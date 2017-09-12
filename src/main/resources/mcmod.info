@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "jsct",
+    "name": "jsChatTriggers",
+    "description": "Customize your chat",
+    "version": "0.1-SNAPSHOT",
+    "mcversion": "1.8.9",
+    "url": "http://chattriggers.com",
+    "updateUrl": "",
+    "authorList": ["kerbybit", "FalseHonesty"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
