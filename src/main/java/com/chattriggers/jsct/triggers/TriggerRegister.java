@@ -2,9 +2,6 @@ package com.chattriggers.jsct.triggers;
 
 import java.util.ArrayList;
 
-/**
- * Copyright (c) FalseHonesty 2017
- */
 public class TriggerRegister {
 
     public static void registerChat(String methodName, String chatCriteria) {

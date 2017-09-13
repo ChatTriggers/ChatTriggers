@@ -10,9 +10,6 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-/**
- * Copyright (c) FalseHonesty 2017
- */
 public class ScriptLoader {
     private List<Import> loadedImports;
     private NashornScriptEngine scriptEngine;

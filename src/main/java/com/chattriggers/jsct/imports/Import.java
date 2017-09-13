@@ -2,9 +2,6 @@ package com.chattriggers.jsct.imports;
 
 import lombok.Getter;
 
-/**
- * Copyright (c) FalseHonesty 2017
- */
 public class Import {
     @Getter
     private String name;

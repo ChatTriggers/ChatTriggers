@@ -5,9 +5,7 @@ import com.chattriggers.jsct.JSCT;
 import javax.script.ScriptException;
 import java.util.List;
 
-/**
- * Copyright (c) FalseHonesty 2017
- */
+
 public class ChatTrigger extends Trigger {
     private String methodName;
     private String chatCriteria;

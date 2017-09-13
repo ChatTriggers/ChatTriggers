@@ -5,9 +5,6 @@ import com.chattriggers.jsct.triggers.TriggerRegister;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-/**
- * Copyright (c) FalseHonesty 2017
- */
 public class ChatListener {
     @SubscribeEvent
     public void onReceiveChat(ClientChatReceivedEvent e) {

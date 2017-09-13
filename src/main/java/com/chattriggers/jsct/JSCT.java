@@ -11,10 +11,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import javax.script.ScriptEngineManager;
 
-/**
- * Copyright (c) FalseHonesty 2017
- */
-
 @Mod(modid = Reference.MODID, name = Reference.MODNAME, version = Reference.MODVERSION)
 public class JSCT {
     @Getter
