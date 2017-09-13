@@ -1,5 +1,8 @@
 package com.chattriggers.jsct.triggers;
 
+import com.chattriggers.jsct.JSCT;
+
+import javax.script.ScriptException;
 import java.util.List;
 
 /**
@@ -12,6 +15,27 @@ public class ChatTrigger extends Trigger {
     public ChatTrigger(String methodName, String chatCriteria) {
         this.methodName = methodName;
         this.chatCriteria = chatCriteria;
+    }
+
+    /**
+     * Argument 1 (String) The chat message received
+     * @param args list of arguments as described
+     */
+    @Override
+    public void trigger(Object... args) {
+        if (!(args[0] instanceof String)) throw new IllegalArgumentException("Argument 1 must be a string");
+
+        String chatMessage = (String) args[0];
+
+        List<String> variables = matchesChatCriteria(chatMessage);
+
+        if (variables != null) {
+            try {
+                JSCT.getInstance().getScriptEngine().invokeFunction(methodName, variables);
+            } catch (ScriptException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

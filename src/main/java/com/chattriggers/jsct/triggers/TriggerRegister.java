@@ -12,7 +12,7 @@ public class TriggerRegister {
         TriggerTypes.CHAT.addTrigger(trigger);
     }
 
-    enum TriggerTypes {
+    public enum TriggerTypes {
         CHAT;
 
         private ArrayList<Trigger> triggers;
