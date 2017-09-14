@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.script.ScriptException;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
@@ -16,6 +17,12 @@ public class ScriptLoader {
 
     public ScriptLoader() {
         this.scriptEngine = JSCT.getInstance().getScriptEngine();
+
+        //Save provided libs script from jar to os filesystem - replaces everytime
+        saveFileFromJar("providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
+        //Save custom libs script from jar to os filesystem - doesn't replace
+        saveFileFromJar("customLibs.js", new File("./mods/ChatTriggers/libs/customLibs.js"), false);
+
         loadImports();
 
         try {
@@ -31,10 +38,6 @@ public class ScriptLoader {
         }
     }
 
-    public void loadImports() {
-        this.loadedImports = getCompiledImports();
-    }
-
     @SubscribeEvent
     public void onClientTick() {
         try {
@@ -43,6 +46,34 @@ public class ScriptLoader {
         } catch (ScriptException | NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+
+    private void loadImports() {
+        this.loadedImports = getCompiledImports();
+    }
+
+    /**
+     * Save a resource to the OS's filesystem from inside the jar
+     * @param resourceName name of the file inside the jar
+     * @param outputFile file to save to
+     * @param replace whether or not to replace the file being saved to
+     */
+    public void saveFileFromJar(String resourceName, File outputFile, boolean replace) {
+        if (!replace && outputFile.exists()) return;
+
+        outputFile.delete();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(resourceName)));
+        String line;
+
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile.toURI()), StandardCharsets.UTF_8)) {
+            while ((line = reader.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
