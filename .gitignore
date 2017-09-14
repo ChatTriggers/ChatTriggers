@@ -29,4 +29,7 @@ build/
 out/
 jsCT.ipr
 jsCT.iws
+jsCT_api.iml
+jsCT_main.iml
+jsCT_test.iml
 libs/

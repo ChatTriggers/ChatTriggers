@@ -4,7 +4,6 @@ import com.chattriggers.jsct.loader.ScriptLoader;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import lombok.Getter;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -30,9 +29,6 @@ public class JSCT {
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
     }
-
-
-
 }
 
 class Reference {
