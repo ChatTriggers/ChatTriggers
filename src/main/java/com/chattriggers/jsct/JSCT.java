@@ -1,6 +1,7 @@
 package com.chattriggers.jsct;
 
 import com.chattriggers.jsct.loader.ScriptLoader;
+import com.chattriggers.jsct.objects.DisplayHandler;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import lombok.Getter;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,6 +20,8 @@ public class JSCT {
     private NashornScriptEngine scriptEngine;
     @Getter
     private ScriptLoader scriptLoader;
+    @Getter
+    private DisplayHandler displayHandler;
 
     @EventHandler
     public void init(FMLInitializationEvent e) {
@@ -26,6 +29,7 @@ public class JSCT {
         this.scriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
 
         this.scriptLoader = new ScriptLoader();
+        this.displayHandler = new DisplayHandler();
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
     }
