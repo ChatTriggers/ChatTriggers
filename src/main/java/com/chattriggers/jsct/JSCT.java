@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import javax.script.ScriptEngineManager;
 
-@Mod(modid = Reference.MODID, name = Reference.MODNAME, version = Reference.MODVERSION)
+@Mod(modid = Reference.MODID, name = Reference.MODNAME, version = Reference.MODVERSION, clientSideOnly = true)
 public class JSCT {
     @Getter
     private static JSCT instance;
