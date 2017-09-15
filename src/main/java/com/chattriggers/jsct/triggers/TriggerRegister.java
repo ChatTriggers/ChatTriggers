@@ -15,10 +15,15 @@ public class TriggerRegister {
         TriggerTypes.CHAT.addTrigger(trigger);
     }
 
-    public enum TriggerTypes {
-        CHAT;
+    public static void registerWorldLoad(String methodName) {
+        WorldLoadTrigger trigger = new WorldLoadTrigger(methodName);
+        TriggerTypes.WORLD_LOAD.addTrigger(trigger);
+    }
 
-        private ArrayList<Trigger> triggers;
+    public enum TriggerTypes {
+        CHAT, WORLD_LOAD;
+
+        private ArrayList<Trigger> triggers = new ArrayList<>();
 
         public void addTrigger(Trigger trigger) {
             triggers.add(trigger);
@@ -26,6 +31,12 @@ public class TriggerRegister {
 
         public ArrayList<Trigger> getTriggers() {
             return triggers;
+        }
+
+        public static void triggerAllOfType(TriggerTypes triggerType, Object... args) {
+            for (Trigger trigger : triggerType.getTriggers()) {
+                trigger.trigger(args);
+            }
         }
     }
 }

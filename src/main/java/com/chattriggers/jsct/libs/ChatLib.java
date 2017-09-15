@@ -1,5 +1,10 @@
 package com.chattriggers.jsct.libs;
 
-public class ChatLib {
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
 
+public class ChatLib {
+    public static void chat(String message) {
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(message));
+    }
 }

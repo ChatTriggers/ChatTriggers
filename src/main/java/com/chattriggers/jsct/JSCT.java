@@ -1,5 +1,6 @@
 package com.chattriggers.jsct;
 
+import com.chattriggers.jsct.listeners.WorldListener;
 import com.chattriggers.jsct.loader.ScriptLoader;
 import com.chattriggers.jsct.objects.DisplayHandler;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
@@ -32,6 +33,7 @@ public class JSCT {
         this.displayHandler = new DisplayHandler();
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
+        MinecraftForge.EVENT_BUS.register(new WorldListener());
     }
 }
 

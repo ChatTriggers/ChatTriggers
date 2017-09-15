@@ -5,6 +5,7 @@ import com.chattriggers.jsct.imports.Import;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,9 +20,9 @@ public class ScriptLoader {
         this.scriptEngine = JSCT.getInstance().getScriptEngine();
 
         //Save provided libs script from jar to os filesystem - replaces everytime
-        saveFileFromJar("providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
+        //saveFileFromJar("providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
         //Save custom libs script from jar to os filesystem - doesn't replace
-        saveFileFromJar("customLibs.js", new File("./mods/ChatTriggers/libs/customLibs.js"), false);
+        //saveFileFromJar("customLibs.js", new File("./mods/ChatTriggers/libs/customLibs.js"), false);
 
         loadImports();
 
@@ -31,14 +32,16 @@ public class ScriptLoader {
 
             for (Import customImport : this.loadedImports) {
                 scriptEngine.eval(customImport.getScript());
-                scriptEngine.invokeFunction("init" + customImport.getName());
+                try {
+                    scriptEngine.invokeFunction("init" + customImport.getName());
+                } catch (NoSuchMethodException ignored) { }
             }
-        } catch (ScriptException | NoSuchMethodException e) {
+        } catch (ScriptException e) {
             e.printStackTrace();
         }
     }
 
-    @SubscribeEvent
+    //@SubscribeEvent
     public void onClientTick() {
         try {
             scriptEngine.invokeFunction("updateProvidedLibs");
@@ -115,7 +118,7 @@ public class ScriptLoader {
         StringBuilder compiledScript = new StringBuilder();
 
         for (File file : files) {
-            if (!file.isFile() || !file.exists()) continue;
+            if (!file.isFile() || !file.exists() || !file.getName().endsWith(".js")) continue;
 
             compiledScript.append(new String(Files.readAllBytes(Paths.get(file.toURI()))));
         }
@@ -149,6 +152,7 @@ public class ScriptLoader {
         List<Import> compiledImports = new ArrayList<>();
 
         File importsDir = new File("./mods/ChatTriggers/Imports/");
+        importsDir.mkdirs();
 
         for (File importDir : getFoldersInDirectory(importsDir)) {
             try {
