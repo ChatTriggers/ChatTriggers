@@ -1,10 +1,12 @@
 package com.chattriggers.jsct;
 
+import com.chattriggers.jsct.commands.CTCommand;
 import com.chattriggers.jsct.listeners.WorldListener;
 import com.chattriggers.jsct.loader.ScriptLoader;
 import com.chattriggers.jsct.objects.DisplayHandler;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import lombok.Getter;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -34,6 +36,8 @@ public class JSCT {
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
         MinecraftForge.EVENT_BUS.register(new WorldListener());
+
+        ClientCommandHandler.instance.registerCommand(new CTCommand());
     }
 }
 

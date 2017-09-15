@@ -19,7 +19,7 @@ public class ScriptLoader {
     public ScriptLoader() {
         this.scriptEngine = JSCT.getInstance().getScriptEngine();
 
-        //Save provided libs script from jar to os filesystem - replaces everytime
+        //Save provided libs script from jar to os filesystem - replaces every time
         //saveFileFromJar("providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
         //Save custom libs script from jar to os filesystem - doesn't replace
         //saveFileFromJar("customLibs.js", new File("./mods/ChatTriggers/libs/customLibs.js"), false);
