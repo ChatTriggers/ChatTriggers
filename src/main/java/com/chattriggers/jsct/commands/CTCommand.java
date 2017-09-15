@@ -3,6 +3,7 @@ package com.chattriggers.jsct.commands;
 import com.chattriggers.jsct.JSCT;
 import com.chattriggers.jsct.libs.ChatLib;
 import com.chattriggers.jsct.loader.ScriptLoader;
+import com.chattriggers.jsct.triggers.TriggerRegister;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -11,6 +12,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.script.ScriptEngineManager;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +34,7 @@ public class CTCommand extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/ct <reload>";
+        return "/ct <reload/files>";
     }
 
     @Override
@@ -46,11 +50,24 @@ public class CTCommand extends CommandBase {
                     reload();
                     ChatLib.chat(EnumChatFormatting.RED + "Reloaded js files");
                     break;
+                case("files"):
+                    openFileLocation();
+                    break;
                 default:
-
+                    ChatLib.chat(EnumChatFormatting.RED + getCommandUsage(sender));
+                    break;
             }
         } else {
-            ChatLib.chat(getCommandUsage(sender));
+            ChatLib.chat(EnumChatFormatting.RED + getCommandUsage(sender));
+        }
+    }
+
+    private void openFileLocation() {
+        try {
+            Desktop.getDesktop().open(new File("./mods/ChatTriggers"));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            ChatLib.chat(EnumChatFormatting.RED + "Could not open file location");
         }
     }
 
@@ -58,6 +75,9 @@ public class CTCommand extends CommandBase {
      * Reload mod's supporting js files and reinitialise script engine
      */
     public void reload() {
+        TriggerRegister.TriggerTypes.CHAT.clearTriggers();
+        TriggerRegister.TriggerTypes.WORLD_LOAD.clearTriggers();
+
         MinecraftForge.EVENT_BUS.unregister(scriptLoader);
 
         scriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");

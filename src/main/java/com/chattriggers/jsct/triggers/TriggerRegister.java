@@ -1,5 +1,7 @@
 package com.chattriggers.jsct.triggers;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
 public class TriggerRegister {
@@ -24,6 +26,10 @@ public class TriggerRegister {
         CHAT, WORLD_LOAD;
 
         private ArrayList<Trigger> triggers = new ArrayList<>();
+
+        public void clearTriggers() {
+            triggers.clear();
+        }
 
         public void addTrigger(Trigger trigger) {
             triggers.add(trigger);
