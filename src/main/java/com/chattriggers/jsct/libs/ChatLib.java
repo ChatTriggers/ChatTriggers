@@ -5,6 +5,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 public class ChatLib {
+    /**
+     * Add a chat message to chat
+     * @param message to add
+     */
     public static void chat(String message) {
         if (Minecraft.getMinecraft().thePlayer == null) return;
 
@@ -12,22 +16,33 @@ public class ChatLib {
         Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
     }
 
+    /**
+     * Say chat message
+     * @param message to say
+     */
     public static void say(String message) {
         //TODO: Add checking for creator
         Minecraft.getMinecraft().thePlayer.sendChatMessage(message);
     }
 
-    public static void command(String message) {
+    /**
+     * Run command
+     * @param command to run
+     */
+    public static void command(String command) {
         //TODO: Add checking for creator
-        if (!isAllowedCommand(message)) return;
+        if (!isAllowedCommand(command)) return;
 
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + message);
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + command);
     }
 
     /**
-     * @param command input command to check
-     * @return true if in single player or if matching criteria
+     * Clear chat
      */
+    public static void clearChat() {
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(0);
+    }
+
     private static boolean isAllowedCommand(String command) {
         if (Minecraft.getMinecraft().isSingleplayer())
             return true;
