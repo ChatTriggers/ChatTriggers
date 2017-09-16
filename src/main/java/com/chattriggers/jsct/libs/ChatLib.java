@@ -6,11 +6,22 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class ChatLib {
     public static void chat(String message) {
+        if (Minecraft.getMinecraft().thePlayer == null) return;
+
         ChatComponentText cct = new ChatComponentText(addColor(message));
         Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
     }
 
+    public static void say(String message) {
+        //TODO: Add checking for creator
+        Minecraft.getMinecraft().thePlayer.sendChatMessage(message);
+    }
+
     public static String addColor(String message) {
+        if (message == null) {
+            message = "null";
+        }
+
         return message.replace("&0", EnumChatFormatting.BLACK.toString())
                 .replace("&1", EnumChatFormatting.DARK_BLUE.toString())
                 .replace("&2", EnumChatFormatting.DARK_GREEN.toString())

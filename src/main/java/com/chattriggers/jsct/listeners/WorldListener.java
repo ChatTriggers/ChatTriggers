@@ -2,6 +2,7 @@ package com.chattriggers.jsct.listeners;
 
 import com.chattriggers.jsct.triggers.TriggerRegister;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -19,5 +20,10 @@ public class WorldListener {
             TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.WORLD_LOAD);
             shouldTriggerWorldLoad = false;
         }
+    }
+
+    @SubscribeEvent
+    public void onSoundPlay(PlaySoundEvent e) {
+        TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.SOUND_PLAY, e);
     }
 }

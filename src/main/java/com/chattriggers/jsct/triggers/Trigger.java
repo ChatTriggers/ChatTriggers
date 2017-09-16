@@ -7,7 +7,5 @@ public abstract class Trigger {
         this.methodName = methodName;
     }
 
-    protected Trigger() {}
-
     public abstract void trigger(Object... args);
 }
