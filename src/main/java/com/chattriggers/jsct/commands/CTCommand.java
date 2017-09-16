@@ -47,6 +47,7 @@ public class CTCommand extends CommandBase {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
                 case("reload"):
+                case("load"):
                     reload();
                     ChatLib.chat(EnumChatFormatting.RED + "Reloaded js files");
                     break;
