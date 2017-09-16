@@ -8,4 +8,8 @@ public abstract class Trigger {
     }
 
     public abstract void trigger(Object... args);
+
+    public enum TriggerResult {
+        CANCEL
+    }
 }
