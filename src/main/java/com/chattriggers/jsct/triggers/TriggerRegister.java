@@ -35,13 +35,26 @@ public class TriggerRegister {
         TriggerTypes.SOUND_PLAY.addTrigger(trigger);
     }
 
+    /**
+     * Register a new method that receives client tick events
+     * @param methodName the name of the method to callback when the event is fired
+     */
     public static void registerOnTick(String methodName) {
         OnTickTrigger trigger = new OnTickTrigger(methodName);
         TriggerTypes.TICK.addTrigger(trigger);
     }
 
+    /**
+     * Register a new method that receives render overlay events
+     * @param methodName the name of the method to callback when the event is fired
+     */
+    public static void registerRenderOverlay(String methodName) {
+        OnRenderOverlayTrigger trigger = new OnRenderOverlayTrigger(methodName);
+        TriggerTypes.RENDER_OVERLAY.addTrigger(trigger);
+    }
+
     public enum TriggerTypes {
-        CHAT, WORLD_LOAD, SOUND_PLAY, TICK;
+        CHAT, WORLD_LOAD, SOUND_PLAY, TICK, RENDER_OVERLAY;
 
         private ArrayList<Trigger> triggers = new ArrayList<>();
 
