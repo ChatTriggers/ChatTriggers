@@ -16,11 +16,10 @@ public class OnRenderOverlayTrigger extends Trigger {
             throw new IllegalArgumentException("Argument 1 must be of type PlaySoundEvent");
         }
 
-        //TODO: figure out how to use render event in js
         RenderGameOverlayEvent event = (RenderGameOverlayEvent) args[0];
 
         try {
-            JSCT.getInstance().getScriptEngine().invokeFunction(methodName);
+            JSCT.getInstance().getScriptEngine().invokeFunction(methodName, event);
         } catch (ScriptException | NoSuchMethodException e) {
             e.printStackTrace();
         }
