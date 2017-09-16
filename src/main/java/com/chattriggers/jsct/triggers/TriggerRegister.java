@@ -1,7 +1,5 @@
 package com.chattriggers.jsct.triggers;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 
 public class TriggerRegister {
@@ -9,7 +7,7 @@ public class TriggerRegister {
     /**
      * Register a new method that receives chat events based
      * on certain message criteria
-     * @param methodName the name of the method to callback when the event is called
+     * @param methodName the name of the method to callback when the event is fired
      * @param chatCriteria the criteria for which the event should called
      */
     public static void registerChat(String methodName, String chatCriteria) {
@@ -17,6 +15,10 @@ public class TriggerRegister {
         TriggerTypes.CHAT.addTrigger(trigger);
     }
 
+    /**
+     * Register a new method that receives world load events
+     * @param methodName the name of the method to callback when the event is fired
+     */
     public static void registerWorldLoad(String methodName) {
         WorldLoadTrigger trigger = new WorldLoadTrigger(methodName);
         TriggerTypes.WORLD_LOAD.addTrigger(trigger);
@@ -42,6 +44,12 @@ public class TriggerRegister {
         public static void triggerAllOfType(TriggerTypes triggerType, Object... args) {
             for (Trigger trigger : triggerType.getTriggers()) {
                 trigger.trigger(args);
+            }
+        }
+
+        public static void clearAllTriggers() {
+            for (TriggerTypes triggerType : TriggerTypes.values()) {
+                triggerType.clearTriggers();
             }
         }
     }

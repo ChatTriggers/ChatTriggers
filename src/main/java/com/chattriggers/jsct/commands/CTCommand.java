@@ -62,6 +62,9 @@ public class CTCommand extends CommandBase {
         }
     }
 
+    /**
+     * Open the folder containing all of ChatTrigger's files
+     */
     private void openFileLocation() {
         try {
             Desktop.getDesktop().open(new File("./mods/ChatTriggers"));
@@ -75,8 +78,7 @@ public class CTCommand extends CommandBase {
      * Reload mod's supporting js files and reinitialise script engine
      */
     public void reload() {
-        TriggerRegister.TriggerTypes.CHAT.clearTriggers();
-        TriggerRegister.TriggerTypes.WORLD_LOAD.clearTriggers();
+        TriggerRegister.TriggerTypes.clearAllTriggers();
 
         MinecraftForge.EVENT_BUS.unregister(scriptLoader);
 

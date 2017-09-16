@@ -4,6 +4,7 @@ import com.chattriggers.jsct.JSCT;
 import com.chattriggers.jsct.imports.Import;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -20,10 +21,11 @@ public class ScriptLoader {
         this.scriptEngine = JSCT.getInstance().getScriptEngine();
 
         //Save provided libs script from jar to os filesystem - replaces every time
-        //saveFileFromJar("providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
+        saveResource("/providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
         //Save custom libs script from jar to os filesystem - doesn't replace
-        //saveFileFromJar("customLibs.js", new File("./mods/ChatTriggers/libs/customLibs.js"), false);
+        saveResource("/customLibs.js", new File("./mods/ChatTriggers/libs/customLibs.js"), false);
 
+        //Load the imports (This compiles them and loads them)
         loadImports();
 
         try {
@@ -32,9 +34,12 @@ public class ScriptLoader {
 
             for (Import customImport : this.loadedImports) {
                 scriptEngine.eval(customImport.getScript());
+
+
+                /* TODO: Decide if this is needed
                 try {
                     scriptEngine.invokeFunction("init" + customImport.getName());
-                } catch (NoSuchMethodException ignored) { }
+                } catch (NoSuchMethodException ignored) { }*/
             }
         } catch (ScriptException e) {
             e.printStackTrace();
@@ -42,12 +47,12 @@ public class ScriptLoader {
     }
 
     //@SubscribeEvent
-    public void onClientTick() {
+    public void onClientTick(TickEvent.ClientTickEvent e) {
         try {
             scriptEngine.invokeFunction("updateProvidedLibs");
             scriptEngine.invokeFunction("updateCustomLibs");
-        } catch (ScriptException | NoSuchMethodException e) {
-            e.printStackTrace();
+        } catch (ScriptException | NoSuchMethodException exc) {
+            exc.printStackTrace();
         }
     }
 
@@ -61,27 +66,42 @@ public class ScriptLoader {
      * @param outputFile file to save to
      * @param replace whether or not to replace the file being saved to
      */
-    public void saveFileFromJar(String resourceName, File outputFile, boolean replace) {
-        if (!replace && outputFile.exists()) return;
-
-        outputFile.delete();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(resourceName)));
-        String line;
-
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile.toURI()), StandardCharsets.UTF_8)) {
-            while ((line = reader.readLine()) != null) {
-                writer.write(line);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void saveResource(String resourceName, File outputFile, boolean replace) {
+        if (resourceName == null || resourceName.equals("")) {
+            throw new IllegalArgumentException("ResourcePath cannot be null or empty");
         }
 
+        resourceName = resourceName.replace('\\', '/');
+        InputStream in = this.getClass().getResourceAsStream(resourceName);
+
+        if (in == null) {
+            throw new IllegalArgumentException("The embedded resource '" + resourceName + "' cannot be found.");
+        }
+
+        File outDir = outputFile.getParentFile();
+
+        if (!outDir.exists()) {
+            outDir.mkdirs();
+        }
+
+        try {
+            if (!outputFile.exists() || replace) {
+                OutputStream out = new FileOutputStream(outputFile);
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                out.close();
+                in.close();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
-     * A method to get the script that provides imports
-     * basic libraries.
+     * Gets the script that provides imports basic libraries.
      * @return a string of the compiled script
      */
     public String getProvidedLibsScript() {
@@ -94,8 +114,7 @@ public class ScriptLoader {
     }
 
     /**
-     * A method to get the script that provides imports
-     * custom libraries.
+     * Gets the script that provides imports custom libraries.
      * @return a string of the compiled script
      */
     public String getCustomLibsScript() {
@@ -108,7 +127,7 @@ public class ScriptLoader {
     }
 
     /**
-     * Helper method to compile all text multiple files
+     * Compiles all text from multiple files
      * into a singular string for loading.
      * @param files a list of files to be compiled
      * @return the string after compilation

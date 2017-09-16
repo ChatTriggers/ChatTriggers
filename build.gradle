@@ -27,7 +27,7 @@ plugins {
 */
 version = "0.1-SNAPSHOT"
 group= "com.chattriggers.jsct" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "jscr"
+archivesBaseName = "jsct"
 
 apply plugin: 'java'
 compileJava {
