@@ -1,5 +1,8 @@
 package com.chattriggers.jsct.objects;
 
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.ArrayList;
 
 public class DisplayHandler {
@@ -20,9 +23,12 @@ public class DisplayHandler {
     /**
      * Render all of the display currently registered.
      */
-    public void renderDisplays() {
-        for (Display display : displays) {
-            display.render();
+    @SubscribeEvent
+    public void renderDisplays(RenderGameOverlayEvent event) {
+        if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+            for (Display display : displays) {
+                display.render();
+            }
         }
     }
 }
