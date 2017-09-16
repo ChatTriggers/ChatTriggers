@@ -26,7 +26,11 @@ public class SoundPlayTrigger extends Trigger {
         }
 
         try {
-            JSCT.getInstance().getScriptEngine().invokeFunction(methodName, event);
+            Object returned = JSCT.getInstance().getScriptEngine().invokeFunction(methodName, event);
+
+            if (returned.equals(TriggerResult.CANCEL)) {
+                event.result = null;
+            }
         } catch (ScriptException | NoSuchMethodException e) {
             e.printStackTrace();
         }
