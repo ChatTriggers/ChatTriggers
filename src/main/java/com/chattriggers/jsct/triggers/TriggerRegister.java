@@ -1,7 +1,5 @@
 package com.chattriggers.jsct.triggers;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 
 public class TriggerRegister {
