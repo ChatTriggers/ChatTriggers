@@ -1,13 +1,16 @@
 package com.chattriggers.jsct.libs;
 
+import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+@UtilityClass
 public class ChatLib {
+
     /**
      * Add a chat message to chat
-     * @param message to add
+     * @param message the message to be printed
      */
     public static void chat(String message) {
         if (Minecraft.getMinecraft().thePlayer == null) return;
@@ -17,8 +20,22 @@ public class ChatLib {
     }
 
     /**
+     * Add a chat message to chat, but with a special ID which allows
+     * them to be clear with {@link #clearChat(int)}.
+     * This ID can be used more than once.
+     * @param message the message to be printed
+     * @param chatLineID the chat line to save the message under (pass to clearChat)
+     */
+    public static void chat(String message, int chatLineID) {
+        if (Minecraft.getMinecraft().thePlayer == null) return;
+
+        ChatComponentText cct = new ChatComponentText(addColor(message));
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
+    }
+
+    /**
      * Say chat message
-     * @param message to say
+     * @param message the message to be sent
      */
     public static void say(String message) {
         //TODO: Add checking for creator
@@ -26,8 +43,8 @@ public class ChatLib {
     }
 
     /**
-     * Run command
-     * @param command to run
+     * Run command, don't add the leading slash (Ex. "help")
+     * @param command the command to run
      */
     public static void command(String command) {
         //TODO: Add checking for creator
@@ -41,6 +58,14 @@ public class ChatLib {
      */
     public static void clearChat() {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(0);
+    }
+
+    /**
+     * Clear chat messages with the specified ID
+     * @param chatLineID the id to be cleared
+     */
+    public static void clearChat(int chatLineID) {
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(chatLineID);
     }
 
     private static boolean isAllowedCommand(String command) {

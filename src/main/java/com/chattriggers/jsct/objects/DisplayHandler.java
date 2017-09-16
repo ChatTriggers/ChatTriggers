@@ -20,9 +20,7 @@ public class DisplayHandler {
         this.displays.add(display);
     }
 
-    /**
-     * Render all of the display currently registered.
-     */
+
     @SubscribeEvent
     public void renderDisplays(RenderGameOverlayEvent event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
