@@ -35,8 +35,13 @@ public class TriggerRegister {
         TriggerTypes.SOUND_PLAY.addTrigger(trigger);
     }
 
+    public static void registerOnTick(String methodName) {
+        OnTickTrigger trigger = new OnTickTrigger(methodName);
+        TriggerTypes.TICK.addTrigger(trigger);
+    }
+
     public enum TriggerTypes {
-        CHAT, WORLD_LOAD, SOUND_PLAY;
+        CHAT, WORLD_LOAD, SOUND_PLAY, TICK;
 
         private ArrayList<Trigger> triggers = new ArrayList<>();
 
