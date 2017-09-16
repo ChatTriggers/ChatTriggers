@@ -17,6 +17,31 @@ public class ChatLib {
         Minecraft.getMinecraft().thePlayer.sendChatMessage(message);
     }
 
+    public static void command(String message) {
+        //TODO: Add checking for creator
+        if (!isAllowedCommand(message)) return;
+
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + message);
+    }
+
+    /**
+     * @param command input command to check
+     * @return true if in single player or if matching criteria
+     */
+    private static boolean isAllowedCommand(String command) {
+        if (Minecraft.getMinecraft().isSingleplayer())
+            return true;
+
+        switch (command.toLowerCase()) {
+            case("who"):
+            case("whereami"):
+            case("wtfmap"):
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public static String addColor(String message) {
         if (message == null) {
             message = "null";
