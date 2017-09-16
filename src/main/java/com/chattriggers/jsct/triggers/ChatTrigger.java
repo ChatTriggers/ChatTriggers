@@ -7,11 +7,10 @@ import java.util.List;
 
 
 public class ChatTrigger extends Trigger {
-    private String methodName;
     private String chatCriteria;
 
     public ChatTrigger(String methodName, String chatCriteria) {
-        this.methodName = methodName;
+        super(methodName);
         this.chatCriteria = chatCriteria;
     }
 

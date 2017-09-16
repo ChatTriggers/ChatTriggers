@@ -5,12 +5,6 @@ import com.chattriggers.jsct.JSCT;
 import javax.script.ScriptException;
 
 public class WorldLoadTrigger extends Trigger {
-    private String methodName;
-
-    public WorldLoadTrigger(String methodName) {
-        this.methodName = methodName;
-    }
-
     @Override
     public void trigger(Object... args) {
         try {
