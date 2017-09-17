@@ -3,6 +3,8 @@ package com.chattriggers.jsct.objects;
 import com.chattriggers.jsct.JSCT;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,10 +59,13 @@ public class Display {
      * Renders the display on to the player's screen.
      */
     public void render() {
-        //TODO: Opacity?
+        FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
+        int i = 0;
 
         for (String line : lines) {
-            //TODO: RENDER
+            ren.drawStringWithShadow(line, renderX, renderY + (i*10), 0xffffffff);
+
+            i++;
         }
     }
 }
