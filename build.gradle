@@ -14,10 +14,12 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
         classpath "io.franzbecker:gradle-lombok:1.10"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: "io.franzbecker.gradle-lombok"
+apply plugin: 'com.github.johnrengelman.shadow'
 
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
@@ -49,7 +51,8 @@ minecraft {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: 'nashorn.jar')
+    compile files('libs/nashorn.jar')
+    shadow files('libs/lombok.jar')
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -71,6 +74,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+}
+
+task listJars << {
+    configurations.compile.each { File file -> println file.name }
 }
 
 processResources
