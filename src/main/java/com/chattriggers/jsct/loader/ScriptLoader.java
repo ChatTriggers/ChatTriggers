@@ -34,12 +34,6 @@ public class ScriptLoader {
 
             for (Import customImport : this.loadedImports) {
                 scriptEngine.eval(customImport.getScript());
-
-
-                /* TODO: Decide if this is needed
-                try {
-                    scriptEngine.invokeFunction("init" + customImport.getName());
-                } catch (NoSuchMethodException ignored) { }*/
             }
         } catch (ScriptException e) {
             e.printStackTrace();
