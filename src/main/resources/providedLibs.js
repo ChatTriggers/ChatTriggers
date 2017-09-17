@@ -9,7 +9,6 @@ var TriggerResult = Java.type("com.chattriggers.jsct.triggers.Trigger.TriggerRes
 var ChatLib = Java.type("com.chattriggers.jsct.libs.ChatLib");
 
 //Objects
-var DisplayHandler = Java.type("com.chattriggers.jsct.objects.DisplayHandler");
 var Display = Java.type("com.chattriggers.jsct.objects.Display");
 
 function updateProvidedLibs() {
