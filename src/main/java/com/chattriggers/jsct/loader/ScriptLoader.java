@@ -3,13 +3,10 @@ package com.chattriggers.jsct.loader;
 import com.chattriggers.jsct.JSCT;
 import com.chattriggers.jsct.imports.Import;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
