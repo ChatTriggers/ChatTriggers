@@ -9,6 +9,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class WorldListener {
     private boolean shouldTriggerWorldLoad;
+    private int ticksPassed;
+
+    public WorldListener() {
+        ticksPassed = 0;
+    }
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
@@ -30,7 +35,8 @@ public class WorldListener {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.TICK);
+        TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.TICK, ticksPassed);
+        ticksPassed++;
     }
 
     @SubscribeEvent
