@@ -14,7 +14,7 @@ public class OnTickTrigger extends Trigger {
         if (!(args[0] instanceof Integer)) throw new IllegalArgumentException("1st argument is not an integer");
 
         try {
-            JSCT.getInstance().getScriptEngine().invokeFunction(methodName, args[0]);
+            JSCT.getInstance().getInvocableEngine().invokeFunction(methodName, args[0]);
         } catch (ScriptException | NoSuchMethodException e) {
             e.printStackTrace();
         }

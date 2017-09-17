@@ -4,13 +4,14 @@ import com.chattriggers.jsct.JSCT;
 import com.chattriggers.jsct.libs.ChatLib;
 import com.chattriggers.jsct.loader.ScriptLoader;
 import com.chattriggers.jsct.triggers.TriggerRegister;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.awt.*;
 import java.io.File;
@@ -19,8 +20,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class CTCommand extends CommandBase {
-    private NashornScriptEngine scriptEngine = JSCT.getInstance().getScriptEngine();
-    private ScriptLoader scriptLoader = JSCT.getInstance().getScriptLoader();
+    private ScriptEngine scriptEngine;
+    private ScriptLoader scriptLoader;
+
+    public CTCommand() {
+        this.scriptEngine = JSCT.getInstance().getScriptEngine();
+        this.scriptLoader = JSCT.getInstance().getScriptLoader();
+    }
 
     @Override
     public String getCommandName() {
@@ -83,8 +89,11 @@ public class CTCommand extends CommandBase {
 
         MinecraftForge.EVENT_BUS.unregister(scriptLoader);
 
-        scriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
+        scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
+        JSCT.getInstance().setScriptEngine(scriptEngine);
         scriptLoader = new ScriptLoader();
+        JSCT.getInstance().setScriptLoader(scriptLoader);
+        JSCT.getInstance().setInvocableEngine(((Invocable) scriptEngine));
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
     }

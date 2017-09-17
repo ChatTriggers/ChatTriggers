@@ -13,7 +13,7 @@ public class WorldLoadTrigger extends Trigger {
     @Override
     public void trigger(Object... args) {
         try {
-            JSCT.getInstance().getScriptEngine().invokeFunction(methodName);
+            JSCT.getInstance().getInvocableEngine().invokeFunction(methodName);
         } catch (ScriptException | NoSuchMethodException e) {
             e.printStackTrace();
         }

@@ -5,6 +5,8 @@ import com.chattriggers.jsct.imports.Import;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.*;
 import java.nio.file.*;
@@ -12,10 +14,12 @@ import java.util.*;
 
 public class ScriptLoader {
     private List<Import> loadedImports;
-    private NashornScriptEngine scriptEngine;
+    private ScriptEngine scriptEngine;
+    private Invocable invocableEngine;
 
     public ScriptLoader() {
         this.scriptEngine = JSCT.getInstance().getScriptEngine();
+        this.invocableEngine = ((Invocable) scriptEngine);
 
         //Save provided libs script from jar to os filesystem - replaces every time
         saveResource("/providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
@@ -40,8 +44,8 @@ public class ScriptLoader {
     //@SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent e) {
         try {
-            scriptEngine.invokeFunction("updateProvidedLibs");
-            scriptEngine.invokeFunction("updateCustomLibs");
+            invocableEngine.invokeFunction("updateProvidedLibs");
+            invocableEngine.invokeFunction("updateCustomLibs");
         } catch (ScriptException | NoSuchMethodException exc) {
             exc.printStackTrace();
         }

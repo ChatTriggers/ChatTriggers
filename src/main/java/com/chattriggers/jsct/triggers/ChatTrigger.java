@@ -28,7 +28,7 @@ public class ChatTrigger extends Trigger {
 
         if (variables != null) {
             try {
-                JSCT.getInstance().getScriptEngine().invokeFunction(methodName, variables);
+                JSCT.getInstance().getInvocableEngine().invokeFunction(methodName, variables);
             } catch (ScriptException | NoSuchMethodException e) {
                 e.printStackTrace();
             }

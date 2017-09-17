@@ -15,11 +15,13 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
         classpath "io.franzbecker:gradle-lombok:1.10"
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: "io.franzbecker.gradle-lombok"
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'gradle-one-jar'
 
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
@@ -98,4 +100,8 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+task oneJar(type: OneJar) {
+    mainClass = 'com.chattriggers.jsct.JSCT'
 }

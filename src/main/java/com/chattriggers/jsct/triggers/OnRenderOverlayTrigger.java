@@ -19,7 +19,7 @@ public class OnRenderOverlayTrigger extends Trigger {
         RenderGameOverlayEvent event = (RenderGameOverlayEvent) args[0];
 
         try {
-            JSCT.getInstance().getScriptEngine().invokeFunction(methodName, event);
+            JSCT.getInstance().getInvocableEngine().invokeFunction(methodName, event);
         } catch (ScriptException | NoSuchMethodException e) {
             e.printStackTrace();
         }
