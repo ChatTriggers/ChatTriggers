@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class DisplayHandler {
     private ArrayList<Display> displays;
 
+
     public DisplayHandler() {
         displays = new ArrayList<>();
     }
