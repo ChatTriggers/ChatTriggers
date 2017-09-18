@@ -33,6 +33,6 @@ public class Command extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        trigger.trigger(args);
+        trigger.trigger((Object[]) args);
     }
 }
