@@ -2,7 +2,6 @@ package com.chattriggers.jsct.loader;
 
 import com.chattriggers.jsct.JSCT;
 import com.chattriggers.jsct.imports.Import;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.script.Invocable;

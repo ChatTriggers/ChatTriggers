@@ -1,5 +1,8 @@
 package com.chattriggers.jsct.triggers;
 
+import com.chattriggers.jsct.commands.Command;
+import net.minecraftforge.client.ClientCommandHandler;
+
 import java.util.ArrayList;
 
 public class TriggerRegister {
@@ -51,6 +54,18 @@ public class TriggerRegister {
     public static void registerRenderOverlay(String methodName) {
         OnRenderOverlayTrigger trigger = new OnRenderOverlayTrigger(methodName);
         TriggerTypes.RENDER_OVERLAY.addTrigger(trigger);
+    }
+
+    /**
+     * Register a new method that receives a command input
+     * @param methodName the name of the method to callback when the event is fired
+     * @param commandName the name of the command
+     * @param commandUsage the usage for the command
+     */
+    public static void registerCommand(String methodName, String commandName, String commandUsage) {
+        CommandTrigger trigger = new CommandTrigger(methodName);
+        Command command = new Command(trigger, commandName, commandUsage);
+        ClientCommandHandler.instance.registerCommand(command);
     }
 
     public enum TriggerTypes {
