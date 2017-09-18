@@ -13,7 +13,7 @@ public class ChatLib {
      * @param message the message to be printed
      */
     public static void chat(String message) {
-        if (Minecraft.getMinecraft().thePlayer == null) return;
+        if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(addColor(message));
         Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
@@ -27,7 +27,7 @@ public class ChatLib {
      * @param chatLineID the chat line to save the message under (pass to clearChat)
      */
     public static void chat(String message, int chatLineID) {
-        if (Minecraft.getMinecraft().thePlayer == null) return;
+        if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(addColor(message));
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
@@ -39,6 +39,8 @@ public class ChatLib {
      */
     public static void say(String message) {
         //TODO: Add checking for creator
+        if (!isPlayer("[SAY]: " + message)) return;
+
         Minecraft.getMinecraft().thePlayer.sendChatMessage(message);
     }
 
@@ -49,6 +51,7 @@ public class ChatLib {
     public static void command(String command) {
         //TODO: Add checking for creator
         if (!isAllowedCommand(command)) return;
+        if (!isPlayer("[COMMAND]: /" + command)) return;
 
         Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + command);
     }
@@ -80,6 +83,14 @@ public class ChatLib {
             default:
                 return false;
         }
+    }
+
+    private Boolean isPlayer(String out) {
+        if (Minecraft.getMinecraft().thePlayer == null) {
+            System.out.println(out);
+            return false;
+        }
+        return true;
     }
 
     public static String addColor(String message) {
