@@ -16,14 +16,21 @@ public class ScriptLoader {
     private ScriptEngine scriptEngine;
     private Invocable invocableEngine;
 
+    //TODO: Move to config?
+    private ArrayList<String> illegalLines;
+
     public ScriptLoader() {
         this.scriptEngine = JSCT.getInstance().getScriptEngine();
-        this.invocableEngine = ((Invocable) scriptEngine);
+        this.invocableEngine = JSCT.getInstance().getInvocableEngine();
+
+        this.illegalLines = new ArrayList<>(Arrays.asList(
+                "module.export", "load(\"http"
+        ));
 
         //Save provided libs script from jar to os filesystem - replaces every time
-        saveResource("/providedLibs.js", new File("./mods/ChatTriggers/libs/providedLibs.js"), true);
+        saveResource("/providedLibs.js", new File("./mods/ChatTriggers/libs/chattriggers-provided-libs.js"), true);
         //Save custom libs script from jar to os filesystem - doesn't replace
-        saveResource("/customLibs.js", new File("./mods/ChatTriggers/libs/customLibs.js"), false);
+        saveResource("/customLibs.js", new File("./mods/ChatTriggers/libs/chattriggers-custom-libs.js"), false);
 
         //Load the imports (This compiles them and loads them)
         loadImports();
@@ -100,7 +107,7 @@ public class ScriptLoader {
      */
     public String getProvidedLibsScript() {
         try {
-            return compileScripts(new File("./mods/ChatTriggers/libs/providedLibs.js"));
+            return compileScripts(new File("./mods/ChatTriggers/libs/chattriggers-provided-libs.js"));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -113,7 +120,7 @@ public class ScriptLoader {
      */
     public String getCustomLibsScript() {
         try {
-            return compileScripts(new File("./mods/ChatTriggers/libs/customLibs.js"));
+            return compileScripts(new File("./mods/ChatTriggers/libs/chattriggers-custom-libs.js"));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -133,7 +140,17 @@ public class ScriptLoader {
         for (File file : files) {
             if (!file.isFile() || !file.exists() || !file.getName().endsWith(".js")) continue;
 
-            compiledScript.append(new String(Files.readAllBytes(Paths.get(file.toURI()))));
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            parseScript:
+            while ((line = br.readLine()) != null) {
+                for (String illegalLine : illegalLines) {
+                    if (line.contains(illegalLine)) continue parseScript;
+                }
+
+                compiledScript.append(line);
+            }
         }
 
         return compiledScript.toString();
