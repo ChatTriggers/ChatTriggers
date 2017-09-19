@@ -149,7 +149,7 @@ public class ScriptLoader {
                     if (line.contains(illegalLine)) continue parseScript;
                 }
 
-                compiledScript.append(line);
+                compiledScript.append(line).append("\n");
             }
         }
 
