@@ -36,11 +36,12 @@ public class JSCT {
         this.scriptEngine = new ScriptEngineManager(null).getEngineByName("nashorn");
         this.invocableEngine = ((Invocable) scriptEngine);
 
-        this.scriptLoader = new ScriptLoader();
         this.displayHandler = new DisplayHandler();
+        this.scriptLoader = new ScriptLoader();
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
         MinecraftForge.EVENT_BUS.register(new WorldListener());
+        MinecraftForge.EVENT_BUS.register(displayHandler);
 
         ClientCommandHandler.instance.registerCommand(new CTCommand());
     }
