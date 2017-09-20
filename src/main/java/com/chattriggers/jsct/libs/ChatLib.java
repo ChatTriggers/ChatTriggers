@@ -76,7 +76,7 @@ public class ChatLib {
      * Clear chat
      */
     public static void clearChat() {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(0);
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages();
     }
 
     /**
