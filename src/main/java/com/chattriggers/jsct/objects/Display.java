@@ -24,10 +24,12 @@ public class Display {
     private boolean shouldRender;
     @Getter
     private Background background;
-    @Getter
+    @Getter @Setter
     private int backgroundColor;
     @Getter
     private Align align;
+    @Getter @Setter
+    private int textColor;
 
     private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
 
@@ -43,6 +45,8 @@ public class Display {
         background = Background.NONE;
         backgroundColor = 0x50000000;
         align = Align.LEFT;
+
+        textColor = 0xffffffff;
 
         JSCT.getInstance().getDisplayHandler().registerDisplay(this);
     }
@@ -60,16 +64,6 @@ public class Display {
      */
     public Display setBackground(Background background) {
         this.background = background;
-        return this;
-    }
-
-    /**
-     * Sets a display's background color
-     * @param color the color of the background
-     * @return the display to allow for method chaining
-     */
-    public Display setBackgroundColor(int color) {
-        this.backgroundColor = color;
         return this;
     }
 
@@ -92,7 +86,8 @@ public class Display {
 
 
     /**
-     * Gets a color int based on 0-255 rgba values
+     * Gets a color int based on 0-255 rgba values.
+     * This can be used in settings background and text color.
      * TODO: maybe move to somewhere more useful
      * @param red value between 0 and 255
      * @param green value between 0 and 255
@@ -124,7 +119,7 @@ public class Display {
     }
 
     /**
-     * Gets a string from a line in a display
+     * Gets a string from a line in a display.
      * @param lineNumber the line number to get
      * @return the string in line of display
      */
@@ -159,7 +154,7 @@ public class Display {
 
 
     /**
-     * Set the X and Y render position of the display
+     * Set the X and Y render position of the display.
      * @param renderX the x coordinate
      * @param renderY the y coordinate
      * @return the display to allow for method chaining
@@ -176,11 +171,21 @@ public class Display {
     void render() {
         if (!shouldRender) return;
 
+        if (this.background == Background.FULL) {
+            int maxWidth = 0;
+            for (String line : lines) {
+                if (ren.getStringWidth(line) > maxWidth)
+                    maxWidth = ren.getStringWidth(line);
+            }
+
+            drawBackground(this.renderX, this.renderY, maxWidth, lines.size()*10);
+        }
+
         int i = 0;
 
         for (String line : lines) {
             if (this.background == Background.PER_LINE)
-                drawBackground(this.renderX, this.renderY + (i*10), ren.getStringWidth(line), 10, this.backgroundColor);
+                drawBackground(this.renderX, this.renderY + (i*10), ren.getStringWidth(line), 10);
 
             drawString(line, this.renderX, this.renderY + (i * 10));
 
@@ -189,23 +194,23 @@ public class Display {
     }
 
     // helper method to draw background with align
-    private void drawBackground(float x, float y, float width, float height, int color) {
+    private void drawBackground(float x, float y, float width, float height) {
         if (this.align == Align.LEFT)
-            drawRect(x, y, x + width, y + height, color);
+            drawRect(x, y, x + width, y + height, this.backgroundColor);
         if (this.align == Align.RIGHT)
-            drawRect(x - width, y, x, y + height, color);
+            drawRect(x - width, y, x, y + height, this.backgroundColor);
         if (this.align == Align.CENTER)
-            drawRect(x - width/2, y, x + width/2, y + height, color);
+            drawRect(x - width/2, y, x + width/2, y + height, this.backgroundColor);
     }
 
     // helper method to draw string with align
     private void drawString(String line, float x, float y) {
         if (this.align == Align.LEFT)
-            ren.drawStringWithShadow(line, x, y, 0xffffffff);
+            ren.drawStringWithShadow(line, x, y, this.textColor);
         else if (this.align == Align.RIGHT)
-            ren.drawStringWithShadow(line, x - ren.getStringWidth(line), y, 0xffffffff);
+            ren.drawStringWithShadow(line, x - ren.getStringWidth(line), y, this.textColor);
         else if (this.align == Align.CENTER)
-            ren.drawStringWithShadow(line, x - ren.getStringWidth(line)/2, y, 0xffffffff);
+            ren.drawStringWithShadow(line, x - ren.getStringWidth(line)/2, y, this.textColor);
     }
 
     //TODO: move somewhere to actually be used in js
