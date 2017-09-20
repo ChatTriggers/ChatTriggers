@@ -24,11 +24,11 @@ public class Display {
     private boolean shouldRender;
     @Getter
     private Background background;
-    @Getter @Setter
+    @Getter
     private int backgroundColor;
     @Getter
     private Align align;
-    @Getter @Setter
+    @Getter
     private int textColor;
 
     private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
@@ -52,18 +52,39 @@ public class Display {
     }
 
 
+    /**
+     * Sets a display's text color.
+     * @param color the integer color of the text
+     * @return the display to allow for method chaining
+     */
+    public Display setTextColor(int color) {
+        this.textColor = color;
+        return this;
+    }
+
+
 
     public enum Background {
         NONE, FULL, PER_LINE
     }
 
     /**
-     * Sets a display's background type
+     * Sets a display's background type.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
     public Display setBackground(Background background) {
         this.background = background;
+        return this;
+    }
+
+    /**
+     * Sets a display's background color.
+     * @param color the integer color of the background
+     * @return the display to allow for method chaining
+     */
+    public Display setBackgroundColor(int color) {
+        this.backgroundColor = color;
         return this;
     }
 
