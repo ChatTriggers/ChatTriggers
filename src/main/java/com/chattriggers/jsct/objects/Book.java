@@ -34,11 +34,7 @@ public class Book {
     public Book addPage(Message message) {
         NBTTagList pages = (NBTTagList) bookData.getTag("pages");
 
-        System.out.println("before pages is " + pages);
-
         pages.appendTag(new NBTTagString(IChatComponent.Serializer.componentToJson(message.getChatMessage())));
-
-        System.out.println("after pages is " + pages);
 
         updateBookScreen(pages);
 
@@ -69,8 +65,6 @@ public class Book {
         bookData.removeTag("pages");
         bookData.setTag("pages", pages);
         book.setTagCompound(bookData);
-
-        System.out.println("Finally pages is " + pages);
 
         if (bookScreen != null) {
             ReflectionHelper.setPrivateValue(GuiScreenBook.class, bookScreen, pages, "field_146483_y", "bookPages");
