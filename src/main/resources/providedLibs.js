@@ -10,9 +10,31 @@ var ChatLib = Java.type("com.chattriggers.jsct.libs.ChatLib");
 
 //Objects
 var Display = Java.type("com.chattriggers.jsct.objects.Display");
+var Message = Java.type("com.chattriggers.jsct.utils.Message");
 
 function updateProvidedLibs() {
 
+}
+
+function clickable(text, action, value, hover) {
+    var ChatStyle = Java.type("net.minecraft.util.ChatStyle");
+    var ChatComponentText = Java.type("net.minecraft.util.ChatComponentText");
+    var ClickEvent = Java.type("net.minecraft.event.ClickEvent");
+    var HoverEvent = Java.type("net.minecraft.event.HoverEvent");
+
+    var chatComponent = new ChatComponentText(ChatLib.addColor(text));
+
+    chatComponent.setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(
+        ClickEvent.Action.getValueByCanonicalName(action), value
+    )));
+
+    if (hover != null && hover != "") {
+        chatComponent.getChatStyle().setChatHoverEvent(new HoverEvent(
+            HoverEvent.Action.SHOW_TEXT, new ChatComponentText(ChatLib.addColor(hover))
+        ));
+    }
+
+    return chatComponent;
 }
 
 module.exports = ArrayList;

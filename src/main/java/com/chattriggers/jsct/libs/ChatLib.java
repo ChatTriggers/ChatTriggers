@@ -1,13 +1,16 @@
 package com.chattriggers.jsct.libs;
 
+import com.chattriggers.jsct.utils.Message;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.ChatComponentProcessor;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,6 +35,12 @@ public class ChatLib {
 
             ChatComponentText cct = new ChatComponentText(addColor(message));
             Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(cct, (byte) 0));
+        }
+    }
+
+    public static void chat(Message... messages) {
+        for (Message message : messages) {
+            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(message.getChatMessage(), (byte) 0));
         }
     }
 
