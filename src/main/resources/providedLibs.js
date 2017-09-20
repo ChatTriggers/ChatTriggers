@@ -11,6 +11,7 @@ var ChatLib = Java.type("com.chattriggers.jsct.libs.ChatLib");
 //Objects
 var Display = Java.type("com.chattriggers.jsct.objects.Display");
 var Message = Java.type("com.chattriggers.jsct.utils.Message");
+var Book = Java.type("com.chattriggers.jsct.objects.Book");
 
 function updateProvidedLibs() {
 

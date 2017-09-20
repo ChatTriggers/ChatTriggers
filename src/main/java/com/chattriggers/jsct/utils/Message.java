@@ -2,6 +2,8 @@ package com.chattriggers.jsct.utils;
 
 import com.chattriggers.jsct.libs.ChatLib;
 import lombok.Getter;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.*;
 
 public class Message {
