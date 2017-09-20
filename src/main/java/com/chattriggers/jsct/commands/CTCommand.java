@@ -3,6 +3,7 @@ package com.chattriggers.jsct.commands;
 import com.chattriggers.jsct.JSCT;
 import com.chattriggers.jsct.libs.ChatLib;
 import com.chattriggers.jsct.loader.ScriptLoader;
+import com.chattriggers.jsct.objects.DisplayHandler;
 import com.chattriggers.jsct.triggers.TriggerRegister;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -94,6 +95,7 @@ public class CTCommand extends CommandBase {
         scriptLoader = new ScriptLoader();
         JSCT.getInstance().setScriptLoader(scriptLoader);
         JSCT.getInstance().setInvocableEngine(((Invocable) scriptEngine));
+        JSCT.getInstance().setDisplayHandler(new DisplayHandler());
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
     }

@@ -8,7 +8,6 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 
 public class ScriptLoader {

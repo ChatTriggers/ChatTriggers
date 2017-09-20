@@ -27,7 +27,7 @@ public class JSCT {
     private Invocable invocableEngine;
     @Getter @Setter
     private ScriptLoader scriptLoader;
-    @Getter
+    @Getter @Setter
     private DisplayHandler displayHandler;
 
     @EventHandler

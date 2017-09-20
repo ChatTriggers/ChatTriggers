@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +22,10 @@ public class Display {
     private int renderY;
     @Getter @Setter
     private boolean shouldRender;
+    @Getter
+    private Background background;
+    @Getter
+    private int backgroundColor;
 
     public Display() {
         lines = new ArrayList<>();
@@ -28,7 +36,38 @@ public class Display {
 
         shouldRender = false;
 
+        background = Background.NONE;
+        backgroundColor = 0x50000000;
+
         JSCT.getInstance().getDisplayHandler().registerDisplay(this);
+    }
+
+    public enum Background {
+        NONE, FULL, PER_LINE
+    }
+
+    /**
+     * Sets a display's background type
+     * @param background the type of background
+     * @return the display to allow for method chaining
+     */
+    public Display setBackground(Background background) {
+        this.background = background;
+        return this;
+    }
+
+    /**
+     * Sets a display's background color
+     * @param color the color of the background
+     * @return the display to allow for method chaining
+     */
+    public Display setBackgroundColor(int color) {
+        this.backgroundColor = color;
+        return this;
+    }
+
+    public static int color(int red, int green, int blue, int alpha) {
+        return (alpha * 0x1000000) + (red * 0x10000) + (green * 0x100) + blue;
     }
 
     /**
@@ -40,6 +79,15 @@ public class Display {
     public Display setLine(int lineNumber, String line) {
         lines.set(lineNumber, ChatLib.addColor(line));
         return this;
+    }
+
+    /**
+     * Gets a string from a line in a display
+     * @param lineNumber the line number to get
+     * @return the string in line of display
+     */
+    public String getLine(int lineNumber) {
+        return lines.get(lineNumber);
     }
 
     /**
@@ -88,9 +136,46 @@ public class Display {
         int i = 0;
 
         for (String line : lines) {
+            if (background == Background.PER_LINE)
+                drawRect(renderX, renderY + (i*10), renderX + ren.getStringWidth(line), renderY + (i*10) + 10, backgroundColor);
+
             ren.drawStringWithShadow(line, renderX, renderY + (i*10), 0xffffffff);
 
             i++;
         }
+    }
+
+    //TODO: move somewhere to acutally be used in js
+    private void drawRect(double left, double top, double right, double bottom, int color) {
+        if (left < right) {
+            double i = left;
+            left = right;
+            right = i;
+        }
+
+        if (top < bottom) {
+            double j = top;
+            top = bottom;
+            bottom = j;
+        }
+
+        float f3 = (float)(color >> 24 & 255) / 255.0F;
+        float f = (float)(color >> 16 & 255) / 255.0F;
+        float f1 = (float)(color >> 8 & 255) / 255.0F;
+        float f2 = (float)(color & 255) / 255.0F;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(f, f1, f2, f3);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(left+1, bottom-1, 0.0D).endVertex();
+        worldrenderer.pos(right-2, bottom-1, 0.0D).endVertex();
+        worldrenderer.pos(right-2, top-1, 0.0D).endVertex();
+        worldrenderer.pos(left+1, top-1, 0.0D).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 }

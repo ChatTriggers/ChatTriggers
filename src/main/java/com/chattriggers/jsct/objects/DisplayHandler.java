@@ -21,7 +21,6 @@ public class DisplayHandler {
         this.displays.add(display);
     }
 
-
     @SubscribeEvent
     public void renderDisplays(RenderGameOverlayEvent event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
