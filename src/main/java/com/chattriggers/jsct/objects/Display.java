@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -64,6 +65,7 @@ public class Display {
 
 
 
+    // background type
     public enum Background {
         NONE, FULL, PER_LINE
     }
@@ -89,11 +91,12 @@ public class Display {
     }
 
 
-
+    
+    // text align
     public enum Align {
         LEFT, CENTER, RIGHT
     }
-
+    
     /**
      * Sets a display's text alignment
      * @param align the type of alignment
@@ -186,9 +189,29 @@ public class Display {
         return this;
     }
 
+
+
     /**
-     * Renders the display on to the player's screen.
+     * gets the current resolution width scaled to guiScale.
+     * @return scaled width
      */
+    public static int getRenderWidth() {
+        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        return res.getScaledWidth();
+    }
+
+    /**
+     * gets the current resolution height scaled to guiScale.
+     * @return scaled height
+     */
+    public static int getRenderHeight() {
+        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        return res.getScaledHeight();
+    }
+
+
+
+    // Renders the display on to the player's screen.
     void render() {
         if (!shouldRender) return;
 
@@ -234,7 +257,7 @@ public class Display {
             ren.drawStringWithShadow(line, x - ren.getStringWidth(line)/2, y, this.textColor);
     }
 
-    //TODO: move somewhere to actually be used in js
+    // TODO: move somewhere to actually be used in js
     private void drawRect(float left, float top, float right, float bottom, int color) {
         if (left < right) {
             float i = left;
