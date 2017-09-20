@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -24,11 +23,11 @@ public class Display {
     @Getter @Setter
     private boolean shouldRender;
     @Getter
-    private Background background;
+    private DisplayHandler.Background background;
     @Getter
     private int backgroundColor;
     @Getter
-    private Align align;
+    private DisplayHandler.Align align;
     @Getter
     private int textColor;
 
@@ -43,9 +42,9 @@ public class Display {
 
         shouldRender = false;
 
-        background = Background.NONE;
+        background = DisplayHandler.Background.NONE;
         backgroundColor = 0x50000000;
-        align = Align.LEFT;
+        align = DisplayHandler.Align.LEFT;
 
         textColor = 0xffffffff;
 
@@ -65,17 +64,12 @@ public class Display {
 
 
 
-    // background type
-    public enum Background {
-        NONE, FULL, PER_LINE
-    }
-
     /**
      * Sets a display's background type.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
-    public Display setBackground(Background background) {
+    public Display setBackground(DisplayHandler.Background background) {
         this.background = background;
         return this;
     }
@@ -92,41 +86,14 @@ public class Display {
 
 
     
-    // text align
-    public enum Align {
-        LEFT, CENTER, RIGHT
-    }
-    
     /**
      * Sets a display's text alignment
      * @param align the type of alignment
      * @return the display to allow for method chaining
      */
-    public Display setAlign(Align align) {
+    public Display setAlign(DisplayHandler.Align align) {
         this.align = align;
         return this;
-    }
-
-
-
-    /**
-     * Gets a color int based on 0-255 rgba values.
-     * This can be used in settings background and text color.
-     * TODO: maybe move to somewhere more useful
-     * @param red value between 0 and 255
-     * @param green value between 0 and 255
-     * @param blue value between 0 and 255
-     * @param alpha value between 0 and 255
-     * @return integer color
-     */
-    public static int color(int red, int green, int blue, int alpha) {
-        if (red > 255) red = 255;
-        if (green > 255) green = 255;
-        if (blue > 255) blue = 255;
-        if (red < 0) red = 0;
-        if (green < 0) green = 0;
-        if (blue < 0) blue = 0;
-        return (alpha * 0x1000000) + (red * 0x10000) + (green * 0x100) + blue;
     }
 
 
@@ -191,31 +158,11 @@ public class Display {
 
 
 
-    /**
-     * gets the current resolution width scaled to guiScale.
-     * @return scaled width
-     */
-    public static int getRenderWidth() {
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
-        return res.getScaledWidth();
-    }
-
-    /**
-     * gets the current resolution height scaled to guiScale.
-     * @return scaled height
-     */
-    public static int getRenderHeight() {
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
-        return res.getScaledHeight();
-    }
-
-
-
     // Renders the display on to the player's screen.
     void render() {
         if (!shouldRender) return;
 
-        if (this.background == Background.FULL) {
+        if (this.background == DisplayHandler.Background.FULL) {
             int maxWidth = 0;
             for (String line : lines) {
                 if (ren.getStringWidth(line) > maxWidth)
@@ -228,7 +175,7 @@ public class Display {
         int i = 0;
 
         for (String line : lines) {
-            if (this.background == Background.PER_LINE)
+            if (this.background == DisplayHandler.Background.PER_LINE)
                 drawBackground(this.renderX, this.renderY + (i*10), ren.getStringWidth(line), 10);
 
             drawString(line, this.renderX, this.renderY + (i * 10));
@@ -239,21 +186,21 @@ public class Display {
 
     // helper method to draw background with align
     private void drawBackground(float x, float y, float width, float height) {
-        if (this.align == Align.LEFT)
+        if (this.align == DisplayHandler.Align.LEFT)
             drawRect(x, y, x + width, y + height, this.backgroundColor);
-        if (this.align == Align.RIGHT)
+        if (this.align == DisplayHandler.Align.RIGHT)
             drawRect(x - width, y, x, y + height, this.backgroundColor);
-        if (this.align == Align.CENTER)
+        if (this.align == DisplayHandler.Align.CENTER)
             drawRect(x - width/2, y, x + width/2, y + height, this.backgroundColor);
     }
 
     // helper method to draw string with align
     private void drawString(String line, float x, float y) {
-        if (this.align == Align.LEFT)
+        if (this.align == DisplayHandler.Align.LEFT)
             ren.drawStringWithShadow(line, x, y, this.textColor);
-        else if (this.align == Align.RIGHT)
+        else if (this.align == DisplayHandler.Align.RIGHT)
             ren.drawStringWithShadow(line, x - ren.getStringWidth(line), y, this.textColor);
-        else if (this.align == Align.CENTER)
+        else if (this.align == DisplayHandler.Align.CENTER)
             ren.drawStringWithShadow(line, x - ren.getStringWidth(line)/2, y, this.textColor);
     }
 
