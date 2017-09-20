@@ -17,15 +17,19 @@ import java.util.Collections;
 public class Display {
     private ArrayList<String> lines;
     @Getter @Setter
-    private int renderX;
+    private float renderX;
     @Getter @Setter
-    private int renderY;
+    private float renderY;
     @Getter @Setter
     private boolean shouldRender;
     @Getter
     private Background background;
     @Getter
     private int backgroundColor;
+    @Getter
+    private Align align;
+
+    private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
 
     public Display() {
         lines = new ArrayList<>();
@@ -38,9 +42,12 @@ public class Display {
 
         background = Background.NONE;
         backgroundColor = 0x50000000;
+        align = Align.LEFT;
 
         JSCT.getInstance().getDisplayHandler().registerDisplay(this);
     }
+
+
 
     public enum Background {
         NONE, FULL, PER_LINE
@@ -66,9 +73,44 @@ public class Display {
         return this;
     }
 
+
+
+    public enum Align {
+        LEFT, CENTER, RIGHT
+    }
+
+    /**
+     * Sets a display's text alignment
+     * @param align the type of alignment
+     * @return the display to allow for method chaining
+     */
+    public Display setAlign(Align align) {
+        this.align = align;
+        return this;
+    }
+
+
+
+    /**
+     * Gets a color int based on 0-255 rgba values
+     * TODO: maybe move to somewhere more useful
+     * @param red value between 0 and 255
+     * @param green value between 0 and 255
+     * @param blue value between 0 and 255
+     * @param alpha value between 0 and 255
+     * @return integer color
+     */
     public static int color(int red, int green, int blue, int alpha) {
+        if (red > 255) red = 255;
+        if (green > 255) green = 255;
+        if (blue > 255) blue = 255;
+        if (red < 0) red = 0;
+        if (green < 0) green = 0;
+        if (blue < 0) blue = 0;
         return (alpha * 0x1000000) + (red * 0x10000) + (green * 0x100) + blue;
     }
+
+
 
     /**
      * Sets a display line to a certain string.
@@ -114,6 +156,8 @@ public class Display {
         return this;
     }
 
+
+
     /**
      * Set the X and Y render position of the display
      * @param renderX the x coordinate
@@ -129,32 +173,51 @@ public class Display {
     /**
      * Renders the display on to the player's screen.
      */
-    public void render() {
+    void render() {
         if (!shouldRender) return;
 
-        FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
         int i = 0;
 
         for (String line : lines) {
-            if (background == Background.PER_LINE)
-                drawRect(renderX, renderY + (i*10), renderX + ren.getStringWidth(line), renderY + (i*10) + 10, backgroundColor);
+            if (this.background == Background.PER_LINE)
+                drawBackground(this.renderX, this.renderY + (i*10), ren.getStringWidth(line), 10, this.backgroundColor);
 
-            ren.drawStringWithShadow(line, renderX, renderY + (i*10), 0xffffffff);
+            drawString(line, this.renderX, this.renderY + (i * 10));
 
             i++;
         }
     }
 
-    //TODO: move somewhere to acutally be used in js
-    private void drawRect(double left, double top, double right, double bottom, int color) {
+    // helper method to draw background with align
+    private void drawBackground(float x, float y, float width, float height, int color) {
+        if (this.align == Align.LEFT)
+            drawRect(x, y, x + width, y + height, color);
+        if (this.align == Align.RIGHT)
+            drawRect(x - width, y, x, y + height, color);
+        if (this.align == Align.CENTER)
+            drawRect(x - width/2, y, x + width/2, y + height, color);
+    }
+
+    // helper method to draw string with align
+    private void drawString(String line, float x, float y) {
+        if (this.align == Align.LEFT)
+            ren.drawStringWithShadow(line, x, y, 0xffffffff);
+        else if (this.align == Align.RIGHT)
+            ren.drawStringWithShadow(line, x - ren.getStringWidth(line), y, 0xffffffff);
+        else if (this.align == Align.CENTER)
+            ren.drawStringWithShadow(line, x - ren.getStringWidth(line)/2, y, 0xffffffff);
+    }
+
+    //TODO: move somewhere to actually be used in js
+    private void drawRect(float left, float top, float right, float bottom, int color) {
         if (left < right) {
-            double i = left;
+            float i = left;
             left = right;
             right = i;
         }
 
         if (top < bottom) {
-            double j = top;
+            float j = top;
             top = bottom;
             bottom = j;
         }
