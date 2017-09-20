@@ -14,3 +14,9 @@ var Display = Java.type("com.chattriggers.jsct.objects.Display");
 function updateProvidedLibs() {
 
 }
+
+module.exports = ArrayList;
+module.exports = TriggerRegister;
+module.exports = TriggerResult;
+module.exports = ChatLib;
+module.exports = Display;
