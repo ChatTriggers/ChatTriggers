@@ -92,10 +92,11 @@ public class CTCommand extends CommandBase {
 
         scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
         JSCT.getInstance().setScriptEngine(scriptEngine);
+        JSCT.getInstance().getDisplayHandler().clearDisplays();
+
         scriptLoader = new ScriptLoader();
         JSCT.getInstance().setScriptLoader(scriptLoader);
         JSCT.getInstance().setInvocableEngine(((Invocable) scriptEngine));
-        JSCT.getInstance().setDisplayHandler(new DisplayHandler());
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
     }

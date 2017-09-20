@@ -21,6 +21,10 @@ public class DisplayHandler {
         this.displays.add(display);
     }
 
+    public void clearDisplays() {
+        displays.clear();
+    }
+
     @SubscribeEvent
     public void renderDisplays(RenderGameOverlayEvent event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
