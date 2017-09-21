@@ -11,7 +11,8 @@ public class ChatListener {
             //Normal Chat Message
             TriggerRegister.TriggerTypes.triggerAllOfType(
                     TriggerRegister.TriggerTypes.CHAT,
-                    event.message.getUnformattedText()
+                    event.message.getUnformattedText(),
+                    event
             );
         }
     }

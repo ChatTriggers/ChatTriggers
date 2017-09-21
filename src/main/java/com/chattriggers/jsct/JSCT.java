@@ -1,6 +1,7 @@
 package com.chattriggers.jsct;
 
 import com.chattriggers.jsct.commands.CTCommand;
+import com.chattriggers.jsct.listeners.ChatListener;
 import com.chattriggers.jsct.listeners.WorldListener;
 import com.chattriggers.jsct.loader.ScriptLoader;
 import com.chattriggers.jsct.objects.DisplayHandler;
@@ -41,6 +42,7 @@ public class JSCT {
 
         MinecraftForge.EVENT_BUS.register(scriptLoader);
         MinecraftForge.EVENT_BUS.register(new WorldListener());
+        MinecraftForge.EVENT_BUS.register(new ChatListener());
         MinecraftForge.EVENT_BUS.register(displayHandler);
 
         ClientCommandHandler.instance.registerCommand(new CTCommand());
