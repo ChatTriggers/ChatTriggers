@@ -24,6 +24,14 @@ public class TriggerRegister {
     }
 
     /**
+     * Register a new method that receives all chat events
+     * @param methodName the name of the method to callback when the event is fired
+     */
+    public static void registerChat(String methodName) {
+        registerChat(methodName, "");
+    }
+
+    /**
      * Register a new method that receives world load events
      * @param methodName the name of the method to callback when the event is fired
      */
