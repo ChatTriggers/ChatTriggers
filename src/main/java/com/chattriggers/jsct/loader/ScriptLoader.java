@@ -2,6 +2,8 @@ package com.chattriggers.jsct.loader;
 
 import com.chattriggers.jsct.JSCT;
 import com.chattriggers.jsct.imports.Import;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.script.Invocable;
@@ -46,7 +48,7 @@ public class ScriptLoader {
         }
     }
 
-    //@SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onClientTick(TickEvent.ClientTickEvent e) {
         try {
             invocableEngine.invokeFunction("updateProvidedLibs");
