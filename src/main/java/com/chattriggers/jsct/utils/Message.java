@@ -2,6 +2,7 @@ package com.chattriggers.jsct.utils;
 
 import com.chattriggers.jsct.libs.ChatLib;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.util.*;
 
 import java.util.ArrayList;
@@ -11,13 +12,16 @@ public class Message {
     @Getter
     private IChatComponent chatMessage;
     private ArrayList<Object> messageParts;
+    @Getter @Setter
+    private int chatLineId;
 
     public Message(Object... messages) {
-        chatMessage = new ChatComponentText("");
         messageParts = new ArrayList<>();
 
         Collections.addAll(messageParts, messages);
         parseMessages(messages);
+
+        this.chatLineId = -1;
     }
 
     /**
@@ -35,10 +39,16 @@ public class Message {
      * @return the copy of the message
      */
     public Message copy() {
+        if (chatLineId != -1) {
+            return new Message(chatLineId, messageParts);
+        }
+
         return new Message(messageParts);
     }
 
     private void parseMessages(Object... messages) {
+        chatMessage = new ChatComponentText("");
+
         for (Object message : messages) {
             if (message instanceof String) {
                 ChatComponentText cct = new ChatComponentText(ChatLib.addColor((String) message));

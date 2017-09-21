@@ -55,7 +55,7 @@ public class CTCommand extends CommandBase {
             switch (args[0].toLowerCase()) {
                 case("reload"):
                 case("load"):
-                    reload();
+                    JSCT.getInstance().initMain(false);
                     ChatLib.chat(EnumChatFormatting.RED + "Reloaded js files");
                     break;
                 case("files"):
@@ -80,24 +80,5 @@ public class CTCommand extends CommandBase {
             exception.printStackTrace();
             ChatLib.chat(EnumChatFormatting.RED + "Could not open file location");
         }
-    }
-
-    /**
-     * Reload mod's supporting js files and reinitialise script engine
-     */
-    public void reload() {
-        TriggerRegister.TriggerTypes.clearAllTriggers();
-
-        MinecraftForge.EVENT_BUS.unregister(scriptLoader);
-
-        scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
-        JSCT.getInstance().setScriptEngine(scriptEngine);
-        JSCT.getInstance().getDisplayHandler().clearDisplays();
-
-        scriptLoader = new ScriptLoader();
-        JSCT.getInstance().setScriptLoader(scriptLoader);
-        JSCT.getInstance().setInvocableEngine(((Invocable) scriptEngine));
-
-        MinecraftForge.EVENT_BUS.register(scriptLoader);
     }
 }

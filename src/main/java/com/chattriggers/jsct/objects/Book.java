@@ -28,8 +28,9 @@ public class Book {
     }
 
     /**
-     * Add a page to the book
+     * Add a page to the book.
      * @param message the entire message for what the page should be
+     * @return the current book to allow method chaining
      */
     public Book addPage(Message message) {
         NBTTagList pages = (NBTTagList) bookData.getTag("pages");
@@ -42,8 +43,9 @@ public class Book {
     }
 
     /**
-     * Overloaded method for adding a simple page to the book
+     * Overloaded method for adding a simple page to the book.
      * @param message a simple string to make the page
+     * @return the current book to allow method chaining
      */
     public Book addPage(String message) {
         addPage(new Message(message));
@@ -51,6 +53,12 @@ public class Book {
         return this;
     }
 
+    /**
+     * Sets a page of the book to the specified message.
+     * @param pageNumber the number of the page to set
+     * @param message the message to set the page to
+     * @return the current book to allow method chaining
+     */
     public Book setPage(int pageNumber, Message message) {
         NBTTagList pages = (NBTTagList) bookData.getTag("pages");
 

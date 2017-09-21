@@ -5,13 +5,11 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.util.ChatComponentProcessor;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -26,32 +24,66 @@ import java.util.List;
 public class ChatLib {
 
     /**
-     * Adds as many chat message to chat as passed
-     * @param messages the message(s) to be printed
+     * Adds as many chat message to chat as passed.
+     * @param recursive whether or not triggers should be triggered by this message
+     * @param message the message to be printed
      */
-    public static void chat(String... messages) {
-        for (String message : messages) {
-            if (!isPlayer("[CHAT]: " + message)) return;
+    public static void chat(String message, boolean recursive) {
+        if (!isPlayer("[CHAT]: " + message)) return;
 
-            ChatComponentText cct = new ChatComponentText(addColor(message));
+        ChatComponentText cct = new ChatComponentText(addColor(message));
+
+        if (recursive) {
             Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(cct, (byte) 0));
+        } else {
+            Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
         }
     }
 
-    public static void chat(Message... messages) {
-        for (Message message : messages) {
-            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(message.getChatMessage(), (byte) 0));
+    /**
+     * Adds a message to chat (IS RECURSIVE! See {@link #chat(String, boolean)}
+     * to specify it not being recursive.
+     * @param message the message to be printed
+     */
+    public static void chat(String message) {
+        chat(message, true);
+    }
+
+    /**
+     * Print a {@link Message} in chat.
+     * @param recursive whether or not triggers should be triggered by this message
+     * @param message the message to be printed
+     */
+    public static void chat(Message message, boolean recursive) {
+        if (message.getChatLineId() != -1) {
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
+            return;
         }
+
+        if (recursive) {
+            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(message.getChatMessage(), (byte) 0));
+        } else {
+            Minecraft.getMinecraft().thePlayer.addChatMessage(message.getChatMessage());
+        }
+    }
+
+    /**
+     * Print a {@link Message} in chat (IS RECURSIVE! See {@link #chat(Message, boolean)}
+     * to specify it not being recursive.
+     * @param message the message to be printed
+     */
+    public static void chat(Message message) {
+        chat(message, true);
     }
 
     /**
      * Add a chat message to chat, but with a special ID which allows
      * them to be clear with {@link #clearChat(int...)}.
-     * This ID can be used more than once.
-     * @param message the message to be printed
+     * This ID can't be used more than once.
      * @param chatLineID the chat line to save the message under (pass to clearChat)
+     * @param message the message to be printed
      */
-    public static void chat(int chatLineID, String message) {
+    public static void chat(String message, int chatLineID) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(addColor(message));
@@ -59,7 +91,7 @@ public class ChatLib {
     }
 
     /**
-     * Say chat message
+     * Say chat message.
      * @param message the message to be sent
      */
     public static void say(String message) {
@@ -70,7 +102,7 @@ public class ChatLib {
     }
 
     /**
-     * Run a command
+     * Run a command.
      * @param command the command to run, without the leading slash (Ex. "help")
      */
     public static void command(String command) {
@@ -126,6 +158,67 @@ public class ChatLib {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
             }
         }
+    }
+
+    /**
+     * Create a clickable message in chat, to be used with {@link Message}.
+     * Also shows text on hover.
+     * @param text the text to show in the message
+     * @param action the action to perform, see {@link ClickEvent.Action}
+     * @param value the value to perform the action with
+     * @param hoverText the text to show when hovered over
+     * @return the chat component created
+     */
+    public static IChatComponent clickable(String text, String action, String value, String hoverText) {
+        ChatComponentText cct = new ChatComponentText(addColor(text));
+
+        cct.setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(
+                ClickEvent.Action.getValueByCanonicalName(action), value
+        )));
+
+        if (hoverText != null) {
+            cct.getChatStyle().setChatHoverEvent(new HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT, new ChatComponentText(addColor(hoverText))
+            ));
+        }
+
+        return cct;
+    }
+
+    /**
+     * Create a clickable message in chat, to be used with {@link Message}.
+     * @param text the text to show in the message
+     * @param action the action to perform, see {@link ClickEvent.Action}
+     * @param value the value to perform the action with
+     * @return the chat component created
+     */
+    public static IChatComponent clickable(String text, String action, String value) {
+        return clickable(text, action, value, null);
+    }
+
+    /**
+     * Create a hoverable message in chat, to be used with {@link Message}
+     * @param text the text to show in the message
+     * @param hover the text to show when hovered over
+     * @return the chat component created
+     */
+    public static IChatComponent hover(String text, String hover) {
+        ChatComponentText cct = new ChatComponentText(addColor(text));
+
+        cct.setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(
+                HoverEvent.Action.SHOW_TEXT, new ChatComponentText(addColor(hover))
+        )));
+
+        return cct;
+    }
+
+    /**
+     * Get the unformatted text of a chat event
+     * @param event the chat event passed in by a chat trigger
+     * @return the unformatted text
+     */
+    public static String getChatMessage(ClientChatReceivedEvent event) {
+        return event.message.getUnformattedText();
     }
 
     private static boolean isAllowedCommand(String command) {

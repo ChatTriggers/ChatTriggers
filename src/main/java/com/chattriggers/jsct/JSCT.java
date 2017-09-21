@@ -5,6 +5,7 @@ import com.chattriggers.jsct.listeners.ChatListener;
 import com.chattriggers.jsct.listeners.WorldListener;
 import com.chattriggers.jsct.loader.ScriptLoader;
 import com.chattriggers.jsct.objects.DisplayHandler;
+import com.chattriggers.jsct.triggers.TriggerRegister;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -34,18 +35,31 @@ public class JSCT {
     @EventHandler
     public void init(FMLInitializationEvent e) {
         instance = this;
+
+        initMain(true);
+        ClientCommandHandler.instance.registerCommand(new CTCommand());
+    }
+
+    public void initMain(boolean firstTime) {
         this.scriptEngine = new ScriptEngineManager(null).getEngineByName("nashorn");
         this.invocableEngine = ((Invocable) scriptEngine);
 
-        this.displayHandler = new DisplayHandler();
+        if (!firstTime) {
+            MinecraftForge.EVENT_BUS.unregister(scriptLoader);
+            this.displayHandler.clearDisplays();
+            TriggerRegister.TriggerTypes.clearAllTriggers();
+        }
+
         this.scriptLoader = new ScriptLoader();
-
         MinecraftForge.EVENT_BUS.register(scriptLoader);
-        MinecraftForge.EVENT_BUS.register(new WorldListener());
-        MinecraftForge.EVENT_BUS.register(new ChatListener());
-        MinecraftForge.EVENT_BUS.register(displayHandler);
 
-        ClientCommandHandler.instance.registerCommand(new CTCommand());
+        if (firstTime) {
+            this.displayHandler = new DisplayHandler();
+
+            MinecraftForge.EVENT_BUS.register(displayHandler);
+            MinecraftForge.EVENT_BUS.register(new WorldListener());
+            MinecraftForge.EVENT_BUS.register(new ChatListener());
+        }
     }
 }
 
