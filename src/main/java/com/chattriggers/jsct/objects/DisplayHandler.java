@@ -46,6 +46,11 @@ public class DisplayHandler {
         LEFT, CENTER, RIGHT
     }
 
+    // line order
+    public enum Order {
+        UP, DOWN
+    }
+
     /**
      * gets the current resolution width scaled to guiScale.
      * @return scaled width
