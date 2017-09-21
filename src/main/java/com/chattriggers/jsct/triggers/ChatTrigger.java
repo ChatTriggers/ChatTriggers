@@ -20,7 +20,7 @@ public class ChatTrigger extends Trigger {
 
         String replacedCriteria = Pattern.quote(chatCriteria).replaceAll("\\$\\{.+?}", "\\\\E(.+)\\\\Q");
 
-        criteriaPattern = Pattern.compile(replacedCriteria);
+        criteriaPattern = Pattern.compile(chatCriteria.equals("") ? ".+" : replacedCriteria);
     }
 
     /**
@@ -36,13 +36,12 @@ public class ChatTrigger extends Trigger {
 
         String chatMessage = (String) args[0];
 
-        List<String> variables = matchesChatCriteria(chatMessage);
+        List<Object> variables = matchesChatCriteria(chatMessage);
 
         if (variables != null) {
             try {
-                Object isNotCanceled = JSCT.getInstance().getInvocableEngine().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
-
-                if (isNotCanceled != null && isNotCanceled.equals(false)) ((ClientChatReceivedEvent) args[1]).setCanceled(true);
+                variables.add(args[1]);
+                JSCT.getInstance().getInvocableEngine().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
             } catch (ScriptException | NoSuchMethodException e) {
                 e.printStackTrace();
             }
@@ -56,12 +55,12 @@ public class ChatTrigger extends Trigger {
      * @param chat the chat message to compare against
      * @return a list of the variables, in order or null if it doesn't match
      */
-    public List<String> matchesChatCriteria(String chat) {
+    public List<Object> matchesChatCriteria(String chat) {
         Matcher matcher = criteriaPattern.matcher(chat);
 
         if (!matcher.matches()) return null;
 
-        ArrayList<String> variables = new ArrayList<>();
+        ArrayList<Object> variables = new ArrayList<>();
 
         for (int i = 1; i <= matcher.groupCount(); i++) {
             variables.add(matcher.group(i));
