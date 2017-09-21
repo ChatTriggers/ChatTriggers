@@ -38,6 +38,7 @@ public class Display {
     public Display() {
         lines = new ArrayList<>();
 
+        //TODO: Default render X & Y?
         renderX = 0;
         renderY = 0;
 

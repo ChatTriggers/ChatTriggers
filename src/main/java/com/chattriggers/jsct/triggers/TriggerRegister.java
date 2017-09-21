@@ -17,11 +17,6 @@ public class TriggerRegister {
         ChatTrigger trigger = new ChatTrigger(methodName, chatCriteria);
         TriggerTypes.CHAT.addTrigger(trigger);
     }
-    
-    public static void registerChat(String methodName) {
-        ChatTrigger trigger = new ChatTrigger(methodName, "");
-        TriggerTypes.CHAT.addTrigger(trigger);
-    }
 
     /**
      * Register a new method that receives all chat events
