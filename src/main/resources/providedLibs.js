@@ -14,7 +14,7 @@ var DisplayHandler = Java.type("com.chattriggers.jsct.objects.DisplayHandler");
 var Message = Java.type("com.chattriggers.jsct.utils.Message");
 var Book = Java.type("com.chattriggers.jsct.objects.Book");
 
-//Built in Strings
+//Built in vars
 var MinecraftVars = Java.type("com.chattriggers.jsct.libs.MinecraftVars");
 var playerName = MinecraftVars.getPlayerName();
 
