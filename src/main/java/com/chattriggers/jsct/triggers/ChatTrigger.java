@@ -18,7 +18,7 @@ public class ChatTrigger extends Trigger {
         super(methodName);
         this.chatCriteria = chatCriteria;
 
-        String replacedCriteria = chatCriteria.replaceAll("\\$\\{.+?}", "(.+)");
+        String replacedCriteria = Pattern.quote(chatCriteria).replaceAll("\\$\\{.+?}", "(.+)");
 
         criteriaPattern = Pattern.compile(replacedCriteria);
     }
