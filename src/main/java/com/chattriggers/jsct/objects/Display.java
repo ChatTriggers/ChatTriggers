@@ -30,6 +30,8 @@ public class Display {
     private DisplayHandler.Align align;
     @Getter
     private int textColor;
+    @Getter
+    private DisplayHandler.Order order;
 
     private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
 
@@ -45,6 +47,7 @@ public class Display {
         background = DisplayHandler.Background.NONE;
         backgroundColor = 0x50000000;
         align = DisplayHandler.Align.LEFT;
+        order = DisplayHandler.Order.DOWN;
 
         textColor = 0xffffffff;
 
@@ -74,6 +77,19 @@ public class Display {
         return this;
     }
 
+    public Display setBackground(String background) {
+        switch (background.toUpperCase()) {
+            case("FULL"):
+                this.background = DisplayHandler.Background.FULL;
+                break;
+            case("PER_LINE"):
+            case("PER LINE"):
+                this.background = DisplayHandler.Background.PER_LINE;
+                break;
+        }
+        return this;
+    }
+
     /**
      * Sets a display's background color.
      * @param color the integer color of the background
@@ -87,12 +103,51 @@ public class Display {
 
     
     /**
-     * Sets a display's text alignment
+     * Sets a display's text alignment.
      * @param align the type of alignment
      * @return the display to allow for method chaining
      */
     public Display setAlign(DisplayHandler.Align align) {
         this.align = align;
+        return this;
+    }
+
+    public Display setAlign(String align) {
+        switch (align.toUpperCase()) {
+            case("LEFT"):
+                this.align = DisplayHandler.Align.LEFT;
+                break;
+            case("RIGHT"):
+                this.align = DisplayHandler.Align.RIGHT;
+                break;
+            case("CENTER"):
+                this.align = DisplayHandler.Align.CENTER;
+                break;
+        }
+        return this;
+    }
+
+
+
+    /**
+     * Sets a display's line order.
+     * @param order the order of lines
+     * @return the display to allow method chaining
+     */
+    public Display setOrder(DisplayHandler.Order order) {
+        this.order = order;
+        return this;
+    }
+
+    public Display setOrder(String order) {
+        switch (order.toUpperCase()) {
+            case("DOWN"):
+                this.order = DisplayHandler.Order.DOWN;
+                break;
+            case("UP"):
+                this.order = DisplayHandler.Order.UP;
+                break;
+        }
         return this;
     }
 
@@ -169,7 +224,10 @@ public class Display {
                     maxWidth = ren.getStringWidth(line);
             }
 
-            drawBackground(this.renderX, this.renderY, maxWidth, lines.size()*10);
+            if (this.order == DisplayHandler.Order.DOWN)
+                drawBackground(this.renderX, this.renderY, maxWidth, lines.size()*10);
+            else if (this.order == DisplayHandler.Order.UP)
+                drawBackground(this.renderX, this.renderY + 10, maxWidth, -lines.size()*10);
         }
 
         int i = 0;
@@ -180,7 +238,10 @@ public class Display {
 
             drawString(line, this.renderX, this.renderY + (i * 10));
 
-            i++;
+            if (order == DisplayHandler.Order.DOWN)
+                i++;
+            else if (order == DisplayHandler.Order.UP)
+                i--;
         }
     }
 
