@@ -27,6 +27,19 @@ public class TriggerRegister {
     }
 
     /**
+     * Register a new method that receives chat events based on certain criteria
+     * and a parameter.
+     * The parameter can be {@code <s> for start, <c> for contains, <e> for end}
+     * @param methodName the name of the method to callback when the event is fired
+     * @param chatCriteria the criteria for which the event should be called
+     * @param parameter the parameter for the criteria to apply to
+     */
+    public static void registerChat(String methodName, String chatCriteria, String parameter) {
+        ChatTrigger trigger = new ChatTrigger(methodName, chatCriteria, parameter);
+        TriggerTypes.CHAT.addTrigger(trigger);
+    }
+
+    /**
      * Register a new method that receives world load events
      * @param methodName the name of the method to callback when the event is fired
      */

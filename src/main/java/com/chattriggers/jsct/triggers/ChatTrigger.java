@@ -5,6 +5,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import javax.script.ScriptException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
 public class ChatTrigger extends Trigger {
     private String chatCriteria;
     private Pattern criteriaPattern;
+    private Parameter parameter;
 
     public ChatTrigger(String methodName, String chatCriteria) {
         super(methodName);
@@ -21,6 +23,12 @@ public class ChatTrigger extends Trigger {
         String replacedCriteria = Pattern.quote(chatCriteria).replaceAll("\\$\\{.+?}", "\\\\E(.+)\\\\Q");
 
         criteriaPattern = Pattern.compile(chatCriteria.equals("") ? ".+" : replacedCriteria);
+    }
+
+    public ChatTrigger(String methodName, String chatCriteria, String parameter) {
+        this(methodName, chatCriteria);
+
+        this.parameter = Parameter.getParameterByName(parameter);
     }
 
     /**
@@ -58,7 +66,21 @@ public class ChatTrigger extends Trigger {
     public List<Object> matchesChatCriteria(String chat) {
         Matcher matcher = criteriaPattern.matcher(chat);
 
-        if (!matcher.matches()) return null;
+        if (parameter == Parameter.CONTAINS) {
+            if (!matcher.find()) return null;
+        } else if (parameter == Parameter.START) {
+            if (!matcher.find() || matcher.start() != 0) return null;
+        } else if (parameter == Parameter.END) {
+            int endMatch = -1;
+
+            while (matcher.find()) {
+                endMatch = matcher.end();
+            }
+
+            if (endMatch != chat.length()) return null;
+        } else if (parameter == null) {
+            if (!matcher.matches()) return null;
+        }
 
         ArrayList<Object> variables = new ArrayList<>();
 
@@ -67,5 +89,27 @@ public class ChatTrigger extends Trigger {
         }
 
         return variables;
+    }
+
+    private enum Parameter {
+        CONTAINS("<c>", "<contains>", "c", "contains"),
+        START("<s>", "<start>", "s", "start"),
+        END("<e>", "<end>", "e", "end");
+
+        public List<String> names;
+
+        Parameter(String... names) {
+            this.names = Arrays.asList(names);
+        }
+
+        public static Parameter getParameterByName(String name) {
+            for (Parameter parameter : Parameter.values()) {
+                for (String paramName : parameter.names) {
+                    if (paramName.equalsIgnoreCase(name)) return parameter;
+                }
+            }
+
+            return null;
+        }
     }
 }
