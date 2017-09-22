@@ -233,7 +233,7 @@ public class Display {
         int i = 0;
 
         for (String line : lines) {
-            if (this.background == DisplayHandler.Background.PER_LINE)
+            if (!line.equals("") && this.background == DisplayHandler.Background.PER_LINE)
                 drawBackground(this.renderX, this.renderY + (i*10), ren.getStringWidth(line), 10);
 
             drawString(line, this.renderX, this.renderY + (i * 10));

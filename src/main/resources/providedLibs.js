@@ -17,7 +17,14 @@ var Book = Java.type("com.chattriggers.jsct.objects.Book");
 //Built in vars
 var MinecraftVars = Java.type("com.chattriggers.jsct.libs.MinecraftVars");
 var playerName = MinecraftVars.getPlayerName();
+var playerPosX = MinecraftVars.getPlayerPosX();
+var playerPosY = MinecraftVars.getPlayerPosY();
+var playerPosZ = MinecraftVars.getPlayerPosZ();
+var playerFPS = MinecraftVars.getPlayerFPS();
 
 function updateProvidedLibs() {
-
+    playerPosX = MinecraftVars.getPlayerPosX();
+    playerPosY = MinecraftVars.getPlayerPosY();
+    playerPosZ = MinecraftVars.getPlayerPosZ();
+    playerFPS = MinecraftVars.getPlayerFPS();
 }
