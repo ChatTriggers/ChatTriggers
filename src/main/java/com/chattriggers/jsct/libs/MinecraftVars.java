@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class MinecraftVars {
@@ -54,7 +53,7 @@ public class MinecraftVars {
     }
 
     public static Long getPing() {
-        if (mc.isSingleplayer()) return 5;
+        if (mc.isSingleplayer()) return 5L;
 
         return mc.getCurrentServerData() == null ? null : mc.getCurrentServerData().pingToServer;
     }
@@ -73,19 +72,13 @@ public class MinecraftVars {
     }
 
     public static Double getPlayerPosX() {
-        if (Minecraft.getMinecraft().thePlayer != null)
-            return Minecraft.getMinecraft().thePlayer.getPositionVector().xCoord;
-        return 0d;
+        return mc.thePlayer == null ? null : mc.thePlayer.posX;
     }
     public static Double getPlayerPosY() {
-        if (Minecraft.getMinecraft().thePlayer != null)
-            return Minecraft.getMinecraft().thePlayer.getPositionVector().yCoord;
-        return 0d;
+        return mc.thePlayer == null ? null : mc.thePlayer.posY;
     }
     public static Double getPlayerPosZ() {
-        if (Minecraft.getMinecraft().thePlayer != null)
-            return Minecraft.getMinecraft().thePlayer.getPositionVector().zCoord;
-        return 0d;
+        return mc.thePlayer == null ? null : mc.thePlayer.posZ;
     }
 
     public static int getPlayerFPS() {
