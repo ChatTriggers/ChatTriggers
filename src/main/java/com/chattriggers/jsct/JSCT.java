@@ -50,12 +50,14 @@ public class JSCT {
             TriggerRegister.TriggerTypes.clearAllTriggers();
         }
 
+        if (firstTime) {
+            this.displayHandler = new DisplayHandler();
+        }
+
         this.scriptLoader = new ScriptLoader();
         MinecraftForge.EVENT_BUS.register(scriptLoader);
 
         if (firstTime) {
-            this.displayHandler = new DisplayHandler();
-
             MinecraftForge.EVENT_BUS.register(displayHandler);
             MinecraftForge.EVENT_BUS.register(new WorldListener());
             MinecraftForge.EVENT_BUS.register(new ChatListener());
