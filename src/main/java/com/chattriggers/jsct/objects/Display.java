@@ -206,6 +206,18 @@ public class Display {
     }
 
     /**
+     * Adds a number of empty lines to a display.
+     * @param lines the number of lines to add
+     * @return the display to allow for method chaining
+     */
+    public Display addLines(int lines) {
+        for (int i=0; i<lines; i++) {
+            this.lines.add("");
+        }
+        return this;
+    }
+
+    /**
      * Clears all the lines in the display.
      * @return the display to allow for method chaining
      */

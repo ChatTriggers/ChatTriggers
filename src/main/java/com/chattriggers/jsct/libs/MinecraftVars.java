@@ -80,6 +80,15 @@ public class MinecraftVars {
     public static Double getPlayerPosZ() {
         return mc.thePlayer == null ? null : mc.thePlayer.posZ;
     }
+    public static Float getPlayerPitch() {
+        return mc.thePlayer == null ? null : mc.thePlayer.cameraPitch;
+    }
+    public static Float getPlayerYaw() {
+        return mc.thePlayer == null ? null : mc.thePlayer.cameraYaw;
+    }
+    public static String getPlayerFacing() {
+        return mc.thePlayer == null ? null : mc.thePlayer.getHorizontalFacing().toString();
+    }
 
     public static int getPlayerFPS() {
         return Minecraft.getDebugFPS();

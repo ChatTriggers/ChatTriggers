@@ -34,7 +34,10 @@ var ping = MinecraftVars.getPing();
 var playerPosX = MinecraftVars.getPlayerPosX();
 var playerPosY = MinecraftVars.getPlayerPosY();
 var playerPosZ = MinecraftVars.getPlayerPosZ();
+var playerPitch = MinecraftVars.getPlayerPitch();
+var playerYaw = MinecraftVars.getPlayerYaw();
 var playerFPS = MinecraftVars.getPlayerFPS();
+var playerFacing = MinecraftVars.getPlayerFacing();
 
 /*End Built in Vars */
 
@@ -48,8 +51,11 @@ function updateProvidedLibs() {
     inTab = MinecraftVars.isInTab();
     server = MinecraftVars.getServerName();
     ping = MinecraftVars.getPing();
-    playerPosX = MinecraftVars.getPlayerPosX();
-    playerPosY = MinecraftVars.getPlayerPosY();
-    playerPosZ = MinecraftVars.getPlayerPosZ();
-    playerFPS = MinecraftVars.getPlayerFPS();
+    posX = MinecraftVars.getPlayerPosX();
+    posY = MinecraftVars.getPlayerPosY();
+    posZ = MinecraftVars.getPlayerPosZ();
+    cameraPitch = MinecraftVars.getPlayerPitch();
+    cameraYaw = MinecraftVars.getPlayerYaw();
+    fps = MinecraftVars.getPlayerFPS();
+    facing = MinecraftVars.getPlayerFacing();
 }
