@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
@@ -170,5 +171,33 @@ public class DisplayHandler {
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
         }
+    }
+
+    /**
+     * Draws a shape with a certain amount of sides, centered around
+     * the x and y parameters. Ex. 5 segments makes a pentagon, 360
+     * makes a circle.
+     * @param x the x coordinate for the shape to be centered around
+     * @param y the y coordinate for the shape to be centered around
+     * @param r the radius of the shape
+     * @param segments the number of sides the shape should have
+     */
+    public static void drawShape(float x, float y, float r, int segments) {
+        double theta = 2 * Math.PI / (segments);
+        double cos = Math.cos(theta);
+        double sin = Math.sin(theta);
+
+        double xHolder;
+        double unitCircleX = 1;
+        double unitCircleY = 0;
+
+        GL11.glBegin(GL11.GL_LINE_LOOP);
+        for(int i = 0; i < segments; i++) {
+            GL11.glVertex2d(unitCircleX * r + x, unitCircleY * r + y);
+            xHolder = unitCircleX;
+            unitCircleX = cos * unitCircleX - sin * unitCircleY;
+            unitCircleY = sin * xHolder + cos * unitCircleY;
+        }
+        GL11.glEnd();
     }
 }
