@@ -160,7 +160,11 @@ public class Display {
      * @return the display to allow for method chaining
      */
     public Display setLine(int lineNumber, String line) {
-        lines.set(lineNumber, ChatLib.addColor(line));
+        try {
+            lines.set(lineNumber, ChatLib.addColor(line));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
         return this;
     }
 
@@ -170,7 +174,11 @@ public class Display {
      * @return the string in line of display
      */
     public String getLine(int lineNumber) {
-        return lines.get(lineNumber);
+        try {
+            return lines.get(lineNumber);
+        } catch (Exception exception) {
+            return "null";
+        }
     }
 
     /**
@@ -186,6 +194,15 @@ public class Display {
 
         Collections.addAll(this.lines, lines);
         return this;
+    }
+
+    /**
+     * Adds one line to a display.
+     * @param line the line to add
+     * @return the display to allow for method chaining
+     */
+    public Display addLine(String line) {
+        return addLines(line);
     }
 
     /**
