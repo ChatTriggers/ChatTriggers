@@ -72,7 +72,7 @@ public class TriggerRegister {
      * Register a new method that receives render overlay events
      * @param methodName the name of the method to callback when the event is fired
      */
-    public static void registerRenderOverlay(String methodName) {
+    public static void registerOnRenderOverlay(String methodName) {
         OnRenderOverlayTrigger trigger = new OnRenderOverlayTrigger(methodName);
         TriggerTypes.RENDER_OVERLAY.addTrigger(trigger);
     }
