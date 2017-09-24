@@ -13,7 +13,7 @@ public class OnRenderOverlayTrigger extends Trigger {
     @Override
     public void trigger(Object... args) {
         if (!(args[0] instanceof RenderGameOverlayEvent)) {
-            throw new IllegalArgumentException("Argument 1 must be of type PlaySoundEvent");
+            throw new IllegalArgumentException("Argument 1 must be of type RenderGameOverlayEvent");
         }
 
         RenderGameOverlayEvent event = (RenderGameOverlayEvent) args[0];
