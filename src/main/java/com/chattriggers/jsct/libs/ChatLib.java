@@ -143,17 +143,13 @@ public class ChatLib {
 
         ChatComponentText cct = new ChatComponentText(addColor(toReplace));
 
-        for (int i = 0; i < drawnChatLines.size(); i++) {
-            ChatLine chatLine = drawnChatLines.get(i);
-
+        for (ChatLine chatLine : drawnChatLines) {
             if (chatLine.getChatComponent().getUnformattedText().equals(chatMessage)) {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
             }
         }
 
-        for (int i = 0; i < chatLines.size(); i++) {
-            ChatLine chatLine = chatLines.get(i);
-
+        for (ChatLine chatLine : chatLines) {
             if (chatLine.getChatComponent().getUnformattedText().equals(chatMessage)) {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
             }
