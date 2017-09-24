@@ -222,7 +222,10 @@ public class ChatLib {
     }
 
     private static boolean isAllowedCommand(String command) {
-        if (Minecraft.getMinecraft().isSingleplayer())
+        return true;
+
+        // TODO: check for creator
+        /*if (Minecraft.getMinecraft().isSingleplayer())
             return true;
 
         switch (command.toLowerCase()) {
@@ -232,7 +235,7 @@ public class ChatLib {
                 return true;
             default:
                 return false;
-        }
+        }*/
     }
 
     private Boolean isPlayer(String out) {
