@@ -10,6 +10,37 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderLib {
     /**
+     * Gets a strings width.
+     * @param text the text to get the width of
+     * @return the width of the text
+     */
+    public static int getStringWidth(String text) {
+        return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
+    }
+
+    /**
+     * Draws a string to the screen.
+     * @param text the text to draw
+     * @param x the x coordinate on screen
+     * @param y the y coordinate on screen
+     * @param color the color
+     */
+    public static void drawString(String text, float x, float y, int color) {
+        Minecraft.getMinecraft().fontRendererObj.drawString(text, x, y, color, false);
+    }
+
+    /**
+     * Draws a string with drop shadow to the screen.
+     * @param text the text to draw
+     * @param x the x coordinate on screen
+     * @param y the y coordinate on screen
+     * @param color the color
+     */
+    public static void drawStringWithShadow(String text, float x, float y, int color) {
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x, y, color);
+    }
+
+    /**
      * Draws a shape with a certain amount of sides, centered around
      * the x and y parameters. Ex. 5 segments makes a pentagon, 360
      * makes a circle.
@@ -17,8 +48,9 @@ public class RenderLib {
      * @param y the y coordinate for the shape to be centered around
      * @param r the radius of the shape
      * @param segments the number of sides the shape should have
+     * @param color the color of the shape
      */
-    public static void drawShape(float x, float y, float r, int segments) {
+    public static void drawShape(float x, float y, float r, int segments, int color) {
         double theta = 2 * Math.PI / (segments);
         double cos = Math.cos(theta);
         double sin = Math.sin(theta);
@@ -26,6 +58,13 @@ public class RenderLib {
         double xHolder;
         double unitCircleX = 1;
         double unitCircleY = 0;
+
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+
+        GlStateManager.color(red, green, blue, alpha);
 
         GL11.glBegin(GL11.GL_LINE_LOOP);
         for(int i = 0; i < segments; i++) {
