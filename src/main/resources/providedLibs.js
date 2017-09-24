@@ -7,6 +7,7 @@ var TriggerResult = Java.type("com.chattriggers.jsct.triggers.Trigger.TriggerRes
 
 //Events
 var ChatLib = Java.type("com.chattriggers.jsct.libs.ChatLib");
+var WorldLib = Java.type("com.chattriggers.jsct.libs.WorldLib");
 var RenderLib = Java.type("com.chattriggers.jsct.libs.RenderLib");
 
 //Objects
