@@ -158,7 +158,6 @@ public class RenderLib {
     /**
      * Gets a color int based on 0-255 rgba values.
      * This can be used in settings background and text color.
-     * TODO: maybe move to somewhere more useful
      * @param red value between 0 and 255
      * @param green value between 0 and 255
      * @param blue value between 0 and 255
