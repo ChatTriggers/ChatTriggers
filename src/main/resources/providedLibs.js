@@ -2,22 +2,22 @@
 var ArrayList = Java.type("java.util.ArrayList");
 
 //Triggers
-var TriggerRegister = Java.type("com.chattriggers.jsct.triggers.TriggerRegister");
-var TriggerResult = Java.type("com.chattriggers.jsct.triggers.Trigger.TriggerResult");
+var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
+var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.Trigger.TriggerResult");
 
 //Events
-var ChatLib = Java.type("com.chattriggers.jsct.libs.ChatLib");
-var WorldLib = Java.type("com.chattriggers.jsct.libs.WorldLib");
-var RenderLib = Java.type("com.chattriggers.jsct.libs.RenderLib");
+var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
+var WorldLib = Java.type("com.chattriggers.ctjs.libs.WorldLib");
+var RenderLib = Java.type("com.chattriggers.ctjs.libs.RenderLib");
 
 //Objects
-var Display = Java.type("com.chattriggers.jsct.objects.Display");
-var DisplayHandler = Java.type("com.chattriggers.jsct.objects.DisplayHandler");
-var Message = Java.type("com.chattriggers.jsct.utils.Message");
-var Book = Java.type("com.chattriggers.jsct.objects.Book");
+var Display = Java.type("com.chattriggers.ctjs.objects.Display");
+var DisplayHandler = Java.type("com.chattriggers.ctjs.objects.DisplayHandler");
+var Message = Java.type("com.chattriggers.ctjs.utils.Message");
+var Book = Java.type("com.chattriggers.ctjs.objects.Book");
 
 /*Built in Vars */
-var MinecraftVars = Java.type("com.chattriggers.jsct.libs.MinecraftVars");
+var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
 
 //Constant
 var playerName = MinecraftVars.getPlayerName();

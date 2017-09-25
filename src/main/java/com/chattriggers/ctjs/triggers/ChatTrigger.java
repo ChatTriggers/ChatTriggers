@@ -44,6 +44,13 @@ public class ChatTrigger extends Trigger {
 
         String chatMessage = (String) args[0];
 
+        if (chatCriteria.contains("&")) {
+            chatMessage = ((ClientChatReceivedEvent) args[1]).message.getFormattedText().replace("\u00a7", "&");
+            System.out.println("Changed!");
+        }
+
+        System.out.println("chat message is " + chatMessage);
+
         List<Object> variables = matchesChatCriteria(chatMessage);
 
         if (variables != null) {
