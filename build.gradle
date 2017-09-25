@@ -30,8 +30,8 @@ plugins {
 }
 */
 version = "0.1-SNAPSHOT"
-group= "com.chattriggers.jsct" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "jsct"
+group= "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "ctjs"
 
 apply plugin: 'java'
 compileJava {
@@ -103,5 +103,5 @@ processResources
 }
 
 task oneJar(type: OneJar) {
-    mainClass = 'com.chattriggers.jsct.JSCT'
+    mainClass = 'com.chattriggers.ctjs.CTJS'
 }
