@@ -147,7 +147,7 @@ public class ChatLib {
 
     /**
      * Get a message that will be perfectly centered in chat.
-     * @param input the message to be centered
+     * @param input the text to be centered
      * @return the centered message
      */
     public static String getCenteredText(String input) {
