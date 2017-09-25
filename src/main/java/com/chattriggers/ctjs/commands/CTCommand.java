@@ -3,10 +3,13 @@ package com.chattriggers.ctjs.commands;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.loader.ScriptLoader;
+import com.chattriggers.ctjs.triggers.TriggerRegister;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 
 import javax.script.ScriptEngine;
 import java.awt.*;
@@ -52,6 +55,7 @@ public class CTCommand extends CommandBase {
                 case("load"):
                     CTJS.getInstance().initMain(false);
                     ChatLib.chat(EnumChatFormatting.RED + "Reloaded js files");
+                    TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.WORLD_LOAD);
                     break;
                 case("files"):
                     openFileLocation();

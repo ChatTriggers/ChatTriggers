@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.utils.Message;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -125,6 +126,46 @@ public class ChatLib {
         for (int chatLineID : chatLineIDs) {
             Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(chatLineID);
         }
+    }
+
+    /**
+     * Get a message that will be perfectly one line of chat,
+     * the sepearator repeated as many times as necessary.
+     * @param seperator the message to split chat with
+     * @return the message that would split chat
+     */
+    public static String getChatBreak(String seperator) {
+        StringBuilder stringBuilder = new StringBuilder();
+        FontRenderer fRenderer = Minecraft.getMinecraft().fontRendererObj;
+
+        while (fRenderer.getStringWidth(stringBuilder.toString()) < Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
+            stringBuilder.append(seperator);
+        }
+
+        return stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString();
+    }
+
+    /**
+     * Get a message that will be perfectly centered in chat.
+     * @param input the message to be centered
+     * @return the centered message
+     */
+    public static String getCenteredText(String input) {
+        boolean left = true;
+        StringBuilder stringBuilder = new StringBuilder(input);
+        FontRenderer fRenderer = Minecraft.getMinecraft().fontRendererObj;
+
+        while (fRenderer.getStringWidth(stringBuilder.toString()) < Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
+            if (left) {
+                stringBuilder.insert(0, " ");
+                left = false;
+            } else {
+                stringBuilder.append(" ");
+                left = true;
+            }
+        }
+
+        return stringBuilder.deleteCharAt(left ? 0 : stringBuilder.length() - 1).toString();
     }
 
     /**
