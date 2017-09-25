@@ -1,7 +1,7 @@
 [
   {
-    "modid": "jsct",
-    "name": "jsChatTriggers",
+    "modid": "ctjs",
+    "name": "ChatTrigger.js",
     "description": "Customize your chat",
     "version": "0.1-SNAPSHOT",
     "mcversion": "1.8.9",
