@@ -1,3 +1,7 @@
-function updateCustomLibs() {
+function updateCustomLibsTick() {
+
+}
+
+function updateCustomLibsWorld() {
 
 }

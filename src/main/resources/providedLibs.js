@@ -1,16 +1,16 @@
-//Java libs
+// Java libs
 var ArrayList = Java.type("java.util.ArrayList");
 
-//Triggers
+// Triggers
 var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.Trigger.TriggerResult");
 
-//Events
+// Events
 var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
 var WorldLib = Java.type("com.chattriggers.ctjs.libs.WorldLib");
 var RenderLib = Java.type("com.chattriggers.ctjs.libs.RenderLib");
 
-//Objects
+// Objects
 var Display = Java.type("com.chattriggers.ctjs.objects.Display");
 var DisplayHandler = Java.type("com.chattriggers.ctjs.objects.DisplayHandler");
 var Message = Java.type("com.chattriggers.ctjs.utils.Message");
@@ -19,11 +19,11 @@ var Book = Java.type("com.chattriggers.ctjs.objects.Book");
 /*Built in Vars */
 var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
 
-//Constant
+// Constant
 var playerName = MinecraftVars.getPlayerName();
 var uuid = MinecraftVars.getPlayerUUID();
 
-//Change
+// Update every tick
 var hp = MinecraftVars.getPlayerHP();
 var hunger = MinecraftVars.getPlayerHunger();
 var saturation = MinecraftVars.getPlayerSaturation();
@@ -33,9 +33,6 @@ var inChat = MinecraftVars.isInChat();
 var inTab = MinecraftVars.isInTab();
 var isSprinting = MinecraftVars.isSprinting();
 var isSneaking = MinecraftVars.isSneaking();
-var serverIP = MinecraftVars.getServerIP();
-var serverMOTD = MinecraftVars.getServerMOTD();
-var server = MinecraftVars.getServerName();
 var ping = MinecraftVars.getPing();
 var posX = MinecraftVars.getPlayerPosX();
 var posY = MinecraftVars.getPlayerPosY();
@@ -45,9 +42,14 @@ var cameraYaw = MinecraftVars.getPlayerYaw();
 var fps = MinecraftVars.getPlayerFPS();
 var facing = MinecraftVars.getPlayerFacing();
 
+// Update every world load
+var serverIP = MinecraftVars.getServerIP();
+var serverMOTD = MinecraftVars.getServerMOTD();
+var server = MinecraftVars.getServerName();
+
 /*End Built in Vars */
 
-function updateProvidedLibs() {
+function updateProvidedLibsTick() {
     hp = MinecraftVars.getPlayerHP();
     hunger = MinecraftVars.getPlayerHunger();
     saturation = MinecraftVars.getPlayerSaturation();
@@ -57,9 +59,6 @@ function updateProvidedLibs() {
     inTab = MinecraftVars.isInTab();
     isSprinting = MinecraftVars.isSprinting();
     isSneaking = MinecraftVars.isSneaking();
-    serverIP = MinecraftVars.getServerIP();
-    serverMOTD = MinecraftVars.getServerMOTD();
-    server = MinecraftVars.getServerName();
     ping = MinecraftVars.getPing();
     posX = MinecraftVars.getPlayerPosX();
     posY = MinecraftVars.getPlayerPosY();
@@ -68,4 +67,10 @@ function updateProvidedLibs() {
     cameraYaw = MinecraftVars.getPlayerYaw();
     fps = MinecraftVars.getPlayerFPS();
     facing = MinecraftVars.getPlayerFacing();
+}
+
+function updateProvidedLibsWorld() {
+    serverIP = MinecraftVars.getServerIP();
+    serverMOTD = MinecraftVars.getServerMOTD();
+    server = MinecraftVars.getServerName();
 }

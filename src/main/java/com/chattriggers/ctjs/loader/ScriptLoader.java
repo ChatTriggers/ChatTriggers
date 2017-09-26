@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.Import;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -17,12 +18,22 @@ public class ScriptLoader {
     private ScriptEngine scriptEngine;
     private Invocable invocableEngine;
 
+    private Boolean hasProvidedLibsTick;
+    private Boolean hasCustomLibsTick;
+    private Boolean hasProvidedLibsWorld;
+    private Boolean hasCustomLibsWorld;
+
     //TODO: Move to config?
     private ArrayList<String> illegalLines;
 
     public ScriptLoader() {
         this.scriptEngine = CTJS.getInstance().getScriptEngine();
         this.invocableEngine = CTJS.getInstance().getInvocableEngine();
+
+        this.hasProvidedLibsTick = true;
+        this.hasCustomLibsTick = true;
+        this.hasProvidedLibsWorld = true;
+        this.hasCustomLibsWorld = true;
 
         this.illegalLines = new ArrayList<>(Arrays.asList(
                 "module.export", "load(\"http"
@@ -49,12 +60,44 @@ public class ScriptLoader {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onClientTick(TickEvent.ClientTickEvent e) {
-        try {
-            invocableEngine.invokeFunction("updateProvidedLibs");
-            invocableEngine.invokeFunction("updateCustomLibs");
-        } catch (ScriptException | NoSuchMethodException exc) {
-            exc.printStackTrace();
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (this.hasProvidedLibsTick) {
+            try {
+                invocableEngine.invokeFunction("updateProvidedLibsTick");
+            } catch (ScriptException | NoSuchMethodException exc) {
+                this.hasProvidedLibsTick = false;
+                exc.printStackTrace();
+            }
+        }
+
+        if (this.hasCustomLibsTick) {
+            try {
+                invocableEngine.invokeFunction("updateCustomLibsTick");
+            } catch (ScriptException | NoSuchMethodException exc) {
+                this.hasCustomLibsTick = false;
+                exc.printStackTrace();
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onWorldLoad(WorldEvent.Load event) {
+        if (this.hasProvidedLibsWorld) {
+            try {
+                invocableEngine.invokeFunction("updateProvidedLibsWorld");
+            } catch (ScriptException | NoSuchMethodException exc) {
+                this.hasProvidedLibsWorld = false;
+                exc.printStackTrace();
+            }
+        }
+
+        if (this.hasCustomLibsWorld) {
+            try {
+                invocableEngine.invokeFunction("updateCustomLibsWorld");
+            } catch (ScriptException | NoSuchMethodException exc) {
+                this.hasCustomLibsWorld = false;
+                exc.printStackTrace();
+            }
         }
     }
 
