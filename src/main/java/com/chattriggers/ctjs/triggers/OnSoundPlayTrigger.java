@@ -5,10 +5,10 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 
 import javax.script.ScriptException;
 
-public class SoundPlayTrigger extends Trigger {
+public class OnSoundPlayTrigger extends OnTrigger {
     private String soundNameCriteria;
 
-    public SoundPlayTrigger(String methodName, String soundNameCriteria) {
+    public OnSoundPlayTrigger(String methodName, String soundNameCriteria) {
         super(methodName);
         this.soundNameCriteria = soundNameCriteria;
     }

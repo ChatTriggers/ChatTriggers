@@ -14,7 +14,7 @@ public class TriggerRegister {
      * @param chatCriteria the criteria for which the event should called
      */
     public static void registerChat(String methodName, String chatCriteria) {
-        ChatTrigger trigger = new ChatTrigger(methodName, chatCriteria);
+        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria);
         TriggerTypes.CHAT.addTrigger(trigger);
     }
 
@@ -35,7 +35,7 @@ public class TriggerRegister {
      * @param parameter the parameter for the criteria to apply to
      */
     public static void registerChat(String methodName, String chatCriteria, String parameter) {
-        ChatTrigger trigger = new ChatTrigger(methodName, chatCriteria, parameter);
+        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, parameter);
         TriggerTypes.CHAT.addTrigger(trigger);
     }
 
@@ -44,7 +44,7 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerWorldLoad(String methodName) {
-        WorldLoadTrigger trigger = new WorldLoadTrigger(methodName);
+        OnWorldLoadTrigger trigger = new OnWorldLoadTrigger(methodName);
         TriggerTypes.WORLD_LOAD.addTrigger(trigger);
     }
 
@@ -55,7 +55,7 @@ public class TriggerRegister {
      * @param soundName the name of the sound criteria (null for all sounds)
      */
     public static void registerSoundPlay(String methodName, String soundName) {
-        SoundPlayTrigger trigger = new SoundPlayTrigger(methodName, soundName);
+        OnSoundPlayTrigger trigger = new OnSoundPlayTrigger(methodName, soundName);
         TriggerTypes.SOUND_PLAY.addTrigger(trigger);
     }
 
@@ -84,7 +84,7 @@ public class TriggerRegister {
      * @param commandUsage the usage for the command
      */
     public static void registerCommand(String methodName, String commandName, String commandUsage) {
-        CommandTrigger trigger = new CommandTrigger(methodName);
+        OnCommandTrigger trigger = new OnCommandTrigger(methodName);
         Command command = new Command(trigger, commandName, commandUsage);
         ClientCommandHandler.instance.registerCommand(command);
     }
@@ -92,22 +92,22 @@ public class TriggerRegister {
     public enum TriggerTypes {
         CHAT, WORLD_LOAD, SOUND_PLAY, TICK, RENDER_OVERLAY;
 
-        private ArrayList<Trigger> triggers = new ArrayList<>();
+        private ArrayList<OnTrigger> triggers = new ArrayList<>();
 
         public void clearTriggers() {
             triggers.clear();
         }
 
-        public void addTrigger(Trigger trigger) {
+        public void addTrigger(OnTrigger trigger) {
             triggers.add(trigger);
         }
 
-        public ArrayList<Trigger> getTriggers() {
+        public ArrayList<OnTrigger> getTriggers() {
             return triggers;
         }
 
         public static void triggerAllOfType(TriggerTypes triggerType, Object... args) {
-            for (Trigger trigger : triggerType.getTriggers()) {
+            for (OnTrigger trigger : triggerType.getTriggers()) {
                 trigger.trigger(args);
             }
         }

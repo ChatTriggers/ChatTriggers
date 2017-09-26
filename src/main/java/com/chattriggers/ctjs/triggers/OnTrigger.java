@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.triggers;
 
-public abstract class Trigger {
+public abstract class OnTrigger {
     protected String methodName;
 
-    protected Trigger(String methodName) {
+    protected OnTrigger(String methodName) {
         this.methodName = methodName;
     }
 

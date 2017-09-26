@@ -4,7 +4,7 @@ import com.chattriggers.ctjs.CTJS;
 
 import javax.script.ScriptException;
 
-public class OnTickTrigger extends Trigger {
+public class OnTickTrigger extends OnTrigger {
     public OnTickTrigger(String methodName) {
         super(methodName);
     }

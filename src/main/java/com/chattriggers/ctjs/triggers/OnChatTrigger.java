@@ -11,12 +11,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class ChatTrigger extends Trigger {
+public class OnChatTrigger extends OnTrigger {
     private String chatCriteria;
     private Pattern criteriaPattern;
     private Parameter parameter;
 
-    public ChatTrigger(String methodName, String chatCriteria) {
+    public OnChatTrigger(String methodName, String chatCriteria) {
         super(methodName);
         this.chatCriteria = chatCriteria;
 
@@ -25,7 +25,7 @@ public class ChatTrigger extends Trigger {
         criteriaPattern = Pattern.compile(chatCriteria.equals("") ? ".+" : replacedCriteria);
     }
 
-    public ChatTrigger(String methodName, String chatCriteria, String parameter) {
+    public OnChatTrigger(String methodName, String chatCriteria, String parameter) {
         this(methodName, chatCriteria);
 
         this.parameter = Parameter.getParameterByName(parameter);

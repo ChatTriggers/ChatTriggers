@@ -145,6 +145,10 @@ public class ChatLib {
         return stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString();
     }
 
+    //public static String removeFormatting() {
+        //EnumChatFormatting.getTextWithoutFormattingCodes()
+    //}
+
     /**
      * Get a message that will be perfectly centered in chat.
      * @param input the text to be centered
@@ -198,7 +202,7 @@ public class ChatLib {
      * Create a clickable message in chat, to be used with {@link Message}.
      * Also shows text on hover.
      * @param text the text to show in the message
-     * @param action the action to perform, see {@link ClickEvent.Action}
+     * @param action the action to perform
      * @param value the value to perform the action with
      * @param hoverText the text to show when hovered over
      * @return the chat component created
@@ -222,7 +226,7 @@ public class ChatLib {
     /**
      * Create a clickable message in chat, to be used with {@link Message}.
      * @param text the text to show in the message
-     * @param action the action to perform, see {@link ClickEvent.Action}
+     * @param action the action to perform
      * @param value the value to perform the action with
      * @return the chat component created
      */

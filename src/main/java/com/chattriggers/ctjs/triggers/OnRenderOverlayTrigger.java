@@ -5,7 +5,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import javax.script.ScriptException;
 
-public class OnRenderOverlayTrigger extends Trigger {
+public class OnRenderOverlayTrigger extends OnTrigger {
     public OnRenderOverlayTrigger(String methodName) {
         super(methodName);
     }

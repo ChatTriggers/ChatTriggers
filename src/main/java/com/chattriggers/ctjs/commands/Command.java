@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.commands;
 
-import com.chattriggers.ctjs.triggers.Trigger;
+import com.chattriggers.ctjs.triggers.OnTrigger;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -8,9 +8,9 @@ import net.minecraft.command.ICommandSender;
 public class Command extends CommandBase {
     private String name;
     private String usage;
-    private Trigger trigger;
+    private OnTrigger trigger;
 
-    public Command(Trigger trigger, String name, String usage) {
+    public Command(OnTrigger trigger, String name, String usage) {
         this.trigger = trigger;
         this.name = name;
         this.usage = usage;

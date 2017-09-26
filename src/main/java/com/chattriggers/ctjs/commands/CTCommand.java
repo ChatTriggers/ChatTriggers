@@ -70,7 +70,7 @@ public class CTCommand extends CommandBase {
     }
 
     /**
-     * Open the folder containing all of ChatTrigger's files
+     * Open the folder containing all of OnChatTrigger's files
      */
     private void openFileLocation() {
         try {
