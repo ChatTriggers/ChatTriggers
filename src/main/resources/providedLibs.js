@@ -33,13 +33,13 @@ var inChat = MinecraftVars.isInChat();
 var inTab = MinecraftVars.isInTab();
 var server = MinecraftVars.getServerName();
 var ping = MinecraftVars.getPing();
-var playerPosX = MinecraftVars.getPlayerPosX();
-var playerPosY = MinecraftVars.getPlayerPosY();
-var playerPosZ = MinecraftVars.getPlayerPosZ();
-var playerPitch = MinecraftVars.getPlayerPitch();
-var playerYaw = MinecraftVars.getPlayerYaw();
-var playerFPS = MinecraftVars.getPlayerFPS();
-var playerFacing = MinecraftVars.getPlayerFacing();
+var posX = MinecraftVars.getPlayerPosX();
+var posY = MinecraftVars.getPlayerPosY();
+var posZ = MinecraftVars.getPlayerPosZ();
+var cameraPitch = MinecraftVars.getPlayerPitch();
+var cameraYaw = MinecraftVars.getPlayerYaw();
+var fps = MinecraftVars.getPlayerFPS();
+var facing = MinecraftVars.getPlayerFacing();
 
 /*End Built in Vars */
 
