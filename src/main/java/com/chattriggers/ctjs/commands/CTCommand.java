@@ -8,8 +8,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
 
 import javax.script.ScriptEngine;
 import java.awt.*;
@@ -69,9 +67,8 @@ public class CTCommand extends CommandBase {
         }
     }
 
-    /**
-     * Open the folder containing all of OnChatTrigger's files
-     */
+
+    // Open the folder containing all of ChatTrigger's files
     private void openFileLocation() {
         try {
             Desktop.getDesktop().open(new File("./mods/ChatTriggers"));
