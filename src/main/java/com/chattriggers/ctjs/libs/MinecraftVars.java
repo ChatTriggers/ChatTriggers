@@ -17,6 +17,19 @@ public class MinecraftVars {
     public static KeyBinding keyUpArrow = new KeyBinding("up", Keyboard.KEY_UP, "CT Controls");
     public static KeyBinding keyDownArrow = new KeyBinding("down", Keyboard.KEY_DOWN, "CT Controls");
 
+    public static Boolean isLeftArrowDown() {
+        return keyLeftArrow.isKeyDown();
+    }
+    public static Boolean isRightArrowDown() {
+        return keyRightArrow.isKeyDown();
+    }
+    public static Boolean isUpArrowDown() {
+        return keyUpArrow.isKeyDown();
+    }
+    public static Boolean isDownArrowDown() {
+        return keyDownArrow.isKeyDown();
+    }
+
     /**
      * Gets the player's username.
      * In an import, accessible via the {@code playerName} variable.
