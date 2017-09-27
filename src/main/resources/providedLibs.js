@@ -3,7 +3,7 @@ var ArrayList = Java.type("java.util.ArrayList");
 
 // Triggers
 var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
-var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.Trigger.TriggerResult");
+var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 
 // Events
 var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
