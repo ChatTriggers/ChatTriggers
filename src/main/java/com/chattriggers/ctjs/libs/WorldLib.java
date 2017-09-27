@@ -2,6 +2,8 @@ package com.chattriggers.ctjs.libs;
 
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,6 +29,8 @@ public class WorldLib {
      * @param fadeOut time to fade out
      */
     public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
-        Minecraft.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), ChatLib.addColor(subtitle), fadeIn, time, fadeOut);
+        Minecraft.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut);
+        Minecraft.getMinecraft().ingameGUI.displayTitle(null, ChatLib.addColor(subtitle), 0, 0, 0);
+        Minecraft.getMinecraft().ingameGUI.displayTitle(null, null, fadeIn, time, fadeOut);
     }
 }

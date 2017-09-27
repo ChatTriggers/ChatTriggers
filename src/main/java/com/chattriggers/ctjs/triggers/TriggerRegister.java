@@ -69,6 +69,14 @@ public class TriggerRegister {
     }
 
     /**
+     * An overloaded method for {@link #registerOnTick(String)}
+     * @param methodName the name of the method to callback when the event is fired
+     */
+    public static void registerClientTick(String methodName) {
+        registerOnTick(methodName);
+    }
+
+    /**
      * Register a new method that receives render overlay events
      * @param methodName the name of the method to callback when the event is fired
      */

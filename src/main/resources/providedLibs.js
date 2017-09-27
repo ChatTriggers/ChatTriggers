@@ -15,6 +15,8 @@ var Display = Java.type("com.chattriggers.ctjs.objects.Display");
 var DisplayHandler = Java.type("com.chattriggers.ctjs.objects.DisplayHandler");
 var Message = Java.type("com.chattriggers.ctjs.utils.Message");
 var Book = Java.type("com.chattriggers.ctjs.objects.Book");
+var KeyBind = Java.type("com.chattriggers.ctjs.objects.KeyBind");
+var Keyboard = Java.type("org.lwjgl.input.Keyboard");
 
 /*Built in Vars */
 var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
