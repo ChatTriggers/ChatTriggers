@@ -22,9 +22,15 @@ public class WorldListener {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+        // world load trigger
         if (shouldTriggerWorldLoad) {
             TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.WORLD_LOAD);
             shouldTriggerWorldLoad = false;
+        }
+
+        // render overlay trigger
+        if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.RENDER_OVERLAY, event);
         }
     }
 
@@ -37,12 +43,5 @@ public class WorldListener {
     public void onTick(TickEvent.ClientTickEvent event) {
         TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.TICK, ticksPassed);
         ticksPassed++;
-    }
-
-    @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
-            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.RENDER_OVERLAY, event);
-        }
     }
 }

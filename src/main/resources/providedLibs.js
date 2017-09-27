@@ -41,6 +41,10 @@ var cameraPitch = MinecraftVars.getPlayerPitch();
 var cameraYaw = MinecraftVars.getPlayerYaw();
 var fps = MinecraftVars.getPlayerFPS();
 var facing = MinecraftVars.getPlayerFacing();
+var leftArrow = MinecraftVars.keyLeftArrow.isKeyDown();
+var rightArrow = MinecraftVars.keyRightArrow.isKeyDown();
+var upArrow = MinecraftVars.keyUpArrow.isKeyDown();
+var downArrow = MinecraftVars.keyDownArrow.isKeyDown();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -67,6 +71,10 @@ function updateProvidedLibsTick() {
     cameraYaw = MinecraftVars.getPlayerYaw();
     fps = MinecraftVars.getPlayerFPS();
     facing = MinecraftVars.getPlayerFacing();
+    leftArrow = MinecraftVars.keyLeftArrow.isKeyDown();
+    rightArrow = MinecraftVars.keyRightArrow.isKeyDown();
+    upArrow = MinecraftVars.keyUpArrow.isKeyDown();
+    downArrow = MinecraftVars.keyDownArrow.isKeyDown();
 }
 
 function updateProvidedLibsWorld() {

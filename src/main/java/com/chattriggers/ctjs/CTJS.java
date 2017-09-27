@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.listeners.ChatListener;
 import com.chattriggers.ctjs.listeners.WorldListener;
 import com.chattriggers.ctjs.loader.ScriptLoader;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -61,6 +63,11 @@ public class CTJS {
             MinecraftForge.EVENT_BUS.register(displayHandler);
             MinecraftForge.EVENT_BUS.register(new WorldListener());
             MinecraftForge.EVENT_BUS.register(new ChatListener());
+
+            ClientRegistry.registerKeyBinding(MinecraftVars.keyLeftArrow);
+            ClientRegistry.registerKeyBinding(MinecraftVars.keyRightArrow);
+            ClientRegistry.registerKeyBinding(MinecraftVars.keyUpArrow);
+            ClientRegistry.registerKeyBinding(MinecraftVars.keyDownArrow);
         }
     }
 }

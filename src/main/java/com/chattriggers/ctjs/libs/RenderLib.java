@@ -86,13 +86,13 @@ public class RenderLib {
      * Draws a shape with a certain amount of sides, centered around
      * the x and y parameters. Ex. 5 segments makes a pentagon, 360
      * makes a circle.
+     * @param segments the number of sides the shape should have
+     * @param color the color of the shape
      * @param x the x coordinate for the shape to be centered around
      * @param y the y coordinate for the shape to be centered around
      * @param r the radius of the shape
-     * @param segments the number of sides the shape should have
-     * @param color the color of the shape
      */
-    public static void drawShape(float x, float y, float r, int segments, int color) {
+    public static void drawShape(int color, int segments, float x, float y, float r) {
         double theta = 2 * Math.PI / (segments);
         double cos = Math.cos(theta);
         double sin = Math.sin(theta);
@@ -116,6 +116,50 @@ public class RenderLib {
             unitCircleY = sin * xHolder + cos * unitCircleY;
         }
         GL11.glEnd();
+    }
+
+    /**
+     * Draws a rectangle on screen with location x and y with width and height.
+     * @param color the color of the rectangle
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param width the width
+     * @param height the height
+     */
+    public static void drawRectangle(int color, float x, float y, float width, float height) {
+        float x2 = x + width;
+        float y2 = y + height;
+
+        if (x > x2) {
+            float k = x;
+            x = x2;
+            x2 = k;
+        }
+        if (y > y2) {
+            float k = y;
+            y = y2;
+            y2 = k;
+        }
+
+        float a = (float) (color >> 24 & 255) / 255.0F;
+        float r = (float) (color >> 16 & 255) / 255.0F;
+        float g = (float) (color >> 8 & 255) / 255.0F;
+        float b = (float) (color & 255) / 255.0F;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(r, g, b, a);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(x, y2, 0.0D).endVertex();
+        worldrenderer.pos(x2, y2, 0.0D).endVertex();
+        worldrenderer.pos(x2, y, 0.0D).endVertex();
+        worldrenderer.pos(x, y, 0.0D).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     /**
