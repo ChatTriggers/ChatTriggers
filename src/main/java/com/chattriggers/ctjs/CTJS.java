@@ -69,6 +69,8 @@ public class CTJS {
             ClientRegistry.registerKeyBinding(MinecraftVars.keyUpArrow);
             ClientRegistry.registerKeyBinding(MinecraftVars.keyDownArrow);
         }
+
+        System.gc();
     }
 }
 

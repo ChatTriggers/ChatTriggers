@@ -46,10 +46,7 @@ public class OnChatTrigger extends OnTrigger {
 
         if (chatCriteria.contains("&")) {
             chatMessage = ((ClientChatReceivedEvent) args[1]).message.getFormattedText().replace("\u00a7", "&");
-            System.out.println("Changed!");
         }
-
-        System.out.println("chat message is " + chatMessage);
 
         List<Object> variables = matchesChatCriteria(chatMessage);
 
