@@ -1,8 +1,8 @@
-# jsCT
+# ct.js
 The JavaScript port of the original [ChatTriggers](https://github.com/ChatTriggers/ChatTriggers) Minecraft Mod. Maintained by @KerbyBit and @FalseHonesty, with support from many others.
 
 ## Installation
-1. Download a relevant build version from the Pinned Messages in `#jsCT` in the [ChatTriggers Discord](https://discord.gg/zqh8hTF).
+1. Download a relevant build version from the Pinned Messages in `#ctjs` in the [ChatTriggers Discord](https://discord.gg/zqh8hTF).
 2. Install [Forge Mod Loader](https://files.minecraftforge.net/) for the relevant Minecraft version.
 3. Move` jsCT.java` to the `mods` folder.
 4. Start your Minecraft Forge version.
@@ -16,7 +16,7 @@ The JavaScript port of the original [ChatTriggers](https://github.com/ChatTrigge
 
 ## Terms of Service
 A more in-depth version of the ChatTriggers Terms of Service is available [here](https://github.com/ChatTriggers/jsCT/blob/master/terms.md). This is a simple overview.  
-By using ChatTriggers ("ct", "mod"), you ("user") agree to not:
+By using ChatTriggers ("ct",, "ct.js", "ctjs", "jsct" "mod"), you ("user") agree to not:
 1. Use ChatTriggers to violate any Minecraft server’s rules and/or guidelines.
 2. Use ChatTriggers to impersonate any other player.
 3. Use ChatTriggers to falsify a rank or reward that you have not earned.
