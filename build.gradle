@@ -110,6 +110,7 @@ task userdocs(type: Javadoc) {
     exclude "com/chattriggers/ctjs/loader/ScriptLoader.java"
     exclude "com/chattriggers/ctjs/listeners/**.java"
     exclude "com/chattriggers/ctjs/triggers/On**.java"
+    exclude "com/chattriggers/ctjs/utils/ImagesPack.java"
 }
 
 configure(userdocs) {
