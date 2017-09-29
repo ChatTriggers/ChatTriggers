@@ -6,6 +6,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.commons.io.FileUtils;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -46,6 +47,8 @@ public class ScriptLoader {
 
         //Load the imports (This compiles them and loads them)
         loadImports();
+        //Load assets (Puts images into ctjs resource location
+        loadAssets();
 
         try {
             scriptEngine.eval(getProvidedLibsScript());
@@ -238,5 +241,24 @@ public class ScriptLoader {
         }
 
         return compiledImports;
+    }
+
+    private void loadAssets() {
+        File importsDir = new File("./mods/ChatTriggers/Imports/");
+        File toCopyDir = CTJS.getInstance().getAssetsDir();
+
+        for (File importDir : getFoldersInDirectory(importsDir)) {
+            File assetsFolder = new File(importDir, "assets");
+
+            if (!assetsFolder.exists() || assetsFolder.isFile()) continue;
+
+            for (File asset : assetsFolder.listFiles()) {
+                try {
+                    FileUtils.copyFileToDirectory(asset, toCopyDir);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

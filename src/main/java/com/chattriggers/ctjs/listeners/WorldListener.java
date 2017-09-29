@@ -32,6 +32,11 @@ public class WorldListener {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
             TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.RENDER_OVERLAY, event);
         }
+
+        // render image trigger
+        if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
+            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.RENDER_IMAGE, event);
+        }
     }
 
     @SubscribeEvent

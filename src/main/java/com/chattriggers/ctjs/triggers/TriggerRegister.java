@@ -85,6 +85,11 @@ public class TriggerRegister {
         TriggerTypes.RENDER_OVERLAY.addTrigger(trigger);
     }
 
+    public static void registerOnImageOverlay(String methodName) {
+        OnRenderImageTrigger trigger = new OnRenderImageTrigger(methodName);
+        TriggerTypes.RENDER_IMAGE.addTrigger(trigger);
+    }
+
     /**
      * Register a new method that receives a command input
      * @param methodName the name of the method to callback when the event is fired
@@ -98,7 +103,7 @@ public class TriggerRegister {
     }
 
     public enum TriggerTypes {
-        CHAT, WORLD_LOAD, SOUND_PLAY, TICK, RENDER_OVERLAY;
+        CHAT, WORLD_LOAD, SOUND_PLAY, TICK, RENDER_OVERLAY, RENDER_IMAGE;
 
         private ArrayList<OnTrigger> triggers = new ArrayList<>();
 

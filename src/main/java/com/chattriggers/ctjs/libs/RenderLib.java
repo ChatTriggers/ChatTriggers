@@ -6,7 +6,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -239,5 +241,35 @@ public class RenderLib {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+    }
+
+    /**
+     * Draws an image to the screen.<br/>
+     * Images must be in the imports /assets/ directory on launch, <br/>
+     * and have a size of 256x256.
+     * @param resourceName the file name, i.e. block.png
+     * @param renderXLoc the x position on the screen to render to
+     * @param renderYLoc the y position on the screen to render to
+     * @param textureMapX the x position on the image to start rendering from, usually 0
+     * @param textureMapY the y position on the image to start rendering from, usually 0
+     * @param textureWidth the width of the image to render, usually 256
+     * @param textureHeight the height of the image to render, usually 256
+     * @param scale the scale of the image, can use decimals, i.e. 0.5, 1.5
+     */
+    public static void drawImage(String resourceName, int renderXLoc, int renderYLoc,
+                                 int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
+
+        TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+        ResourceLocation rl = new ResourceLocation("ctjs.images", resourceName);
+
+        Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
+
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glTranslatef(renderXLoc, renderYLoc, 0);
+        GL11.glScalef(scale, scale, scale);
+        Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureMapX, textureMapY, textureWidth, textureHeight);
+        GL11.glPopMatrix();
     }
 }
