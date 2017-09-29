@@ -159,6 +159,10 @@ public class ChatLib {
         StringBuilder stringBuilder = new StringBuilder(input);
         FontRenderer fRenderer = Minecraft.getMinecraft().fontRendererObj;
 
+        if (fRenderer.getStringWidth(stringBuilder.toString()) > Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
+            return stringBuilder.toString();
+        }
+
         while (fRenderer.getStringWidth(stringBuilder.toString()) < Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
             if (left) {
                 stringBuilder.insert(0, " ");
