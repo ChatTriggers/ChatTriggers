@@ -244,8 +244,8 @@ public class RenderLib {
     }
 
     /**
-     * Draws an image to the screen.<br/>
-     * Images must be in the imports /assets/ directory on launch, <br/>
+     * Draws an image to the screen.<br>
+     * Images must be in the imports /assets/ directory on launch, <br>
      * and have a size of 256x256.
      * @param resourceName the file name, i.e. block.png
      * @param renderXLoc the x position on the screen to render to
