@@ -145,9 +145,13 @@ public class ChatLib {
         return stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString();
     }
 
-    //public static String removeFormatting() {
-        //EnumChatFormatting.getTextWithoutFormattingCodes()
-    //}
+    public static String removeFormatting(String toRemove) {
+        for (EnumChatFormatting format : EnumChatFormatting.values()) {
+            toRemove = toRemove.replace(format.toString(), "").replace(format.toString().replace("\u00a7", "&"), "");
+        }
+
+        return toRemove;
+    }
 
     /**
      * Get a message that will be perfectly centered in chat.
@@ -190,13 +194,13 @@ public class ChatLib {
         ChatComponentText cct = new ChatComponentText(addColor(toReplace));
 
         for (ChatLine chatLine : drawnChatLines) {
-            if (chatLine.getChatComponent().getUnformattedText().equals(chatMessage)) {
+            if (removeFormatting(chatLine.getChatComponent().getUnformattedText()).equals(chatMessage)) {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
             }
         }
 
         for (ChatLine chatLine : chatLines) {
-            if (chatLine.getChatComponent().getUnformattedText().equals(chatMessage)) {
+            if (removeFormatting(chatLine.getChatComponent().getUnformattedText()).equals(chatMessage)) {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
             }
         }
