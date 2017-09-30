@@ -76,6 +76,15 @@ public class TriggerRegister {
         registerOnTick(methodName);
     }
 
+    public static void registerOnStep(String methodName, long fps) {
+        OnStepTrigger trigger = new OnStepTrigger(methodName, fps);
+        TriggerTypes.STEP.addTrigger(trigger);
+    }
+
+    public static void registerOnStep(String methodName) {
+        registerOnStep(methodName, 60L);
+    }
+
     /**
      * Register a new method that receives render overlay events
      * @param methodName the name of the method to callback when the event is fired
@@ -103,7 +112,7 @@ public class TriggerRegister {
     }
 
     public enum TriggerTypes {
-        CHAT, WORLD_LOAD, SOUND_PLAY, TICK, RENDER_OVERLAY, RENDER_IMAGE;
+        CHAT, WORLD_LOAD, SOUND_PLAY, TICK, STEP, RENDER_OVERLAY, RENDER_IMAGE;
 
         private ArrayList<OnTrigger> triggers = new ArrayList<>();
 

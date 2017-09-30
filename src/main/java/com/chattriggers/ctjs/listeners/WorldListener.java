@@ -28,9 +28,12 @@ public class WorldListener {
             shouldTriggerWorldLoad = false;
         }
 
-        // render overlay trigger
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+            // render overlay trigger
             TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.RENDER_OVERLAY, event);
+
+            // step trigger
+            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.STEP);
         }
 
         // render image trigger
