@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @UtilityClass
@@ -204,6 +205,18 @@ public class ChatLib {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
             }
         }
+    }
+
+    public static ArrayList<String> getChatLines() {
+        List<ChatLine> chatLines =  ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(),
+                "drawnChatLines", "field_146253_i");
+        ArrayList<String> messages = new ArrayList<>();
+
+        for (ChatLine chatLine : chatLines) {
+            messages.add(removeFormatting(chatLine.getChatComponent().getUnformattedText()));
+        }
+
+        return messages;
     }
 
     /**
