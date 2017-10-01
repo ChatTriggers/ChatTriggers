@@ -272,12 +272,27 @@ public class ChatLib {
     }
 
     /**
-     * Get the unformatted text of a chat event
-     * @param event the chat event passed in by a chat trigger
-     * @return the unformatted text
+     * Get the text of a chat event.
+     * @param event     The chat event passed in by a chat trigger.
+     * @param formatted If true, returns formatted text. Otherwise, returns
+     *                   unformatted text.
+     * @return          The text of the event.
+     */
+    public static String getChatMessage(ClientChatReceivedEvent event, boolean formatted) {
+        if (formatted) {
+            return event.message.getFormattedText().replace('\u00A7', '&');
+        } else {
+            return event.message.getUnformattedText();
+        }
+    }
+
+    /**
+     * Get the unformatted text of a chat event.
+     * @param event The chat event passed in by a chat trigger.
+     * @return      The unformatted text.
      */
     public static String getChatMessage(ClientChatReceivedEvent event) {
-        return event.message.getUnformattedText();
+        return getChatMessage(event, false);
     }
 
     private static boolean isAllowedCommand(String command) {
