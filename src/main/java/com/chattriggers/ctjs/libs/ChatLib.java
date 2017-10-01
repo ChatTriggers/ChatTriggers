@@ -273,10 +273,10 @@ public class ChatLib {
 
     /**
      * Get the text of a chat event.
-     * @param event     The chat event passed in by a chat trigger.
+     * @param event     The chat event passed in by a chat trigger
      * @param formatted If true, returns formatted text. Otherwise, returns
-     *                   unformatted text.
-     * @return          The text of the event.
+     *                   unformatted text
+     * @return          The text of the event
      */
     public static String getChatMessage(ClientChatReceivedEvent event, boolean formatted) {
         if (formatted) {
@@ -288,8 +288,8 @@ public class ChatLib {
 
     /**
      * Get the unformatted text of a chat event.
-     * @param event The chat event passed in by a chat trigger.
-     * @return      The unformatted text.
+     * @param event The chat event passed in by a chat trigger
+     * @return      The unformatted text
      */
     public static String getChatMessage(ClientChatReceivedEvent event) {
         return getChatMessage(event, false);

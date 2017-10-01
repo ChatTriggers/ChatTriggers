@@ -39,6 +39,7 @@ var ping = MinecraftVars.getPing();
 var posX = MinecraftVars.getPlayerPosX();
 var posY = MinecraftVars.getPlayerPosY();
 var posZ = MinecraftVars.getPlayerPosZ();
+var biome = MinecraftVars.getPlayerBiome();
 var cameraPitch = MinecraftVars.getPlayerPitch();
 var cameraYaw = MinecraftVars.getPlayerYaw();
 var fps = MinecraftVars.getPlayerFPS();
@@ -69,6 +70,7 @@ function updateProvidedLibsTick() {
     posX = MinecraftVars.getPlayerPosX();
     posY = MinecraftVars.getPlayerPosY();
     posZ = MinecraftVars.getPlayerPosZ();
+    biome = MinecraftVars.getPlayerBiome();
     cameraPitch = MinecraftVars.getPlayerPitch();
     cameraYaw = MinecraftVars.getPlayerYaw();
     fps = MinecraftVars.getPlayerFPS();
