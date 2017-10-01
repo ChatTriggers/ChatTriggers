@@ -91,4 +91,8 @@ public class Console {
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
+
+    public static void clear() {
+        getConsole().clearConsole();
+    }
 }
