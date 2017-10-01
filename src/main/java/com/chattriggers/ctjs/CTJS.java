@@ -78,7 +78,6 @@ public class CTJS {
 
         this.displayHandler.clearDisplays();
 
-        this.console.showConsole(false);
         this.console.clearConsole();
         this.scriptLoader = new ScriptLoader();
         MinecraftForge.EVENT_BUS.register(scriptLoader);

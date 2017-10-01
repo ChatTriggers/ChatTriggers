@@ -61,6 +61,7 @@ public class CTCommand extends CommandBase {
                     break;
                 case("console"):
                     Console.getConsole().showConsole(true);
+                    Console.clear();
                     break;
                 default:
                     ChatLib.chat(EnumChatFormatting.RED + getCommandUsage(sender));

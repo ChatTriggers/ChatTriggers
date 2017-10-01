@@ -2,8 +2,8 @@ package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
 import lombok.Getter;
+import net.minecraft.network.ThreadQuickExitException;
 
-import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -15,6 +15,7 @@ public class Console {
     private JFrame frame;
     public PrintStream out;
     private TextAreaOutputStream taos;
+    private boolean shouldClear;
 
     @Getter
     private static Console console;
@@ -44,20 +45,25 @@ public class Console {
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     Object toPrint = null;
-                    boolean shouldPrint = true;
+                    boolean errorThrown = false;
+
+                    String command = inputField.getText();
+                    inputField.setText("");
 
                     try {
-                        toPrint = CTJS.getInstance().getScriptEngine().eval(inputField.getText());
-                    } catch (ScriptException error) {
-                        printStackTrace(error);
-                        shouldPrint = false;
+                        toPrint = CTJS.getInstance().getScriptEngine().eval(command);
+                    } catch (Exception error) {
+                        if (!(error instanceof ThreadQuickExitException)) {
+                            printStackTrace(error);
+                            errorThrown = true;
+                        }
                     }
 
-                    if (toPrint != null && shouldPrint) {
+                    if (toPrint != null) {
                         out.println(toPrint);
+                    } else {
+                        out.println(errorThrown ? "> " + command : command);
                     }
-
-                    inputField.setText("");
                 }
             }
         });
