@@ -38,7 +38,7 @@ public class CTCommand extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/ct <reload/files>";
+        return "/ct <reload/files/console>";
     }
 
     @Override
