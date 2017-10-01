@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.libs;
 
+import com.chattriggers.ctjs.objects.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -197,6 +198,23 @@ public class MinecraftVars {
      */
     public static boolean isUserTabbedIn() {
         return Display.isActive();
+    }
+
+    /**
+     * Get the {@link KeyBind} from an already existing
+     * Minecraft KeyBinding.
+     * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
+     * @return the {@link KeyBind} from a Minecraft KeyBinding, or null if one doesn't exist
+     * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
+     */
+    public static KeyBind getKeyBindFromKey(int keyCode) {
+        for (KeyBinding keyBinding : Minecraft.getMinecraft().gameSettings.keyBindings) {
+            if (keyBinding.getKeyCode() == keyCode) {
+                return new KeyBind(keyBinding);
+            }
+        }
+
+        return null;
     }
 
     /**

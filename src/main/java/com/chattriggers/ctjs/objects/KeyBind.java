@@ -1,10 +1,8 @@
 package com.chattriggers.ctjs.objects;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.apache.commons.lang3.ArrayUtils;
 
 public class KeyBind {
     private KeyBinding keyBinding;
@@ -16,8 +14,6 @@ public class KeyBind {
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
     public KeyBind(String description, int keyCode) {
-        KeyBinding foundKey = null;
-
         for (KeyBinding key : Minecraft.getMinecraft().gameSettings.keyBindings) {
             if (key.getKeyCategory().equals("ChatTriggers") && key.getKeyDescription().equals(description)) {
                 this.keyBinding = key;
@@ -29,6 +25,10 @@ public class KeyBind {
             this.keyBinding = new KeyBinding(description, keyCode, "ChatTriggers");
             ClientRegistry.registerKeyBinding(this.keyBinding);
         }
+    }
+
+    public KeyBind(KeyBinding keyBinding) {
+        this.keyBinding = keyBinding;
     }
 
     /**
