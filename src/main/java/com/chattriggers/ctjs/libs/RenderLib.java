@@ -157,6 +157,7 @@ public class RenderLib {
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
 
+        GlStateManager.pushMatrix();
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.enableBlend();
@@ -169,8 +170,10 @@ public class RenderLib {
         worldrenderer.pos(x2, y, 0.0D).endVertex();
         worldrenderer.pos(x, y, 0.0D).endVertex();
         tessellator.draw();
+        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     /**
@@ -201,6 +204,8 @@ public class RenderLib {
             float g = (float) (color >> 8 & 255) / 255.0F;
             float b = (float) (color & 255) / 255.0F;
 
+            GlStateManager.pushMatrix();
+
             Tessellator tessellator = Tessellator.getInstance();
             WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
@@ -217,8 +222,11 @@ public class RenderLib {
 
             tessellator.draw();
 
+            GlStateManager.color(1, 1, 1, 1);
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
+
+            GlStateManager.popMatrix();
         }
     }
 
@@ -232,6 +240,9 @@ public class RenderLib {
         float f = (float)(color >> 16 & 255) / 255.0F;
         float f1 = (float)(color >> 8 & 255) / 255.0F;
         float f2 = (float)(color & 255) / 255.0F;
+
+        GlStateManager.pushMatrix();
+
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.enableBlend();
@@ -248,8 +259,11 @@ public class RenderLib {
         }
 
         tessellator.draw();
+        GlStateManager.color(1, 1, 1,1);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+
+        GlStateManager.popMatrix();
     }
 
     /**
@@ -279,6 +293,7 @@ public class RenderLib {
         GL11.glTranslatef(renderXLoc, renderYLoc, 0);
         GL11.glScalef(scale, scale, scale);
         Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureMapX, textureMapY, textureWidth, textureHeight);
+        GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
     }
 
