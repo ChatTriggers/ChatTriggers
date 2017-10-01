@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.objects.DisplayHandler;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
 import com.chattriggers.ctjs.utils.ImagesPack;
+import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.resources.IResourcePack;
@@ -44,24 +45,21 @@ public class CTJS {
     private ImagesPack imagesPack;
     @Getter
     private File assetsDir;
+    @Getter
+    private Console console;
 
     @EventHandler
     public void init(FMLInitializationEvent e) {
         instance = this;
 
         this.displayHandler = new DisplayHandler();
+        this.console = new Console();
+
         initMain(true);
 
-        MinecraftForge.EVENT_BUS.register(displayHandler);
-        MinecraftForge.EVENT_BUS.register(new WorldListener());
-        MinecraftForge.EVENT_BUS.register(new ChatListener());
+        registerListeners();
 
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyLeftArrow);
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyRightArrow);
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyUpArrow);
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyDownArrow);
-
-        ClientCommandHandler.instance.registerCommand(new CTCommand());
+        registerHooks();
     }
 
     @EventHandler
@@ -80,6 +78,8 @@ public class CTJS {
 
         this.displayHandler.clearDisplays();
 
+        this.console.showConsole(false);
+        this.console.clearConsole();
         this.scriptLoader = new ScriptLoader();
         MinecraftForge.EVENT_BUS.register(scriptLoader);
 
@@ -98,15 +98,23 @@ public class CTJS {
             assetsDir = pictures;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 
+    private void registerListeners() {
+        MinecraftForge.EVENT_BUS.register(displayHandler);
+        MinecraftForge.EVENT_BUS.register(new WorldListener());
+        MinecraftForge.EVENT_BUS.register(new ChatListener());
+    }
+
+    private void registerHooks() {
+        ClientRegistry.registerKeyBinding(MinecraftVars.keyLeftArrow);
+        ClientRegistry.registerKeyBinding(MinecraftVars.keyRightArrow);
+        ClientRegistry.registerKeyBinding(MinecraftVars.keyUpArrow);
+        ClientRegistry.registerKeyBinding(MinecraftVars.keyDownArrow);
+
+        ClientCommandHandler.instance.registerCommand(new CTCommand());
+    }
 }
 
-class Reference {
-    public static final String MODID = "ct.js";
-    public static final String MODNAME = "ChatTriggers.js";
-    public static final String MODVERSION = "0.1-SNAPSHOT";
-    public static final String MAPPINGURL = "http://export.mcpbot.bspk.rs/mcp_stable_nodoc/22-1.8.9/mcp_stable_nodoc-22-1.8.9.zip";
-}

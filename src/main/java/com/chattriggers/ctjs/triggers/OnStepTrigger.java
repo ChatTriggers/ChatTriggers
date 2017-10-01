@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
 
 import javax.script.ScriptException;
@@ -23,7 +24,7 @@ public class OnStepTrigger extends OnTrigger {
                 this.systemTime += (1000 / fps);
             }
         } catch (ScriptException | NoSuchMethodException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 }

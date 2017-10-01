@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.libs;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.utils.console.Console;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -294,7 +295,7 @@ public class RenderLib {
 
             ImageIO.write(resized, "png", resourceFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 }

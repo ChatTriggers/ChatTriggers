@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import javax.script.ScriptException;
@@ -55,7 +56,7 @@ public class OnChatTrigger extends OnTrigger {
                 variables.add(args[1]);
                 CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
             } catch (ScriptException | NoSuchMethodException e) {
-                e.printStackTrace();
+                Console.getConsole().printStackTrace(e);
             }
         }
     }

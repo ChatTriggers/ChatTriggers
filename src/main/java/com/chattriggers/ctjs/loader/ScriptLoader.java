@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.Import;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -12,7 +13,9 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ScriptLoader {
     private List<Import> loadedImports;
@@ -58,7 +61,7 @@ public class ScriptLoader {
                 scriptEngine.eval(customImport.getScript());
             }
         } catch (ScriptException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 
@@ -69,7 +72,7 @@ public class ScriptLoader {
                 invocableEngine.invokeFunction("updateProvidedLibsTick");
             } catch (ScriptException | NoSuchMethodException exc) {
                 this.hasProvidedLibsTick = false;
-                exc.printStackTrace();
+                Console.getConsole().printStackTrace(exc);
             }
         }
 
@@ -78,7 +81,7 @@ public class ScriptLoader {
                 invocableEngine.invokeFunction("updateCustomLibsTick");
             } catch (ScriptException | NoSuchMethodException exc) {
                 this.hasCustomLibsTick = false;
-                exc.printStackTrace();
+                Console.getConsole().printStackTrace(exc);
             }
         }
     }
@@ -90,7 +93,7 @@ public class ScriptLoader {
                 invocableEngine.invokeFunction("updateProvidedLibsWorld");
             } catch (ScriptException | NoSuchMethodException exc) {
                 this.hasProvidedLibsWorld = false;
-                exc.printStackTrace();
+                Console.getConsole().printStackTrace(exc);
             }
         }
 
@@ -99,7 +102,7 @@ public class ScriptLoader {
                 invocableEngine.invokeFunction("updateCustomLibsWorld");
             } catch (ScriptException | NoSuchMethodException exc) {
                 this.hasCustomLibsWorld = false;
-                exc.printStackTrace();
+                Console.getConsole().printStackTrace(exc);
             }
         }
     }
@@ -144,7 +147,7 @@ public class ScriptLoader {
                 in.close();
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Console.getConsole().printStackTrace(ex);
         }
     }
 
@@ -156,7 +159,7 @@ public class ScriptLoader {
         try {
             return compileScripts(new File("./mods/ChatTriggers/libs/chattriggers-provided-libs.js"));
         } catch (IOException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
             return null;
         }
     }
@@ -169,7 +172,7 @@ public class ScriptLoader {
         try {
             return compileScripts(new File("./mods/ChatTriggers/libs/chattriggers-custom-libs.js"));
         } catch (IOException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
             return null;
         }
     }
@@ -236,7 +239,7 @@ public class ScriptLoader {
                 Import newImport = new Import(importDir.getName(), compileScripts(importDir.listFiles()));
                 compiledImports.add(newImport);
             } catch (IOException e) {
-                e.printStackTrace();
+                Console.getConsole().printStackTrace(e);
             }
         }
 
@@ -256,7 +259,7 @@ public class ScriptLoader {
                 try {
                     FileUtils.copyFileToDirectory(asset, toCopyDir);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Console.getConsole().printStackTrace(e);
                 }
             }
         }

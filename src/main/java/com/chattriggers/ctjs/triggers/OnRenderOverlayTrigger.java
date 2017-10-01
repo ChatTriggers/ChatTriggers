@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import javax.script.ScriptException;
@@ -21,7 +22,7 @@ public class OnRenderOverlayTrigger extends OnTrigger {
         try {
             CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, event);
         } catch (ScriptException | NoSuchMethodException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 }

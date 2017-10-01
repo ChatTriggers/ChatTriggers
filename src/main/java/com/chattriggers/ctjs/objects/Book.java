@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.objects;
 
 import com.chattriggers.ctjs.utils.Message;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.init.Items;
@@ -90,7 +91,7 @@ public class Book {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Console.getConsole().printStackTrace(e);
             }
             Minecraft.getMinecraft().displayGuiScreen(bookScreen);
         }).start();

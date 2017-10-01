@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -58,6 +59,9 @@ public class CTCommand extends CommandBase {
                 case("files"):
                     openFileLocation();
                     break;
+                case("console"):
+                    Console.getConsole().showConsole(true);
+                    break;
                 default:
                     ChatLib.chat(EnumChatFormatting.RED + getCommandUsage(sender));
                     break;
@@ -73,7 +77,7 @@ public class CTCommand extends CommandBase {
         try {
             Desktop.getDesktop().open(new File("./mods/ChatTriggers"));
         } catch (IOException exception) {
-            exception.printStackTrace();
+            Console.getConsole().printStackTrace(exception);
             ChatLib.chat(EnumChatFormatting.RED + "Could not open file location");
         }
     }

@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 
 import javax.script.ScriptException;
@@ -32,7 +33,7 @@ public class OnSoundPlayTrigger extends OnTrigger {
                 event.result = null;
             }
         } catch (ScriptException | NoSuchMethodException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 }
