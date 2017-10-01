@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.libs;
 
-import com.typesafe.config.ConfigException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -9,9 +8,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.UUID;
 
 public class MinecraftVars {
     private static Minecraft mc = Minecraft.getMinecraft();
@@ -191,9 +192,28 @@ public class MinecraftVars {
      *          is in a single player world.
      */
     public static Long getPing() {
-        if (mc.isSingleplayer()) return 5L;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
-        return mc.getCurrentServerData() == null ? null : mc.getCurrentServerData().pingToServer;
+        if (player == null || mc.isSingleplayer()) {
+            return 5L;
+        }
+
+        if(Minecraft.getMinecraft().getNetHandler().getPlayerInfo(UUID.fromString(Minecraft.getMinecraft().thePlayer.getGameProfile().getId().toString())) != null) {
+            return (long) Minecraft.getMinecraft().getNetHandler().getPlayerInfo(
+                    UUID.fromString(Minecraft.getMinecraft().thePlayer.getGameProfile().getId().toString())
+            ).getResponseTime();
+        }
+
+        return Minecraft.getMinecraft().getCurrentServerData().pingToServer;
+    }
+
+    /**
+     * Gets whether or not the minecraft window is active
+     * and in the foreground of the user's screen
+     * @return whether or not the game is active
+     */
+    public static boolean isUserTabbedIn() {
+        return Display.isActive();
     }
 
     /**

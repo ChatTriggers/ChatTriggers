@@ -48,6 +48,7 @@ var leftArrow = MinecraftVars.isLeftArrowDown();
 var rightArrow = MinecraftVars.isRightArrowDown();
 var upArrow = MinecraftVars.isUpArrowDown();
 var downArrow = MinecraftVars.isDownArrowDown();
+var tabbedIn = MinecraftVars.isUserTabbedIn();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -79,6 +80,7 @@ function updateProvidedLibsTick() {
     rightArrow = MinecraftVars.isRightArrowDown();
     upArrow = MinecraftVars.isUpArrowDown();
     downArrow = MinecraftVars.isDownArrowDown();
+    tabbedIn = MinecraftVars.isUserTabbedIn();
 }
 
 function updateProvidedLibsWorld() {

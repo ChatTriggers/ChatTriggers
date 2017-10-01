@@ -147,11 +147,8 @@ public class ChatLib {
     }
 
     public static String removeFormatting(String toRemove) {
-        for (EnumChatFormatting format : EnumChatFormatting.values()) {
-            toRemove = toRemove.replace(format.toString(), "").replace(format.toString().replace("\u00a7", "&"), "");
-        }
-
-        return toRemove;
+        return toRemove.replaceAll("\\u00a7[0-9a-fklmnor]", "")
+                .replaceAll("&[0-9a-fklmnor]", "");
     }
 
     /**
@@ -325,6 +322,6 @@ public class ChatLib {
             message = "null";
         }
 
-        return message.replace("&", "\u00a7");
+        return message.replaceAll("&(?![^0-9a-fklmnor]|$)", "\u00a7");
     }
 }
