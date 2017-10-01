@@ -23,12 +23,12 @@
 hs_err_pid*
 
 .idea/
-jsCT.iml
+ct.js.iml
 build/
 .gradle/
 out/
-jsCT.ipr
-jsCT.iws
+ct.js.ipr
+ct.js.iws
 jsCT_api.iml
 jsCT_main.iml
 jsCT_test.iml
