@@ -4,7 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -94,6 +96,21 @@ public class MinecraftVars {
      */
     public static Float getXPProgress() {
         return mc.thePlayer == null ? null : mc.thePlayer.experience;
+    }
+
+    /**
+     * Gets the biome the player is currently in.
+     * In an import, accessible via the {@code biome} variable.
+     * @return The biome the player is in.
+     */
+    public static String getPlayerBiome() {
+        if (mc.thePlayer == null) {
+            return null;
+        }
+        Chunk chunk = mc.theWorld.getChunkFromBlockCoords(mc.thePlayer.getPosition());
+        BiomeGenBase biome = chunk.getBiome(mc.thePlayer.getPosition(), mc.theWorld.getWorldChunkManager());
+
+        return biome.biomeName;
     }
 
     /**
@@ -251,7 +268,7 @@ public class MinecraftVars {
      * @return The player's camera pitch.
      */
     public static Float getPlayerPitch() {
-        return mc.thePlayer == null ? null : mc.thePlayer.cameraPitch;
+        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.cameraPitch);
     }
 
     /**
@@ -260,7 +277,7 @@ public class MinecraftVars {
      * @return The player's camera yaw.
      */
     public static Float getPlayerYaw() {
-        return mc.thePlayer == null ? null : mc.thePlayer.cameraYaw;
+        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
     }
 
     /**
@@ -269,7 +286,32 @@ public class MinecraftVars {
      * @return The direction the player is facing, one of the four cardinal directions.
      */
     public static String getPlayerFacing() {
-        return mc.thePlayer == null ? null : mc.thePlayer.getHorizontalFacing().toString();
+        if (mc.thePlayer == null) {
+            return null;
+        }
+
+        Float yaw = getPlayerYaw();
+        String direction = "";
+
+        if(yaw < 22.5 && yaw > -22.5) {
+            direction = "South";
+        } else if (yaw < 67.5 && yaw > 22.5) {
+            direction = "South West";
+        } else if (yaw < 112.5 && yaw > 67.5) {
+            direction = "West";
+        } else if (yaw < 157.5 && yaw > 112.5) {
+            direction = "North West";
+        } else if (yaw < -157.5 || yaw > 157.5) {
+            direction = "North";
+        } else if (yaw > -157.5 && yaw < -112.5) {
+            direction = "North East";
+        } else if (yaw > -112.5 && yaw < -67.5) {
+            direction = "East";
+        } else if (yaw > -67.5 && yaw < -22.5) {
+            direction = "South East";
+        }
+
+        return direction;
     }
 
     /**
