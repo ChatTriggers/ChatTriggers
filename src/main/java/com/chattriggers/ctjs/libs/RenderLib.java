@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.libs;
 
+import com.chattriggers.ctjs.CTJS;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -12,6 +13,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 @UtilityClass
 @SideOnly(Side.CLIENT)
@@ -271,5 +279,22 @@ public class RenderLib {
         GL11.glScalef(scale, scale, scale);
         Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureMapX, textureMapY, textureWidth, textureHeight);
         GL11.glPopMatrix();
+    }
+
+    public static void downloadImage(String url, String resourceName) {
+        try {
+            BufferedImage image = ImageIO.read(new URL(url));
+            BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = resized.createGraphics();
+            g.drawImage(image, 0, 0, 256, 256, null);
+            g.dispose();
+
+            File resourceFile = new File(CTJS.getInstance().getAssetsDir(), resourceName);
+            resourceFile.createNewFile();
+
+            ImageIO.write(resized, "png", resourceFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
