@@ -268,7 +268,7 @@ public class MinecraftVars {
      * @return The player's camera pitch.
      */
     public static Float getPlayerPitch() {
-        return mc.thePlayer == null ? null : mc.thePlayer.cameraPitch;
+        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.cameraPitch);
     }
 
     /**
@@ -277,7 +277,7 @@ public class MinecraftVars {
      * @return The player's camera yaw.
      */
     public static Float getPlayerYaw() {
-        return mc.thePlayer == null ? null : mc.thePlayer.rotationYaw;
+        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
     }
 
     /**
@@ -290,7 +290,7 @@ public class MinecraftVars {
             return null;
         }
 
-        Float yaw = MathHelper.wrapAngleTo180_float(getPlayerYaw());
+        Float yaw = getPlayerYaw();
         String direction = "";
 
         if(yaw < 22.5 && yaw > -22.5) {
