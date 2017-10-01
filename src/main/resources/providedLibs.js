@@ -17,6 +17,7 @@ var Message = Java.type("com.chattriggers.ctjs.utils.Message");
 var Book = Java.type("com.chattriggers.ctjs.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.objects.KeyBind");
 var Keyboard = Java.type("org.lwjgl.input.Keyboard");
+var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 
 /*Built in Vars */
 var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
@@ -87,4 +88,8 @@ function updateProvidedLibsWorld() {
     serverIP = MinecraftVars.getServerIP();
     serverMOTD = MinecraftVars.getServerMOTD();
     server = MinecraftVars.getServerName();
+}
+
+function print(toPrint) {
+    Console.getConsole().out.println(toPrint);
 }
