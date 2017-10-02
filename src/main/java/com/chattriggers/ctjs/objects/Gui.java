@@ -18,7 +18,7 @@ public class Gui extends GuiScreen {
 
     }
 
-    public void openGui() {
+    public void open() {
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
 
