@@ -18,10 +18,19 @@ public class Gui extends GuiScreen {
 
     }
 
+    /**
+     * Displays the gui object to Minecraft.
+     */
     public void open() {
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
 
+
+    /**
+     * Registers a method to be ran while gui is open.
+     * Registered method runs on draw.
+     * @param methodName the method to run
+     */
     public void registerOnDraw(String methodName) {
         onDraw = new OnTrigger(methodName) {
             @Override
@@ -45,6 +54,11 @@ public class Gui extends GuiScreen {
         };
     }
 
+    /**
+     * Registers a method to be ran while gui is open.
+     * Registered method runs on mouse click.
+     * @param methodName the method to run
+     */
     public void registerOnClicked(String methodName) {
         onClick = new OnTrigger(methodName) {
             @Override
@@ -68,6 +82,11 @@ public class Gui extends GuiScreen {
         };
     }
 
+    /**
+     * Registers a method to be ran while gui is open.
+     * Registered method runs on key input.
+     * @param methodName the method to run
+     */
     public void registerOnKeyTyped(String methodName) {
         onKeyTyped = new OnTrigger(methodName) {
             @Override
