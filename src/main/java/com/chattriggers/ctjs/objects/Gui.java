@@ -14,15 +14,21 @@ public class Gui extends GuiScreen {
     private OnTrigger onClick = null;
     private OnTrigger onKeyTyped = null;
 
-    public Gui() {
-
-    }
+    public Gui() {}
 
     /**
      * Displays the gui object to Minecraft.
      */
     public void open() {
         Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    /**
+     * Closes this gui screen.
+     */
+    public void close() {
+        if (Minecraft.getMinecraft().currentScreen == this)
+            Minecraft.getMinecraft().thePlayer.closeScreen();
     }
 
 

@@ -1,8 +1,10 @@
 package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.listeners.ChatListener;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
+import net.minecraft.util.IChatComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -100,5 +102,11 @@ public class Console {
 
     public static void clear() {
         getConsole().clearConsole();
+    }
+
+    public static void printChatHistory() {
+        System.out.println(CTJS.getInstance().getChatListener().getChatHistory()); // TODO: remove
+        for (IChatComponent message : CTJS.getInstance().getChatListener().getChatHistory())
+            getConsole().out.println(message.getFormattedText());
     }
 }

@@ -42,6 +42,8 @@ public class CTJS {
     @Getter @Setter
     private DisplayHandler displayHandler;
     @Getter
+    private ChatListener chatListener;
+    @Getter
     private ImagesPack imagesPack;
     @Getter
     private File assetsDir;
@@ -53,6 +55,7 @@ public class CTJS {
         instance = this;
 
         this.displayHandler = new DisplayHandler();
+        this.chatListener = new ChatListener();
         this.console = new Console();
 
         initMain(true);
