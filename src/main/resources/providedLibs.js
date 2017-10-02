@@ -13,6 +13,7 @@ var RenderLib = Java.type("com.chattriggers.ctjs.libs.RenderLib");
 // Objects
 var Display = Java.type("com.chattriggers.ctjs.objects.Display");
 var DisplayHandler = Java.type("com.chattriggers.ctjs.objects.DisplayHandler");
+var Gui = Java.type("com.chattriggers.ctjs.objects.Gui");
 var Message = Java.type("com.chattriggers.ctjs.utils.Message");
 var Book = Java.type("com.chattriggers.ctjs.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.objects.KeyBind");
