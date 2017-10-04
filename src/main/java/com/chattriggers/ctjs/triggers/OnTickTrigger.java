@@ -17,10 +17,8 @@ public class OnTickTrigger extends OnTrigger {
         try {
             CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, args[0]);
         } catch (ScriptException | NoSuchMethodException e) {
-            if (((int) args[0]) % 40 == 0) {
-                Console.getConsole().printStackTrace(e);
-                TriggerRegister.TriggerTypes.TICK.removeTrigger(this);
-            }
+            Console.getConsole().printStackTrace(e);
+            TriggerRegister.TriggerTypes.TICK.removeTrigger(this);
         }
     }
 }

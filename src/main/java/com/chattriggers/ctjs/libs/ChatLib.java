@@ -146,9 +146,23 @@ public class ChatLib {
         return stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString();
     }
 
+    /**
+     * Remove all formatting
+     * @param toRemove the string to un-format
+     * @return the unformatted string
+     */
     public static String removeFormatting(String toRemove) {
         return toRemove.replaceAll("\\u00a7[0-9a-fklmnor]", "")
                 .replaceAll("&[0-9a-fklmnor]", "");
+    }
+
+    /**
+     * Replaces minecraft formatted text with <code>&</code> formatted text
+     * @param toUnformat the formatted string
+     * @return the unformatted string
+     */
+    public static String replaceFormatting(String toUnformat) {
+        return toUnformat.replaceAll("\\u00a7(?![^0-9a-fklmnor]|$)", "&");
     }
 
     /**

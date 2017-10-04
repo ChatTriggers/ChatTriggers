@@ -1,8 +1,10 @@
 package com.chattriggers.ctjs.listeners;
 
+import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
 import lombok.Getter;
 import net.minecraft.util.IChatComponent;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -19,6 +21,8 @@ public class ChatListener {
                     event.message.getUnformattedText(),
                     event
             );
+
+            Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(event.message.getUnformattedTextForChat()));
         }
     }
 }
