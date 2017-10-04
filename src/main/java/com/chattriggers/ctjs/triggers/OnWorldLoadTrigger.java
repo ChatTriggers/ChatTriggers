@@ -17,6 +17,7 @@ public class OnWorldLoadTrigger extends OnTrigger {
             CTJS.getInstance().getInvocableEngine().invokeFunction(methodName);
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e);
+            TriggerRegister.TriggerTypes.WORLD_LOAD.removeTrigger(this);
         }
     }
 }

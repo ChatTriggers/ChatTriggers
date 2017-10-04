@@ -124,6 +124,10 @@ public class TriggerRegister {
             triggers.add(trigger);
         }
 
+        public void removeTrigger(OnTrigger trigger) {
+            triggers.remove(trigger);
+        }
+
         public ArrayList<OnTrigger> getTriggers() {
             return triggers;
         }

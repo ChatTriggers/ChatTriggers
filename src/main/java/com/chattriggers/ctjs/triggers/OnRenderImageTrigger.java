@@ -23,6 +23,7 @@ public class OnRenderImageTrigger extends OnTrigger {
             CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, event);
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e);
+            TriggerRegister.TriggerTypes.RENDER_IMAGE.removeTrigger(this);
         }
     }
 }

@@ -103,10 +103,4 @@ public class Console {
     public static void clear() {
         getConsole().clearConsole();
     }
-
-    public static void printChatHistory() {
-        System.out.println(CTJS.getInstance().getChatListener().getChatHistory()); // TODO: remove
-        for (IChatComponent message : CTJS.getInstance().getChatListener().getChatHistory())
-            getConsole().out.println(message.getFormattedText());
-    }
 }

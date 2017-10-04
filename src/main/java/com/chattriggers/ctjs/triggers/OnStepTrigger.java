@@ -25,6 +25,7 @@ public class OnStepTrigger extends OnTrigger {
             }
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e);
+            TriggerRegister.TriggerTypes.STEP.removeTrigger(this);
         }
     }
 }

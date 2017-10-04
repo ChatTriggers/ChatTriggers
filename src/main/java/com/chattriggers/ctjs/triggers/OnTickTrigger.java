@@ -19,6 +19,7 @@ public class OnTickTrigger extends OnTrigger {
         } catch (ScriptException | NoSuchMethodException e) {
             if (((int) args[0]) % 40 == 0) {
                 Console.getConsole().printStackTrace(e);
+                TriggerRegister.TriggerTypes.TICK.removeTrigger(this);
             }
         }
     }
