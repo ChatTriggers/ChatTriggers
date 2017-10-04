@@ -19,18 +19,26 @@ public class Gui extends GuiScreen {
     /**
      * Displays the gui object to Minecraft.
      */
-    public void openGui() {
+    public void open() {
+        Minecraft.getMinecraft().thePlayer.closeScreen();
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
 
     /**
      * Closes this gui screen.
      */
-    public void closeGui() {
+    public void close() {
         if (Minecraft.getMinecraft().currentScreen == this)
             Minecraft.getMinecraft().thePlayer.closeScreen();
     }
 
+    /**
+     * Get if the gui object is open.
+     * @return true if this gui is open
+     */
+    public boolean isOpen() {
+        return Minecraft.getMinecraft().currentScreen == this;
+    }
 
     /**
      * Registers a method to be ran while gui is open.

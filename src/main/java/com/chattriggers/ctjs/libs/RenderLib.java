@@ -6,10 +6,14 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -66,13 +70,12 @@ public class RenderLib {
      * @return integer color
      */
     public static int color(int red, int green, int blue, int alpha) {
-        if (red > 255) red = 255;
-        if (green > 255) green = 255;
-        if (blue > 255) blue = 255;
-        if (red < 0) red = 0;
-        if (green < 0) green = 0;
-        if (blue < 0) blue = 0;
-        return (alpha * 0x1000000) + (red * 0x10000) + (green * 0x100) + blue;
+        return (limit255(alpha) * 0x1000000) + (limit255(red) * 0x10000) + (limit255(green) * 0x100) + blue;
+    }
+
+    // helper method to limit numbers between 0 and 255
+    private int limit255(int a) {
+        return (a > 255) ? 255 : (a < 0 ? 0: a);
     }
 
     /**
@@ -312,5 +315,23 @@ public class RenderLib {
         } catch (IOException e) {
             Console.getConsole().printStackTrace(e);
         }
+    }
+
+    /**
+     * Renders an item icon on screen.
+     * @param x x coordinate to render item icon to
+     * @param y y coordinate to render item icon to
+     * @param item name or id of item to render
+     */
+    private static void drawItemIcon(int x, int y, String item) {
+        ItemStack itemStack = new ItemStack(Item.getByNameOrId(item));
+        RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
+
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderHelper.enableStandardItemLighting();
+        RenderHelper.enableGUIStandardItemLighting();
+        itemRenderer.zLevel = 200.0F;
+
+        itemRenderer.renderItemIntoGUI(itemStack, x, y);
     }
 }
