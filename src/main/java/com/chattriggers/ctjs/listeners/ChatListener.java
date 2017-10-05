@@ -22,7 +22,7 @@ public class ChatListener {
                     event
             );
 
-            Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(event.message.getUnformattedText()));
+            Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(event.message.getFormattedText()));
         }
     }
 }
