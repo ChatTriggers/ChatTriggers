@@ -49,7 +49,7 @@ public class WorldListener {
 
     @SubscribeEvent
     public void onSoundPlay(PlaySoundEvent event) {
-        TriggerType.WORLD_LOAD.triggerAll(event);
+        TriggerType.SOUND_PLAY.triggerAll(event);
     }
 
     @SubscribeEvent
