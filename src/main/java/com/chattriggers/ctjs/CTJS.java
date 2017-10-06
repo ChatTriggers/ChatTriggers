@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.listeners.ChatListener;
 import com.chattriggers.ctjs.listeners.WorldListener;
 import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.objects.DisplayHandler;
-import com.chattriggers.ctjs.triggers.TriggerRegister;
+import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
@@ -76,7 +76,7 @@ public class CTJS {
 
         if (!firstTime) {
             MinecraftForge.EVENT_BUS.unregister(scriptLoader);
-            TriggerRegister.TriggerTypes.clearAllTriggers();
+            TriggerType.clearAllTriggers();
         }
 
         this.displayHandler.clearDisplays();

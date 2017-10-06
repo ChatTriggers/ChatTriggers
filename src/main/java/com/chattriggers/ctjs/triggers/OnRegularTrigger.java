@@ -5,20 +5,21 @@ import com.chattriggers.ctjs.utils.console.Console;
 
 import javax.script.ScriptException;
 
-public class OnTickTrigger extends OnTrigger {
-    public OnTickTrigger(String methodName) {
+public class OnRegularTrigger extends OnTrigger {
+    private TriggerType triggerType;
+
+    public OnRegularTrigger(String methodName, TriggerType triggerType) {
         super(methodName);
+        this.triggerType = triggerType;
     }
 
     @Override
     public void trigger(Object... args) {
-        if (!(args[0] instanceof Integer)) throw new IllegalArgumentException("1st argument is not an integer");
-
         try {
-            CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, args[0]);
+            CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, args);
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e);
-            TriggerRegister.TriggerTypes.TICK.removeTrigger(this);
+            triggerType.removeTrigger(this);
         }
     }
 }

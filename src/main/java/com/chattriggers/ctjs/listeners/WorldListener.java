@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.listeners;
 
-import com.chattriggers.ctjs.triggers.TriggerRegister;
+import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -24,32 +24,37 @@ public class WorldListener {
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
         // world load trigger
         if (shouldTriggerWorldLoad) {
-            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.WORLD_LOAD);
+            TriggerType.WORLD_LOAD.triggerAll();
             shouldTriggerWorldLoad = false;
         }
 
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
             // render overlay trigger
-            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.RENDER_OVERLAY, event);
+            TriggerType.RENDER_OVERLAY.triggerAll();
 
             // step trigger
-            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.STEP);
+            TriggerType.STEP.triggerAll();
         }
 
         // render image trigger
         if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
-            TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.RENDER_IMAGE, event);
+            TriggerType.RENDER_IMAGE.triggerAll();
         }
     }
 
     @SubscribeEvent
+    public void onWorldUnload(WorldEvent.Unload event) {
+        TriggerType.WORLD_UNLOAD.triggerAll();
+    }
+
+    @SubscribeEvent
     public void onSoundPlay(PlaySoundEvent event) {
-        TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.SOUND_PLAY, event);
+        TriggerType.WORLD_LOAD.triggerAll(event);
     }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.TICK, ticksPassed);
+        TriggerType.WORLD_LOAD.triggerAll(ticksPassed);
         ticksPassed++;
     }
 }

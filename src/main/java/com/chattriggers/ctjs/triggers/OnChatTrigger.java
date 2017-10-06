@@ -57,7 +57,7 @@ public class OnChatTrigger extends OnTrigger {
                 CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
             } catch (ScriptException | NoSuchMethodException e) {
                 Console.getConsole().printStackTrace(e);
-                TriggerRegister.TriggerTypes.CHAT.removeTrigger(this);
+                TriggerType.CHAT.removeTrigger(this);
             }
         }
     }

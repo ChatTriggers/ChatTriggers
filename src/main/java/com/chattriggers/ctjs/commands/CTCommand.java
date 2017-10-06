@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.commands;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.loader.ScriptLoader;
-import com.chattriggers.ctjs.triggers.TriggerRegister;
+import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -52,9 +52,10 @@ public class CTCommand extends CommandBase {
             switch (args[0].toLowerCase()) {
                 case("reload"):
                 case("load"):
+                    TriggerType.WORLD_UNLOAD.triggerAll();
                     CTJS.getInstance().initMain(false);
                     ChatLib.chat(EnumChatFormatting.RED + "Reloaded js files");
-                    TriggerRegister.TriggerTypes.triggerAllOfType(TriggerRegister.TriggerTypes.WORLD_LOAD);
+                    TriggerType.WORLD_LOAD.triggerAll();
                     break;
                 case("files"):
                     openFileLocation();

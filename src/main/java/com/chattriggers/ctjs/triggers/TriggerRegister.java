@@ -3,8 +3,6 @@ package com.chattriggers.ctjs.triggers;
 import com.chattriggers.ctjs.commands.Command;
 import net.minecraftforge.client.ClientCommandHandler;
 
-import java.util.ArrayList;
-
 public class TriggerRegister {
 
     /**
@@ -15,7 +13,7 @@ public class TriggerRegister {
      */
     public static void registerChat(String methodName, String chatCriteria) {
         OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria);
-        TriggerTypes.CHAT.addTrigger(trigger);
+        TriggerType.CHAT.addTrigger(trigger);
     }
 
     /**
@@ -36,7 +34,7 @@ public class TriggerRegister {
      */
     public static void registerChat(String methodName, String chatCriteria, String parameter) {
         OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, parameter);
-        TriggerTypes.CHAT.addTrigger(trigger);
+        TriggerType.CHAT.addTrigger(trigger);
     }
 
     /**
@@ -44,8 +42,8 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerWorldLoad(String methodName) {
-        OnWorldLoadTrigger trigger = new OnWorldLoadTrigger(methodName);
-        TriggerTypes.WORLD_LOAD.addTrigger(trigger);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
+        TriggerType.WORLD_LOAD.addTrigger(trigger);
     }
 
     /**
@@ -56,7 +54,7 @@ public class TriggerRegister {
      */
     public static void registerSoundPlay(String methodName, String soundName) {
         OnSoundPlayTrigger trigger = new OnSoundPlayTrigger(methodName, soundName);
-        TriggerTypes.SOUND_PLAY.addTrigger(trigger);
+        TriggerType.SOUND_PLAY.addTrigger(trigger);
     }
 
     /**
@@ -64,8 +62,8 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerOnTick(String methodName) {
-        OnTickTrigger trigger = new OnTickTrigger(methodName);
-        TriggerTypes.TICK.addTrigger(trigger);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK);
+        TriggerType.TICK.addTrigger(trigger);
     }
 
     /**
@@ -76,11 +74,20 @@ public class TriggerRegister {
         registerOnTick(methodName);
     }
 
+    /**
+     * Register a new method that receives step events
+     * @param methodName the name of the method to callback when the event is fired
+     * @param fps how many fps this trigger should be limited to
+     */
     public static void registerOnStep(String methodName, long fps) {
         OnStepTrigger trigger = new OnStepTrigger(methodName, fps);
-        TriggerTypes.STEP.addTrigger(trigger);
+        TriggerType.STEP.addTrigger(trigger);
     }
 
+    /**
+     * Register a new method that receives step events (fired at 60fps)
+     * @param methodName the name of the method to callback when the event is fired
+     */
     public static void registerOnStep(String methodName) {
         registerOnStep(methodName, 60L);
     }
@@ -90,13 +97,26 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerOnRenderOverlay(String methodName) {
-        OnRenderOverlayTrigger trigger = new OnRenderOverlayTrigger(methodName);
-        TriggerTypes.RENDER_OVERLAY.addTrigger(trigger);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY);
+        TriggerType.RENDER_OVERLAY.addTrigger(trigger);
     }
 
+    /**
+     * Register a new method that receives render image overlay events
+     * @param methodName the name of the method to callback when the event is fired
+     */
     public static void registerOnImageOverlay(String methodName) {
-        OnRenderImageTrigger trigger = new OnRenderImageTrigger(methodName);
-        TriggerTypes.RENDER_IMAGE.addTrigger(trigger);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.RENDER_IMAGE);
+        TriggerType.RENDER_IMAGE.addTrigger(trigger);
+    }
+
+    /**
+     * Register a new method that receives world unload events
+     * @param methodName the name of the method to callback when the event is fired
+     */
+    public static void registerWorldUnload(String methodName) {
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
+        TriggerType.WORLD_UNLOAD.addTrigger(trigger);
     }
 
     /**
@@ -111,37 +131,4 @@ public class TriggerRegister {
         ClientCommandHandler.instance.registerCommand(command);
     }
 
-    public enum TriggerTypes {
-        CHAT, WORLD_LOAD, SOUND_PLAY, TICK, STEP, RENDER_OVERLAY, RENDER_IMAGE;
-
-        private ArrayList<OnTrigger> triggers = new ArrayList<>();
-
-        public void clearTriggers() {
-            triggers.clear();
-        }
-
-        public void addTrigger(OnTrigger trigger) {
-            triggers.add(trigger);
-        }
-
-        public void removeTrigger(OnTrigger trigger) {
-            triggers.remove(trigger);
-        }
-
-        public ArrayList<OnTrigger> getTriggers() {
-            return triggers;
-        }
-
-        public static void triggerAllOfType(TriggerTypes triggerType, Object... args) {
-            for (OnTrigger trigger : triggerType.getTriggers()) {
-                trigger.trigger(args);
-            }
-        }
-
-        public static void clearAllTriggers() {
-            for (TriggerTypes triggerType : TriggerTypes.values()) {
-                triggerType.clearTriggers();
-            }
-        }
-    }
 }

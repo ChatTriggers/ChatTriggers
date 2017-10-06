@@ -9,6 +9,7 @@ var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerR
 var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
 var WorldLib = Java.type("com.chattriggers.ctjs.libs.WorldLib");
 var RenderLib = Java.type("com.chattriggers.ctjs.libs.RenderLib");
+var FileLib = Java.type("com.chattriggers.ctjs.libs.FileLib");
 
 // Objects
 var Display = Java.type("com.chattriggers.ctjs.objects.Display");
