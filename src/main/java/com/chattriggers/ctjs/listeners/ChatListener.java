@@ -14,7 +14,8 @@ import java.util.ArrayList;
 public class ChatListener {
     @SubscribeEvent
     public void onReceiveChat(ClientChatReceivedEvent event) {
-        if (event.type == 0) {
+        System.out.println(event.type);
+        if (event.type == 0 || event.type == 1) {
             //Normal Chat Message
             TriggerRegister.TriggerTypes.triggerAllOfType(
                     TriggerRegister.TriggerTypes.CHAT,
