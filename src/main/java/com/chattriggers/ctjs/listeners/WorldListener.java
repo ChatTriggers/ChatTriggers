@@ -54,7 +54,7 @@ public class WorldListener {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        TriggerType.WORLD_LOAD.triggerAll(ticksPassed);
+        TriggerType.TICK.triggerAll(ticksPassed);
         ticksPassed++;
     }
 }
