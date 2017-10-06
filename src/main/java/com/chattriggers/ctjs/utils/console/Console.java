@@ -1,10 +1,8 @@
 package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.listeners.ChatListener;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
-import net.minecraft.util.IChatComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -96,7 +94,7 @@ public class Console {
 
     @Override
     public void finalize() {
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
