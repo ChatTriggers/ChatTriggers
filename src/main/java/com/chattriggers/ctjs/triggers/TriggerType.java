@@ -1,5 +1,9 @@
 package com.chattriggers.ctjs.triggers;
 
+import com.chattriggers.ctjs.utils.console.Console;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import java.util.ArrayList;
 
 public enum TriggerType {
@@ -7,6 +11,7 @@ public enum TriggerType {
     WORLD_UNLOAD;
 
     private ArrayList<OnTrigger> triggers = new ArrayList<>();
+    private ArrayList<OnTrigger> triggersRemove = new ArrayList<>();
 
     public void clearTriggers() {
         triggers.clear();
@@ -17,7 +22,8 @@ public enum TriggerType {
     }
 
     public void removeTrigger(OnTrigger trigger) {
-        triggers.remove(trigger);
+        // Add to removal list to avoid concurrent modification exceptions
+        triggersRemove.add(trigger);
     }
 
     public ArrayList<OnTrigger> getTriggers() {
@@ -26,6 +32,19 @@ public enum TriggerType {
 
     public void triggerAll(Object... args) {
         for (OnTrigger trigger : triggers) {
+            // Check for removal of broken trigger before running
+            if (triggersRemove.contains(trigger)) {
+                try {
+                    triggersRemove.remove(trigger);
+                    triggers.remove(trigger);
+                } catch (Exception e) {
+                    Console.getConsole().out.println("Failed to unregister broken function. Trying again later.");
+                    Console.getConsole().out.println(trigger.methodName);
+                }
+                return;
+            }
+
+            // run the trigger
             trigger.trigger(args);
         }
     }
