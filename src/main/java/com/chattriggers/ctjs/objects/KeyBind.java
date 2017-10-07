@@ -3,9 +3,15 @@ package com.chattriggers.ctjs.objects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.ArrayList;
 
 public class KeyBind {
+    private static ArrayList<KeyBind> keyBinds = new ArrayList<>();
+
     private KeyBinding keyBinding;
+    private boolean isCustom;
 
     /**
      * Create a new key bind, editable in the user's controls.
@@ -16,19 +22,22 @@ public class KeyBind {
     public KeyBind(String description, int keyCode) {
         for (KeyBinding key : Minecraft.getMinecraft().gameSettings.keyBindings) {
             if (key.getKeyCategory().equals("ChatTriggers") && key.getKeyDescription().equals(description)) {
-                this.keyBinding = key;
+                Minecraft.getMinecraft().gameSettings.keyBindings =
+                        ArrayUtils.removeElement(Minecraft.getMinecraft().gameSettings.keyBindings, key);
                 break;
             }
         }
 
-        if (this.keyBinding == null) {
-            this.keyBinding = new KeyBinding(description, keyCode, "ChatTriggers");
-            ClientRegistry.registerKeyBinding(this.keyBinding);
-        }
+        this.keyBinding = new KeyBinding(description, keyCode, "ChatTriggers");
+        ClientRegistry.registerKeyBinding(this.keyBinding);
+
+        keyBinds.add(this);
+        isCustom = true;
     }
 
     public KeyBind(KeyBinding keyBinding) {
         this.keyBinding = keyBinding;
+        isCustom = false;
     }
 
     /**
@@ -45,5 +54,14 @@ public class KeyBind {
      */
     public boolean isPressed() {
         return keyBinding.isPressed();
+    }
+
+    public static void clearKeyBinds() {
+        for (KeyBind keyBind : keyBinds) {
+            if (!keyBind.isCustom) continue;
+
+            Minecraft.getMinecraft().gameSettings.keyBindings =
+                    ArrayUtils.removeElement(Minecraft.getMinecraft().gameSettings.keyBindings, keyBind.keyBinding);
+        }
     }
 }
