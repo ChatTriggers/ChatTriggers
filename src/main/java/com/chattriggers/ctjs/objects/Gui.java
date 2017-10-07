@@ -20,8 +20,15 @@ public class Gui extends GuiScreen {
      * Displays the gui object to Minecraft.
      */
     public void open() {
-        Minecraft.getMinecraft().thePlayer.closeScreen();
-        Minecraft.getMinecraft().displayGuiScreen(this);
+        new Thread(() -> {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                Console.getConsole().printStackTrace(e);
+            }
+
+            Minecraft.getMinecraft().displayGuiScreen(this);
+        }).start();
     }
 
     /**
