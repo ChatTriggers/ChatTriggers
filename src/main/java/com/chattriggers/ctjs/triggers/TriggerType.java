@@ -1,17 +1,17 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.utils.console.Console;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public enum TriggerType {
-    CHAT, WORLD_LOAD, SOUND_PLAY, TICK, STEP, RENDER_OVERLAY, RENDER_IMAGE,
-    WORLD_UNLOAD;
     CHAT, WORLD_LOAD, SOUND_PLAY, TICK, STEP, RENDER_OVERLAY, WORLD_UNLOAD;
 
-    private ArrayList<OnTrigger> triggers = new ArrayList<>();
+    private PriorityQueue<OnTrigger> triggers = new PriorityQueue<> (
+            (obj1, obj2) -> obj1.priority.priority - obj2.priority.priority
+    );
+
     private ArrayList<OnTrigger> triggersRemove = new ArrayList<>();
 
     public void clearTriggers() {
@@ -27,7 +27,7 @@ public enum TriggerType {
         triggersRemove.add(trigger);
     }
 
-    public ArrayList<OnTrigger> getTriggers() {
+    public PriorityQueue<OnTrigger> getTriggers() {
         return triggers;
     }
 

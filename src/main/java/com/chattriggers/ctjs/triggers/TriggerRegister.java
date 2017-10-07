@@ -121,5 +121,10 @@ public class TriggerRegister {
         Command command = new Command(trigger, commandName, commandUsage);
         ClientCommandHandler.instance.registerCommand(command);
     }
+    
+    public static void registerOnRenderOverlay(String methodName, Priority priority) {
+        OnRegularTrigger onRegularTrigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY, priority);
+        TriggerType.RENDER_OVERLAY.addTrigger(onRegularTrigger);
+    }
 
 }
