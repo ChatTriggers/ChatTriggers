@@ -325,9 +325,9 @@ public class ChatLib {
 
     private Boolean isPlayer(String out) {
         if (Minecraft.getMinecraft().thePlayer == null) {
-            System.out.println(out);
             return false;
         }
+
         return true;
     }
 

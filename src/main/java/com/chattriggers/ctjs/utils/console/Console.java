@@ -27,7 +27,7 @@ public class Console {
         JTextArea textArea = new JTextArea();
         this.taos = new TextAreaOutputStream(textArea, 1000);
         textArea.setEditable(false);
-        textArea.setFont(new Font(null, Font.PLAIN, 15));
+        textArea.setFont(new Font("Arial", Font.PLAIN, 15));
         JTextField inputField = new JTextField(1);
         inputField.setFocusable(true);
 
@@ -90,6 +90,8 @@ public class Console {
 
     public void showConsole(boolean show) {
         this.frame.setVisible(show);
+        this.frame.toFront();
+        this.frame.repaint();
     }
 
     @Override
