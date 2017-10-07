@@ -14,8 +14,8 @@ public class OnRegularTrigger extends OnTrigger {
     }
 
     public OnRegularTrigger(String methodName, TriggerType triggerType, Priority priority) {
-        super(methodName);
-        this.triggerType = triggerType;
+        this(methodName, triggerType);
+        this.priority = priority;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.triggers.TriggerType;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -49,6 +50,8 @@ public class WorldListener {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        if (Minecraft.getMinecraft().theWorld == null) return;
+
         TriggerType.TICK.triggerAll(ticksPassed);
         ticksPassed++;
     }
