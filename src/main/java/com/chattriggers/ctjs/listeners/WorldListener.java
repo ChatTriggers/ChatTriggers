@@ -35,11 +35,6 @@ public class WorldListener {
             // step trigger
             TriggerType.STEP.triggerAll();
         }
-
-        // render image trigger
-        if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
-            TriggerType.RENDER_IMAGE.triggerAll();
-        }
     }
 
     @SubscribeEvent

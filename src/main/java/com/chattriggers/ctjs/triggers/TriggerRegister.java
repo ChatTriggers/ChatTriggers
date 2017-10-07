@@ -102,15 +102,6 @@ public class TriggerRegister {
     }
 
     /**
-     * Register a new method that receives render image overlay events
-     * @param methodName the name of the method to callback when the event is fired
-     */
-    public static void registerOnImageOverlay(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.RENDER_IMAGE);
-        TriggerType.RENDER_IMAGE.addTrigger(trigger);
-    }
-
-    /**
      * Register a new method that receives world unload events
      * @param methodName the name of the method to callback when the event is fired
      */

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public enum TriggerType {
     CHAT, WORLD_LOAD, SOUND_PLAY, TICK, STEP, RENDER_OVERLAY, RENDER_IMAGE,
     WORLD_UNLOAD;
+    CHAT, WORLD_LOAD, SOUND_PLAY, TICK, STEP, RENDER_OVERLAY, WORLD_UNLOAD;
 
     private ArrayList<OnTrigger> triggers = new ArrayList<>();
     private ArrayList<OnTrigger> triggersRemove = new ArrayList<>();

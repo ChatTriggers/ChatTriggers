@@ -8,7 +8,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -283,10 +282,34 @@ public class RenderLib {
      */
     public static void drawImage(String resourceName, int renderXLoc, int renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
+        drawImage("ctjs.images", resourceName, renderXLoc, renderYLoc,
+                textureMapX, textureMapY, textureWidth, textureHeight, scale);
+    }
 
-        TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-        ResourceLocation rl = new ResourceLocation("ctjs.images", resourceName);
+    /**
+     * Draws an image to the screen.<br>
+     * Images must be in the imports /assets/ directory on launch, <br>
+     * and have a size of 256x256.
+     * @param resourceDomain the domain of the file, i.e minecraft
+     * @param resourceName the file name, i.e. block.png
+     * @param renderXLoc the x position on the screen to render to
+     * @param renderYLoc the y position on the screen to render to
+     * @param textureMapX the x position on the image to start rendering from, usually 0
+     * @param textureMapY the y position on the image to start rendering from, usually 0
+     * @param textureWidth the width of the image to render, usually 256
+     * @param textureHeight the height of the image to render, usually 256
+     * @param scale the scale of the image, can use decimals, i.e. 0.5, 1.5
+     */
+    public static void drawImage(String resourceDomain, String resourceName, int renderXLoc, int renderYLoc,
+                                 int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
 
+        ResourceLocation rl = new ResourceLocation(resourceDomain, resourceName);
+
+        drawImage(rl, renderXLoc, renderYLoc, textureMapX, textureMapY, textureWidth, textureHeight, scale);
+    }
+
+    public static void drawImage(ResourceLocation rl, int renderXLoc, int renderYLoc, int textureMapX,
+                                 int textureMapY, int textureWidth, int textureHeight, float scale) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
 
         GL11.glPushMatrix();
