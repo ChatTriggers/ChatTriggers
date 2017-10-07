@@ -33,6 +33,8 @@ var uuid = MinecraftVars.getPlayerUUID();
 var hp = MinecraftVars.getPlayerHP();
 var hunger = MinecraftVars.getPlayerHunger();
 var saturation = MinecraftVars.getPlayerSaturation();
+var armorPoints = MinecraftVars.getPlayerArmorPoints();
+var airLevel = MinecraftVars.getPlayerAirLevel()
 var xpLevel = MinecraftVars.getXPLevel();
 var xpProgress = MinecraftVars.getXPProgress();
 var inChat = MinecraftVars.isInChat();
@@ -53,6 +55,8 @@ var rightArrow = MinecraftVars.isRightArrowDown();
 var upArrow = MinecraftVars.isUpArrowDown();
 var downArrow = MinecraftVars.isDownArrowDown();
 var tabbedIn = MinecraftVars.isUserTabbedIn();
+var windowWidth = MinecraftVars.getWindowWidth();
+var windowHeight = MinecraftVars.getWindowHeight();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -65,6 +69,8 @@ function updateProvidedLibsTick() {
     hp = MinecraftVars.getPlayerHP();
     hunger = MinecraftVars.getPlayerHunger();
     saturation = MinecraftVars.getPlayerSaturation();
+    armorPoints = MinecraftVars.getPlayerArmorPoints();
+    airLevel = MinecraftVars.getPlayerAirLevel();
     xpLevel = MinecraftVars.getXPLevel();
     xpProgress = MinecraftVars.getXPProgress();
     inChat = MinecraftVars.isInChat();
@@ -85,6 +91,8 @@ function updateProvidedLibsTick() {
     upArrow = MinecraftVars.isUpArrowDown();
     downArrow = MinecraftVars.isDownArrowDown();
     tabbedIn = MinecraftVars.isUserTabbedIn();
+    windowWidth = MinecraftVars.getWindowWidth();
+    windowHeight = MinecraftVars.getWindowHeight();
 }
 
 function updateProvidedLibsWorld() {

@@ -56,6 +56,24 @@ public class MinecraftVars {
     }
 
     /**
+     * Gets the Minecraft window's width.
+     * In an import, accessible via the {@code windowWidth} variable.
+     * @return The window width.
+     */
+    public static Integer getWindowWidth() {
+        return mc.displayWidth;
+    }
+
+    /**
+     * Gets the Minecraft window's height.
+     * In an import, accessible via the {@code windowHeight} variable.
+     * @return The window height.
+     */
+    public static Integer getWindowHeight() {
+        return mc.displayHeight;
+    }
+
+    /**
      * Gets the player's HP.
      * In an import, accessible via the {@code hp} variable.
      * @return The player's HP.
@@ -80,6 +98,28 @@ public class MinecraftVars {
      */
     public static Float getPlayerSaturation() {
         return mc.thePlayer == null ? null : mc.thePlayer.getFoodStats().getSaturationLevel();
+    }
+
+    /**
+     * Gets the player's armor points.
+     * In an import, accessible via the {@code armorPoints} variable.
+     * @return The player's armor points.
+     */
+    public static Integer getPlayerArmorPoints() {
+        return mc.thePlayer == null ? null : mc.thePlayer.getTotalArmorValue();
+    }
+
+    /**
+     * Gets the player's air level.
+     * The returned value will be an integer. If the player is not taking damage, it
+     * will be between 300 (not in water) and 0. If the player is taking damage, it
+     * will be between -20 and 0, getting reset to 0 every time the player takes damage.
+     *
+     * In an import, accessible via the {@code airLevel} variable.
+     * @return An integer corresponding to the player's air level.
+     */
+    public static Integer getPlayerAirLevel() {
+        return mc.thePlayer == null ? null : mc.thePlayer.getAir();
     }
 
     /**
