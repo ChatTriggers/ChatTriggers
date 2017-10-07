@@ -362,8 +362,9 @@ public class RenderLib {
      * @param posX the x position on the screen
      * @param posY the y position on the screen
      * @param scale how much to scale the entity by
+     * @param rotate whether or not the drawn player should rotate
      */
-    public static void drawPlayerOnScreen(int posX, int posY, int scale) {
+    public static void drawPlayerOnScreen(int posX, int posY, int scale, boolean rotate) {
         float mouseX = -30;
         float mouseY = 0;
         EntityLivingBase ent = Minecraft.getMinecraft().thePlayer;
@@ -382,11 +383,13 @@ public class RenderLib {
         RenderHelper.enableStandardItemLighting();
         GlStateManager.rotate(-45.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(-((float)Math.atan((double)(mouseY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        ent.renderYawOffset = (float)Math.atan((double)(mouseX / 40.0F)) * 20.0F;
-        ent.rotationYaw = (float)Math.atan((double)(mouseX / 40.0F)) * 40.0F;
-        ent.rotationPitch = -((float)Math.atan((double)(mouseY / 40.0F))) * 20.0F;
-        ent.rotationYawHead = ent.rotationYaw;
-        ent.prevRotationYawHead = ent.rotationYaw;
+        if (!rotate) {
+            ent.renderYawOffset = (float) Math.atan((double) (mouseX / 40.0F)) * 20.0F;
+            ent.rotationYaw = (float) Math.atan((double) (mouseX / 40.0F)) * 40.0F;
+            ent.rotationPitch = -((float) Math.atan((double) (mouseY / 40.0F))) * 20.0F;
+            ent.rotationYawHead = ent.rotationYaw;
+            ent.prevRotationYawHead = ent.rotationYaw;
+        }
         GlStateManager.translate(0.0F, 0.0F, 0.0F);
         RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
