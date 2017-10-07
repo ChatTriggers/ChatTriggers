@@ -56,24 +56,6 @@ public class MinecraftVars {
     }
 
     /**
-     * Gets the Minecraft window's width.
-     * In an import, accessible via the {@code windowWidth} variable.
-     * @return The window width.
-     */
-    public static Integer getWindowWidth() {
-        return mc.displayWidth;
-    }
-
-    /**
-     * Gets the Minecraft window's height.
-     * In an import, accessible via the {@code windowHeight} variable.
-     * @return The window height.
-     */
-    public static Integer getWindowHeight() {
-        return mc.displayHeight;
-    }
-
-    /**
      * Gets the player's HP.
      * In an import, accessible via the {@code hp} variable.
      * @return The player's HP.
