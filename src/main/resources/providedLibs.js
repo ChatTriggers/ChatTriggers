@@ -33,6 +33,8 @@ var uuid = MinecraftVars.getPlayerUUID();
 var hp = MinecraftVars.getPlayerHP();
 var hunger = MinecraftVars.getPlayerHunger();
 var saturation = MinecraftVars.getPlayerSaturation();
+var armorPoints = MinecraftVars.getPlayerArmorPoints();
+var airLevel = MinecraftVars.getPlayerAirLevel()
 var xpLevel = MinecraftVars.getXPLevel();
 var xpProgress = MinecraftVars.getXPProgress();
 var inChat = MinecraftVars.isInChat();
@@ -65,6 +67,8 @@ function updateProvidedLibsTick() {
     hp = MinecraftVars.getPlayerHP();
     hunger = MinecraftVars.getPlayerHunger();
     saturation = MinecraftVars.getPlayerSaturation();
+    armorPoints = MinecraftVars.getPlayerArmorPoints();
+    airLevel = MinecraftVars.getPlayerAirLevel();
     xpLevel = MinecraftVars.getXPLevel();
     xpProgress = MinecraftVars.getXPProgress();
     inChat = MinecraftVars.isInChat();
