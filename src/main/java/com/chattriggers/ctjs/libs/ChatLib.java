@@ -157,7 +157,7 @@ public class ChatLib {
     }
 
     /**
-     * Replaces minecraft formatted text with <code>&</code> formatted text
+     * Replaces minecraft formatted text with normal formatted text
      * @param toUnformat the formatted string
      * @return the unformatted string
      */

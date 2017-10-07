@@ -111,6 +111,9 @@ task userdocs(type: Javadoc) {
     exclude "com/chattriggers/ctjs/listeners/**.java"
     exclude "com/chattriggers/ctjs/triggers/On**.java"
     exclude "com/chattriggers/ctjs/utils/ImagesPack.java"
+    exclude "com/chattriggers/ctjs/utils/console/**.java"
+    exclude "com/chattriggers/ctjs/Reference.java"
+    exclude "com/chattriggers/ctjs/triggers/TriggerType.java"
 }
 
 configure(userdocs) {
