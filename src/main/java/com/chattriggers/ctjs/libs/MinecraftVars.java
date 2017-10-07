@@ -309,7 +309,7 @@ public class MinecraftVars {
      * @return The player's camera pitch.
      */
     public static Float getPlayerPitch() {
-        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.cameraPitch);
+        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationPitch);
     }
 
     /**
