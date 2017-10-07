@@ -6,6 +6,7 @@ public abstract class OnTrigger {
 
     protected OnTrigger(String methodName) {
         this.methodName = methodName;
+        this.priority = Priority.NORMAL;
     }
 
     public OnTrigger(String methodName, Priority priority) {
