@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.loader;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.Import;
 import com.chattriggers.ctjs.utils.console.Console;
+import lombok.Getter;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ScriptLoader {
-    private List<Import> loadedImports;
+    @Getter
+    private ArrayList<Import> loadedImports;
     private ScriptEngine scriptEngine;
     private Invocable invocableEngine;
 
@@ -58,7 +60,7 @@ public class ScriptLoader {
             scriptEngine.eval(getCustomLibsScript());
 
             for (Import customImport : this.loadedImports) {
-                scriptEngine.eval(customImport.getScript());
+                scriptEngine.eval(customImport.getCompiledScript());
             }
         } catch (ScriptException e) {
             Console.getConsole().printStackTrace(e);
@@ -223,20 +225,37 @@ public class ScriptLoader {
         return filesToReturn;
     }
 
+    private ArrayList<String> getAllLines(File... files) {
+        ArrayList<String> stringList = new ArrayList<>();
+
+        for (File file : files) {
+            if (!file.getName().endsWith(".js")) continue;
+
+            try {
+                stringList.addAll(FileUtils.readLines(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return stringList;
+    }
+
     /**
      * Helper method which gets all the imports
      * compiled into strings.
      * @return a list of imports, all compiled
      */
-    public List<Import> getCompiledImports() {
-        List<Import> compiledImports = new ArrayList<>();
+    public ArrayList<Import> getCompiledImports() {
+        ArrayList<Import> compiledImports = new ArrayList<>();
 
         File importsDir = new File("./mods/ChatTriggers/Imports/");
         importsDir.mkdirs();
 
         for (File importDir : getFoldersInDirectory(importsDir)) {
             try {
-                Import newImport = new Import(importDir.getName(), compileScripts(importDir.listFiles()));
+                Import newImport = new Import(importDir.getName(),
+                        compileScripts(importDir.listFiles()), getAllLines(importDir.listFiles()));
                 compiledImports.add(newImport);
             } catch (IOException e) {
                 Console.getConsole().printStackTrace(e);

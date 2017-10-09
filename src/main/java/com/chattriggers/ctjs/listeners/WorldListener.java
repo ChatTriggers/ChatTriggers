@@ -1,19 +1,28 @@
 package com.chattriggers.ctjs.listeners;
 
+import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.imports.gui.ImportsGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.input.Keyboard;
 
 public class WorldListener {
     private boolean shouldTriggerWorldLoad;
     private int ticksPassed;
+    private KeyBinding guiKeyBind;
 
     public WorldListener() {
         ticksPassed = 0;
+        this.guiKeyBind = new KeyBinding("Key to open import gui", Keyboard.KEY_L, "CT Controls");
+        ClientRegistry.registerKeyBinding(this.guiKeyBind);
     }
 
     @SubscribeEvent
@@ -54,5 +63,12 @@ public class WorldListener {
 
         TriggerType.TICK.triggerAll(ticksPassed);
         ticksPassed++;
+    }
+
+    @SubscribeEvent
+    public void onKeyPress(InputEvent.KeyInputEvent e) {
+        if (guiKeyBind.isPressed()) {
+            Minecraft.getMinecraft().displayGuiScreen(new ImportsGui(CTJS.getInstance().getScriptLoader().getLoadedImports()));
+        }
     }
 }

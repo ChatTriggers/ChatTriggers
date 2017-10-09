@@ -1,5 +1,6 @@
 // Java libs
 var ArrayList = Java.type("java.util.ArrayList");
+var HashMap = Java.type("java.util.HashMap");
 
 // Triggers
 var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
