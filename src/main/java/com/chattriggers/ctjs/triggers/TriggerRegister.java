@@ -17,11 +17,31 @@ public class TriggerRegister {
     }
 
     /**
+     * The same as {@Link #registerChat(String, String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param chatCriteria the criteria for which the event should called
+     * @param priority the priority of this event
+     */
+    public static void registerChat(String methodName, String chatCriteria, Priority priority) {
+        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, priority);
+        TriggerType.CHAT.addTrigger(trigger);
+    }
+
+    /**
      * Register a new method that receives all chat events
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerChat(String methodName) {
         registerChat(methodName, "");
+    }
+
+    /**
+     * The same as {@Link #registerChat(String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param priority the priority of this event
+     */
+    public static void registerChat(String methodName, Priority priority) {
+        registerChat(methodName, "", priority);
     }
 
     /**
@@ -38,12 +58,53 @@ public class TriggerRegister {
     }
 
     /**
+     * The same as {@Link #registerChat(String, String, String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param chatCriteria the criteria for which the event should be called
+     * @param parameter the parameter for the criteria to apply to
+     * @param priority the priority of this event
+     */
+    public static void registerChat(String methodName, String chatCriteria, String parameter, Priority priority) {
+        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, parameter, priority);
+        TriggerType.CHAT.addTrigger(trigger);
+    }
+
+    /**
      * Register a new method that receives world load events
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerWorldLoad(String methodName) {
         OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
         TriggerType.WORLD_LOAD.addTrigger(trigger);
+    }
+
+    /**
+     * Same as {@link #registerWorldLoad(String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param priority the priority of this event
+     */
+    public static void registerWorldLoad(String methodName, Priority priority) {
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD, priority);
+        TriggerType.WORLD_LOAD.addTrigger(trigger);
+    }
+
+    /**
+     * Register a new method that receives world unload events
+     * @param methodName the name of the method to callback when the event is fired
+     */
+    public static void registerWorldUnload(String methodName) {
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
+        TriggerType.WORLD_UNLOAD.addTrigger(trigger);
+    }
+
+    /**
+     * Same as {@link #registerWorldUnload(String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param priority the priority of this event
+     */
+    public static void registerWorldUnload(String methodName, Priority priority) {
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD, priority);
+        TriggerType.WORLD_UNLOAD.addTrigger(trigger);
     }
 
     /**
@@ -63,6 +124,16 @@ public class TriggerRegister {
      */
     public static void registerOnTick(String methodName) {
         OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK);
+        TriggerType.TICK.addTrigger(trigger);
+    }
+
+    /**
+     * Same as {@link #registerOnTick(String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param priority the priority of this event
+     */
+    public static void registerOnTick(String methodName, Priority priority) {
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK, priority);
         TriggerType.TICK.addTrigger(trigger);
     }
 
@@ -94,12 +165,13 @@ public class TriggerRegister {
     }
 
     /**
-     * Register a new method that receives world unload events
+     * Same as {@link #registerOnRenderOverlay(String)} except it takes a priority
      * @param methodName the name of the method to callback when the event is fired
+     * @param priority the priority of this event
      */
-    public static void registerWorldUnload(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
-        TriggerType.WORLD_UNLOAD.addTrigger(trigger);
+    public static void registerOnRenderOverlay(String methodName, Priority priority) {
+        OnRegularTrigger onRegularTrigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY, priority);
+        TriggerType.RENDER_OVERLAY.addTrigger(onRegularTrigger);
     }
 
     /**
@@ -113,45 +185,4 @@ public class TriggerRegister {
         Command command = new Command(trigger, commandName, commandUsage);
         ClientCommandHandler.instance.registerCommand(command);
     }
-
-    /**
-     * Same as {@link #registerOnRenderOverlay(String)} except it takes a priority
-     * @param methodName the name of the method to callback when the event is fired
-     * @param priority the priority of this event
-     */
-    public static void registerOnRenderOverlay(String methodName, Priority priority) {
-        OnRegularTrigger onRegularTrigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY, priority);
-        TriggerType.RENDER_OVERLAY.addTrigger(onRegularTrigger);
-    }
-
-    /**
-     * Same as {@link #registerWorldUnload(String)} except it takes a priority
-     * @param methodName the name of the method to callback when the event is fired
-     * @param priority the priority of this event
-     */
-    public static void registerWorldUnload(String methodName, Priority priority) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD, priority);
-        TriggerType.WORLD_UNLOAD.addTrigger(trigger);
-    }
-
-    /**
-     * Same as {@link #registerOnTick(String)} except it takes a priority
-     * @param methodName the name of the method to callback when the event is fired
-     * @param priority the priority of this event
-     */
-    public static void registerOnTick(String methodName, Priority priority) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK, priority);
-        TriggerType.TICK.addTrigger(trigger);
-    }
-
-    /**
-     * Same as {@link #registerWorldLoad(String)} except it takes a priority
-     * @param methodName the name of the method to callback when the event is fired
-     * @param priority the priority of this event
-     */
-    public static void registerWorldLoad(String methodName, Priority priority) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD, priority);
-        TriggerType.WORLD_LOAD.addTrigger(trigger);
-    }
-
 }
