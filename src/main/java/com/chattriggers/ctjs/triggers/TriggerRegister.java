@@ -154,8 +154,7 @@ public class TriggerRegister {
      * @param fps how many fps this trigger should be limited to
      */
     public static void registerOnStep(String methodName, long fps) {
-        OnStepTrigger trigger = new OnStepTrigger(methodName, fps);
-        TriggerType.STEP.addTrigger(trigger);
+        registerOnStep(methodName, fps, Priority.NORMAL);
     }
 
     /**
@@ -163,7 +162,28 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerOnStep(String methodName) {
-        registerOnStep(methodName, 60L);
+        registerOnStep(methodName, 60L, Priority.NORMAL);
+    }
+
+    /**
+     * Same as {@Link #registerOnStep(String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param priority the priority of this event
+     */
+    public static void registerOnStep(String methodName, Priority priority) {
+        registerOnStep(methodName, 60L, priority);
+    }
+
+    /**
+     * Same as {@Link #registerOnStep(String, long)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param fps how many fps this trigger should be limited to
+     * @param priority the priority of this event
+     */
+    public static void registerOnStep(String methodName, long fps, Priority priority) {
+        OnStepTrigger trigger = new OnStepTrigger(methodName, fps);
+        trigger.priority = priority;
+        TriggerType.STEP.addTrigger(trigger);
     }
 
     /**
