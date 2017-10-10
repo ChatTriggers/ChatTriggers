@@ -12,8 +12,7 @@ public class TriggerRegister {
      * @param chatCriteria the criteria for which the event should called
      */
     public static void registerChat(String methodName, String chatCriteria) {
-        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria);
-        TriggerType.CHAT.addTrigger(trigger);
+        registerChat(methodName, chatCriteria, Priority.NORMAL);
     }
 
     /**
@@ -23,7 +22,8 @@ public class TriggerRegister {
      * @param priority the priority of this event
      */
     public static void registerChat(String methodName, String chatCriteria, Priority priority) {
-        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, priority);
+        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria);
+        trigger.priority = priority;
         TriggerType.CHAT.addTrigger(trigger);
     }
 
@@ -53,8 +53,7 @@ public class TriggerRegister {
      * @param parameter the parameter for the criteria to apply to
      */
     public static void registerChat(String methodName, String chatCriteria, String parameter) {
-        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, parameter);
-        TriggerType.CHAT.addTrigger(trigger);
+        registerChat(methodName, chatCriteria, parameter, Priority.NORMAL);
     }
 
     /**
@@ -65,7 +64,8 @@ public class TriggerRegister {
      * @param priority the priority of this event
      */
     public static void registerChat(String methodName, String chatCriteria, String parameter, Priority priority) {
-        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, parameter, priority);
+        OnChatTrigger trigger = new OnChatTrigger(methodName, chatCriteria, parameter);
+        trigger.priority = priority;
         TriggerType.CHAT.addTrigger(trigger);
     }
 
@@ -74,8 +74,7 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerWorldLoad(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
-        TriggerType.WORLD_LOAD.addTrigger(trigger);
+        registerWorldLoad(methodName, Priority.NORMAL);
     }
 
     /**
@@ -84,7 +83,8 @@ public class TriggerRegister {
      * @param priority the priority of this event
      */
     public static void registerWorldLoad(String methodName, Priority priority) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD, priority);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
+        trigger.priority = priority;
         TriggerType.WORLD_LOAD.addTrigger(trigger);
     }
 
@@ -93,8 +93,7 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerWorldUnload(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
-        TriggerType.WORLD_UNLOAD.addTrigger(trigger);
+        registerWorldUnload(methodName, Priority.NORMAL);
     }
 
     /**
@@ -103,7 +102,8 @@ public class TriggerRegister {
      * @param priority the priority of this event
      */
     public static void registerWorldUnload(String methodName, Priority priority) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD, priority);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
+        trigger.priority = priority;
         TriggerType.WORLD_UNLOAD.addTrigger(trigger);
     }
 
@@ -114,7 +114,18 @@ public class TriggerRegister {
      * @param soundName the name of the sound criteria (null for all sounds)
      */
     public static void registerSoundPlay(String methodName, String soundName) {
+        registerSoundPlay(methodName, soundName, Priority.NORMAL);
+    }
+
+    /**
+     * Same as {@Link #registerSoundPlay(String, String)} except it takes a priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @param soundName the name of the sound criteria (null for all sounds)
+     * @param priority the priority of this event
+     */
+    public static void registerSoundPlay(String methodName, String soundName, Priority priority) {
         OnSoundPlayTrigger trigger = new OnSoundPlayTrigger(methodName, soundName);
+        trigger.priority = priority;
         TriggerType.SOUND_PLAY.addTrigger(trigger);
     }
 
@@ -123,8 +134,7 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerOnTick(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK);
-        TriggerType.TICK.addTrigger(trigger);
+        registerOnTick(methodName, Priority.NORMAL);
     }
 
     /**
@@ -133,7 +143,8 @@ public class TriggerRegister {
      * @param priority the priority of this event
      */
     public static void registerOnTick(String methodName, Priority priority) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK, priority);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK);
+        trigger.priority = priority;
         TriggerType.TICK.addTrigger(trigger);
     }
 
@@ -160,8 +171,7 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      */
     public static void registerOnRenderOverlay(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY);
-        TriggerType.RENDER_OVERLAY.addTrigger(trigger);
+        registerOnRenderOverlay(methodName, Priority.NORMAL);
     }
 
     /**
@@ -170,8 +180,9 @@ public class TriggerRegister {
      * @param priority the priority of this event
      */
     public static void registerOnRenderOverlay(String methodName, Priority priority) {
-        OnRegularTrigger onRegularTrigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY, priority);
-        TriggerType.RENDER_OVERLAY.addTrigger(onRegularTrigger);
+        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY);
+        trigger.priority = priority;
+        TriggerType.RENDER_OVERLAY.addTrigger(trigger);
     }
 
     /**

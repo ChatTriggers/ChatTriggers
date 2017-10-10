@@ -13,11 +13,6 @@ public class OnRegularTrigger extends OnTrigger {
         this.triggerType = triggerType;
     }
 
-    public OnRegularTrigger(String methodName, TriggerType triggerType, Priority priority) {
-        this(methodName, triggerType);
-        this.priority = priority;
-    }
-
     @Override
     public void trigger(Object... args) {
         try {

@@ -27,23 +27,10 @@ public class OnChatTrigger extends OnTrigger {
         criteriaPattern = Pattern.compile(chatCriteria.equals("") ? ".+" : replacedCriteria);
     }
 
-    public OnChatTrigger(String methodName, String chatCriteria, Priority priority) {
-        this(methodName, chatCriteria);
-
-        this.priority = priority;
-    }
-
     public OnChatTrigger(String methodName, String chatCriteria, String parameter) {
         this(methodName, chatCriteria);
 
         this.parameter = Parameter.getParameterByName(parameter);
-    }
-
-    public OnChatTrigger(String methodName, String chatCriteria, String parameter, Priority priority) {
-        this(methodName, chatCriteria);
-
-        this.parameter = Parameter.getParameterByName(parameter);
-        this.priority = priority;
     }
 
     /**
