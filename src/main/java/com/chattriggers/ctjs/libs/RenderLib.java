@@ -77,7 +77,7 @@ public class RenderLib {
      * @param speed speed of time
      * @return integer color
      */
-    public static int getRainbow(int step, int speed) {
+    public static int getRainbow(float step, float speed) {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
         int green = (int) ((Math.sin(step / speed + ((2 * Math.PI) / 3)) + 0.75) * 170);
         int blue = (int) ((Math.sin(step / speed + ((4 * Math.PI) / 3)) + 0.75) * 170);
@@ -89,8 +89,8 @@ public class RenderLib {
      * @param step time elapsed
      * @return integer color
      */
-    public static int getRainbow(int step) {
-        return getRainbow(step, 1);
+    public static int getRainbow(float step) {
+        return getRainbow(step, 1f);
     }
 
     // helper method to limit numbers between 0 and 255
