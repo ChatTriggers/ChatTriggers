@@ -150,6 +150,8 @@ public class RenderLib {
             unitCircleY = sin * xHolder + cos * unitCircleY;
         }
         GL11.glEnd();
+
+        GlStateManager.popMatrix();
     }
 
     /**
@@ -196,6 +198,7 @@ public class RenderLib {
         GlStateManager.color(1, 1, 1, 1);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+
         GlStateManager.popMatrix();
     }
 
@@ -341,6 +344,7 @@ public class RenderLib {
         GL11.glScalef(scale, scale, scale);
         Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureMapX, textureMapY, textureWidth, textureHeight);
         GL11.glDisable(GL11.GL_BLEND);
+
         GL11.glPopMatrix();
     }
 
@@ -377,6 +381,8 @@ public class RenderLib {
         itemRenderer.zLevel = 200.0F;
 
         itemRenderer.renderItemIntoGUI(itemStack, x, y);
+
+        GlStateManager.popMatrix();
     }
 
     /**
@@ -429,5 +435,7 @@ public class RenderLib {
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+        GlStateManager.popMatrix();
     }
 }
