@@ -9,11 +9,6 @@ import javax.script.ScriptException;
 public class OnSoundPlayTrigger extends OnTrigger {
     private String soundNameCriteria = "";
 
-    public OnSoundPlayTrigger(String methodName, String soundNameCriteria) {
-        super(methodName);
-        this.soundNameCriteria = soundNameCriteria;
-    }
-
     public OnSoundPlayTrigger(String methodName) {
         super(methodName);
     }

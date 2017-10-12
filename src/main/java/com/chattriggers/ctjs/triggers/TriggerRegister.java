@@ -4,6 +4,15 @@ import com.chattriggers.ctjs.commands.Command;
 import net.minecraftforge.client.ClientCommandHandler;
 
 public class TriggerRegister {
+    /**
+     * Registers a new chat trigger.
+     * Available modifications:
+     * {@link OnChatTrigger#setChatCriteria(String)} Sets the chat criteria
+     * {@link OnChatTrigger#setParameter(String)} Sets the chat parameter
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnChatTrigger registerChat(String methodName) {
         OnChatTrigger trigger = new OnChatTrigger(methodName);
         TriggerType.CHAT.addTrigger(trigger);
@@ -11,6 +20,13 @@ public class TriggerRegister {
         return trigger;
     }
 
+    /**
+     * Registers a new world load trigger.
+     * Available modifications:
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnRegularTrigger registerWorldLoad(String methodName) {
         OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
         TriggerType.WORLD_LOAD.addTrigger(trigger);
@@ -18,6 +34,13 @@ public class TriggerRegister {
         return trigger;
     }
 
+    /**
+     * Registers a new world unload trigger.
+     * Available modifications:
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnRegularTrigger registerWorldUnload(String methodName) {
         OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
         TriggerType.WORLD_UNLOAD.addTrigger(trigger);
@@ -25,6 +48,14 @@ public class TriggerRegister {
         return trigger;
     }
 
+    /**
+     * Registers a new world unload trigger.
+     * Available modifications:
+     * {@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnSoundPlayTrigger registerSoundPlay(String methodName) {
         OnSoundPlayTrigger trigger = new OnSoundPlayTrigger(methodName);
         TriggerType.SOUND_PLAY.addTrigger(trigger);
@@ -32,6 +63,13 @@ public class TriggerRegister {
         return trigger;
     }
 
+    /**
+     * Registers a new world unload trigger.
+     * Available modifications:
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnRegularTrigger registerTick(String methodName) {
         OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK);
         TriggerType.TICK.addTrigger(trigger);
@@ -39,6 +77,14 @@ public class TriggerRegister {
         return trigger;
     }
 
+    /**
+     * Registers a new world unload trigger.
+     * Available modifications:
+     * {@link OnStepTrigger#setFps(long)} Sets the fps
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnStepTrigger registerStep(String methodName) {
         OnStepTrigger trigger = new OnStepTrigger(methodName);
         TriggerType.STEP.addTrigger(trigger);
@@ -46,6 +92,13 @@ public class TriggerRegister {
         return trigger;
     }
 
+    /**
+     * Registers a new world unload trigger.
+     * Available modifications:
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnRegularTrigger registerRenderOverlay(String methodName) {
         OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY);
         TriggerType.RENDER_OVERLAY.addTrigger(trigger);
