@@ -5,11 +5,11 @@ import net.minecraftforge.client.ClientCommandHandler;
 
 public class TriggerRegister {
     /**
-     * Registers a new chat trigger.
-     * Available modifications:
-     * {@link OnChatTrigger#setChatCriteria(String)} Sets the chat criteria
-     * {@link OnChatTrigger#setParameter(String)} Sets the chat parameter
-     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * Registers a new chat trigger.<br>
+     * Available modifications:<br>
+     * {@link OnChatTrigger#setChatCriteria(String)} Sets the chat criteria<br>
+     * {@link OnChatTrigger#setParameter(String)} Sets the chat parameter<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
@@ -21,9 +21,9 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world load trigger.
-     * Available modifications:
-     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * Registers a new world load trigger.<br>
+     * Available modifications:<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
@@ -35,9 +35,9 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.
-     * Available modifications:
-     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * Registers a new world unload trigger.<br>
+     * Available modifications:<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
@@ -49,10 +49,10 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.
-     * Available modifications:
-     * {@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria
-     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * Registers a new world unload trigger.<br>
+     * Available modifications:<br>
+     * {@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
@@ -64,9 +64,9 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.
-     * Available modifications:
-     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * Registers a new world unload trigger.<br>
+     * Available modifications:<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
@@ -78,10 +78,10 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.
-     * Available modifications:
-     * {@link OnStepTrigger#setFps(long)} Sets the fps
-     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * Registers a new world unload trigger.<br>
+     * Available modifications:<br>
+     * {@link OnStepTrigger#setFps(long)} Sets the fps<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
@@ -93,9 +93,9 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.
-     * Available modifications:
-     * {@link OnTrigger#setPriority(Priority)} Sets the priority
+     * Registers a new world unload trigger.<br>
+     * Available modifications:<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
