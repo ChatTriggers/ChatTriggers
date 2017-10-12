@@ -13,24 +13,29 @@ import java.util.regex.Pattern;
 
 
 public class OnChatTrigger extends OnTrigger {
-    private String chatCriteria;
+    private String chatCriteria = "";
     private Pattern criteriaPattern;
     private Parameter parameter;
 
-    public OnChatTrigger(String methodName, String chatCriteria) {
+    public OnChatTrigger(String methodName) {
         super(methodName);
+    }
+
+    public OnChatTrigger setChatCriteria(String chatCriteria) {
         this.chatCriteria = chatCriteria;
 
         String replacedCriteria = chatCriteria.replace("\n", "->newLine<-");
         replacedCriteria = Pattern.quote(replacedCriteria).replaceAll("\\$\\{.+?}", "\\\\E(.+)\\\\Q");
 
         criteriaPattern = Pattern.compile(chatCriteria.equals("") ? ".+" : replacedCriteria);
+
+        return this;
     }
 
-    public OnChatTrigger(String methodName, String chatCriteria, String parameter) {
-        this(methodName, chatCriteria);
-
+    public OnChatTrigger setParameter(String parameter) {
         this.parameter = Parameter.getParameterByName(parameter);
+
+        return this;
     }
 
     /**

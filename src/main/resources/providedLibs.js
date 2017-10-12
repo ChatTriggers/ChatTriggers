@@ -8,6 +8,8 @@ var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister"
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 var Priority = Java.type("com.chattriggers.ctjs.triggers.Priority");
 
+var OnChatTrigger = Java.type("com.chattriggers.ctjs.triggers.OnChatTrigger");
+
 // Events
 var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
 var WorldLib = Java.type("com.chattriggers.ctjs.libs.WorldLib");

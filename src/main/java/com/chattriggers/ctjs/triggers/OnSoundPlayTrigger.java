@@ -7,11 +7,21 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import javax.script.ScriptException;
 
 public class OnSoundPlayTrigger extends OnTrigger {
-    private String soundNameCriteria;
+    private String soundNameCriteria = "";
 
     public OnSoundPlayTrigger(String methodName, String soundNameCriteria) {
         super(methodName);
         this.soundNameCriteria = soundNameCriteria;
+    }
+
+    public OnSoundPlayTrigger(String methodName) {
+        super(methodName);
+    }
+
+    public OnSoundPlayTrigger setSoundNameCriteria(String soundNameCriteria) {
+        this.soundNameCriteria = soundNameCriteria;
+
+        return this;
     }
 
     @Override

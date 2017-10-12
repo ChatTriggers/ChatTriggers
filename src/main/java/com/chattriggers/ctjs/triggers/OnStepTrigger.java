@@ -7,13 +7,18 @@ import net.minecraft.client.Minecraft;
 import javax.script.ScriptException;
 
 public class OnStepTrigger extends OnTrigger {
-    private long fps;
+    private long fps = 60;
     private long systemTime;
 
-    protected OnStepTrigger(String methodName, long fps) {
+    protected OnStepTrigger(String methodName) {
         super(methodName);
-        this.fps = fps;
         this.systemTime = Minecraft.getSystemTime();
+    }
+
+    public OnStepTrigger setFps(long fps) {
+        this.fps = fps;
+
+        return this;
     }
 
     @Override

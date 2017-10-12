@@ -9,9 +9,10 @@ public abstract class OnTrigger {
         this.priority = Priority.NORMAL;
     }
 
-    public OnTrigger(String methodName, Priority priority) {
-        this(methodName);
+    public OnTrigger setPriority(Priority priority) {
         this.priority = priority;
+
+        return this;
     }
 
     public abstract void trigger(Object... args);
