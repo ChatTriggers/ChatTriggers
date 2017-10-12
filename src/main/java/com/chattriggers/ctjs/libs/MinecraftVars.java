@@ -313,12 +313,30 @@ public class MinecraftVars {
     }
 
     /**
+     * Gets the player's previous camera pitch.
+     * In an import, accessible via the {@code cameraPrevPitch} variable.
+     * @return The player's camera pitch.
+     */
+    public static Float getPrevPlayerPitch() {
+        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.prevRotationPitch);
+    }
+
+    /**
      * Gets the player's camera yaw.
      * In an import, accessible via the {@code cameraYaw} variable.
      * @return The player's camera yaw.
      */
     public static Float getPlayerYaw() {
         return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
+    }
+
+    /**
+     * Gets the player's previous camera yaw.
+     * In an import, accessible via the {@code cameraPrevYaw} variable.
+     * @return The player's camera pitch.
+     */
+    public static Float getPrevPlayerYaw() {
+        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.prevRotationYaw);
     }
 
     /**
