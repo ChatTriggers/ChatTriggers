@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.utils;
+package com.chattriggers.ctjs.objects;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

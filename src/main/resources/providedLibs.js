@@ -24,6 +24,7 @@ var Message = Java.type("com.chattriggers.ctjs.utils.Message");
 var Book = Java.type("com.chattriggers.ctjs.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.objects.KeyBind");
 var Keyboard = Java.type("org.lwjgl.input.Keyboard");
+var XMLHttpRequest = Java.type("com.chattriggers.ctjs.objects.XMLHttpRequest");
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 
 /*Built in Vars */
