@@ -49,7 +49,7 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.<br>
+     * Registers a new sound play trigger.<br>
      * Available modifications:<br>
      * {@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria<br>
      * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
@@ -64,7 +64,7 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.<br>
+     * Registers a new tick trigger.<br>
      * Available modifications:<br>
      * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
@@ -78,7 +78,7 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.<br>
+     * Registers a new step trigger.<br>
      * Available modifications:<br>
      * {@link OnStepTrigger#setFps(long)} Sets the fps<br>
      * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
@@ -93,7 +93,7 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.<br>
+     * Registers a new render overlay trigger.<br>
      * Available modifications:<br>
      * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
