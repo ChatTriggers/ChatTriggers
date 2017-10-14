@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.objects;
 
+import com.chattriggers.ctjs.CTJS;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -9,7 +11,7 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
-class XMLHttpRequest {
+public class XMLHttpRequest {
     private final static String USER_AGENT = "Mozilla/5.0";
 
     private HttpURLConnection conn;
@@ -42,10 +44,18 @@ class XMLHttpRequest {
         conn.addRequestProperty(key, value);
     }
 
+    /**
+     * Sets the callback method, passes in the XMLHttpRequest object
+     * @param methodName the method to be called back on completion of the request
+     */
     public void setCallbackMethod(String methodName) {
         this.methodCallback = methodName;
     }
 
+    /**
+     * Send a post request to the currently opened connection
+     * @param parameters any number of post data, in the form of <code>"key", "value", "key", "value"</code>
+     */
     public void send(String... parameters) {
         addRequestHeader("User-Agent", USER_AGENT);
 
@@ -88,6 +98,9 @@ class XMLHttpRequest {
         }
     }
 
+    /**
+     * Send a GET request to the currently opened connection
+     */
     public void send() {
         addRequestHeader("User-Agent", USER_AGENT);
 
@@ -120,7 +133,7 @@ class XMLHttpRequest {
 
             this.responseText = response.toString();
 
-            //Callback method
+            CTJS.getInstance().getInvocableEngine().invokeFunction(this.methodCallback, this);
         } catch (Exception e) {
             e.printStackTrace();
         }
