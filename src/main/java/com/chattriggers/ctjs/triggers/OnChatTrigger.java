@@ -25,7 +25,9 @@ public class OnChatTrigger extends OnTrigger {
         this.chatCriteria = chatCriteria;
 
         String replacedCriteria = chatCriteria.replace("\n", "->newLine<-");
-        replacedCriteria = Pattern.quote(replacedCriteria).replaceAll("\\$\\{.+?}", "\\\\E(.+)\\\\Q");
+        replacedCriteria = Pattern.quote(replacedCriteria)
+                .replaceAll("\\$\\{[^*]+?}", "\\\\E(.+)\\\\Q")
+                .replaceAll("\\$\\{\\*?}", "\\\\E(?:.+)\\\\Q");
 
         criteriaPattern = Pattern.compile(chatCriteria.equals("") ? ".+" : replacedCriteria);
 
