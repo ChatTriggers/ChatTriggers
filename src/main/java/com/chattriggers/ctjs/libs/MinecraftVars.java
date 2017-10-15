@@ -138,6 +138,17 @@ public class MinecraftVars {
     }
 
     /**
+     * Gets the light level at the player's current position.
+     * In an import, accessible via the {@code lightLevel} variable.
+     * @return The light level at the player's current position.
+     */
+    public static Integer getPlayerLightLevel() {
+        if (mc.thePlayer == null || mc.theWorld == null) return null;
+
+        return mc.theWorld.getLight(mc.thePlayer.getPosition());
+    }
+
+    /**
      * Returns true if the player has the chat open.
      * In an import, accessible via the {@code inChat} variable.
      * @return True if the player has the chat open, false otherwise.
@@ -301,6 +312,33 @@ public class MinecraftVars {
      */
     public static Double getPlayerPosZ() {
         return mc.thePlayer == null ? null : mc.thePlayer.posZ;
+    }
+
+    /**
+     * Gets the player's X motion.
+     * In an import, accessible via the {@code motionX} variable.
+     * @return The player's X motion.
+     */
+    public static Double getPlayerMotionX() {
+        return mc.thePlayer == null ? null : mc.thePlayer.motionX;
+    }
+
+    /**
+     * Gets the player's Y motion.
+     * In an import, accessible via the {@code motionY} variable.
+     * @return The player's Y motion.
+     */
+    public static Double getPlayerMotionY() {
+        return mc.thePlayer == null ? null : mc.thePlayer.motionY;
+    }
+
+    /**
+     * Gets the player's Z motion.
+     * In an import, accessible via the {@code motionZ} variable.
+     * @return The player's Z motion.
+     */
+    public static Double getPlayerMotionZ() {
+        return mc.thePlayer == null ? null : mc.thePlayer.motionZ;
     }
 
     /**

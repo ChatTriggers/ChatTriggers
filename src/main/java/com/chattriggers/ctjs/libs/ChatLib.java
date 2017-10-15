@@ -174,7 +174,7 @@ public class ChatLib {
      */
     public static String getCenteredText(String input) {
         boolean left = true;
-        StringBuilder stringBuilder = new StringBuilder(input);
+        StringBuilder stringBuilder = new StringBuilder(removeFormatting(input));
         FontRenderer fRenderer = Minecraft.getMinecraft().fontRendererObj;
 
         if (fRenderer.getStringWidth(stringBuilder.toString()) > Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
@@ -191,7 +191,7 @@ public class ChatLib {
             }
         }
 
-        return stringBuilder.deleteCharAt(left ? 0 : stringBuilder.length() - 1).toString();
+        return stringBuilder.deleteCharAt(left ? 0 : stringBuilder.length() - 1).toString().replaceAll(removeFormatting(input), input);
     }
 
     /**
