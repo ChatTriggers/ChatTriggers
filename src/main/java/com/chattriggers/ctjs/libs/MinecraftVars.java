@@ -142,7 +142,7 @@ public class MinecraftVars {
      * In an import, accessible via the {@code lightLevel} variable.
      * @return The light level at the player's current position.
      */
-    public static Integer getPlayerLightLeve() {
+    public static Integer getPlayerLightLevel() {
         if (mc.thePlayer == null || mc.theWorld == null) return null;
 
         return mc.theWorld.getLight(mc.thePlayer.getPosition());
