@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.objects;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.utils.console.Console;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -34,7 +35,7 @@ public class XMLHttpRequest {
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(method);
         } catch (Exception e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 
@@ -66,7 +67,7 @@ public class XMLHttpRequest {
                 sendPost(parameters);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 
@@ -94,7 +95,7 @@ public class XMLHttpRequest {
 
             sendGet();
         } catch (Exception e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 
@@ -111,7 +112,7 @@ public class XMLHttpRequest {
                 sendGet();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 
@@ -135,7 +136,7 @@ public class XMLHttpRequest {
 
             CTJS.getInstance().getInvocableEngine().invokeFunction(this.methodCallback, this);
         } catch (Exception e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 }
