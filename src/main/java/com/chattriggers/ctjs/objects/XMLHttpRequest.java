@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class XMLHttpRequest {
@@ -22,6 +23,7 @@ public class XMLHttpRequest {
     public int status;
     public String statusText;
     public String responseText;
+    public HashMap<String, Object> extras = new HashMap<>();
 
     public void open(String method, String urlStr, boolean async) {
         try {
