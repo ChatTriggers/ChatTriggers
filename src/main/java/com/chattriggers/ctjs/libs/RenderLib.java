@@ -27,6 +27,21 @@ import java.net.URL;
 @UtilityClass
 @SideOnly(Side.CLIENT)
 public class RenderLib {
+
+    public static final int WHITE = color(255, 255, 255, 255);
+    public static final int BLACK = color(255, 255, 255, 255);
+    public static final int GRAY = color(192, 192, 192, 255);
+    public static final int LIGHT_GRAY = color(128, 128, 128, 255);
+    public static final int DARK_GRAY = color(64, 64, 64, 255);
+    public static final int RED = color(255, 0, 0, 255);
+    public static final int PINK = color(255, 175, 175, 255);
+    public static final int ORANGE = color(255, 200, 0, 255);
+    public static final int YELLOW = color(255, 255, 0, 255);
+    public static final int GREEN = color(0, 255, 0, 255);
+    public static final int MAGENTA = color(255, 0, 255, 255);
+    public static final int CYAN = color(0, 255, 255, 255);
+    public static final int BLUE = color(0, 0, 255, 255);
+
     /**
      * Gets a strings width.
      * @param text the text to get the width of
@@ -95,7 +110,7 @@ public class RenderLib {
 
     // helper method to limit numbers between 0 and 255
     private int limit255(int a) {
-        return (a > 255) ? 255 : (a < 0 ? 0: a);
+        return (a > 255) ? 255 : (a < 0 ? 0 : a);
     }
 
     /**
