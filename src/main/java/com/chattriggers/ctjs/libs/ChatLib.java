@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.libs;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.Message;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
@@ -8,8 +9,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,7 +35,7 @@ public class ChatLib {
         ChatComponentText cct = new ChatComponentText(addColor(message));
 
         if (recursive) {
-            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(cct, (byte) 0));
+            CTJS.getInstance().getChatListener().onReceiveChat(new ClientChatReceivedEvent((byte) 0, cct));
         } else {
             Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
         }
@@ -60,7 +62,7 @@ public class ChatLib {
         }
 
         if (recursive) {
-            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(message.getChatMessage(), (byte) 0));
+            CTJS.getInstance().getChatListener().onReceiveChat(new ClientChatReceivedEvent((byte) 0, message.getChatMessage()));
         } else {
             Minecraft.getMinecraft().thePlayer.addChatMessage(message.getChatMessage());
         }
