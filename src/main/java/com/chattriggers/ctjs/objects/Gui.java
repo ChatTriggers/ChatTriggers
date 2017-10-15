@@ -134,22 +134,25 @@ public class Gui extends GuiScreen {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
+        super.mouseClicked(mouseX, mouseY, button);
+
         if (onClick != null)
             onClick.trigger(mouseX, mouseY, button);
-        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
         if (onDraw != null)
             onDraw.trigger(mouseX, mouseY, partialTicks);
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        super.keyTyped(typedChar, keyCode);
+
         if (onKeyTyped != null)
             onKeyTyped.trigger(typedChar, keyCode);
-        super.keyTyped(typedChar, keyCode);
     }
 }
