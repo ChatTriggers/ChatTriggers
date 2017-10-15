@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.libs;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.Message;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
@@ -9,6 +8,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
+import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
@@ -35,7 +35,7 @@ public class ChatLib {
         ChatComponentText cct = new ChatComponentText(addColor(message));
 
         if (recursive) {
-            CTJS.getInstance().getChatListener().onReceiveChat(new ClientChatReceivedEvent((byte) 0, cct));
+            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(cct, (byte) 0));
         } else {
             Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
         }
@@ -62,7 +62,7 @@ public class ChatLib {
         }
 
         if (recursive) {
-            CTJS.getInstance().getChatListener().onReceiveChat(new ClientChatReceivedEvent((byte) 0, message.getChatMessage()));
+            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(message.getChatMessage(), (byte) 0));
         } else {
             Minecraft.getMinecraft().thePlayer.addChatMessage(message.getChatMessage());
         }
