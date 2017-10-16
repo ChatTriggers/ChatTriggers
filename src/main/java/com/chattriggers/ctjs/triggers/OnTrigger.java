@@ -1,8 +1,13 @@
 package com.chattriggers.ctjs.triggers;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class OnTrigger {
     protected String methodName;
+    @Getter @Setter
     protected Priority priority;
+    @Getter
     protected TriggerType type;
 
     protected OnTrigger(String methodName, TriggerType type) {
@@ -19,10 +24,6 @@ public abstract class OnTrigger {
         return this;
     }
 
-    public TriggerType getType() {
-        return this.type;
-    }
-
     public OnTrigger register() {
         this.getType().addTrigger(this);
         return this;
@@ -31,6 +32,10 @@ public abstract class OnTrigger {
     public OnTrigger unregister() {
         this.getType().removeTrigger(this);
         return this;
+    }
+
+    public boolean isRegistered() {
+        return getType().containsTrigger(this);
     }
 
     public abstract void trigger(Object... args);

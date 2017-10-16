@@ -38,6 +38,10 @@ public enum TriggerType {
         return triggers;
     }
 
+    public boolean containsTrigger(OnTrigger trigger) {
+        return triggers.contains(trigger);
+    }
+
     public void triggerAll(Object... args) {
         ArrayList<OnTrigger> triggersCopy = new ArrayList<>(triggers.size());
 
