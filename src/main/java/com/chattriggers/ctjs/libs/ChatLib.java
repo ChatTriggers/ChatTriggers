@@ -200,8 +200,17 @@ public class ChatLib {
      * @param toReplace the new message to be put in replace of the old one
      */
     public static void editChat(String chatMessage, String toReplace) {
+        editChat(chatMessage, toReplace, false);
+    }
+
+    /**
+     * Edits an already sent chat message
+     * @param chatMessage the unformatted text of the message to be replaced
+     * @param toReplace the new message to be put in replace of the old one
+     */
+    public static void editChat(String chatMessage, String toReplace, boolean once) {
         List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(),
-                "drawnChatLines", "field_146253_i");
+                "drawnChatLines", "field_146252_h");
         List<ChatLine> chatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(),
                 "chatLines", "field_146252_h");
 
@@ -210,12 +219,16 @@ public class ChatLib {
         for (ChatLine chatLine : drawnChatLines) {
             if (removeFormatting(chatLine.getChatComponent().getUnformattedText()).equals(chatMessage)) {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+
+                if (once) break;
             }
         }
 
         for (ChatLine chatLine : chatLines) {
             if (removeFormatting(chatLine.getChatComponent().getUnformattedText()).equals(chatMessage)) {
                 ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+
+                if (once) break;
             }
         }
     }
