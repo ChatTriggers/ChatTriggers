@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.objects;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.triggers.OnTrigger;
+import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -52,8 +53,8 @@ public class Gui extends GuiScreen {
      * Registered method runs on draw.
      * @param methodName the method to run
      */
-    public void registerOnDraw(String methodName) {
-        onDraw = new OnTrigger(methodName) {
+    public OnTrigger registerOnDraw(String methodName) {
+        return onDraw = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
                 if (!(args[0] instanceof Integer
@@ -81,8 +82,8 @@ public class Gui extends GuiScreen {
      * Registered method runs on mouse click.
      * @param methodName the method to run
      */
-    public void registerOnClicked(String methodName) {
-        onClick = new OnTrigger(methodName) {
+    public OnTrigger registerOnClicked(String methodName) {
+        return onClick = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
                 if (!(args[0] instanceof Integer
@@ -110,8 +111,8 @@ public class Gui extends GuiScreen {
      * Registered method runs on key input.
      * @param methodName the method to run
      */
-    public void registerOnKeyTyped(String methodName) {
-        onKeyTyped = new OnTrigger(methodName) {
+    public OnTrigger registerOnKeyTyped(String methodName) {
+        return onKeyTyped = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
                 if (!(args[0] instanceof Character

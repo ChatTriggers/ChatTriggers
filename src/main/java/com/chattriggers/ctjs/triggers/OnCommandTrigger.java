@@ -7,7 +7,7 @@ import javax.script.ScriptException;
 
 public class OnCommandTrigger extends OnTrigger {
     public OnCommandTrigger(String methodName) {
-        super(methodName);
+        super(methodName, TriggerType.COMMAND);
     }
 
     @Override

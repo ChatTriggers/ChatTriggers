@@ -11,7 +11,7 @@ public class OnStepTrigger extends OnTrigger {
     private long systemTime;
 
     protected OnStepTrigger(String methodName) {
-        super(methodName);
+        super(methodName, TriggerType.STEP);
         this.systemTime = Minecraft.getSystemTime();
     }
 

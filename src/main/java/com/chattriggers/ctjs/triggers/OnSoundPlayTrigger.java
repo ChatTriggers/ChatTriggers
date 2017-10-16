@@ -10,7 +10,7 @@ public class OnSoundPlayTrigger extends OnTrigger {
     private String soundNameCriteria = "";
 
     public OnSoundPlayTrigger(String methodName) {
-        super(methodName);
+        super(methodName, TriggerType.SOUND_PLAY);
     }
 
     public OnSoundPlayTrigger setSoundNameCriteria(String soundNameCriteria) {
