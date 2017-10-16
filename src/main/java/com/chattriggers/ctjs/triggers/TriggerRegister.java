@@ -14,10 +14,7 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnChatTrigger registerChat(String methodName) {
-        OnChatTrigger trigger = new OnChatTrigger(methodName);
-        TriggerType.CHAT.addTrigger(trigger);
-
-        return trigger;
+        return new OnChatTrigger(methodName);
     }
 
     /**
@@ -28,10 +25,7 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnRegularTrigger registerWorldLoad(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
-        TriggerType.WORLD_LOAD.addTrigger(trigger);
-
-        return trigger;
+        return new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
     }
 
     /**
@@ -42,10 +36,7 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnRegularTrigger registerWorldUnload(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
-        TriggerType.WORLD_UNLOAD.addTrigger(trigger);
-
-        return trigger;
+        return new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
     }
 
     /**
@@ -57,10 +48,7 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnSoundPlayTrigger registerSoundPlay(String methodName) {
-        OnSoundPlayTrigger trigger = new OnSoundPlayTrigger(methodName);
-        TriggerType.SOUND_PLAY.addTrigger(trigger);
-
-        return trigger;
+        return new OnSoundPlayTrigger(methodName);
     }
 
     /**
@@ -71,10 +59,7 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnRegularTrigger registerTick(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.TICK);
-        TriggerType.TICK.addTrigger(trigger);
-
-        return trigger;
+        return new OnRegularTrigger(methodName, TriggerType.TICK);
     }
 
     /**
@@ -86,10 +71,7 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnStepTrigger registerStep(String methodName) {
-        OnStepTrigger trigger = new OnStepTrigger(methodName);
-        TriggerType.STEP.addTrigger(trigger);
-
-        return trigger;
+        return new OnStepTrigger(methodName);
     }
 
     /**
@@ -100,10 +82,7 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnRegularTrigger registerRenderOverlay(String methodName) {
-        OnRegularTrigger trigger = new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY);
-        TriggerType.RENDER_OVERLAY.addTrigger(trigger);
-
-        return trigger;
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY);
     }
 
     /**

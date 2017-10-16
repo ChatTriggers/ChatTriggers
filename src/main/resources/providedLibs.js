@@ -8,8 +8,6 @@ var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister"
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 var Priority = Java.type("com.chattriggers.ctjs.triggers.Priority");
 
-var OnChatTrigger = Java.type("com.chattriggers.ctjs.triggers.OnChatTrigger");
-
 // Events
 var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
 var WorldLib = Java.type("com.chattriggers.ctjs.libs.WorldLib");
@@ -50,7 +48,11 @@ var ping = MinecraftVars.getPing();
 var posX = MinecraftVars.getPlayerPosX();
 var posY = MinecraftVars.getPlayerPosY();
 var posZ = MinecraftVars.getPlayerPosZ();
+var motionX = MinecraftVars.getPlayerMotionX();
+var motionY = MinecraftVars.getPlayerMotionY();
+var motionZ = MinecraftVars.getPlayerMotionZ();
 var biome = MinecraftVars.getPlayerBiome();
+var lightLevel = MinecraftVars.getPlayerLightLevel();
 var cameraPitch = MinecraftVars.getPlayerPitch();
 var cameraYaw = MinecraftVars.getPlayerYaw();
 var fps = MinecraftVars.getPlayerFPS();
@@ -84,7 +86,11 @@ function updateProvidedLibsTick() {
     posX = MinecraftVars.getPlayerPosX();
     posY = MinecraftVars.getPlayerPosY();
     posZ = MinecraftVars.getPlayerPosZ();
+    motionX = MinecraftVars.getPlayerMotionX();
+    motionY = MinecraftVars.getPlayerMotionY();
+    motionZ = MinecraftVars.getPlayerMotionZ();
     biome = MinecraftVars.getPlayerBiome();
+    lightLevel = MinecraftVars.getPlayerLightLevel();
     cameraPitch = MinecraftVars.getPlayerPitch();
     cameraYaw = MinecraftVars.getPlayerYaw();
     fps = MinecraftVars.getPlayerFPS();

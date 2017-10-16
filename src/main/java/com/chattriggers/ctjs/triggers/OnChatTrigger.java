@@ -18,7 +18,7 @@ public class OnChatTrigger extends OnTrigger {
     private Parameter parameter;
 
     public OnChatTrigger(String methodName) {
-        super(methodName);
+        super(methodName, TriggerType.CHAT);
     }
 
     public OnChatTrigger setChatCriteria(String chatCriteria) {
