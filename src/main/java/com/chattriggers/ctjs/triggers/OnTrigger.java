@@ -15,27 +15,26 @@ public abstract class OnTrigger {
         this.priority = Priority.NORMAL;
         this.type = type;
 
-        this.getType().addTrigger(this);
+        this.register();
     }
 
     public OnTrigger setPriority(Priority priority) {
         this.priority = priority;
-
         return this;
     }
 
     public OnTrigger register() {
-        this.getType().addTrigger(this);
+        this.type.addTrigger(this);
         return this;
     }
 
     public OnTrigger unregister() {
-        this.getType().removeTrigger(this);
+        this.type.removeTrigger(this);
         return this;
     }
 
     public boolean isRegistered() {
-        return getType().containsTrigger(this);
+        return this.type.containsTrigger(this);
     }
 
     public abstract void trigger(Object... args);
