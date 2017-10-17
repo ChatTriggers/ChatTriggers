@@ -101,4 +101,15 @@ public class Book {
         display(0);
     }
 
+    public boolean isOpen() {
+        return bookScreen != null && Minecraft.getMinecraft().currentScreen == bookScreen;
+
+    }
+
+    public int getCurrentPage() {
+        if (!isOpen()) return -1;
+
+        return ReflectionHelper.getPrivateValue(GuiScreenBook.class, bookScreen, "currPage", "field_146484_x");
+    }
+
 }
