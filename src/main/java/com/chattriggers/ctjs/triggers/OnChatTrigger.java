@@ -21,6 +21,11 @@ public class OnChatTrigger extends OnTrigger {
         super(methodName, TriggerType.CHAT);
     }
 
+    /**
+     * Sets the chat criteria for {@link #matchesChatCriteria(String)}.
+     * @param chatCriteria the chat criteria to set
+     * @return the trigger for method chaining
+     */
     public OnChatTrigger setChatCriteria(String chatCriteria) {
         this.chatCriteria = chatCriteria;
 
@@ -34,6 +39,11 @@ public class OnChatTrigger extends OnTrigger {
         return this;
     }
 
+    /**
+     * sets the chat parameter for {@link #parameter}.
+     * @param parameter the chat parameter to set
+     * @return the trigger for method chaining
+     */
     public OnChatTrigger setParameter(String parameter) {
         this.parameter = Parameter.getParameterByName(parameter);
 

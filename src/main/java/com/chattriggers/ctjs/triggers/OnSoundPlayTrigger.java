@@ -13,6 +13,11 @@ public class OnSoundPlayTrigger extends OnTrigger {
         super(methodName, TriggerType.SOUND_PLAY);
     }
 
+    /**
+     * Sets the sound name criteria.
+     * @param soundNameCriteria the sound name
+     * @return the trigger for method chaining
+     */
     public OnSoundPlayTrigger setSoundNameCriteria(String soundNameCriteria) {
         this.soundNameCriteria = soundNameCriteria;
 

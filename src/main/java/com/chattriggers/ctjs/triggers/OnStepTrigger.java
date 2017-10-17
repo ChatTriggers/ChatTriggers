@@ -15,6 +15,11 @@ public class OnStepTrigger extends OnTrigger {
         this.systemTime = Minecraft.getSystemTime();
     }
 
+    /**
+     * Sets the frames per second that the trigger activates
+     * @param fps the frames per second to set
+     * @return the trigger for method chaining
+     */
     public OnStepTrigger setFps(long fps) {
         this.fps = fps;
 

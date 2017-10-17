@@ -15,27 +15,44 @@ public abstract class OnTrigger {
         this.priority = Priority.NORMAL;
         this.type = type;
 
-        this.getType().addTrigger(this);
+        this.register();
     }
 
+    /**
+     * Sets a triggers priority using {@link Priority}.
+     * Highest runs first.
+     * @param priority the priority of the trigger
+     * @return the trigger for method chaining
+     */
     public OnTrigger setPriority(Priority priority) {
         this.priority = priority;
-
         return this;
     }
 
+    /**
+     * Registers a trigger based on its type.
+     * This is done automatically with TriggerRegister.
+     * @return the trigger for method chaining
+     */
     public OnTrigger register() {
-        this.getType().addTrigger(this);
+        this.type.addTrigger(this);
         return this;
     }
 
+    /**
+     * Unregisters a trigger.
+     * @return the trigger for method chaining
+     */
     public OnTrigger unregister() {
-        this.getType().removeTrigger(this);
+        this.type.removeTrigger(this);
         return this;
     }
 
+    /**
+     * @return boolean of if trigger is registered
+     */
     public boolean isRegistered() {
-        return getType().containsTrigger(this);
+        return this.type.containsTrigger(this);
     }
 
     public abstract void trigger(Object... args);

@@ -26,6 +26,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -98,7 +99,9 @@ public class CTJS {
 
             List<IResourcePack> packs = (List<IResourcePack>) field.get(FMLClientHandler.instance());
             packs.add(imagesPack = new ImagesPack(pictures));
-            pictures.mkdirs();
+            if (!pictures.mkdirs()) {
+                throw new IOException();
+            }
             assetsDir = pictures;
         }
         catch (Exception e) {
