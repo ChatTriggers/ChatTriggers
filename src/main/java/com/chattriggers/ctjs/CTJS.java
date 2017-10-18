@@ -99,9 +99,7 @@ public class CTJS {
 
             List<IResourcePack> packs = (List<IResourcePack>) field.get(FMLClientHandler.instance());
             packs.add(imagesPack = new ImagesPack(pictures));
-            if (!pictures.mkdirs()) {
-                throw new IOException();
-            }
+            pictures.mkdirs();
             assetsDir = pictures;
         }
         catch (Exception e) {
