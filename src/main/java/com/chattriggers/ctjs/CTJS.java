@@ -8,7 +8,7 @@ import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.objects.DisplayHandler;
 import com.chattriggers.ctjs.objects.KeyBind;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.Config;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
@@ -16,7 +16,6 @@ import lombok.Setter;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -28,11 +27,14 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
-@Mod(modid = Reference.MODID, name = Reference.MODNAME, version = Reference.MODVERSION, clientSideOnly = true)
+@Mod(modid = Reference.MODID,
+        name = Reference.MODNAME,
+        version = Reference.MODVERSION,
+        guiFactory = "com.chattriggers.ctjs.utils.config.ConfigGuiFactory",
+        clientSideOnly = true)
 public class CTJS {
     @Getter
     private static CTJS instance;
