@@ -102,8 +102,8 @@ public class CTJS {
             pictures.mkdirs();
             assetsDir = pictures;
         }
-        catch (Exception e) {
-            Console.getConsole().printStackTrace(e);
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
