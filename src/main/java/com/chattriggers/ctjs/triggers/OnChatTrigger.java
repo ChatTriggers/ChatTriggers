@@ -67,7 +67,10 @@ public class OnChatTrigger extends OnTrigger {
             chatMessage = ((ClientChatReceivedEvent) args[1]).message.getFormattedText().replace("\u00a7", "&");
         }
 
-        List<Object> variables = matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
+        List<Object> variables = new ArrayList<>();
+        if (!chatCriteria.equals("")) {
+            variables = matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
+        }
 
         if (variables != null) {
             try {
