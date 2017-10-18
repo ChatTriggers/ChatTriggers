@@ -1,6 +1,6 @@
 [
   {
-    "modid": "ctjs",
+    "modid": "ct.js",
     "name": "ChatTrigger.js",
     "description": "Customize your chat",
     "version": "0.1-SNAPSHOT",

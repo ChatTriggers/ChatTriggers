@@ -53,6 +53,7 @@ public class CTCommand extends CommandBase {
                 case("reload"):
                 case("load"):
                     TriggerType.WORLD_UNLOAD.triggerAll();
+                    CTJS.getInstance().getConfig().loadConfig();
                     CTJS.getInstance().initMain(false);
                     ChatLib.chat(EnumChatFormatting.RED + "Reloaded js files");
                     TriggerType.WORLD_LOAD.triggerAll();

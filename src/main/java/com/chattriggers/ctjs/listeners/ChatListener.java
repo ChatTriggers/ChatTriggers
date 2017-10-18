@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.listeners;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import lombok.Getter;
@@ -15,7 +16,9 @@ public class ChatListener {
             //Normal Chat Message
             TriggerType.CHAT.triggerAll(event.message.getUnformattedText(), event);
 
-            Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(event.message.getFormattedText()));
+            if (CTJS.getInstance().getConfig().getPrintChatToConsole()) {
+                Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(event.message.getFormattedText()));
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.objects.DisplayHandler;
 import com.chattriggers.ctjs.objects.KeyBind;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.Config;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import lombok.Setter;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -52,8 +54,11 @@ public class CTJS {
     @Getter
     private Console console;
 
+    @Getter
+    private Config config;
+
     @EventHandler
-    public void init(FMLInitializationEvent e) {
+    public void init(FMLInitializationEvent event) {
         instance = this;
 
         this.displayHandler = new DisplayHandler();
@@ -68,8 +73,12 @@ public class CTJS {
     }
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent e) {
-        this.injectResourcePack(e.getModConfigurationDirectory().toString());
+    public void preInit(FMLPreInitializationEvent event) {
+        this.injectResourcePack(event.getModConfigurationDirectory().toString());
+
+        this.config = new Config();
+        this.config.setConfigFile(new File(event.getModConfigurationDirectory().toString(), "ChatTriggers.cfg"));
+        this.config.loadConfig();
     }
 
     public void initMain(boolean firstTime) {
@@ -108,9 +117,10 @@ public class CTJS {
     }
 
     private void registerListeners() {
-        MinecraftForge.EVENT_BUS.register(displayHandler);
+        MinecraftForge.EVENT_BUS.register(this.displayHandler);
         MinecraftForge.EVENT_BUS.register(new WorldListener());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
+        MinecraftForge.EVENT_BUS.register(this.config);
     }
 
     private void registerHooks() {
