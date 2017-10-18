@@ -1,5 +1,4 @@
 package com.chattriggers.ctjs.utils;
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.Reference;
 import lombok.Getter;
 import lombok.Setter;
