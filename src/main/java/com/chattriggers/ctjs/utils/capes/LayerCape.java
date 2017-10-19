@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.utils.capes;
 
+import com.chattriggers.ctjs.CTJS;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -16,6 +17,8 @@ public class LayerCape implements LayerRenderer<AbstractClientPlayer> {
     }
 
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        if (!CTJS.getInstance().getConfig().getShowCapes()) return;
+
         ResourceLocation rl = null;
         String uuid = entitylivingbaseIn.getUniqueID().toString().replace("-", "");
         if (uuid.equals("f746f8682c834f9da885a9b40dcf9ac7")

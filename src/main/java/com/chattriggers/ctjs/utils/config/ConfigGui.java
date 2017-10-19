@@ -11,7 +11,7 @@ public class ConfigGui extends GuiConfig {
     public ConfigGui(GuiScreen parentScreen) {
         super(parentScreen,
                 new ConfigElement(
-                    CTJS.getInstance().getConfig().getConfig().getCategory("console")
+                    CTJS.getInstance().getConfig().getConfig().getCategory("ct")
                 ).getChildElements(),
                 Reference.MODID,
                 false,

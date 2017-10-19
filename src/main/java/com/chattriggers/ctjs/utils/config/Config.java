@@ -17,9 +17,12 @@ public class Config {
     // configuration settings
     @Getter
     private Boolean printChatToConsole;
+    @Getter
+    private Boolean showCapes;
 
-    public void saveConfig() {
-        this.printChatToConsole = this.config.getBoolean("printChatToConsole", "console", true, "Chat printing to console");
+    private void saveConfig() {
+        this.printChatToConsole = this.config.getBoolean("print chat to console", "ct", true, "Chat printing to console");
+        this.showCapes = this.config.getBoolean("show capes", "ct", true, "Show developer and creator capes");
 
         this.config.save();
     }
