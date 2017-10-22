@@ -329,7 +329,7 @@ public class ChatLib {
     }
 
     /**
-     * Replaces the easier to type '&' color codes with proper color codes in a string.
+     * Replaces the easier to type '&amp;' color codes with proper color codes in a string.
      * @param message The string to add color codes to
      * @return the formatted message
      */
