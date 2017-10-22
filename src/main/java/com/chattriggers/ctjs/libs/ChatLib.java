@@ -43,11 +43,11 @@ public class ChatLib {
 
     /**
      * Adds a message to chat (IS RECURSIVE! See {@link #chat(String, boolean)}
-     * to specify it not being recursive.
+     * to specify it being recursive.
      * @param message the message to be printed
      */
     public static void chat(String message) {
-        chat(message, true);
+        chat(message, false);
     }
 
     /**
@@ -70,11 +70,11 @@ public class ChatLib {
 
     /**
      * Print a {@link Message} in chat (IS RECURSIVE! See {@link #chat(Message, boolean)}
-     * to specify it not being recursive.
+     * to specify it being recursive.
      * @param message the message to be printed
      */
     public static void chat(Message message) {
-        chat(message, true);
+        chat(message, false);
     }
 
     /**
