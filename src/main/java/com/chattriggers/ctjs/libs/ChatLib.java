@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.libs;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.Message;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
@@ -96,7 +97,6 @@ public class ChatLib {
      * @param message the message to be sent
      */
     public static void say(String message) {
-        //TODO: Add checking for creator
         if (!isPlayer("[SAY]: " + message)) return;
 
         Minecraft.getMinecraft().thePlayer.sendChatMessage(message);
@@ -107,8 +107,6 @@ public class ChatLib {
      * @param command the command to run, without the leading slash (Ex. "help")
      */
     public static void command(String command) {
-        //TODO: Add checking for creator
-        if (!isAllowedCommand(command)) return;
         if (!isPlayer("[COMMAND]: /" + command)) return;
 
         Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + command);
@@ -321,31 +319,20 @@ public class ChatLib {
         return getChatMessage(event, false);
     }
 
-    private static boolean isAllowedCommand(String command) {
-        return true;
-
-        // TODO: check for creator
-        /*if (Minecraft.getMinecraft().isSingleplayer())
-            return true;
-
-        switch (command.toLowerCase()) {
-            case("who"):
-            case("whereami"):
-            case("wtfmap"):
-                return true;
-            default:
-                return false;
-        }*/
-    }
-
     private Boolean isPlayer(String out) {
         if (Minecraft.getMinecraft().thePlayer == null) {
+            CTJS.getInstance().getConsole().out.println(out);
             return false;
         }
 
         return true;
     }
 
+    /**
+     * Replaces the easier to type '&' color codes with proper color codes in a string.
+     * @param message The string to add color codes to
+     * @return the formatted message
+     */
     public static String addColor(String message) {
         if (message == null) {
             message = "null";
