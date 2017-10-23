@@ -7,8 +7,9 @@ import net.minecraft.client.Minecraft;
 import javax.script.ScriptException;
 
 public class OnStepTrigger extends OnTrigger {
-    private long fps = 60;
-    private long systemTime;
+    private Long fps = 60L;
+    private Long delay = null;
+    private Long systemTime;
 
     protected OnStepTrigger(String methodName) {
         super(methodName, TriggerType.STEP);
@@ -16,12 +17,27 @@ public class OnStepTrigger extends OnTrigger {
     }
 
     /**
-     * Sets the frames per second that the trigger activates
+     * Sets the frames per second that the trigger activates.
+     * This is limited to 1 step per second.
      * @param fps the frames per second to set
      * @return the trigger for method chaining
      */
     public OnStepTrigger setFps(long fps) {
+        if (fps < 1) fps = 1;
         this.fps = fps;
+
+        return this;
+    }
+
+    /**
+     * Sets the delay in seconds between the trigger activation.
+     * This is limited to one step every second. This will override {@link #setFps(long)}.
+     * @param delay The delay in seconds
+     * @return the trigger for method chaining
+     */
+    public OnStepTrigger setDelay(long delay) {
+        if (delay < 1) delay = 1;
+        this.delay = delay;
 
         return this;
     }
@@ -29,9 +45,19 @@ public class OnStepTrigger extends OnTrigger {
     @Override
     public void trigger(Object... args) {
         try {
-            while (this.systemTime < Minecraft.getSystemTime() + (1000 / fps)) {
-                CTJS.getInstance().getInvocableEngine().invokeFunction(methodName);
-                this.systemTime += (1000 / fps);
+            if (this.delay == null) {
+                // run trigger based on set fps value (60 per second by default)
+                while (this.systemTime < Minecraft.getSystemTime() + (1000 / this.fps)) {
+                    CTJS.getInstance().getInvocableEngine().invokeFunction(this.methodName);
+                    this.systemTime += (1000 / this.fps);
+                }
+            } else {
+                // run trigger based on set delay in seconds
+                while (Minecraft.getSystemTime() > this.systemTime + this.delay * 1000) {
+                    CTJS.getInstance().getInvocableEngine().invokeFunction(this.methodName);
+                    this.systemTime += this.delay * 1000;
+                }
+
             }
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e);
