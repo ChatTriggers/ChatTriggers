@@ -59,7 +59,9 @@ public class RenderLib {
      * @param color the color
      */
     public static void drawString(String text, float x, float y, int color) {
+        GlStateManager.enableBlend();
         Minecraft.getMinecraft().fontRendererObj.drawString(text, x, y, color, false);
+        GlStateManager.disableBlend();
     }
 
     /**
@@ -70,7 +72,9 @@ public class RenderLib {
      * @param color the color
      */
     public static void drawStringWithShadow(String text, float x, float y, int color) {
+        GlStateManager.enableBlend();
         Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x, y, color);
+        GlStateManager.disableBlend();
     }
 
     /**
@@ -198,10 +202,11 @@ public class RenderLib {
         float b = (float) (color & 255) / 255.0F;
 
         GlStateManager.pushMatrix();
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(r, g, b, a);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION);
@@ -211,9 +216,9 @@ public class RenderLib {
         worldrenderer.pos(x, y, 0.0D).endVertex();
         tessellator.draw();
         GlStateManager.color(1, 1, 1, 1);
+
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
-
         GlStateManager.popMatrix();
     }
 
