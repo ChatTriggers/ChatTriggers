@@ -401,4 +401,15 @@ public class MinecraftVars {
     public static int getPlayerFPS() {
         return Minecraft.getDebugFPS();
     }
+    
+    /**
+     * Gets the player's active potion effects.
+     */
+    public static ArrayList<String> getActivePotionEffects(){
+        ArrayList<String> effects = new Arraylist<String>();
+        for(PotionEffect e : mc.thePlayer.getActivePotionEffects()){
+            effects.add(e.toString());
+        }
+        return effects;
+    }
 }
