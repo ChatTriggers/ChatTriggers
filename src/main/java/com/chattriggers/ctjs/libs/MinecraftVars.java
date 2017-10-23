@@ -401,15 +401,17 @@ public class MinecraftVars {
     public static int getPlayerFPS() {
         return Minecraft.getDebugFPS();
     }
-    
+
     /**
      * Gets the player's active potion effects.
+     * In an import, accessible via the {@code potEffects} variable.
+     * @return The player's active potion effects.
      */
-    public static ArrayList<String> getActivePotionEffects(){
+    public static String[] getActivePotionEffects(){
         ArrayList<String> effects = new Arraylist<String>();
         for(PotionEffect e : mc.thePlayer.getActivePotionEffects()){
             effects.add(e.toString());
         }
-        return effects;
+        return effects.toArray(new String[effects.size()]);
     }
 }
