@@ -414,4 +414,40 @@ public class MinecraftVars {
         }
         return effects.toArray(new String[effects.size()]);
     }
+
+    /**
+     * Gets the player's helmet.
+     * In an import, accessible via the {@code playerHat} variable.
+     * @return The player's helmet.
+     */
+    public static String getPlayerHelmet() {
+        return mc.thePlayer.inventory.armorInventory[3].toString();
+    }
+
+    /**
+     * Gets the player's chestplate.
+     * In an import, accessible via the {@code playerChest} variable.
+     * @return The player's chestplate.
+     */
+    public static String getPlayerChestplate() {
+        return mc.thePlayer.inventory.armorInventory[2].toString();
+    }
+
+    /**
+     * Gets the player's leggings.
+     * In an import, accessible via the {@code playerPants} variable.
+     * @return The player's leggings.
+     */
+    public static String getPlayerLeggings() {
+        return mc.thePlayer.inventory.armorInventory[1].toString();
+    }
+
+    /**
+     * Gets the player's boots.
+     * In an import, accessible via the {@code playerBoots} variable.
+     * @return The player's boots.
+     */
+    public static String getPlayerBoots() {
+        return mc.thePlayer.inventory.armorInventory[0].toString();
+    }
 }

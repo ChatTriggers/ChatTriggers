@@ -63,6 +63,10 @@ var upArrow = MinecraftVars.isUpArrowDown();
 var downArrow = MinecraftVars.isDownArrowDown();
 var tabbedIn = MinecraftVars.isUserTabbedIn();
 var potEffects = MinecraftVars.getActivePotionEffects();
+var playerHat = MinecraftVars.getPlayerHelmet();
+var playerChest = MinecraftVars.getPlayerChestplate();
+var playerPants = MinecraftVars.getPlayerLeggings();
+var playerBoots = MinecraftVars.getPlayerBoots();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -102,6 +106,10 @@ function updateProvidedLibsTick() {
     downArrow = MinecraftVars.isDownArrowDown();
     tabbedIn = MinecraftVars.isUserTabbedIn();
     potEffects = MinecraftVars.getActivePotionEffects();
+    playerHat = MinecraftVars.getPlayerHelmet();
+    playerChest = MinecraftVars.getPlayerChestplate();
+    playerPants = MinecraftVars.getPlayerLeggings();
+    playerBoots = MinecraftVars.getPlayerBoots();
 }
 
 function updateProvidedLibsWorld() {
