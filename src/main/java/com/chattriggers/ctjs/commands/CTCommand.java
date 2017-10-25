@@ -4,18 +4,28 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.Message;
 import com.chattriggers.ctjs.utils.console.Console;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.script.ScriptEngine;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,6 +85,17 @@ public class CTCommand extends CommandBase {
                 case("simulate"):
                     simulateChat(args);
                     break;
+                case("dump"):
+                    try {
+                        if (args.length > 1 && args[1] != null) dumpChat(Integer.parseInt(args[1]));
+                        else dumpChat(100);
+                    } catch (NumberFormatException e) {
+                        ChatLib.chat("&cThe second command argument must be an integer!");
+                    }
+                    break;
+                case("copy"):
+                    copyArgsToClipboard(args);
+                    break;
                 default:
                     ChatLib.chat(getCommandUsage(sender));
                     break;
@@ -98,6 +119,36 @@ public class CTCommand extends CommandBase {
         if (!event.isCanceled()) {
             ChatLib.chat(event.message.getFormattedText());
         }
+    }
+
+    private void dumpChat(int lines) {
+        ArrayList<ChatLine> messages = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(), "field_146253_i");
+        if (lines > messages.size()) lines = messages.size();
+        String msg;
+
+        for (int i = lines; i > 0; i--) {
+            msg = messages.get(lines - 1).getChatComponent().getFormattedText().replace("§", "&");
+            ChatComponentText cct = new ChatComponentText(msg);
+
+            cct.setChatStyle(new ChatStyle()
+                    .setChatClickEvent(
+                            new ClickEvent(ClickEvent.Action.getValueByCanonicalName("run_command"), "/ct copy " + msg))
+                    .setChatHoverEvent(
+                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message.")))
+            );
+
+            ChatLib.chat(new Message(cct));
+        }
+    }
+
+    private void copyArgsToClipboard(String[] args) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 1; i < args.length; i++) {
+            sb.append(args[i]).append(" ");
+        }
+
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(sb.toString()), null);
     }
 
     // Open the folder containing all of ChatTrigger's files
