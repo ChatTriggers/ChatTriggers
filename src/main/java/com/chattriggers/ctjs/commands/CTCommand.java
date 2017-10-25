@@ -38,7 +38,12 @@ public class CTCommand extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/ct <reload/files/console>";
+        return "&b&m" + ChatLib.getChatBreak("-") + "\n" +
+               "&c/ct <load/reload> &b- &eReloads all of the ct imports.\n" +
+               "&c/ct files &b- &eOpens the ChatTriggers folder.\n" +
+               "&c/ct console &b- &eOpens the ct console.\n" +
+               "&c/ct &b- &eDisplays this help dialog\n" +
+               "&b&m" + ChatLib.getChatBreak("-");
     }
 
     @Override
@@ -66,11 +71,11 @@ public class CTCommand extends CommandBase {
                     Console.clear();
                     break;
                 default:
-                    ChatLib.chat(EnumChatFormatting.RED + getCommandUsage(sender));
+                    ChatLib.chat(getCommandUsage(sender));
                     break;
             }
         } else {
-            ChatLib.chat(EnumChatFormatting.RED + getCommandUsage(sender));
+            ChatLib.chat(getCommandUsage(sender));
         }
     }
 
