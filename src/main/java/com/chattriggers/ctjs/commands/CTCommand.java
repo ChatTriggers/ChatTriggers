@@ -8,7 +8,9 @@ import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import javax.script.ScriptEngine;
 import java.awt.*;
@@ -70,6 +72,9 @@ public class CTCommand extends CommandBase {
                     Console.getConsole().showConsole(true);
                     Console.clear();
                     break;
+                case("simulate"):
+                    simulateChat(args);
+                    break;
                 default:
                     ChatLib.chat(getCommandUsage(sender));
                     break;
@@ -79,6 +84,21 @@ public class CTCommand extends CommandBase {
         }
     }
 
+
+    private void simulateChat(String[] args) {
+        StringBuilder toSend = new StringBuilder();
+
+        for (int i = 1; i < args.length; i++) {
+            toSend.append(args[i]).append(" ");
+        }
+
+        ClientChatReceivedEvent event = new ClientChatReceivedEvent((byte) 0, new ChatComponentText(toSend.toString()));
+        CTJS.getInstance().getChatListener().onReceiveChat(event);
+
+        if (!event.isCanceled()) {
+            ChatLib.chat(event.message.getFormattedText());
+        }
+    }
 
     // Open the folder containing all of ChatTrigger's files
     private void openFileLocation() {
