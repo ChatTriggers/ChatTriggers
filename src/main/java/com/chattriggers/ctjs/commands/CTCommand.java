@@ -54,6 +54,8 @@ public class CTCommand extends CommandBase {
                "&c/ct <load/reload> &b- &eReloads all of the ct imports.\n" +
                "&c/ct files &b- &eOpens the ChatTriggers folder.\n" +
                "&c/ct console &b- &eOpens the ct console.\n" +
+               "&c/ct simulate &b- &eSimulates a received chat message.\n" +
+               "&c/ct dump &b- &eDumps previous chat messages into chat, showing color codes.\n" +
                "&c/ct &b- &eDisplays this help dialog\n" +
                "&b&m" + ChatLib.getChatBreak("-");
     }
