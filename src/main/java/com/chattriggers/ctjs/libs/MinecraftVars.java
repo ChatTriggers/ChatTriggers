@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -408,9 +409,11 @@ public class MinecraftVars {
      * @return The player's active potion effects.
      */
     public static String[] getActivePotionEffects(){
-        ArrayList<String> effects = new Arraylist<String>();
-        for(PotionEffect e : mc.thePlayer.getActivePotionEffects()){
-            effects.add(e.toString());
+        if (mc.thePlayer == null) return null;
+        
+        ArrayList<String> effects = new ArrayList<>();
+        for(PotionEffect effect : mc.thePlayer.getActivePotionEffects()){
+            effects.add(effect.toString());
         }
         return effects.toArray(new String[effects.size()]);
     }
