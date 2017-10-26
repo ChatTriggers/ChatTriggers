@@ -123,8 +123,11 @@ public class CTCommand extends CommandBase {
         }
     }
 
+    private final int idFixed = 90123;
+    private Integer idFixedOffset = null;
     private void dumpChat(int lines) {
-        ArrayList<ChatLine> messages = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(), "field_146253_i");
+        ArrayList<ChatLine> messages = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(), "field_146253_i", "chatLines");
+
         if (lines > messages.size()) lines = messages.size();
         String msg;
 
@@ -139,11 +142,14 @@ public class CTCommand extends CommandBase {
                             new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message.")))
             );
 
-            ChatLib.chat(new Message(cct));
+            ChatLib.chat(new Message(cct).setChatLineId(idFixed + i));
         }
+
+        idFixedOffset = idFixed + lines;
     }
 
     private void copyArgsToClipboard(String[] args) {
+        clearOldDump();
         StringBuilder sb = new StringBuilder();
 
         for (int i = 1; i < args.length; i++) {
@@ -151,6 +157,17 @@ public class CTCommand extends CommandBase {
         }
 
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(sb.toString()), null);
+    }
+
+    private void clearOldDump() {
+        if (idFixedOffset == null) return;
+
+        while (idFixedOffset > idFixed) {
+            ChatLib.clearChat(idFixedOffset);
+            idFixedOffset--;
+        }
+
+        idFixedOffset = null;
     }
 
     // Open the folder containing all of ChatTrigger's files
