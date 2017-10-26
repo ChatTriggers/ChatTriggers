@@ -409,13 +409,11 @@ public class MinecraftVars {
      * @return The player's active potion effects.
      */
     public static String[] getActivePotionEffects(){
-        if(mc.thePlayer == null){
-            return null;
-        }
-
-        ArrayList<String> effects = new ArrayList<String>();
-        for(PotionEffect e : mc.thePlayer.getActivePotionEffects()){
-            effects.add(e.toString());
+        if (mc.thePlayer == null) return null;
+        
+        ArrayList<String> effects = new ArrayList<>();
+        for(PotionEffect effect : mc.thePlayer.getActivePotionEffects()){
+            effects.add(effect.toString());
         }
         return effects.toArray(new String[effects.size()]);
     }
