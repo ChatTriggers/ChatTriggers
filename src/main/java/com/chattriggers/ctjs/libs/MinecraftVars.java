@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -408,7 +409,11 @@ public class MinecraftVars {
      * @return The player's active potion effects.
      */
     public static String[] getActivePotionEffects(){
-        ArrayList<String> effects = new Arraylist<String>();
+        if(mc.thePlayer == null){
+            return null;
+        }
+
+        ArrayList<String> effects = new ArrayList<String>();
         for(PotionEffect e : mc.thePlayer.getActivePotionEffects()){
             effects.add(e.toString());
         }
@@ -421,6 +426,13 @@ public class MinecraftVars {
      * @return The player's helmet.
      */
     public static String getPlayerHelmet() {
+        if(mc.thePlayer == null) {
+            return null;
+        }
+        if(mc.thePlayer.inventory.armorInventory[3] == null){
+            return null;
+        }
+
         return mc.thePlayer.inventory.armorInventory[3].toString();
     }
 
@@ -430,6 +442,13 @@ public class MinecraftVars {
      * @return The player's chestplate.
      */
     public static String getPlayerChestplate() {
+        if(mc.thePlayer == null) {
+            return null;
+        }
+        if(mc.thePlayer.inventory.armorInventory[2] == null){
+            return null;
+        }
+
         return mc.thePlayer.inventory.armorInventory[2].toString();
     }
 
@@ -439,6 +458,13 @@ public class MinecraftVars {
      * @return The player's leggings.
      */
     public static String getPlayerLeggings() {
+        if(mc.thePlayer == null) {
+            return null;
+        }
+        if(mc.thePlayer.inventory.armorInventory[1] == null){
+            return null;
+        }
+
         return mc.thePlayer.inventory.armorInventory[1].toString();
     }
 
@@ -448,6 +474,13 @@ public class MinecraftVars {
      * @return The player's boots.
      */
     public static String getPlayerBoots() {
+        if(mc.thePlayer == null) {
+            return null;
+        }
+        if(mc.thePlayer.inventory.armorInventory[0] == null){
+            return null;
+        }
+
         return mc.thePlayer.inventory.armorInventory[0].toString();
     }
 }
