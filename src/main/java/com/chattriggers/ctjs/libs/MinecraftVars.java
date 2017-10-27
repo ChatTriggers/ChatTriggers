@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -431,7 +432,7 @@ public class MinecraftVars {
             return null;
         }
 
-        return mc.thePlayer.inventory.armorInventory[3].toString();
+        return mc.thePlayer.inventory.armorInventory[3].getDisplayName();
     }
 
     /**
@@ -447,7 +448,7 @@ public class MinecraftVars {
             return null;
         }
 
-        return mc.thePlayer.inventory.armorInventory[2].toString();
+        return mc.thePlayer.inventory.armorInventory[2].getDisplayName();
     }
 
     /**
@@ -463,7 +464,7 @@ public class MinecraftVars {
             return null;
         }
 
-        return mc.thePlayer.inventory.armorInventory[1].toString();
+        return mc.thePlayer.inventory.armorInventory[1].getDisplayName();
     }
 
     /**
@@ -479,6 +480,19 @@ public class MinecraftVars {
             return null;
         }
 
-        return mc.thePlayer.inventory.armorInventory[0].toString();
+        return mc.thePlayer.inventory.armorInventory[0].getDisplayName();
+    }
+
+    /**
+     * Gets the player's held item.
+     * In an import, accessible via the {@code heldItem} variable.
+     * @return The player's held item.
+     */
+    public static String getHeldItem() {
+        if(mc.thePlayer == null || mc.thePlayer.getCurrentEquippedItem() == null){
+            return null;
+        }
+        ItemStack heldItem = mc.thePlayer.getCurrentEquippedItem();
+        return heldItem.getItem().getItemStackDisplayName(heldItem);
     }
 }

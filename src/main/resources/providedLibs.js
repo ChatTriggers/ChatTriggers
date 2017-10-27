@@ -67,6 +67,7 @@ var playerHat = MinecraftVars.getPlayerHelmet();
 var playerChest = MinecraftVars.getPlayerChestplate();
 var playerPants = MinecraftVars.getPlayerLeggings();
 var playerBoots = MinecraftVars.getPlayerBoots();
+var heldItem = MinecraftVars.getHeldItem();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -110,6 +111,7 @@ function updateProvidedLibsTick() {
     playerChest = MinecraftVars.getPlayerChestplate();
     playerPants = MinecraftVars.getPlayerLeggings();
     playerBoots = MinecraftVars.getPlayerBoots();
+    heldItem = MinecraftVars.getHeldItem();
 }
 
 function updateProvidedLibsWorld() {
