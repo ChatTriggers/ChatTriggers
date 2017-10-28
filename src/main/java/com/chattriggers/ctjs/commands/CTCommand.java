@@ -132,7 +132,7 @@ public class CTCommand extends CommandBase {
         String msg;
 
         for (int i = lines; i > 0; i--) {
-            msg = messages.get(lines - 1).getChatComponent().getFormattedText().replace("§", "&");
+            msg = ChatLib.replaceFormatting(messages.get(lines - 1).getChatComponent().getFormattedText());
             ChatComponentText cct = new ChatComponentText(msg);
 
             cct.setChatStyle(new ChatStyle()
