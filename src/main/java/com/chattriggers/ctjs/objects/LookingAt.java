@@ -301,25 +301,6 @@ public class LookingAt {
         return (new Gson()).toJsonTree(metadata).getAsJsonObject().toString();
     }
 
-    private static String getBlockOnFaceName() {
-        switch (mop.sideHit) {
-            case UP:
-                return mc.theWorld.getBlockState(pos.up()).getBlock().getUnlocalizedName();
-            case DOWN:
-                return mc.theWorld.getBlockState(pos.down()).getBlock().getUnlocalizedName();
-            case NORTH:
-                return mc.theWorld.getBlockState(pos.north()).getBlock().getUnlocalizedName();
-            case SOUTH:
-                return mc.theWorld.getBlockState(pos.south()).getBlock().getUnlocalizedName();
-            case EAST:
-                return mc.theWorld.getBlockState(pos.east()).getBlock().getUnlocalizedName();
-            case WEST:
-                return mc.theWorld.getBlockState(pos.west()).getBlock().getUnlocalizedName();
-            default:
-                return null;
-        }
-    }
-
     private static BlockPos getBlockOnFace() {
         switch (mop.sideHit) {
             case UP:
