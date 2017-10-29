@@ -371,6 +371,7 @@ public class MinecraftVars {
         }
 
         Float yaw = getPlayerYaw();
+        if (yaw == null) return null;
 
         if(yaw < 22.5 && yaw > -22.5) {
             return "South";
