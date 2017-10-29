@@ -170,9 +170,9 @@ public class OnChatTrigger extends OnTrigger {
     /**
      * The parameter to match chat criteria to.
      * Location parameters<br>
-     *     <strong>contains</strong>
-     *     <strong>start</strong>
-     *     <strong>end</strong>
+     *     <strong>&emsp;contains</strong><br>
+     *     <strong>&emsp;start</strong><br>
+     *     <strong>&emsp;end</strong><br>
      */
      private enum Parameter {
         CONTAINS("<c>", "<contains>", "c", "contains"),
