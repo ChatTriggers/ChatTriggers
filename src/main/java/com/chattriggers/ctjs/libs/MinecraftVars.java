@@ -389,6 +389,8 @@ public class MinecraftVars {
         } else if (yaw > -67.5 && yaw < -22.5) {
             return "South East";
         }
+
+        return null;
     }
 
     /**
