@@ -417,4 +417,24 @@ public class MinecraftVars {
         }
         return effects.toArray(new String[effects.size()]);
     }
+
+    public static String getMinecraftVersion() {
+        return Minecraft.getMinecraft().getVersion();
+    }
+
+    public static long getMaxMemory() {
+        return Runtime.getRuntime().maxMemory();
+    }
+
+    public static long getTotalMemory() {
+        return Runtime.getRuntime().totalMemory();
+    }
+
+    public static long getFreeMemory() {
+        return Runtime.getRuntime().freeMemory();
+    }
+
+    public static int getMemoryUsage() {
+        return Math.round((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory());
+    }
 }
