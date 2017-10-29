@@ -26,7 +26,6 @@ var XMLHttpRequest = Java.type("com.chattriggers.ctjs.objects.XMLHttpRequest");
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 var LookingAt = Java.type("com.chattriggers.ctjs.objects.LookingAt");
 var Inventory = Java.type("com.chattriggers.ctjs.objects.Inventory");
-var InventorySlot = Inventory.InventorySlot;
 
 /*Built in Vars */
 var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
