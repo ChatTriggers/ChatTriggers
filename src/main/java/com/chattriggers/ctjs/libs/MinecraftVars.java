@@ -371,27 +371,26 @@ public class MinecraftVars {
         }
 
         Float yaw = getPlayerYaw();
-        String direction = "";
 
         if(yaw < 22.5 && yaw > -22.5) {
-            direction = "South";
+            return "South";
         } else if (yaw < 67.5 && yaw > 22.5) {
-            direction = "South West";
+            return "South West";
         } else if (yaw < 112.5 && yaw > 67.5) {
-            direction = "West";
+            return "West";
         } else if (yaw < 157.5 && yaw > 112.5) {
-            direction = "North West";
+            return "North West";
         } else if (yaw < -157.5 || yaw > 157.5) {
-            direction = "North";
+            return "North";
         } else if (yaw > -157.5 && yaw < -112.5) {
-            direction = "North East";
+            return "North East";
         } else if (yaw > -112.5 && yaw < -67.5) {
-            direction = "East";
+            return "East";
         } else if (yaw > -67.5 && yaw < -22.5) {
-            direction = "South East";
+            return "South East";
         }
 
-        return direction;
+        return null;
     }
 
     /**
