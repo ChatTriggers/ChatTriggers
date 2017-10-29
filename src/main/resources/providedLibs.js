@@ -34,6 +34,7 @@ var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
 // Constant
 var playerName = MinecraftVars.getPlayerName();
 var uuid = MinecraftVars.getPlayerUUID();
+var mcVersion = MinecraftVars.getMinecraftVersion();
 
 // Update every tick
 var hp = MinecraftVars.getPlayerHP();
@@ -66,6 +67,10 @@ var upArrow = MinecraftVars.isUpArrowDown();
 var downArrow = MinecraftVars.isDownArrowDown();
 var tabbedIn = MinecraftVars.isUserTabbedIn();
 var potEffects = MinecraftVars.getActivePotionEffects();
+var maxMem = MinecraftVars.getMaxMemory();
+var totalMem = MinecraftVars.getTotalMemory();
+var freeMem = MinecraftVars.getFreeMemory();
+var memUsage = MinecraftVars.getMemoryUsage();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -105,6 +110,10 @@ function updateProvidedLibsTick() {
     downArrow = MinecraftVars.isDownArrowDown();
     tabbedIn = MinecraftVars.isUserTabbedIn();
     potEffects = MinecraftVars.getActivePotionEffects();
+    maxMem = MinecraftVars.getMaxMemory();
+    totalMem = MinecraftVars.getTotalMemory();
+    freeMem = MinecraftVars.getFreeMemory();
+    memUsage = MinecraftVars.getMemoryUsage();
 
     LookingAt.update();
 }
