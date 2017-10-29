@@ -112,7 +112,8 @@ public class CTCommand extends CommandBase {
         StringBuilder toSend = new StringBuilder();
 
         for (int i = 1; i < args.length; i++) {
-            toSend.append(args[i]).append(" ");
+            toSend.append(args[i]);
+            if (i != args.length - 1) toSend.append(" ");
         }
 
         ClientChatReceivedEvent event = new ClientChatReceivedEvent((byte) 0, new ChatComponentText(toSend.toString()));
