@@ -256,7 +256,7 @@ public class ScriptLoader {
         for (File importDir : getFoldersInDirectory(importsDir)) {
             try {
 
-                File metadata = new File(importDir.getPath() + "/" + importDir.getName() + ".json");
+                File metadata = new File(importDir.getPath() + "/metadata.json");
                 if (metadata.exists()) {
                     //TODO load from json using gson
                 } else {
