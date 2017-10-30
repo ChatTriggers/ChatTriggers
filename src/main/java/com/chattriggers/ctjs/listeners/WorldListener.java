@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.imports.gui.ImportsGui;
+import com.chattriggers.ctjs.imports.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -68,7 +68,7 @@ public class WorldListener {
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent e) {
         if (guiKeyBind.isPressed()) {
-            Minecraft.getMinecraft().displayGuiScreen(new ImportsGui(CTJS.getInstance().getScriptLoader().getLoadedImports()));
+            Minecraft.getMinecraft().displayGuiScreen(new ModulesGui(CTJS.getInstance().getScriptLoader().getLoadedImports()));
         }
     }
 }

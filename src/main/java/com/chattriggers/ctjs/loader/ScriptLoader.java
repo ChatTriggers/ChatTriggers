@@ -1,8 +1,9 @@
 package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.imports.Import;
+import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.utils.console.Console;
+import com.google.gson.Gson;
 import lombok.Getter;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class ScriptLoader {
     @Getter
-    private ArrayList<Import> loadedImports;
+    private ArrayList<Module> loadedImports;
     private ScriptEngine scriptEngine;
     private Invocable invocableEngine;
 
@@ -59,7 +60,7 @@ public class ScriptLoader {
             scriptEngine.eval(getProvidedLibsScript());
             scriptEngine.eval(getCustomLibsScript());
 
-            for (Import customImport : this.loadedImports) {
+            for (Module customImport : this.loadedImports) {
                 scriptEngine.eval(customImport.getCompiledScript());
             }
         } catch (ScriptException e) {
@@ -246,17 +247,23 @@ public class ScriptLoader {
      * compiled into strings.
      * @return a list of imports, all compiled
      */
-    public ArrayList<Import> getCompiledImports() {
-        ArrayList<Import> compiledImports = new ArrayList<>();
+    public ArrayList<Module> getCompiledImports() {
+        ArrayList<Module> compiledImports = new ArrayList<>();
 
         File importsDir = new File("./mods/ChatTriggers/Imports/");
         importsDir.mkdirs();
 
         for (File importDir : getFoldersInDirectory(importsDir)) {
             try {
-                Import newImport = new Import(importDir.getName(),
-                        compileScripts(importDir.listFiles()), getAllLines(importDir.listFiles()));
-                compiledImports.add(newImport);
+
+                File metadata = new File(importDir.getPath() + "/" + importDir.getName() + ".json");
+                if (metadata.exists()) {
+                    //TODO load from json using gson
+                } else {
+                    Module newModule = new Module(importDir.getName(),
+                            compileScripts(importDir.listFiles()), getAllLines(importDir.listFiles()));
+                    compiledImports.add(newModule);
+                }
             } catch (IOException e) {
                 Console.getConsole().printStackTrace(e);
             }

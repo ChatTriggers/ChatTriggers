@@ -1,19 +1,19 @@
 package com.chattriggers.ctjs.imports.gui;
 
-import com.chattriggers.ctjs.imports.Import;
+import com.chattriggers.ctjs.imports.Module;
 import net.minecraft.client.gui.GuiScreen;
 
-public class ImportGui extends GuiScreen {
-    private Import theImport;
+public class ModuleGui extends GuiScreen {
+    private Module theModule;
 
-    public ImportGui(Import theImport) {
-        this.theImport = theImport;
+    public ModuleGui(Module theModule) {
+        this.theModule = theModule;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        theImport.getLines();
+        theModule.getLines();
     }
 }

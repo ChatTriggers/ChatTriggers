@@ -103,7 +103,7 @@ task userdocs(type: Javadoc) {
     source = sourceSets.main.allJava
     classpath += configurations.compile
     exclude "com/chattriggers/ctjs/CTJS.java"
-    exclude "com/chattriggers/ctjs/imports/Import.java"
+    exclude "com/chattriggers/ctjs/imports/Module.java"
     exclude "com/chattriggers/ctjs/commands/**.java"
     exclude "com/chattriggers/ctjs/utils/capes/**.java"
     exclude "com/chattriggers/ctjs/objects/DisplayHandler.java"
