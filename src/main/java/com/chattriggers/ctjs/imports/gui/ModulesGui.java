@@ -16,6 +16,8 @@ public class ModulesGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        drawDefaultBackground();
     }
 
     private void openModule(Module theModule) {

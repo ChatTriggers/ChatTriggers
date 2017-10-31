@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.imports.gui.ModulesGui;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -83,6 +84,9 @@ public class CTCommand extends CommandBase {
                 case("console"):
                     Console.getConsole().showConsole(true);
                     Console.clear();
+                    break;
+                case("gui"):
+                    Minecraft.getMinecraft().currentScreen = new ModulesGui(CTJS.getInstance().getScriptLoader().getLoadedModules());
                     break;
                 case("simulate"):
                     simulateChat(args);
