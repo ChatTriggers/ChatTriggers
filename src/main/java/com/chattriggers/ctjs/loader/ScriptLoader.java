@@ -54,7 +54,7 @@ public class ScriptLoader {
         saveResource("/customLibs.js", new File("./mods/ChatTriggers/libs/chattriggers-custom-libs.js"), false);
 
         //Load the imports (This compiles them and loads them)
-        loadImports();
+        loadModules();
         //Load assets (Puts images into ctjs resource location
         loadAssets();
 
@@ -62,10 +62,10 @@ public class ScriptLoader {
             scriptEngine.eval(getProvidedLibsScript());
             scriptEngine.eval(getCustomLibsScript());
 
-            for (Module customImport : this.loadedModules) {
-                scriptEngine.eval(customImport.getCompiledScript());
+            for (Module customModule : this.loadedModules) {
+                scriptEngine.eval(customModule.getCompiledScript());
             }
-        } catch (ScriptException e) {
+        } catch (Exception e) {
             Console.getConsole().printStackTrace(e);
         }
     }
@@ -112,7 +112,7 @@ public class ScriptLoader {
         }
     }
 
-    private void loadImports() {
+    private void loadModules() {
         this.loadedModules = getCompiledModules();
     }
 
@@ -252,27 +252,26 @@ public class ScriptLoader {
     public ArrayList<Module> getCompiledModules() {
         ArrayList<Module> compiledModules = new ArrayList<>();
 
-        File importsDir = new File("./mods/ChatTriggers/Imports/");
-        if (!importsDir.mkdirs()) return null;
+        File modulesDir = new File("./mods/ChatTriggers/Imports/");
+        modulesDir.mkdirs();
 
-        for (File importDir : getFoldersInDirectory(importsDir)) {
+        for (File moduleDir : getFoldersInDirectory(modulesDir)) {
             try {
-
-                File metadata = new File(importDir.getPath() + "/metadata.json");
+                File metadata = new File(moduleDir.getPath() + "/metadata.json");
                 if (metadata.exists()) {
-                    ModuleMetadata mm = new Gson().fromJson(new FileReader(importDir.getPath() + "/metadata.json"), ModuleMetadata.class);
+                    ModuleMetadata mm = new Gson().fromJson(new FileReader(moduleDir.getPath() + "/metadata.json"), ModuleMetadata.class);
                     Module newModule = new Module(
-                            importDir.getName(),
-                            compileScripts(importDir.listFiles()),
-                            getAllLines(importDir.listFiles()),
+                            moduleDir.getName(),
+                            compileScripts(moduleDir.listFiles()),
+                            getAllLines(moduleDir.listFiles()),
                             mm
                     );
                     compiledModules.add(newModule);
                 } else {
                     Module newModule = new Module(
-                            importDir.getName(),
-                            compileScripts(importDir.listFiles()),
-                            getAllLines(importDir.listFiles())
+                            moduleDir.getName(),
+                            compileScripts(moduleDir.listFiles()),
+                            getAllLines(moduleDir.listFiles())
                     );
                     compiledModules.add(newModule);
                 }
