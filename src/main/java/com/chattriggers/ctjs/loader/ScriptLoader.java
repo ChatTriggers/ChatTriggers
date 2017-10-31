@@ -281,7 +281,10 @@ public class ScriptLoader {
 
             if (!assetsFolder.exists() || assetsFolder.isFile()) continue;
 
-            for (File asset : assetsFolder.listFiles()) {
+            File[] assets = assetsFolder.listFiles();
+            if (assets == null) return;
+
+            for (File asset : assets) {
                 try {
                     FileUtils.copyFileToDirectory(asset, toCopyDir);
                 } catch (IOException e) {
