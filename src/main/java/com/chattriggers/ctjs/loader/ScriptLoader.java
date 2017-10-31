@@ -267,6 +267,7 @@ public class ScriptLoader {
                             getAllLines(importDir.listFiles()),
                             mm
                     );
+                    compiledImports.add(newModule);
                 } else {
                     Module newModule = new Module(
                             importDir.getName(),
