@@ -2,6 +2,8 @@ package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.Module;
+import com.chattriggers.ctjs.imports.ModuleMetadata;
+import com.chattriggers.ctjs.libs.FileLib;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import lombok.Getter;
@@ -251,17 +253,26 @@ public class ScriptLoader {
         ArrayList<Module> compiledImports = new ArrayList<>();
 
         File importsDir = new File("./mods/ChatTriggers/Imports/");
-        importsDir.mkdirs();
+        if (!importsDir.mkdirs()) return null;
 
         for (File importDir : getFoldersInDirectory(importsDir)) {
             try {
 
                 File metadata = new File(importDir.getPath() + "/metadata.json");
                 if (metadata.exists()) {
-                    //TODO load from json using gson
+                    ModuleMetadata mm = new Gson().fromJson(new FileReader(importDir.getPath() + "/metadata.json"), ModuleMetadata.class);
+                    Module newModule = new Module(
+                            importDir.getName(),
+                            compileScripts(importDir.listFiles()),
+                            getAllLines(importDir.listFiles()),
+                            mm
+                    );
                 } else {
-                    Module newModule = new Module(importDir.getName(),
-                            compileScripts(importDir.listFiles()), getAllLines(importDir.listFiles()));
+                    Module newModule = new Module(
+                            importDir.getName(),
+                            compileScripts(importDir.listFiles()),
+                            getAllLines(importDir.listFiles())
+                    );
                     compiledImports.add(newModule);
                 }
             } catch (IOException e) {
