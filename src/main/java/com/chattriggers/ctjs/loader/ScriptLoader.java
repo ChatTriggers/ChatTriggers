@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ScriptLoader {
     @Getter
-    private ArrayList<Module> loadedImports;
+    private ArrayList<Module> loadedModules;
     private ScriptEngine scriptEngine;
     private Invocable invocableEngine;
 
@@ -62,7 +62,7 @@ public class ScriptLoader {
             scriptEngine.eval(getProvidedLibsScript());
             scriptEngine.eval(getCustomLibsScript());
 
-            for (Module customImport : this.loadedImports) {
+            for (Module customImport : this.loadedModules) {
                 scriptEngine.eval(customImport.getCompiledScript());
             }
         } catch (ScriptException e) {
@@ -113,7 +113,7 @@ public class ScriptLoader {
     }
 
     private void loadImports() {
-        this.loadedImports = getCompiledImports();
+        this.loadedModules = getCompiledModules();
     }
 
     /**
@@ -249,8 +249,8 @@ public class ScriptLoader {
      * compiled into strings.
      * @return a list of imports, all compiled
      */
-    public ArrayList<Module> getCompiledImports() {
-        ArrayList<Module> compiledImports = new ArrayList<>();
+    public ArrayList<Module> getCompiledModules() {
+        ArrayList<Module> compiledModules = new ArrayList<>();
 
         File importsDir = new File("./mods/ChatTriggers/Imports/");
         if (!importsDir.mkdirs()) return null;
@@ -267,21 +267,21 @@ public class ScriptLoader {
                             getAllLines(importDir.listFiles()),
                             mm
                     );
-                    compiledImports.add(newModule);
+                    compiledModules.add(newModule);
                 } else {
                     Module newModule = new Module(
                             importDir.getName(),
                             compileScripts(importDir.listFiles()),
                             getAllLines(importDir.listFiles())
                     );
-                    compiledImports.add(newModule);
+                    compiledModules.add(newModule);
                 }
             } catch (IOException e) {
                 Console.getConsole().printStackTrace(e);
             }
         }
 
-        return compiledImports;
+        return compiledModules;
     }
 
     private void loadAssets() {
