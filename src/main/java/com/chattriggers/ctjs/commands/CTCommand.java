@@ -86,7 +86,7 @@ public class CTCommand extends CommandBase {
                     Console.clear();
                     break;
                 case("gui"):
-                    Minecraft.getMinecraft().currentScreen = new ModulesGui(CTJS.getInstance().getScriptLoader().getLoadedModules());
+                    Minecraft.getMinecraft().displayGuiScreen(new ModulesGui(CTJS.getInstance().getScriptLoader().getLoadedModules()));
                     break;
                 case("simulate"):
                     simulateChat(args);
