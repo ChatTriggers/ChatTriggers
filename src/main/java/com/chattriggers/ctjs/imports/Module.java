@@ -16,9 +16,6 @@ public class Module {
     @Getter
     private ModuleMetadata metadata = null;
 
-    @Getter @Setter
-    private float x = 10;
-
 
     public Module(String name, String compiledScript, ArrayList<String> lines) {
         this.name = name;

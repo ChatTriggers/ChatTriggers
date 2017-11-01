@@ -15,10 +15,13 @@ public class ModuleMetadata {
     private String pictureLink;
     @Getter
     private String creator;
+    @Getter
+    private String description;
 
-    public ModuleMetadata(String name, String creator, int version, ArrayList<String> tags, String pictureLink) {
+    public ModuleMetadata(String name, String creator, String description, int version, ArrayList<String> tags, String pictureLink) {
         this.name = name;
         this.creator = creator;
+        this.description = description;
         this.version = version;
         this.tags = tags;
         this.pictureLink = pictureLink;
