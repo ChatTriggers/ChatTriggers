@@ -14,7 +14,7 @@ public class OnRegularTrigger extends OnTrigger {
     @Override
     public void trigger(Object... args) {
         try {
-            CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, args);
+            CTJS.getInstance().getModuleManager().invokeFunction(methodName, args);
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e);
             type.removeTrigger(this);

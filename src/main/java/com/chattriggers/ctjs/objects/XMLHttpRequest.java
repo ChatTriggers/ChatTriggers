@@ -136,7 +136,7 @@ public class XMLHttpRequest {
 
             this.responseText = response.toString();
 
-            CTJS.getInstance().getInvocableEngine().invokeFunction(this.methodCallback, this);
+            CTJS.getInstance().getModuleManager().invokeFunction(this.methodCallback, this);
         } catch (Exception e) {
             Console.getConsole().printStackTrace(e);
         }

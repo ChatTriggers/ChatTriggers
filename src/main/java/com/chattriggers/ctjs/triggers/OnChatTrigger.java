@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.triggers;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import scala.xml.PrettyPrinter;
 
 import javax.script.ScriptException;
 import java.util.ArrayList;
@@ -118,7 +117,7 @@ public class OnChatTrigger extends OnTrigger {
         if (variables != null) {
             try {
                 variables.add(args[1]);
-                CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
+                CTJS.getInstance().getModuleManager().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
             } catch (ScriptException | NoSuchMethodException e) {
                 Console.getConsole().printStackTrace(e);
                 TriggerType.CHAT.removeTrigger(this);

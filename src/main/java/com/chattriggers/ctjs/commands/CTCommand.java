@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.commands;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.gui.ModulesGui;
 import com.chattriggers.ctjs.libs.ChatLib;
-import com.chattriggers.ctjs.loader.ScriptLoader;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.Message;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -21,7 +20,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import javax.script.ScriptEngine;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
@@ -31,13 +29,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class CTCommand extends CommandBase {
-    private ScriptEngine scriptEngine;
-    private ScriptLoader scriptLoader;
-
-    public CTCommand() {
-        this.scriptEngine = CTJS.getInstance().getScriptEngine();
-        this.scriptLoader = CTJS.getInstance().getScriptLoader();
-    }
 
     @Override
     public String getCommandName() {
@@ -74,7 +65,8 @@ public class CTCommand extends CommandBase {
                 case("load"):
                     TriggerType.WORLD_UNLOAD.triggerAll();
                     CTJS.getInstance().getConfig().loadConfig();
-                    CTJS.getInstance().initMain(false);
+                    CTJS.getInstance().getModuleManager().unload();
+                    CTJS.getInstance().getModuleManager().load();
                     ChatLib.chat(EnumChatFormatting.RED + "Reloaded js files");
                     TriggerType.WORLD_LOAD.triggerAll();
                     break;
@@ -93,7 +85,9 @@ public class CTCommand extends CommandBase {
                             Console.getConsole().printStackTrace(exception);
                         }
 
-                        Minecraft.getMinecraft().displayGuiScreen(new ModulesGui(CTJS.getInstance().getScriptLoader().getLoadedModules()));
+                        Minecraft.getMinecraft().displayGuiScreen(
+                                new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
+                        );
                     }).start();
                     break;
                 case("simulate"):

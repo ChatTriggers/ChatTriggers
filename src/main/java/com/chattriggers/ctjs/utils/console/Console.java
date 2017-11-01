@@ -51,7 +51,7 @@ public class Console {
                     inputField.setText("");
 
                     try {
-                        toPrint = CTJS.getInstance().getScriptEngine().eval(command);
+                        toPrint = CTJS.getInstance().getModuleManager().eval(command);
                     } catch (Exception error) {
                         if (!(error instanceof ThreadQuickExitException)) {
                             printStackTrace(error);

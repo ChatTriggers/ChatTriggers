@@ -1,7 +1,0 @@
-function updateCustomLibsTick() {
-
-}
-
-function updateCustomLibsWorld() {
-
-}

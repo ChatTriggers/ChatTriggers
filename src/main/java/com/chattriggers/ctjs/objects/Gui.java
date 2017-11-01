@@ -15,7 +15,8 @@ public class Gui extends GuiScreen {
     private OnTrigger onClick = null;
     private OnTrigger onKeyTyped = null;
 
-    public Gui() {}
+    public Gui() {
+    }
 
     /**
      * Displays the gui object to Minecraft.
@@ -42,6 +43,7 @@ public class Gui extends GuiScreen {
 
     /**
      * Get if the gui object is open.
+     *
      * @return true if this gui is open
      */
     public boolean isOpen() {
@@ -51,6 +53,7 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on draw.
+     *
      * @param methodName the method to run
      */
     public OnTrigger registerOnDraw(String methodName) {
@@ -68,10 +71,10 @@ public class Gui extends GuiScreen {
                 float partialTicks = (float) args[2];
 
                 try {
-                    CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, mouseX, mouseY, partialTicks);
+                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, partialTicks);
                 } catch (ScriptException | NoSuchMethodException e) {
-                    Console.getConsole().printStackTrace(e);
                     onDraw = null;
+                    e.printStackTrace();
                 }
             }
         };
@@ -80,6 +83,7 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on mouse click.
+     *
      * @param methodName the method to run
      */
     public OnTrigger registerOnClicked(String methodName) {
@@ -97,10 +101,10 @@ public class Gui extends GuiScreen {
                 int button = (int) args[2];
 
                 try {
-                    CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, mouseX, mouseY, button);
+                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, button);
                 } catch (ScriptException | NoSuchMethodException e) {
-                    Console.getConsole().printStackTrace(e);
                     onClick = null;
+                    e.printStackTrace();
                 }
             }
         };
@@ -109,6 +113,7 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on key input.
+     *
      * @param methodName the method to run
      */
     public OnTrigger registerOnKeyTyped(String methodName) {
@@ -124,7 +129,7 @@ public class Gui extends GuiScreen {
                 int keyCode = (int) args[1];
 
                 try {
-                    CTJS.getInstance().getInvocableEngine().invokeFunction(methodName, typedChar, keyCode);
+                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, typedChar, keyCode);
                 } catch (ScriptException | NoSuchMethodException e) {
                     Console.getConsole().printStackTrace(e);
                     onKeyTyped = null;

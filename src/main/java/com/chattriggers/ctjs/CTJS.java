@@ -4,14 +4,11 @@ import com.chattriggers.ctjs.commands.CTCommand;
 import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.listeners.ChatListener;
 import com.chattriggers.ctjs.listeners.WorldListener;
-import com.chattriggers.ctjs.loader.ScriptLoader;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.objects.DisplayHandler;
-import com.chattriggers.ctjs.objects.KeyBind;
-import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.capes.DLCape;
+import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.capes.LayerCape;
 import com.chattriggers.ctjs.utils.config.Config;
-import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +25,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -45,12 +39,6 @@ public class CTJS {
     private static CTJS instance;
 
     @Getter @Setter
-    private ScriptEngine scriptEngine;
-    @Getter @Setter
-    private Invocable invocableEngine;
-    @Getter @Setter
-    private ScriptLoader scriptLoader;
-    @Getter @Setter
     private DisplayHandler displayHandler;
     @Getter
     private ChatListener chatListener;
@@ -60,9 +48,10 @@ public class CTJS {
     private File assetsDir;
     @Getter
     private Console console;
-
     @Getter
     private Config config;
+    @Getter
+    private ModuleManager moduleManager;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
@@ -71,12 +60,13 @@ public class CTJS {
         this.displayHandler = new DisplayHandler();
         this.chatListener = new ChatListener();
         this.console = new Console();
-
-        initMain(true);
+        this.moduleManager = new ModuleManager();
 
         registerListeners();
 
         registerHooks();
+
+        moduleManager.load();
     }
 
     @EventHandler
@@ -93,27 +83,6 @@ public class CTJS {
         for (RenderPlayer render : Minecraft.getMinecraft().getRenderManager().getSkinMap().values()) {
             render.addLayer(new LayerCape(render));
         }
-    }
-
-    public void initMain(boolean firstTime) {
-        this.scriptEngine = new ScriptEngineManager(null).getEngineByName("nashorn");
-        this.invocableEngine = ((Invocable) scriptEngine);
-
-        if (!firstTime) {
-            MinecraftForge.EVENT_BUS.unregister(scriptLoader);
-            KeyBind.clearKeyBinds();
-            TriggerType.clearAllTriggers();
-        } else {
-            DLCape.getCapes();
-        }
-
-        this.displayHandler.clearDisplays();
-
-        this.console.clearConsole();
-        this.scriptLoader = new ScriptLoader();
-        MinecraftForge.EVENT_BUS.register(scriptLoader);
-
-        System.gc();
     }
 
     private void injectResourcePack(String path) {
