@@ -24,8 +24,8 @@ public class Gui extends GuiScreen {
         new Thread(() -> {
             try {
                 Thread.sleep(20);
-            } catch (InterruptedException e) {
-                Console.getConsole().printStackTrace(e);
+            } catch (InterruptedException exception) {
+                Console.getConsole().printStackTrace(exception);
             }
 
             Minecraft.getMinecraft().displayGuiScreen(this);
