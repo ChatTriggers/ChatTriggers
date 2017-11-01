@@ -14,13 +14,14 @@ public class Module {
     private ArrayList<String> lines;
 
     @Getter
-    private ModuleMetadata metadata = null;
+    private ModuleMetadata metadata;
 
 
     public Module(String name, String compiledScript, ArrayList<String> lines) {
         this.name = name;
         this.compiledScript = compiledScript;
         this.lines = lines;
+        this.metadata = new ModuleMetadata();
     }
 
     public Module(String name, String compiledScript, ArrayList<String> lines, ModuleMetadata metadata) {

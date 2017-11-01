@@ -2,6 +2,8 @@ package com.chattriggers.ctjs.imports.gui;
 
 import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.imports.ModuleMetadata;
+import com.chattriggers.ctjs.libs.ChatLib;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -54,11 +56,7 @@ public class ModulesGui extends GuiScreen {
 
         for (int i = 0; i < modules.size(); i++) {
             Module module = modules.get(i);
-            if (module.getMetadata() == null) {
-                drawModule(module, i);
-            } else {
-                drawModule(module, module.getMetadata(), i);
-            }
+            drawModule(module, module.getMetadata(), i);
         }
     }
 
@@ -97,10 +95,9 @@ public class ModulesGui extends GuiScreen {
             this.scrolled = this.maxScroll;
         if (this.scrolled < 0)
             this.scrolled = 0;
-
     }
 
-    private void drawModule(Module module, int i) {
+    private void drawModule(Module module, ModuleMetadata moduleMetadata, int i) {
         int x = 20;
         int y = getModuleY(i);
         int width = this.res.getScaledWidth() - 40;
@@ -110,57 +107,43 @@ public class ModulesGui extends GuiScreen {
         rectangle(x, y, width, height, 0x80000000);
 
         // name
+        String name = (moduleMetadata.getName() == null) ? module.getName() : moduleMetadata.getName();
         ren.drawStringWithShadow(
-                module.getName(),
+                ChatLib.addColor(name),
                 x + 2,
                 y + 2,
                 0xffffffff
         );
-        rectangle(
-                x + 2,
-                y+12,
-                width - 4,
-                2,
-                0xa0000000
-        );
 
-        // no metadata
-        ren.drawStringWithShadow(
-                "No metadata provided",
-                x + 2,
-                y + 20,
-                0xffffffff
-        );
-    }
+        // version
+        if (moduleMetadata.getVersion() != null) {
+            String version = ChatFormatting.GRAY  + "v" + moduleMetadata.getVersion();
+            ren.drawStringWithShadow(
+                    version,
+                    x + width - ren.getStringWidth(version) - 2,
+                    y + 2,
+                    0xffffffff
+            );
+        }
 
-    private void drawModule(Module module, ModuleMetadata moduleMetadata, int i) {
-        int x = 100;
-        int y = getModuleY(i);
-        int width = 200;
-        int height = 50;
-
-        // background
-        rectangle(x, y, width, height, 0x50000000);
-
-        // name
-        ren.drawStringWithShadow(
-                moduleMetadata.getName(),
-                x + 2,
-                y + 2,
-                0xffffffff
-        );
+        // line break
+        rectangle(x + 2, y+12, width - 4, 2, 0xa0000000);
 
         // description
-        ren.drawStringWithShadow(
-                moduleMetadata.getDescription(),
-                x + 2,
-                y + 10,
-                0xffffffff
-        );
+        String description = (moduleMetadata.getDescription() == null) ? "No description provided" : moduleMetadata.getDescription();
+        String[] descriptionLines = description.split("\n");
+        for (int j = 0; j < descriptionLines.length; j++) {
+            ren.drawStringWithShadow(
+                    ChatLib.addColor(descriptionLines[j]),
+                    x + 2,
+                    y + 20 + j * 10,
+                    0xffffffff
+            );
+        }
 
         // directory
         ren.drawStringWithShadow(
-                "/mods/ChatTriggers/modules/" + module.getName() + "/",
+                ChatFormatting.DARK_GRAY + "/mods/ChatTriggers/modules/" + module.getName() + "/",
                 x + 2,
                 y + height - 12,
                 0xffffffff

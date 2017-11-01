@@ -6,24 +6,28 @@ import java.util.ArrayList;
 
 public class ModuleMetadata {
     @Getter
-    private String name;
+    private String name = null;
     @Getter
-    private int version;
+    private String version = null;
     @Getter
-    private ArrayList<String> tags;
+    private ArrayList<String> tags = null;
     @Getter
-    private String pictureLink;
+    private String pictureLink = null;
     @Getter
-    private String creator;
+    private String creator = null;
     @Getter
-    private String description;
+    private String description = null;
 
-    public ModuleMetadata(String name, String creator, String description, int version, ArrayList<String> tags, String pictureLink) {
+    public ModuleMetadata(String name, String creator, String description, String version, ArrayList<String> tags, String pictureLink) {
         this.name = name;
         this.creator = creator;
         this.description = description;
         this.version = version;
         this.tags = tags;
         this.pictureLink = pictureLink;
+    }
+
+    public ModuleMetadata() {
+
     }
 }
