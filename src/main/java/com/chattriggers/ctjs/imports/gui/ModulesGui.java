@@ -14,13 +14,19 @@ import java.util.ArrayList;
 public class ModulesGui extends GuiScreen {
     private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
     private ArrayList<Module> modules;
+
     private int scrolled;
+    private int maxScroll;
 
     private ScaledResolution res;
 
     public ModulesGui(ArrayList<Module> modules) {
         this.modules = modules;
+
         this.scrolled = 0;
+
+        this.res = new ScaledResolution(Minecraft.getMinecraft());
+        this.maxScroll = this.modules.size() * 110 + 10 - this.res.getScaledHeight();
     }
 
     @Override
@@ -28,17 +34,23 @@ public class ModulesGui extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         this.res = new ScaledResolution(Minecraft.getMinecraft());
+        this.maxScroll = this.modules.size() * 110 + 10 - this.res.getScaledHeight();
 
         drawBackground(0);
 
         // draw scroll bar
-        rectangle(
-                this.res.getScaledWidth() - 5,
-                10 + scrolled / 5,
-                5,
-                50,
-                0xa0000000
-        );
+        int scrollHeight = res.getScaledHeight() - this.maxScroll;
+        if (scrollHeight < 20) scrollHeight = 20;
+        if (scrollHeight < res.getScaledHeight()) {
+            int scrollY = (int) map(this.scrolled, 0, this.maxScroll, 10, res.getScaledHeight() - scrollHeight - 10);
+            rectangle(
+                    this.res.getScaledWidth() - 5,
+                    scrollY,
+                    5,
+                    scrollHeight,
+                    0xa0000000
+            );
+        }
 
         for (int i = 0; i < modules.size(); i++) {
             Module module = modules.get(i);
@@ -47,8 +59,11 @@ public class ModulesGui extends GuiScreen {
             } else {
                 drawModule(module, module.getMetadata(), i);
             }
-
         }
+    }
+
+    private float map(float number, float in_min, float in_max, float out_min, float out_max) {
+        return (number - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     @Override
@@ -78,8 +93,8 @@ public class ModulesGui extends GuiScreen {
         else i *= 20;
 
         this.scrolled -= i;
-        if (this.scrolled > modules.size() * 110 + 10 - res.getScaledHeight())
-            this.scrolled = modules.size() * 110 + 10 - res.getScaledHeight();
+        if (this.scrolled > this.maxScroll)
+            this.scrolled = this.maxScroll;
         if (this.scrolled < 0)
             this.scrolled = 0;
 
