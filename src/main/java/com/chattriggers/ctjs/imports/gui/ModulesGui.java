@@ -12,6 +12,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ModulesGui extends GuiScreen {
     private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
@@ -101,7 +102,7 @@ public class ModulesGui extends GuiScreen {
         int x = 20;
         int y = getModuleY(i);
         int width = this.res.getScaledWidth() - 40;
-        int height = 100;
+        int height = 105;
 
         // background
         rectangle(x, y, width, height, 0x80000000);
@@ -131,10 +132,10 @@ public class ModulesGui extends GuiScreen {
 
         // description
         String description = (moduleMetadata.getDescription() == null) ? "No description provided" : moduleMetadata.getDescription();
-        String[] descriptionLines = description.split("\n");
-        for (int j = 0; j < descriptionLines.length; j++) {
+        ArrayList<String> descriptionLines = lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5);
+        for (int j = 0; j < descriptionLines.size(); j++) {
             ren.drawStringWithShadow(
-                    ChatLib.addColor(descriptionLines[j]),
+                    ChatLib.addColor(descriptionLines.get(j)),
                     x + 2,
                     y + 20 + j * 10,
                     0xffffffff
@@ -148,6 +149,48 @@ public class ModulesGui extends GuiScreen {
                 y + height - 12,
                 0xffffffff
         );
+    }
+
+    private ArrayList<String> lineWrap(ArrayList<String> lines, int width) {
+        int lineWrapIterator = 0;
+        Boolean lineWrapContinue = true;
+        Boolean addExtra = false;
+
+        while (lineWrapContinue) {
+            String line = lines.get(lineWrapIterator);
+            if (ren.getStringWidth(line) > width) {
+                String[] lineParts = line.split(" ");
+                StringBuilder lineBefore = new StringBuilder();
+                StringBuilder lineAfter = new StringBuilder();
+
+                Boolean fillBefore = true;
+                for (String linePart : lineParts) {
+                    if (fillBefore) {
+                        if (ren.getStringWidth(lineBefore.toString() + linePart) < width)
+                            lineBefore.append(linePart).append(" ");
+                        else
+                            fillBefore = false;
+                    }
+
+                    if (!fillBefore) {
+                        lineAfter.append(" ").append(linePart);
+                    }
+                }
+
+                lines.set(lineWrapIterator, lineBefore.toString());
+                if (lines.size() < 6) lines.add(lineWrapIterator+1, lineAfter.toString());
+                else addExtra = true;
+            }
+
+            lineWrapIterator++;
+            if (lineWrapIterator >= lines.size()) {
+                lineWrapContinue = false;
+            }
+        }
+
+        if (addExtra) lines.add("...");
+
+        return lines;
     }
 
     private int getModuleY(int i) {
