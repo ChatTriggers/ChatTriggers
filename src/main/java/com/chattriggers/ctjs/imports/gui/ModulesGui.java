@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.imports.gui;
 
 import com.chattriggers.ctjs.imports.Module;
-import com.chattriggers.ctjs.imports.ModuleMetadata;
 import com.chattriggers.ctjs.libs.ChatLib;
+import com.chattriggers.ctjs.libs.RenderLib;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 public class ModulesGui extends GuiScreen {
     private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
-    private ArrayList<Module> modules;
+    private ArrayList<GuiModule> modules = new ArrayList<>();
 
     private int scrolled;
     private int maxScroll;
@@ -24,7 +24,11 @@ public class ModulesGui extends GuiScreen {
     private ScaledResolution res;
 
     public ModulesGui(ArrayList<Module> modules) {
-        this.modules = modules;
+        int i = 0;
+        for (Module module : modules) {
+            this.modules.add(new GuiModule(module, i));
+            i++;
+        }
 
         this.scrolled = 0;
 
@@ -55,9 +59,8 @@ public class ModulesGui extends GuiScreen {
             );
         }
 
-        for (int i = 0; i < modules.size(); i++) {
-            Module module = modules.get(i);
-            drawModule(module, module.getMetadata(), i);
+        for (GuiModule module : this.modules) {
+            module.draw();
         }
     }
 
@@ -68,14 +71,6 @@ public class ModulesGui extends GuiScreen {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-
-        for (int i = 0; i < modules.size(); i++) {
-            Module module = modules.get(i);
-
-            if (isHovered(module, mouseX, mouseY, i)) {
-
-            }
-        }
     }
 
     @Override
@@ -98,109 +93,10 @@ public class ModulesGui extends GuiScreen {
             this.scrolled = 0;
     }
 
-    private void drawModule(Module module, ModuleMetadata moduleMetadata, int i) {
-        int x = 20;
-        int y = getModuleY(i);
-        int width = this.res.getScaledWidth() - 40;
-        int height = 105;
-
-        // background
-        rectangle(x, y, width, height, 0x80000000);
-
-        // name
-        String name = (moduleMetadata.getName() == null) ? module.getName() : moduleMetadata.getName();
-        ren.drawStringWithShadow(
-                ChatLib.addColor(name),
-                x + 2,
-                y + 2,
-                0xffffffff
-        );
-
-        // version
-        if (moduleMetadata.getVersion() != null) {
-            String version = ChatFormatting.GRAY  + "v" + moduleMetadata.getVersion();
-            ren.drawStringWithShadow(
-                    version,
-                    x + width - ren.getStringWidth(version) - 2,
-                    y + 2,
-                    0xffffffff
-            );
-        }
-
-        // line break
-        rectangle(x + 2, y+12, width - 4, 2, 0xa0000000);
-
-        // description
-        String description = (moduleMetadata.getDescription() == null) ? "No description provided" : moduleMetadata.getDescription();
-        ArrayList<String> descriptionLines = lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5);
-        for (int j = 0; j < descriptionLines.size(); j++) {
-            ren.drawStringWithShadow(
-                    ChatLib.addColor(descriptionLines.get(j)),
-                    x + 2,
-                    y + 20 + j * 10,
-                    0xffffffff
-            );
-        }
-
-        // directory
-        ren.drawStringWithShadow(
-                ChatFormatting.DARK_GRAY + "/mods/ChatTriggers/modules/" + module.getName() + "/",
-                x + 2,
-                y + height - 12,
-                0xffffffff
-        );
-    }
-
-    private ArrayList<String> lineWrap(ArrayList<String> lines, int width) {
-        int lineWrapIterator = 0;
-        Boolean lineWrapContinue = true;
-        Boolean addExtra = false;
-
-        while (lineWrapContinue) {
-            String line = lines.get(lineWrapIterator);
-            if (ren.getStringWidth(line) > width) {
-                String[] lineParts = line.split(" ");
-                StringBuilder lineBefore = new StringBuilder();
-                StringBuilder lineAfter = new StringBuilder();
-
-                Boolean fillBefore = true;
-                for (String linePart : lineParts) {
-                    if (fillBefore) {
-                        if (ren.getStringWidth(lineBefore.toString() + linePart) < width)
-                            lineBefore.append(linePart).append(" ");
-                        else
-                            fillBefore = false;
-                    }
-
-                    if (!fillBefore) {
-                        lineAfter.append(" ").append(linePart);
-                    }
-                }
-
-                lines.set(lineWrapIterator, lineBefore.toString());
-                if (lines.size() < 6) lines.add(lineWrapIterator+1, lineAfter.toString());
-                else addExtra = true;
-            }
-
-            lineWrapIterator++;
-            if (lineWrapIterator >= lines.size()) {
-                lineWrapContinue = false;
-            }
-        }
-
-        if (addExtra) lines.add("...");
-
-        return lines;
-    }
-
-    private int getModuleY(int i) {
-        return i * 110 + 10 - scrolled;
-    }
-
-    private Boolean isHovered(Module module, int mouseX, int mouseY, int i) {
+    /**private Boolean isHovered(Module module, int mouseX, int mouseY, int i) {
         return mouseX > 10 && mouseX < ren.getStringWidth(module.getName()) + 20
                 && mouseY > getModuleY(i) && mouseY < getModuleY(i) + 10;
-    }
+    }**/
 
     private void rectangle(int x, int y, int width, int height, int color) {
         drawRect(x, y, x+width, y+height, color);
@@ -212,5 +108,80 @@ public class ModulesGui extends GuiScreen {
 
     private void openModule(Module theModule) {
         Minecraft.getMinecraft().displayGuiScreen(new ModuleGui(theModule));
+    }
+
+    private class GuiModule {
+        private Module module;
+        private int i;
+
+        private GuiModule(Module module, int i) {
+            this.module = module;
+            this.i = i;
+        }
+
+        private int getY(int i) {
+            return i * 110 + 10 - scrolled;
+        }
+
+        private void draw() {
+            int x = 20;
+            int y = getY(i);
+            int width = res.getScaledWidth() - 40;
+            int height = 105;
+
+            // background
+           rectangle(x, y, width, height, 0x80000000);
+
+            // name
+            String name = (this.module.getMetadata().getName() == null) ? this.module.getName() : this.module.getMetadata().getName();
+            ren.drawStringWithShadow(
+                    ChatLib.addColor(name),
+                    x + 2,
+                    y + 2,
+                    0xffffffff
+            );
+
+            // version
+            if (this.module.getMetadata().getVersion() != null) {
+                String version = ChatFormatting.GRAY  + "v" + this.module.getMetadata().getVersion();
+                ren.drawStringWithShadow(
+                        version,
+                        x + width - ren.getStringWidth(version) - 2,
+                        y + 2,
+                        0xffffffff
+                );
+            }
+
+            // line break
+            rectangle(x + 2, y+12, width - 4, 2, 0xa0000000);
+
+            // description
+            String description = (this.module.getMetadata().getDescription() == null) ? "No description provided" : this.module.getMetadata().getDescription();
+            ArrayList<String> descriptionLines = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
+            for (int j = 0; j < descriptionLines.size(); j++) {
+                ren.drawStringWithShadow(
+                        ChatLib.addColor(descriptionLines.get(j)),
+                        x + 2,
+                        y + 20 + j * 10,
+                        0xffffffff
+                );
+            }
+
+            // directory
+            ren.drawStringWithShadow(
+                    ChatFormatting.DARK_GRAY + "/mods/ChatTriggers/modules/" + this.module.getName() + "/",
+                    x + 2,
+                    y + height - 12,
+                    0xffffffff
+            );
+
+            // show code
+            ren.drawStringWithShadow(
+                    ChatLib.addColor("show code >"),
+                    x + width - ren.getStringWidth("show code >") - 2,
+                    y + height - 12,
+                    0xffffffff
+            );
+        }
     }
 }

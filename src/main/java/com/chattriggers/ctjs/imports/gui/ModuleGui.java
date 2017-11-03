@@ -4,16 +4,16 @@ import com.chattriggers.ctjs.imports.Module;
 import net.minecraft.client.gui.GuiScreen;
 
 public class ModuleGui extends GuiScreen {
-    private Module theModule;
+    private Module module;
 
-    public ModuleGui(Module theModule) {
-        this.theModule = theModule;
+    public ModuleGui(Module module) {
+        this.module = module;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        theModule.getLines();
+        module.getLines();
     }
 }

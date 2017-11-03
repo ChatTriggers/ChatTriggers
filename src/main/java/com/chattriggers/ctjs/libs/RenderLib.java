@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 @UtilityClass
 @SideOnly(Side.CLIENT)
@@ -49,6 +50,55 @@ public class RenderLib {
      */
     public static int getStringWidth(String text) {
         return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
+    }
+
+    /**
+     * Returns a wrapped list of lines based on a max width
+     * @param lines the input list of lines
+     * @param width the max width of a line
+     * @param maxLines the max number of lines
+     * @return the wrapped line list
+     */
+    public static ArrayList<String> lineWrap(ArrayList<String> lines, int width, int maxLines) {
+        int lineWrapIterator = 0;
+        Boolean lineWrapContinue = true;
+        Boolean addExtra = false;
+
+        while (lineWrapContinue) {
+            String line = lines.get(lineWrapIterator);
+            if (Minecraft.getMinecraft().fontRendererObj.getStringWidth(line) > width) {
+                String[] lineParts = line.split(" ");
+                StringBuilder lineBefore = new StringBuilder();
+                StringBuilder lineAfter = new StringBuilder();
+
+                Boolean fillBefore = true;
+                for (String linePart : lineParts) {
+                    if (fillBefore) {
+                        if (Minecraft.getMinecraft().fontRendererObj.getStringWidth(lineBefore.toString() + linePart) < width)
+                            lineBefore.append(linePart).append(" ");
+                        else
+                            fillBefore = false;
+                    }
+
+                    if (!fillBefore) {
+                        lineAfter.append(" ").append(linePart);
+                    }
+                }
+
+                lines.set(lineWrapIterator, lineBefore.toString());
+                if (lines.size() < maxLines) lines.add(lineWrapIterator+1, lineAfter.toString());
+                else addExtra = true;
+            }
+
+            lineWrapIterator++;
+            if (lineWrapIterator >= lines.size()) {
+                lineWrapContinue = false;
+            }
+        }
+
+        if (addExtra) lines.add("...");
+
+        return lines;
     }
 
     /**
