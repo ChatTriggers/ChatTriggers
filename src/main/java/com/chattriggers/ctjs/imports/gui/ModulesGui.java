@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ModulesGui extends GuiScreen {
-    private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
     private ArrayList<GuiModule> modules = new ArrayList<>();
 
     private int scrolled;
     private int maxScroll;
 
     private ScaledResolution res;
+    private long sysTime;
 
     public ModulesGui(ArrayList<Module> modules) {
         int i = 0;
@@ -32,15 +32,24 @@ public class ModulesGui extends GuiScreen {
             i++;
         }
 
-        this.scrolled = 0;
-
         this.res = new ScaledResolution(Minecraft.getMinecraft());
+        this.sysTime = Minecraft.getSystemTime();
+
+        this.scrolled = 0;
         this.maxScroll = this.modules.size() * 110 + 10 - this.res.getScaledHeight();
+
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        while (Minecraft.getSystemTime() >= sysTime + 20L) {
+            sysTime += 20L;
+            for (GuiModule module : this.modules) {
+                module.tick();
+            }
+        }
 
         this.res = new ScaledResolution(Minecraft.getMinecraft());
         this.maxScroll = this.modules.size() * 110 + 10 - this.res.getScaledHeight();
@@ -63,6 +72,7 @@ public class ModulesGui extends GuiScreen {
 
         for (GuiModule module : this.modules) {
             module.draw();
+            module.checkHover(mouseX, mouseY);
         }
     }
 
@@ -73,6 +83,12 @@ public class ModulesGui extends GuiScreen {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseButton == 0) {
+            for (GuiModule module : modules) {
+                module.click();
+            }
+        }
     }
 
     @Override
@@ -99,22 +115,58 @@ public class ModulesGui extends GuiScreen {
         private Module module;
         private int i;
 
+        private boolean isHovered;
+        private String showCode;
+        private int showCodeLoc;
+
+        private int x;
+        private int y;
+
         private GuiModule(Module module, int i) {
             this.module = module;
             this.i = i;
-        }
 
-        private void open() {
-            Minecraft.getMinecraft().displayGuiScreen(new ModuleGui(this.module));
+            this.isHovered = false;
+            showCode = "show code >";
+            showCodeLoc = showCode.length();
+
+            this.x = 20;
+            this.y = getY(i);
         }
 
         private int getY(int i) {
             return i * 110 + 10 - scrolled;
         }
 
+        private void click() {
+            if (isHovered) {
+                Minecraft.getMinecraft().displayGuiScreen(new ModuleGui(module));
+            }
+        }
+
+        private void checkHover(int mouseX, int mouseY) {
+            int width = res.getScaledWidth() - 40;
+            int height = 105;
+
+            isHovered = (mouseX > x + width - RenderLib.getStringWidth("show code >") - 2
+                && mouseX < x + width - 2
+                && mouseY > y + height - 12
+                && mouseY < y + height - 2);
+        }
+
+        private void tick() {
+            if (isHovered) {
+                if (showCodeLoc > 0)
+                    showCodeLoc--;
+            } else {
+                if (showCodeLoc < showCode.length())
+                    showCodeLoc++;
+            }
+        }
+
         private void draw() {
-            int x = 20;
-            int y = getY(i);
+            x = 20;
+            y = getY(i);
             int width = res.getScaledWidth() - 40;
             int height = 105;
 
@@ -123,7 +175,7 @@ public class ModulesGui extends GuiScreen {
 
             // name
             String name = (this.module.getMetadata().getName() == null) ? this.module.getName() : this.module.getMetadata().getName();
-            ren.drawStringWithShadow(
+            RenderLib.drawStringWithShadow(
                     ChatLib.addColor(name),
                     x + 2,
                     y + 2,
@@ -133,9 +185,9 @@ public class ModulesGui extends GuiScreen {
             // version
             if (this.module.getMetadata().getVersion() != null) {
                 String version = ChatFormatting.GRAY  + "v" + this.module.getMetadata().getVersion();
-                ren.drawStringWithShadow(
+                RenderLib.drawStringWithShadow(
                         version,
-                        x + width - ren.getStringWidth(version) - 2,
+                        x + width - RenderLib.getStringWidth(version) - 2,
                         y + 2,
                         0xffffffff
                 );
@@ -148,7 +200,7 @@ public class ModulesGui extends GuiScreen {
             String description = (this.module.getMetadata().getDescription() == null) ? "No description provided" : this.module.getMetadata().getDescription();
             ArrayList<String> descriptionLines = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
             for (int j = 0; j < descriptionLines.size(); j++) {
-                ren.drawStringWithShadow(
+                RenderLib.drawStringWithShadow(
                         ChatLib.addColor(descriptionLines.get(j)),
                         x + 2,
                         y + 20 + j * 10,
@@ -157,7 +209,7 @@ public class ModulesGui extends GuiScreen {
             }
 
             // directory
-            ren.drawStringWithShadow(
+            RenderLib.drawStringWithShadow(
                     ChatFormatting.DARK_GRAY + "/mods/ChatTriggers/modules/" + this.module.getName() + "/",
                     x + 2,
                     y + height - 12,
@@ -165,9 +217,10 @@ public class ModulesGui extends GuiScreen {
             );
 
             // show code
-            ren.drawStringWithShadow(
-                    ChatLib.addColor("show code >"),
-                    x + width - ren.getStringWidth("show code >") - 2,
+            String finalShowCode = showCode.substring(0, showCodeLoc) + "&r" + showCode.substring(showCodeLoc);
+            RenderLib.drawStringWithShadow(
+                    ChatFormatting.DARK_GRAY + ChatLib.addColor(finalShowCode),
+                    x + width - RenderLib.getStringWidth("show code >") - 2,
                     y + height - 12,
                     0xffffffff
             );
