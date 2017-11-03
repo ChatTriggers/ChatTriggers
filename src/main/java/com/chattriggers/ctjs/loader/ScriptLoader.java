@@ -77,12 +77,8 @@ public abstract class ScriptLoader {
         if (!directory.isDirectory()) return null;
 
         List<File> filesToReturn = new ArrayList<>();
-        try {
-            for (File file : directory.listFiles()) {
-                if (file.isDirectory()) filesToReturn.add(file);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        for (File file : directory.listFiles()) {
+            if (file.isDirectory()) filesToReturn.add(file);
         }
 
         return filesToReturn;
