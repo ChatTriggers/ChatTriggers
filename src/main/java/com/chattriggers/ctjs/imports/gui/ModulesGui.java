@@ -8,6 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -50,12 +52,12 @@ public class ModulesGui extends GuiScreen {
         if (scrollHeight < 20) scrollHeight = 20;
         if (scrollHeight < res.getScaledHeight()) {
             int scrollY = (int) map(this.scrolled, 0, this.maxScroll, 10, res.getScaledHeight() - scrollHeight - 10);
-            rectangle(
+            RenderLib.drawRectangle(
+                    0xa0000000,
                     this.res.getScaledWidth() - 5,
                     scrollY,
                     5,
-                    scrollHeight,
-                    0xa0000000
+                    scrollHeight
             );
         }
 
@@ -93,23 +95,6 @@ public class ModulesGui extends GuiScreen {
             this.scrolled = 0;
     }
 
-    /**private Boolean isHovered(Module module, int mouseX, int mouseY, int i) {
-        return mouseX > 10 && mouseX < ren.getStringWidth(module.getName()) + 20
-                && mouseY > getModuleY(i) && mouseY < getModuleY(i) + 10;
-    }**/
-
-    private void rectangle(int x, int y, int width, int height, int color) {
-        drawRect(x, y, x+width, y+height, color);
-    }
-
-    private float easeOut(float from, float to ) {
-        return from + (to - from) / 5f;
-    }
-
-    private void openModule(Module theModule) {
-        Minecraft.getMinecraft().displayGuiScreen(new ModuleGui(theModule));
-    }
-
     private class GuiModule {
         private Module module;
         private int i;
@@ -117,6 +102,10 @@ public class ModulesGui extends GuiScreen {
         private GuiModule(Module module, int i) {
             this.module = module;
             this.i = i;
+        }
+
+        private void open() {
+            Minecraft.getMinecraft().displayGuiScreen(new ModuleGui(this.module));
         }
 
         private int getY(int i) {
@@ -130,7 +119,7 @@ public class ModulesGui extends GuiScreen {
             int height = 105;
 
             // background
-           rectangle(x, y, width, height, 0x80000000);
+           RenderLib.drawRectangle(0x80000000, x, y, width, height);
 
             // name
             String name = (this.module.getMetadata().getName() == null) ? this.module.getName() : this.module.getMetadata().getName();
@@ -153,7 +142,7 @@ public class ModulesGui extends GuiScreen {
             }
 
             // line break
-            rectangle(x + 2, y+12, width - 4, 2, 0xa0000000);
+            RenderLib.drawRectangle(0xa0000000, x + 2, y+12, width - 4, 2);
 
             // description
             String description = (this.module.getMetadata().getDescription() == null) ? "No description provided" : this.module.getMetadata().getDescription();
