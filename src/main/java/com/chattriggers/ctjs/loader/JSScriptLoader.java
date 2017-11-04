@@ -33,7 +33,7 @@ public class JSScriptLoader extends ScriptLoader {
             saveResource("/providedLibs.js", new File(modulesDir, "chattriggers-provided-libs.js"), true);
             scriptEngine.eval(getProvidedLibsScript());
         } catch (ScriptException e) {
-            e.printStackTrace();
+            Console.getConsole().printStackTrace(e);
         }
     }
 
