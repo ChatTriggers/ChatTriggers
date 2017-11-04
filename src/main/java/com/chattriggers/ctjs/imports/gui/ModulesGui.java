@@ -2,11 +2,11 @@ package com.chattriggers.ctjs.imports.gui;
 
 import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.libs.ChatLib;
+import com.chattriggers.ctjs.libs.MathLib;
 import com.chattriggers.ctjs.libs.RenderLib;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -19,9 +19,6 @@ public class ModulesGui extends GuiScreen {
     private int scrolled;
     private int maxScroll;
 
-    private ScaledResolution res;
-    private long sysTime;
-
     public ModulesGui(ArrayList<Module> modules) {
         int i = 0;
         for (Module module : modules) {
@@ -29,11 +26,8 @@ public class ModulesGui extends GuiScreen {
             i++;
         }
 
-        this.res = new ScaledResolution(Minecraft.getMinecraft());
-        this.sysTime = Minecraft.getSystemTime();
-
         this.scrolled = 0;
-        this.maxScroll = this.modules.size() * 110 + 10 - this.res.getScaledHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - RenderLib.getRenderHeight();
 
     }
 
@@ -41,26 +35,18 @@ public class ModulesGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        while (Minecraft.getSystemTime() >= sysTime + 20L) {
-            sysTime += 20L;
-            for (GuiModule module : this.modules) {
-                module.tick();
-            }
-        }
-
-        this.res = new ScaledResolution(Minecraft.getMinecraft());
-        this.maxScroll = this.modules.size() * 110 + 10 - this.res.getScaledHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - RenderLib.getRenderHeight();
 
         drawBackground(0);
 
         // draw scroll bar
-        int scrollHeight = res.getScaledHeight() - this.maxScroll;
+        int scrollHeight = RenderLib.getRenderHeight() - this.maxScroll;
         if (scrollHeight < 20) scrollHeight = 20;
-        if (scrollHeight < res.getScaledHeight()) {
-            int scrollY = (int) map(this.scrolled, 0, this.maxScroll, 10, res.getScaledHeight() - scrollHeight - 10);
+        if (scrollHeight < RenderLib.getRenderHeight()) {
+            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, RenderLib.getRenderHeight() - scrollHeight - 10);
             RenderLib.drawRectangle(
                     0xa0000000,
-                    this.res.getScaledWidth() - 5,
+                    RenderLib.getRenderWidth() - 5,
                     scrollY,
                     5,
                     scrollHeight
@@ -71,10 +57,6 @@ public class ModulesGui extends GuiScreen {
             module.draw();
             module.checkHover(mouseX, mouseY);
         }
-    }
-
-    private float map(float number, float in_min, float in_max, float out_min, float out_max) {
-        return (number - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     @Override
@@ -113,22 +95,24 @@ public class ModulesGui extends GuiScreen {
         private int i;
 
         private boolean isHovered;
-        private String showCode;
-        private int showCodeLoc;
 
         private int x;
         private int y;
+
+        private String name;
 
         private GuiModule(Module module, int i) {
             this.module = module;
             this.i = i;
 
             this.isHovered = false;
-            showCode = "show code >";
-            showCodeLoc = showCode.length();
 
             this.x = 20;
             this.y = getY(i);
+
+            name = ChatLib.addColor(this.module.getMetadata().getName() == null
+                    ? this.module.getName()
+                    : this.module.getMetadata().getName());
         }
 
         private int getY(int i) {
@@ -142,7 +126,7 @@ public class ModulesGui extends GuiScreen {
         }
 
         private void checkHover(int mouseX, int mouseY) {
-            int width = res.getScaledWidth() - 40;
+            int width = RenderLib.getRenderWidth() - 40;
             int height = 105;
 
             isHovered = (mouseX > x + width - RenderLib.getStringWidth("show code >") - 2
@@ -151,29 +135,18 @@ public class ModulesGui extends GuiScreen {
                 && mouseY < y + height - 2);
         }
 
-        private void tick() {
-            if (isHovered) {
-                if (showCodeLoc > 0)
-                    showCodeLoc--;
-            } else {
-                if (showCodeLoc < showCode.length())
-                    showCodeLoc++;
-            }
-        }
-
         private void draw() {
             x = 20;
             y = getY(i);
-            int width = res.getScaledWidth() - 40;
+            int width = RenderLib.getRenderWidth() - 40;
             int height = 105;
 
             // background
            RenderLib.drawRectangle(0x80000000, x, y, width, height);
 
             // name
-            String name = (this.module.getMetadata().getName() == null) ? this.module.getName() : this.module.getMetadata().getName();
             RenderLib.drawStringWithShadow(
-                    ChatLib.addColor(name),
+                    name,
                     x + 2,
                     y + 2,
                     0xffffffff
@@ -194,7 +167,9 @@ public class ModulesGui extends GuiScreen {
             RenderLib.drawRectangle(0xa0000000, x + 2, y+12, width - 4, 2);
 
             // description
-            String description = (this.module.getMetadata().getDescription() == null) ? "No description provided" : this.module.getMetadata().getDescription();
+            String description = (this.module.getMetadata().getDescription() == null)
+                    ? "No description provided"
+                    : this.module.getMetadata().getDescription();
             ArrayList<String> descriptionLines = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
             for (int j = 0; j < descriptionLines.size(); j++) {
                 RenderLib.drawStringWithShadow(
@@ -214,9 +189,9 @@ public class ModulesGui extends GuiScreen {
             );
 
             // show code
-            String finalShowCode = showCode.substring(0, showCodeLoc) + "&r" + showCode.substring(showCodeLoc);
+            String finalShowCode = isHovered ? "show code >" : "&8show code >";
             RenderLib.drawStringWithShadow(
-                    ChatFormatting.DARK_GRAY + ChatLib.addColor(finalShowCode),
+                    ChatLib.addColor(finalShowCode),
                     x + width - RenderLib.getStringWidth("show code >") - 2,
                     y + height - 12,
                     0xffffffff

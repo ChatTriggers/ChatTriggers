@@ -13,6 +13,7 @@ var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
 var WorldLib = Java.type("com.chattriggers.ctjs.libs.WorldLib");
 var RenderLib = Java.type("com.chattriggers.ctjs.libs.RenderLib");
 var FileLib = Java.type("com.chattriggers.ctjs.libs.FileLib");
+var MathLib = Java.type("com.chattriggers.ctjs.libs.MathLib");
 
 // Objects
 var Display = Java.type("com.chattriggers.ctjs.objects.Display");

@@ -18,6 +18,8 @@ import javax.script.ScriptException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class JSScriptLoader extends ScriptLoader {
     private ScriptEngine scriptEngine;
@@ -61,7 +63,7 @@ public class JSScriptLoader extends ScriptLoader {
                 Module module = new Module(
                     dir.getName(),
                     compileScripts(dir.listFiles()),
-                    getAllLines(dir.listFiles()),
+                    getAllFiles(dir.listFiles()),
                     metadata
                 );
 
@@ -144,20 +146,20 @@ public class JSScriptLoader extends ScriptLoader {
 
 
 
-    private ArrayList<String> getAllLines(File... files) {
-        ArrayList<String> stringList = new ArrayList<>();
+    private HashMap<String, List<String>> getAllFiles(File... files) {
+        HashMap<String, List<String>> allFiles = new HashMap<>();
 
         for (File file : files) {
             if (!file.getName().endsWith(".js")) continue;
 
             try {
-                stringList.addAll(FileUtils.readLines(file));
+                allFiles.put(file.getName(), FileUtils.readLines(file));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        return stringList;
+        return allFiles;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

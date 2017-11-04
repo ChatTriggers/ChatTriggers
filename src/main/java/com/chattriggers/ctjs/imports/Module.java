@@ -2,7 +2,8 @@ package com.chattriggers.ctjs.imports;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Module {
     @Getter
@@ -10,14 +11,14 @@ public class Module {
     @Getter
     private String compiledScript;
     @Getter
-    private ArrayList<String> lines;
+    private HashMap<String,List<String>> files;
     @Getter
     private ModuleMetadata metadata;
 
-    public Module(String name, String compiledScript, ArrayList<String> lines, ModuleMetadata metadata) {
+    public Module(String name, String compiledScript, HashMap<String, List<String>> files, ModuleMetadata metadata) {
         this.name = name;
         this.compiledScript = compiledScript;
-        this.lines = lines;
+        this.files = files;
         this.metadata = metadata == null ? new ModuleMetadata() : metadata;
     }
 }
