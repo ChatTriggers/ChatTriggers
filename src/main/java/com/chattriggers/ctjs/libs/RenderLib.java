@@ -53,7 +53,7 @@ public class RenderLib {
     }
 
     /**
-     * Returns a wrapped list of lines based on a max width
+     * Returns a wrapped list of lines based on a max width with a max number of lines.
      * @param lines the input list of lines
      * @param width the max width of a line
      * @param maxLines the max number of lines
@@ -64,9 +64,11 @@ public class RenderLib {
         Boolean lineWrapContinue = true;
         Boolean addExtra = false;
 
+        lines = new ArrayList<>(lines);
+
         while (lineWrapContinue) {
-            String line = lines.get(lineWrapIterator);
-            if (Minecraft.getMinecraft().fontRendererObj.getStringWidth(line) > width) {
+            String line = lines.get(lineWrapIterator).replace("\u0009", "     ");
+            if (line.contains(" ") && getStringWidth(line) > width) {
                 String[] lineParts = line.split(" ");
                 StringBuilder lineBefore = new StringBuilder();
                 StringBuilder lineAfter = new StringBuilder();
@@ -74,7 +76,7 @@ public class RenderLib {
                 Boolean fillBefore = true;
                 for (String linePart : lineParts) {
                     if (fillBefore) {
-                        if (Minecraft.getMinecraft().fontRendererObj.getStringWidth(lineBefore.toString() + linePart) < width)
+                        if (getStringWidth(lineBefore.toString() + linePart) < width)
                             lineBefore.append(linePart).append(" ");
                         else
                             fillBefore = false;
@@ -86,8 +88,13 @@ public class RenderLib {
                 }
 
                 lines.set(lineWrapIterator, lineBefore.toString());
-                if (lines.size() < maxLines) lines.add(lineWrapIterator+1, lineAfter.toString());
-                else addExtra = true;
+
+                if (lines.size() < maxLines) {
+                    lines.add(lineWrapIterator + 1, lineAfter.toString());
+                } else {
+                    addExtra = true;
+                    lineWrapContinue = false;
+                }
             }
 
             lineWrapIterator++;
