@@ -1,10 +1,12 @@
 package com.chattriggers.ctjs.imports.gui;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.libs.MathLib;
 import com.chattriggers.ctjs.libs.RenderLib;
 import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
@@ -25,12 +27,15 @@ public class ModuleGui extends GuiScreen {
     private String version;
     private ArrayList<String> description;
 
+    private boolean isHovered;
+
     ModuleGui(Module module) {
         this.module = module;
 
-        updateScaling();
+        updateScaling(0, 0);
 
         scrolled = 0;
+        isHovered = false;
 
         name = ChatLib.addColor(this.module.getMetadata().getName() == null
                 ? this.module.getName()
@@ -44,7 +49,7 @@ public class ModuleGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        updateScaling();
+        updateScaling(mouseX, mouseY);
 
         drawBackground(0);
 
@@ -100,6 +105,23 @@ public class ModuleGui extends GuiScreen {
             );
         }
 
+        // directory
+        RenderLib.drawStringWithShadow(
+                ChatFormatting.DARK_GRAY + "/mods/ChatTriggers/modules/" + this.module.getName() + "/",
+                22,
+                infoHeight - scrolled,
+                0xffffffff
+        );
+
+        // back
+        String finalShowCode = isHovered ? "< back" : "&8< back";
+        RenderLib.drawStringWithShadow(
+                ChatLib.addColor(finalShowCode),
+                20 + width - RenderLib.getStringWidth("< back") - 2,
+                infoHeight - scrolled,
+                0xffffffff
+        );
+
         // code
         RenderLib.drawRectangle(
                 0x80000000,
@@ -118,6 +140,42 @@ public class ModuleGui extends GuiScreen {
                     0xffffffff
             );
             i++;
+        }
+
+        // jump up
+        if (scrolled > infoHeight) {
+            RenderLib.drawRectangle(
+                    0x80000000,
+                    width + 20,
+                    height - 20,
+                    20,
+                    20
+            );
+            RenderLib.drawStringWithShadow(
+                    "^",
+                    width + 31 - RenderLib.getStringWidth("^")/2,
+                    height - 12,
+                    0xffffffff
+            );
+        }
+    }
+
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseButton == 0) {
+            if (isHovered)
+                Minecraft.getMinecraft().displayGuiScreen(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
+
+            if (scrolled > infoHeight) {
+                if (mouseX > width + 20
+                        && mouseX < width + 40
+                        && mouseY > height - 20
+                        && mouseY < height) {
+                    scrolled = 0;
+                }
+            }
         }
     }
 
@@ -141,7 +199,7 @@ public class ModuleGui extends GuiScreen {
             this.scrolled = 0;
     }
 
-    private void updateScaling() {
+    private void updateScaling(int mouseX, int mouseY) {
         width = RenderLib.getRenderWidth() - 40;
 
         String preDescription = module.getMetadata().getDescription() == null
@@ -149,8 +207,13 @@ public class ModuleGui extends GuiScreen {
                 : module.getMetadata().getDescription();
         description = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(preDescription.split("\n"))), width - 5, 100);
 
-        infoHeight = description.size()*10 + 20;
+        infoHeight = description.size()*10 + 35;
 
         maxScroll = this.module.getLines().size()*9 + infoHeight - RenderLib.getRenderHeight() + 30;
+
+        isHovered = (mouseX > 20 + width - RenderLib.getStringWidth("< back") - 2
+                && mouseX < 20 + width - 2
+                && mouseY > infoHeight - scrolled - 2
+                && mouseY < infoHeight - scrolled + 10);
     }
 }
