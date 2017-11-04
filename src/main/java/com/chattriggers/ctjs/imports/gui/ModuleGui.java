@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.libs.MathLib;
 import com.chattriggers.ctjs.libs.RenderLib;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
@@ -21,9 +22,10 @@ public class ModuleGui extends GuiScreen {
     private int maxScroll;
 
     private String name;
+    private String version;
     private ArrayList<String> description;
 
-    public ModuleGui(Module module) {
+    ModuleGui(Module module) {
         this.module = module;
 
         updateScaling();
@@ -33,6 +35,9 @@ public class ModuleGui extends GuiScreen {
         name = ChatLib.addColor(this.module.getMetadata().getName() == null
                 ? this.module.getName()
                 : this.module.getMetadata().getName());
+        version = this.module.getMetadata().getVersion() == null
+                ? ""
+                : "v" + this.module.getMetadata().getVersion();
     }
 
     @Override
@@ -57,27 +62,40 @@ public class ModuleGui extends GuiScreen {
             );
         }
 
-        // info
+        // info box
         RenderLib.drawRectangle(
                 0x80000000,
-                10,
+                20,
                 10 - scrolled,
                 width,
                 infoHeight
         );
 
+        // name
         RenderLib.drawStringWithShadow(
                 name,
-                12,
+                22,
                 12 - scrolled,
                 0xffffffff
         );
 
+        // version
+        RenderLib.drawStringWithShadow(
+                ChatFormatting.GRAY + version,
+                width - RenderLib.getStringWidth(version) +18,
+                12 - scrolled,
+                0xffffffff
+        );
+
+        // line break
+        RenderLib.drawRectangle(0xa0000000, 22, 22 - scrolled, width - 4, 2);
+
+        // description
         for (int i = 0; i < description.size(); i++) {
             RenderLib.drawStringWithShadow(
                     ChatLib.addColor(description.get(i)),
-                    12,
-                    25 + i * 9 - scrolled,
+                    22,
+                    30 + i * 10 - scrolled,
                     0xffffffff
             );
         }
@@ -85,7 +103,7 @@ public class ModuleGui extends GuiScreen {
         // code
         RenderLib.drawRectangle(
                 0x80000000,
-                10,
+                20,
                 infoHeight + 20 - scrolled,
                 width,
                 module.getLines().size() * 9
@@ -95,8 +113,8 @@ public class ModuleGui extends GuiScreen {
         for (String line : module.getLines()) {
             RenderLib.drawStringWithShadow(
                     line.replace("\u0009", "     "),
-                    10,
-                    i * 9 + infoHeight + 20 - scrolled,
+                    22,
+                    i * 9 + infoHeight + 22 - scrolled,
                     0xffffffff
             );
             i++;
@@ -124,14 +142,14 @@ public class ModuleGui extends GuiScreen {
     }
 
     private void updateScaling() {
-        width = RenderLib.getRenderWidth() - 20;
+        width = RenderLib.getRenderWidth() - 40;
 
         String preDescription = module.getMetadata().getDescription() == null
                 ? "No description provided"
                 : module.getMetadata().getDescription();
         description = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(preDescription.split("\n"))), width - 5, 100);
 
-        infoHeight = description.size()*9 + 20;
+        infoHeight = description.size()*10 + 20;
 
         maxScroll = this.module.getLines().size()*9 + infoHeight - RenderLib.getRenderHeight() + 30;
     }

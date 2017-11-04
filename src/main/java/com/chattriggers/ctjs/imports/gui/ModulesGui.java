@@ -167,7 +167,9 @@ public class ModulesGui extends GuiScreen {
             RenderLib.drawRectangle(0xa0000000, x + 2, y+12, width - 4, 2);
 
             // description
-            String description = (this.module.getMetadata().getDescription() == null) ? "No description provided" : this.module.getMetadata().getDescription();
+            String description = (this.module.getMetadata().getDescription() == null)
+                    ? "No description provided"
+                    : this.module.getMetadata().getDescription();
             ArrayList<String> descriptionLines = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
             for (int j = 0; j < descriptionLines.size(); j++) {
                 RenderLib.drawStringWithShadow(
