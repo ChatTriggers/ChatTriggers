@@ -13,6 +13,8 @@ import org.lwjgl.input.Mouse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ModuleGui extends GuiScreen {
     private Module module;
@@ -32,7 +34,7 @@ public class ModuleGui extends GuiScreen {
     ModuleGui(Module module) {
         this.module = module;
 
-        updateScaling(0, 0);
+        updateScaling(0, 0, 0);
 
         scrolled = 0;
         isHovered = false;
@@ -48,8 +50,6 @@ public class ModuleGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-
-        updateScaling(mouseX, mouseY);
 
         drawBackground(0);
 
@@ -123,23 +123,35 @@ public class ModuleGui extends GuiScreen {
         );
 
         // code
-        RenderLib.drawRectangle(
-                0x80000000,
-                20,
-                infoHeight + 20 - scrolled,
-                width,
-                module.getLines().size() * 9
-        );
+        int fileOffset = 20;
+        for (Map.Entry<String, List<String>> file : module.getFiles().entrySet()) {
+            RenderLib.drawRectangle(
+                    0x80000000,
+                    20,
+                    infoHeight + fileOffset - scrolled,
+                    width,
+                    file.getValue().size() * 9 + 12
+            );
 
-        int i = 0;
-        for (String line : module.getLines()) {
             RenderLib.drawStringWithShadow(
-                    line.replace("\u0009", "     "),
+                    ChatFormatting.DARK_GRAY + file.getKey(),
                     22,
-                    i * 9 + infoHeight + 22 - scrolled,
+                    infoHeight + fileOffset - scrolled + 2,
                     0xffffffff
             );
-            i++;
+
+            int i = 0;
+            for (String line : file.getValue()) {
+                RenderLib.drawStringWithShadow(
+                        line.replace("\u0009", "     "),
+                        22,
+                        i * 9 + infoHeight + fileOffset - scrolled + 12,
+                        0xffffffff
+                );
+                i++;
+            }
+
+            fileOffset += file.getValue().size() * 9 + 30;
         }
 
         // jump up
@@ -158,6 +170,8 @@ public class ModuleGui extends GuiScreen {
                     0xffffffff
             );
         }
+
+        updateScaling(mouseX, mouseY, fileOffset);
     }
 
     @Override
@@ -199,7 +213,7 @@ public class ModuleGui extends GuiScreen {
             this.scrolled = 0;
     }
 
-    private void updateScaling(int mouseX, int mouseY) {
+    private void updateScaling(int mouseX, int mouseY, int fileOffset) {
         width = RenderLib.getRenderWidth() - 40;
 
         String preDescription = module.getMetadata().getDescription() == null
@@ -209,7 +223,7 @@ public class ModuleGui extends GuiScreen {
 
         infoHeight = description.size()*10 + 35;
 
-        maxScroll = this.module.getLines().size()*9 + infoHeight - RenderLib.getRenderHeight() + 30;
+        maxScroll = fileOffset + infoHeight - RenderLib.getRenderHeight();
 
         isHovered = (mouseX > 20 + width - RenderLib.getStringWidth("< back") - 2
                 && mouseX < 20 + width - 2
