@@ -65,10 +65,10 @@ public class JSScriptLoader extends ScriptLoader {
                     metadata
                 );
 
-                modules.add(module);
                 getScriptEngine().eval(module.getCompiledScript());
+                modules.add(module);
             } catch (IOException | ScriptException e) {
-                e.printStackTrace();
+                Console.getConsole().printStackTrace(e);
             }
         }
 

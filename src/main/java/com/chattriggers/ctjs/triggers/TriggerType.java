@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.triggers;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public enum TriggerType {
     }
 
     public void triggerAll(Object... args) {
+        if (CTJS.getInstance().getModuleManager().isLoading()) return;
+
         ArrayList<OnTrigger> triggersCopy = new ArrayList<>(triggers.size());
 
         while (!triggers.isEmpty()){

@@ -189,7 +189,7 @@ public class ChatLib {
             }
         }
 
-        return stringBuilder.deleteCharAt(left ? 0 : stringBuilder.length() - 1).toString().replaceAll(removeFormatting(input), input);
+        return stringBuilder.deleteCharAt(left ? 0 : stringBuilder.length() - 1).toString().replace(removeFormatting(input), input);
     }
 
     /**

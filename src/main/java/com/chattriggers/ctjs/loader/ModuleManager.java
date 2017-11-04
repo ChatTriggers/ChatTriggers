@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.objects.KeyBind;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.capes.DLCape;
+import lombok.Getter;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.script.ScriptException;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 
 public class ModuleManager {
     private ArrayList<ScriptLoader> scriptLoaders;
+    @Getter
+    private boolean isLoading;
 
     public ModuleManager() {
         this.scriptLoaders = new ArrayList<>();
@@ -20,6 +23,7 @@ public class ModuleManager {
     }
 
     public void load() {
+        this.isLoading = true;
         scriptLoaders.add(new JSScriptLoader());
 
         for (ScriptLoader sl : scriptLoaders) {
@@ -36,6 +40,7 @@ public class ModuleManager {
 
 
         System.gc();
+        this.isLoading = false;
     }
 
     public void unload() {
