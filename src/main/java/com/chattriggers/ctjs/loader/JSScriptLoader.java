@@ -29,7 +29,7 @@ public class JSScriptLoader extends ScriptLoader {
     public void preLoad() {
         super.preLoad();
 
-        this.scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
+        this.scriptEngine = new ScriptEngineManager(null).getEngineByName("nashorn");
 
         try {
             saveResource("/providedLibs.js", new File(modulesDir, "chattriggers-provided-libs.js"), true);
