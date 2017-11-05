@@ -22,17 +22,12 @@
 hs_err_pid*
 
 .idea/
-ct.js.iml
 build/
 .gradle/
 out/
-ct.js.ipr
-ct.js.iws
-jsCT_api.iml
-jsCT_main.iml
-jsCT_test.iml
 run/
 eclipse
 *.hprof
-jsCT.iml
-ct.jsforked.iml
+*.iml
+*.ipr
+*.iws
