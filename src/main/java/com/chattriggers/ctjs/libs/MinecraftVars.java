@@ -418,22 +418,47 @@ public class MinecraftVars {
         return effects.toArray(new String[effects.size()]);
     }
 
+    /**
+     * Gets the player's minecraft version.
+     * In an import, accessible via the {@code mcVersion} variable.
+     * @return The player's minecraft version.
+     */
     public static String getMinecraftVersion() {
         return Minecraft.getMinecraft().getVersion();
     }
 
+    /**
+     * Gets the player's max memory.
+     * In an import, accessible via the {@code maxMem} variable.
+     * @return The player's max memory.
+     */
     public static long getMaxMemory() {
         return Runtime.getRuntime().maxMemory();
     }
 
+    /**
+     * Gets the player's total memory.
+     * In an import, accessible via the {@code totalMem} variable.
+     * @return The player's total memory.
+     */
     public static long getTotalMemory() {
         return Runtime.getRuntime().totalMemory();
     }
 
+    /**
+     * Gets the player's free memory.
+     * In an import, accessible via the {@code freeMem} variable.
+     * @return The player's free memory.
+     */
     public static long getFreeMemory() {
         return Runtime.getRuntime().freeMemory();
     }
 
+    /**
+     * Gets the player's memory usage.
+     * In an import, accessible via the {@code memUsage} variable.
+     * @return The player's memory usage.
+     */
     public static int getMemoryUsage() {
         return Math.round((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory());
     }
