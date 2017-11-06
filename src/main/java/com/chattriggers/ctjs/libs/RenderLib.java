@@ -101,6 +101,13 @@ public class RenderLib {
             if (lineWrapIterator >= lines.size()) {
                 lineWrapContinue = false;
             }
+            if (lines.size() > maxLines) {
+                addExtra = true;
+                while (lines.size() > maxLines) {
+                    lines.remove(lines.size()-1);
+                }
+                break;
+            }
         }
 
         if (addExtra) lines.add("...");
