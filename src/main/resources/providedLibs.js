@@ -124,6 +124,11 @@ function updateProvidedLibsWorld() {
     server = MinecraftVars.getServerName();
 }
 
+// simplified methods
 function print(toPrint) {
     Console.getConsole().out.println(toPrint);
+}
+
+function cancel(event) {
+    event.setCanceled(true);
 }

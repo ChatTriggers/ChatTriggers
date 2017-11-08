@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ScriptLoader {
-    protected File modulesDir = new File("./mods/ChatTriggers/Imports/");
+    protected File modulesDir = new File("./mods/ChatTriggers/modules/");
 
     public void preLoad() {
         loadAssets();
@@ -86,6 +86,8 @@ public abstract class ScriptLoader {
 
     private void loadAssets() {
         File toCopyDir = CTJS.getInstance().getAssetsDir();
+
+        if (!modulesDir.exists()) modulesDir.mkdir();
 
         for (File importDir : getFoldersInDirectory(modulesDir)) {
             File assetsFolder = new File(importDir, "assets");
