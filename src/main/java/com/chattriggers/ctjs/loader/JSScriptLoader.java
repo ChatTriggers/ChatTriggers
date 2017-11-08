@@ -32,7 +32,7 @@ public class JSScriptLoader extends ScriptLoader {
         this.scriptEngine = new ScriptEngineManager(null).getEngineByName("nashorn");
 
         try {
-            saveResource("/providedLibs.js", new File(modulesDir, "chattriggers-provided-libs.js"), true);
+            saveResource("/providedLibs.js", new File(modulesDir.getParentFile(), "chattriggers-provided-libs.js"), true);
             scriptEngine.eval(getProvidedLibsScript());
         } catch (ScriptException e) {
             Console.getConsole().printStackTrace(e);
@@ -108,7 +108,7 @@ public class JSScriptLoader extends ScriptLoader {
      */
     public String getProvidedLibsScript() {
         try {
-            return compileScripts(new File(this.modulesDir, "chattriggers-provided-libs.js"));
+            return compileScripts(new File(this.modulesDir.getParentFile(), "chattriggers-provided-libs.js"));
         } catch (IOException e) {
             Console.getConsole().printStackTrace(e);
             return null;
