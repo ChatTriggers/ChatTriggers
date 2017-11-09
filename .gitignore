@@ -31,3 +31,5 @@ eclipse
 *.iml
 *.ipr
 *.iws
+mcmod.info
+classes/production/

@@ -7,6 +7,8 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -462,4 +464,32 @@ public class MinecraftVars {
     public static int getMemoryUsage() {
         return Math.round((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory());
     }
+    public static String[] getScoreboardObjectives() {
+        if(mc.theWorld == null) return null;
+        ArrayList<ScoreObjective> objectives = new ArrayList<>(mc.theWorld.getScoreboard().getScoreObjectives());
+        ArrayList<String> objStrings = new ArrayList<String>();
+        for(ScoreObjective o : objectives){
+            objStrings.add(o.getDisplayName());
+        }
+
+        return objStrings.toArray(new String[objStrings.size()]);
+    }
+
+    public static Integer[] getObjectiveScores() {
+        if(mc.theWorld == null) return null;
+        ArrayList<Score> objScores = new ArrayList<>(mc.theWorld.getScoreboard().getScores());
+        ArrayList<Integer> objInts = new ArrayList<>();
+        for(Score o : objScores){
+            objInts.add(o.getScorePoints());
+        }
+
+        return objInts.toArray(new Integer[objInts.size()]);
+    }
+
+    public static String[] getObjectiveNames() {
+        if(mc.theWorld == null) return null;
+        ArrayList<String> objNames = new ArrayList<>(mc.theWorld.getScoreboard().getObjectiveNames());
+        return objNames.toArray(new String[objNames.size()]);
+    }
+
 }

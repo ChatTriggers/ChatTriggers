@@ -71,6 +71,9 @@ var maxMem = MinecraftVars.getMaxMemory();
 var totalMem = MinecraftVars.getTotalMemory();
 var freeMem = MinecraftVars.getFreeMemory();
 var memUsage = MinecraftVars.getMemoryUsage();
+var objectives = MinecraftVars.getScoreboardObjectives();
+var objectiveScores = MinecraftVars.getObjectiveScores();
+var objectiveNames = MinecraftVars.getObjectiveNames();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -114,6 +117,9 @@ function updateProvidedLibsTick() {
     totalMem = MinecraftVars.getTotalMemory();
     freeMem = MinecraftVars.getFreeMemory();
     memUsage = MinecraftVars.getMemoryUsage();
+    objectives = MinecraftVars.getScoreboardObjectives();
+    objectiveScores = MinecraftVars.getObjectiveScores();
+    objectiveNames = MinecraftVars.getObjectiveNames();
 
     LookingAt.update();
 }
