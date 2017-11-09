@@ -464,15 +464,10 @@ public class MinecraftVars {
     public static int getMemoryUsage() {
         return Math.round((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory());
     }
-    public static String[] getScoreboardObjectives() {
+    public static ScoreObjective[] getScoreboardObjectives() {
         if(mc.theWorld == null) return null;
         ArrayList<ScoreObjective> objectives = new ArrayList<>(mc.theWorld.getScoreboard().getScoreObjectives());
-        ArrayList<String> objStrings = new ArrayList<String>();
-        for(ScoreObjective o : objectives){
-            objStrings.add(o.getDisplayName());
-        }
-
-        return objStrings.toArray(new String[objStrings.size()]);
+        return objectives.toArray(new ScoreObjective[objectives.size()]);
     }
 
     public static Integer[] getObjectiveScores() {
