@@ -8,17 +8,27 @@ import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
+
 @Getter
 public class ChatListener {
+    @Getter
+    private ArrayList<String> chatHistory = new ArrayList<>();
+
     @SubscribeEvent
     public void onReceiveChat(ClientChatReceivedEvent event) {
         if (event.type == 0 || event.type == 1) {
-            //Normal Chat Message
-            TriggerType.CHAT.triggerAll(event.message.getUnformattedText(), event);
+            // normal Chat Message
+            TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event);
 
+            // print to console
             if (CTJS.getInstance().getConfig().getPrintChatToConsole()) {
-                Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(event.message.getFormattedText()));
+                Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
             }
+
+            // save to chatHistory
+            chatHistory.add(ChatLib.getChatMessage(event, true));
+            if (chatHistory.size() > 1000) chatHistory.remove(0);
         }
     }
 }

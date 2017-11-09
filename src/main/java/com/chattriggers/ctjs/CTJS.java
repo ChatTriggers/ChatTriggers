@@ -104,7 +104,7 @@ public class CTJS {
     private void registerListeners() {
         MinecraftForge.EVENT_BUS.register(this.displayHandler);
         MinecraftForge.EVENT_BUS.register(new WorldListener());
-        MinecraftForge.EVENT_BUS.register(new ChatListener());
+        MinecraftForge.EVENT_BUS.register(this.chatListener);
         MinecraftForge.EVENT_BUS.register(this.config);
     }
 
