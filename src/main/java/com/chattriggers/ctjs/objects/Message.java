@@ -1,8 +1,7 @@
-package com.chattriggers.ctjs.utils;
+package com.chattriggers.ctjs.objects;
 
 import com.chattriggers.ctjs.libs.ChatLib;
 import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.util.*;
 
 import java.util.ArrayList;
