@@ -30,6 +30,7 @@ var Inventory = Java.type("com.chattriggers.ctjs.objects.Inventory");
 
 /*Built in Vars */
 var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
+var ScoreboardReader = Java.type("com.chattriggers.ctjs.libs.ScoreboardReader");
 
 // Constant
 var playerName = MinecraftVars.getPlayerName();
