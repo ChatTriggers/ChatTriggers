@@ -120,12 +120,16 @@ public class CTCommand extends CommandBase {
     private void simulateChat(String[] args) {
         StringBuilder toSend = new StringBuilder();
 
-        for (String arg : args) toSend.append(arg).append(" ");
+        for (String arg : args) {
+            if (!arg.equals(args[0])) toSend.append(arg).append(" ");
+        }
 
         ClientChatReceivedEvent event = new ClientChatReceivedEvent((byte) 0, new ChatComponentText(toSend.toString().trim()));
         CTJS.getInstance().getChatListener().onReceiveChat(event);
 
-        if (!event.isCanceled()) ChatLib.chat(event.message.getFormattedText());
+        if (!event.isCanceled()) {
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(ChatLib.addColor(toSend.toString().trim())));
+        }
     }
 
     private final int idFixed = 90123;
@@ -135,20 +139,21 @@ public class CTCommand extends CommandBase {
         ArrayList<String> messages = CTJS.getInstance().getChatListener().getChatHistory();
 
         if (lines > messages.size()) lines = messages.size();
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"));
+        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed - 1);
+        String msg;
         for (int i = 0; i < lines; i++) {
-            ChatLib.chat(
-                    new Message(
-                            ChatLib.clickable(
-                                    messages.get(i),
-                                    "run_command",
-                                    "/ct copy " + messages.get(i),
-                                    "&eClick to copy text"
-                            )
-                    ).setChatLineId(idFixed + i)
-            );
+            msg = ChatLib.replaceFormatting(messages.get(i));
+            ChatComponentText cct = new ChatComponentText(msg);
+
+            cct.setChatStyle(new ChatStyle()
+                    .setChatClickEvent(
+                            new ClickEvent(ClickEvent.Action.getValueByCanonicalName("run_command"), "/ct copy " + msg))
+                    .setChatHoverEvent(
+                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message."))));
+
+            ChatLib.chat(new Message(cct).setChatLineId(idFixed + i));
         }
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"));
+        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + lines);
 
         idFixedOffset = idFixed + lines;
     }
@@ -167,7 +172,7 @@ public class CTCommand extends CommandBase {
     private void clearOldDump() {
         if (idFixedOffset == null) return;
 
-        while (idFixedOffset >= idFixed) {
+        while (idFixedOffset >= idFixed - 1) {
             ChatLib.clearChat(idFixedOffset);
             idFixedOffset--;
         }

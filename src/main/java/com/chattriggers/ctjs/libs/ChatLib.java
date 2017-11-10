@@ -39,6 +39,7 @@ public class ChatLib {
             Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(cct, (byte) 0));
         } else {
             Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
+            CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
         }
     }
 
