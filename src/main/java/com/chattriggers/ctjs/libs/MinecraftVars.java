@@ -483,8 +483,18 @@ public class MinecraftVars {
 
     public static String[] getObjectiveNames() {
         if(mc.theWorld == null) return null;
-        ArrayList<String> objNames = new ArrayList<>(mc.theWorld.getScoreboard().getObjectiveNames());
+        ArrayList<ScoreObjective> objectives = new ArrayList<>(mc.theWorld.getScoreboard().getScoreObjectives());
+        ArrayList<String> objNames= new ArrayList<>();
+        for(ScoreObjective o : objectives){
+            objNames.add(o.getDisplayName());
+        }
         return objNames.toArray(new String[objNames.size()]);
+    }
+
+    public static String[] getTeamNames() {
+        if(mc.theWorld == null) return null;
+        ArrayList<String> names = new ArrayList<>(mc.theWorld.getScoreboard().getTeamNames());
+        return names.toArray(new String[names.size()]);
     }
 
 }

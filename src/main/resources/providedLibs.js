@@ -74,6 +74,7 @@ var memUsage = MinecraftVars.getMemoryUsage();
 var objectives = MinecraftVars.getScoreboardObjectives();
 var objectiveScores = MinecraftVars.getObjectiveScores();
 var objectiveNames = MinecraftVars.getObjectiveNames();
+var teamNames = MinecraftVars.getTeamNames();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -120,6 +121,7 @@ function updateProvidedLibsTick() {
     objectives = MinecraftVars.getScoreboardObjectives();
     objectiveScores = MinecraftVars.getObjectiveScores();
     objectiveNames = MinecraftVars.getObjectiveNames();
+    teamNames = MinecraftVars.getTeamNames();
 
     LookingAt.update();
 }
