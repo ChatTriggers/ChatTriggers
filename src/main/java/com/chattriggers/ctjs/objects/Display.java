@@ -81,8 +81,8 @@ public class Display {
     /**
      * Sets a display's background type.
      * Background types are: FULL, PER_LINE
-     * @param background
-     * @return
+     * @param background the type of background
+     * @return the display to allow for method chaining
      */
     public Display setBackground(String background) {
         switch (background.toUpperCase()) {
