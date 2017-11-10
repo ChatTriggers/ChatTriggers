@@ -31,4 +31,8 @@ public class ChatListener {
             if (chatHistory.size() > 1000) chatHistory.remove(0);
         }
     }
+
+    public void addMessageToChatHistory(String msg) {
+        chatHistory.add(msg);
+    }
 }
