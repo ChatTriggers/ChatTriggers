@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
+import com.chattriggers.ctjs.handlers.GuiHandler;
 import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.listeners.ChatListener;
 import com.chattriggers.ctjs.listeners.WorldListener;
@@ -41,6 +42,8 @@ public class CTJS {
     @Getter @Setter
     private DisplayHandler displayHandler;
     @Getter
+    private GuiHandler guiHandler;
+    @Getter
     private ChatListener chatListener;
     @Getter
     private ImagesPack imagesPack;
@@ -58,6 +61,7 @@ public class CTJS {
         instance = this;
 
         this.displayHandler = new DisplayHandler();
+        this.guiHandler = new GuiHandler();
         this.chatListener = new ChatListener();
         this.console = new Console();
         this.moduleManager = new ModuleManager();
@@ -103,6 +107,7 @@ public class CTJS {
 
     private void registerListeners() {
         MinecraftForge.EVENT_BUS.register(this.displayHandler);
+        MinecraftForge.EVENT_BUS.register(this.guiHandler);
         MinecraftForge.EVENT_BUS.register(new WorldListener());
         MinecraftForge.EVENT_BUS.register(this.chatListener);
         MinecraftForge.EVENT_BUS.register(this.config);

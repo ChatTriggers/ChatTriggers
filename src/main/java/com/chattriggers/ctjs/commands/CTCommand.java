@@ -78,17 +78,9 @@ public class CTCommand extends CommandBase {
                     Console.clear();
                     break;
                 case("gui"):
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException exception) {
-                            Console.getConsole().printStackTrace(exception);
-                        }
-
-                        Minecraft.getMinecraft().displayGuiScreen(
-                                new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
-                        );
-                    }).start();
+                    CTJS.getInstance().getGuiHandler().openGui(
+                            new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
+                    );
                     break;
                 case("simulate"):
                     simulateChat(args);

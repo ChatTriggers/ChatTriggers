@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.imports.gui;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.libs.MathLib;
@@ -121,7 +122,7 @@ public class ModulesGui extends GuiScreen {
 
         private void click() {
             if (isHovered) {
-                Minecraft.getMinecraft().displayGuiScreen(new ModuleGui(module));
+                CTJS.getInstance().getGuiHandler().openGui(new ModuleGui(module));
             }
         }
 
