@@ -86,6 +86,28 @@ public class TriggerRegister {
     }
 
     /**
+     * Registers a new game load trigger.<br>
+     * Available modifications:<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerGameLoad(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.GAME_LOAD);
+    }
+
+    /**
+     * Registers a new game unload trigger.<br>
+     * Available modifications:<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerGameUnload(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.GAME_UNLOAD);
+    }
+
+    /**
      * Register a new method that receives a command input
      * @param methodName the name of the method to callback when the event is fired
      * @param commandName the name of the command
