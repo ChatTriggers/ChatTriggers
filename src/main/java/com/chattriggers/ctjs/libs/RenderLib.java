@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class RenderLib {
 
     public static final int WHITE = color(255, 255, 255, 255);
-    public static final int BLACK = color(255, 255, 255, 255);
+    public static final int BLACK = color(0, 0, 0, 255);
     public static final int GRAY = color(192, 192, 192, 255);
     public static final int LIGHT_GRAY = color(128, 128, 128, 255);
     public static final int DARK_GRAY = color(64, 64, 64, 255);
