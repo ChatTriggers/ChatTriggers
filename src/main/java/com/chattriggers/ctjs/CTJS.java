@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.listeners.ChatListener;
 import com.chattriggers.ctjs.listeners.WorldListener;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.handlers.DisplayHandler;
+import com.chattriggers.ctjs.objects.CPS;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.capes.LayerCape;
 import com.chattriggers.ctjs.utils.config.Config;
@@ -55,6 +56,8 @@ public class CTJS {
     private Config config;
     @Getter
     private ModuleManager moduleManager;
+    @Getter
+    private CPS cps;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
@@ -65,6 +68,7 @@ public class CTJS {
         this.chatListener = new ChatListener();
         this.console = new Console();
         this.moduleManager = new ModuleManager();
+        this.cps = new CPS();
 
         registerListeners();
 
@@ -111,6 +115,7 @@ public class CTJS {
         MinecraftForge.EVENT_BUS.register(new WorldListener());
         MinecraftForge.EVENT_BUS.register(this.chatListener);
         MinecraftForge.EVENT_BUS.register(this.config);
+        MinecraftForge.EVENT_BUS.register(this.cps);
     }
 
     private void registerHooks() {

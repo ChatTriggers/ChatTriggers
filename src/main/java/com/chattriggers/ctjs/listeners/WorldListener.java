@@ -2,9 +2,11 @@ package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.gui.ModulesGui;
+import com.chattriggers.ctjs.objects.CPS;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -45,6 +47,8 @@ public class WorldListener {
             // step trigger
             TriggerType.STEP.triggerAll();
         }
+
+        CTJS.getInstance().getCps().clickCalc();
     }
 
     @SubscribeEvent
@@ -70,5 +74,11 @@ public class WorldListener {
         if (guiKeyBind.isPressed()) {
             CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
         }
+    }
+
+    @SubscribeEvent
+    public void onMouseEvent(MouseEvent event) {
+        if (event.button == 0 && event.buttonstate) CTJS.getInstance().getCps().addLeftClicks();
+        if (event.button == 1 && event.buttonstate) CTJS.getInstance().getCps().addRightClicks();
     }
 }
