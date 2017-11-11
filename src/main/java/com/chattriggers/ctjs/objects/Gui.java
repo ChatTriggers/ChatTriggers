@@ -67,9 +67,9 @@ public class Gui extends GuiScreen {
 
                 try {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, partialTicks);
-                } catch (ScriptException | NoSuchMethodException e) {
+                } catch (ScriptException | NoSuchMethodException exception) {
                     onDraw = null;
-                    e.printStackTrace();
+                    Console.getConsole().printStackTrace(exception);
                 }
             }
         };
@@ -97,9 +97,9 @@ public class Gui extends GuiScreen {
 
                 try {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, button);
-                } catch (ScriptException | NoSuchMethodException e) {
+                } catch (ScriptException | NoSuchMethodException exception) {
                     onClick = null;
-                    e.printStackTrace();
+                    Console.getConsole().printStackTrace(exception);
                 }
             }
         };
@@ -125,9 +125,9 @@ public class Gui extends GuiScreen {
 
                 try {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, typedChar, keyCode);
-                } catch (ScriptException | NoSuchMethodException e) {
-                    Console.getConsole().printStackTrace(e);
+                } catch (ScriptException | NoSuchMethodException exception) {
                     onKeyTyped = null;
+                    Console.getConsole().printStackTrace(exception);
                 }
             }
         };
