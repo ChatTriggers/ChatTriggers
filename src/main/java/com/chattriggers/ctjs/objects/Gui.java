@@ -153,7 +153,7 @@ public class Gui extends GuiScreen {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY,
                             clickedMouseButton, timeSinceLastClick);
                 } catch (ScriptException | NoSuchMethodException exception) {
-                    onKeyTyped = null;
+                    onMouseDragged = null;
                     Console.getConsole().printStackTrace(exception);
                 }
             }
@@ -177,7 +177,7 @@ public class Gui extends GuiScreen {
                 try {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, state);
                 } catch (ScriptException | NoSuchMethodException exception) {
-                    onKeyTyped = null;
+                    onMouseReleased = null;
                     Console.getConsole().printStackTrace(exception);
                 }
             }
