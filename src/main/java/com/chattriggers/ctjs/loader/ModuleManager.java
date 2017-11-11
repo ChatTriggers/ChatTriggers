@@ -41,6 +41,8 @@ public class ModuleManager {
 
         System.gc();
         this.isLoading = false;
+
+        TriggerType.GAME_LOAD.triggerAll();
     }
 
     public void unload() {

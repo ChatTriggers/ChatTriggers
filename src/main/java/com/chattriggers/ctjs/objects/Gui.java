@@ -133,11 +133,73 @@ public class Gui extends GuiScreen {
         };
     }
 
+    /**
+     * Registers a method to be ran while gui is open.
+     * Registered method runs on key input.
+     * @param methodName the method to run
+     * @return the trigger
+     */
+    public OnTrigger registerMouseDragged(String methodName) {
+        return onKeyTyped = new OnTrigger(methodName, TriggerType.OTHER) {
+            @Override
+            public void trigger(Object... args) {
+                if (!(args[0] instanceof Character
+                        && args[1] instanceof Integer)) {
+                    throw new IllegalArgumentException("Arguments must be of type char, int");
+                }
+
+                char typedChar = (char) args[0];
+                int keyCode = (int) args[1];
+
+                try {
+                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, typedChar, keyCode);
+                } catch (ScriptException | NoSuchMethodException exception) {
+                    onKeyTyped = null;
+                    Console.getConsole().printStackTrace(exception);
+                }
+            }
+        };
+    }
+
+    /**
+     * Registers a method to be ran while gui is open.
+     * Registered method runs on key input.
+     * @param methodName the method to run
+     * @return the trigger
+     */
+    public OnTrigger registerMouseReleased(String methodName) {
+        return onKeyTyped = new OnTrigger(methodName, TriggerType.OTHER) {
+            @Override
+            public void trigger(Object... args) {
+                int mouseX = (int) args[0];
+                int mouseY = (int) args[1];
+                int state = (int) args[2];
+
+                try {
+                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, state);
+                } catch (ScriptException | NoSuchMethodException exception) {
+                    onKeyTyped = null;
+                    Console.getConsole().printStackTrace(exception);
+                }
+            }
+        };
+    }
+
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         super.mouseClicked(mouseX, mouseY, button);
 
         runOnClick(mouseX, mouseY, button);
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+    }
+
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
 
     @Override

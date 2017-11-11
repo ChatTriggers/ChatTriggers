@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.listeners.WorldListener;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.handlers.DisplayHandler;
 import com.chattriggers.ctjs.objects.CPS;
+import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.capes.LayerCape;
 import com.chattriggers.ctjs.utils.config.Config;
@@ -125,6 +126,8 @@ public class CTJS {
         ClientRegistry.registerKeyBinding(MinecraftVars.keyDownArrow);
 
         ClientCommandHandler.instance.registerCommand(new CTCommand());
+
+        Runtime.getRuntime().addShutdownHook(new Thread(TriggerType.GAME_UNLOAD::triggerAll));
     }
 }
 
