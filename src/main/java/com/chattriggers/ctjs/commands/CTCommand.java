@@ -60,14 +60,14 @@ public class CTCommand extends CommandBase {
             switch (args[0].toLowerCase()) {
                 case("reload"):
                 case("load"):
-                    TriggerType.WORLD_UNLOAD.triggerAll();
+                    TriggerType.GAME_UNLOAD.triggerAll();
                     CTJS.getInstance().getModuleManager().unload();
                     ChatLib.chat(EnumChatFormatting.RED + "Reloading ct.js scripts...");
                     new Thread(() -> {
                         CTJS.getInstance().getConfig().loadConfig();
                         CTJS.getInstance().getModuleManager().load();
                         ChatLib.chat(EnumChatFormatting.GREEN + "Done reloading scripts!");
-                        TriggerType.WORLD_LOAD.triggerAll();
+                        TriggerType.GAME_LOAD.triggerAll();
                     }).start();
                     break;
                 case("files"):

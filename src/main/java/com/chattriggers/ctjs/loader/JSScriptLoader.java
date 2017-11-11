@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.imports.Module;
 import com.chattriggers.ctjs.imports.ModuleMetadata;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -16,6 +17,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +33,13 @@ public class JSScriptLoader extends ScriptLoader {
     public void preLoad() {
         super.preLoad();
 
-        this.scriptEngine = new ScriptEngineManager(null).getEngineByName("nashorn");
+        File nashornJar = new File(System.getProperty("java.home"), "lib/ext/nashorn.jar");
+        try {
+            URLClassLoader ucl = new URLClassLoader(new URL[]{nashornJar.toURL()}, Minecraft.class.getClassLoader());
+            this.scriptEngine = new ScriptEngineManager(ucl).getEngineByName("nashorn");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         try {
             saveResource("/providedLibs.js", new File(modulesDir.getParentFile(), "chattriggers-provided-libs.js"), true);
