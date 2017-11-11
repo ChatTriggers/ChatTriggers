@@ -67,7 +67,6 @@ public class CTCommand extends CommandBase {
                         CTJS.getInstance().getConfig().loadConfig();
                         CTJS.getInstance().getModuleManager().load();
                         ChatLib.chat(EnumChatFormatting.GREEN + "Done reloading scripts!");
-                        TriggerType.GAME_LOAD.triggerAll();
                     }).start();
                     break;
                 case("files"):

@@ -15,6 +15,8 @@ public class Gui extends GuiScreen {
     private OnTrigger onDraw = null;
     private OnTrigger onClick = null;
     private OnTrigger onKeyTyped = null;
+    private OnTrigger onMouseReleased = null;
+    private OnTrigger onMouseDragged = null;
 
     private int mouseX = 0;
     private int mouseY = 0;
@@ -140,19 +142,16 @@ public class Gui extends GuiScreen {
      * @return the trigger
      */
     public OnTrigger registerMouseDragged(String methodName) {
-        return onKeyTyped = new OnTrigger(methodName, TriggerType.OTHER) {
+        return onMouseDragged = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
-                if (!(args[0] instanceof Character
-                        && args[1] instanceof Integer)) {
-                    throw new IllegalArgumentException("Arguments must be of type char, int");
-                }
-
-                char typedChar = (char) args[0];
-                int keyCode = (int) args[1];
-
+                int mouseX = (int) args[0];
+                int mouseY = (int) args[1];
+                int clickedMouseButton = (int) args[2];
+                long timeSinceLastClick = (long) args[3];
                 try {
-                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, typedChar, keyCode);
+                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY,
+                            clickedMouseButton, timeSinceLastClick);
                 } catch (ScriptException | NoSuchMethodException exception) {
                     onKeyTyped = null;
                     Console.getConsole().printStackTrace(exception);
@@ -168,7 +167,7 @@ public class Gui extends GuiScreen {
      * @return the trigger
      */
     public OnTrigger registerMouseReleased(String methodName) {
-        return onKeyTyped = new OnTrigger(methodName, TriggerType.OTHER) {
+        return onMouseReleased = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
                 int mouseX = (int) args[0];
@@ -195,11 +194,17 @@ public class Gui extends GuiScreen {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
+
+        if (onMouseReleased != null)
+            onMouseReleased.trigger(mouseX, mouseY, state);
     }
 
     @Override
     protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+
+        if (onMouseDragged != null)
+            onMouseDragged.trigger(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
 
     @Override
