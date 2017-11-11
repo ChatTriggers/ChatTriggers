@@ -43,42 +43,43 @@ public class LookingAt {
      *
      * If the player is looking at an entity, returns "entity". If
      * the player is looking at a block, return "block". If the player
-     * is not looking at anything, returns null.
+     * is not looking at anything, returns "null".
      *
      * @return The object type.
      */
     public static String getType() {
         if (entity != null) return "entity";
         else if (block != null) return "block";
-        else return null;
+        else return "null";
     }
 
     /**
      * Gets the name of the object the player is looking at.
      *
      * Example return values: "Sandstone", "Wolf", "Oak Fence", "Zombie Pigman".
-     * Returns null if the player is not looking at anything.
+     * Returns "null" if the player is not looking at anything.
      *
      * @return The object name.
      */
     public static String getName() {
         if (entity != null) return entity.getName();
         else if (block != null) return block.getLocalizedName();
-        else return null;
+        else return "null";
     }
 
     /**
-     * Gets the distance of the object from the player.
+     * Gets the distance of the object from the player. Returns -1
+     * if the player is not looking at anything.
      *
      * @return The distance of the object from the player.
      */
-    public static Double getDistanceFromPlayer() {
+    public static double getDistanceFromPlayer() {
         if (block != null) {
             return Math.sqrt(Math.pow(pos.getX() - mc.thePlayer.posX, 2) + Math.pow(pos.getY() - mc.thePlayer.posY, 2) + Math.pow(pos.getZ() - mc.thePlayer.posZ, 2));
         } else if (entity != null) {
             return (double) entity.getDistanceToEntity(mc.thePlayer);
         } else {
-            return null;
+            return -1d;
         }
     }
 
@@ -87,10 +88,10 @@ public class LookingAt {
      *
      * @return A float number representing the object's X coordinate.
      */
-    public static Double getPosX() {
+    public static double getPosX() {
         if (entity != null) return entity.posX;
         else if (pos != null) return (double) pos.getX();
-        else return null;
+        else return 0d;
     }
 
     /**
@@ -98,10 +99,10 @@ public class LookingAt {
      *
      * @return A float number representing the object's Y coordinate.
      */
-    public static Double getPosY() {
+    public static double getPosY() {
         if (entity != null) return entity.posY;
         else if (pos != null) return (double) pos.getY();
-        else return null;
+        else return 0d;
     }
 
     /**
@@ -109,42 +110,42 @@ public class LookingAt {
      *
      * @return A float number representing the object's Z coordinate.
      */
-    public static Double getPosZ() {
+    public static double getPosZ() {
         if (entity != null) return entity.posZ;
         else if (pos != null) return (double) pos.getY();
-        else return null;
+        else return 0d;
     }
 
     /**
-     * Gets the metadata of the block the player is looking at, or null
+     * Gets the metadata of the block the player is looking at, or -1
      * if the player is looking at either an entity or nothing.
      *
      * @return The block's metadata.
      */
-    public static Integer getBlockMetadata() {
-        if (block == null) return null;
+    public static int getBlockMetadata() {
+        if (block == null) return -1;
         return block.getMetaFromState(mc.theWorld.getBlockState(pos));
     }
 
     /**
      * Gets the unlocalized name of the block the player is looking at,
-     * or null if the player is looking at either an entity or nothing.
+     * or "null" if the player is looking at either an entity or nothing.
      *
      * @return The block's unlocalized name.
      */
     public static String getBlockUnlocalizedName() {
-        if (block == null) return null;
+        if (block == null) return "null";
         return block.getUnlocalizedName().replace("tile.", "");
     }
 
     /**
      * Gets the registry name of the block the player is looking at,
-     * or null if the player is looking at either an entity or nothing.
+     * or "null" if the player is looking at either an entity or nothing.
      *
      * @return The block's registry name.
      */
     public static String getBlockRegistryName() {
-        if (block == null) return null;
+        if (block == null) return "null";
 
         String registryName = block.getRegistryName().replace("minecraft:", "");
 
@@ -155,119 +156,112 @@ public class LookingAt {
     }
 
     /**
-     * Gets the id of the block the player is looking at, or null if
+     * Gets the id of the block the player is looking at, or -1 if
      * the player is looking at either an entity or nothing.
      *
      * @return The block's id.
      */
-    public static Integer getBlockId() {
-        if (block == null) return null;
+    public static int getBlockId() {
+        if (block == null) return -1;
         else return Block.getIdFromBlock(block);
     }
 
     /**
      * Gets the light level of the block the player is looking at, or
-     * null if the player is looking at either an entity or nothing.
+     * -1 if the player is looking at either an entity or nothing.
      *
      * @return The block's light level.
      */
-    public static Integer getBlockLightLevel() {
+    public static int getBlockLightLevel() {
         BlockPos newPos = getBlockOnFace();
-        if (pos == null || newPos == null) return null;
+        if (pos == null || newPos == null) return -1;
 
         if (block.getLightValue() != 0) return block.getLightValue();
         else return mc.theWorld.getLightFor(EnumSkyBlock.BLOCK, newPos);
     }
 
     /**
-     * Gets whether or not the block the player is looking at is on fire,
-     * or null if the player is looking at either an entity or nothing.
+     * Gets whether or not the block the player is looking at is on fire.
      *
-     * @return True if the block is on fire.
+     * @return True if the block is on fire, false otherwise.
      */
-    public static Boolean isBlockOnFire() {
-        if (pos == null) return null;
-        return mc.theWorld.getBlockState(pos.up()).getBlock().getUnlocalizedName().equals("tile.fire");
+    public static boolean isBlockOnFire() {
+        return pos != null && mc.theWorld.getBlockState(pos.up()).getBlock().getUnlocalizedName().equals("tile.fire");
     }
 
     /**
      * Gets whether or not the entity the player is looking at is human
-     * (a player type), or null if the player is looking at either a
-     * block or nothing.
+     * (a player type).
      *
-     * @return True if the entity is human.
+     * @return True if the entity is human, false otherwise.
      */
-    public static Boolean isEntityHuman() {
-        if (entity == null) return null;
-        return entity instanceof EntityPlayer;
+    public static boolean isEntityHuman() {
+        return entity != null && entity instanceof EntityPlayer;
     }
 
     /**
      * Gets the display name of the entity the player is looking at,
-     * or null if the player is looking at either a block or nothing.
+     * or "null" if the player is looking at either a block or nothing.
      *
      * @return The entity's display name.
      */
     public static String getEntityDisplayName() {
-        if (entity == null) return null;
+        if (entity == null) return "null";
         return entity.getCustomNameTag();
     }
 
     /**
-     * Gets the X motion of the entity the player is looking at, or
-     * null if the player is looking at either a block or nothing.
+     * Gets the X motion of the entity the player is looking at.
      *
      * @return The X motion of the entity.
      */
-    public static Double getEntityMotionX() {
-        if (entity == null) return null;
+    public static double getEntityMotionX() {
+        if (entity == null) return 0d;
         return entity.motionX;
     }
 
     /**
-     * Gets the Y motion of the entity the player is looking at, or
-     * null if the player is looking at either a block or nothing.
+     * Gets the Y motion of the entity the player is looking at.
      *
      * @return The Y motion of the entity.
      */
-    public static Double getEntityMotionY() {
-        if (entity == null) return null;
+    public static double getEntityMotionY() {
+        if (entity == null) return 0d;
         return entity.motionY;
     }
 
     /**
-     * Gets the Z motion of the entity the player is looking at, or
-     * null if the player is looking at either a block or nothing.
+     * Gets the Z motion of the entity the player is looking at.
      *
      * @return The Z motion of the entity.
      */
-    public static Double getEntityMotionZ() {
-        if (entity == null) return null;
+    public static double getEntityMotionZ() {
+        if (entity == null) return 0d;
         return entity.motionZ;
     }
 
     /**
-     * Gets the team name of the entity the player is looking at, or null
+     * Gets the team name of the entity the player is looking at, or "null"
      * if there is no team, or if the player is looking at either a block
      * or nothing.
      *
      * @return The entity's team name, or null if nonexistent.
      */
     public static String getEntityTeamName() {
-        if (entity == null) return null;
+        if (entity == null) return "null";
         if (!(entity instanceof EntityLivingBase) || ((EntityLivingBase) entity).getTeam() == null) return null;
 
         return ((EntityLivingBase) entity).getTeam().getRegisteredName();
     }
 
     /**
-     * Gets the NBT data of the entity the player is looking at, or null
+     * Gets the NBT data of the entity the player is looking at, or "null"
      * if the player is looking at either a block or nothing.
      *
      * @return A JSON string containing the entity NBT data.
      */
     public static String getEntityNBTData() {
-        if (entity == null) return null;
+        if (entity == null) return "null";
 
         NBTTagCompound tags = new NBTTagCompound();
         entity.writeToNBT(tags);
