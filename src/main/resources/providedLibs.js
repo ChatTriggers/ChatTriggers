@@ -117,6 +117,7 @@ function updateProvidedLibsTick() {
     totalMem = MinecraftVars.getTotalMemory();
     freeMem = MinecraftVars.getFreeMemory();
     memUsage = MinecraftVars.getMemoryUsage();
+    ScoreboardReader.resetCache();
     scoreboardTitle = ScoreboardReader.getScoreboardTitle();
     scoreboardNames = ScoreboardReader.getScoreboardNames();
 
