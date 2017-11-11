@@ -180,7 +180,7 @@ public class ModuleGui extends GuiScreen {
 
         if (mouseButton == 0) {
             if (isHovered)
-                Minecraft.getMinecraft().displayGuiScreen(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
+                CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
 
             if (scrolled > infoHeight) {
                 if (mouseX > width + 20

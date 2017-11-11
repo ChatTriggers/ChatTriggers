@@ -87,7 +87,7 @@ public abstract class ScriptLoader {
     private void loadAssets() {
         File toCopyDir = CTJS.getInstance().getAssetsDir();
 
-        if (!modulesDir.exists()) modulesDir.mkdir();
+        if (!modulesDir.exists()) modulesDir.mkdirs();
 
         for (File importDir : getFoldersInDirectory(modulesDir)) {
             File assetsFolder = new File(importDir, "assets");

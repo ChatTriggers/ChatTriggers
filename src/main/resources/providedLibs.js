@@ -17,9 +17,9 @@ var MathLib = Java.type("com.chattriggers.ctjs.libs.MathLib");
 
 // Objects
 var Display = Java.type("com.chattriggers.ctjs.objects.Display");
-var DisplayHandler = Java.type("com.chattriggers.ctjs.objects.DisplayHandler");
+var DisplayHandler = Java.type("com.chattriggers.ctjs.handlers.DisplayHandler");
 var Gui = Java.type("com.chattriggers.ctjs.objects.Gui");
-var Message = Java.type("com.chattriggers.ctjs.utils.Message");
+var Message = Java.type("com.chattriggers.ctjs.objects.Message");
 var Book = Java.type("com.chattriggers.ctjs.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.objects.KeyBind");
 var Keyboard = Java.type("org.lwjgl.input.Keyboard");

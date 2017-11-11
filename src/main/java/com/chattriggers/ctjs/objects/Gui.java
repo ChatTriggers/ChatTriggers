@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import org.lwjgl.input.Mouse;
 
 import javax.script.ScriptException;
 import java.io.IOException;
@@ -15,6 +16,9 @@ public class Gui extends GuiScreen {
     private OnTrigger onClick = null;
     private OnTrigger onKeyTyped = null;
 
+    private int mouseX = 0;
+    private int mouseY = 0;
+
     public Gui() {
     }
 
@@ -22,15 +26,7 @@ public class Gui extends GuiScreen {
      * Displays the gui object to Minecraft.
      */
     public void open() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException exception) {
-                Console.getConsole().printStackTrace(exception);
-            }
-
-            Minecraft.getMinecraft().displayGuiScreen(this);
-        }).start();
+        CTJS.getInstance().getGuiHandler().openGui(this);
     }
 
     /**
@@ -43,7 +39,6 @@ public class Gui extends GuiScreen {
 
     /**
      * Get if the gui object is open.
-     *
      * @return true if this gui is open
      */
     public boolean isOpen() {
@@ -53,10 +48,10 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on draw.
-     *
      * @param methodName the method to run
+     * @return the trigger
      */
-    public OnTrigger registerOnDraw(String methodName) {
+    public OnTrigger registerDraw(String methodName) {
         return onDraw = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
@@ -72,9 +67,9 @@ public class Gui extends GuiScreen {
 
                 try {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, partialTicks);
-                } catch (ScriptException | NoSuchMethodException e) {
+                } catch (ScriptException | NoSuchMethodException exception) {
                     onDraw = null;
-                    e.printStackTrace();
+                    Console.getConsole().printStackTrace(exception);
                 }
             }
         };
@@ -83,10 +78,10 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on mouse click.
-     *
      * @param methodName the method to run
+     * @return the trigger
      */
-    public OnTrigger registerOnClicked(String methodName) {
+    public OnTrigger registerClicked(String methodName) {
         return onClick = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
@@ -102,9 +97,9 @@ public class Gui extends GuiScreen {
 
                 try {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, button);
-                } catch (ScriptException | NoSuchMethodException e) {
+                } catch (ScriptException | NoSuchMethodException exception) {
                     onClick = null;
-                    e.printStackTrace();
+                    Console.getConsole().printStackTrace(exception);
                 }
             }
         };
@@ -113,10 +108,10 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on key input.
-     *
      * @param methodName the method to run
+     * @return the trigger
      */
-    public OnTrigger registerOnKeyTyped(String methodName) {
+    public OnTrigger registerKeyTyped(String methodName) {
         return onKeyTyped = new OnTrigger(methodName, TriggerType.OTHER) {
             @Override
             public void trigger(Object... args) {
@@ -130,9 +125,9 @@ public class Gui extends GuiScreen {
 
                 try {
                     CTJS.getInstance().getModuleManager().invokeFunction(methodName, typedChar, keyCode);
-                } catch (ScriptException | NoSuchMethodException e) {
-                    Console.getConsole().printStackTrace(e);
+                } catch (ScriptException | NoSuchMethodException exception) {
                     onKeyTyped = null;
+                    Console.getConsole().printStackTrace(exception);
                 }
             }
         };
@@ -142,6 +137,22 @@ public class Gui extends GuiScreen {
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         super.mouseClicked(mouseX, mouseY, button);
 
+        runOnClick(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+
+        int i = Mouse.getEventDWheel();
+        if (i == 0) return;
+
+        if (i > 0) runOnClick(this.mouseX, this.mouseY, -1);
+        if (i < 0) runOnClick(this.mouseX, this.mouseY, -2);
+    }
+
+    // helper method for running onClick
+    private void runOnClick(int mouseX, int mouseY, int button) {
         if (onClick != null)
             onClick.trigger(mouseX, mouseY, button);
     }
@@ -149,6 +160,8 @@ public class Gui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
 
         if (onDraw != null)
             onDraw.trigger(mouseX, mouseY, partialTicks);

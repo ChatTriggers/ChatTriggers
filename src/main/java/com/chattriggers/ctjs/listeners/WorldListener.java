@@ -68,7 +68,7 @@ public class WorldListener {
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent e) {
         if (guiKeyBind.isPressed()) {
-            Minecraft.getMinecraft().displayGuiScreen(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
+            CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
         }
     }
 }

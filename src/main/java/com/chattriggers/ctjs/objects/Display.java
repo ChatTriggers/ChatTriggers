@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.objects;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.handlers.DisplayHandler;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
@@ -81,8 +82,8 @@ public class Display {
     /**
      * Sets a display's background type.
      * Background types are: FULL, PER_LINE
-     * @param background
-     * @return
+     * @param background the type of background
+     * @return the display to allow for method chaining
      */
     public Display setBackground(String background) {
         switch (background.toUpperCase()) {
@@ -250,7 +251,7 @@ public class Display {
 
 
     // Renders the display on to the player's screen.
-    void render() {
+    public void render() {
         if (!shouldRender) return;
 
         if (this.background == DisplayHandler.Background.FULL) {

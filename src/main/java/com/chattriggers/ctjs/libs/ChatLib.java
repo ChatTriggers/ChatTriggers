@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.libs;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.utils.Message;
+import com.chattriggers.ctjs.objects.Message;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
@@ -39,6 +39,7 @@ public class ChatLib {
             Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(cct, (byte) 0));
         } else {
             Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
+            CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
         }
     }
 

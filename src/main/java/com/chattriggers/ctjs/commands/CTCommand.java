@@ -4,11 +4,9 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.imports.gui.ModulesGui;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.Message;
+import com.chattriggers.ctjs.objects.Message;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ChatLine;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -18,7 +16,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -81,17 +78,9 @@ public class CTCommand extends CommandBase {
                     Console.clear();
                     break;
                 case("gui"):
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException exception) {
-                            Console.getConsole().printStackTrace(exception);
-                        }
-
-                        Minecraft.getMinecraft().displayGuiScreen(
-                                new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
-                        );
-                    }).start();
+                    CTJS.getInstance().getGuiHandler().openGui(
+                            new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
+                    );
                     break;
                 case("simulate"):
                     simulateChat(args);
@@ -120,40 +109,40 @@ public class CTCommand extends CommandBase {
     private void simulateChat(String[] args) {
         StringBuilder toSend = new StringBuilder();
 
-        for (int i = 1; i < args.length; i++) {
-            toSend.append(args[i]);
-            if (i != args.length - 1) toSend.append(" ");
+        for (String arg : args) {
+            if (!arg.equals(args[0])) toSend.append(arg).append(" ");
         }
 
-        ClientChatReceivedEvent event = new ClientChatReceivedEvent((byte) 0, new ChatComponentText(toSend.toString()));
+        ClientChatReceivedEvent event = new ClientChatReceivedEvent((byte) 0, new ChatComponentText(toSend.toString().trim()));
         CTJS.getInstance().getChatListener().onReceiveChat(event);
 
         if (!event.isCanceled()) {
-            ChatLib.chat(event.message.getFormattedText());
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(ChatLib.addColor(toSend.toString().trim())));
         }
     }
 
     private final int idFixed = 90123;
     private Integer idFixedOffset = null;
     private void dumpChat(int lines) {
-        ArrayList<ChatLine> messages = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(), "field_146253_i", "chatLines");
+        System.out.println(CTJS.getInstance().getChatListener().getChatHistory());
+        ArrayList<String> messages = CTJS.getInstance().getChatListener().getChatHistory();
 
         if (lines > messages.size()) lines = messages.size();
+        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed - 1);
         String msg;
-
-        for (int i = lines; i > 0; i--) {
-            msg = ChatLib.replaceFormatting(messages.get(lines - 1).getChatComponent().getFormattedText());
+        for (int i = 0; i < lines; i++) {
+            msg = ChatLib.replaceFormatting(messages.get(i));
             ChatComponentText cct = new ChatComponentText(msg);
 
             cct.setChatStyle(new ChatStyle()
                     .setChatClickEvent(
                             new ClickEvent(ClickEvent.Action.getValueByCanonicalName("run_command"), "/ct copy " + msg))
                     .setChatHoverEvent(
-                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message.")))
-            );
+                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message."))));
 
             ChatLib.chat(new Message(cct).setChatLineId(idFixed + i));
         }
+        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + lines);
 
         idFixedOffset = idFixed + lines;
     }
@@ -172,7 +161,7 @@ public class CTCommand extends CommandBase {
     private void clearOldDump() {
         if (idFixedOffset == null) return;
 
-        while (idFixedOffset > idFixed) {
+        while (idFixedOffset >= idFixed - 1) {
             ChatLib.clearChat(idFixedOffset);
             idFixedOffset--;
         }
