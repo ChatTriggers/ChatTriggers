@@ -30,6 +30,7 @@ var Inventory = Java.type("com.chattriggers.ctjs.objects.Inventory");
 
 /*Built in Vars */
 var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
+var ScoreboardReader = Java.type("com.chattriggers.ctjs.libs.ScoreboardReader");
 
 // Constant
 var playerName = MinecraftVars.getPlayerName();
@@ -71,6 +72,8 @@ var maxMem = MinecraftVars.getMaxMemory();
 var totalMem = MinecraftVars.getTotalMemory();
 var freeMem = MinecraftVars.getFreeMemory();
 var memUsage = MinecraftVars.getMemoryUsage();
+var scoreboardTitle = ScoreboardReader.getScoreboardTitle();
+var scoreboardNames = ScoreboardReader.getScoreboardNames();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -114,6 +117,9 @@ function updateProvidedLibsTick() {
     totalMem = MinecraftVars.getTotalMemory();
     freeMem = MinecraftVars.getFreeMemory();
     memUsage = MinecraftVars.getMemoryUsage();
+    ScoreboardReader.resetCache();
+    scoreboardTitle = ScoreboardReader.getScoreboardTitle();
+    scoreboardNames = ScoreboardReader.getScoreboardNames();
 
     LookingAt.update();
 }
