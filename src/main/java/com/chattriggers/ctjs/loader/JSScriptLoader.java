@@ -12,11 +12,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.io.FileUtils;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -33,11 +32,32 @@ public class JSScriptLoader extends ScriptLoader {
     public void preLoad() {
         super.preLoad();
 
-        File nashornJar = new File(System.getProperty("java.home"), "lib/ext/nashorn.jar");
         try {
-            URLClassLoader ucl = new URLClassLoader(new URL[]{nashornJar.toURL()}, Minecraft.class.getClassLoader());
-            this.scriptEngine = new ScriptEngineManager(ucl).getEngineByName("nashorn");
-        } catch (MalformedURLException e) {
+            ArrayList<URL> files = new ArrayList<>();
+            files.add(new File(System.getProperty("java.home"), "lib/ext/nashorn.jar").toURI().toURL());
+
+            for (File dir : getFoldersInDirectory(modulesDir)) {
+                for (File file : dir.listFiles()) {
+                    if (file.getName().endsWith(".jar")) {
+                        File jar = new File("mods/ChatTriggers/modules/" + dir.getName()
+                                + "/" + file.getName());
+
+                        files.add(jar.toURI().toURL());
+                    }
+                }
+            }
+
+            URLClassLoader ucl = new URLClassLoader(files.toArray(new URL[files.size()]), Minecraft.class.getClassLoader());
+
+            Class<?> factoryClass = ucl.loadClass("jdk.nashorn.api.scripting.NashornScriptEngineFactory");
+            ScriptEngineFactory factory = (ScriptEngineFactory) factoryClass.getConstructor().newInstance();
+            Method getScriptEngine = factory.getClass().getMethod("getScriptEngine", ClassLoader.class);
+
+//            System.out.println(Class.forName("org.pircbotx.ListenerAdapter", true, ucl));
+//            System.out.println(Arrays.toString(ucl.getURLs()));
+
+            this.scriptEngine = (ScriptEngine) getScriptEngine.invoke(factory, ucl);
+        } catch (IOException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
 
