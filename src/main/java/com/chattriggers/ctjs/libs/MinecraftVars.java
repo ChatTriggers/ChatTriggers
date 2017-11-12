@@ -464,4 +464,13 @@ public class MinecraftVars {
     public static int getMemoryUsage() {
         return Math.round((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory());
     }
+
+    /**
+     * Checks if player is pushed by water currently
+     * In an import, accessible via the {@code isFlying} variable.
+     * @return If the player is pushed by water (and false if the player does not exist)
+     */
+    public static boolean isFlying(){
+        return !(mc.thePlayer != null && mc.thePlayer.isPushedByWater());
+    }
 }
