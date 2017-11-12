@@ -147,12 +147,27 @@ public class LookingAt {
     public static String getBlockRegistryName() {
         if (block == null) return "null";
 
-        String registryName = block.getRegistryName().replace("minecraft:", "");
+        String rn = block.getRegistryName().replace("minecraft:", "");
 
-        if (registryName.startsWith("double_") && registryName.endsWith("_slab")) registryName = registryName.substring(7);
-        if (registryName.startsWith("lit_") && !registryName.endsWith("pumpkin")) registryName = registryName.substring(4);
+        if (rn.startsWith("double_") && rn.endsWith("_slab") || rn.endsWith("slab2")) rn = rn.substring(7);
+        else if (rn.startsWith("lit_") && !rn.endsWith("pumpkin")) rn = rn.substring(4);
+        else if (rn.contains("daylight_detector_inverted")) rn = "daylight_detector";
+        else if (rn.equals("standing_sign") || rn.equals("wall_sign")) rn = "sign";
+        else if (rn.endsWith("_redstone_torch")) rn = "redstone_torch";
+        else if (rn.equals("pumpkin_stem")) rn = "pumpkin_seeds";
+        else if (rn.endsWith("comparator")) rn = "comparator";
+        else if (rn.equals("melon_stem")) rn = "melon_seeds";
+        else if (rn.equals("redstone_wire")) rn = "redstone";
+        else if (rn.equals("double_plant")) rn = "tallgrass";
+        else if (rn.endsWith("_repeater")) rn = "repeater";
+        else if (rn.equals("piston_head")) rn = "piston";
+        else if (rn.endsWith("_banner")) rn = "banner";
+        else if (rn.equals("potatoes")) rn = "potato";
+        else if (rn.equals("tripwire")) rn = "string";
+        else if (rn.equals("carrots")) rn = "carrot";
+        else if (rn.equals("farmland")) rn = "dirt";
 
-        return registryName;
+        return "minecraft:" + rn;
     }
 
     /**
