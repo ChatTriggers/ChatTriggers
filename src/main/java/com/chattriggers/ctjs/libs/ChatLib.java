@@ -148,6 +148,14 @@ public class ChatLib {
     }
 
     /**
+     * Gets the width of minecraft's chat
+     * @return the width of chat
+     */
+    public static int getChatWidth() {
+        return Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth();
+    }
+
+    /**
      * Remove all formatting
      * @param toRemove the string to un-format
      * @return the unformatted string
