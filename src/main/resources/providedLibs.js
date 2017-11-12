@@ -76,6 +76,7 @@ var memUsage = MinecraftVars.getMemoryUsage();
 var scoreboardTitle = ScoreboardReader.getScoreboardTitle();
 var scoreboardNames = ScoreboardReader.getScoreboardNames();
 var isFlying = MinecraftVars.isFlying();
+var isSleeping = MinecraftVars.isSleeping();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -123,6 +124,7 @@ function updateProvidedLibsTick() {
     scoreboardTitle = ScoreboardReader.getScoreboardTitle();
     scoreboardNames = ScoreboardReader.getScoreboardNames();
     isFlying = MinecraftVars.isFlying();
+    isSleeping = MinecraftVars.isSleeping();
 
     LookingAt.update();
 }
