@@ -112,19 +112,8 @@ public class LookingAt {
      */
     public static double getPosZ() {
         if (entity != null) return entity.posZ;
-        else if (pos != null) return (double) pos.getY();
+        else if (pos != null) return (double) pos.getZ();
         else return 0d;
-    }
-
-    /**
-     * Gets the metadata of the block the player is looking at, or -1
-     * if the player is looking at either an entity or nothing.
-     *
-     * @return The block's metadata.
-     */
-    public static int getBlockMetadata() {
-        if (block == null) return -1;
-        return block.getMetaFromState(mc.theWorld.getBlockState(pos));
     }
 
     /**
@@ -149,7 +138,7 @@ public class LookingAt {
 
         String rn = block.getRegistryName().replace("minecraft:", "");
 
-        if (rn.startsWith("double_") && rn.endsWith("_slab") || rn.endsWith("slab2")) rn = rn.substring(7);
+        if (rn.startsWith("double_") && (rn.endsWith("_slab") || rn.endsWith("_slab2"))) rn = rn.substring(7);
         else if (rn.startsWith("lit_") && !rn.endsWith("pumpkin")) rn = rn.substring(4);
         else if (rn.contains("daylight_detector_inverted")) rn = "daylight_detector";
         else if (rn.equals("standing_sign") || rn.equals("wall_sign")) rn = "sign";
@@ -168,6 +157,51 @@ public class LookingAt {
         else if (rn.equals("farmland")) rn = "dirt";
 
         return "minecraft:" + rn;
+    }
+
+
+
+    /**
+     * Gets the metadata of the block the player is looking at, or -1
+     * if the player is looking at either an entity or nothing.
+     *
+     * @return The block's metadata.
+     */
+    public static int getBlockMetadata() {
+        if (block == null) return -1;
+
+        String rn = block.getRegistryName().replace("minecraft:", "");
+        int md = block.getMetaFromState(mc.theWorld.getBlockState(pos));
+
+        if (rn.equals("anvil")) {
+            if (md > 5) md = 2;
+            else if (md < 4) md = 0;
+            else md = 1;
+        } else if ((rn.endsWith("_slab") || rn.endsWith("_slab2") || rn.equals("saplings") || rn.equals("leaves")) && md > 7) {
+            md -= 8;
+        } else if (rn.equals("log")) {
+            md %= 4;
+        } else if (rn.equals("standing_banner")) {
+            md = 15;
+        } else if (rn.equals("double_plant")) {
+            md = 15;
+        } else if (rn.equals("quartz_block") && md > 2) {
+            md = 2;
+        } else if (rn.equals("cocoa")) {
+            md = 3;
+        } else if (rn.equals("bed")     || rn.equals("dropper")   || rn.equals("dispenser")     || rn.endsWith("_fence_gate")     ||
+                   rn.equals("vine")    || rn.equals("furnace")   || rn.equals("hay_block")     || rn.equals("brewing_stand")     ||
+                   rn.equals("chest")   || rn.equals("pumpkin")   || rn.endsWith("trapdoor")    || rn.equals("trapped_chest")     ||
+                   rn.equals("lever")   || rn.endsWith("_door")   || rn.endsWith("_repeater")   || rn.equals("tripwire_hook")     ||
+                   rn.endsWith("rail")  || rn.endsWith("piston")  || rn.equals("ender_chest")   || rn.equals("redstone_wire")     ||
+                   rn.equals("hopper")  || rn.equals("tripwire")  || rn.equals("lit_pumpkin")   || rn.equals("end_portal_frame")  ||
+                   rn.equals("ladder")  || rn.endsWith("_stairs") || rn.equals("piston_head")   || rn.endsWith("_pressure_plate") ||
+                   rn.endsWith("torch") || rn.endsWith("_button") || rn.endsWith("_comparator") || rn.equals("daylight_detector") ||
+                   rn.endsWith("_sign")) {
+            md = 0;
+        }
+
+        return md;
     }
 
     /**

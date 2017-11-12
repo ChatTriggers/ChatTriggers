@@ -463,15 +463,30 @@ public class RenderLib {
     }
 
     /**
-     * Renders an item icon on screen.
+     * Renders an item icon on screen with metadata.
      * @param x x coordinate to render item icon to
      * @param y y coordinate to render item icon to
      * @param item name or id of item to render
+     * @param metadata metadata of item to render
      */
-    public static void drawItemIcon(int x, int y, String item) {
+    public static void drawItemIcon(int x, int y, String item, Integer metadata) {
         if (item.equals("minecraft:air")) return;
 
-        ItemStack itemStack = new ItemStack(Item.getByNameOrId(item));
+        if (item.equals("minecraft:cocoa")) {
+            item = "minecraft:dye";
+            metadata = 3;
+        } else if ((item.equals("minecraft:dirt") || item.equals("minecraft:potato") || item.equals("minecraft:carrot"))
+                 && metadata == 7) {
+            metadata = 0;
+        }
+
+        ItemStack itemStack;
+        if (metadata != null) {
+            itemStack = new ItemStack(Item.getByNameOrId(item), 1, metadata);
+        } else {
+            itemStack = new ItemStack(Item.getByNameOrId(item));
+        }
+
         RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 
         GlStateManager.pushMatrix();
@@ -487,6 +502,16 @@ public class RenderLib {
         }
 
         GlStateManager.popMatrix();
+    }
+
+    /**
+     * Renders an item icon on screen without metadata.
+     * @param x x coordinate to render item icon to
+     * @param y y coordinate to render item icon to
+     * @param item name or id of item to render
+     */
+    public static void drawItemIcon(int x, int y, String item) {
+        drawItemIcon(x, y, item, null);
     }
 
     /**
