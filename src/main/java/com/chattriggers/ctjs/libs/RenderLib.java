@@ -469,15 +469,22 @@ public class RenderLib {
      * @param item name or id of item to render
      */
     public static void drawItemIcon(int x, int y, String item) {
+        if (item.equals("minecraft:air")) return;
+
         ItemStack itemStack = new ItemStack(Item.getByNameOrId(item));
         RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 
+        GlStateManager.pushMatrix();
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         RenderHelper.enableStandardItemLighting();
         RenderHelper.enableGUIStandardItemLighting();
         itemRenderer.zLevel = 200.0F;
 
-        itemRenderer.renderItemIntoGUI(itemStack, x, y);
+        try {
+            itemRenderer.renderItemIntoGUI(itemStack, x, y);
+        } catch (NullPointerException e) {
+            Console.getConsole().printStackTrace(e);
+        }
 
         GlStateManager.popMatrix();
     }
