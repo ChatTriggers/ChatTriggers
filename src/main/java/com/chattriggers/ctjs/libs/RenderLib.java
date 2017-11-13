@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,20 +29,64 @@ import java.util.ArrayList;
 @UtilityClass
 @SideOnly(Side.CLIENT)
 public class RenderLib {
-
-    public static final int WHITE = color(255, 255, 255, 255);
     public static final int BLACK = color(0, 0, 0, 255);
-    public static final int GRAY = color(192, 192, 192, 255);
-    public static final int LIGHT_GRAY = color(128, 128, 128, 255);
-    public static final int DARK_GRAY = color(64, 64, 64, 255);
-    public static final int RED = color(255, 0, 0, 255);
-    public static final int PINK = color(255, 175, 175, 255);
-    public static final int ORANGE = color(255, 200, 0, 255);
+    public static final int DARK_BLUE = color(0, 0, 190, 255);
+    public static final int DARK_GREEN = color(0, 190, 0, 255);
+    public static final int DARK_AQUA = color(0, 190, 190, 255);
+    public static final int DARK_RED = color(190, 0, 0, 255);
+    public static final int DARK_PURPLE = color(190, 0, 190, 255);
+    public static final int GOLD = color(217, 163, 52, 255);
+    public static final int GRAY = color(190, 190, 190, 255);
+    public static final int DARK_GRAY = color(63, 63, 63, 255);
+    public static final int BLUE = color(63, 63, 254, 255);
+    public static final int GREEN = color(63, 254, 63, 255);
+    public static final int AQUA = color(63, 254, 254, 255);
+    public static final int RED = color(254, 63, 63, 255);
+    public static final int LIGHT_PURPLE = color(254, 63, 254, 255);
     public static final int YELLOW = color(255, 255, 0, 255);
-    public static final int GREEN = color(0, 255, 0, 255);
-    public static final int MAGENTA = color(255, 0, 255, 255);
-    public static final int CYAN = color(0, 255, 255, 255);
-    public static final int BLUE = color(0, 0, 255, 255);
+    public static final int WHITE = color(254, 254, 63, 255);
+
+    /**
+     * Gets a color based off of a hex integer input
+     * @param color the hex integer
+     * @return the color
+     */
+    public static int getColor(int color) {
+        switch(color) {
+            case(0):
+                return BLACK;
+            case(1):
+                return DARK_BLUE;
+            case(2):
+                return DARK_GREEN;
+            case(3):
+                return DARK_AQUA;
+            case(4):
+                return DARK_RED;
+            case(5):
+                return DARK_PURPLE;
+            case(6):
+                return GOLD;
+            case(7):
+                return GRAY;
+            case(8):
+                return DARK_GRAY;
+            case(9):
+                return BLUE;
+            case(10):
+                return GREEN;
+            case(12):
+                return AQUA;
+            case(13):
+                return RED;
+            case(14):
+                return LIGHT_PURPLE;
+            case(15):
+                return YELLOW;
+            default:
+                return WHITE;
+        }
+    }
 
     /**
      * Gets a strings width.
