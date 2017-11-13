@@ -43,8 +43,8 @@ public class RenderLib {
     public static final int AQUA = color(63, 254, 254, 255);
     public static final int RED = color(254, 63, 63, 255);
     public static final int LIGHT_PURPLE = color(254, 63, 254, 255);
-    public static final int YELLOW = color(255, 255, 0, 255);
-    public static final int WHITE = color(254, 254, 63, 255);
+    public static final int YELLOW = color(254, 254, 63, 255);
+    public static final int WHITE = color(255, 255, 255, 255);
 
     /**
      * Gets a color based off of a hex integer input
