@@ -47,6 +47,12 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onMouseEvent(MouseEvent event) {
+        if (event.button == -1) return;
+
+        // clicked trigger
+        TriggerType.CLICKED.triggerAll(event.button, event.buttonstate, event);
+
+        // add to cps
         if (event.button == 0 && event.buttonstate) CTJS.getInstance().getCps().addLeftClicks();
         if (event.button == 1 && event.buttonstate) CTJS.getInstance().getCps().addRightClicks();
     }

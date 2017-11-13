@@ -8,8 +8,14 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public enum TriggerType {
-    CHAT, WORLD_LOAD, SOUND_PLAY, TICK, STEP, RENDER_OVERLAY, WORLD_UNLOAD, COMMAND,
-    GAME_UNLOAD, GAME_LOAD, OTHER;
+    // client
+    CHAT, TICK, STEP, RENDER_OVERLAY, GAME_UNLOAD, GAME_LOAD, CLICKED,
+
+    // world
+    SOUND_PLAY, WORLD_LOAD, WORLD_UNLOAD,
+
+    // misc
+    COMMAND, OTHER;
 
     private Comparator<OnTrigger> triggerComparator = (o1, o2) -> {
 

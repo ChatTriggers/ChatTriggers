@@ -40,6 +40,17 @@ public class TriggerRegister {
     }
 
     /**
+     * Registers a new clicked trigger.<br>
+     * Available modifications:<br>
+     * {@link OnTrigger#setPriority(Priority)} Sets the priority<br>
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerClicked(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.CLICKED);
+    }
+
+    /**
      * Registers a new sound play trigger.<br>
      * Available modifications:<br>
      * {@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria<br>
