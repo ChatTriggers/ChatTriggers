@@ -75,13 +75,13 @@ public class RenderLib {
                 return BLUE;
             case(10):
                 return GREEN;
-            case(12):
+            case(11):
                 return AQUA;
-            case(13):
+            case(12):
                 return RED;
-            case(14):
+            case(13):
                 return LIGHT_PURPLE;
-            case(15):
+            case(14):
                 return YELLOW;
             default:
                 return WHITE;
