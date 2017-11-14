@@ -123,14 +123,14 @@ public class CTCommand extends CommandBase {
     private final int idFixed = 90123;
     private Integer idFixedOffset = null;
     private void dumpChat(int lines) {
-        System.out.println(CTJS.getInstance().getChatListener().getChatHistory());
+        clearOldDump();
         ArrayList<String> messages = CTJS.getInstance().getChatListener().getChatHistory();
 
         if (lines > messages.size()) lines = messages.size();
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed - 1);
+        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed);
         String msg;
         for (int i = 0; i < lines; i++) {
-            msg = ChatLib.replaceFormatting(messages.get(i));
+            msg = ChatLib.replaceFormatting(messages.get(messages.size() - lines + i));
             ChatComponentText cct = new ChatComponentText(msg);
 
             cct.setChatStyle(new ChatStyle()
@@ -139,11 +139,11 @@ public class CTCommand extends CommandBase {
                     .setChatHoverEvent(
                             new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message."))));
 
-            ChatLib.chat(new Message(cct).setChatLineId(idFixed + i));
+            ChatLib.chat(new Message(cct).setChatLineId(idFixed + i + 1));
         }
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + lines);
+        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + lines + 1);
 
-        idFixedOffset = idFixed + lines;
+        idFixedOffset = idFixed + lines + 1;
     }
 
     private void copyArgsToClipboard(String[] args) {
@@ -160,9 +160,8 @@ public class CTCommand extends CommandBase {
     private void clearOldDump() {
         if (idFixedOffset == null) return;
 
-        while (idFixedOffset >= idFixed - 1) {
-            ChatLib.clearChat(idFixedOffset);
-            idFixedOffset--;
+        while (idFixedOffset >= idFixed) {
+            ChatLib.clearChat(idFixedOffset--);
         }
 
         idFixedOffset = null;
