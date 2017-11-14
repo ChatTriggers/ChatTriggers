@@ -143,3 +143,12 @@ function print(toPrint) {
 function cancel(event) {
     event.setCanceled(true);
 }
+
+function easeOut(start, finish, speed, jump) {
+    if (jump == undefined) {jump = 1;}
+	if (Math.floor(Math.abs(finish - start) / jump)) {
+		return start + (finish - start) / speed;
+	} else {
+		return finish;
+	}
+}
