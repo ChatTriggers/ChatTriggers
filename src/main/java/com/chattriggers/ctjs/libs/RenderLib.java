@@ -520,8 +520,7 @@ public class RenderLib {
         if (item.equals("minecraft:cocoa")) {
             item = "minecraft:dye";
             metadata = 3;
-        } else if ((item.equals("minecraft:dirt") || item.equals("minecraft:potato") || item.equals("minecraft:carrot"))
-                 && metadata == 7) {
+        } else if ((item.equals("minecraft:dirt") || item.equals("minecraft:potato") || item.equals("minecraft:carrot"))) {
             metadata = 0;
         }
 

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 public abstract class OnTrigger {
     protected String methodName;
-    @Getter @Setter
+    @Getter
     protected Priority priority;
     @Getter
     protected TriggerType type;

@@ -1,7 +1,10 @@
 package com.chattriggers.ctjs.objects;
 
+import com.chattriggers.ctjs.utils.console.Console;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,6 +15,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.EnumSkyBlock;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class LookingAt {
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -75,7 +79,11 @@ public class LookingAt {
      */
     public static double getDistanceFromPlayer() {
         if (block != null) {
-            return Math.sqrt(Math.pow(pos.getX() - mc.thePlayer.posX, 2) + Math.pow(pos.getY() - mc.thePlayer.posY, 2) + Math.pow(pos.getZ() - mc.thePlayer.posZ, 2));
+            return Math.sqrt(
+                       Math.pow(pos.getX() - mc.thePlayer.posX + .5, 2) +
+                       Math.pow(pos.getY() - mc.thePlayer.posY - .5, 2) +
+                       Math.pow(pos.getZ() - mc.thePlayer.posZ + .5, 2)
+                   );
         } else if (entity != null) {
             return (double) entity.getDistanceToEntity(mc.thePlayer);
         } else {
@@ -147,7 +155,6 @@ public class LookingAt {
         else if (rn.endsWith("comparator")) rn = "comparator";
         else if (rn.equals("melon_stem")) rn = "melon_seeds";
         else if (rn.equals("redstone_wire")) rn = "redstone";
-        else if (rn.equals("double_plant")) rn = "tallgrass";
         else if (rn.endsWith("_repeater")) rn = "repeater";
         else if (rn.equals("piston_head")) rn = "piston";
         else if (rn.endsWith("_banner")) rn = "banner";
@@ -168,18 +175,31 @@ public class LookingAt {
      * @return The block's metadata.
      */
     public static int getBlockMetadata() {
-        if (block == null) return -1;
+        if (block == null || mc.theWorld == null || pos == null) return -1;
 
         String rn = block.getRegistryName().replace("minecraft:", "");
-        int md = block.getMetaFromState(mc.theWorld.getBlockState(pos));
+        int md;
+        try {
+            md = block.getMetaFromState(mc.theWorld.getBlockState(pos));
+        } catch (Exception e) {
+            Console.getConsole().printStackTrace(e);
+            return -1;
+        }
 
-        if (rn.equals("anvil")) {
-            if (md > 5) md = 2;
-            else if (md < 4) md = 0;
-            else md = 1;
-        } else if ((rn.endsWith("_slab") || rn.endsWith("_slab2") || rn.equals("saplings") || rn.equals("leaves")) && md > 7) {
+        String[] rnEquals = {"bed", "vine", "chest", "lever", "hopper", "ladder", "jukebox", "dropper", "furnace",
+                             "pumpkin", "tripwire", "snow_layer", "cake", "dispenser", "hay_block", "ender_chest",
+                             "lit_pumpkin", "piston_head", "melon_seeds", "brewing_stand", "trapped_chest",
+                             "tripwire_hook", "redstone_wire", "end_portal_frame", "daylight_detector", "reeds", "cactus",
+                             "nether_wart", "cauldron", "skull"}; // TODO: Figure out how the hell skulls work
+        String [] rnEndsWith = {"rail", "torch", "_sign", "_door", "piston", "_stairs", "_button", "trapdoor", "_repeater",
+                                "_comparator", "_mushroom_block", "fence_gate", "_pressure_plate", "flower_pot"};
+
+        if ((rn.endsWith("_slab") || rn.endsWith("_slab2") || rn.equals("saplings") || rn.equals("leaves") ||
+               rn.equals("leaves2")) && md > 7) {
             md -= 8;
-        } else if (rn.equals("log")) {
+        } else if (rn.equals("leaves2") && md > 3) {
+            md -= 4;
+        } else if (rn.equals("log") || rn.equals("log2")) {
             md %= 4;
         } else if (rn.equals("standing_banner")) {
             md = 15;
@@ -189,16 +209,17 @@ public class LookingAt {
             md = 2;
         } else if (rn.equals("cocoa")) {
             md = 3;
-        } else if (rn.equals("bed")     || rn.equals("dropper")   || rn.equals("dispenser")     || rn.endsWith("_fence_gate")     ||
-                   rn.equals("vine")    || rn.equals("furnace")   || rn.equals("hay_block")     || rn.equals("brewing_stand")     ||
-                   rn.equals("chest")   || rn.equals("pumpkin")   || rn.endsWith("trapdoor")    || rn.equals("trapped_chest")     ||
-                   rn.equals("lever")   || rn.endsWith("_door")   || rn.endsWith("_repeater")   || rn.equals("tripwire_hook")     ||
-                   rn.endsWith("rail")  || rn.endsWith("piston")  || rn.equals("ender_chest")   || rn.equals("redstone_wire")     ||
-                   rn.equals("hopper")  || rn.equals("tripwire")  || rn.equals("lit_pumpkin")   || rn.equals("end_portal_frame")  ||
-                   rn.equals("ladder")  || rn.endsWith("_stairs") || rn.equals("piston_head")   || rn.endsWith("_pressure_plate") ||
-                   rn.endsWith("torch") || rn.endsWith("_button") || rn.endsWith("_comparator") || rn.equals("daylight_detector") ||
-                   rn.endsWith("_sign")) {
-            md = 0;
+        } else if (rn.equals("anvil")) {
+            if (md > 5) md = 2;
+            else if (md < 4) md = 0;
+            else md = 1;
+        } else {
+            for (String str : rnEquals) {
+                if (rn.equals(str)) md = 0;
+            }
+            for (String str : rnEndsWith) {
+                if (rn.endsWith(str)) md = 0;
+            }
         }
 
         return md;
@@ -227,6 +248,25 @@ public class LookingAt {
 
         if (block.getLightValue() != 0) return block.getLightValue();
         else return mc.theWorld.getLightFor(EnumSkyBlock.BLOCK, newPos);
+    }
+
+    /**
+     * Gets the block properties block the player is looking at, or "null"
+     * if the player is not looking at a block. The data is returned as
+     * a JSON string.
+     *
+     * @return A JSON string of block properties.
+     */
+    public static String getBlockProperties() {
+        if (block == null || mc.theWorld == null || pos == null) return "null";
+        HashMap<String, Object> map = new HashMap<>();
+        ImmutableMap<IProperty, Comparable> properties = mc.theWorld.getBlockState(pos).getProperties();
+
+        for (Map.Entry<IProperty, Comparable> property : properties.entrySet()) {
+            map.put(property.getKey().getName(), property.getValue());
+        }
+
+        return (new Gson()).toJsonTree(map).getAsJsonObject().toString();
     }
 
     /**
