@@ -81,6 +81,7 @@ public class CTCommand extends CommandBase {
                             new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
                     );
                     break;
+                case("sim"):
                 case("simulate"):
                     simulateChat(args);
                     break;

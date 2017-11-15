@@ -281,6 +281,7 @@ public class RenderLib {
         float green = (float) (color >> 8 & 255) / 255.0F;
         float blue = (float) (color & 255) / 255.0F;
 
+        GlStateManager.pushMatrix();
         GlStateManager.color(red, green, blue, alpha);
 
         GL11.glBegin(GL11.GL_LINE_LOOP);
@@ -608,7 +609,5 @@ public class RenderLib {
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-
-        GlStateManager.popMatrix();
     }
 }
