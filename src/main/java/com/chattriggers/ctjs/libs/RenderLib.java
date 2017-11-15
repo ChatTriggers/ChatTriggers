@@ -165,12 +165,44 @@ public class RenderLib {
      * @param text the text to draw
      * @param x the x coordinate on screen
      * @param y the y coordinate on screen
+     * @param scale scales the text size
+     * @param color the color
+     */
+    public static void drawString(String text, float x, float y, float scale, int color) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.scale(scale, scale, scale);
+        Minecraft.getMinecraft().fontRendererObj.drawString(text, x / scale, y / scale, color, false);
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+    }
+
+    /**
+     * Draws a string to the screen.
+     * @param text the text to draw
+     * @param x the x coordinate on screen
+     * @param y the y coordinate on screen
      * @param color the color
      */
     public static void drawString(String text, float x, float y, int color) {
+        drawString(text, x, y, 1, color);
+    }
+
+    /**
+     * Draws a string with drop shadow to the screen.
+     * @param text the text to draw
+     * @param x the x coordinate on screen
+     * @param y the y coordinate on screen
+     * @param scale scales the text size
+     * @param color the color
+     */
+    public static void drawStringWithShadow(String text, float x, float y, float scale, int color) {
+        GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
-        Minecraft.getMinecraft().fontRendererObj.drawString(text, x, y, color, false);
+        GlStateManager.scale(scale, scale, scale);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x / scale, y / scale, color);
         GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     /**
@@ -181,9 +213,7 @@ public class RenderLib {
      * @param color the color
      */
     public static void drawStringWithShadow(String text, float x, float y, int color) {
-        GlStateManager.enableBlend();
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x, y, color);
-        GlStateManager.disableBlend();
+        drawStringWithShadow(text, x, y, 1, color);
     }
 
     /**
@@ -509,13 +539,15 @@ public class RenderLib {
     }
 
     /**
-     * Renders an item icon on screen with metadata.
+     * Renders an item icon on screen.
+     *
      * @param x x coordinate to render item icon to
      * @param y y coordinate to render item icon to
+     * @param scale scales the icon size
      * @param item name or id of item to render
      * @param metadata metadata of item to render
      */
-    public static void drawItemIcon(int x, int y, String item, Integer metadata) {
+    public static void drawItemIcon(int x, int y, float scale, String item, Integer metadata) {
         if (item.equals("minecraft:air")) return;
 
         if (item.equals("minecraft:cocoa")) {
@@ -532,9 +564,13 @@ public class RenderLib {
             itemStack = new ItemStack(Item.getByNameOrId(item));
         }
 
+        x /= scale;
+        y /= scale;
+
         RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 
         GlStateManager.pushMatrix();
+        GlStateManager.scale(scale, scale, 1f);
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         RenderHelper.enableStandardItemLighting();
         RenderHelper.enableGUIStandardItemLighting();
@@ -550,13 +586,26 @@ public class RenderLib {
     }
 
     /**
-     * Renders an item icon on screen without metadata.
+     * Renders an item icon on screen.
+     *
+     * @param x x coordinate to render item icon to
+     * @param y y coordinate to render item icon to
+     * @param item name or id of item to render
+     * @param metadata metadata of item to render
+     */
+    public static void drawItemIcon(int x, int y, String item, Integer metadata) {
+        drawItemIcon(x, y, 1, item, metadata);
+    }
+
+    /**
+     * Renders an item icon on screen.
+     * 
      * @param x x coordinate to render item icon to
      * @param y y coordinate to render item icon to
      * @param item name or id of item to render
      */
     public static void drawItemIcon(int x, int y, String item) {
-        drawItemIcon(x, y, item, null);
+        drawItemIcon(x, y, 1, item, null);
     }
 
     /**
