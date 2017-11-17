@@ -1,4 +1,5 @@
 package com.chattriggers.ctjs.utils.config;
+
 import com.chattriggers.ctjs.Reference;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +10,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.io.File;
 
 public class Config {
-    @Getter @Setter
+    @Getter
+    @Setter
     private Configuration config;
-    @Getter @Setter
+    @Getter
+    @Setter
     private File configFile;
 
     // configuration settings
@@ -19,10 +22,24 @@ public class Config {
     private Boolean printChatToConsole;
     @Getter
     private Boolean showCapes;
+    @Getter
+    private String consoleTheme;
 
     private void saveConfig() {
         this.printChatToConsole = this.config.getBoolean("print chat to console", "ct", true, "Chat printing to console");
         this.showCapes = this.config.getBoolean("show capes", "ct", true, "Show developer and creator capes");
+        this.consoleTheme = this.config.getString("console theme", "ct",
+                "default.dark", "Console theme", new String[]{
+                        "ashes.dark",
+                        "atelierforest.dark",
+                        "default.dark",
+                        "isotope.dark",
+                        "codeschool.dark",
+                        "gotham",
+                        "hybrid",
+                        "3024.light",
+                        "chalk.light"
+                });
 
         this.config.save();
     }

@@ -74,7 +74,6 @@ public class CTCommand extends CommandBase {
                     break;
                 case("console"):
                     Console.getConsole().showConsole(true);
-                    Console.clear();
                     break;
                 case("gui"):
                     CTJS.getInstance().getGuiHandler().openGui(
