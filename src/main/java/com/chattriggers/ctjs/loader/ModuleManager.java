@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.imports.Module;
+import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.objects.KeyBind;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.capes.DLCape;

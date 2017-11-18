@@ -467,7 +467,7 @@ public class RenderLib {
 
     /**
      * Draws an image to the screen.<br>
-     * Images must be in the imports /assets/ directory on launch, <br>
+     * Images must be in the modules /assets/ directory on launch, <br>
      * and have a size of 256x256.
      * @param resourceName the file name, i.e. block.png
      * @param renderXLoc the x position on the screen to render to
@@ -486,7 +486,7 @@ public class RenderLib {
 
     /**
      * Draws an image to the screen.<br>
-     * Images must be in the imports /assets/ directory on launch, <br>
+     * Images must be in the modules /assets/ directory on launch, <br>
      * and have a size of 256x256.
      * @param resourceDomain the domain of the file, i.e minecraft
      * @param resourceName the file name, i.e. block.png

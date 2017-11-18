@@ -1,8 +1,6 @@
 package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
-import jp.uphy.javafx.console.ConsoleApplication;
-import jp.uphy.javafx.console.ConsoleView;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
 

@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.imports.Module;
+import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.utils.console.Console;
 import org.apache.commons.io.FileUtils;
 

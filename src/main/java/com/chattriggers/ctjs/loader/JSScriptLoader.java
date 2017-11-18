@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.loader;
 
-import com.chattriggers.ctjs.imports.Module;
-import com.chattriggers.ctjs.imports.ModuleMetadata;
+import com.chattriggers.ctjs.modules.Module;
+import com.chattriggers.ctjs.modules.ModuleMetadata;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,6 @@ import javax.script.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -133,7 +132,7 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
     /**
-     * Gets the script that provides imports basic libraries.
+     * Gets the script that provides modules basic libraries.
      * @return a string of the compiled script
      */
     public String getProvidedLibsScript() {

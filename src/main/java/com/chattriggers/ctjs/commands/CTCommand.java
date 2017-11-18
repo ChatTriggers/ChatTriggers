@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.imports.gui.ModulesGui;
+import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.objects.Message;
@@ -40,7 +40,7 @@ public class CTCommand extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return "&b&m" + ChatLib.getChatBreak("-") + "\n" +
-               "&c/ct <load/reload> &b- &eReloads all of the ct imports.\n" +
+               "&c/ct <load/reload> &b- &eReloads all of the ct modules.\n" +
                "&c/ct files &b- &eOpens the ChatTriggers folder.\n" +
                "&c/ct console &b- &eOpens the ct console.\n" +
                "&c/ct simulate &b- &eSimulates a received chat message.\n" +

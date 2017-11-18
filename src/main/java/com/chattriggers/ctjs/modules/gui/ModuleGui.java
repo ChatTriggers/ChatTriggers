@@ -1,20 +1,16 @@
-package com.chattriggers.ctjs.imports.gui;
+package com.chattriggers.ctjs.modules.gui;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.imports.Module;
+import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.libs.MathLib;
 import com.chattriggers.ctjs.libs.RenderLib;
 import com.mojang.realmsclient.gui.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ModuleGui extends GuiScreen {
     private Module module;
@@ -28,6 +24,7 @@ public class ModuleGui extends GuiScreen {
     private String name;
     private String version;
     private ArrayList<String> description;
+    private HashMap<String, List<String>> coloredFiles;
 
     private boolean isHovered;
 
@@ -45,6 +42,18 @@ public class ModuleGui extends GuiScreen {
         version = this.module.getMetadata().getVersion() == null
                 ? ""
                 : "v" + this.module.getMetadata().getVersion();
+
+        coloredFiles = new HashMap<>();
+
+        for (Map.Entry<String, List<String>> file : this.module.getFiles().entrySet()) {
+            List<String> lines = new ArrayList<>();
+
+            for (String line : file.getValue()) {
+                lines.add(colorLine(line));
+            }
+
+            coloredFiles.put(file.getKey(), lines);
+        }
     }
 
     @Override
@@ -87,7 +96,7 @@ public class ModuleGui extends GuiScreen {
         // version
         RenderLib.drawStringWithShadow(
                 ChatFormatting.GRAY + version,
-                width - RenderLib.getStringWidth(version) +18,
+                width - RenderLib.getStringWidth(version) + 18,
                 12 - scrolled,
                 0xffffffff
         );
@@ -124,7 +133,7 @@ public class ModuleGui extends GuiScreen {
 
         // code
         int fileOffset = 20;
-        for (Map.Entry<String, List<String>> file : module.getFiles().entrySet()) {
+        for (Map.Entry<String, List<String>> file : coloredFiles.entrySet()) {
             RenderLib.drawRectangle(
                     0x80000000,
                     20,
@@ -143,7 +152,7 @@ public class ModuleGui extends GuiScreen {
             int i = 0;
             for (String line : file.getValue()) {
                 RenderLib.drawStringWithShadow(
-                        line.replace("\u0009", "     "),
+                        colorLine(line).replace("\u0009", "     "),
                         22,
                         i * 9 + infoHeight + fileOffset - scrolled + 12,
                         0xffffffff
@@ -165,7 +174,7 @@ public class ModuleGui extends GuiScreen {
             );
             RenderLib.drawStringWithShadow(
                     "^",
-                    width + 31 - RenderLib.getStringWidth("^")/2,
+                    width + 31 - RenderLib.getStringWidth("^") / 2,
                     height - 12,
                     0xffffffff
             );
@@ -191,6 +200,38 @@ public class ModuleGui extends GuiScreen {
                 }
             }
         }
+    }
+
+    private String colorLine(String line) {
+        return ChatLib.addColor(
+                line.replace("var", "&dvar&r")
+                        .replace("function", "&dfunction&r")
+                        .replaceAll("new (\\w+)\\(", "&dnew&r &e$1&r(")
+                        .replace(" if", "&d if&r")
+                        .replace("with", "&dwith&r")
+                        .replace("while", "&dwhile&r")
+                        .replace("catch", "&dcatch&r")
+                        .replace("try", "&dtry&r")
+                        .replace("else", "&delse&r")
+                        .replace("=", "&b=&r")
+                        .replace("|", "&b|&r")
+                        .replace("^", "&b^&r")
+                        .replace("//", "&7//")
+                        .replace("+", "&b+&r")
+                        .replace("-", "&b+&r")
+                        .replaceAll("(\\d+)", "&6$1&r")
+                        .replace("TriggerRegister", "&cTriggerRegister&r")
+                        .replace("ChatLib", "&cChatLib&r")
+                        .replace("WorldLib", "&cWorldLib&r")
+                        .replace("RenderLib", "&cRenderLib&r")
+                        .replace("MathLib", "&cMathLib&r")
+                        .replace("FileLib", "&cFileLib&r")
+                        .replaceAll("(\\w+\\.)(\\w+)\\(", "$1&b$2&r(")
+                        .replaceAll("\\.(\\w+)", ".&c$1&r")
+                        .replaceAll("(\\w{2,})\\.", "&c$1&r.")
+                        .replace("!", "&b!&r")
+                        .replace("\"&", "sf8e8r9escapedquote")
+        ).replace("sf8e8r9escapedquote", "\"&");
     }
 
     @Override
@@ -221,7 +262,7 @@ public class ModuleGui extends GuiScreen {
                 : module.getMetadata().getDescription();
         description = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(preDescription.split("\n"))), width - 5, 100);
 
-        infoHeight = description.size()*10 + 35;
+        infoHeight = description.size() * 10 + 35;
 
         maxScroll = fileOffset + infoHeight - RenderLib.getRenderHeight();
 

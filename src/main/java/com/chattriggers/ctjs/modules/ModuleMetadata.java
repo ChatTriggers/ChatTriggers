@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.imports;
+package com.chattriggers.ctjs.modules;
 
 import lombok.Getter;
 

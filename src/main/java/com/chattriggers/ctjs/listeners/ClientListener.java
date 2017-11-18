@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.imports.gui.ModulesGui;
+import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
