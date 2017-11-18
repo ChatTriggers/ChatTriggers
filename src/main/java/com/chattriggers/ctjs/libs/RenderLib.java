@@ -265,7 +265,7 @@ public class RenderLib {
     }
 
     // helper method to limit numbers between 0 and 255
-    private int limit255(int a) {
+    public static int limit255(int a) {
         return (a > 255) ? 255 : (a < 0 ? 0 : a);
     }
 

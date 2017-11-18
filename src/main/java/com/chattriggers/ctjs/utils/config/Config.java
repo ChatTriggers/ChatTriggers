@@ -24,22 +24,42 @@ public class Config {
     private Boolean showCapes;
     @Getter
     private String consoleTheme;
+    @Getter
+    private Boolean customTheme;
+    @Getter
+    private String fg;
+    @Getter
+    private String bg;
+
 
     private void saveConfig() {
         this.printChatToConsole = this.config.getBoolean("print chat to console", "ct", true, "Chat printing to console");
         this.showCapes = this.config.getBoolean("show capes", "ct", true, "Show developer and creator capes");
+
         this.consoleTheme = this.config.getString("console theme", "ct",
-                "default.dark", "Console theme", new String[]{
-                        "ashes.dark",
-                        "atelierforest.dark",
-                        "default.dark",
-                        "isotope.dark",
-                        "codeschool.dark",
-                        "gotham",
-                        "hybrid",
-                        "3024.light",
-                        "chalk.light"
-                });
+            "default.dark", "Console theme", new String[]{
+                "ashes.dark",
+                "atelierforest.dark",
+                "default.dark",
+                "isotope.dark",
+                "codeschool.dark",
+                "gotham",
+                "hybrid",
+                "3024.light",
+                "chalk.light",
+                "blue",
+                "slate",
+                "red",
+                "green",
+                "aids"
+            });
+
+        this.customTheme = this.config.getBoolean("custom theme", "ct",
+                false, "Use custom theme");
+        this.bg = this.config.getString("background", "ct",
+                "[21,21,21]", "Custom background color ([r,g,b])");
+        this.fg = this.config.getString("foreground", "ct",
+                "[208,208,208]", "Custom foreground color ([r,g,b])");
 
         this.config.save();
     }
