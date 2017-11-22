@@ -9,6 +9,7 @@ import lombok.Getter;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.script.ScriptException;
+import java.io.File;
 import java.util.ArrayList;
 
 public class ModuleManager {
@@ -77,5 +78,11 @@ public class ModuleManager {
     public Object eval(String script) throws ScriptException {
         //TODO: Make this elegant, I'm not sure yet how to.
         return scriptLoaders.get(0).getScriptEngine().eval(script);
+    }
+
+    public void importModule(String name) {
+        JSScriptLoader scriptLoader = (JSScriptLoader) scriptLoaders.get(0);
+        scriptLoader.downloadModule(name, true);
+        scriptLoader.loadModule(new File(scriptLoader.modulesDir, name), false);
     }
 }

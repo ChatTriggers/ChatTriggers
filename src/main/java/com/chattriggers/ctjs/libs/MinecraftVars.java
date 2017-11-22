@@ -272,6 +272,23 @@ public class MinecraftVars {
     }
 
     /**
+     * Get the {@link KeyBind} from an already existing
+     * Minecraft KeyBinding, else, return a new one.
+     * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
+     * @return the {@link KeyBind} from a Minecraft KeyBinding, or null if one doesn't exist
+     * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
+     */
+    public static KeyBind getKeyBindFromKey(int keyCode, String description) {
+        for (KeyBinding keyBinding : Minecraft.getMinecraft().gameSettings.keyBindings) {
+            if (keyBinding.getKeyCode() == keyCode) {
+                return new KeyBind(keyBinding);
+            }
+        }
+
+        return new KeyBind(description, keyCode);
+    }
+
+    /**
      * Gets a list of the players in tabs list.
      * @return A string array containing the names of the players in the tabs list.
      *          If the player is in a single player world, returns an array containing

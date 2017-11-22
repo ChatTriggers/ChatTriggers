@@ -1,7 +1,9 @@
 package com.chattriggers.ctjs.loader;
 
+import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
+import com.chattriggers.ctjs.objects.XMLHttpRequest;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class JSScriptLoader extends ScriptLoader {
     private ScriptEngine scriptEngine;
@@ -52,9 +56,6 @@ public class JSScriptLoader extends ScriptLoader {
             ScriptEngineFactory factory = (ScriptEngineFactory) factoryClass.getConstructor().newInstance();
             Method getScriptEngine = factory.getClass().getMethod("getScriptEngine", ClassLoader.class);
 
-//            System.out.println(Class.forName("org.pircbotx.ListenerAdapter", true, ucl));
-//            System.out.println(Arrays.toString(ucl.getURLs()));
-
             this.scriptEngine = (ScriptEngine) getScriptEngine.invoke(factory, ucl);
         } catch (IOException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
@@ -77,34 +78,107 @@ public class JSScriptLoader extends ScriptLoader {
         ArrayList<Module> modules = new ArrayList<>();
 
         for (File dir : getFoldersInDirectory(modulesDir)) {
-            File metadataFile = new File(dir, "metadata.json");
-            ModuleMetadata metadata = null;
+            Module mod = loadModule(dir, true);
 
-            if (metadataFile.exists()) {
-                try {
-                    metadata = new Gson().fromJson(new FileReader(metadataFile), ModuleMetadata.class);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
+            if (mod == null) continue;
 
-            try {
-                Module module = new Module(
-                    dir.getName(),
-                    compileScripts(dir.listFiles()),
-                    getAllFiles(dir.listFiles()),
-                    metadata
-                );
-
-                getScriptEngine().eval(module.getCompiledScript());
-                modules.add(module);
-            } catch (IOException | ScriptException e) {
-                Console.getConsole().printStackTrace(e);
-            }
+            modules.add(mod);
         }
 
         cachedModules = modules;
         return modules;
+    }
+
+    public Module loadModule(File dir, boolean updateCheck) {
+        File metadataFile = new File(dir, "metadata.json");
+        ModuleMetadata metadata = null;
+
+        if (metadataFile.exists()) {
+            try {
+                metadata = new Gson().fromJson(new FileReader(metadataFile), ModuleMetadata.class);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            if (metadata != null && updateCheck) {
+                XMLHttpRequest xhr = new XMLHttpRequest();
+                xhr.open("GET", "https://chattriggers.com/downloads/metadata/" + metadata.getName(), false);
+                xhr.addRequestHeader("Accept", "application/json");
+                xhr.send();
+
+                if (xhr.status == 200) {
+                    ModuleMetadata newMetadata = new Gson().fromJson(xhr.responseText, ModuleMetadata.class);
+
+                    if (Float.parseFloat(newMetadata.getVersion()) > Float.parseFloat(metadata.getVersion())) {
+                        downloadModule(metadata.getName(), false);
+                    }
+                }
+            }
+
+            Module module = new Module(
+                    dir.getName(),
+                    compileScripts(dir.listFiles()),
+                    getAllFiles(dir.listFiles()),
+                    metadata
+            );
+
+            getScriptEngine().eval(module.getCompiledScript());
+            return module;
+        } catch (IOException | ScriptException e) {
+            Console.getConsole().printStackTrace(e);
+        }
+
+        return null;
+    }
+
+    public void downloadModule(String name, boolean existCheck) {
+        if (existCheck) {
+            XMLHttpRequest xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://chattriggers.com/downloads/metadata/" + name, false);
+            xhr.send();
+
+            if (xhr.status != 200) {
+                ChatLib.chat("&cModule not found!");
+                return;
+            }
+        }
+
+        try {
+            File downloadZip = new File(modulesDir, "currDownload.zip");
+            File outputDir = new File(modulesDir, name + "/");
+            outputDir.delete();
+            outputDir.mkdir();
+            FileUtils.copyURLToFile(
+                    new URL("https://chattriggers.com/downloads/scripts/" + name),
+                    downloadZip
+            );
+
+            byte[] buffer = new byte[1024];
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(downloadZip));
+            ZipEntry zipEntry = zis.getNextEntry();
+
+            while(zipEntry != null){
+                String fileName = zipEntry.getName();
+                File newFile = new File(outputDir, fileName);
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+                zipEntry = zis.getNextEntry();
+            }
+
+            zis.closeEntry();
+            zis.close();
+            downloadZip.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

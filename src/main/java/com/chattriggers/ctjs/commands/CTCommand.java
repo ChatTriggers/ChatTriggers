@@ -72,6 +72,9 @@ public class CTCommand extends CommandBase {
                 case("files"):
                     openFileLocation();
                     break;
+                case("import"):
+                    CTJS.getInstance().getModuleManager().importModule(args[1]);
+                    break;
                 case("console"):
                     Console.getConsole().showConsole(true);
                     break;

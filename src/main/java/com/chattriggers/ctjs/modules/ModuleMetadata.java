@@ -8,6 +8,8 @@ public class ModuleMetadata {
     @Getter
     private String name = null;
     @Getter
+    private String displayName = null;
+    @Getter
     private String version = null;
     @Getter
     private ArrayList<String> tags = null;
@@ -18,7 +20,7 @@ public class ModuleMetadata {
     @Getter
     private String description = null;
 
-    public ModuleMetadata(String name, String creator, String description, String version, ArrayList<String> tags, String pictureLink) {
+    public ModuleMetadata(String name, String creator, String description, String version, ArrayList<String> tags, String pictureLink, String displayName) {
         this.name = name;
         this.creator = creator;
         this.description = description;

@@ -110,9 +110,9 @@ public class ModulesGui extends GuiScreen {
             this.x = 20;
             this.y = getY(i);
 
-            name = ChatLib.addColor(this.module.getMetadata().getName() == null
+            name = ChatLib.addColor(this.module.getMetadata().getDisplayName() == null
                     ? this.module.getName()
-                    : this.module.getMetadata().getName());
+                    : this.module.getMetadata().getDisplayName());
         }
 
         private int getY(int i) {
