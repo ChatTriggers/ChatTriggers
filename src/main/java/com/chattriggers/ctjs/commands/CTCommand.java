@@ -14,7 +14,6 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import java.awt.*;
@@ -40,13 +39,14 @@ public class CTCommand extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return "&b&m" + ChatLib.getChatBreak("-") + "\n" +
-               "&c/ct <load/reload> &b- &eReloads all of the ct modules.\n" +
-               "&c/ct files &b- &eOpens the ChatTriggers folder.\n" +
-               "&c/ct console &b- &eOpens the ct console.\n" +
-               "&c/ct simulate &b- &eSimulates a received chat message.\n" +
-               "&c/ct dump &b- &eDumps previous chat messages into chat, showing color codes.\n" +
-               "&c/ct &b- &eDisplays this help dialog\n" +
-               "&b&m" + ChatLib.getChatBreak("-");
+                "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
+                "&c/ct import [module] &7- &oImports a module.\n" +
+                "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
+                "&c/ct console &7- &oOpens the ct console.\n" +
+                "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
+                "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
+                "&c/ct &7- &oDisplays this help dialog\n" +
+                "&b&m" + ChatLib.getChatBreak("-");
     }
 
     @Override
@@ -62,11 +62,11 @@ public class CTCommand extends CommandBase {
                 case("load"):
                     TriggerType.GAME_UNLOAD.triggerAll();
                     CTJS.getInstance().getModuleManager().unload();
-                    ChatLib.chat(EnumChatFormatting.RED + "Reloading ct.js scripts...");
+                    ChatLib.chat("&cReloading ct.js scripts...");
                     new Thread(() -> {
                         CTJS.getInstance().getConfig().loadConfig();
                         CTJS.getInstance().getModuleManager().load();
-                        ChatLib.chat(EnumChatFormatting.GREEN + "Done reloading scripts!");
+                        ChatLib.chat("&aDone reloading scripts!");
                         TriggerType.WORLD_LOAD.triggerAll();
                     }).start();
                     break;
@@ -74,8 +74,12 @@ public class CTCommand extends CommandBase {
                     openFileLocation();
                     break;
                 case("import"):
-                    ChatLib.chat("&6Importing " + args[1]);
-                    CTJS.getInstance().getModuleManager().importModule(args[1]);
+                    if (args.length == 1) {
+                        ChatLib.chat("&c/ct import [module name]");
+                    } else {
+                        ChatLib.chat("&6Importing " + args[1]);
+                        CTJS.getInstance().getModuleManager().importModule(args[1]);
+                    }
                     break;
                 case("console"):
                     Console.getConsole().showConsole(true);
@@ -178,7 +182,7 @@ public class CTCommand extends CommandBase {
             Desktop.getDesktop().open(new File("./mods/ChatTriggers"));
         } catch (IOException exception) {
             Console.getConsole().printStackTrace(exception);
-            ChatLib.chat(EnumChatFormatting.RED + "Could not open file location");
+            ChatLib.chat("&cCould not open file location");
         }
     }
 }
