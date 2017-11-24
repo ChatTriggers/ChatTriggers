@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.objects.KeyBind;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -82,7 +83,9 @@ public class ModuleManager {
 
     public void importModule(String name) {
         JSScriptLoader scriptLoader = (JSScriptLoader) scriptLoaders.get(0);
-        scriptLoader.downloadModule(name, true);
-        scriptLoader.loadModule(new File(scriptLoader.modulesDir, name), false);
+        if (scriptLoader.downloadModule(name, true)) {
+            scriptLoader.loadModule(new File(scriptLoader.modulesDir, name), false);
+            ChatLib.chat("&6Successfully imported " + name + "!");
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.loader;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
-import com.chattriggers.ctjs.objects.XMLHttpRequest;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
@@ -103,17 +102,25 @@ public class JSScriptLoader extends ScriptLoader {
 
         try {
             if (metadata != null && updateCheck) {
-                XMLHttpRequest xhr = new XMLHttpRequest();
-                xhr.open("GET", "https://chattriggers.com/downloads/metadata/" + metadata.getName(), false);
-                xhr.addRequestHeader("Accept", "application/json");
-                xhr.send();
+                try {
+                    File newMetadataFile = new File(modulesDir, "currMetadata.json");
+                    FileUtils.copyURLToFile(new URL("https://chattriggers.com/downloads/metadata/" + metadata.getName()),
+                            newMetadataFile);
 
-                if (xhr.status == 200) {
-                    ModuleMetadata newMetadata = new Gson().fromJson(xhr.responseText, ModuleMetadata.class);
+                    float currVersion = Float.parseFloat(metadata.getVersion());
 
-                    if (Float.parseFloat(newMetadata.getVersion()) > Float.parseFloat(metadata.getVersion())) {
+                    ModuleMetadata newMetadata = new Gson().fromJson(new FileReader(newMetadataFile), ModuleMetadata.class);
+                    float newVersion = Float.parseFloat(newMetadata.getVersion());
+
+                    if (newVersion > currVersion) {
                         downloadModule(metadata.getName(), false);
+
+                        ChatLib.chat("&6Updated " + metadata.getName());
                     }
+
+                    newMetadataFile.delete();
+                } catch (IOException e) {
+                    Console.getConsole().out.println("Can't update module " + metadata.getName());
                 }
             }
 
@@ -133,21 +140,20 @@ public class JSScriptLoader extends ScriptLoader {
         return null;
     }
 
-    public void downloadModule(String name, boolean existCheck) {
+    public boolean downloadModule(String name, boolean existCheck) {
         if (existCheck) {
-            XMLHttpRequest xhr = new XMLHttpRequest();
-            xhr.open("GET", "https://chattriggers.com/downloads/metadata/" + name, false);
-            xhr.send();
-
-            if (xhr.status != 200) {
+            try {
+                FileUtils.copyURLToFile(new URL("https://chattriggers.com/downloads/metadata/" + name),
+                        new File(modulesDir, "currMetadata.json"));
+            } catch (IOException e) {
                 ChatLib.chat("&cModule not found!");
-                return;
+                return false;
             }
         }
 
         try {
             File downloadZip = new File(modulesDir, "currDownload.zip");
-            File outputDir = new File(modulesDir, name + "/");
+            File outputDir = new File(modulesDir, name);
             outputDir.delete();
             outputDir.mkdir();
             FileUtils.copyURLToFile(
@@ -161,7 +167,14 @@ public class JSScriptLoader extends ScriptLoader {
 
             while(zipEntry != null){
                 String fileName = zipEntry.getName();
-                File newFile = new File(outputDir, fileName);
+                File newFile = new File(outputDir, fileName.replaceAll("(?i)" + name + "/", ""));
+
+                if (zipEntry.isDirectory()) {
+                    newFile.mkdir();
+                    zipEntry = zis.getNextEntry();
+                    continue;
+                }
+
                 FileOutputStream fos = new FileOutputStream(newFile);
 
                 int len;
@@ -178,7 +191,10 @@ public class JSScriptLoader extends ScriptLoader {
             downloadZip.delete();
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
     @Override

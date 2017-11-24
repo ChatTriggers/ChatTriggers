@@ -74,6 +74,7 @@ public class CTCommand extends CommandBase {
                     openFileLocation();
                     break;
                 case("import"):
+                    ChatLib.chat("&6Importing " + args[1]);
                     CTJS.getInstance().getModuleManager().importModule(args[1]);
                     break;
                 case("console"):
