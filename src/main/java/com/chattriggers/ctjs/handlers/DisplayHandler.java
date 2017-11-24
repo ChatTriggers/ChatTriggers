@@ -31,17 +31,23 @@ public class DisplayHandler {
         }
     }
 
-    // background type
+    /**
+     * The background type of a display.
+     */
     public enum Background {
         NONE, FULL, PER_LINE
     }
 
-    // text align
+    /**
+     * The alignment of the text in a display.
+     */
     public enum Align {
         LEFT, CENTER, RIGHT
     }
 
-    // line order
+    /**
+     * The order that a display should be drawn in.
+     */
     public enum Order {
         UP, DOWN
     }

@@ -40,7 +40,6 @@ public class Display {
     public Display() {
         lines = new ArrayList<>();
 
-        //TODO: Default render X & Y?
         renderX = 0;
         renderY = 0;
 
@@ -71,6 +70,7 @@ public class Display {
 
     /**
      * Sets a display's background type.
+     * Use {@link DisplayHandler.Background}.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -80,8 +80,8 @@ public class Display {
     }
 
     /**
-     * Sets a display's background type.
-     * Background types are: FULL, PER_LINE
+     * Sets a display's background type using string input.
+     * Use {@link DisplayHandler.Background}.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -112,6 +112,7 @@ public class Display {
     
     /**
      * Sets a display's text alignment.
+     * Use {@link DisplayHandler.Align}.
      * @param align the type of alignment
      * @return the display to allow for method chaining
      */
@@ -120,6 +121,12 @@ public class Display {
         return this;
     }
 
+    /**
+     * Sets a display's text alignment using string input.
+     * Use {@link DisplayHandler.Align}.
+     * @param align the type of alignment
+     * @return the display to allow for method chaining
+     */
     public Display setAlign(String align) {
         switch (align.toUpperCase()) {
             case("LEFT"):
@@ -139,6 +146,7 @@ public class Display {
 
     /**
      * Sets a display's line order.
+     * Use {@link DisplayHandler.Order}.
      * @param order the order of lines
      * @return the display to allow method chaining
      */
@@ -147,6 +155,12 @@ public class Display {
         return this;
     }
 
+    /**
+     * Sets a display's line order using string input.
+     * Use {@link DisplayHandler.Order}.
+     * @param order the order of lines
+     * @return the display to allow method chaining
+     */
     public Display setOrder(String order) {
         switch (order.toUpperCase()) {
             case("DOWN"):
@@ -302,7 +316,6 @@ public class Display {
             ren.drawStringWithShadow(line, x - ren.getStringWidth(line)/2, y, this.textColor);
     }
 
-    // TODO: move somewhere to actually be used in js
     private void drawRect(float left, float top, float right, float bottom, int color) {
         if (left < right) {
             float i = left;
