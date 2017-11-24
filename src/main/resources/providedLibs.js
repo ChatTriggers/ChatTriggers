@@ -6,7 +6,7 @@ var Thread = Java.type("java.lang.Thread");
 // Triggers
 var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
-var Priority = Java.type("com.chattriggers.ctjs.triggers.Priority");
+var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 
 // Events
 var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
