@@ -289,25 +289,6 @@ public class MinecraftVars {
     }
 
     /**
-     * Gets a list of the players in tabs list.
-     * @return A string array containing the names of the players in the tabs list.
-     *          If the player is in a single player world, returns an array containing
-     *          the player's name.
-     */
-    public static ArrayList<String> getTabList() {
-        if (mc.isSingleplayer()) return new ArrayList<>(Collections.singletonList(getPlayerName()));
-        if (mc.getNetHandler() == null || mc.getNetHandler().getPlayerInfoMap() == null) return null;
-
-        ArrayList<String> playerNames = new ArrayList<>();
-
-        for (NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            playerNames.add(playerInfo.getGameProfile().getName());
-        }
-
-        return playerNames;
-    }
-
-    /**
      * Gets the player's X position.
      * In an import, accessible via the {@code posX} variable.
      * @return The player's X position.
