@@ -67,24 +67,4 @@ public class TabList {
             return ComparisonChain.start().compareTrueFirst(p_compare_1_.getGameType() != WorldSettings.GameType.SPECTATOR, p_compare_2_.getGameType() != WorldSettings.GameType.SPECTATOR).compare(scoreplayerteam != null ? scoreplayerteam.getRegisteredName() : "", scoreplayerteam1 != null ? scoreplayerteam1.getRegisteredName() : "").compare(p_compare_1_.getGameProfile().getName(), p_compare_2_.getGameProfile().getName()).result();
         }
     }
-
-    //TODO decide if needed
-    /**
-     * Gets a list of the players in tabs list.
-     * @return A string array containing the names of the players in the tabs list.
-     *          If the player is in a single player world, returns an array containing
-     *          the player's name.
-     */
-    public static ArrayList<String> getTabList() {
-        if (Minecraft.getMinecraft().isSingleplayer()) return new ArrayList<>(Collections.singletonList(MinecraftVars.getPlayerName()));
-        if (Minecraft.getMinecraft().getNetHandler() == null || Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap() == null) return null;
-
-        ArrayList<String> playerNames = new ArrayList<>();
-
-        for (NetworkPlayerInfo playerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-            playerNames.add(playerInfo.getGameProfile().getName());
-        }
-
-        return playerNames;
-    }
 }
