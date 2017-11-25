@@ -28,6 +28,7 @@ var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 var LookingAt = Java.type("com.chattriggers.ctjs.objects.LookingAt");
 var Inventory = Java.type("com.chattriggers.ctjs.objects.Inventory");
 var CPS = Java.type("com.chattriggers.ctjs.CTJS").getInstance().getCps();
+var TabList = Java.type("com.chattriggers.ctjs.objects.TabList");
 
 /*Built in Vars */
 var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
