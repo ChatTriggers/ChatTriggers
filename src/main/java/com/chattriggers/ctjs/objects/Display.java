@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.objects;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.handlers.DisplayHandler;
 import com.chattriggers.ctjs.libs.ChatLib;
-import com.chattriggers.ctjs.utils.console.Console;
+import com.chattriggers.ctjs.libs.RenderLib;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Display {
-    private ArrayList<String> lines;
+    @Getter @Setter
+    private ArrayList<DisplayLine> lines;
     @Getter @Setter
     private float renderX;
     @Getter @Setter
@@ -30,8 +31,6 @@ public class Display {
     private int backgroundColor;
     @Getter
     private DisplayHandler.Align align;
-    @Getter
-    private int textColor;
     @Getter
     private DisplayHandler.Order order;
 
@@ -50,20 +49,7 @@ public class Display {
         align = DisplayHandler.Align.LEFT;
         order = DisplayHandler.Order.DOWN;
 
-        textColor = 0xffffffff;
-
         CTJS.getInstance().getDisplayHandler().registerDisplay(this);
-    }
-
-
-    /**
-     * Sets a display's text color.
-     * @param color the integer color of the text
-     * @return the display to allow for method chaining
-     */
-    public Display setTextColor(int color) {
-        this.textColor = color;
-        return this;
     }
 
 
@@ -128,17 +114,8 @@ public class Display {
      * @return the display to allow for method chaining
      */
     public Display setAlign(String align) {
-        switch (align.toUpperCase()) {
-            case("LEFT"):
-                this.align = DisplayHandler.Align.LEFT;
-                break;
-            case("RIGHT"):
-                this.align = DisplayHandler.Align.RIGHT;
-                break;
-            case("CENTER"):
-                this.align = DisplayHandler.Align.CENTER;
-                break;
-        }
+        this.align = DisplayHandler.Align.getAlignByName(align);
+
         return this;
     }
 
@@ -176,54 +153,86 @@ public class Display {
 
 
     /**
-     * Sets a display line to a certain string.
+     * Sets a display line to a string.
      * @param lineNumber the line number to set (0 based)
      * @param line the string to set the line to
      * @return the display to allow for method chaining
      */
     public Display setLine(int lineNumber, String line) {
         while (this.lines.size() - 1 < lineNumber)
-            this.lines.add("");
+            this.lines.add(new DisplayLine(""));
 
-        this.lines.set(lineNumber, ChatLib.addColor(line));
+        this.lines.set(lineNumber, new DisplayLine(line));
 
         return this;
     }
 
     /**
-     * Gets a string from a line in a display.
+     * Sets a display line to a DisplayLine
+     * @param lineNumber the line number to set (0 based)
+     * @param line the DisplayLine to set the line to
+     * @return the display to allow for method chaining
+     */
+    public Display setLine(int lineNumber, DisplayLine line) {
+        while (this.lines.size() - 1 < lineNumber)
+            this.lines.add(new DisplayLine(""));
+
+        this.lines.set(lineNumber, line);
+
+        return this;
+    }
+
+    /**
+     * Gets a DisplayLine from a line in a display.
      * @param lineNumber the line number to get
      * @return the string in line of display
      */
-    public String getLine(int lineNumber) {
+    public DisplayLine getLine(int lineNumber) {
         try {
             return lines.get(lineNumber);
         } catch (Exception exception) {
-            return "null";
+            return new DisplayLine("");
         }
     }
 
     /**
      * Adds as many lines as you specify onto the end of
      * the display (appends them).
-     * @param lines a variable amount of lines to add
+     * @param lines a variable amount of strings to add
      * @return the display to allow for method chaining
      */
     public Display addLines(String... lines) {
-        for (int i = 0; i < lines.length; i++) {
-            lines[i] = ChatLib.addColor(lines[i]);
-        }
+        for (String line : lines)
+            this.lines.add(new DisplayLine(line));
+        return this;
+    }
 
+    /**
+     * Adds as many DisplayLines as you specify onto the
+     * end of the display (appends them).
+     * @param lines a variable amount of DisplayLine to add
+     * @return the display to allow for method chaining
+     */
+    public Display addLines(DisplayLine... lines) {
         Collections.addAll(this.lines, lines);
         return this;
     }
 
     /**
      * Adds one line to a display.
-     * @param line the line to add
+     * @param line the string to add
      * @return the display to allow for method chaining
      */
     public Display addLine(String line) {
+        return addLines(line);
+    }
+
+    /**
+     * Adds one DisplayLine to a display.
+     * @param line the DisplayLine to add
+     * @return the display to allow for method chaining
+     */
+    public Display addLine(DisplayLine line) {
         return addLines(line);
     }
 
@@ -234,7 +243,7 @@ public class Display {
      */
     public Display addLines(int lines) {
         for (int i=0; i<lines; i++) {
-            this.lines.add("");
+            this.lines.add(new DisplayLine(""));
         }
         return this;
     }
@@ -268,13 +277,13 @@ public class Display {
     public void render() {
         if (!shouldRender) return;
 
-        if (this.background == DisplayHandler.Background.FULL) {
-            int maxWidth = 0;
-            for (String line : lines) {
-                if (ren.getStringWidth(line) > maxWidth)
-                    maxWidth = ren.getStringWidth(line);
-            }
+        int maxWidth = 0;
+        for (DisplayLine line : lines) {
+            if (ren.getStringWidth(line.getText()) > maxWidth)
+                maxWidth = ren.getStringWidth(line.getText());
+        }
 
+        if (this.background == DisplayHandler.Background.FULL) {
             if (this.order == DisplayHandler.Order.DOWN)
                 drawBackground(this.renderX, this.renderY, maxWidth, lines.size()*10);
             else if (this.order == DisplayHandler.Order.UP)
@@ -283,11 +292,11 @@ public class Display {
 
         int i = 0;
 
-        for (String line : lines) {
-            if (!line.equals("") && this.background == DisplayHandler.Background.PER_LINE)
-                drawBackground(this.renderX, this.renderY + (i*10), ren.getStringWidth(line), 10);
+        for (DisplayLine line : lines) {
+            if (!line.getText().equals("") && this.background == DisplayHandler.Background.PER_LINE)
+                drawBackground(this.renderX, this.renderY + (i*10), ren.getStringWidth(line.getText()), 10);
 
-            drawString(line, this.renderX, this.renderY + (i * 10));
+            drawLine(line, this.renderX, this.renderY + (i * 10), maxWidth);
 
             if (order == DisplayHandler.Order.DOWN)
                 i++;
@@ -306,14 +315,14 @@ public class Display {
             drawRect(x - width/2, y, x + width/2, y + height, this.backgroundColor);
     }
 
-    // helper method to draw string with align
-    private void drawString(String line, float x, float y) {
+    // helper method to draw line with align
+    private void drawLine(DisplayLine line, float x, float y, int maxWidth) {
         if (this.align == DisplayHandler.Align.LEFT)
-            ren.drawStringWithShadow(line, x, y, this.textColor);
+            line.draw(x, 0,  y, maxWidth);
         else if (this.align == DisplayHandler.Align.RIGHT)
-            ren.drawStringWithShadow(line, x - ren.getStringWidth(line), y, this.textColor);
+            line.draw(x,  - ren.getStringWidth(line.getText()), y, -maxWidth);
         else if (this.align == DisplayHandler.Align.CENTER)
-            ren.drawStringWithShadow(line, x - ren.getStringWidth(line)/2, y, this.textColor);
+            line.draw(x,  - ren.getStringWidth(line.getText())/2, y, 0);
     }
 
     private void drawRect(float left, float top, float right, float bottom, int color) {
@@ -347,5 +356,72 @@ public class Display {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+    }
+
+    public static class DisplayLine {
+        @Getter
+        String text;
+        int color;
+        DisplayHandler.Align align;
+        Boolean shadow;
+
+        public DisplayLine(String text) {
+            this.text = ChatLib.addColor(text);
+
+            this.color = 0xffffffff;
+            this.align = DisplayHandler.Align.LEFT;
+            this.shadow = true;
+        }
+
+        /**
+         * Sets the alignment of the line (based on max width of display)
+         * @param align the alignment
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine setAlign(String align) {
+            this.align = DisplayHandler.Align.getAlignByName(align);
+            return this;
+        }
+
+        /**
+         * Sets the text color of the line
+         * @param color the integer color
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine setColor(int color) {
+            this.color = color;
+            return this;
+        }
+
+        /**
+         * Sets if a drop shadow is drawn (true by default)
+         * @param shadow if the shadow is drawn
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine setShadow(boolean shadow) {
+            this.shadow = shadow;
+            return this;
+        }
+
+        private void draw(float x, float xOffset, float y, float maxWidth) {
+            if (this.text.equals("")) return;
+
+            if (this.align == DisplayHandler.Align.LEFT) {
+                if (this.shadow)
+                    RenderLib.drawStringWithShadow(this.text, x + xOffset, y, this.color);
+                else
+                    RenderLib.drawString(this.text, x + xOffset, y, 1, this.color, false);
+            } else if (this.align == DisplayHandler.Align.RIGHT) {
+                if (this.shadow)
+                    RenderLib.drawStringWithShadow(this.text, x - RenderLib.getStringWidth(text) + maxWidth, y, this.color);
+                else
+                    RenderLib.drawString(this.text, x - RenderLib.getStringWidth(text) + maxWidth, y, 1, this.color, false);
+            } else if (this.align == DisplayHandler.Align.CENTER) {
+                if (this.shadow)
+                    RenderLib.drawStringWithShadow(this.text, x - RenderLib.getStringWidth(text) / 2 + maxWidth / 2, y, this.color);
+                else
+                    RenderLib.drawString(this.text, x - RenderLib.getStringWidth(text) / 2 + maxWidth / 2, y, 1, this.color, false);
+            }
+        }
     }
 }

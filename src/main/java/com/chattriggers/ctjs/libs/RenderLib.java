@@ -168,11 +168,11 @@ public class RenderLib {
      * @param scale scales the text size
      * @param color the color
      */
-    public static void drawString(String text, float x, float y, float scale, int color) {
+    public static void drawString(String text, float x, float y, float scale, int color, Boolean dropShadow) {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.scale(scale, scale, scale);
-        Minecraft.getMinecraft().fontRendererObj.drawString(text, x / scale, y / scale, color, false);
+        Minecraft.getMinecraft().fontRendererObj.drawString(text, x / scale, y / scale, color, dropShadow);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
@@ -185,7 +185,7 @@ public class RenderLib {
      * @param color the color
      */
     public static void drawString(String text, float x, float y, int color) {
-        drawString(text, x, y, 1, color);
+        drawString(text, x, y, 1, color, false);
     }
 
     /**
@@ -197,12 +197,7 @@ public class RenderLib {
      * @param color the color
      */
     public static void drawStringWithShadow(String text, float x, float y, float scale, int color) {
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.scale(scale, scale, scale);
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x / scale, y / scale, color);
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
+        drawString(text, x, y, scale, color, true);
     }
 
     /**

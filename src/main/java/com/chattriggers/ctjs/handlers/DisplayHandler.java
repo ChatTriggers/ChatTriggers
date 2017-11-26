@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.handlers;
 
 import com.chattriggers.ctjs.objects.Display;
+import lombok.Getter;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -42,7 +43,18 @@ public class DisplayHandler {
      * The alignment of the text in a display.
      */
     public enum Align {
-        LEFT, CENTER, RIGHT
+        LEFT, CENTER, RIGHT;
+
+        public static Align getAlignByName(String align) {
+            switch (align.toUpperCase()) {
+                case("RIGHT"):
+                    return RIGHT;
+                case("CENTER"):
+                    return CENTER;
+                default:
+                    return LEFT;
+            }
+        }
     }
 
     /**

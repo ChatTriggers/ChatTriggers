@@ -18,6 +18,7 @@ var MathLib = Java.type("com.chattriggers.ctjs.libs.MathLib");
 // Objects
 var Display = Java.type("com.chattriggers.ctjs.objects.Display");
 var DisplayHandler = Java.type("com.chattriggers.ctjs.handlers.DisplayHandler");
+var DisplayLine = Java.type("com.chattriggers.ctjs.objects.Display.DisplayLine");
 var Gui = Java.type("com.chattriggers.ctjs.objects.Gui");
 var Message = Java.type("com.chattriggers.ctjs.objects.Message");
 var Book = Java.type("com.chattriggers.ctjs.objects.Book");
