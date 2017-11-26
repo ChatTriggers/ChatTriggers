@@ -182,11 +182,11 @@ public class Display {
      * @return the display to allow for method chaining
      */
     public Display setLine(int lineNumber, String line) {
-        try {
-            lines.set(lineNumber, ChatLib.addColor(line));
-        } catch (Exception exception) {
-            Console.getConsole().printStackTrace(exception);
-        }
+        while (this.lines.size() - 1 < lineNumber)
+            this.lines.add("");
+
+        this.lines.set(lineNumber, ChatLib.addColor(line));
+
         return this;
     }
 
