@@ -31,6 +31,8 @@ public class Display {
     private DisplayHandler.Align align;
     @Getter
     private DisplayHandler.Order order;
+    @Getter
+    private int minWidth;
 
     private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
 
@@ -47,6 +49,8 @@ public class Display {
         this.textColor = 0xffffffff;
         this.align = DisplayHandler.Align.LEFT;
         this.order = DisplayHandler.Order.DOWN;
+
+        this.minWidth = 0;
 
         CTJS.getInstance().getDisplayHandler().registerDisplay(this);
     }
@@ -114,7 +118,6 @@ public class Display {
      */
     public Display setAlign(String align) {
         this.align = DisplayHandler.Align.getAlignByName(align);
-
         return this;
     }
 
@@ -249,7 +252,15 @@ public class Display {
         return this;
     }
 
-
+    /**
+     * Sets the minimum width of a display
+     * @param width the width to set
+     * @return the display to allow for method chaining
+     */
+    public Display setMinWidth(int width) {
+        this.minWidth = width;
+        return this;
+    }
 
     /**
      * Set the X and Y render position of the display.
@@ -269,7 +280,7 @@ public class Display {
     public void render() {
         if (!shouldRender) return;
 
-        int maxWidth = 0;
+        int maxWidth = this.minWidth;
         for (DisplayLine line : lines) {
             if (ren.getStringWidth(line.getText()) > maxWidth)
                 maxWidth = (int) Math.ceil(ren.getStringWidth(line.getText()) * line.getScale());
@@ -300,7 +311,6 @@ public class Display {
     public static class DisplayLine {
         @Getter
         String text;
-
         int textWidth;
 
         Integer textColor;
