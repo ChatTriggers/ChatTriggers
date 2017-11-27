@@ -8,10 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 import java.util.ArrayList;
 import java.util.Collections;
