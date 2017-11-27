@@ -36,23 +36,37 @@ public class DisplayHandler {
      * The background type of a display.
      */
     public enum Background {
-        NONE, FULL, PER_LINE
+        NONE, FULL, PER_LINE;
+
+        public static Background getBackgroundByName(String background) {
+            switch(background.toUpperCase()) {
+                case("FULL"):
+                    return FULL;
+                case("PER LINE"):
+                case("PER_LINE"):
+                    return PER_LINE;
+                default:
+                    return NONE;
+            }
+        }
     }
 
     /**
      * The alignment of the text in a display.
      */
     public enum Align {
-        LEFT, CENTER, RIGHT;
+        NONE, LEFT, CENTER, RIGHT;
 
         public static Align getAlignByName(String align) {
             switch (align.toUpperCase()) {
+                case("LEFT"):
+                    return LEFT;
                 case("RIGHT"):
                     return RIGHT;
                 case("CENTER"):
                     return CENTER;
                 default:
-                    return LEFT;
+                    return NONE;
             }
         }
     }
@@ -61,6 +75,15 @@ public class DisplayHandler {
      * The order that a display should be drawn in.
      */
     public enum Order {
-        UP, DOWN
+        UP, DOWN;
+
+        public static Order getOrderByName(String order) {
+            switch (order.toUpperCase()) {
+                case("UP"):
+                    return UP;
+                default:
+                    return DOWN;
+            }
+        }
     }
 }
