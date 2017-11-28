@@ -14,12 +14,28 @@ import java.util.regex.Pattern;
 
 
 public class OnChatTrigger extends OnTrigger {
-    private String chatCriteria = "";
+    private String chatCriteria;
     private Pattern criteriaPattern;
-    private List<Parameter> parameters = new ArrayList<>();
+    private List<Parameter> parameters;
+    private Boolean triggerIfCanceled;
 
     public OnChatTrigger(String methodName) {
         super(methodName, TriggerType.CHAT);
+
+        this.chatCriteria = "";
+        this.parameters = new ArrayList<>();
+        this.triggerIfCanceled = true;
+    }
+
+    /**
+     * Sets if the chat trigger should run if the chat event has already been canceled.
+     * True by default.
+     * @param bool Boolean to set
+     * @return the trigger for method chaining
+     */
+    public OnChatTrigger triggerIfCanceled(Boolean bool) {
+        this.triggerIfCanceled = bool;
+        return this;
     }
 
     /**
@@ -48,7 +64,6 @@ public class OnChatTrigger extends OnTrigger {
      */
     public OnChatTrigger setParameter(String parameter) {
         this.parameters = Collections.singletonList(Parameter.getParameterByName(parameter));
-
         return this;
     }
 
@@ -60,11 +75,8 @@ public class OnChatTrigger extends OnTrigger {
      */
     public OnChatTrigger setParameters(String... parameters) {
         this.parameters.clear();
-
-        for (String parameter : parameters) {
+        for (String parameter : parameters)
             this.parameters.add(Parameter.getParameterByName(parameter));
-        }
-
         return this;
     }
 
@@ -75,7 +87,6 @@ public class OnChatTrigger extends OnTrigger {
      */
     public OnChatTrigger addParameter(String parameter) {
         this.parameters.add(Parameter.getParameterByName(parameter));
-
         return this;
     }
 
@@ -85,10 +96,8 @@ public class OnChatTrigger extends OnTrigger {
      * @return the trigger for method chaining
      */
     public OnChatTrigger addParameters(String... parameters) {
-        for (String parameter : parameters) {
+        for (String parameter : parameters)
             this.parameters.add(Parameter.getParameterByName(parameter));
-        }
-
         return this;
     }
 
@@ -99,24 +108,24 @@ public class OnChatTrigger extends OnTrigger {
      */
     @Override
     public void trigger(Object... args) {
-        if (!(args[0] instanceof String) || !(args[1] instanceof ClientChatReceivedEvent)) {
+        if (!(args[0] instanceof String) || !(args[1] instanceof ClientChatReceivedEvent))
             throw new IllegalArgumentException("Argument 1 must be a String, Argument 2 must be a ClientChatReceivedEvent");
-        }
+
+        ClientChatReceivedEvent chatEvent = (ClientChatReceivedEvent) args[1];
+        if (!this.triggerIfCanceled && chatEvent.isCanceled()) return;
 
         String chatMessage = (String) args[0];
 
-        if (chatCriteria.contains("&")) {
+        if (chatCriteria.contains("&"))
             chatMessage = ((ClientChatReceivedEvent) args[1]).message.getFormattedText().replace("\u00a7", "&");
-        }
 
         List<Object> variables = new ArrayList<>();
-        if (!chatCriteria.equals("")) {
+        if (!chatCriteria.equals(""))
             variables = matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
-        }
 
         if (variables != null) {
             try {
-                variables.add(args[1]);
+                variables.add(chatEvent);
                 CTJS.getInstance().getModuleManager().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
             } catch (ScriptException | NoSuchMethodException e) {
                 Console.getConsole().printStackTrace(e);
@@ -145,11 +154,8 @@ public class OnChatTrigger extends OnTrigger {
                     if (!matcher.find() || matcher.start() != 0) return null;
                 } else if (parameter == Parameter.END) {
                     int endMatch = -1;
-
-                    while (matcher.find()) {
+                    while (matcher.find())
                         endMatch = matcher.end();
-                    }
-
                     if (endMatch != chat.length()) return null;
                 } else if (parameter == null) {
                     if (!matcher.matches()) return null;
