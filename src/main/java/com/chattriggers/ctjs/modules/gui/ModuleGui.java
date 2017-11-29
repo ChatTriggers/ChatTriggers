@@ -131,8 +131,19 @@ public class ModuleGui extends GuiScreen {
                 0xffffffff
         );
 
-        // code
         int fileOffset = 20;
+
+        if (this.module.getMetadata().getRequires()!= null) {
+            RenderLib.drawStringWithShadow(
+                    "Requires: " + this.module.getMetadata().getRequires(),
+                    22,
+                    infoHeight - scrolled + 20,
+                    0xffffffff
+            );
+            fileOffset += 20;
+        }
+
+        // code
         for (Map.Entry<String, List<String>> file : coloredFiles.entrySet()) {
             RenderLib.drawRectangle(
                     0x80000000,
