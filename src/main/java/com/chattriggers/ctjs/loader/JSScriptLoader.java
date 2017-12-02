@@ -247,7 +247,7 @@ public class JSScriptLoader extends ScriptLoader {
         for (File file : files) {
             if (!file.isFile() || !file.exists() || !file.getName().endsWith(".js")) continue;
 
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             String line;
 
             parseScript:
