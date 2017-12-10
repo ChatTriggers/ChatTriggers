@@ -15,7 +15,7 @@ public class WorldLib {
      * @param pitch the pitch of the sound
      */
     public static void playSound(String name, float volume, float pitch) {
-        Minecraft.getMinecraft().thePlayer.playSound(name, volume, pitch);
+        MinecraftVars.getPlayer().playSound(name, volume, pitch);
     }
 
     /**

@@ -261,19 +261,19 @@ public class MinecraftVars {
      *          is in a single player world.
      */
     public static Long getPing() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = getPlayer();
 
-        if (player == null || mc.isSingleplayer()) {
+        if (player == null || getMinecraft().isSingleplayer()) {
             return 5L;
         }
 
-        if(Minecraft.getMinecraft().getNetHandler().getPlayerInfo(UUID.fromString(Minecraft.getMinecraft().thePlayer.getGameProfile().getId().toString())) != null) {
-            return (long) Minecraft.getMinecraft().getNetHandler().getPlayerInfo(
-                    UUID.fromString(Minecraft.getMinecraft().thePlayer.getGameProfile().getId().toString())
+        if(getConnection().getPlayerInfo(UUID.fromString(getPlayer().getGameProfile().getId().toString())) != null) {
+            return (long) getConnection().getPlayerInfo(
+                    UUID.fromString(getPlayer().getGameProfile().getId().toString())
             ).getResponseTime();
         }
 
-        return Minecraft.getMinecraft().getCurrentServerData().pingToServer;
+        return getMinecraft().getCurrentServerData().pingToServer;
     }
 
     /**
