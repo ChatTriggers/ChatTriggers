@@ -36,9 +36,9 @@ public class ChatLib {
         ChatComponentText cct = new ChatComponentText(addColor(message));
 
         if (recursive) {
-            Minecraft.getMinecraft().getNetHandler().handleChat(new S02PacketChat(cct, (byte) 0));
+            MinecraftVars.getConnection().handleChat(new S02PacketChat(cct, (byte) 0));
         } else {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(cct);
+            MinecraftVars.getPlayer().addChatMessage(cct);
             CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
         }
     }
