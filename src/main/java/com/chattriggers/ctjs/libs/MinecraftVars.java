@@ -2,13 +2,12 @@ package com.chattriggers.ctjs.libs;
 
 import com.chattriggers.ctjs.objects.KeyBind;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -16,7 +15,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.UUID;
 
 public class MinecraftVars {
@@ -38,6 +36,30 @@ public class MinecraftVars {
     }
     public static Boolean isDownArrowDown() {
         return keyDownArrow.isKeyDown();
+    }
+
+    /**
+     * Gets the Minecraft object.
+     * @return the Minecraft object
+     */
+    public static Minecraft getMinecraft() {
+        return mc;
+    }
+
+    /**
+     * Gets the world object.
+     * @return the world object
+     */
+    public static WorldClient getWorld() {
+        return mc.theWorld;
+    }
+
+    /**
+     * Gets the player object.
+     * @return the player object
+     */
+    public static EntityPlayerSP getPlayer() {
+        return mc.thePlayer;
     }
 
     /**
@@ -464,7 +486,7 @@ public class MinecraftVars {
     }
 
     /**
-     * Checks if player is pushed by water currently
+     * Checks if player is pushed by water currently.
      * In an import, accessible via the {@code isFlying} variable.
      * @return If the player is flying (and false if the player does not exist)
      */
@@ -473,11 +495,19 @@ public class MinecraftVars {
     }
 
     /**
-     * Checks if player is sleeping
+     * Checks if player is sleeping.
      * In an import, accessible via the {@code isSleeping} variable.
      * @return If the player is sleeping (and false if the player does not exist)
      */
     public static boolean isSleeping(){
         return mc.thePlayer != null && mc.thePlayer.isPlayerSleeping();
+    }
+
+    /**
+     * Gets the system time.
+     * @return the system time
+     */
+    public static Long getSystemTime() {
+        return Minecraft.getSystemTime();
     }
 }

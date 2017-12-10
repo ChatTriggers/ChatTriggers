@@ -1,9 +1,10 @@
 package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.libs.EventLib;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -26,7 +27,7 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().theWorld == null) return;
+        if (MinecraftVars.getWorld() == null) return;
 
         TriggerType.TICK.triggerAll(ticksPassed);
         ticksPassed++;
@@ -34,7 +35,7 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-        if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
             // render overlay trigger
             TriggerType.RENDER_OVERLAY.triggerAll();
 
@@ -47,7 +48,7 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onMouseEvent(MouseEvent event) {
-        if (event.button == -1) return;
+        if (EventLib.getButton(event) == -1) return;
 
         // clicked trigger
         TriggerType.CLICKED.triggerAll(event.button, event.buttonstate, event);

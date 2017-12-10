@@ -1,17 +1,15 @@
 package com.chattriggers.ctjs.objects;
 
-import net.minecraft.client.Minecraft;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 
 public class Inventory {
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     /**
      * Gets the slot of the player's currently held item.
      *
      * @return {@link InventorySlot} of currently selected hotbar position.
      */
     public static InventorySlot getHeldItem() {
-        return new InventorySlot(mc.thePlayer.inventory.currentItem, false);
+        return new InventorySlot(MinecraftVars.getPlayer().inventory.currentItem, false);
     }
 
     public static InventorySlot getHelmet() {

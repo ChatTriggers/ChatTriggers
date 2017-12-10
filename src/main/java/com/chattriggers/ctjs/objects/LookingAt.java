@@ -1,11 +1,11 @@
 package com.chattriggers.ctjs.objects;
 
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LookingAt {
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static MovingObjectPosition mop;
 
     private static Entity entity;
@@ -26,13 +25,13 @@ public class LookingAt {
     private static Block block;
 
     public static void update() {
-        if (mc.thePlayer == null || mc.theWorld == null || mc.objectMouseOver == null) return;
+        if (MinecraftVars.getPlayer() == null || MinecraftVars.getWorld() == null || MinecraftVars.getMinecraft().objectMouseOver == null) return;
 
-        mop = mc.objectMouseOver;
+        mop = MinecraftVars.getMinecraft().objectMouseOver;
 
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             pos = mop.getBlockPos();
-            block = mc.theWorld.getBlockState(pos).getBlock();
+            block = MinecraftVars.getMinecraft().theWorld.getBlockState(pos).getBlock();
             entity = null;
         } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             entity = mop.entityHit;
@@ -80,12 +79,12 @@ public class LookingAt {
     public static double getDistanceFromPlayer() {
         if (block != null) {
             return Math.sqrt(
-                       Math.pow(pos.getX() - mc.thePlayer.posX + .5, 2) +
-                       Math.pow(pos.getY() - mc.thePlayer.posY - .5, 2) +
-                       Math.pow(pos.getZ() - mc.thePlayer.posZ + .5, 2)
+                       Math.pow(pos.getX() - MinecraftVars.getPlayer().posX + .5, 2) +
+                       Math.pow(pos.getY() - MinecraftVars.getPlayer().posY - .5, 2) +
+                       Math.pow(pos.getZ() - MinecraftVars.getPlayer().posZ + .5, 2)
                    );
         } else if (entity != null) {
-            return (double) entity.getDistanceToEntity(mc.thePlayer);
+            return (double) entity.getDistanceToEntity(MinecraftVars.getPlayer());
         } else {
             return -1d;
         }
@@ -175,12 +174,12 @@ public class LookingAt {
      * @return The block's metadata.
      */
     public static int getBlockMetadata() {
-        if (block == null || mc.theWorld == null || pos == null) return -1;
+        if (block == null || MinecraftVars.getWorld() == null || pos == null) return -1;
 
         String rn = block.getRegistryName().replace("minecraft:", "");
         int md;
         try {
-            md = block.getMetaFromState(mc.theWorld.getBlockState(pos));
+            md = block.getMetaFromState(MinecraftVars.getWorld().getBlockState(pos));
         } catch (Exception e) {
             Console.getConsole().printStackTrace(e);
             return -1;
@@ -247,7 +246,7 @@ public class LookingAt {
         if (pos == null || newPos == null) return -1;
 
         if (block.getLightValue() != 0) return block.getLightValue();
-        else return mc.theWorld.getLightFor(EnumSkyBlock.BLOCK, newPos);
+        else return MinecraftVars.getWorld().getLightFor(EnumSkyBlock.BLOCK, newPos);
     }
 
     /**
@@ -258,9 +257,9 @@ public class LookingAt {
      * @return A JSON string of block properties.
      */
     public static String getBlockProperties() {
-        if (block == null || mc.theWorld == null || pos == null) return "null";
+        if (block == null || MinecraftVars.getWorld() == null || pos == null) return "null";
         HashMap<String, Object> map = new HashMap<>();
-        ImmutableMap<IProperty, Comparable> properties = mc.theWorld.getBlockState(pos).getProperties();
+        ImmutableMap<IProperty, Comparable> properties = MinecraftVars.getWorld().getBlockState(pos).getProperties();
 
         for (Map.Entry<IProperty, Comparable> property : properties.entrySet()) {
             map.put(property.getKey().getName(), property.getValue());
@@ -275,7 +274,7 @@ public class LookingAt {
      * @return True if the block is on fire, false otherwise.
      */
     public static boolean isBlockOnFire() {
-        return pos != null && mc.theWorld.getBlockState(pos.up()).getBlock().getUnlocalizedName().equals("tile.fire");
+        return pos != null && MinecraftVars.getWorld().getBlockState(pos.up()).getBlock().getUnlocalizedName().equals("tile.fire");
     }
 
     /**

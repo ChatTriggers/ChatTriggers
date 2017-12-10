@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.ChatLib;
+import com.chattriggers.ctjs.libs.EventLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import lombok.Getter;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -17,7 +18,7 @@ public class ChatListener {
 
     @SubscribeEvent
     public void onReceiveChat(ClientChatReceivedEvent event) {
-        if (event.type == 0 || event.type == 1) {
+        if (EventLib.getType(event) == 0 || EventLib.getType(event) == 1) {
             // normal Chat Message
             TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event);
 

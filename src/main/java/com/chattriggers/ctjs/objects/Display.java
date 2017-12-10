@@ -34,8 +34,6 @@ public class Display {
     @Getter
     private int minWidth;
 
-    private FontRenderer ren = Minecraft.getMinecraft().fontRendererObj;
-
     public Display() {
         this.lines = new ArrayList<>();
 
@@ -282,8 +280,8 @@ public class Display {
 
         int maxWidth = this.minWidth;
         for (DisplayLine line : lines) {
-            if (ren.getStringWidth(line.getText()) > maxWidth)
-                maxWidth = (int) Math.ceil(ren.getStringWidth(line.getText()) * line.getScale());
+            if (RenderLib.getStringWidth(line.getText()) > maxWidth)
+                maxWidth = (int) Math.ceil(RenderLib.getStringWidth(line.getText()) * line.getScale());
         }
 
         int i = 0;
