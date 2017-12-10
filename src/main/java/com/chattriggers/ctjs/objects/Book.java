@@ -82,7 +82,7 @@ public class Book {
 
     public void display(int page) {
         if (bookScreen == null) {
-            bookScreen = new GuiScreenBook(Minecraft.getMinecraft().thePlayer, book, false);
+            bookScreen = new GuiScreenBook(MinecraftVars.getPlayer(), book, false);
         }
 
         ReflectionHelper.setPrivateValue(GuiScreenBook.class, bookScreen, page, "currPage", "field_146484_x");

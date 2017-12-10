@@ -51,11 +51,11 @@ public class ClientListener {
         if (EventLib.getButton(event) == -1) return;
 
         // clicked trigger
-        TriggerType.CLICKED.triggerAll(event.button, event.buttonstate, event);
+        TriggerType.CLICKED.triggerAll(EventLib.getButton(event), EventLib.getButtonState(event), event);
 
         // add to cps
-        if (event.button == 0 && event.buttonstate) CTJS.getInstance().getCps().addLeftClicks();
-        if (event.button == 1 && event.buttonstate) CTJS.getInstance().getCps().addRightClicks();
+        if (EventLib.getButton(event) == 0 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addLeftClicks();
+        if (EventLib.getButton(event) == 1 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addRightClicks();
     }
 
     @SubscribeEvent

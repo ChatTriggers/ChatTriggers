@@ -1,12 +1,12 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.objects.Message;
 import com.chattriggers.ctjs.utils.console.Console;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -125,7 +125,7 @@ public class CTCommand extends CommandBase {
         CTJS.getInstance().getChatListener().onReceiveChat(event);
 
         if (!event.isCanceled()) {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(ChatLib.addColor(toSend.toString().trim())));
+            MinecraftVars.getPlayer().addChatMessage(new ChatComponentText(ChatLib.addColor(toSend.toString().trim())));
         }
     }
 
