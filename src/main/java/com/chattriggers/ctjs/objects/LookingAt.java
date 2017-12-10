@@ -31,7 +31,7 @@ public class LookingAt {
 
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             pos = mop.getBlockPos();
-            block = MinecraftVars.getMinecraft().theWorld.getBlockState(pos).getBlock();
+            block = MinecraftVars.getWorld().getBlockState(pos).getBlock();
             entity = null;
         } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             entity = mop.entityHit;
