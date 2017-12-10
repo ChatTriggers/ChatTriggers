@@ -149,6 +149,8 @@ public class JSScriptLoader extends ScriptLoader {
                 ChatLib.chat("&cModule not found!");
                 return false;
             }
+
+            new File(modulesDir,  "currMetadata.json").delete();
         }
 
         try {
