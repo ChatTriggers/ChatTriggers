@@ -52,7 +52,7 @@ public class MinecraftVars {
      * @return the world object
      */
     public static WorldClient getWorld() {
-        return getWorld();
+        return getMinecraft().theWorld;
     }
 
     /**
@@ -60,7 +60,7 @@ public class MinecraftVars {
      * @return the player object
      */
     public static EntityPlayerSP getPlayer() {
-        return getPlayer();
+        return getMinecraft().thePlayer;
     }
 
     /**
@@ -68,7 +68,7 @@ public class MinecraftVars {
      * @return the connection object
      */
     public static NetHandlerPlayClient getConnection() {
-        return mc.getNetHandler();
+        return getMinecraft().getNetHandler();
     }
 
     /**
@@ -77,7 +77,7 @@ public class MinecraftVars {
      * @return The username of the user.
      */
     public static String getPlayerName() {
-        return mc.getSession().getUsername();
+        return getMinecraft().getSession().getUsername();
     }
 
     /**
@@ -86,7 +86,7 @@ public class MinecraftVars {
      * @return The UUID of the user.
      */
     public static String getPlayerUUID() {
-        return mc.getSession().getPlayerID();
+        return getMinecraft().getSession().getPlayerID();
     }
 
     /**
