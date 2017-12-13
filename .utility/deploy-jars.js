@@ -7,7 +7,14 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     var { exec } = require('child_process');
 
     exec("mkdir jars");
-    exec("cp -R ../build/libs/* jars");
+    exec("cp ../build/libs/* jars");
+    exec("ls", (error, stdout) => {
+        console.log(stdout);
+    });
+    exec("ls jars", (error, stdout) => {
+        console.log(stdout);
+    });
+
 
     var FtpClient = require('ftp-client');
     var client = new FtpClient({
