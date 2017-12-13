@@ -8,10 +8,8 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
     exec("mkdir jars");
     exec("cp ../build/libs/* jars");
-    exec("ls", (error, stdout) => {
-        console.log(stdout);
-    });
-    exec("ls jars", (error, stdout) => {
+    console.log("Listing files...");
+    exec("find .", (error, stdout) => {
         console.log(stdout);
     });
 
