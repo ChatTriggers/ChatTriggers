@@ -17,7 +17,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
     console.log("Publishing userdocs...");
 
-    var exec = require('child_process');
+    var { exec } = require('child_process');
 
     exec("mkdir .utility/javadocs");
     exec("cp -R build/docs/javadoc .utility/javadocs");
