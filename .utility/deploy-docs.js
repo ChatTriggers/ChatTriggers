@@ -2,6 +2,11 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     && process.env.TRAVIS_PULL_REQUEST == "false"
     && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")) {
 
+    if (process.env.TRAVIS_COMMIT_MESSAGE.includes("-n") || process.env.TRAVIS_COMMIT_MESSAGE.includes("--no")) {
+        console.log("Not deploying docs!");
+        return;
+    }
+
     console.log("Publishing userdocs...");
 
     var { exec } = require('child_process');
@@ -23,11 +28,6 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
 
     client.connect(function () {
-        client.ftp.rmdir('/public_html/javadocs', function (err) {
-            if (err) console.log(err, 'debug');
-            console.log("Removed old docs!");
-        });
-
         client.upload(['javadocs/**'], '/public_html/javadocs', {
             baseDir: 'javadocs',
             overwrite: 'all'

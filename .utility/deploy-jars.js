@@ -2,6 +2,11 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     && process.env.TRAVIS_PULL_REQUEST == "false"
     && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")) {
 
+    if (process.env.TRAVIS_COMMIT_MESSAGE.includes("-n") || process.env.TRAVIS_COMMIT_MESSAGE.includes("--no")) {
+        console.log("Not deploying jars!");
+        return;
+    }
+
     console.log("Publishing jars...");
 
     var { exec } = require('child_process');
