@@ -33,3 +33,4 @@ eclipse
 *.iws
 mcmod.info
 classes/production/
+.utility/node_modules/

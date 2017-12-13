@@ -14,14 +14,10 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
         classpath "io.franzbecker:gradle-lombok:1.10"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: "io.franzbecker.gradle-lombok"
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'gradle-one-jar'
 
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
@@ -29,8 +25,8 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.1-SNAPSHOT"
-group= "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "0.3.1-SNAPSHOT"
+group = "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ctjs"
 
 apply plugin: 'java'
@@ -54,7 +50,6 @@ minecraft {
 
 dependencies {
     compile files('libs/nashorn.jar')
-    shadow files('libs/lombok.jar')
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -102,18 +97,15 @@ task userdocs(type: Javadoc) {
     options.links("https://docs.oracle.com/javase/8/docs/api/")
     source = sourceSets.main.allJava
     classpath += configurations.compile
-    exclude "com/chattriggers/ctjs/CTJS.java"
     exclude "com/chattriggers/ctjs/commands/**.java"
-    exclude "com/chattriggers/ctjs/utils/capes/**.java"
     exclude "com/chattriggers/ctjs/listeners/**.java"
-    exclude "com/chattriggers/ctjs/utils/ImagesPack.java"
-    exclude "com/chattriggers/ctjs/utils/console/**.java"
-    exclude "com/chattriggers/ctjs/Reference.java"
+    exclude "com/chattriggers/ctjs/utils/*/**.java"
+    exclude "com/chattriggers/ctjs/*.java"
     exclude "com/chattriggers/ctjs/triggers/TriggerType.java"
     exclude "com/chattriggers/ctjs/modules/**.java"
-    exclude "com/chattriggers/ctjs/modules/gui/**.java"
     exclude "com/chattriggers/ctjs/loader/**.java"
-    exclude "com/chattrigges/ctjs/utils/config/**.java"
+    exclude "com/chattriggers/ctjs/handlers/GuiHandler.java"
+    exclude "com/chattriggers/ctjs/utils/*.java"
 }
 
 configure(userdocs) {

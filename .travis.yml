@@ -1,0 +1,18 @@
+language: java
+jdk:
+- oraclejdk8
+- openjdk8
+before_install:
+- chmod +x gradlew
+- ". $HOME/.nvm/nvm.sh"
+- nvm install stable
+- nvm use stable
+- cd .utility && npm install && cd ..
+install: "./gradlew setupCIWorkspace -S"
+script:
+- "./gradlew build -S"
+- "./gradlew userdocs -q"
+after_success:
+- cd .utility/
+- npm run deploy-docs
+- npm run deploy-jars
