@@ -9,9 +9,6 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     exec("mkdir jars");
     exec("cp ../build/libs/* jars");
     console.log("Listing files...");
-    exec("find .", (error, stdout) => {
-        console.log(stdout);
-    });
 
 
     var FtpClient = require('ftp-client');
@@ -25,7 +22,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     });
 
     client.connect(function () {
-        client.upload(['jars/*'], '/public_html/versions', {
+        client.upload(['./jars/*'], '/public_html/versions', {
             overwrite: 'older'
         }, function (result) {
             console.log(result);
