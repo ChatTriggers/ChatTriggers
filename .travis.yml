@@ -11,7 +11,7 @@ before_install:
 - . $HOME/.nvm/nvm.sh
 - nvm install stable
 - nvm use stable
-- "cd .utility && npm install"
+- "cd .utility && npm install && cd .."
 install: "./gradlew setupCIWorkspace -S"
 script:
 - "./gradlew build -S"
