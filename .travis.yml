@@ -8,9 +8,14 @@ env:
   - secure: hlWfaiB5ras7JRHzUuLuUTIMYllNjXKpv8wHU4BFm/Ze4u+3JiJT8eIF7exCROF9mmHUAiSLfkvEEy2vadjElg7VgZ25KwAPKNkfJ1JoD8X47hbpL7G6T3vMrMZ5xxzeuyCpAVX9Q/GRdds8j5Wt5/J6zR6cLs6p4YRasges7PEf04sb9nn/D2NQEiAnKsZivqmbemXGSrkhR6D7JSqUwph+p1QFtxA4dPg0gODJiiC0C27c8cfowj043CHpa7sjcB33kPBbMUvh5aGEFzGIhVuGxsOGiPUHzghez7+VFyKHM8ZLLkK2CdcGwvCK+pZgx5ZRylM9cl34qpDPQCtNLQOBa0MVBQAhqfLgHhGMNsHnmP/ol/6um9j94NywtO7tswmf26/yHv8NUfmlZte7fPfdpyZEsM9UwU9oMqlinTK9BHYgivxlM7JEKoag9taB/9urJf6AARLuhMyveFZ0OsCGvnC4FYzMRSk+oHNji3i/J1H8IWGD2czm7MMHZRbldvTa9tTtN43v0XhNxW/27RzurMt93dRBMCRaOzKf6QSts3ql5aXxNg+BLzE7nETWbs8GDdUp5yyB6lLRrhzU4O1ZlFslXVbnzZZhf27m9JXGMZVJfw/zqw8BKVEiy3MyDYjq9gG2ryr8b3Hn9Tekhn7Py0NMOhXr+Fyr1tzQz/U=
 before_install:
 - "chmod +x gradlew"
-- "sudo apt-get install lftp"
+- . $HOME/.nvm/nvm.sh
+- nvm install stable
+- nvm use stable
+- "cd .utility && npm install"
 install: "./gradlew setupCIWorkspace -S"
-script: "./gradlew build -S"
-after_success:
+script:
+- "./gradlew build -S"
 - "./gradlew userdocs -q"
-- ".utility/push-jdocs.sh"
+after_success:
+- "npm run deploy-docs"
+- "npm run deploy-jars"

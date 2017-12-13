@@ -1,0 +1,16 @@
+{
+  "name": "ct.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "ftp-client": "^0.2.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy-docs": "node deploy-docs.js",
+    "deploy-jars": "node deploy-jars.js"
+  },
+  "author": "FalseHonesty",
+  "license": "ISC"
+}
