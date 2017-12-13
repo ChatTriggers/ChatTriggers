@@ -22,7 +22,8 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     });
 
     client.connect(function () {
-        client.upload(['./jars/*'], '/public_html/versions', {
+        client.upload(['jars/*'], '/public_html/versions', {
+            baseDir: 'jars',
             overwrite: 'older'
         }, function (result) {
             console.log(result);
