@@ -12,6 +12,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -52,7 +53,14 @@ public class MinecraftVars {
      * @return the world object
      */
     public static WorldClient getWorld() {
-        return getMinecraft().theWorld;
+        try {
+            return (WorldClient) ReflectionHelper.findField(Minecraft.class,
+                    "theWorld", "world" /* add obfuscated names too*/)
+                    .get(getMinecraft());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return getMinecraft().theWorld;
+        }
     }
 
     /**
@@ -60,7 +68,14 @@ public class MinecraftVars {
      * @return the player object
      */
     public static EntityPlayerSP getPlayer() {
-        return getMinecraft().thePlayer;
+        try {
+            return (EntityPlayerSP) ReflectionHelper.findField(Minecraft.class,
+                    "thePlayer", "player" /* add obfuscated names too*/)
+                    .get(getMinecraft());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return getMinecraft().thePlayer;
+        }
     }
 
     /**
