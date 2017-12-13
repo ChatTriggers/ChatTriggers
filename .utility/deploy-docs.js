@@ -9,6 +9,8 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     exec("mkdir .utility/javadocs");
     exec("cp -R build/docs/javadoc .utility/javadocs");
 
+    console.log(process.env.FTP_USER + ":" + process.env.FTP_PASSWORD);
+
     var FtpClient = require('ftp-client');
     var client = new FtpClient({
         host: 'chattriggers.com',
