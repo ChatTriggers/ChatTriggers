@@ -1,16 +1,3 @@
-console.log("Repo slug: " + process.env.TRAVIS_REPO_SLUG);
-console.log(process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js");
-console.log("PR: " + process.env.TRAVIS_PULL_REQUEST);
-console.log(process.env.TRAVIS_PULL_REQUEST == "false");
-console.log("Branch: " + process.env.TRAVIS_BRANCH);
-console.log(process.env.TRAVIS_BRANCH === "master");
-console.log(process.env.TRAVIS_BRANCH === "travis");
-console.log((process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis"));
-
-console.log((process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
-    && process.env.TRAVIS_PULL_REQUEST == false
-    && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")));
-
 if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     && process.env.TRAVIS_PULL_REQUEST == "false"
     && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")) {
@@ -39,9 +26,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
             overwrite: 'all'
         }, function (result) {
             console.log(result);
+            console.log("Published userdocs to production.");
         });
     });
-
-    console.log("Published userdocs to production.");
-
 }

@@ -1,10 +1,10 @@
 if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
-    && process.env.TRAVIS_PULL_REQUEST == false
+    && process.env.TRAVIS_PULL_REQUEST == "false"
     && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")) {
 
     console.log("Publishing jars...");
 
-    var exec = require('child_process');
+    var { exec } = require('child_process');
 
     exec("mkdir .utility/jars");
     exec("cp -R build/libs/* .utility/jars");
@@ -24,8 +24,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
             overwrite: 'older'
         }, function (result) {
             console.log(result);
+            console.log("Published jars to production.");
         });
     });
-
-    console.log("Published jars to production.");
 }
