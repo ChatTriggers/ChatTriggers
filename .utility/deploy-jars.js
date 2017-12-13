@@ -2,10 +2,13 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     && process.env.TRAVIS_PULL_REQUEST == "false"
     && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")) {
 
-    if (process.env.TRAVIS_COMMIT_MESSAGE.includes("-n") || process.env.TRAVIS_COMMIT_MESSAGE.includes("--no")) {
+    if (!process.env.TRAVIS_COMMIT_MESSAGE.includes("--release stable")
+        && !process.env.TRAVIS_COMMIT_MESSAGE.includes("--release snapshot")) {
         console.log("Not deploying jars!");
         return;
     }
+
+    var folderToDeploy = process.env.TRAVIS_COMMIT_MESSAGE.includes("--release stable") ? "stable" : "snapshot";
 
     console.log("Publishing jars...");
 
@@ -27,9 +30,9 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     });
 
     client.connect(function () {
-        client.upload(['jars/*'], '/public_html/versions', {
+        client.upload(['jars/*'], '/public_html/versions/' + folderToDeploy, {
             baseDir: 'jars',
-            overwrite: 'older'
+            overwrite: 'all'
         }, function (result) {
             console.log(result);
             console.log("Published jars to production.");
