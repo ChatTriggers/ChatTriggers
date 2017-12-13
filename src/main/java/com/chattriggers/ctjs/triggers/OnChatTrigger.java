@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.libs.EventLib;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
@@ -117,7 +118,7 @@ public class OnChatTrigger extends OnTrigger {
         String chatMessage = (String) args[0];
 
         if (chatCriteria.contains("&"))
-            chatMessage = ((ClientChatReceivedEvent) args[1]).message.getFormattedText().replace("\u00a7", "&");
+            chatMessage = EventLib.getMessage((ClientChatReceivedEvent) args[1]).getFormattedText().replace("\u00a7", "&");
 
         List<Object> variables = new ArrayList<>();
         if (!chatCriteria.equals(""))

@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.handlers;
 
+import com.chattriggers.ctjs.libs.EventLib;
 import com.chattriggers.ctjs.objects.Display;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,7 +25,7 @@ public class DisplayHandler {
 
     @SubscribeEvent
     public void renderDisplays(RenderGameOverlayEvent event) {
-        if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
             for (Display display : displays) {
                 display.render();
             }

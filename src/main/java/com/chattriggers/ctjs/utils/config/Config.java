@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.Reference;
+import com.chattriggers.ctjs.libs.EventLib;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraftforge.common.config.Configuration;
@@ -71,7 +72,7 @@ public class Config {
 
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID.equals(Reference.MODID)) {
+        if (EventLib.getModId(event).equals(Reference.MODID)) {
             saveConfig();
         }
     }

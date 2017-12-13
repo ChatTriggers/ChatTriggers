@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
 
@@ -47,13 +48,13 @@ public class OnStepTrigger extends OnTrigger {
         try {
             if (this.delay == null) {
                 // run trigger based on set fps value (60 per second by default)
-                while (this.systemTime < Minecraft.getSystemTime() + (1000 / this.fps)) {
+                while (this.systemTime < MinecraftVars.getSystemTime() + (1000 / this.fps)) {
                     CTJS.getInstance().getModuleManager().invokeFunction(this.methodName);
                     this.systemTime += (1000 / this.fps);
                 }
             } else {
                 // run trigger based on set delay in seconds
-                while (Minecraft.getSystemTime() > this.systemTime + this.delay * 1000) {
+                while (MinecraftVars.getSystemTime() > this.systemTime + this.delay * 1000) {
                     CTJS.getInstance().getModuleManager().invokeFunction(this.methodName);
                     this.systemTime += this.delay * 1000;
                 }

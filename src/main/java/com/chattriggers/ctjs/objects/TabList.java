@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.objects;
 import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Ordering;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.Score;
@@ -11,7 +10,6 @@ import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.world.WorldSettings;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,7 +23,7 @@ public class TabList {
     public static List<String> getNamesByObjectives() {
         List<String> tabNames = new ArrayList<>();
         try {
-            Scoreboard scoreboard = FMLClientHandler.instance().getClient().theWorld.getScoreboard();
+            Scoreboard scoreboard = MinecraftVars.getWorld().getScoreboard();
             ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0);
             Collection<Score> scores = scoreboard.getSortedScores(sidebarObjective);
             for (Score score : scores) {
@@ -47,7 +45,7 @@ public class TabList {
         List<String> names = new ArrayList<>();
 
         Ordering<NetworkPlayerInfo> tab = Ordering.from(new PlayerComparator());
-        NetHandlerPlayClient nethandlerplayclient = Minecraft.getMinecraft().thePlayer.sendQueue;
+        NetHandlerPlayClient nethandlerplayclient = MinecraftVars.getPlayer().sendQueue;
         List<NetworkPlayerInfo> list = tab.sortedCopy(nethandlerplayclient.getPlayerInfoMap());
 
         for (NetworkPlayerInfo player : list) {

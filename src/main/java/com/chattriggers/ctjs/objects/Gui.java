@@ -1,10 +1,10 @@
 package com.chattriggers.ctjs.objects;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
@@ -35,8 +35,8 @@ public class Gui extends GuiScreen {
      * Closes this gui screen.
      */
     public void close() {
-        if (Minecraft.getMinecraft().currentScreen == this)
-            Minecraft.getMinecraft().thePlayer.closeScreen();
+        if (MinecraftVars.getMinecraft().currentScreen == this)
+            MinecraftVars.getPlayer().closeScreen();
     }
 
     /**
@@ -44,7 +44,7 @@ public class Gui extends GuiScreen {
      * @return true if this gui is open
      */
     public boolean isOpen() {
-        return Minecraft.getMinecraft().currentScreen == this;
+        return MinecraftVars.getMinecraft().currentScreen == this;
     }
 
     /**

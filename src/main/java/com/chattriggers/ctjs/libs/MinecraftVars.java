@@ -2,13 +2,13 @@ package com.chattriggers.ctjs.libs;
 
 import com.chattriggers.ctjs.objects.KeyBind;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.scoreboard.Score;
-import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -16,7 +16,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.UUID;
 
 public class MinecraftVars {
@@ -41,12 +40,44 @@ public class MinecraftVars {
     }
 
     /**
+     * Gets the Minecraft object.
+     * @return the Minecraft object
+     */
+    public static Minecraft getMinecraft() {
+        return mc;
+    }
+
+    /**
+     * Gets the world object.
+     * @return the world object
+     */
+    public static WorldClient getWorld() {
+        return getMinecraft().theWorld;
+    }
+
+    /**
+     * Gets the player object.
+     * @return the player object
+     */
+    public static EntityPlayerSP getPlayer() {
+        return getMinecraft().thePlayer;
+    }
+
+    /**
+     * Gets the connection object.
+     * @return the connection object
+     */
+    public static NetHandlerPlayClient getConnection() {
+        return getMinecraft().getNetHandler();
+    }
+
+    /**
      * Gets the player's username.
      * In an import, accessible via the {@code playerName} variable.
      * @return The username of the user.
      */
     public static String getPlayerName() {
-        return mc.getSession().getUsername();
+        return getMinecraft().getSession().getUsername();
     }
 
     /**
@@ -55,7 +86,7 @@ public class MinecraftVars {
      * @return The UUID of the user.
      */
     public static String getPlayerUUID() {
-        return mc.getSession().getPlayerID();
+        return getMinecraft().getSession().getPlayerID();
     }
 
     /**
@@ -64,7 +95,7 @@ public class MinecraftVars {
      * @return The player's HP.
      */
     public static Float getPlayerHP() {
-        return mc.thePlayer == null ? null : mc.thePlayer.getHealth();
+        return getPlayer() == null ? null : getPlayer().getHealth();
     }
 
     /**
@@ -73,7 +104,7 @@ public class MinecraftVars {
      * @return The player's hunger level.
      */
     public static Integer getPlayerHunger() {
-        return mc.thePlayer == null ? null : mc.thePlayer.getFoodStats().getFoodLevel();
+        return getPlayer() == null ? null : getPlayer().getFoodStats().getFoodLevel();
     }
 
     /**
@@ -82,7 +113,7 @@ public class MinecraftVars {
      * @return The player's saturation level.
      */
     public static Float getPlayerSaturation() {
-        return mc.thePlayer == null ? null : mc.thePlayer.getFoodStats().getSaturationLevel();
+        return getPlayer() == null ? null : getPlayer().getFoodStats().getSaturationLevel();
     }
 
     /**
@@ -91,7 +122,7 @@ public class MinecraftVars {
      * @return The player's armor points.
      */
     public static Integer getPlayerArmorPoints() {
-        return mc.thePlayer == null ? null : mc.thePlayer.getTotalArmorValue();
+        return getPlayer() == null ? null : getPlayer().getTotalArmorValue();
     }
 
     /**
@@ -104,7 +135,7 @@ public class MinecraftVars {
      * @return An integer corresponding to the player's air level.
      */
     public static Integer getPlayerAirLevel() {
-        return mc.thePlayer == null ? null : mc.thePlayer.getAir();
+        return getPlayer() == null ? null : getPlayer().getAir();
     }
 
     /**
@@ -113,7 +144,7 @@ public class MinecraftVars {
      * @return The player's XP level.
      */
     public static Integer getXPLevel() {
-        return mc.thePlayer == null ? null : mc.thePlayer.experienceLevel;
+        return getPlayer() == null ? null : getPlayer().experienceLevel;
     }
 
     /**
@@ -122,7 +153,7 @@ public class MinecraftVars {
      * @return The player's xp progress.
      */
     public static Float getXPProgress() {
-        return mc.thePlayer == null ? null : mc.thePlayer.experience;
+        return getPlayer() == null ? null : getPlayer().experience;
     }
 
     /**
@@ -131,11 +162,11 @@ public class MinecraftVars {
      * @return The biome the player is in.
      */
     public static String getPlayerBiome() {
-        if (mc.thePlayer == null) {
+        if (getPlayer() == null) {
             return null;
         }
-        Chunk chunk = mc.theWorld.getChunkFromBlockCoords(mc.thePlayer.getPosition());
-        BiomeGenBase biome = chunk.getBiome(mc.thePlayer.getPosition(), mc.theWorld.getWorldChunkManager());
+        Chunk chunk = getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
+        BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(), getWorld().getWorldChunkManager());
 
         return biome.biomeName;
     }
@@ -146,9 +177,9 @@ public class MinecraftVars {
      * @return The light level at the player's current position.
      */
     public static Integer getPlayerLightLevel() {
-        if (mc.thePlayer == null || mc.theWorld == null) return null;
+        if (getPlayer() == null || getWorld() == null) return null;
 
-        return mc.theWorld.getLight(mc.thePlayer.getPosition());
+        return getWorld().getLight(getPlayer().getPosition());
     }
 
     /**
@@ -157,7 +188,7 @@ public class MinecraftVars {
      * @return True if the player has the chat open, false otherwise.
      */
     public static boolean isInChat() {
-        return mc.currentScreen instanceof GuiChat;
+        return getMinecraft().currentScreen instanceof GuiChat;
     }
 
     /**
@@ -166,7 +197,7 @@ public class MinecraftVars {
      * @return True if the player has the tab list open, false otherwise.
      */
     public static boolean isInTab() {
-        return mc.gameSettings.keyBindPlayerList.isKeyDown();
+        return getMinecraft().gameSettings.keyBindPlayerList.isKeyDown();
     }
 
     /**
@@ -175,7 +206,7 @@ public class MinecraftVars {
      * @return True if the player is sneaking, false otherwise.
      */
     public static boolean isSneaking() {
-        return mc.thePlayer != null && mc.thePlayer.isSneaking();
+        return getPlayer() != null && getPlayer().isSneaking();
     }
 
     /**
@@ -184,7 +215,7 @@ public class MinecraftVars {
      * @return True if the player is sprinting, false otherwise.
      */
     public static boolean isSprinting() {
-        return mc.thePlayer != null && mc.thePlayer.isSprinting();
+        return getPlayer() != null && getPlayer().isSprinting();
     }
 
     /**
@@ -194,9 +225,9 @@ public class MinecraftVars {
      *          is in a single player world.
      */
     public static String getServerIP() {
-        if (mc.isSingleplayer()) return "localhost";
+        if (getMinecraft().isSingleplayer()) return "localhost";
 
-        return mc.getCurrentServerData() == null ? null : mc.getCurrentServerData().serverIP;
+        return getMinecraft().getCurrentServerData() == null ? null : getMinecraft().getCurrentServerData().serverIP;
     }
 
     /**
@@ -206,9 +237,9 @@ public class MinecraftVars {
      *          is in a single player world.
      */
     public static String getServerName() {
-        if (mc.isSingleplayer()) return "SinglePlayer";
+        if (getMinecraft().isSingleplayer()) return "SinglePlayer";
 
-        return mc.getCurrentServerData() == null ? null : mc.getCurrentServerData().serverName;
+        return getMinecraft().getCurrentServerData() == null ? null : getMinecraft().getCurrentServerData().serverName;
     }
 
     /**
@@ -218,9 +249,9 @@ public class MinecraftVars {
      *          is in a single player world.
      */
     public static String getServerMOTD() {
-        if (mc.isSingleplayer()) return "SinglePlayer";
+        if (getMinecraft().isSingleplayer()) return "SinglePlayer";
 
-        return mc.getCurrentServerData() == null ? null : mc.getCurrentServerData().serverMOTD;
+        return getMinecraft().getCurrentServerData() == null ? null : getMinecraft().getCurrentServerData().serverMOTD;
     }
 
     /**
@@ -230,19 +261,19 @@ public class MinecraftVars {
      *          is in a single player world.
      */
     public static Long getPing() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = getPlayer();
 
-        if (player == null || mc.isSingleplayer()) {
+        if (player == null || getMinecraft().isSingleplayer()) {
             return 5L;
         }
 
-        if(Minecraft.getMinecraft().getNetHandler().getPlayerInfo(UUID.fromString(Minecraft.getMinecraft().thePlayer.getGameProfile().getId().toString())) != null) {
-            return (long) Minecraft.getMinecraft().getNetHandler().getPlayerInfo(
-                    UUID.fromString(Minecraft.getMinecraft().thePlayer.getGameProfile().getId().toString())
+        if(getConnection().getPlayerInfo(UUID.fromString(getPlayer().getGameProfile().getId().toString())) != null) {
+            return (long) getConnection().getPlayerInfo(
+                    UUID.fromString(getPlayer().getGameProfile().getId().toString())
             ).getResponseTime();
         }
 
-        return Minecraft.getMinecraft().getCurrentServerData().pingToServer;
+        return getMinecraft().getCurrentServerData().pingToServer;
     }
 
     /**
@@ -262,7 +293,7 @@ public class MinecraftVars {
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
     public static KeyBind getKeyBindFromKey(int keyCode) {
-        for (KeyBinding keyBinding : Minecraft.getMinecraft().gameSettings.keyBindings) {
+        for (KeyBinding keyBinding : getMinecraft().gameSettings.keyBindings) {
             if (keyBinding.getKeyCode() == keyCode) {
                 return new KeyBind(keyBinding);
             }
@@ -279,7 +310,7 @@ public class MinecraftVars {
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
     public static KeyBind getKeyBindFromKey(int keyCode, String description) {
-        for (KeyBinding keyBinding : Minecraft.getMinecraft().gameSettings.keyBindings) {
+        for (KeyBinding keyBinding : getMinecraft().gameSettings.keyBindings) {
             if (keyBinding.getKeyCode() == keyCode) {
                 return new KeyBind(keyBinding);
             }
@@ -294,7 +325,7 @@ public class MinecraftVars {
      * @return The player's X position.
      */
     public static Double getPlayerPosX() {
-        return mc.thePlayer == null ? null : mc.thePlayer.posX;
+        return getPlayer() == null ? null : getPlayer().posX;
     }
 
     /**
@@ -303,7 +334,7 @@ public class MinecraftVars {
      * @return The player's Y position.
      */
     public static Double getPlayerPosY() {
-        return mc.thePlayer == null ? null : mc.thePlayer.posY;
+        return getPlayer() == null ? null : getPlayer().posY;
     }
 
     /**
@@ -312,7 +343,7 @@ public class MinecraftVars {
      * @return The player's Z position.
      */
     public static Double getPlayerPosZ() {
-        return mc.thePlayer == null ? null : mc.thePlayer.posZ;
+        return getPlayer() == null ? null : getPlayer().posZ;
     }
 
     /**
@@ -321,7 +352,7 @@ public class MinecraftVars {
      * @return The player's X motion.
      */
     public static Double getPlayerMotionX() {
-        return mc.thePlayer == null ? null : mc.thePlayer.motionX;
+        return getPlayer() == null ? null : getPlayer().motionX;
     }
 
     /**
@@ -330,7 +361,7 @@ public class MinecraftVars {
      * @return The player's Y motion.
      */
     public static Double getPlayerMotionY() {
-        return mc.thePlayer == null ? null : mc.thePlayer.motionY;
+        return getPlayer() == null ? null : getPlayer().motionY;
     }
 
     /**
@@ -339,7 +370,7 @@ public class MinecraftVars {
      * @return The player's Z motion.
      */
     public static Double getPlayerMotionZ() {
-        return mc.thePlayer == null ? null : mc.thePlayer.motionZ;
+        return getPlayer() == null ? null : getPlayer().motionZ;
     }
 
     /**
@@ -348,7 +379,7 @@ public class MinecraftVars {
      * @return The player's camera pitch.
      */
     public static Float getPlayerPitch() {
-        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationPitch);
+        return getPlayer() == null ? null : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
     }
 
     /**
@@ -357,7 +388,7 @@ public class MinecraftVars {
      * @return The player's camera yaw.
      */
     public static Float getPlayerYaw() {
-        return mc.thePlayer == null ? null : MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
+        return getPlayer() == null ? null : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
     }
 
     /**
@@ -366,7 +397,7 @@ public class MinecraftVars {
      * @return The direction the player is facing, one of the four cardinal directions.
      */
     public static String getPlayerFacing() {
-        if (mc.thePlayer == null) {
+        if (getPlayer() == null) {
             return null;
         }
 
@@ -409,10 +440,10 @@ public class MinecraftVars {
      * @return The player's active potion effects.
      */
     public static String[] getActivePotionEffects(){
-        if (mc.thePlayer == null) return null;
+        if (getPlayer() == null) return null;
         
         ArrayList<String> effects = new ArrayList<>();
-        for(PotionEffect effect : mc.thePlayer.getActivePotionEffects()){
+        for(PotionEffect effect : getPlayer().getActivePotionEffects()){
             effects.add(effect.toString());
         }
         return effects.toArray(new String[effects.size()]);
@@ -424,7 +455,7 @@ public class MinecraftVars {
      * @return The player's minecraft version.
      */
     public static String getMinecraftVersion() {
-        return Minecraft.getMinecraft().getVersion();
+        return getMinecraft().getVersion();
     }
 
     /**
@@ -464,20 +495,28 @@ public class MinecraftVars {
     }
 
     /**
-     * Checks if player is pushed by water currently
+     * Checks if player is pushed by water currently.
      * In an import, accessible via the {@code isFlying} variable.
      * @return If the player is flying (and false if the player does not exist)
      */
     public static boolean isFlying(){
-        return !(mc.thePlayer != null && mc.thePlayer.isPushedByWater());
+        return !(getPlayer() != null && getPlayer().isPushedByWater());
     }
 
     /**
-     * Checks if player is sleeping
+     * Checks if player is sleeping.
      * In an import, accessible via the {@code isSleeping} variable.
      * @return If the player is sleeping (and false if the player does not exist)
      */
     public static boolean isSleeping(){
-        return mc.thePlayer != null && mc.thePlayer.isPlayerSleeping();
+        return getPlayer() != null && getPlayer().isPlayerSleeping();
+    }
+
+    /**
+     * Gets the system time.
+     * @return the system time
+     */
+    public static Long getSystemTime() {
+        return Minecraft.getSystemTime();
     }
 }

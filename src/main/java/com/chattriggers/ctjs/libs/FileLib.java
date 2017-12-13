@@ -31,7 +31,7 @@ public class FileLib {
     public static String read(String importName, String fileName) {
         try {
             File file = new File("./mods/ChatTriggers/modules/" + importName + "/" + fileName);
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
 
             if (!file.exists() || br.readLine() == null) {
                 br.close();

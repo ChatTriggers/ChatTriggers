@@ -18,7 +18,6 @@ public class Console {
     public PrintStream out;
     private TextAreaOutputStream taos;
     private ArrayList<Component> components;
-    private boolean shouldClear;
 
     @Getter
     private static Console console;

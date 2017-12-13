@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -89,12 +89,20 @@ public class RenderLib {
     }
 
     /**
+     * Gets the font renderer object.
+     * @return the font renderer object
+     */
+    public static FontRenderer getFontRenderer() {
+        return MinecraftVars.getMinecraft().fontRendererObj;
+    }
+
+    /**
      * Gets a strings width.
      * @param text the text to get the width of
      * @return the width of the text
      */
     public static int getStringWidth(String text) {
-        return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
+        return getFontRenderer().getStringWidth(text);
     }
 
     /**
@@ -172,7 +180,7 @@ public class RenderLib {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.scale(scale, scale, scale);
-        Minecraft.getMinecraft().fontRendererObj.drawString(text, x / scale, y / scale, color, dropShadow);
+        getFontRenderer().drawString(text, x / scale, y / scale, color, dropShadow);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
@@ -613,7 +621,7 @@ public class RenderLib {
     public static void drawPlayerOnScreen(int posX, int posY, int scale, boolean rotate) {
         float mouseX = -30;
         float mouseY = 0;
-        EntityLivingBase ent = Minecraft.getMinecraft().thePlayer;
+        EntityLivingBase ent = MinecraftVars.getPlayer();
 
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
