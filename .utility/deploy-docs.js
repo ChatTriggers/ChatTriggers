@@ -23,6 +23,11 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
 
     client.connect(function () {
+        client.ftp.rmdir('/public_html/javadocs', function (err) {
+            if (err) log(err, 'debug');
+            console.log("Removed old docs!");
+        });
+
         client.upload(['javadocs/**'], '/public_html/javadocs', {
             baseDir: 'javadocs',
             overwrite: 'all'
