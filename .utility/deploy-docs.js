@@ -1,3 +1,7 @@
+console.log("Repo slug: " + process.env.TRAVIS_REPO_SLUG);
+console.log("PR: " + process.env.TRAVIS_PULL_REQUEST);
+console.log("Branch: " + process.env.TRAVIS_BRANCH);
+
 if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
     && process.env.TRAVIS_PULL_REQUEST == false
     && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")) {
