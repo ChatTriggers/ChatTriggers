@@ -6,8 +6,8 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
     var { exec } = require('child_process');
 
-    exec("mkdir .utility/javadocs");
-    exec("cp -R build/docs/javadoc .utility/javadocs");
+    exec("mkdir javadocs");
+    exec("cp -R ../build/docs/javadoc javadocs");
 
     console.log(process.env.FTP_USER + ":" + process.env.FTP_PASSWORD);
 
@@ -23,7 +23,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
 
     client.connect(function () {
-        client.upload(['.utility/javadocs/**'], '/public_html/javadocs', {
+        client.upload(['javadocs/**'], '/public_html/javadocs', {
             baseDir: 'javadocs',
             overwrite: 'all'
         }, function (result) {
