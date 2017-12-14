@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class MinecraftVars {
-    private static Minecraft mc = Minecraft.getMinecraft();
-
     public static KeyBinding keyLeftArrow = new KeyBinding("left", Keyboard.KEY_LEFT, "CT Controls");
     public static KeyBinding keyRightArrow = new KeyBinding("right", Keyboard.KEY_RIGHT, "CT Controls");
     public static KeyBinding keyUpArrow = new KeyBinding("up", Keyboard.KEY_UP, "CT Controls");
@@ -45,7 +43,7 @@ public class MinecraftVars {
      * @return the Minecraft object
      */
     public static Minecraft getMinecraft() {
-        return mc;
+        return Minecraft.getMinecraft();
     }
 
     /**
@@ -55,11 +53,12 @@ public class MinecraftVars {
     public static WorldClient getWorld() {
         try {
             return (WorldClient) ReflectionHelper.findField(Minecraft.class,
-                    "theWorld", "world" /* add obfuscated names too*/)
+                    "theWorld", "field_71441_e",
+                    "world", "field_147550_f")
                     .get(getMinecraft());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            return getMinecraft().theWorld;
+            return null;
         }
     }
 
@@ -70,11 +69,12 @@ public class MinecraftVars {
     public static EntityPlayerSP getPlayer() {
         try {
             return (EntityPlayerSP) ReflectionHelper.findField(Minecraft.class,
-                    "thePlayer", "player" /* add obfuscated names too*/)
+                    "thePlayer", "field_70475_c",
+                    "player", "field_145917_k")
                     .get(getMinecraft());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            return getMinecraft().thePlayer;
+            return null;
         }
     }
 
