@@ -50,6 +50,7 @@ minecraft {
 
 dependencies {
     compile files('libs/nashorn.jar')
+    compile 'io.sentry:sentry:1.6.3'
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

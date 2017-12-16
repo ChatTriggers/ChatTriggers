@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.loader;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
+import com.chattriggers.ctjs.triggers.TriggerRegister;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
@@ -131,7 +132,11 @@ public class JSScriptLoader extends ScriptLoader {
                     metadata
             );
 
+            TriggerRegister.currentModule = module;
+
             getScriptEngine().eval(module.getCompiledScript());
+
+            TriggerRegister.currentModule = null;
             return module;
         } catch (IOException | ScriptException e) {
             Console.getConsole().printStackTrace(e);
@@ -214,7 +219,7 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
     @Override
-    protected ScriptEngine getScriptEngine() {
+    public ScriptEngine getScriptEngine() {
         return scriptEngine;
     }
 

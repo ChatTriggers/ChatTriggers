@@ -1,9 +1,12 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.commands.Command;
+import com.chattriggers.ctjs.modules.Module;
 import net.minecraftforge.client.ClientCommandHandler;
 
 public class TriggerRegister {
+    public static Module currentModule = null;
+
     /**
      * Registers a new chat trigger.<br>
      * Available modifications:<br>

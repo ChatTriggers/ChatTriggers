@@ -40,7 +40,7 @@ public class OnSoundPlayTrigger extends OnTrigger {
         try {
             CTJS.getInstance().getModuleManager().invokeFunction(methodName, event);
         } catch (ScriptException | NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getConsole().printStackTrace(e, this);
             TriggerType.SOUND_PLAY.removeTrigger(this);
         }
     }

@@ -24,7 +24,7 @@ public abstract class ScriptLoader {
 
     protected abstract ArrayList<Module> loadModules();
     protected abstract ArrayList<String> getIllegalLines();
-    protected abstract ScriptEngine getScriptEngine();
+    public abstract ScriptEngine getScriptEngine();
     protected abstract Invocable getInvocableEngine();
 
     /**

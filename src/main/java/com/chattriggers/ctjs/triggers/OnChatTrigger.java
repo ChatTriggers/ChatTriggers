@@ -3,13 +3,13 @@ package com.chattriggers.ctjs.triggers;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.EventLib;
 import com.chattriggers.ctjs.utils.console.Console;
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb;
+import io.sentry.event.BreadcrumbBuilder;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import javax.script.ScriptException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -125,11 +125,22 @@ public class OnChatTrigger extends OnTrigger {
             variables = matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
 
         if (variables != null) {
+
+            Sentry.getContext().recordBreadcrumb(
+                new BreadcrumbBuilder()
+                    .setCategory("generic")
+                    .setLevel(Breadcrumb.Level.INFO)
+                    .setTimestamp(new Date())
+                    .setType(Breadcrumb.Type.DEFAULT)
+                    .setMessage("Chat message: " + chatMessage)
+                    .build()
+            );
+
             try {
                 variables.add(chatEvent);
                 CTJS.getInstance().getModuleManager().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
             } catch (ScriptException | NoSuchMethodException e) {
-                Console.getConsole().printStackTrace(e);
+                Console.getConsole().printStackTrace(e, this);
                 TriggerType.CHAT.removeTrigger(this);
             }
         }

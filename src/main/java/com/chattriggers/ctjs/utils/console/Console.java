@@ -2,9 +2,13 @@ package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.RenderLib;
+import com.chattriggers.ctjs.triggers.OnTrigger;
+import com.chattriggers.ctjs.triggers.TriggerType;
+import io.sentry.Sentry;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
 
+import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -93,7 +97,42 @@ public class Console {
     }
 
     public void printStackTrace(Throwable error) {
+        Sentry.capture(error);
         error.printStackTrace(out);
+    }
+
+    public void printStackTrace(Throwable error, OnTrigger trigger) {
+        Sentry.getContext().addTag(
+            "methodName",
+            trigger.getMethodName()
+        );
+
+        try {
+            String body = CTJS.getInstance().getModuleManager().eval(trigger.getMethodName()).toString();
+
+            Sentry.getContext().addExtra(
+                "methodBody",
+                body.replace("\n", "<br>")
+            );
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+
+        if (trigger.getOwningModule() != null) {
+            Sentry.getContext().addTag(
+                "moduleName",
+                trigger.getOwningModule().getName()
+            );
+
+            if (trigger.getOwningModule().getMetadata() != null) {
+                Sentry.getContext().addExtra(
+                    "moduleMetadata",
+                    trigger.getOwningModule().getMetadata().toString()
+                );
+            }
+        }
+
+        printStackTrace(error);
     }
 
     public void showConsole(boolean show) {

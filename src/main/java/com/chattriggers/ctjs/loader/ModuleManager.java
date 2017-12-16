@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ModuleManager {
+    @Getter
     private ArrayList<ScriptLoader> scriptLoaders;
     @Getter
     private boolean isLoading;

@@ -5,6 +5,8 @@ import com.chattriggers.ctjs.libs.EventLib;
 import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import io.sentry.Sentry;
+import io.sentry.context.Context;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;

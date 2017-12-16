@@ -1,18 +1,27 @@
 package com.chattriggers.ctjs.triggers;
 
+import com.chattriggers.ctjs.modules.Module;
 import lombok.Getter;
+import lombok.Setter;
 
 public abstract class OnTrigger {
+    @Getter
     protected String methodName;
     @Getter
     protected Priority priority;
     @Getter
     protected TriggerType type;
+    @Getter @Setter
+    protected Module owningModule;
 
     protected OnTrigger(String methodName, TriggerType type) {
         this.methodName = methodName;
         this.priority = Priority.NORMAL;
         this.type = type;
+
+        if (TriggerRegister.currentModule != null) {
+            setOwningModule(TriggerRegister.currentModule);
+        }
 
         this.register();
     }

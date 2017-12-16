@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.listeners;
 
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import io.sentry.Sentry;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -12,6 +14,7 @@ public class WorldListener {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         shouldTriggerWorldLoad = true;
+        Sentry.getStoredClient().setServerName(MinecraftVars.getServerName());
     }
 
     @SubscribeEvent
@@ -26,6 +29,7 @@ public class WorldListener {
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
         TriggerType.WORLD_UNLOAD.triggerAll();
+        Sentry.getStoredClient().setServerName("Not connected");
     }
 
     @SubscribeEvent

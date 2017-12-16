@@ -16,7 +16,7 @@ public class OnRegularTrigger extends OnTrigger {
         try {
             CTJS.getInstance().getModuleManager().invokeFunction(methodName, args);
         } catch (ScriptException | NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getConsole().printStackTrace(e, this);
             type.removeTrigger(this);
         }
     }

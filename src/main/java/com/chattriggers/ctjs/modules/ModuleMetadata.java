@@ -33,7 +33,12 @@ public class ModuleMetadata {
         this.requires = requires;
     }
 
-    public ModuleMetadata() {
+    public ModuleMetadata() {}
 
+    @Override
+    public String toString() {
+        return "{name=" + name + ",displayName=" + displayName + ",version=" + version
+                + ",tags=" + (tags == null ? "null" : tags.toString()) + ",pictureLink=" + pictureLink
+                + ",creator=" + creator + ",requires=" + requires + "}";
     }
 }
