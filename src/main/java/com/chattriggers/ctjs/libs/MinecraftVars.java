@@ -9,7 +9,9 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.Chunk;
@@ -17,6 +19,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -197,10 +200,37 @@ public class MinecraftVars {
             return "";
         }
 
-        Chunk chunk = getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
-        BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(), getWorld().getWorldChunkManager());
+        Method getBiomeMethod = null;
 
-        return biome.biomeName;
+        Chunk chunk = getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
+
+        try {
+             getBiomeMethod = Chunk.class.getDeclaredMethod("getBiome", BlockPos.class,
+                    Class.forName("net.minecraft.world.biome.WorldChunkManager"));
+        } catch (NoSuchMethodException | ClassNotFoundException e) {
+            try {
+                getBiomeMethod = Chunk.class.getDeclaredMethod("getBiome", BlockPos.class,
+                        Class.forName("net.minecraft.world.biome.BiomeProvider"));
+            } catch (NoSuchMethodException | ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        if (getBiomeMethod != null) {
+            Method getManagerMethod = ReflectionHelper.findMethod(World.class, getWorld(),
+                    new String[]{"getWorldChunkManager", "getBiomeProvider"});
+
+            try {
+                BiomeGenBase biome = (BiomeGenBase) getBiomeMethod.invoke(chunk, getPlayer().getPosition(),
+                        getManagerMethod.invoke(getWorld()));
+
+                return biome.biomeName;
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
