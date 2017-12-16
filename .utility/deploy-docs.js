@@ -11,8 +11,8 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
     var { exec } = require('child_process');
 
-    exec("mkdir javadocs");
-    exec("cp -R ../build/docs/javadoc javadocs");
+    exec("cp -R ../build/docs/javadoc/ .");
+    exec("mv javadoc/ javadocs");
 
     console.log(process.env.FTP_USER + ":" + process.env.FTP_PASSWORD);
 
