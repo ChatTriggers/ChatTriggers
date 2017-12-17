@@ -11,13 +11,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -57,7 +55,7 @@ public class MinecraftVars {
             return (WorldClient) ReflectionHelper.findField(
                     Minecraft.class,
                     "theWorld", "field_71441_e", // 1.8.9
-                    "world", "field_147550_f" // 1.12.2
+                    "world" // 1.12.2
                 ).get(getMinecraft());
         } catch (IllegalAccessException exception) {
             exception.printStackTrace();
@@ -73,9 +71,9 @@ public class MinecraftVars {
         try {
             return (EntityPlayerSP) ReflectionHelper.findField(
                     Minecraft.class,
-                    "thePlayer", "field_70475_c", // 1.8.9
-                    "player", "field_145917_k" // 1.12.2
-                ).get(getMinecraft());
+                    "thePlayer", "field_71439_g", // 1.8.9
+                    "player" // 1.12.2
+            ).get(getMinecraft());
         } catch (IllegalAccessException exception) {
             exception.printStackTrace();
             return null;

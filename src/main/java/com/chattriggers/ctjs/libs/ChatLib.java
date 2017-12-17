@@ -343,9 +343,8 @@ public class ChatLib {
      * @return the formatted message
      */
     public static String addColor(String message) {
-        if (message == null) {
+        if (message == null)
             message = "null";
-        }
 
         return message.replaceAll("&(?![^0-9a-fklmnor]|$)", "\u00a7");
     }
