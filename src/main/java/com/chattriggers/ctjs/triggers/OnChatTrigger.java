@@ -52,7 +52,7 @@ public class OnChatTrigger extends OnTrigger {
                 .replaceAll("\\$\\{[^*]+?}", "\\\\E(.+)\\\\Q")
                 .replaceAll("\\$\\{\\*?}", "\\\\E(?:.+)\\\\Q");
 
-        this.criteriaPattern = Pattern.compile(chatCriteria.equals("") ? ".+" : replacedCriteria);
+        this.criteriaPattern = Pattern.compile("".equals(chatCriteria) ? ".+" : replacedCriteria);
 
         return this;
     }
@@ -121,7 +121,7 @@ public class OnChatTrigger extends OnTrigger {
             chatMessage = EventLib.getMessage((ClientChatReceivedEvent) args[1]).getFormattedText().replace("\u00a7", "&");
 
         List<Object> variables = new ArrayList<>();
-        if (!chatCriteria.equals(""))
+        if (!"".equals(chatCriteria))
             variables = matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
 
         if (variables != null) {

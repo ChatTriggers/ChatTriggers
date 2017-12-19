@@ -217,13 +217,12 @@ public class ModuleGui extends GuiScreen {
             if (isHovered)
                 CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
 
-            if (scrolled > infoHeight) {
-                if (mouseX > width + 20
-                        && mouseX < width + 40
-                        && mouseY > height - 20
-                        && mouseY < height) {
-                    scrolled = 0;
-                }
+            if (scrolled > infoHeight
+                    && mouseX > width + 20
+                    && mouseX < width + 40
+                    && mouseY > height - 20
+                    && mouseY < height) {
+                scrolled = 0;
             }
         }
     }

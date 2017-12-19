@@ -142,15 +142,15 @@ public class CTCommand extends CommandBase {
         }
     }
 
-    private void dumpChat(int lines) {
+    private void dumpChat(int ammount) {
         clearOldDump();
         ArrayList<String> messages = CTJS.getInstance().getChatListener().getChatHistory();
 
-        if (lines > messages.size()) lines = messages.size();
+        if (ammount > messages.size()) ammount = messages.size();
         ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed);
         String msg;
-        for (int i = 0; i < lines; i++) {
-            msg = ChatLib.replaceFormatting(messages.get(messages.size() - lines + i));
+        for (int i = 0; i < ammount; i++) {
+            msg = ChatLib.replaceFormatting(messages.get(messages.size() - ammount + i));
             ChatComponentText cct = new ChatComponentText(msg);
 
             cct.setChatStyle(new ChatStyle()
@@ -161,9 +161,9 @@ public class CTCommand extends CommandBase {
 
             ChatLib.chat(new Message(cct).setChatLineId(idFixed + i + 1));
         }
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + lines + 1);
+        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + ammount + 1);
 
-        idFixedOffset = idFixed + lines + 1;
+        idFixedOffset = idFixed + ammount + 1;
     }
 
     private void copyArgsToClipboard(String[] args) {

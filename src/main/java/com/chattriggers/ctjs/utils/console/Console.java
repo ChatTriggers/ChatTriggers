@@ -215,6 +215,10 @@ public class Console {
                     bg = new Color(251, 251, 28);
                     fg = new Color(192, 20, 214);
                     break;
+                default:
+                    bg = new Color(21, 21, 21);
+                    fg = new Color(208, 208, 208);
+                    break;
             }
         }
 

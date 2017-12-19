@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.objects;
 
 import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.utils.console.Console;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

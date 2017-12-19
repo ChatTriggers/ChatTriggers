@@ -8,9 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 //Credit to https://stackoverflow.com/users/8946/lawrence-dol
-public class TextAreaOutputStream
-        extends OutputStream
-{
+public class TextAreaOutputStream extends OutputStream {
 
 // *************************************************************************************************
 // INSTANCE MEMBERS
@@ -18,7 +16,7 @@ public class TextAreaOutputStream
 
     private byte[]                          oneByte;                                                    // array for write(int val);
     private Appender                        appender;                                                   // most recent action
-    private BufferedWriter bufferedWriter;
+    private BufferedWriter                  bufferedWriter;
 
     public TextAreaOutputStream(JTextArea txtara) {
         this(txtara,1000);
@@ -96,9 +94,7 @@ public class TextAreaOutputStream
 // STATIC MEMBERS
 // *************************************************************************************************
 
-    static class Appender
-            implements Runnable
-    {
+    static class Appender implements Runnable {
         private final JTextArea             textArea;
         private final int                   maxLines;                                                   // maximum lines allowed in text area
         private final LinkedList<Integer>   lengths;                                                    // length of lines within text area
@@ -107,6 +103,9 @@ public class TextAreaOutputStream
         private int                         curLength;                                                  // length of current line
         private boolean                     clear;
         private boolean                     queue;
+
+        static private final String         EOL1="\n";
+        static private final String         EOL2=System.getProperty("line.separator",EOL1);
 
         Appender(JTextArea txtara, int maxlin) {
             textArea =txtara;
@@ -119,12 +118,12 @@ public class TextAreaOutputStream
             queue    =true;
         }
 
-        synchronized void append(String val) {
+        private synchronized void append(String val) {
             values.add(val);
             if(queue) { queue=false; EventQueue.invokeLater(this); }
         }
 
-        synchronized void clear() {
+        private synchronized void clear() {
             clear=true;
             curLength=0;
             lengths.clear();
@@ -148,9 +147,5 @@ public class TextAreaOutputStream
             clear =false;
             queue =true;
         }
-
-        static private final String         EOL1="\n";
-        static private final String         EOL2=System.getProperty("line.separator",EOL1);
     }
-
-} /* END PUBLIC CLASS */
+}

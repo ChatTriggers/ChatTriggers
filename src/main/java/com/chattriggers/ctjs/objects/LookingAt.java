@@ -147,20 +147,24 @@ public class LookingAt {
 
         if (rn.startsWith("double_") && (rn.endsWith("_slab") || rn.endsWith("_slab2"))) rn = rn.substring(7);
         else if (rn.startsWith("lit_") && !rn.endsWith("pumpkin")) rn = rn.substring(4);
+
         else if (rn.contains("daylight_detector_inverted")) rn = "daylight_detector";
-        else if (rn.equals("standing_sign") || rn.equals("wall_sign")) rn = "sign";
+
         else if (rn.endsWith("_redstone_torch")) rn = "redstone_torch";
-        else if (rn.equals("pumpkin_stem")) rn = "pumpkin_seeds";
         else if (rn.endsWith("comparator")) rn = "comparator";
-        else if (rn.equals("melon_stem")) rn = "melon_seeds";
-        else if (rn.equals("redstone_wire")) rn = "redstone";
         else if (rn.endsWith("_repeater")) rn = "repeater";
-        else if (rn.equals("piston_head")) rn = "piston";
         else if (rn.endsWith("_banner")) rn = "banner";
-        else if (rn.equals("potatoes")) rn = "potato";
-        else if (rn.equals("tripwire")) rn = "string";
-        else if (rn.equals("carrots")) rn = "carrot";
-        else if (rn.equals("farmland")) rn = "dirt";
+
+        else if ("standing_sign".equals(rn) || rn.equals("wall_sign")) rn = "sign";
+        else if ("pumpkin_stem".equals(rn)) rn = "pumpkin_seeds";
+        else if ("melon_stem".equals(rn)) rn = "melon_seeds";
+        else if ("redstone_wire".equals(rn)) rn = "redstone";
+        else if ("piston_head".equals(rn)) rn = "piston";
+        else if ("potatoes".equals(rn)) rn = "potato";
+        else if ("tripwire".equals(rn)) rn = "string";
+        else if ("carrots".equals(rn)) rn = "carrot";
+        else if ("farmland".equals(rn)) rn = "dirt";
+
 
         return "minecraft:" + rn;
     }
@@ -193,22 +197,22 @@ public class LookingAt {
         String [] rnEndsWith = {"rail", "torch", "_sign", "_door", "piston", "_stairs", "_button", "trapdoor", "_repeater",
                                 "_comparator", "_mushroom_block", "fence_gate", "_pressure_plate", "flower_pot"};
 
-        if ((rn.endsWith("_slab") || rn.endsWith("_slab2") || rn.equals("saplings") || rn.equals("leaves") ||
-               rn.equals("leaves2")) && md > 7) {
+        if ((rn.endsWith("_slab") || rn.endsWith("_slab2") || "saplings".equals(rn) || "leaves".equals(rn) ||
+                "leaves2".equals(rn)) && md > 7) {
             md -= 8;
-        } else if (rn.equals("leaves2") && md > 3) {
+        } else if ("leaves2".equals(rn) && md > 3) {
             md -= 4;
-        } else if (rn.equals("log") || rn.equals("log2")) {
+        } else if ("log".equals(rn) || "log2".equals(rn)) {
             md %= 4;
-        } else if (rn.equals("standing_banner")) {
+        } else if ("standing_banner".equals(rn)) {
             md = 15;
-        } else if (rn.equals("double_plant")) {
+        } else if ("double_plant".equals(rn)) {
             md = 15;
-        } else if (rn.equals("quartz_block") && md > 2) {
+        } else if ("quartz_block".equals(rn) && md > 2) {
             md = 2;
-        } else if (rn.equals("cocoa")) {
+        } else if ("cocoa".equals(rn)) {
             md = 3;
-        } else if (rn.equals("anvil")) {
+        } else if ("anvil".equals(rn)) {
             if (md > 5) md = 2;
             else if (md < 4) md = 0;
             else md = 1;
@@ -364,9 +368,9 @@ public class LookingAt {
                 String val = tags.getTag(key).toString();
                 Object targetVal;
 
-                if (val.equals("0b")) {
+                if ("0b".equals(val)) {
                     targetVal = false;
-                } else if (val.equals("1b")) {
+                } else if ("1b".equals(val)) {
                     targetVal = true;
                 } else if (val.matches("-?\\d+L")) {
                     targetVal = Long.valueOf(val.substring(0, val.length() - 1));
