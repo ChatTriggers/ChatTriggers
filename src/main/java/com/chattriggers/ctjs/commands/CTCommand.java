@@ -142,10 +142,11 @@ public class CTCommand extends CommandBase {
         }
     }
 
-    private void dumpChat(int amount) {
+    private void dumpChat(int lines) {
         clearOldDump();
         ArrayList<String> messages = CTJS.getInstance().getChatListener().getChatHistory();
 
+        int amount = lines;
         if (amount > messages.size()) amount = messages.size();
         ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed);
         String msg;

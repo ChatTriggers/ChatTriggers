@@ -24,8 +24,10 @@ public class OnStepTrigger extends OnTrigger {
      * @return the trigger for method chaining
      */
     public OnStepTrigger setFps(long fps) {
-        if (fps < 1) fps = 1;
-        this.fps = fps;
+        if (fps < 1)
+            this.fps = 1L;
+        else
+            this.fps = fps;
 
         return this;
     }
@@ -37,8 +39,10 @@ public class OnStepTrigger extends OnTrigger {
      * @return the trigger for method chaining
      */
     public OnStepTrigger setDelay(long delay) {
-        if (delay < 1) delay = 1;
-        this.delay = delay;
+        if (delay < 1)
+            this.delay = 1L;
+        else
+            this.delay = delay;
 
         return this;
     }

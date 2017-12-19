@@ -153,7 +153,7 @@ public class LookingAt {
         else if (rn.endsWith("_repeater")) rn = "repeater";
         else if (rn.endsWith("_banner")) rn = "banner";
 
-        else if ("standing_sign".equals(rn) || rn.equals("wall_sign")) rn = "sign";
+        else if ("standing_sign".equals(rn) || "wall_sign".equals(rn)) rn = "sign";
         else if ("pumpkin_stem".equals(rn)) rn = "pumpkin_seeds";
         else if ("melon_stem".equals(rn)) rn = "melon_seeds";
         else if ("redstone_wire".equals(rn)) rn = "redstone";

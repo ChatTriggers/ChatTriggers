@@ -21,9 +21,6 @@ public class Gui extends GuiScreen {
     private int mouseX = 0;
     private int mouseY = 0;
 
-    public Gui() {
-    }
-
     /**
      * Displays the gui object to Minecraft.
      */

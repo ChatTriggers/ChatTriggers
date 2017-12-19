@@ -169,8 +169,8 @@ public class OnChatTrigger extends OnTrigger {
                     while (matcher.find())
                         endMatch = matcher.end();
                     if (endMatch != chat.length()) return null;
-                } else if (parameter == null) {
-                    if (!matcher.matches()) return null;
+                } else if (parameter == null && !matcher.matches()) {
+                    return null;
                 }
             }
         }
