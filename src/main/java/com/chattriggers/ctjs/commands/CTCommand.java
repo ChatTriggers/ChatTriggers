@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class CTCommand extends CommandBase {
+    private final int idFixed = 90123; // ID for dumped chat
+    private Integer idFixedOffset = null; // ID offset (increments)
 
     public String getName() {
         return getCommandName();
@@ -140,8 +142,6 @@ public class CTCommand extends CommandBase {
         }
     }
 
-    private final int idFixed = 90123;
-    private Integer idFixedOffset = null;
     private void dumpChat(int lines) {
         clearOldDump();
         ArrayList<String> messages = CTJS.getInstance().getChatListener().getChatHistory();

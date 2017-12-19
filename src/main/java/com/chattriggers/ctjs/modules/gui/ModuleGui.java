@@ -63,53 +63,40 @@ public class ModuleGui extends GuiScreen {
         drawBackground(0);
 
         // scrollbar
-        int scrollHeight = RenderLib.getRenderHeight() - this.maxScroll;
-        if (scrollHeight < 20) scrollHeight = 20;
-        if (scrollHeight < RenderLib.getRenderHeight()) {
-            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, RenderLib.getRenderHeight() - scrollHeight - 10);
-            RenderLib.drawRectangle(
-                    0xa0000000,
-                    RenderLib.getRenderWidth() - 5,
-                    scrollY,
-                    5,
-                    scrollHeight
-            );
-        }
+        drawScroll();
 
         // info box
         RenderLib.drawRectangle(
                 0x80000000,
-                20,
-                10 - scrolled,
-                width,
-                infoHeight
+                20, 10 - scrolled,
+                width, infoHeight
         );
 
         // name
-        RenderLib.drawStringWithShadow(
-                name,
-                22,
-                12 - scrolled,
+        RenderLib.drawStringWithShadow(name,
+                22, 12 - scrolled,
                 0xffffffff
         );
 
         // version
         RenderLib.drawStringWithShadow(
                 ChatFormatting.GRAY + version,
-                width - RenderLib.getStringWidth(version) + 18,
-                12 - scrolled,
+                width - RenderLib.getStringWidth(version) + 18, 12 - scrolled,
                 0xffffffff
         );
 
         // line break
-        RenderLib.drawRectangle(0xa0000000, 22, 22 - scrolled, width - 4, 2);
+        RenderLib.drawRectangle(
+                0xa0000000,
+                22, 22 - scrolled,
+                width - 4, 2
+        );
 
         // description
         for (int i = 0; i < description.size(); i++) {
             RenderLib.drawStringWithShadow(
                     ChatLib.addColor(description.get(i)),
-                    22,
-                    30 + i * 10 - scrolled,
+                    22, 30 + i * 10 - scrolled,
                     0xffffffff
             );
         }
@@ -117,64 +104,56 @@ public class ModuleGui extends GuiScreen {
         // directory
         RenderLib.drawStringWithShadow(
                 ChatFormatting.DARK_GRAY + "/mods/ChatTriggers/modules/" + this.module.getName() + "/",
-                22,
-                infoHeight - scrolled,
+                22, infoHeight - scrolled,
                 0xffffffff
         );
 
         // back
-        String finalShowCode = isHovered ? "< back" : "&8< back";
-        RenderLib.drawStringWithShadow(
-                ChatLib.addColor(finalShowCode),
-                20 + width - RenderLib.getStringWidth("< back") - 2,
-                infoHeight - scrolled,
-                0xffffffff
-        );
-
-        int fileOffset = 20;
-
-        if (this.module.getMetadata().getRequires()!= null) {
-            RenderLib.drawStringWithShadow(
-                    "Requires: " + this.module.getMetadata().getRequires(),
-                    22,
-                    infoHeight - scrolled + 20,
-                    0xffffffff
-            );
-            fileOffset += 20;
-        }
+        drawBack();
 
         // code
+        int fileOffset = 20 + drawRequires();
         for (Map.Entry<String, List<String>> file : coloredFiles.entrySet()) {
-            RenderLib.drawRectangle(
-                    0x80000000,
-                    20,
-                    infoHeight + fileOffset - scrolled,
-                    width,
-                    file.getValue().size() * 9 + 12
-            );
-
-            RenderLib.drawStringWithShadow(
-                    ChatFormatting.DARK_GRAY + file.getKey(),
-                    22,
-                    infoHeight + fileOffset - scrolled + 2,
-                    0xffffffff
-            );
-
-            int i = 0;
-            for (String line : file.getValue()) {
-                RenderLib.drawStringWithShadow(
-                        colorLine(line).replace("\u0009", "     "),
-                        22,
-                        i * 9 + infoHeight + fileOffset - scrolled + 12,
-                        0xffffffff
-                );
-                i++;
-            }
-
-            fileOffset += file.getValue().size() * 9 + 30;
+            fileOffset += drawFile(file, fileOffset);
         }
 
         // jump up
+        drawJump();
+
+        updateScaling(mouseX, mouseY, fileOffset);
+    }
+
+    private int drawFile(Map.Entry<String, List<String>> file, int fileOffset) {
+        RenderLib.drawRectangle(
+                0x80000000,
+                20,
+                infoHeight + fileOffset - scrolled,
+                width,
+                file.getValue().size() * 9 + 12
+        );
+
+        RenderLib.drawStringWithShadow(
+                ChatFormatting.DARK_GRAY + file.getKey(),
+                22,
+                infoHeight + fileOffset - scrolled + 2,
+                0xffffffff
+        );
+
+        int i = 0;
+        for (String line : file.getValue()) {
+            RenderLib.drawStringWithShadow(
+                    colorLine(line).replace("\u0009", "     "),
+                    22,
+                    i * 9 + infoHeight + fileOffset - scrolled + 12,
+                    0xffffffff
+            );
+            i++;
+        }
+
+        return file.getValue().size() * 9 + 30;
+    }
+
+    private void drawJump() {
         if (scrolled > infoHeight) {
             RenderLib.drawRectangle(
                     0x80000000,
@@ -190,8 +169,44 @@ public class ModuleGui extends GuiScreen {
                     0xffffffff
             );
         }
+    }
 
-        updateScaling(mouseX, mouseY, fileOffset);
+    private void drawScroll() {
+        int scrollHeight = RenderLib.getRenderHeight() - this.maxScroll;
+        if (scrollHeight < 20) scrollHeight = 20;
+        if (scrollHeight < RenderLib.getRenderHeight()) {
+            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, RenderLib.getRenderHeight() - scrollHeight - 10);
+            RenderLib.drawRectangle(
+                    0xa0000000,
+                    RenderLib.getRenderWidth() - 5,
+                    scrollY,
+                    5,
+                    scrollHeight
+            );
+        }
+    }
+
+    private void drawBack() {
+        String back = isHovered ? "< back" : "&8< back";
+        RenderLib.drawStringWithShadow(
+                ChatLib.addColor(back),
+                20 + width - RenderLib.getStringWidth("< back") - 2,
+                infoHeight - scrolled,
+                0xffffffff
+        );
+    }
+
+    private int drawRequires() {
+        if (this.module.getMetadata().getRequires() == null) return 0;
+
+        RenderLib.drawStringWithShadow(
+                "Requires: " + this.module.getMetadata().getRequires(),
+                22,
+                infoHeight - scrolled + 20,
+                0xffffffff
+        );
+
+        return 20;
     }
 
     @Override
