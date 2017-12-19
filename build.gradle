@@ -66,6 +66,7 @@ minecraft {
 dependencies {
     compile files('libs/nashorn.jar')
     provided 'io.sentry:sentry:1.6.3'
+    provided group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

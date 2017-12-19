@@ -67,6 +67,15 @@ public class CTJS {
     public void init(FMLInitializationEvent event) {
         instance = this;
 
+        Sentry.init(Reference.SENTRYDSN);
+
+        Sentry.getContext().setUser(
+            new UserBuilder()
+                .setUsername(MinecraftVars.getPlayerName())
+                .setId(MinecraftVars.getPlayerUUID())
+                .build()
+        );
+
         this.displayHandler = new DisplayHandler();
         this.guiHandler = new GuiHandler();
         this.chatListener = new ChatListener();
@@ -79,15 +88,6 @@ public class CTJS {
         registerHooks();
 
         moduleManager.load();
-
-        Sentry.init(Reference.SENTRYDSN);
-
-        Sentry.getContext().setUser(
-            new UserBuilder()
-            .setUsername(MinecraftVars.getPlayerName())
-            .setId(MinecraftVars.getPlayerUUID())
-            .build()
-        );
     }
 
     @EventHandler
