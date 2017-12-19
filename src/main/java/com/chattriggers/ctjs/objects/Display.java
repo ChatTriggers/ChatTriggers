@@ -6,8 +6,6 @@ import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.libs.RenderLib;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 
 import java.util.ArrayList;
 import java.util.Collections;

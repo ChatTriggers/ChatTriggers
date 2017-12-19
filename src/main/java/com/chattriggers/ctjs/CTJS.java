@@ -15,7 +15,6 @@ import com.chattriggers.ctjs.utils.capes.LayerCape;
 import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.console.Console;
 import io.sentry.Sentry;
-import io.sentry.event.User;
 import io.sentry.event.UserBuilder;
 import lombok.Getter;
 import lombok.Setter;
@@ -114,7 +113,8 @@ public class CTJS {
             field.setAccessible(true);
 
             List<IResourcePack> packs = (List<IResourcePack>) field.get(FMLClientHandler.instance());
-            packs.add(imagesPack = new ImagesPack(pictures));
+            imagesPack = new ImagesPack(pictures);
+            packs.add(imagesPack);
             pictures.mkdirs();
             assetsDir = pictures;
         }

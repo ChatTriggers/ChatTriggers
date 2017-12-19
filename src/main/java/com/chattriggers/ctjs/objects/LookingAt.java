@@ -42,8 +42,7 @@ public class LookingAt {
     }
 
     /**
-     * Gets the type of the object the player is looking at.
-     *
+     * Gets the type of the object the player is looking at.<br>
      * If the player is looking at an entity, returns "entity". If
      * the player is looking at a block, return "block". If the player
      * is not looking at anything, returns "null".
@@ -57,8 +56,7 @@ public class LookingAt {
     }
 
     /**
-     * Gets the name of the object the player is looking at.
-     *
+     * Gets the name of the object the player is looking at.<br>
      * Example return values: "Sandstone", "Wolf", "Oak Fence", "Zombie Pigman".
      * Returns "null" if the player is not looking at anything.
      *
