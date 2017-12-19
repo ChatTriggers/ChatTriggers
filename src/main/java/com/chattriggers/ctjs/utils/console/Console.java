@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.utils.console;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.libs.RenderLib;
 import com.chattriggers.ctjs.triggers.OnTrigger;
-import com.chattriggers.ctjs.triggers.TriggerType;
 import io.sentry.Sentry;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
