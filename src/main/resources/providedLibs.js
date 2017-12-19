@@ -1,3 +1,7 @@
+/*global
+   Java
+*/
+
 // Java libs
 var ArrayList = Java.type("java.util.ArrayList");
 var HashMap = Java.type("java.util.HashMap");
@@ -147,10 +151,13 @@ function cancel(event) {
 }
 
 function easeOut(start, finish, speed, jump) {
-    if (jump == undefined) {jump = 1;}
-	if (Math.floor(Math.abs(finish - start) / jump)) {
-		return start + (finish - start) / speed;
-	} else {
-		return finish;
-	}
+    if (!jump) {
+	jump = 1;
+    }
+    
+    if (Math.floor(Math.abs(finish - start) / jump)) {
+        return start + (finish - start) / speed;
+    } else {
+        return finish;
+    }
 }
