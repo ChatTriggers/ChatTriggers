@@ -114,7 +114,8 @@ public class CTJS {
             field.setAccessible(true);
 
             List<IResourcePack> packs = (List<IResourcePack>) field.get(FMLClientHandler.instance());
-            packs.add(imagesPack = new ImagesPack(pictures));
+            imagesPack = new ImagesPack(pictures);
+            packs.add(imagesPack);
             pictures.mkdirs();
             assetsDir = pictures;
         }
