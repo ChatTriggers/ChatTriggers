@@ -19,6 +19,14 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: "io.franzbecker.gradle-lombok"
 
+//shadowJar {
+//    dependencies {
+//        exclude(dependency {
+//            it.moduleGroup != 'sentry'
+//        })
+//    }
+//}
+
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
 plugins {
@@ -35,6 +43,13 @@ compileJava {
     targetCompatibility = '1.8'
 }
 
+configurations {
+    provided
+    // Make compile extend from our provided configuration so that things added to bundled end up on the compile classpath
+    compile.extendsFrom(provided)
+}
+
+
 minecraft {
     version = "1.8.9-11.15.1.1722"
     runDir = "run"
@@ -50,7 +65,7 @@ minecraft {
 
 dependencies {
     compile files('libs/nashorn.jar')
-    compile 'io.sentry:sentry:1.6.3'
+    provided 'io.sentry:sentry:1.6.3'
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -72,6 +87,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+}
+
+jar {
+    // Include all of the jars from the bundled configuration in our jar
+    from configurations.provided.asFileTree.files.collect { zipTree(it) }
 }
 
 processResources
