@@ -308,16 +308,16 @@ public class Display {
 
     public static class DisplayLine {
         @Getter
-        String text;
-        int textWidth;
+        private String text;
+        private int textWidth;
 
-        Integer textColor;
-        DisplayHandler.Align align;
-        Boolean shadow;
+        private Integer textColor;
+        private DisplayHandler.Align align;
+        private Boolean shadow;
         @Getter
-        float scale;
-        DisplayHandler.Background background;
-        Integer backgroundColor;
+        private float scale;
+        private DisplayHandler.Background background;
+        private Integer backgroundColor;
 
         public DisplayLine(String text) {
             this.text = ChatLib.addColor(text);
@@ -394,103 +394,98 @@ public class Display {
             return this;
         }
 
-        private void drawLeft(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
-            // full background
-            if (this.backgroundColor != null) backgroundColor = this.backgroundColor;
+        private void drawFullBG(DisplayHandler.Background background, int color, float x, float y, float width, float height) {
+            if (background == DisplayHandler.Background.FULL)
+                RenderLib.drawRectangle(color, x, y, width, height);
+        }
 
+        private void drawPerLineBG(DisplayHandler.Background background, int color, float x, float y, float width, float height) {
+            if (background == DisplayHandler.Background.PER_LINE)
+                RenderLib.drawRectangle(color, x, y, width, height);
+        }
+
+        private void drawLeft(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
+            // get default line
+            if (this.backgroundColor != null)
+                backgroundColor = this.backgroundColor;
             if (this.background != DisplayHandler.Background.NONE)
                 background = this.background;
-            if (background == DisplayHandler.Background.FULL)
-                RenderLib.drawRectangle(backgroundColor, x - 1, y - 1, maxWidth + 2, 10 * this.scale);
+            if (this.textColor != null)
+                textColor = this.textColor;
+
+            // full background
+            drawFullBG(background, backgroundColor, x - 1, y - 1, maxWidth + 2, 10 * this.scale);
 
             // blank line
             if (this.text.equals("")) return;
 
             // text and per line background
-            if (this.textColor != null) textColor = this.textColor;
-            if (this.align == DisplayHandler.Align.NONE) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x, y, this.scale, textColor, this.shadow);
-            } else if (this.align == DisplayHandler.Align.LEFT) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x, y, this.scale, textColor, this.shadow);
-            } else if (this.align == DisplayHandler.Align.RIGHT) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - this.textWidth + maxWidth - 1, y-1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - this.textWidth + maxWidth, y, this.scale, textColor, this.shadow);
+            float xOff = x;
+
+            if (this.align == DisplayHandler.Align.RIGHT) {
+                xOff = x - this.textWidth + maxWidth;
             } else if (this.align == DisplayHandler.Align.CENTER) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - this.textWidth / 2 + maxWidth / 2 - 1, y-1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - this.textWidth / 2 + maxWidth / 2, y, this.scale, textColor, this.shadow);
+                xOff = x - this.textWidth / 2 + maxWidth / 2;
             }
+
+            drawPerLineBG(background, backgroundColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
+            RenderLib.drawString(this.text, xOff, y, this.scale, textColor, this.shadow);
         }
 
         private void drawRight(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
-            // full background
-            if (this.backgroundColor != null) backgroundColor = this.backgroundColor;
-
+            // get default line
+            if (this.backgroundColor != null)
+                backgroundColor = this.backgroundColor;
             if (this.background != DisplayHandler.Background.NONE)
                 background = this.background;
-            if (background == DisplayHandler.Background.FULL)
-                RenderLib.drawRectangle(backgroundColor, x - maxWidth - 1, y - 1, maxWidth + 2, 10 * this.scale);
+            if (this.textColor != null)
+                textColor = this.textColor;
+
+            // full background
+            drawFullBG(background, backgroundColor, x - maxWidth - 1, y - 1, maxWidth + 2, 10 * this.scale);
 
             // blank line
             if (this.text.equals("")) return;
 
-            // text and per line background
-            if (this.textColor != null) textColor = this.textColor;
-            if (this.align == DisplayHandler.Align.NONE) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - this.textWidth - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - this.textWidth, y, this.scale, textColor, this.shadow);
-            } else if (this.align == DisplayHandler.Align.LEFT) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - maxWidth - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - maxWidth, y, this.scale, textColor, this.shadow);
-            } else if (this.align == DisplayHandler.Align.RIGHT) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - this.textWidth - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - this.textWidth, y , this.scale, textColor, this.shadow);
+            // text and per line background\
+            float xOff = x - this.textWidth;
+
+            if (this.align == DisplayHandler.Align.LEFT) {
+                xOff = x - maxWidth;
             } else if (this.align == DisplayHandler.Align.CENTER) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - this.textWidth / 2 - maxWidth / 2 - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - this.textWidth / 2 - maxWidth / 2, y, this.scale, textColor, this.shadow);
+                xOff = x - this.textWidth / 2 - maxWidth / 2;
             }
+
+            drawPerLineBG(background, backgroundColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
+            RenderLib.drawString(this.text, xOff, y, this.scale, textColor, this.shadow);
         }
 
         private void drawCenter(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
-            // full background
-            if (this.backgroundColor != null) backgroundColor = this.backgroundColor;
-
+            // get default line
+            if (this.backgroundColor != null)
+                backgroundColor = this.backgroundColor;
             if (this.background != DisplayHandler.Background.NONE)
                 background = this.background;
-            if (background == DisplayHandler.Background.FULL)
-                RenderLib.drawRectangle(backgroundColor, x - maxWidth / 2 - 1, y - 1, maxWidth + 2, 10 * this.scale);
+            if (this.textColor != null)
+                textColor = this.textColor;
+
+            // full background
+            drawFullBG(background, backgroundColor, x - maxWidth / 2 - 1, y - 1, maxWidth + 2, 10 * this.scale);
 
             // blank line
             if (this.text.equals("")) return;
 
             // text and per line background
-            if (this.textColor != null) textColor = this.textColor;
-            if (this.align == DisplayHandler.Align.NONE) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - this.textWidth / 2 - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - this.textWidth / 2, y, this.scale, textColor, this.shadow);
-            } else if (this.align == DisplayHandler.Align.LEFT) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - maxWidth / 2 - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - maxWidth / 2, y, this.scale, textColor, this.shadow);
+            float xOff = x - this.textWidth / 2;
+
+            if (this.align == DisplayHandler.Align.LEFT) {
+                xOff = x - maxWidth / 2;
             } else if (this.align == DisplayHandler.Align.RIGHT) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x + maxWidth / 2 - this.textWidth - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x + maxWidth / 2 - this.textWidth, y , this.scale, textColor, this.shadow);
-            } else if (this.align == DisplayHandler.Align.CENTER) {
-                if (background == DisplayHandler.Background.PER_LINE)
-                    RenderLib.drawRectangle(backgroundColor, x - this.textWidth / 2 - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-                RenderLib.drawString(this.text, x - this.textWidth / 2, y, this.scale, textColor, this.shadow);
+                xOff = x + maxWidth / 2 - this.textWidth;
             }
+
+            drawPerLineBG(background, backgroundColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
+            RenderLib.drawString(this.text, xOff, y, this.scale, textColor, this.shadow);
         }
     }
 }
