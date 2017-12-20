@@ -33,7 +33,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.3.2-SNAPSHOT"
+version = "0.3.3-SNAPSHOT"
 group = "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ctjs"
 
@@ -65,8 +65,8 @@ minecraft {
 
 dependencies {
     compile files('libs/nashorn.jar')
-    provided 'io.sentry:sentry:1.6.3'
-    provided group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+    provided files('libs/sentry.jar')
+    provided group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.3'
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -92,7 +92,9 @@ dependencies {
 
 jar {
     // Include all of the jars from the bundled configuration in our jar
-    from configurations.provided.asFileTree.files.collect { zipTree(it) }
+    from configurations.provided.asFileTree.files.collect {
+        zipTree(it)
+    }
 }
 
 processResources
