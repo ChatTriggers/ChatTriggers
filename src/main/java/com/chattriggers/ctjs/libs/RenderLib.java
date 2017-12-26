@@ -523,6 +523,10 @@ public class RenderLib {
 
         GL11.glPopMatrix();
     }
+    
+    public static void downloadImage(String url, String resourceName) {
+        downloadImage(url, resourceName, true);
+    }
 
     public static void downloadImage(String url, String resourceName, boolean shouldResize) {
         try {
