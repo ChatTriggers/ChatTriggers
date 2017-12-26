@@ -530,8 +530,9 @@ public class RenderLib {
 
     public static void downloadImage(String url, String resourceName, boolean shouldResize) {
         try {
+            BufferedImage image = ImageIO.read(new URL(url));
+            
             if (shouldResize) {
-                BufferedImage image = ImageIO.read(new URL(url));
                 BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g = resized.createGraphics();
                 g.drawImage(image, 0, 0, 256, 256, null);
