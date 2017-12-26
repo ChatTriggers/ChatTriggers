@@ -523,19 +523,31 @@ public class RenderLib {
 
         GL11.glPopMatrix();
     }
-
+    
     public static void downloadImage(String url, String resourceName) {
+        downloadImage(url, resourceName, true);
+    }
+
+    public static void downloadImage(String url, String resourceName, boolean shouldResize) {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
-            BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g = resized.createGraphics();
-            g.drawImage(image, 0, 0, 256, 256, null);
-            g.dispose();
+            
+            if (shouldResize) {
+                BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = resized.createGraphics();
+                g.drawImage(image, 0, 0, 256, 256, null);
+                g.dispose();
 
-            File resourceFile = new File(CTJS.getInstance().getAssetsDir(), resourceName);
-            resourceFile.createNewFile();
+                File resourceFile = new File(CTJS.getInstance().getAssetsDir(), resourceName);
+                resourceFile.createNewFile();
 
-            ImageIO.write(resized, "png", resourceFile);
+                ImageIO.write(resized, "png", resourceFile);
+            } else {
+                File resourceFile = new File(CTJS.getInstance().getAssetsDir(), resourceName);
+                resourceFile.createNewFile();
+
+                ImageIO.write(image, "png", resourceFile);
+            }
         } catch (IOException e) {
             Console.getConsole().printStackTrace(e);
         }
