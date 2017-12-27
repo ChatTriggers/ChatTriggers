@@ -533,6 +533,11 @@ public class RenderLib {
             g.dispose();
 
             File resourceFile = new File(CTJS.getInstance().getAssetsDir(), resourceName);
+
+            if (resourceFile.exists()) {
+                resourceFile.delete();
+            }
+
             resourceFile.createNewFile();
 
             ImageIO.write(resized, "png", resourceFile);
