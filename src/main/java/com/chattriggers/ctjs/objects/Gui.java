@@ -5,11 +5,13 @@ import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
 import javax.script.ScriptException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Gui extends GuiScreen {
     private OnTrigger onDraw = null;
@@ -17,6 +19,7 @@ public class Gui extends GuiScreen {
     private OnTrigger onKeyTyped = null;
     private OnTrigger onMouseReleased = null;
     private OnTrigger onMouseDragged = null;
+    private OnTrigger onActionPerformed = null;
 
     private int mouseX = 0;
     private int mouseY = 0;
@@ -181,6 +184,28 @@ public class Gui extends GuiScreen {
         };
     }
 
+    /**
+     * Registers a method to be ran while gui is open.
+     * Registered method runs on key input.
+     * @param methodName the method to run
+     * @return the trigger
+     */
+    public OnTrigger registerActionPerformed(String methodName) {
+        return onActionPerformed = new OnTrigger(methodName, TriggerType.OTHER) {
+            @Override
+            public void trigger(Object... args) {
+                int buttonId = (int) args[0];
+
+                try {
+                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, buttonId);
+                } catch (ScriptException | NoSuchMethodException exception) {
+                    onActionPerformed = null;
+                    Console.getConsole().printStackTrace(exception);
+                }
+            }
+        };
+    }
+
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         super.mouseClicked(mouseX, mouseY, button);
@@ -194,6 +219,14 @@ public class Gui extends GuiScreen {
 
         if (onMouseReleased != null)
             onMouseReleased.trigger(mouseX, mouseY, state);
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        super.actionPerformed(button);
+
+        if (onActionPerformed != null)
+            onActionPerformed.trigger(button.id);
     }
 
     @Override
@@ -237,5 +270,38 @@ public class Gui extends GuiScreen {
 
         if (onKeyTyped != null)
             onKeyTyped.trigger(typedChar, keyCode);
+    }
+
+    /**
+     * Add a base minecraft button to the gui
+     * @param buttonId id for the button
+     * @param x X position of the button
+     * @param y Y position of the button
+     * @param buttonText the label of the button
+     */
+    public void addButton(int buttonId, int x, int y, String buttonText) {
+        this.buttonList.add(new GuiButton(buttonId, x, y, buttonText));
+    }
+
+    /**
+     * Add a base minecraft button to the gui
+     * @param buttonId id for the button
+     * @param x X position of the button
+     * @param y Y position of the button
+     * @param width the width of the button
+     * @param height the height of the button
+     * @param buttonText the label of the button
+     */
+    public void addButton(int buttonId, int x, int y, int width, int height, String buttonText) {
+        this.buttonList.add(new GuiButton(buttonId, x, y, width, height, buttonText));
+    }
+
+    public void setButtonVisibility(int buttonId, boolean visible) {
+        for (GuiButton button : this.buttonList) {
+            if (button.id == buttonId) {
+                button.visible = visible;
+                break;
+            }
+        }
     }
 }
