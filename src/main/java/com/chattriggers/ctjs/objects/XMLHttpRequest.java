@@ -141,4 +141,13 @@ public class XMLHttpRequest {
             Console.getConsole().printStackTrace(e);
         }
     }
+
+    /**
+     * Get the value of the response header with the specified key
+     * @param headerName the key for the header
+     * @return the value of the response header
+     */
+    public String getResponseHeader(String headerName) {
+        return conn.getHeaderField(headerName);
+    }
 }
