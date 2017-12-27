@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
+import com.chattriggers.ctjs.handlers.CommandHandler;
 import com.chattriggers.ctjs.handlers.GuiHandler;
 import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.listeners.ChatListener;
@@ -49,6 +50,8 @@ public class CTJS {
     @Getter
     private GuiHandler guiHandler;
     @Getter
+    private CommandHandler commandHandler;
+    @Getter
     private ChatListener chatListener;
     @Getter
     private ImagesPack imagesPack;
@@ -78,6 +81,7 @@ public class CTJS {
 
         this.displayHandler = new DisplayHandler();
         this.guiHandler = new GuiHandler();
+        this.commandHandler = new CommandHandler();
         this.chatListener = new ChatListener();
         this.console = new Console();
         this.moduleManager = new ModuleManager();
