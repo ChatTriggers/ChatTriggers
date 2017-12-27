@@ -3,18 +3,22 @@ package com.chattriggers.ctjs.commands;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.utils.console.Console;
+import lombok.Getter;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 
+import java.util.ArrayList;
+
 public class Command extends CommandBase {
     private String name;
     private String usage;
-    private OnTrigger trigger;
+    @Getter
+    private ArrayList<OnTrigger> triggers = new ArrayList<>();
 
     public Command(OnTrigger trigger, String name, String usage) {
-        this.trigger = trigger;
+        this.triggers.add(trigger);
         this.name = name;
         this.usage = usage;
     }
@@ -42,7 +46,8 @@ public class Command extends CommandBase {
     }
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         try {
-            trigger.trigger((Object[]) args);
+            for (OnTrigger trigger : triggers)
+                trigger.trigger((Object[]) args);
         } catch (Exception exception) {
             ChatLib.chat("&cSomething went wrong while running that command");
             ChatLib.chat("&cCheck the ct console for more information");

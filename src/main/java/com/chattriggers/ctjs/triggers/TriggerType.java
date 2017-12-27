@@ -23,9 +23,8 @@ public enum TriggerType {
     COMMAND, OTHER;
 
     private Comparator<OnTrigger> triggerComparator = (o1, o2) -> {
-
-        if (o1.priority.ordinal() > o2.priority.ordinal()) return 1;
-        else if (o2.priority.ordinal() > o1.priority.ordinal()) return -1;
+        if (o1.priority.ordinal() > o2.priority.ordinal()) return -1;
+        else if (o2.priority.ordinal() > o1.priority.ordinal()) return 1;
 
         return 0;
     };

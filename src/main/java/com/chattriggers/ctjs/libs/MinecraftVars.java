@@ -199,6 +199,7 @@ public class MinecraftVars {
             return "";
         }
 
+        /*
         Method getBiomeMethod = null;
 
         Chunk chunk = getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
@@ -230,6 +231,13 @@ public class MinecraftVars {
         } else {
             return null;
         }
+        */
+
+        Chunk chunk = getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
+        BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(),
+                getWorld().getWorldChunkManager());
+
+        return biome.biomeName;
     }
 
     /**

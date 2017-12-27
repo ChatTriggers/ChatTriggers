@@ -1,7 +1,10 @@
 package com.chattriggers.ctjs.triggers;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.commands.Command;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.modules.Module;
+import net.minecraft.command.ICommand;
 import net.minecraftforge.client.ClientCommandHandler;
 
 public class TriggerRegister {
@@ -122,14 +125,29 @@ public class TriggerRegister {
     }
 
     /**
-     * Register a new method that receives a command input
+     * Register a new method that receives a command input.
      * @param methodName the name of the method to callback when the event is fired
      * @param commandName the name of the command
      * @param commandUsage the usage for the command
      */
+    @Deprecated
     public static void registerCommand(String methodName, String commandName, String commandUsage) {
         OnCommandTrigger trigger = new OnCommandTrigger(methodName);
         Command command = new Command(trigger, commandName, commandUsage);
+        CTJS.getInstance().getCommandHandler().getCommandList().add(command);
         ClientCommandHandler.instance.registerCommand(command);
+    }
+
+    /**
+     * Registers a new method that receives a command input.<br>
+     * Available modifications:<br>
+     * {@link OnCommandTrigger#setCommandName(String)} Sets the command name<br>
+     * {@link OnCommandTrigger#setCommandUsage(String)} Sets the command usage<br>
+     * {@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnCommandTrigger registerCommand(String methodName) {
+        return new OnCommandTrigger(methodName);
     }
 }
