@@ -93,6 +93,16 @@ public class ChatLib {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
     }
 
+    public static void simulateChat(String[] args) {
+        StringBuilder toSend = new StringBuilder();
+
+        for (String arg : args) {
+            if (!arg.equals(args[0])) toSend.append(arg).append(" ");
+        }
+
+        chat(toSend.toString(), true);
+    }
+
     /**
      * Say chat message.
      * @param message the message to be sent

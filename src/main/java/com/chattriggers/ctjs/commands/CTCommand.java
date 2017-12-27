@@ -105,7 +105,7 @@ public class CTCommand extends CommandBase {
                     break;
                 case("sim"):
                 case("simulate"):
-                    simulateChat(args);
+                    ChatLib.simulateChat(args);
                     break;
                 case("dump"):
                     try {
@@ -124,22 +124,6 @@ public class CTCommand extends CommandBase {
             }
         } else {
             ChatLib.chat(getCommandUsage(sender));
-        }
-    }
-
-
-    private void simulateChat(String[] args) {
-        StringBuilder toSend = new StringBuilder();
-
-        for (String arg : args) {
-            if (!arg.equals(args[0])) toSend.append(arg).append(" ");
-        }
-
-        ClientChatReceivedEvent event = new ClientChatReceivedEvent((byte) 0, new ChatComponentText(toSend.toString().trim()));
-        CTJS.getInstance().getChatListener().onReceiveChat(event);
-
-        if (!event.isCanceled()) {
-            MinecraftVars.getPlayer().addChatMessage(new ChatComponentText(ChatLib.addColor(toSend.toString().trim())));
         }
     }
 
