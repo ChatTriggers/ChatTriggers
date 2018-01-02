@@ -18,6 +18,7 @@ public class OnChatTrigger extends OnTrigger {
     private String chatCriteria;
     private Pattern criteriaPattern;
     private List<Parameter> parameters;
+    private List<String> ignored;
     private Boolean triggerIfCanceled;
 
     public OnChatTrigger(String methodName) {
@@ -25,6 +26,7 @@ public class OnChatTrigger extends OnTrigger {
 
         this.chatCriteria = "";
         this.parameters = new ArrayList<>();
+        this.ignored = new ArrayList<>();
         this.triggerIfCanceled = true;
     }
 
@@ -32,7 +34,7 @@ public class OnChatTrigger extends OnTrigger {
      * Sets if the chat trigger should run if the chat event has already been canceled.
      * True by default.
      * @param bool Boolean to set
-     * @return the trigger for method chaining
+     * @return the trigger object for method chaining
      */
     public OnChatTrigger triggerIfCanceled(Boolean bool) {
         this.triggerIfCanceled = bool;
@@ -42,7 +44,7 @@ public class OnChatTrigger extends OnTrigger {
     /**
      * Sets the chat criteria for {@link #matchesChatCriteria(String)}.
      * @param chatCriteria the chat criteria to set
-     * @return the trigger for method chaining
+     * @return the trigger object for method chaining
      */
     public OnChatTrigger setChatCriteria(String chatCriteria) {
         this.chatCriteria = chatCriteria;
@@ -58,10 +60,31 @@ public class OnChatTrigger extends OnTrigger {
     }
 
     /**
+     * Adds substrings to be ignored when deciding if a chat event triggers this.
+     * @param ignores substrings to ignore
+     * @return the trigger object for method chaining
+     */
+    public OnChatTrigger shouldIgnore(String... ignores) {
+        this.ignored.addAll(Arrays.asList(ignores));
+        
+        return this;
+    }
+
+    /**
+     * Clears the ignored substring list.
+     * @return the trigger object for method chaining
+     */
+    public OnChatTrigger clearIgnoreList() {
+        this.ignored.clear();
+        
+        return this;
+    }
+
+    /**
      * Sets the chat parameter for {@link Parameter}.
      * Clears current parameter list.
      * @param parameter the chat parameter to set
-     * @return the trigger for method chaining
+     * @return the trigger object for method chaining
      */
     public OnChatTrigger setParameter(String parameter) {
         this.parameters = Collections.singletonList(Parameter.getParameterByName(parameter));
@@ -72,7 +95,7 @@ public class OnChatTrigger extends OnTrigger {
      * Sets multiple chat parameters for {@link Parameter}.
      * Clears current parameter list.
      * @param parameters the chat parameters to set
-     * @return the trigger for method chaining
+     * @return the trigger object for method chaining
      */
     public OnChatTrigger setParameters(String... parameters) {
         this.parameters.clear();
@@ -84,7 +107,7 @@ public class OnChatTrigger extends OnTrigger {
     /**
      * Adds chat parameter for {@link Parameter}.
      * @param parameter the chat parameter to add
-     * @return the trigger for method chaining
+     * @return the trigger object for method chaining
      */
     public OnChatTrigger addParameter(String parameter) {
         this.parameters.add(Parameter.getParameterByName(parameter));
@@ -94,7 +117,7 @@ public class OnChatTrigger extends OnTrigger {
     /**
      * Adds multiple chat parameters for {@link Parameter}.
      * @param parameters the chat parameters to add
-     * @return the trigger for method chaining
+     * @return the trigger object for method chaining
      */
     public OnChatTrigger addParameters(String... parameters) {
         for (String parameter : parameters)
@@ -119,6 +142,9 @@ public class OnChatTrigger extends OnTrigger {
 
         if (chatCriteria.contains("&"))
             chatMessage = EventLib.getMessage((ClientChatReceivedEvent) args[1]).getFormattedText().replace("\u00a7", "&");
+
+        for (String ignore : this.ignored)
+            chatMessage = chatMessage.replace(ignore, "");
 
         List<Object> variables = new ArrayList<>();
         if (!"".equals(chatCriteria))
