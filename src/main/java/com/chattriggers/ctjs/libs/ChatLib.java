@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.libs;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.objects.Message;
 import lombok.experimental.UtilityClass;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiNewChat;
@@ -59,7 +58,7 @@ public class ChatLib {
      */
     public static void chat(Message message, boolean recursive) {
         if (message.getChatLineId() != -1) {
-            MinecraftVars.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
+            MinecraftVars.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
             return;
         }
 
@@ -90,7 +89,7 @@ public class ChatLib {
         if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(addColor(message));
-        MinecraftVars.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
+        MinecraftVars.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
     }
 
     /**
@@ -128,7 +127,7 @@ public class ChatLib {
         if (!isPlayer("[RAW]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(message);
-        MinecraftVars.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
+        MinecraftVars.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
     }
 
     public static void simulateChat(String[] args) {
@@ -165,7 +164,7 @@ public class ChatLib {
      * Clear chat
      */
     public static void clearChat() {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages();
+        MinecraftVars.getChatGUI().clearChatMessages();
     }
 
     /**
@@ -174,7 +173,7 @@ public class ChatLib {
      */
     public static void clearChat(int... chatLineIDs) {
         for (int chatLineID : chatLineIDs) {
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(chatLineID);
+            MinecraftVars.getChatGUI().deleteChatLine(chatLineID);
         }
     }
 
@@ -188,7 +187,7 @@ public class ChatLib {
         StringBuilder stringBuilder = new StringBuilder();
         FontRenderer fRenderer = RenderLib.getFontRenderer();
 
-        while (fRenderer.getStringWidth(stringBuilder.toString()) < Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
+        while (fRenderer.getStringWidth(stringBuilder.toString()) < MinecraftVars.getChatGUI().getChatWidth()) {
             stringBuilder.append(seperator);
         }
 
@@ -200,7 +199,7 @@ public class ChatLib {
      * @return the width of chat
      */
     public static int getChatWidth() {
-        return Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth();
+        return MinecraftVars.getChatGUI().getChatWidth();
     }
 
     /**
@@ -230,13 +229,13 @@ public class ChatLib {
     public static String getCenteredText(String input) {
         boolean left = true;
         StringBuilder stringBuilder = new StringBuilder(removeFormatting(input));
-        FontRenderer fRenderer = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fRenderer = MinecraftVars.getMinecraft().fontRendererObj;
 
-        if (fRenderer.getStringWidth(stringBuilder.toString()) > Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
+        if (fRenderer.getStringWidth(stringBuilder.toString()) > MinecraftVars.getChatGUI().getChatWidth()) {
             return stringBuilder.toString();
         }
 
-        while (fRenderer.getStringWidth(stringBuilder.toString()) < Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth()) {
+        while (fRenderer.getStringWidth(stringBuilder.toString()) < MinecraftVars.getChatGUI().getChatWidth()) {
             if (left) {
                 stringBuilder.insert(0, " ");
                 left = false;
@@ -264,9 +263,9 @@ public class ChatLib {
      * @param toReplace the new message to be put in replace of the old one
      */
     public static void editChat(String chatMessage, String toReplace, boolean once) {
-        List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(),
+        List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, MinecraftVars.getChatGUI(),
                 "drawnChatLines", "field_146252_h");
-        List<ChatLine> chatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(),
+        List<ChatLine> chatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, MinecraftVars.getChatGUI(),
                 "chatLines", "field_146252_h");
 
         ChatComponentText cct = new ChatComponentText(addColor(toReplace));
@@ -289,7 +288,7 @@ public class ChatLib {
     }
 
     public static ArrayList<String> getChatLines() {
-        List<ChatLine> chatLines =  ReflectionHelper.getPrivateValue(GuiNewChat.class, Minecraft.getMinecraft().ingameGUI.getChatGUI(),
+        List<ChatLine> chatLines =  ReflectionHelper.getPrivateValue(GuiNewChat.class, MinecraftVars.getChatGUI(),
                 "drawnChatLines", "field_146253_i");
         ArrayList<String> messages = new ArrayList<>();
 

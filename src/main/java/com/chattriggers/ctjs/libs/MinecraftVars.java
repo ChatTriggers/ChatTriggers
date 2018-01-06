@@ -4,22 +4,19 @@ import com.chattriggers.ctjs.objects.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -102,6 +99,14 @@ public class MinecraftVars {
             exception.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Gets the chat gui object.
+     * @return the chat gui object
+     */
+    public static GuiNewChat getChatGUI() {
+        return getMinecraft().ingameGUI.getChatGUI();
     }
 
     /**
