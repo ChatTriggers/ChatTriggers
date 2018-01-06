@@ -393,6 +393,6 @@ public class ChatLib {
         if (message == null)
             message = "null";
 
-        return message.replaceAll("&(?![^0-9a-fklmnor]|$)", "\u00a7");
+        return message.replaceAll("(?:(?<!\\\\))&(?![^0-9a-fklmnor]|$)", "\u00a7");
     }
 }
