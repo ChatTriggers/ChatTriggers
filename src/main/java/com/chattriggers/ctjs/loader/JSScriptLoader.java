@@ -42,7 +42,7 @@ public class JSScriptLoader extends ScriptLoader {
             for (File dir : getFoldersInDirectory(modulesDir)) {
                 for (File file : dir.listFiles()) {
                     if (file.getName().endsWith(".jar")) {
-                        File jar = new File("mods/ChatTriggers/modules/" + dir.getName()
+                        File jar = new File("config/ChatTriggers/modules/" + dir.getName()
                                 + "/" + file.getName());
 
                         files.add(jar.toURI().toURL());

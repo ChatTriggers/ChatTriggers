@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ScriptLoader {
-    protected File modulesDir = new File("./mods/ChatTriggers/modules/");
+    protected File modulesDir = new File("./config/ChatTriggers/modules/");
 
     public void preLoad() {
         loadAssets();

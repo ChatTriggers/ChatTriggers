@@ -112,7 +112,7 @@ public class CTJS {
 
     private void injectResourcePack(String path) {
         try {
-            File pictures = new File(path, "ctjs/images/");
+            File pictures = new File(path, "ChatTriggers/images/");
             Field field = FMLClientHandler.class.getDeclaredField("resourcePackList");
             field.setAccessible(true);
 

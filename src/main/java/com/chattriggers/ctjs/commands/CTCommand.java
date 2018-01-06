@@ -174,7 +174,7 @@ public class CTCommand extends CommandBase {
     // Open the folder containing all of ChatTrigger's files
     private void openFileLocation() {
         try {
-            Desktop.getDesktop().open(new File("./mods/ChatTriggers"));
+            Desktop.getDesktop().open(new File("./config/ChatTriggers"));
         } catch (IOException exception) {
             Console.getConsole().printStackTrace(exception);
             ChatLib.chat("&cCould not open file location");

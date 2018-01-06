@@ -103,7 +103,7 @@ public class ModuleGui extends GuiScreen {
 
         // directory
         RenderLib.drawStringWithShadow(
-                ChatFormatting.DARK_GRAY + "/mods/ChatTriggers/modules/" + this.module.getName() + "/",
+                ChatFormatting.DARK_GRAY + "/config/ChatTriggers/modules/" + this.module.getName() + "/",
                 22, infoHeight - scrolled,
                 0xffffffff
         );
