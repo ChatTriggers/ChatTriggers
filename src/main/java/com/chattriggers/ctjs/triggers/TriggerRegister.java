@@ -2,9 +2,7 @@ package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.commands.Command;
-import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.modules.Module;
-import net.minecraft.command.ICommand;
 import net.minecraftforge.client.ClientCommandHandler;
 
 public class TriggerRegister {
@@ -126,6 +124,7 @@ public class TriggerRegister {
 
     /**
      * Register a new method that receives a command input.
+     * @deprecated Use {@link #registerCommand(String)} with modifiers instead.
      * @param methodName the name of the method to callback when the event is fired
      * @param commandName the name of the command
      * @param commandUsage the usage for the command

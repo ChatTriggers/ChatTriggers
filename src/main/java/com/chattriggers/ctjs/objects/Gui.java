@@ -11,7 +11,6 @@ import org.lwjgl.input.Mouse;
 
 import javax.script.ScriptException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Gui extends GuiScreen {
     private OnTrigger onDraw = null;

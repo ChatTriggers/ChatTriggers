@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -15,7 +14,6 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
