@@ -27,8 +27,8 @@ public class ChatLib {
 
     /**
      * Adds as many chat message to chat as passed.
-     * @param recursive whether or not triggers should be triggered by this message
      * @param message the message to be printed
+     * @param recursive whether or not triggers should be triggered by this message
      */
     public static void chat(String message, boolean recursive) {
         if (!isPlayer("[CHAT]: " + message)) return;
@@ -54,12 +54,12 @@ public class ChatLib {
 
     /**
      * Print a {@link Message} in chat.
-     * @param recursive whether or not triggers should be triggered by this message
      * @param message the message to be printed
+     * @param recursive whether or not triggers should be triggered by this message
      */
     public static void chat(Message message, boolean recursive) {
         if (message.getChatLineId() != -1) {
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
+            MinecraftVars.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
             return;
         }
 
@@ -71,7 +71,7 @@ public class ChatLib {
     }
 
     /**
-     * Print a {@link Message} in chat (IS RECURSIVE! See {@link #chat(Message, boolean)}
+     * Print a {@link Message} in chat (not recursive by default. See {@link #chat(Message, boolean)}
      * to specify it being recursive.
      * @param message the message to be printed
      */
@@ -83,14 +83,52 @@ public class ChatLib {
      * Add a chat message to chat, but with a special ID which allows
      * them to be clear with {@link #clearChat(int...)}.
      * This ID can't be used more than once.
-     * @param chatLineID the chat line to save the message under (pass to clearChat)
      * @param message the message to be printed
+     * @param chatLineID the chat line to save the message under (pass to clearChat)
      */
     public static void chat(String message, int chatLineID) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(addColor(message));
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
+        MinecraftVars.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
+    }
+
+    /**
+     * Add a raw chat message to chat (no formatting).
+     * @param message the message to be printed
+     */
+    public static void raw(String message) {
+        raw(message, false);
+    }
+
+    /**
+     * Add a raw chat message to chat (no formatting).
+     * @param message the message to be printed
+     * @param recursive whether or not triggers should be triggered by this message
+     */
+    public static void raw(String message, Boolean recursive) {
+        if (!isPlayer("[CHAT]: " + message)) return;
+
+        ChatComponentText cct = new ChatComponentText(message);
+
+        if (recursive) {
+            MinecraftVars.getConnection().handleChat(new S02PacketChat(cct, (byte) 0));
+        } else {
+            MinecraftVars.getPlayer().addChatMessage(cct);
+            CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
+        }
+    }
+
+    /**
+     * Add a raw chat message to chat (no formatting).
+     * @param message the message to be printed
+     * @param chatLineID the chat line to save the message under (pass to clearChat)
+     */
+    public static void raw(String message, int chatLineID) {
+        if (!isPlayer("[RAW]: " + message)) return;
+
+        ChatComponentText cct = new ChatComponentText(message);
+        MinecraftVars.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
     }
 
     public static void simulateChat(String[] args) {
