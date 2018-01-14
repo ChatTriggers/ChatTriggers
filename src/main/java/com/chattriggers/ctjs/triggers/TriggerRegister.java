@@ -81,6 +81,7 @@ public class TriggerRegister {
      * Registers a new step trigger.<br>
      * Available modifications:<br>
      * {@link OnStepTrigger#setFps(long)} Sets the fps<br>
+     * {@link OnStepTrigger#setDelay(long)} Sets the delay in seconds<br>
      * {@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
