@@ -282,7 +282,7 @@ public class Display {
                 maxWidth = (int) Math.ceil(RenderLib.getStringWidth(line.getText()) * line.getScale());
         }
 
-        int i = 0;
+        float i = 0;
 
         for (DisplayLine line : lines) {
             drawLine(line, this.renderX, this.renderY + (i * 10), maxWidth);
