@@ -55,7 +55,7 @@ public class Display {
 
     /**
      * Sets a display's background type.
-     * Use {@link DisplayHandler.Background}.
+     * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -66,7 +66,7 @@ public class Display {
 
     /**
      * Sets a display's background type using string input.
-     * Use {@link DisplayHandler.Background}.
+     * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -373,6 +373,7 @@ public class Display {
         /**
          * Sets the lines background (NONE by default).
          * If set to NONE, the line will inherit the background from the display.
+         * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}
          * @param background the background type
          * @return the DisplayLine to allow for method chaining
          */
@@ -384,6 +385,7 @@ public class Display {
         /**
          * Sets the line background color.
          * If not set, the line will inherit the background color from the display.
+         * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}
          * @param backgroundColor the background color int
          * @return the DisplayLine to allow for method chaining
          */
