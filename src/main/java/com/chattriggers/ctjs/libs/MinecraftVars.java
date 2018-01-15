@@ -15,8 +15,10 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -591,5 +593,21 @@ public class MinecraftVars {
      */
     public static Long getSystemTime() {
         return Minecraft.getSystemTime();
+    }
+
+    /**
+     * Gets the mouse x location.
+     * @return the mouse x location
+     */
+    public static int getMouseX() {
+        return Mouse.getEventX() * RenderLib.getRenderWidth() / MinecraftVars.getMinecraft().displayWidth;
+    }
+
+    /**
+     * Gets the mouse y location.
+     * @return the mouse y location
+     */
+    public static int getMouseY() {
+        return RenderLib.getRenderHeight() - Mouse.getEventY() * RenderLib.getRenderHeight() / MinecraftVars.getMinecraft().displayHeight - 1;
     }
 }

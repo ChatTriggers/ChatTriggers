@@ -83,6 +83,8 @@ var scoreboardTitle = ScoreboardReader.getScoreboardTitle();
 var scoreboardNames = ScoreboardReader.getScoreboardNames();
 var isFlying = MinecraftVars.isFlying();
 var isSleeping = MinecraftVars.isSleeping();
+var mouseX = MinecraftVars.getMouseX();
+var mouseY = MinecraftVars.getMouseY();
 
 // Update every world load
 var serverIP = MinecraftVars.getServerIP();
@@ -131,6 +133,8 @@ function updateProvidedLibsTick() {
     scoreboardNames = ScoreboardReader.getScoreboardNames();
     isFlying = MinecraftVars.isFlying();
     isSleeping = MinecraftVars.isSleeping();
+    mouseX = MinecraftVars.getMouseX();
+    mouseY = MinecraftVars.getMouseY();
 
     LookingAt.update();
 }
@@ -150,12 +154,13 @@ function cancel(event) {
     event.setCanceled(true);
 }
 
+// animation
 function easeOut(start, finish, speed, jump) {
     if (!jump) {
-	jump = 1;
+	    jump = 1;
     }
     
-    if (Math.floor(Math.abs(finish - start) / jump)) {
+    if (Math.floor(Math.abs(finish - start) / jump) > 0) {
         return start + (finish - start) / speed;
     } else {
         return finish;

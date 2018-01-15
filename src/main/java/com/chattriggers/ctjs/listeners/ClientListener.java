@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.libs.EventLib;
 import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -13,6 +14,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
 
 public class ClientListener {
     private int ticksPassed;
@@ -31,17 +35,31 @@ public class ClientListener {
 
         TriggerType.TICK.triggerAll(ticksPassed);
         ticksPassed++;
+
+        // mouse clicked trigger
+        handleMouseInput();
+    }
+
+    private void handleMouseInput() {
+        if (!Mouse.isCreated()) return;
+
+        while (Mouse.next()) {
+            if (Mouse.getEventButton() == -1) continue;
+            TriggerType.CLICKED.triggerAll(MinecraftVars.getMouseX(), MinecraftVars.getMouseY(), Mouse.getEventButton(), Mouse.getEventButtonState());
+        }
     }
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
-            // render overlay trigger
-            TriggerType.RENDER_OVERLAY.triggerAll();
+        if (EventLib.getType(event) != RenderGameOverlayEvent.ElementType.TEXT)
+            return;
 
-            // step trigger
-            TriggerType.STEP.triggerAll();
-        }
+
+        // render overlay trigger
+        TriggerType.RENDER_OVERLAY.triggerAll();
+
+        // step trigger
+        TriggerType.STEP.triggerAll();
 
         CTJS.getInstance().getCps().clickCalc();
     }
@@ -51,7 +69,7 @@ public class ClientListener {
         if (EventLib.getButton(event) == -1) return;
 
         // clicked trigger
-        TriggerType.CLICKED.triggerAll(EventLib.getButton(event), EventLib.getButtonState(event), event);
+        // TriggerType.CLICKED.triggerAll(EventLib.getButton(event), EventLib.getButtonState(event), event);
 
         // add to cps
         if (EventLib.getButton(event) == 0 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addLeftClicks();
