@@ -26,19 +26,19 @@ public class ClientListener {
         this.guiKeyBind = new KeyBinding("Key to open import gui", Keyboard.KEY_L, "CT Controls");
         ClientRegistry.registerKeyBinding(this.guiKeyBind);
 
-        ticksPassed = 0;
+        this.ticksPassed = 0;
 
-        mouseState = new HashMap<>();
+        this.mouseState = new HashMap<>();
         for (int i = 0; i < 5; i++)
-            mouseState.put(i, false);
+            this.mouseState.put(i, false);
     }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (MinecraftVars.getWorld() == null) return;
 
-        TriggerType.TICK.triggerAll(ticksPassed);
-        ticksPassed++;
+        TriggerType.TICK.triggerAll(this.ticksPassed);
+        this.ticksPassed++;
     }
 
 
@@ -46,9 +46,9 @@ public class ClientListener {
         if (!Mouse.isCreated()) return;
 
         for (int i = 0; i < 5; i++) {
-            if (Mouse.isButtonDown(i) == mouseState.get(i)) continue;
+            if (Mouse.isButtonDown(i) == this.mouseState.get(i)) continue;
             TriggerType.CLICKED.triggerAll(MinecraftVars.getMouseX(), MinecraftVars.getMouseY(), i, Mouse.isButtonDown(i));
-            mouseState.put(i, Mouse.isButtonDown(i));
+            this.mouseState.put(i, Mouse.isButtonDown(i));
         }
     }
 

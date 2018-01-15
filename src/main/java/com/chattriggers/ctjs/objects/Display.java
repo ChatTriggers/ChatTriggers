@@ -3,12 +3,19 @@ package com.chattriggers.ctjs.objects;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.handlers.DisplayHandler;
 import com.chattriggers.ctjs.libs.ChatLib;
+import com.chattriggers.ctjs.libs.MinecraftVars;
 import com.chattriggers.ctjs.libs.RenderLib;
+import com.chattriggers.ctjs.triggers.OnTrigger;
+import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
+import org.lwjgl.input.Mouse;
 
+import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class Display {
     @Getter @Setter
@@ -317,6 +324,9 @@ public class Display {
         private DisplayHandler.Background background;
         private Integer backgroundColor;
 
+        private OnTrigger onClicked;
+        private HashMap<Integer, Boolean> mouseState;
+
         public DisplayLine(String text) {
             this.text = ChatLib.addColor(text);
             this.textWidth = RenderLib.getStringWidth(this.text);
@@ -327,6 +337,11 @@ public class Display {
             this.scale = 1;
             this.background = DisplayHandler.Background.NONE;
             this.backgroundColor = null;
+
+            this.onClicked = null;
+            this.mouseState = new HashMap<>();
+            for (int i = 0; i < 5; i++)
+                this.mouseState.put(i, false);
         }
 
         /**
@@ -394,6 +409,46 @@ public class Display {
             return this;
         }
 
+        public OnTrigger registerClicked(String methodName) {
+            return onClicked = new OnTrigger(methodName, TriggerType.OTHER) {
+                @Override
+                public void trigger(Object... args) {
+                    if (!(args[0] instanceof Integer
+                            && args[1] instanceof Integer
+                            && args[2] instanceof Integer
+                            && args[3] instanceof Boolean)) {
+                        throw new IllegalArgumentException("Arguments must be of type int, int, int, bool");
+                    }
+
+                    int mouseX = (int) args[0];
+                    int mouseY = (int) args[1];
+                    int button = (int) args[2];
+                    boolean state = (boolean) args[3];
+
+                    try {
+                        CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, button, state);
+                    } catch (ScriptException | NoSuchMethodException exception) {
+                        onClicked = null;
+                        Console.getConsole().printStackTrace(exception);
+                    }
+                }
+            };
+        }
+
+        private void handleInput(float x, float y, float width, float height) {
+            if (this.onClicked == null) return;
+            if (!Mouse.isCreated()) return;
+
+            if (MinecraftVars.getMouseX() > x && MinecraftVars.getMouseX() < x + width
+                    && MinecraftVars.getMouseY() > y && MinecraftVars.getMouseY() < y + height) {
+                for (int i = 0; i < 5; i++) {
+                    if (Mouse.isButtonDown(i) == this.mouseState.get(i)) continue;
+                    this.onClicked.trigger(MinecraftVars.getMouseX(), MinecraftVars.getMouseY(), i, Mouse.isButtonDown(i));
+                    this.mouseState.put(i, Mouse.isButtonDown(i));
+                }
+            }
+        }
+
         private void drawFullBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
             if (bg == DisplayHandler.Background.FULL)
                 RenderLib.drawRectangle(color, x, y, width, height);
@@ -434,6 +489,8 @@ public class Display {
 
             drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
             RenderLib.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
+
+            handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
         }
 
         private void drawRight(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
@@ -466,6 +523,8 @@ public class Display {
 
             drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
             RenderLib.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
+
+            handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
         }
 
         private void drawCenter(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
@@ -498,6 +557,8 @@ public class Display {
 
             drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
             RenderLib.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
+
+            handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
         }
     }
 }
