@@ -481,7 +481,7 @@ public class RenderLib {
      * @param textureHeight the height of the image to render, usually 256
      * @param scale the scale of the image, can use decimals, i.e. 0.5, 1.5
      */
-    public static void drawImage(String resourceName, int renderXLoc, int renderYLoc,
+    public static void drawImage(String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
         drawImage("ctjs.images", resourceName, renderXLoc, renderYLoc,
                 textureMapX, textureMapY, textureWidth, textureHeight, scale);
@@ -501,7 +501,7 @@ public class RenderLib {
      * @param textureHeight the height of the image to render, usually 256
      * @param scale the scale of the image, can use decimals, i.e. 0.5, 1.5
      */
-    public static void drawImage(String resourceDomain, String resourceName, int renderXLoc, int renderYLoc,
+    public static void drawImage(String resourceDomain, String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
 
         ResourceLocation rl = new ResourceLocation(resourceDomain, resourceName);
@@ -509,7 +509,7 @@ public class RenderLib {
         drawImage(rl, renderXLoc, renderYLoc, textureMapX, textureMapY, textureWidth, textureHeight, scale);
     }
 
-    public static void drawImage(ResourceLocation rl, int renderXLoc, int renderYLoc, int textureMapX,
+    public static void drawImage(ResourceLocation rl, float renderXLoc, float renderYLoc, int textureMapX,
                                  int textureMapY, int textureWidth, int textureHeight, float scale) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
 

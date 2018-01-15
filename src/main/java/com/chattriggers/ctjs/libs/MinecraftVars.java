@@ -599,15 +599,21 @@ public class MinecraftVars {
      * Gets the mouse x location.
      * @return the mouse x location
      */
-    public static int getMouseX() {
-        return Mouse.getEventX() * RenderLib.getRenderWidth() / MinecraftVars.getMinecraft().displayWidth;
+    public static float getMouseX() {
+        float mx = (float) Mouse.getX();
+        float rw = (float) RenderLib.getRenderWidth();
+        float dw = (float) MinecraftVars.getMinecraft().displayWidth;
+        return mx * rw / dw;
     }
 
     /**
      * Gets the mouse y location.
      * @return the mouse y location
      */
-    public static int getMouseY() {
-        return RenderLib.getRenderHeight() - Mouse.getEventY() * RenderLib.getRenderHeight() / MinecraftVars.getMinecraft().displayHeight - 1;
+    public static float getMouseY() {
+        float my = (float) Mouse.getY();
+        float rh = (float) RenderLib.getRenderHeight();
+        float dh = (float) MinecraftVars.getMinecraft().displayHeight;
+        return rh - my * rh / dh - 1;
     }
 }

@@ -271,7 +271,7 @@ public class Display {
      * @param renderY the y coordinate
      * @return the display to allow for method chaining
      */
-    public Display setRenderLoc(int renderX, int renderY) {
+    public Display setRenderLoc(float renderX, float renderY) {
         this.renderX = renderX;
         this.renderY = renderY;
         return this;
@@ -423,15 +423,15 @@ public class Display {
             onClicked = new OnTrigger(methodName, TriggerType.OTHER) {
                 @Override
                 public void trigger(Object... args) {
-                    if (!(args[0] instanceof Integer
-                            && args[1] instanceof Integer
+                    if (!(args[0] instanceof Float
+                            && args[1] instanceof Float
                             && args[2] instanceof Integer
                             && args[3] instanceof Boolean)) {
                         throw new IllegalArgumentException("Arguments must be of type int, int, int, bool");
                     }
 
-                    int mouseX = (int) args[0];
-                    int mouseY = (int) args[1];
+                    float mouseX = (float) args[0];
+                    float mouseY = (float) args[1];
                     int button = (int) args[2];
                     boolean state = (boolean) args[3];
 
