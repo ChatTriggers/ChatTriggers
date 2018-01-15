@@ -409,8 +409,18 @@ public class Display {
             return this;
         }
 
-        public OnTrigger registerClicked(String methodName) {
-            return onClicked = new OnTrigger(methodName, TriggerType.OTHER) {
+        /**
+         * Registers a method to be run when the line is clicked (pressed or released).
+         * Arguments passed through to method:<br>
+         *     int mouseX<br>
+         *     int mouseY<br>
+         *     int button<br>
+         *     int button state
+         * @param methodName the method to run
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine registerClicked(String methodName) {
+            onClicked = new OnTrigger(methodName, TriggerType.OTHER) {
                 @Override
                 public void trigger(Object... args) {
                     if (!(args[0] instanceof Integer
@@ -433,6 +443,7 @@ public class Display {
                     }
                 }
             };
+            return this;
         }
 
         private void handleInput(float x, float y, float width, float height) {

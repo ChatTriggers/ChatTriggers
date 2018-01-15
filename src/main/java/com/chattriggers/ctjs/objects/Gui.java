@@ -48,7 +48,11 @@ public class Gui extends GuiScreen {
 
     /**
      * Registers a method to be ran while gui is open.
-     * Registered method runs on draw.
+     * Registered method runs on draw.<br>
+     * Arguments passed through to method:<br>
+     *     int mouseX<br>
+     *     int mouseY<br>
+     *     float partialTicks
      * @param methodName the method to run
      * @return the trigger
      */
@@ -78,7 +82,11 @@ public class Gui extends GuiScreen {
 
     /**
      * Registers a method to be ran while gui is open.
-     * Registered method runs on mouse click.
+     * Registered method runs on mouse click.<br>
+     * Arguments passed through to method:<br>
+     *     int mouseX<br>
+     *     int mouseY<br>
+     *     int button
      * @param methodName the method to run
      * @return the trigger
      */
@@ -108,7 +116,10 @@ public class Gui extends GuiScreen {
 
     /**
      * Registers a method to be ran while gui is open.
-     * Registered method runs on key input.
+     * Registered method runs on key input.<br>
+     * Arguments passed through to method:<br>
+     *     char typed character<br>
+     *     int key code
      * @param methodName the method to run
      * @return the trigger
      */
