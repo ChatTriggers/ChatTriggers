@@ -35,18 +35,15 @@ public class ClientListener {
 
         TriggerType.TICK.triggerAll(ticksPassed);
         ticksPassed++;
-
-        // mouse clicked trigger
-        handleMouseInput();
     }
 
     private void handleMouseInput() {
         if (!Mouse.isCreated()) return;
 
-        while (Mouse.next()) {
-            if (Mouse.getEventButton() == -1) continue;
-            TriggerType.CLICKED.triggerAll(MinecraftVars.getMouseX(), MinecraftVars.getMouseY(), Mouse.getEventButton(), Mouse.getEventButtonState());
-        }
+        Mouse.poll();
+
+        if (Mouse.getEventButton() == -1) return;
+        TriggerType.CLICKED.triggerAll(MinecraftVars.getMouseX(), MinecraftVars.getMouseY(), Mouse.getEventButton(), Mouse.getEventButtonState());
     }
 
     @SubscribeEvent
@@ -60,6 +57,9 @@ public class ClientListener {
 
         // step trigger
         TriggerType.STEP.triggerAll();
+
+        // mouse clicked trigger
+        handleMouseInput();
 
         CTJS.getInstance().getCps().clickCalc();
     }
