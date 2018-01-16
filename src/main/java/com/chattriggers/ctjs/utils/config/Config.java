@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.Reference;
-import com.chattriggers.ctjs.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraftforge.common.config.Configuration;

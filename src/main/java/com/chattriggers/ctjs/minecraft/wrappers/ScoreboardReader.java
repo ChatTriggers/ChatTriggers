@@ -1,10 +1,10 @@
-package com.chattriggers.ctjs.libs;
+package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;

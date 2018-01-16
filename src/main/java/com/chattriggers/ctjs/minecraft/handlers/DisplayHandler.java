@@ -1,7 +1,7 @@
-package com.chattriggers.ctjs.handlers;
+package com.chattriggers.ctjs.minecraft.handlers;
 
-import com.chattriggers.ctjs.libs.EventLib;
-import com.chattriggers.ctjs.objects.Display;
+import com.chattriggers.ctjs.minecraft.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.objects.Display;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 

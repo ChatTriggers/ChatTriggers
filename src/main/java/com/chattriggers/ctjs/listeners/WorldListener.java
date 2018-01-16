@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.listeners;
 
-import com.chattriggers.ctjs.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import io.sentry.Sentry;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;

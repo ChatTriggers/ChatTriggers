@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
-import com.chattriggers.ctjs.objects.KeyBind;
+import com.chattriggers.ctjs.minecraft.objects.KeyBind;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.capes.DLCape;
 import lombok.Getter;

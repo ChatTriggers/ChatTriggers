@@ -1,7 +1,7 @@
-package com.chattriggers.ctjs.libs;
+package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.objects.Message;
+import com.chattriggers.ctjs.minecraft.objects.Message;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;

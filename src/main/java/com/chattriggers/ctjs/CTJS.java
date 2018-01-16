@@ -1,15 +1,15 @@
 package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
-import com.chattriggers.ctjs.handlers.CommandHandler;
-import com.chattriggers.ctjs.handlers.GuiHandler;
-import com.chattriggers.ctjs.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
+import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.listeners.ChatListener;
 import com.chattriggers.ctjs.listeners.ClientListener;
 import com.chattriggers.ctjs.listeners.WorldListener;
 import com.chattriggers.ctjs.loader.ModuleManager;
-import com.chattriggers.ctjs.handlers.DisplayHandler;
-import com.chattriggers.ctjs.objects.CPS;
+import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
+import com.chattriggers.ctjs.minecraft.objects.CPS;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.capes.LayerCape;

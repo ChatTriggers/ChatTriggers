@@ -1,6 +1,6 @@
-package com.chattriggers.ctjs.objects;
+package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;

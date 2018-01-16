@@ -1,6 +1,6 @@
-package com.chattriggers.ctjs.libs;
+package com.chattriggers.ctjs.minecraft.libs;
 
-import com.chattriggers.ctjs.objects.KeyBind;
+import com.chattriggers.ctjs.minecraft.objects.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -18,7 +18,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
 

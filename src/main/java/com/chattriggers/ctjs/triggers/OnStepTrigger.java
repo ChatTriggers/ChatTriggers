@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.utils.console.Console;
 
 import javax.script.ScriptException;

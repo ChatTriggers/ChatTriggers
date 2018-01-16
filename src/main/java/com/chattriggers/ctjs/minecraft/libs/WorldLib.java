@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.libs;
+package com.chattriggers.ctjs.minecraft.libs;
 
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;

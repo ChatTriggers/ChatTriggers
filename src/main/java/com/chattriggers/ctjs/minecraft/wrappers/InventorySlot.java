@@ -1,6 +1,6 @@
-package com.chattriggers.ctjs.objects;
+package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

@@ -1,6 +1,6 @@
-package com.chattriggers.ctjs.objects;
+package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import lombok.Getter;
 import net.minecraft.util.*;
 

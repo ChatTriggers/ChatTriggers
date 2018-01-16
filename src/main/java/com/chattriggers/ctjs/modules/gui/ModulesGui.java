@@ -2,9 +2,9 @@ package com.chattriggers.ctjs.modules.gui;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.modules.Module;
-import com.chattriggers.ctjs.libs.ChatLib;
-import com.chattriggers.ctjs.libs.MathLib;
-import com.chattriggers.ctjs.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.MathLib;
+import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;

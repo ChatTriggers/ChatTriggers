@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.loader;
 
-import com.chattriggers.ctjs.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
 import com.chattriggers.ctjs.triggers.TriggerRegister;

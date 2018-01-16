@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.libs;
+package com.chattriggers.ctjs.minecraft.libs;
 
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;

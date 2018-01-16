@@ -1,6 +1,6 @@
-package com.chattriggers.ctjs.objects;
+package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.apache.commons.lang3.ArrayUtils;

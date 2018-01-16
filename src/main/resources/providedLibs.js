@@ -6,6 +6,7 @@
 var ArrayList = Java.type("java.util.ArrayList");
 var HashMap = Java.type("java.util.HashMap");
 var Thread = Java.type("java.lang.Thread");
+var Keyboard = Java.type("org.lwjgl.input.Keyboard");
 
 // Triggers
 var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
@@ -13,31 +14,34 @@ var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerR
 var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 
 // Events
-var ChatLib = Java.type("com.chattriggers.ctjs.libs.ChatLib");
-var WorldLib = Java.type("com.chattriggers.ctjs.libs.WorldLib");
-var RenderLib = Java.type("com.chattriggers.ctjs.libs.RenderLib");
-var FileLib = Java.type("com.chattriggers.ctjs.libs.FileLib");
-var MathLib = Java.type("com.chattriggers.ctjs.libs.MathLib");
+var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
+var WorldLib = Java.type("com.chattriggers.ctjs.minecraft.libs.WorldLib");
+var RenderLib = Java.type("com.chattriggers.ctjs.minecraft.libs.RenderLib");
+var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
+var MathLib = Java.type("com.chattriggers.ctjs.minecraft.libs.MathLib");
 
 // Objects
-var Display = Java.type("com.chattriggers.ctjs.objects.Display");
-var DisplayHandler = Java.type("com.chattriggers.ctjs.handlers.DisplayHandler");
-var DisplayLine = Java.type("com.chattriggers.ctjs.objects.Display.DisplayLine");
-var Gui = Java.type("com.chattriggers.ctjs.objects.Gui");
-var Message = Java.type("com.chattriggers.ctjs.objects.Message");
-var Book = Java.type("com.chattriggers.ctjs.objects.Book");
-var KeyBind = Java.type("com.chattriggers.ctjs.objects.KeyBind");
-var Keyboard = Java.type("org.lwjgl.input.Keyboard");
-var XMLHttpRequest = Java.type("com.chattriggers.ctjs.objects.XMLHttpRequest");
-var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
-var LookingAt = Java.type("com.chattriggers.ctjs.objects.LookingAt");
-var Inventory = Java.type("com.chattriggers.ctjs.objects.Inventory");
+var Display = Java.type("com.chattriggers.ctjs.minecraft.objects.Display");
+var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.Display.DisplayLine");
+var Gui = Java.type("com.chattriggers.ctjs.minecraft.objects.Gui");
+var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.Message");
+var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
+var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
+var XMLHttpRequest = Java.type("com.chattriggers.ctjs.minecraft.objects.XMLHttpRequest");
+
+// Wrappers
+var LookingAt = Java.type("com.chattriggers.ctjs.minecraft.wrappers.LookingAt");
+var Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Inventory");
+var TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
+var ScoreboardReader = Java.type("com.chattriggers.ctjs.minecraft.wrappers.ScoreboardReader");
 var CPS = Java.type("com.chattriggers.ctjs.CTJS").getInstance().getCps();
-var TabList = Java.type("com.chattriggers.ctjs.objects.TabList");
+
+// Misc
+var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.handlers.DisplayHandler");
+var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 
 /*Built in Vars */
-var MinecraftVars = Java.type("com.chattriggers.ctjs.libs.MinecraftVars");
-var ScoreboardReader = Java.type("com.chattriggers.ctjs.libs.ScoreboardReader");
+var MinecraftVars = Java.type("com.chattriggers.ctjs.minecraft.libs.MinecraftVars");
 
 // Constant
 var playerName = MinecraftVars.getPlayerName();

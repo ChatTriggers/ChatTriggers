@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.libs;
+package com.chattriggers.ctjs.minecraft.libs;
 
 public class MathLib {
     /**

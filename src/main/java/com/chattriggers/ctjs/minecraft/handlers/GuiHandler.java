@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.handlers;
+package com.chattriggers.ctjs.minecraft.handlers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

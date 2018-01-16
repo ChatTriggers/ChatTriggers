@@ -1,10 +1,10 @@
-package com.chattriggers.ctjs.objects;
+package com.chattriggers.ctjs.minecraft.objects;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.handlers.DisplayHandler;
-import com.chattriggers.ctjs.libs.ChatLib;
-import com.chattriggers.ctjs.libs.MinecraftVars;
-import com.chattriggers.ctjs.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -62,7 +62,7 @@ public class Display {
 
     /**
      * Sets a display's background type.
-     * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}.
+     * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -73,7 +73,7 @@ public class Display {
 
     /**
      * Sets a display's background type using string input.
-     * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}.
+     * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}.
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -388,7 +388,7 @@ public class Display {
         /**
          * Sets the lines background (NONE by default).
          * If set to NONE, the line will inherit the background from the display.
-         * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}
+         * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}
          * @param background the background type
          * @return the DisplayLine to allow for method chaining
          */
@@ -400,7 +400,7 @@ public class Display {
         /**
          * Sets the line background color.
          * If not set, the line will inherit the background color from the display.
-         * Use {@link com.chattriggers.ctjs.handlers.DisplayHandler.Background}
+         * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}
          * @param backgroundColor the background color int
          * @return the DisplayLine to allow for method chaining
          */

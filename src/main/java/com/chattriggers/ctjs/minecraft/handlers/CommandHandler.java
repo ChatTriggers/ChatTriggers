@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.handlers;
+package com.chattriggers.ctjs.minecraft.handlers;
 
 import com.chattriggers.ctjs.commands.Command;
 import lombok.Getter;

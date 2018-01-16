@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.libs.ChatLib;
-import com.chattriggers.ctjs.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import lombok.Getter;
 import com.chattriggers.ctjs.utils.console.Console;

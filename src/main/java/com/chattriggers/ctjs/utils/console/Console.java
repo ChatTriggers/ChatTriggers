@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import io.sentry.Sentry;
 import lombok.Getter;
