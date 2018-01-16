@@ -509,21 +509,6 @@ public class MinecraftVars {
     }
 
     /**
-     * Gets the player's active potion effects.
-     * In an import, accessible via the {@code potEffects} variable.
-     * @return The player's active potion effects.
-     */
-    public static String[] getActivePotionEffects(){
-        if (getPlayer() == null) return new String[]{};
-        
-        ArrayList<String> effects = new ArrayList<>();
-        for(PotionEffect effect : getPlayer().getActivePotionEffects()){
-            effects.add(effect.toString());
-        }
-        return effects.toArray(new String[effects.size()]);
-    }
-
-    /**
      * Gets the player's minecraft version.
      * In an import, accessible via the {@code mcVersion} variable.
      * @return The player's minecraft version.
