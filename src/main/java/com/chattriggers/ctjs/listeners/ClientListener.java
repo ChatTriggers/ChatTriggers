@@ -2,8 +2,8 @@ package com.chattriggers.ctjs.listeners;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.settings.KeyBinding;
@@ -36,7 +36,7 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (MinecraftVars.getWorld() == null) return;
+        if (World.getWorld() == null) return;
 
         TriggerType.TICK.triggerAll(this.ticksPassed);
         this.ticksPassed++;

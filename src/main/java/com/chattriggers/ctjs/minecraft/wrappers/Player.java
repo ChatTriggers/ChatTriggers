@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
@@ -167,9 +166,9 @@ public class Player {
         if (getPlayer() == null)
             return "";
 
-        Chunk chunk = MinecraftVars.getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
+        Chunk chunk = World.getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
         BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(),
-                MinecraftVars.getWorld().getWorldChunkManager());
+                World.getWorld().getWorldChunkManager());
 
         return biome.biomeName;
     }
@@ -179,9 +178,9 @@ public class Player {
      * @return the light level at the player's current position
      */
     public static Integer getLightLevel() {
-        if (getPlayer() == null || MinecraftVars.getWorld() == null) return 0;
+        if (getPlayer() == null || World.getWorld() == null) return 0;
 
-        return MinecraftVars.getWorld().getLight(getPlayer().getPosition());
+        return World.getWorld().getLight(getPlayer().getPosition());
     }
 
     /**

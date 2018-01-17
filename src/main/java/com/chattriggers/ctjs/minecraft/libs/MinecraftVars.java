@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.objects.KeyBind;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.Server;
+import com.chattriggers.ctjs.minecraft.wrappers.World;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -54,9 +55,11 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link World#getWorld()}
      * Gets the world object.
      * @return the world object
      */
+    @Deprecated
     public static WorldClient getWorld() {
         try {
             return (WorldClient) ReflectionHelper.findField(

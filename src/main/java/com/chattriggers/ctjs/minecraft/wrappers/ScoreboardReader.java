@@ -71,7 +71,7 @@ public class ScoreboardReader {
 
         try {
             // Get the scoreboard.
-            Scoreboard scoreboard = MinecraftVars.getWorld().getScoreboard();
+            Scoreboard scoreboard = World.getWorld().getScoreboard();
             // Get the right objective. I think the 1 stands for the sidebar objective but I've just copied it from the rendering code.
             ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
             // only update if there actually is something to update

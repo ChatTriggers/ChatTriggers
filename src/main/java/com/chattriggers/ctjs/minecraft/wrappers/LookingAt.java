@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -25,13 +24,13 @@ public class LookingAt {
     private static Block block;
 
     public static void update() {
-        if (MinecraftVars.getPlayer() == null || MinecraftVars.getWorld() == null || MinecraftVars.getMinecraft().objectMouseOver == null) return;
+        if (Player.getPlayer() == null || World.getWorld() == null || Client.getMinecraft().objectMouseOver == null) return;
 
-        mop = MinecraftVars.getMinecraft().objectMouseOver;
+        mop = Client.getMinecraft().objectMouseOver;
 
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             pos = mop.getBlockPos();
-            block = MinecraftVars.getWorld().getBlockState(pos).getBlock();
+            block = World.getWorld().getBlockState(pos).getBlock();
             entity = null;
         } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             entity = mop.entityHit;
@@ -77,12 +76,12 @@ public class LookingAt {
     public static double getDistanceFromPlayer() {
         if (block != null) {
             return Math.sqrt(
-                       Math.pow(pos.getX() - MinecraftVars.getPlayer().posX + .5, 2) +
-                       Math.pow(pos.getY() - MinecraftVars.getPlayer().posY - .5, 2) +
-                       Math.pow(pos.getZ() - MinecraftVars.getPlayer().posZ + .5, 2)
+                       Math.pow(pos.getX() - Player.getPlayer().posX + .5, 2) +
+                       Math.pow(pos.getY() - Player.getPlayer().posY - .5, 2) +
+                       Math.pow(pos.getZ() - Player.getPlayer().posZ + .5, 2)
                    );
         } else if (entity != null) {
-            return (double) entity.getDistanceToEntity(MinecraftVars.getPlayer());
+            return (double) entity.getDistanceToEntity(Player.getPlayer());
         } else {
             return -1d;
         }
@@ -176,12 +175,12 @@ public class LookingAt {
      * @return The block's metadata.
      */
     public static int getBlockMetadata() {
-        if (block == null || MinecraftVars.getWorld() == null || pos == null) return -1;
+        if (block == null || World.getWorld() == null || pos == null) return -1;
 
         String rn = block.getRegistryName().replace("minecraft:", "");
         int md;
         try {
-            md = block.getMetaFromState(MinecraftVars.getWorld().getBlockState(pos));
+            md = block.getMetaFromState(World.getWorld().getBlockState(pos));
         } catch (Exception e) {
             Console.getConsole().printStackTrace(e);
             return -1;
@@ -248,7 +247,7 @@ public class LookingAt {
         if (pos == null || newPos == null) return -1;
 
         if (block.getLightValue() != 0) return block.getLightValue();
-        else return MinecraftVars.getWorld().getLightFor(EnumSkyBlock.BLOCK, newPos);
+        else return World.getWorld().getLightFor(EnumSkyBlock.BLOCK, newPos);
     }
 
     /**
@@ -259,9 +258,9 @@ public class LookingAt {
      * @return A JSON string of block properties.
      */
     public static String getBlockProperties() {
-        if (block == null || MinecraftVars.getWorld() == null || pos == null) return "null";
+        if (block == null || World.getWorld() == null || pos == null) return "null";
         HashMap<String, Object> map = new HashMap<>();
-        ImmutableMap<IProperty, Comparable> properties = MinecraftVars.getWorld().getBlockState(pos).getProperties();
+        ImmutableMap<IProperty, Comparable> properties = World.getWorld().getBlockState(pos).getProperties();
 
         for (Map.Entry<IProperty, Comparable> property : properties.entrySet()) {
             map.put(property.getKey().getName(), property.getValue());
@@ -276,7 +275,7 @@ public class LookingAt {
      * @return True if the block is on fire, false otherwise.
      */
     public static boolean isBlockOnFire() {
-        return pos != null && MinecraftVars.getWorld().getBlockState(pos.up()).getBlock().getUnlocalizedName().equals("tile.fire");
+        return pos != null && World.getWorld().getBlockState(pos.up()).getBlock().getUnlocalizedName().equals("tile.fire");
     }
 
     /**
