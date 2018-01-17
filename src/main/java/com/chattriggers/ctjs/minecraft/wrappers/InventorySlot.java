@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -117,7 +116,7 @@ public class InventorySlot {
     }
 
     private ItemStack getItem() {
-        if (this.isArmor) return MinecraftVars.getPlayer().inventory.armorInventory[this.id];
-        else return MinecraftVars.getPlayer().inventory.getStackInSlot(this.id);
+        if (this.isArmor) return Player.getPlayer().inventory.armorInventory[this.id];
+        else return Player.getPlayer().inventory.getStackInSlot(this.id);
     }
 }

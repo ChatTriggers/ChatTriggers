@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.init.Items;
@@ -20,7 +21,7 @@ public class Book {
         book = new ItemStack(Items.written_book);
 
         bookData = new NBTTagCompound();
-        bookData.setTag("author", new NBTTagString(MinecraftVars.getMinecraft().getSession().getUsername()));
+        bookData.setTag("author", new NBTTagString(Client.getMinecraft().getSession().getUsername()));
         bookData.setTag("title", new NBTTagString("CT-" + bookName));
         bookData.setTag("pages", new NBTTagList());
 
@@ -81,7 +82,7 @@ public class Book {
 
     public void display(int page) {
         if (bookScreen == null) {
-            bookScreen = new GuiScreenBook(MinecraftVars.getPlayer(), book, false);
+            bookScreen = new GuiScreenBook(Player.getPlayer(), book, false);
         }
 
         ReflectionHelper.setPrivateValue(GuiScreenBook.class, bookScreen, page, "currPage", "field_146484_x");
@@ -92,7 +93,7 @@ public class Book {
             } catch (InterruptedException e) {
                 Console.getConsole().printStackTrace(e);
             }
-            MinecraftVars.getMinecraft().displayGuiScreen(bookScreen);
+            Client.getMinecraft().displayGuiScreen(bookScreen);
         }).start();
     }
 
@@ -101,7 +102,7 @@ public class Book {
     }
 
     public boolean isOpen() {
-        return bookScreen != null && MinecraftVars.getMinecraft().currentScreen == bookScreen;
+        return bookScreen != null && Client.getMinecraft().currentScreen == bookScreen;
 
     }
 

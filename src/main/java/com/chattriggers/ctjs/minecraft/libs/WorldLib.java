@@ -1,7 +1,8 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.experimental.UtilityClass;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -15,7 +16,7 @@ public class WorldLib {
      * @param pitch the pitch of the sound
      */
     public static void playSound(String name, float volume, float pitch) {
-        MinecraftVars.getPlayer().playSound(name, volume, pitch);
+        Player.getPlayer().playSound(name, volume, pitch);
     }
 
     /**
@@ -27,8 +28,8 @@ public class WorldLib {
      * @param fadeOut time to fade out
      */
     public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
-        Minecraft.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut);
-        Minecraft.getMinecraft().ingameGUI.displayTitle(null, ChatLib.addColor(subtitle), 0, 0, 0);
-        Minecraft.getMinecraft().ingameGUI.displayTitle(null, null, fadeIn, time, fadeOut);
+        Client.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut);
+        Client.getMinecraft().ingameGUI.displayTitle(null, ChatLib.addColor(subtitle), 0, 0, 0);
+        Client.getMinecraft().ingameGUI.displayTitle(null, null, fadeIn, time, fadeOut);
     }
 }

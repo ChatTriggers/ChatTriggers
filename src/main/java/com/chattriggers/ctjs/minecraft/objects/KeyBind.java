@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.apache.commons.lang3.ArrayUtils;
@@ -20,10 +20,10 @@ public class KeyBind {
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
     public KeyBind(String description, int keyCode) {
-        for (KeyBinding key : MinecraftVars.getMinecraft().gameSettings.keyBindings) {
+        for (KeyBinding key : Client.getMinecraft().gameSettings.keyBindings) {
             if (key.getKeyCategory().equals("ChatTriggers") && key.getKeyDescription().equals(description)) {
-                MinecraftVars.getMinecraft().gameSettings.keyBindings =
-                        ArrayUtils.removeElement(MinecraftVars.getMinecraft().gameSettings.keyBindings, key);
+                Client.getMinecraft().gameSettings.keyBindings =
+                        ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, key);
                 break;
             }
         }
@@ -60,8 +60,8 @@ public class KeyBind {
         for (KeyBind keyBind : keyBinds) {
             if (!keyBind.isCustom) continue;
 
-            MinecraftVars.getMinecraft().gameSettings.keyBindings =
-                    ArrayUtils.removeElement(MinecraftVars.getMinecraft().gameSettings.keyBindings, keyBind.keyBinding);
+            Client.getMinecraft().gameSettings.keyBindings =
+                    ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, keyBind.keyBinding);
         }
     }
 }

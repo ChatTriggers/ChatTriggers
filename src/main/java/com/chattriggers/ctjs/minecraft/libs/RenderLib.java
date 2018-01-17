@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.experimental.UtilityClass;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.*;
@@ -277,7 +277,7 @@ public class RenderLib {
      * @return scaled width
      */
     public static int getRenderWidth() {
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        ScaledResolution res = new ScaledResolution(Client.getMinecraft());
         return res.getScaledWidth();
     }
 
@@ -286,7 +286,7 @@ public class RenderLib {
      * @return scaled height
      */
     public static int getRenderHeight() {
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        ScaledResolution res = new ScaledResolution(Client.getMinecraft());
         return res.getScaledHeight();
     }
 
@@ -511,14 +511,14 @@ public class RenderLib {
 
     public static void drawImage(ResourceLocation rl, float renderXLoc, float renderYLoc, int textureMapX,
                                  int textureMapY, int textureWidth, int textureHeight, float scale) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
+        Client.getMinecraft().getTextureManager().bindTexture(rl);
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glTranslatef(renderXLoc, renderYLoc, 0);
         GL11.glScalef(scale, scale, scale);
-        Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureMapX, textureMapY, textureWidth, textureHeight);
+        Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureMapX, textureMapY, textureWidth, textureHeight);
         GL11.glDisable(GL11.GL_BLEND);
 
         GL11.glPopMatrix();
@@ -587,7 +587,7 @@ public class RenderLib {
         x /= scale;
         y /= scale;
 
-        RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
+        RenderItem itemRenderer = Client.getMinecraft().getRenderItem();
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(scale, scale, 1f);
@@ -662,7 +662,7 @@ public class RenderLib {
             ent.prevRotationYawHead = ent.rotationYaw;
         }
         GlStateManager.translate(0.0F, 0.0F, 0.0F);
-        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+        RenderManager rendermanager = Client.getMinecraft().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
         rendermanager.renderEntityWithPosYaw(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
