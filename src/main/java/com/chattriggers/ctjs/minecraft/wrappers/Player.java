@@ -133,7 +133,6 @@ public class Player {
 
     /**
      * Gets the player's air level.<br>
-     *
      * The returned value will be an integer. If the player is not taking damage, it
      * will be between 300 (not in water) and 0. If the player is taking damage, it
      * will be between -20 and 0, getting reset to 0 every time the player takes damage.
