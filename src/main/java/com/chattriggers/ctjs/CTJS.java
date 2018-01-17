@@ -10,6 +10,7 @@ import com.chattriggers.ctjs.listeners.WorldListener;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.CPS;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.capes.LayerCape;
@@ -128,10 +129,11 @@ public class CTJS {
     }
 
     private void registerListeners() {
-        MinecraftForge.EVENT_BUS.register(this.displayHandler);
-        MinecraftForge.EVENT_BUS.register(this.guiHandler);
         MinecraftForge.EVENT_BUS.register(new WorldListener());
         MinecraftForge.EVENT_BUS.register(new ClientListener());
+
+        MinecraftForge.EVENT_BUS.register(this.displayHandler);
+        MinecraftForge.EVENT_BUS.register(this.guiHandler);
         MinecraftForge.EVENT_BUS.register(this.chatListener);
         MinecraftForge.EVENT_BUS.register(this.config);
         MinecraftForge.EVENT_BUS.register(this.cps);

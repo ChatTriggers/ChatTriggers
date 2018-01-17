@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -66,9 +67,11 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Player#getPlayer()}
      * Gets the player object.
      * @return the player object
      */
+    @Deprecated
     public static EntityPlayerSP getPlayer() {
         try {
             return (EntityPlayerSP) ReflectionHelper.findField(
@@ -111,60 +114,73 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Player#getName()}
      * Gets the player's username.
      * In an import, accessible via the {@code playerName} variable.
      * @return The username of the user.
      */
+    @Deprecated
     public static String getPlayerName() {
         return getMinecraft().getSession().getUsername();
     }
 
     /**
+     * @deprecated use {@link Player#getUUID()}
      * Gets the player's UUID.
      * In an import, accessible via the {@code playerUUID} variable.
      * @return The UUID of the user.
      */
+    @Deprecated
     public static String getPlayerUUID() {
         return getMinecraft().getSession().getPlayerID();
     }
 
     /**
+     * @deprecated use {@link Player#getHP()}
      * Gets the player's HP.
      * In an import, accessible via the {@code hp} variable.
      * @return The player's HP.
      */
+    @Deprecated
     public static Float getPlayerHP() {
         return getPlayer() == null ? 0 : getPlayer().getHealth();
     }
 
     /**
+     * @deprecated use {@link Player#getHunger()}
      * Gets the player's hunger level.
      * In an import, accessible via the {@code hunger} variable.
      * @return The player's hunger level.
      */
+    @Deprecated
     public static Integer getPlayerHunger() {
         return getPlayer() == null ? 0 : getPlayer().getFoodStats().getFoodLevel();
     }
 
     /**
+     * @deprecated use {@link Player#getSaturation()}
      * Gets the player's saturation level.
      * In an import, accessible via the {@code saturation} variable.
      * @return The player's saturation level.
      */
+    @Deprecated
     public static Float getPlayerSaturation() {
         return getPlayer() == null ? 0 : getPlayer().getFoodStats().getSaturationLevel();
     }
 
     /**
+     * @deprecated use {@link Player#getArmorPoints()}
      * Gets the player's armor points.
      * In an import, accessible via the {@code armorPoints} variable.
      * @return The player's armor points.
      */
+    @Deprecated
     public static Integer getPlayerArmorPoints() {
         return getPlayer() == null ? 0 : getPlayer().getTotalArmorValue();
     }
 
     /**
+     * @deprecated use {@link Player#getAirLevel()}
      * Gets the player's air level.
      * The returned value will be an integer. If the player is not taking damage, it
      * will be between 300 (not in water) and 0. If the player is taking damage, it
@@ -173,33 +189,40 @@ public class MinecraftVars {
      * In an import, accessible via the {@code airLevel} variable.
      * @return An integer corresponding to the player's air level.
      */
+    @Deprecated
     public static Integer getPlayerAirLevel() {
         return getPlayer() == null ? 0 : getPlayer().getAir();
     }
 
     /**
+     * @deprecated use {@link Player#getXPLevel()}
      * Gets the player's XP level.
      * In an import, accessible via the {@code xpLevel} variable.
      * @return The player's XP level.
      */
+    @Deprecated
     public static Integer getXPLevel() {
         return getPlayer() == null ? 0 : getPlayer().experienceLevel;
     }
 
     /**
+     * @deprecated use {@link Player#getXPProgress()}
      * Gets the player's XP progress towards the next XP level.
      * In an import, accessible via the {@code xpProgress} variable.
      * @return The player's xp progress.
      */
+    @Deprecated
     public static Float getXPProgress() {
         return getPlayer() == null ? 0 : getPlayer().experience;
     }
 
     /**
+     * @deprecated use {@link Player#getBiome()}
      * Gets the biome the player is currently in.
      * In an import, accessible via the {@code biome} variable.
      * @return The biome the player is in.
      */
+    @Deprecated
     public static String getPlayerBiome() {
         if (getPlayer() == null) {
             return "";
@@ -247,10 +270,12 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Player#getLightLevel()}
      * Gets the light level at the player's current position.
      * In an import, accessible via the {@code lightLevel} variable.
      * @return The light level at the player's current position.
      */
+    @Deprecated
     public static Integer getPlayerLightLevel() {
         if (getPlayer() == null || getWorld() == null) return 0;
 
@@ -276,19 +301,23 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Player#isSneaking()}
      * Returns true if the player is sneaking.
      * In an import, accessible via the {@code isSneaking} variable.
      * @return True if the player is sneaking, false otherwise.
      */
+    @Deprecated
     public static boolean isSneaking() {
         return getPlayer() != null && getPlayer().isSneaking();
     }
 
     /**
+     * @deprecated use {@link Player#isSprinting()}
      * Returns true if the player is sprinting.
      * In an import, accessible via the {@code isSprinting} variable.
      * @return True if the player is sprinting, false otherwise.
      */
+    @Deprecated
     public static boolean isSprinting() {
         return getPlayer() != null && getPlayer().isSprinting();
     }
@@ -395,82 +424,100 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Player#getX()}
      * Gets the player's X position.
      * In an import, accessible via the {@code posX} variable.
      * @return The player's X position.
      */
+    @Deprecated
     public static Double getPlayerPosX() {
         return getPlayer() == null ? 0 : getPlayer().posX;
     }
 
     /**
+     * @deprecated use {@link Player#getY()}
      * Gets the player's Y position.
      * In an import, accessible via the {@code posY} variable.
      * @return The player's Y position.
      */
+    @Deprecated
     public static Double getPlayerPosY() {
         return getPlayer() == null ? 0 : getPlayer().posY;
     }
 
     /**
+     * @deprecated use {@link Player#getZ()}
      * Gets the player's Z position.
      * In an import, accessible via the {@code posZ} variable.
      * @return The player's Z position.
      */
+    @Deprecated
     public static Double getPlayerPosZ() {
         return getPlayer() == null ? 0 : getPlayer().posZ;
     }
 
     /**
+     * @deprecated use {@link Player#getMotionX()}
      * Gets the player's X motion.
      * In an import, accessible via the {@code motionX} variable.
      * @return The player's X motion.
      */
+    @Deprecated
     public static Double getPlayerMotionX() {
         return getPlayer() == null ? 0 : getPlayer().motionX;
     }
 
     /**
+     * @deprecated use {@link Player#getMotionY()}
      * Gets the player's Y motion.
      * In an import, accessible via the {@code motionY} variable.
      * @return The player's Y motion.
      */
+    @Deprecated
     public static Double getPlayerMotionY() {
         return getPlayer() == null ? 0 : getPlayer().motionY;
     }
 
     /**
+     * @deprecated use {@link Player#getMotionZ()}
      * Gets the player's Z motion.
      * In an import, accessible via the {@code motionZ} variable.
      * @return The player's Z motion.
      */
+    @Deprecated
     public static Double getPlayerMotionZ() {
         return getPlayer() == null ? 0 : getPlayer().motionZ;
     }
 
     /**
+     * @deprecated use {@link Player#getPitch()}
      * Gets the player's camera pitch.
      * In an import, accessible via the {@code cameraPitch} variable.
      * @return The player's camera pitch.
      */
+    @Deprecated
     public static Float getPlayerPitch() {
         return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
     }
 
     /**
+     * @deprecated use {@link Player#getYaw()}
      * Gets the player's camera yaw.
      * In an import, accessible via the {@code cameraYaw} variable.
      * @return The player's camera yaw.
      */
+    @Deprecated
     public static Float getPlayerYaw() {
         return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
     }
 
     /**
+     * @deprecated use {@link Player#facing()}
      * Gets the direction the player is facing.
      * In an import, accessible via the {@code facing} variable.
      * @return The direction the player is facing, one of the four cardinal directions.
      */
+    @Deprecated
     public static String getPlayerFacing() {
         if (getPlayer() == null) {
             return "";
@@ -506,6 +553,23 @@ public class MinecraftVars {
      */
     public static int getPlayerFPS() {
         return Minecraft.getDebugFPS();
+    }
+
+    /**
+     * @deprecated use {@link Player#getActivePotionEffects()}
+     * Gets the player's active potion effects.
+     * In an import, accessible via the {@code potEffects} variable.
+     * @return The player's active potion effects.
+     */
+    @Deprecated
+    public static String[] getActivePotionEffects(){
+        if (getPlayer() == null) return new String[]{};
+        
+        ArrayList<String> effects = new ArrayList<>();
+        for(PotionEffect effect : getPlayer().getActivePotionEffects()){
+            effects.add(effect.toString());
+        }
+        return effects.toArray(new String[effects.size()]);
     }
 
     /**
@@ -554,19 +618,23 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Player#isFlying()}
      * Checks if player is pushed by water currently.
      * In an import, accessible via the {@code isFlying} variable.
      * @return If the player is flying (and false if the player does not exist)
      */
+    @Deprecated
     public static boolean isFlying(){
         return !(getPlayer() != null && getPlayer().isPushedByWater());
     }
 
     /**
+     * @deprecated use {@link Player#isSleeping()}
      * Checks if player is sleeping.
      * In an import, accessible via the {@code isSleeping} variable.
      * @return If the player is sleeping (and false if the player does not exist)
      */
+    @Deprecated
     public static boolean isSleeping(){
         return getPlayer() != null && getPlayer().isPlayerSleeping();
     }
