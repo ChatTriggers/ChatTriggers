@@ -163,7 +163,7 @@ function cancel(event) {
 // animation
 function easeOut(start, finish, speed, jump) {
     if (!jump) {
-	    jump = 1;
+        jump = 1;
     }
     
     if (Math.floor(Math.abs(finish - start) / jump) > 0) {
