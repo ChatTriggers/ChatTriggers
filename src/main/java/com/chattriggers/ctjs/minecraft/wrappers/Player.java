@@ -16,7 +16,7 @@ public class Player {
      * @return the player object
      */
     public static EntityPlayerSP getPlayer() {
-        return MinecraftVars.getMinecraft().thePlayer;
+        return Client.getMinecraft().thePlayer;
     }
 
     /**
@@ -88,7 +88,7 @@ public class Player {
      * @return the player's username
      */
     public static String getName() {
-        return MinecraftVars.getMinecraft().getSession().getUsername();
+        return Client.getMinecraft().getSession().getUsername();
     }
 
     /**
@@ -96,7 +96,7 @@ public class Player {
      * @return the player's uuid
      */
     public static String getUUID() {
-        return MinecraftVars.getMinecraft().getSession().getPlayerID();
+        return Client.getMinecraft().getSession().getPlayerID();
     }
 
     /**

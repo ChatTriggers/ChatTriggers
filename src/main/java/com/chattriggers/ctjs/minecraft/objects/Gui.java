@@ -2,23 +2,23 @@ package com.chattriggers.ctjs.minecraft.objects;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
-import com.chattriggers.ctjs.triggers.OnTrigger;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
-import javax.script.ScriptException;
 import java.io.IOException;
 
 public class Gui extends GuiScreen {
-    private OnTrigger onDraw = null;
-    private OnTrigger onClick = null;
-    private OnTrigger onKeyTyped = null;
-    private OnTrigger onMouseReleased = null;
-    private OnTrigger onMouseDragged = null;
-    private OnTrigger onActionPerformed = null;
+    private OnRegularTrigger onDraw = null;
+    private OnRegularTrigger onClick = null;
+    private OnRegularTrigger onKeyTyped = null;
+    private OnRegularTrigger onMouseReleased = null;
+    private OnRegularTrigger onMouseDragged = null;
+    private OnRegularTrigger onActionPerformed = null;
 
     private int mouseX = 0;
     private int mouseY = 0;
@@ -34,8 +34,8 @@ public class Gui extends GuiScreen {
      * Closes this gui screen.
      */
     public void close() {
-        if (MinecraftVars.getMinecraft().currentScreen == this)
-            MinecraftVars.getPlayer().closeScreen();
+        if (Client.getMinecraft().currentScreen == this)
+            Player.getPlayer().closeScreen();
     }
 
     /**
@@ -56,28 +56,8 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnTrigger registerDraw(String methodName) {
-        return onDraw = new OnTrigger(methodName, TriggerType.OTHER) {
-            @Override
-            public void trigger(Object... args) {
-                if (!(args[0] instanceof Integer
-                        && args[1] instanceof Integer
-                        && args[2] instanceof Float)) {
-                    throw new IllegalArgumentException("Arguments must be of type int, int, float");
-                }
-
-                int mouseX = (int) args[0];
-                int mouseY = (int) args[1];
-                float partialTicks = (float) args[2];
-
-                try {
-                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, partialTicks);
-                } catch (ScriptException | NoSuchMethodException exception) {
-                    onDraw = null;
-                    Console.getConsole().printStackTrace(exception);
-                }
-            }
-        };
+    public OnRegularTrigger registerDraw(String methodName) {
+        return onDraw = new OnRegularTrigger(methodName, TriggerType.OTHER);
     }
 
     /**
@@ -90,28 +70,8 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnTrigger registerClicked(String methodName) {
-        return onClick = new OnTrigger(methodName, TriggerType.OTHER) {
-            @Override
-            public void trigger(Object... args) {
-                if (!(args[0] instanceof Integer
-                        && args[1] instanceof Integer
-                        && args[2] instanceof Integer)) {
-                    throw new IllegalArgumentException("Arguments must be of type int, int, int");
-                }
-
-                int mouseX = (int) args[0];
-                int mouseY = (int) args[1];
-                int button = (int) args[2];
-
-                try {
-                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, button);
-                } catch (ScriptException | NoSuchMethodException exception) {
-                    onClick = null;
-                    Console.getConsole().printStackTrace(exception);
-                }
-            }
-        };
+    public OnRegularTrigger registerClicked(String methodName) {
+        return onClick = new OnRegularTrigger(methodName, TriggerType.OTHER);
     }
 
     /**
@@ -123,26 +83,8 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnTrigger registerKeyTyped(String methodName) {
-        return onKeyTyped = new OnTrigger(methodName, TriggerType.OTHER) {
-            @Override
-            public void trigger(Object... args) {
-                if (!(args[0] instanceof Character
-                        && args[1] instanceof Integer)) {
-                    throw new IllegalArgumentException("Arguments must be of type char, int");
-                }
-
-                char typedChar = (char) args[0];
-                int keyCode = (int) args[1];
-
-                try {
-                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, typedChar, keyCode);
-                } catch (ScriptException | NoSuchMethodException exception) {
-                    onKeyTyped = null;
-                    Console.getConsole().printStackTrace(exception);
-                }
-            }
-        };
+    public OnRegularTrigger registerKeyTyped(String methodName) {
+        return onKeyTyped = new OnRegularTrigger(methodName, TriggerType.OTHER);
     }
 
     /**
@@ -151,23 +93,8 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnTrigger registerMouseDragged(String methodName) {
-        return onMouseDragged = new OnTrigger(methodName, TriggerType.OTHER) {
-            @Override
-            public void trigger(Object... args) {
-                int mouseX = (int) args[0];
-                int mouseY = (int) args[1];
-                int clickedMouseButton = (int) args[2];
-                long timeSinceLastClick = (long) args[3];
-                try {
-                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY,
-                            clickedMouseButton, timeSinceLastClick);
-                } catch (ScriptException | NoSuchMethodException exception) {
-                    onMouseDragged = null;
-                    Console.getConsole().printStackTrace(exception);
-                }
-            }
-        };
+    public OnRegularTrigger registerMouseDragged(String methodName) {
+        return onMouseDragged = new OnRegularTrigger(methodName, TriggerType.OTHER);
     }
 
     /**
@@ -176,22 +103,8 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnTrigger registerMouseReleased(String methodName) {
-        return onMouseReleased = new OnTrigger(methodName, TriggerType.OTHER) {
-            @Override
-            public void trigger(Object... args) {
-                int mouseX = (int) args[0];
-                int mouseY = (int) args[1];
-                int state = (int) args[2];
-
-                try {
-                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, state);
-                } catch (ScriptException | NoSuchMethodException exception) {
-                    onMouseReleased = null;
-                    Console.getConsole().printStackTrace(exception);
-                }
-            }
-        };
+    public OnRegularTrigger registerMouseReleased(String methodName) {
+        return onMouseDragged = new OnRegularTrigger(methodName, TriggerType.OTHER);
     }
 
     /**
@@ -200,20 +113,8 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnTrigger registerActionPerformed(String methodName) {
-        return onActionPerformed = new OnTrigger(methodName, TriggerType.OTHER) {
-            @Override
-            public void trigger(Object... args) {
-                int buttonId = (int) args[0];
-
-                try {
-                    CTJS.getInstance().getModuleManager().invokeFunction(methodName, buttonId);
-                } catch (ScriptException | NoSuchMethodException exception) {
-                    onActionPerformed = null;
-                    Console.getConsole().printStackTrace(exception);
-                }
-            }
-        };
+    public OnRegularTrigger registerActionPerformed(String methodName) {
+        return onActionPerformed = new OnRegularTrigger(methodName, TriggerType.OTHER);
     }
 
     @Override

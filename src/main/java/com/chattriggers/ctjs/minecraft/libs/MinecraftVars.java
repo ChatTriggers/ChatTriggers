@@ -1,7 +1,9 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.chattriggers.ctjs.minecraft.wrappers.Server;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -42,9 +44,11 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getMinecraft()}
      * Gets the Minecraft object.
      * @return the Minecraft object
      */
+    @Deprecated
     public static Minecraft getMinecraft() {
         return Minecraft.getMinecraft();
     }
@@ -86,9 +90,11 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getConnection()}
      * Gets the connection object.
      * @return the connection object
      */
+    @Deprecated
     public static NetHandlerPlayClient getConnection() {
         try {
             return (NetHandlerPlayClient) ReflectionHelper.findMethod(
@@ -106,9 +112,11 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getChatGUI()}
      * Gets the chat gui object.
      * @return the chat gui object
      */
+    @Deprecated
     public static GuiNewChat getChatGUI() {
         return getMinecraft().ingameGUI.getChatGUI();
     }
@@ -283,19 +291,23 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#isInChat()}
      * Returns true if the player has the chat open.
      * In an import, accessible via the {@code inChat} variable.
      * @return True if the player has the chat open, false otherwise.
      */
+    @Deprecated
     public static boolean isInChat() {
         return getMinecraft().currentScreen instanceof GuiChat;
     }
 
     /**
+     * @deprecated use {@link Client#isInTab()}
      * Returns true if the player has the tab list open.
      * In an import, accessible via the {@code inTab} variable.
      * @return True if the player has the tab list open, false otherwise.
      */
+    @Deprecated
     public static boolean isInTab() {
         return getMinecraft().gameSettings.keyBindPlayerList.isKeyDown();
     }
@@ -323,11 +335,13 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Server#getIP()}
      * Gets the current server's IP.
      * In an import, accessible via the {@code serverIP} variable.
      * @return The IP of the current server, or "localhost" if the player
      *          is in a single player world.
      */
+    @Deprecated
     public static String getServerIP() {
         if (getMinecraft().isSingleplayer()) return "localhost";
 
@@ -335,11 +349,13 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Server#getName()}
      * Gets the current server's name.
      * In an import, accessible via the {@code server} variable.
      * @return The name of the current server, or "SinglePlayer" if the player
      *          is in a single player world.
      */
+    @Deprecated
     public static String getServerName() {
         if (getMinecraft().isSingleplayer()) return "SinglePlayer";
 
@@ -347,11 +363,13 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Server#getMOTD()}
      * Gets the current server's MOTD.
      * In an import, accessible via the {@code serverMOTD} variable.
      * @return The MOTD of the current server, or "SinglePlayer" if the player
      *          is in a single player world.
      */
+    @Deprecated
     public static String getServerMOTD() {
         if (getMinecraft().isSingleplayer()) return "SinglePlayer";
 
@@ -359,11 +377,13 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Server#getPing()}
      * Gets the ping to the current server.
      * In an import, accessible via the {@code ping} variable.
      * @return The ping to the current server, or 5 if the player
      *          is in a single player world.
      */
+    @Deprecated
     public static Long getPing() {
         EntityPlayer player = getPlayer();
 
@@ -381,21 +401,25 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#isTabbedIn()}
      * Gets whether or not the minecraft window is active
      * and in the foreground of the user's screen
      * @return whether or not the game is active
      */
+    @Deprecated
     public static boolean isUserTabbedIn() {
         return Display.isActive();
     }
 
     /**
+     * @deprecated use {@link Client#getKeyBindFromKey(int)}
      * Get the {@link KeyBind} from an already existing
      * Minecraft KeyBinding.
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
      * @return the {@link KeyBind} from a Minecraft KeyBinding, or null if one doesn't exist
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
+    @Deprecated
     public static KeyBind getKeyBindFromKey(int keyCode) {
         for (KeyBinding keyBinding : getMinecraft().gameSettings.keyBindings) {
             if (keyBinding.getKeyCode() == keyCode) {
@@ -407,12 +431,14 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getKeyBindFromKey(int, String)}
      * Get the {@link KeyBind} from an already existing
      * Minecraft KeyBinding, else, return a new one.
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
      * @return the {@link KeyBind} from a Minecraft KeyBinding, or null if one doesn't exist
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
+    @Deprecated
     public static KeyBind getKeyBindFromKey(int keyCode, String description) {
         for (KeyBinding keyBinding : getMinecraft().gameSettings.keyBindings) {
             if (keyBinding.getKeyCode() == keyCode) {
@@ -547,10 +573,12 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getFPS()}
      * Gets the game's FPS count.
      * In an import, accessible via the {@code fps} variable.
      * @return The game's FPS count.
      */
+    @Deprecated
     public static int getPlayerFPS() {
         return Minecraft.getDebugFPS();
     }
@@ -573,46 +601,56 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getVersion()}
      * Gets the player's minecraft version.
      * In an import, accessible via the {@code mcVersion} variable.
      * @return The player's minecraft version.
      */
+    @Deprecated
     public static String getMinecraftVersion() {
         return getMinecraft().getVersion();
     }
 
     /**
+     * @deprecated use {@link Client#getMaxMemory()}
      * Gets the player's max memory.
      * In an import, accessible via the {@code maxMem} variable.
      * @return The player's max memory.
      */
+    @Deprecated
     public static long getMaxMemory() {
         return Runtime.getRuntime().maxMemory();
     }
 
     /**
+     * @deprecated use {@link Client#getTotalMemory()}
      * Gets the player's total memory.
      * In an import, accessible via the {@code totalMem} variable.
      * @return The player's total memory.
      */
+    @Deprecated
     public static long getTotalMemory() {
         return Runtime.getRuntime().totalMemory();
     }
 
     /**
+     * @deprecated use {@link Client#getFreeMemory()}
      * Gets the player's free memory.
      * In an import, accessible via the {@code freeMem} variable.
      * @return The player's free memory.
      */
+    @Deprecated
     public static long getFreeMemory() {
         return Runtime.getRuntime().freeMemory();
     }
 
     /**
+     * @deprecated use {@link Client#getMemoryUsage()}
      * Gets the player's memory usage.
      * In an import, accessible via the {@code memUsage} variable.
      * @return The player's memory usage.
      */
+    @Deprecated
     public static int getMemoryUsage() {
         return Math.round((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory());
     }
@@ -640,17 +678,21 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getSystemTime()}
      * Gets the system time.
      * @return the system time
      */
+    @Deprecated
     public static Long getSystemTime() {
         return Minecraft.getSystemTime();
     }
 
     /**
+     * @deprecated use {@link Client#getMouseX()}
      * Gets the mouse x location.
      * @return the mouse x location
      */
+    @Deprecated
     public static float getMouseX() {
         float mx = (float) Mouse.getX();
         float rw = (float) RenderLib.getRenderWidth();
@@ -659,9 +701,11 @@ public class MinecraftVars {
     }
 
     /**
+     * @deprecated use {@link Client#getMouseY()}
      * Gets the mouse y location.
      * @return the mouse y location
      */
+    @Deprecated
     public static float getMouseY() {
         float my = (float) Mouse.getY();
         float rh = (float) RenderLib.getRenderHeight();

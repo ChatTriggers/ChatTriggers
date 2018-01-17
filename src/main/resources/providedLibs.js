@@ -30,6 +30,7 @@ var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
 var XMLHttpRequest = Java.type("com.chattriggers.ctjs.minecraft.objects.XMLHttpRequest");
 
 // Wrappers
+var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
 var Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
 var LookingAt = Java.type("com.chattriggers.ctjs.minecraft.wrappers.LookingAt");
 var Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Inventory");
