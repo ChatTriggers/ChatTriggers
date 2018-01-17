@@ -35,7 +35,6 @@ var Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Inventory");
 var TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
 var ScoreboardReader = Java.type("com.chattriggers.ctjs.minecraft.wrappers.ScoreboardReader");
 var CPS = Java.type("com.chattriggers.ctjs.CTJS").getInstance().getCps();
-var Potions = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Potions");
 
 // Misc
 var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.handlers.DisplayHandler");
@@ -79,7 +78,7 @@ var rightArrow = MinecraftVars.isRightArrowDown();
 var upArrow = MinecraftVars.isUpArrowDown();
 var downArrow = MinecraftVars.isDownArrowDown();
 var tabbedIn = MinecraftVars.isUserTabbedIn();
-var potEffects = Potions.getPotionEffects();
+var potEffects = MinecraftVars.getPotionEffects();
 var maxMem = MinecraftVars.getMaxMemory();
 var totalMem = MinecraftVars.getTotalMemory();
 var freeMem = MinecraftVars.getFreeMemory();
@@ -128,7 +127,7 @@ function updateProvidedLibsTick() {
     upArrow = MinecraftVars.isUpArrowDown();
     downArrow = MinecraftVars.isDownArrowDown();
     tabbedIn = MinecraftVars.isUserTabbedIn();
-    potEffects = Potions.getPotionEffects();
+    potEffects = MinecraftVars.getPotionEffects();
     maxMem = MinecraftVars.getMaxMemory();
     totalMem = MinecraftVars.getTotalMemory();
     freeMem = MinecraftVars.getFreeMemory();
