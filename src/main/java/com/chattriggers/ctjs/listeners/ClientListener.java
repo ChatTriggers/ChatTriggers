@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.listeners;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.settings.KeyBinding;
@@ -47,7 +48,7 @@ public class ClientListener {
 
         for (int i = 0; i < 5; i++) {
             if (Mouse.isButtonDown(i) == this.mouseState.get(i)) continue;
-            TriggerType.CLICKED.triggerAll(MinecraftVars.getMouseX(), MinecraftVars.getMouseY(), i, Mouse.isButtonDown(i));
+            TriggerType.CLICKED.triggerAll(Client.getMouseX(), Client.getMouseY(), i, Mouse.isButtonDown(i));
             this.mouseState.put(i, Mouse.isButtonDown(i));
         }
     }

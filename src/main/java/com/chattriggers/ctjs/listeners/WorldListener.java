@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.listeners;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.wrappers.Server;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import io.sentry.Sentry;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -14,7 +14,7 @@ public class WorldListener {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         shouldTriggerWorldLoad = true;
-        Sentry.getStoredClient().setServerName(MinecraftVars.getServerName());
+        Sentry.getStoredClient().setServerName(Server.getName());
     }
 
     @SubscribeEvent

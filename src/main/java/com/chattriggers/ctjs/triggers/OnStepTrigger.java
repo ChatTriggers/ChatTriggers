@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.utils.console.Console;
 
 import javax.script.ScriptException;
@@ -14,7 +14,7 @@ public class OnStepTrigger extends OnTrigger {
 
     protected OnStepTrigger(String methodName) {
         super(methodName, TriggerType.STEP);
-        this.systemTime = MinecraftVars.getSystemTime();
+        this.systemTime = Client.getSystemTime();
         this.elapsed = 0L;
     }
 
@@ -30,7 +30,7 @@ public class OnStepTrigger extends OnTrigger {
         else
             this.fps = fps;
 
-        this.systemTime = MinecraftVars.getSystemTime() + (1000 / this.fps);
+        this.systemTime = Client.getSystemTime() + (1000 / this.fps);
 
         return this;
     }
@@ -47,7 +47,7 @@ public class OnStepTrigger extends OnTrigger {
         else
             this.delay = delay;
 
-        this.systemTime = MinecraftVars.getSystemTime() - this.delay * 1000;
+        this.systemTime = Client.getSystemTime() - this.delay * 1000;
 
         return this;
     }
@@ -57,14 +57,14 @@ public class OnStepTrigger extends OnTrigger {
         try {
             if (this.delay == null) {
                 // run trigger based on set fps value (60 per second by default)
-                while (this.systemTime < MinecraftVars.getSystemTime() + (1000 / this.fps)) {
+                while (this.systemTime < Client.getSystemTime() + (1000 / this.fps)) {
                     this.elapsed++;
                     CTJS.getInstance().getModuleManager().invokeFunction(this.methodName, this.elapsed);
                     this.systemTime += (1000 / this.fps);
                 }
             } else {
                 // run trigger based on set delay in seconds
-                while (MinecraftVars.getSystemTime() > this.systemTime + this.delay * 1000) {
+                while (Client.getSystemTime() > this.systemTime + this.delay * 1000) {
                     this.elapsed++;
                     CTJS.getInstance().getModuleManager().invokeFunction(this.methodName, this.elapsed);
                     this.systemTime += this.delay * 1000;

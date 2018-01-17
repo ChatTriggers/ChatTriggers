@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
@@ -43,7 +42,7 @@ public class Gui extends GuiScreen {
      * @return true if this gui is open
      */
     public boolean isOpen() {
-        return MinecraftVars.getMinecraft().currentScreen == this;
+        return Client.getMinecraft().currentScreen == this;
     }
 
     /**

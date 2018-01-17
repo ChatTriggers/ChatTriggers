@@ -3,18 +3,15 @@ package com.chattriggers.ctjs.minecraft.objects;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
 import org.lwjgl.input.Mouse;
 
-import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

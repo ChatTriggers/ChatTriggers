@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
 import net.minecraft.client.Minecraft;
@@ -158,7 +157,7 @@ public class Client {
     public static float getMouseX() {
         float mx = (float) Mouse.getX();
         float rw = (float) RenderLib.getRenderWidth();
-        float dw = (float) MinecraftVars.getMinecraft().displayWidth;
+        float dw = (float) getMinecraft().displayWidth;
         return mx * rw / dw;
     }
 
@@ -169,7 +168,7 @@ public class Client {
     public static float getMouseY() {
         float my = (float) Mouse.getY();
         float rh = (float) RenderLib.getRenderHeight();
-        float dh = (float) MinecraftVars.getMinecraft().displayHeight;
+        float dh = (float) getMinecraft().displayHeight;
         return rh - my * rh / dh - 1;
     }
 }
