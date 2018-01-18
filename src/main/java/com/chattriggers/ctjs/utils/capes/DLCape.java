@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.utils.capes;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import net.minecraft.client.Minecraft;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
@@ -35,7 +35,7 @@ public class DLCape {
         };
 
         ResourceLocation rl = new ResourceLocation(resource);
-        TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+        TextureManager textureManager = Client.getMinecraft().getTextureManager();
         ITextureObject tex = textureManager.getTexture(rl);
         ThreadDownloadImageData textureCape = new ThreadDownloadImageData(null, url, null, iib);
         textureManager.loadTexture(rl, textureCape);
@@ -60,7 +60,7 @@ public class DLCape {
 
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event) {
-        for (RenderPlayer render : Minecraft.getMinecraft().getRenderManager().getSkinMap().values()) {
+        for (RenderPlayer render : Client.getMinecraft().getRenderManager().getSkinMap().values()) {
             render.addLayer(new LayerCape(render));
         }
     }

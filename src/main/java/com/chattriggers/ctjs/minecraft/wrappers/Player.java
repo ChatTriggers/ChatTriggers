@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
@@ -16,7 +15,7 @@ public class Player {
      * @return the player object
      */
     public static EntityPlayerSP getPlayer() {
-        return MinecraftVars.getMinecraft().thePlayer;
+        return Client.getMinecraft().thePlayer;
     }
 
     /**
@@ -88,7 +87,7 @@ public class Player {
      * @return the player's username
      */
     public static String getName() {
-        return MinecraftVars.getMinecraft().getSession().getUsername();
+        return Client.getMinecraft().getSession().getUsername();
     }
 
     /**
@@ -96,7 +95,7 @@ public class Player {
      * @return the player's uuid
      */
     public static String getUUID() {
-        return MinecraftVars.getMinecraft().getSession().getPlayerID();
+        return Client.getMinecraft().getSession().getPlayerID();
     }
 
     /**
@@ -133,7 +132,6 @@ public class Player {
 
     /**
      * Gets the player's air level.<br>
-     *
      * The returned value will be an integer. If the player is not taking damage, it
      * will be between 300 (not in water) and 0. If the player is taking damage, it
      * will be between -20 and 0, getting reset to 0 every time the player takes damage.
@@ -168,9 +166,9 @@ public class Player {
         if (getPlayer() == null)
             return "";
 
-        Chunk chunk = MinecraftVars.getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
+        Chunk chunk = World.getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
         BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(),
-                MinecraftVars.getWorld().getWorldChunkManager());
+                World.getWorld().getWorldChunkManager());
 
         return biome.biomeName;
     }
@@ -180,9 +178,9 @@ public class Player {
      * @return the light level at the player's current position
      */
     public static Integer getLightLevel() {
-        if (getPlayer() == null || MinecraftVars.getWorld() == null) return 0;
+        if (getPlayer() == null || World.getWorld() == null) return 0;
 
-        return MinecraftVars.getWorld().getLight(getPlayer().getPosition());
+        return World.getWorld().getLight(getPlayer().getPosition());
     }
 
     /**

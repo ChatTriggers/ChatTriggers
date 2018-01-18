@@ -92,8 +92,8 @@ public class CTJS {
 
         Sentry.getContext().setUser(
             new UserBuilder()
-                .setUsername(MinecraftVars.getPlayerName())
-                .setId(MinecraftVars.getPlayerUUID())
+                .setUsername(Player.getName())
+                .setId(Player.getUUID())
                 .build()
         );
 

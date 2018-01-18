@@ -3,16 +3,15 @@ package com.chattriggers.ctjs.minecraft.objects;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
 import org.lwjgl.input.Mouse;
 
-import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -420,29 +419,7 @@ public class Display {
          * @return the DisplayLine to allow for method chaining
          */
         public DisplayLine registerClicked(String methodName) {
-            onClicked = new OnTrigger(methodName, TriggerType.OTHER) {
-                @Override
-                public void trigger(Object... args) {
-                    if (!(args[0] instanceof Float
-                            && args[1] instanceof Float
-                            && args[2] instanceof Integer
-                            && args[3] instanceof Boolean)) {
-                        throw new IllegalArgumentException("Arguments must be of type int, int, int, bool");
-                    }
-
-                    float mouseX = (float) args[0];
-                    float mouseY = (float) args[1];
-                    int button = (int) args[2];
-                    boolean state = (boolean) args[3];
-
-                    try {
-                        CTJS.getInstance().getModuleManager().invokeFunction(methodName, mouseX, mouseY, button, state);
-                    } catch (ScriptException | NoSuchMethodException exception) {
-                        onClicked = null;
-                        Console.getConsole().printStackTrace(exception);
-                    }
-                }
-            };
+            onClicked = new OnRegularTrigger(methodName, TriggerType.OTHER);
             return this;
         }
 
@@ -450,11 +427,11 @@ public class Display {
             if (this.onClicked == null) return;
             if (!Mouse.isCreated()) return;
 
-            if (MinecraftVars.getMouseX() > x && MinecraftVars.getMouseX() < x + width
-                    && MinecraftVars.getMouseY() > y && MinecraftVars.getMouseY() < y + height) {
+            if (Client.getMouseX() > x && Client.getMouseX() < x + width
+                    && Client.getMouseY() > y && Client.getMouseY() < y + height) {
                 for (int i = 0; i < 5; i++) {
                     if (Mouse.isButtonDown(i) == this.mouseState.get(i)) continue;
-                    this.onClicked.trigger(MinecraftVars.getMouseX(), MinecraftVars.getMouseY(), i, Mouse.isButtonDown(i));
+                    this.onClicked.trigger(Client.getMouseX(), Client.getMouseY(), i, Mouse.isButtonDown(i));
                     this.mouseState.put(i, Mouse.isButtonDown(i));
                 }
             }

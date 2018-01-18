@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Ordering;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -23,7 +22,7 @@ public class TabList {
     public static List<String> getNamesByObjectives() {
         List<String> tabNames = new ArrayList<>();
         try {
-            Scoreboard scoreboard = MinecraftVars.getWorld().getScoreboard();
+            Scoreboard scoreboard = World.getWorld().getScoreboard();
             ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0);
             Collection<Score> scores = scoreboard.getSortedScores(sidebarObjective);
             for (Score score : scores) {
@@ -45,7 +44,7 @@ public class TabList {
         List<String> names = new ArrayList<>();
 
         Ordering<NetworkPlayerInfo> tab = Ordering.from(new PlayerComparator());
-        NetHandlerPlayClient nethandlerplayclient = MinecraftVars.getPlayer().sendQueue;
+        NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().sendQueue;
         List<NetworkPlayerInfo> list = tab.sortedCopy(nethandlerplayclient.getPlayerInfoMap());
 
         for (NetworkPlayerInfo player : list) {

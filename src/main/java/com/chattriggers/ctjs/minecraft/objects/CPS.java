@@ -1,8 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 
@@ -29,7 +28,7 @@ public class CPS {
     @Getter private int rightClicksMax;
 
     public CPS() {
-        this.sysTime = MinecraftVars.getSystemTime();
+        this.sysTime = Client.getSystemTime();
         this.leftClicks = new ArrayList<>();
         this.rightClicks = new ArrayList<>();
         this.leftClicksAverage = new ArrayList<>();
@@ -85,7 +84,7 @@ public class CPS {
     public void clickCalc() {
         if (sysTime == null) return;
 
-        while (Minecraft.getSystemTime() > sysTime + 50L) {
+        while (Client.getSystemTime() > sysTime + 50L) {
             sysTime += 50L;
 
             decreaseClicks(leftClicks);
