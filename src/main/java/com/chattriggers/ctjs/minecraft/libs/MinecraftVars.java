@@ -45,7 +45,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getMinecraft()}
+     * @deprecated use {@link Client#getMinecraft()}<br>
      * Gets the Minecraft object.
      * @return the Minecraft object
      */
@@ -55,7 +55,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link World#getWorld()}
+     * @deprecated use {@link World#getWorld()}<br>
      * Gets the world object.
      * @return the world object
      */
@@ -74,7 +74,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getPlayer()}
+     * @deprecated use {@link Player#getPlayer()}<br>
      * Gets the player object.
      * @return the player object
      */
@@ -93,7 +93,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getConnection()}
+     * @deprecated use {@link Client#getConnection()}<br>
      * Gets the connection object.
      * @return the connection object
      */
@@ -115,7 +115,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getChatGUI()}
+     * @deprecated use {@link Client#getChatGUI()}<br>
      * Gets the chat gui object.
      * @return the chat gui object
      */
@@ -125,7 +125,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getName()}
+     * @deprecated use {@link Player#getName()}<br>
      * Gets the player's username.
      * In an import, accessible via the {@code playerName} variable.
      * @return The username of the user.
@@ -136,7 +136,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getUUID()}
+     * @deprecated use {@link Player#getUUID()}<br>
      * Gets the player's UUID.
      * In an import, accessible via the {@code playerUUID} variable.
      * @return The UUID of the user.
@@ -147,7 +147,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getHP()}
+     * @deprecated use {@link Player#getHP()}<br>
      * Gets the player's HP.
      * In an import, accessible via the {@code hp} variable.
      * @return The player's HP.
@@ -158,7 +158,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getHunger()}
+     * @deprecated use {@link Player#getHunger()}<br>
      * Gets the player's hunger level.
      * In an import, accessible via the {@code hunger} variable.
      * @return The player's hunger level.
@@ -169,7 +169,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getSaturation()}
+     * @deprecated use {@link Player#getSaturation()}<br>
      * Gets the player's saturation level.
      * In an import, accessible via the {@code saturation} variable.
      * @return The player's saturation level.
@@ -180,7 +180,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getArmorPoints()}
+     * @deprecated use {@link Player#getArmorPoints()}<br>
      * Gets the player's armor points.
      * In an import, accessible via the {@code armorPoints} variable.
      * @return The player's armor points.
@@ -191,7 +191,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getAirLevel()}
+     * @deprecated use {@link Player#getAirLevel()}<br>
      * Gets the player's air level.
      * The returned value will be an integer. If the player is not taking damage, it
      * will be between 300 (not in water) and 0. If the player is taking damage, it
@@ -206,7 +206,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getXPLevel()}
+     * @deprecated use {@link Player#getXPLevel()}<br>
      * Gets the player's XP level.
      * In an import, accessible via the {@code xpLevel} variable.
      * @return The player's XP level.
@@ -217,7 +217,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getXPProgress()}
+     * @deprecated use {@link Player#getXPProgress()}<br>
      * Gets the player's XP progress towards the next XP level.
      * In an import, accessible via the {@code xpProgress} variable.
      * @return The player's xp progress.
@@ -228,7 +228,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getBiome()}
+     * @deprecated use {@link Player#getBiome()}<br>
      * Gets the biome the player is currently in.
      * In an import, accessible via the {@code biome} variable.
      * @return The biome the player is in.
@@ -281,7 +281,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getLightLevel()}
+     * @deprecated use {@link Player#getLightLevel()}<br>
      * Gets the light level at the player's current position.
      * In an import, accessible via the {@code lightLevel} variable.
      * @return The light level at the player's current position.
@@ -294,7 +294,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#isInChat()}
+     * @deprecated use {@link Client#isInChat()}<br>
      * Returns true if the player has the chat open.
      * In an import, accessible via the {@code inChat} variable.
      * @return True if the player has the chat open, false otherwise.
@@ -305,7 +305,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#isInTab()}
+     * @deprecated use {@link Client#isInTab()}<br>
      * Returns true if the player has the tab list open.
      * In an import, accessible via the {@code inTab} variable.
      * @return True if the player has the tab list open, false otherwise.
@@ -316,7 +316,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#isSneaking()}
+     * @deprecated use {@link Player#isSneaking()}<br>
      * Returns true if the player is sneaking.
      * In an import, accessible via the {@code isSneaking} variable.
      * @return True if the player is sneaking, false otherwise.
@@ -327,7 +327,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#isSprinting()}
+     * @deprecated use {@link Player#isSprinting()}<br>
      * Returns true if the player is sprinting.
      * In an import, accessible via the {@code isSprinting} variable.
      * @return True if the player is sprinting, false otherwise.
@@ -338,7 +338,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Server#getIP()}
+     * @deprecated use {@link Server#getIP()}<br>
      * Gets the current server's IP.
      * In an import, accessible via the {@code serverIP} variable.
      * @return The IP of the current server, or "localhost" if the player
@@ -352,7 +352,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Server#getName()}
+     * @deprecated use {@link Server#getName()}<br>
      * Gets the current server's name.
      * In an import, accessible via the {@code server} variable.
      * @return The name of the current server, or "SinglePlayer" if the player
@@ -366,7 +366,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Server#getMOTD()}
+     * @deprecated use {@link Server#getMOTD()}<br>
      * Gets the current server's MOTD.
      * In an import, accessible via the {@code serverMOTD} variable.
      * @return The MOTD of the current server, or "SinglePlayer" if the player
@@ -380,7 +380,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Server#getPing()}
+     * @deprecated use {@link Server#getPing()}<br>
      * Gets the ping to the current server.
      * In an import, accessible via the {@code ping} variable.
      * @return The ping to the current server, or 5 if the player
@@ -404,7 +404,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#isTabbedIn()}
+     * @deprecated use {@link Client#isTabbedIn()}<br>
      * Gets whether or not the minecraft window is active
      * and in the foreground of the user's screen
      * @return whether or not the game is active
@@ -415,7 +415,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getKeyBindFromKey(int)}
+     * @deprecated use {@link Client#getKeyBindFromKey(int)}<br>
      * Get the {@link KeyBind} from an already existing
      * Minecraft KeyBinding.
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
@@ -434,7 +434,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getKeyBindFromKey(int, String)}
+     * @deprecated use {@link Client#getKeyBindFromKey(int, String)}<br>
      * Get the {@link KeyBind} from an already existing
      * Minecraft KeyBinding, else, return a new one.
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
@@ -453,7 +453,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getX()}
+     * @deprecated use {@link Player#getX()}<br>
      * Gets the player's X position.
      * In an import, accessible via the {@code posX} variable.
      * @return The player's X position.
@@ -464,7 +464,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getY()}
+     * @deprecated use {@link Player#getY()}<br>
      * Gets the player's Y position.
      * In an import, accessible via the {@code posY} variable.
      * @return The player's Y position.
@@ -475,7 +475,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getZ()}
+     * @deprecated use {@link Player#getZ()}<br>
      * Gets the player's Z position.
      * In an import, accessible via the {@code posZ} variable.
      * @return The player's Z position.
@@ -486,7 +486,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getMotionX()}
+     * @deprecated use {@link Player#getMotionX()}<br>
      * Gets the player's X motion.
      * In an import, accessible via the {@code motionX} variable.
      * @return The player's X motion.
@@ -497,7 +497,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getMotionY()}
+     * @deprecated use {@link Player#getMotionY()}<br>
      * Gets the player's Y motion.
      * In an import, accessible via the {@code motionY} variable.
      * @return The player's Y motion.
@@ -508,7 +508,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getMotionZ()}
+     * @deprecated use {@link Player#getMotionZ()}<br>
      * Gets the player's Z motion.
      * In an import, accessible via the {@code motionZ} variable.
      * @return The player's Z motion.
@@ -519,7 +519,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getPitch()}
+     * @deprecated use {@link Player#getPitch()}<br>
      * Gets the player's camera pitch.
      * In an import, accessible via the {@code cameraPitch} variable.
      * @return The player's camera pitch.
@@ -530,7 +530,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getYaw()}
+     * @deprecated use {@link Player#getYaw()}<br>
      * Gets the player's camera yaw.
      * In an import, accessible via the {@code cameraYaw} variable.
      * @return The player's camera yaw.
@@ -541,7 +541,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#facing()}
+     * @deprecated use {@link Player#facing()}<br>
      * Gets the direction the player is facing.
      * In an import, accessible via the {@code facing} variable.
      * @return The direction the player is facing, one of the four cardinal directions.
@@ -576,7 +576,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getFPS()}
+     * @deprecated use {@link Client#getFPS()}<br>
      * Gets the game's FPS count.
      * In an import, accessible via the {@code fps} variable.
      * @return The game's FPS count.
@@ -587,7 +587,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#getActivePotionEffects()}
+     * @deprecated use {@link Player#getActivePotionEffects()}<br>
      * Gets the player's active potion effects.
      * In an import, accessible via the {@code potEffects} variable.
      * @return The player's active potion effects.
@@ -604,7 +604,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getVersion()}
+     * @deprecated use {@link Client#getVersion()}<br>
      * Gets the player's minecraft version.
      * In an import, accessible via the {@code mcVersion} variable.
      * @return The player's minecraft version.
@@ -615,7 +615,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getMaxMemory()}
+     * @deprecated use {@link Client#getMaxMemory()}<br>
      * Gets the player's max memory.
      * In an import, accessible via the {@code maxMem} variable.
      * @return The player's max memory.
@@ -626,7 +626,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getTotalMemory()}
+     * @deprecated use {@link Client#getTotalMemory()}<br>
      * Gets the player's total memory.
      * In an import, accessible via the {@code totalMem} variable.
      * @return The player's total memory.
@@ -637,7 +637,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getFreeMemory()}
+     * @deprecated use {@link Client#getFreeMemory()}<br>
      * Gets the player's free memory.
      * In an import, accessible via the {@code freeMem} variable.
      * @return The player's free memory.
@@ -648,7 +648,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getMemoryUsage()}
+     * @deprecated use {@link Client#getMemoryUsage()}<br>
      * Gets the player's memory usage.
      * In an import, accessible via the {@code memUsage} variable.
      * @return The player's memory usage.
@@ -659,7 +659,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#isFlying()}
+     * @deprecated use {@link Player#isFlying()}<br>
      * Checks if player is pushed by water currently.
      * In an import, accessible via the {@code isFlying} variable.
      * @return If the player is flying (and false if the player does not exist)
@@ -670,7 +670,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Player#isSleeping()}
+     * @deprecated use {@link Player#isSleeping()}<br>
      * Checks if player is sleeping.
      * In an import, accessible via the {@code isSleeping} variable.
      * @return If the player is sleeping (and false if the player does not exist)
@@ -681,7 +681,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getSystemTime()}
+     * @deprecated use {@link Client#getSystemTime()}<br>
      * Gets the system time.
      * @return the system time
      */
@@ -691,7 +691,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getMouseX()}
+     * @deprecated use {@link Client#getMouseX()}<br>
      * Gets the mouse x location.
      * @return the mouse x location
      */
@@ -704,7 +704,7 @@ public class MinecraftVars {
     }
 
     /**
-     * @deprecated use {@link Client#getMouseY()}
+     * @deprecated use {@link Client#getMouseY()}<br>
      * Gets the mouse y location.
      * @return the mouse y location
      */
