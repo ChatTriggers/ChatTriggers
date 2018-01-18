@@ -33,6 +33,7 @@ var XMLHttpRequest = Java.type("com.chattriggers.ctjs.minecraft.objects.XMLHttpR
 var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
 var Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
 var World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
+var Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");
 var LookingAt = Java.type("com.chattriggers.ctjs.minecraft.wrappers.LookingAt");
 var Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Inventory");
 var TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
