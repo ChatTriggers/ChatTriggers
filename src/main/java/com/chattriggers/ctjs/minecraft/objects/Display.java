@@ -340,6 +340,7 @@ public class Display {
          */
         public DisplayLine setText(String text) {
             this.text = text;
+            this.textWidth = RenderLib.getStringWidth(this.text);
             return this;
         }
 
