@@ -344,6 +344,18 @@ public class Display {
         }
 
         /**
+         * Sets the line's text.<br>
+         * Use this to update a display line instead of
+         * re-instancing it every display update for dynamic lines
+         * @param text the text
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine setText(String text) {
+            this.text = text;
+            return this;
+        }
+
+        /**
          * Sets the alignment of the line (based on max width of display)
          * @param align the alignment
          * @return the DisplayLine to allow for method chaining
