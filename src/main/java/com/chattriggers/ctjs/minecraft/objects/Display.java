@@ -339,7 +339,7 @@ public class Display {
          * @return the DisplayLine to allow for method chaining
          */
         public DisplayLine setText(String text) {
-            this.text = text;
+            this.text = ChatLib.addColor(text);
             this.textWidth = RenderLib.getStringWidth(this.text);
             return this;
         }
