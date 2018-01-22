@@ -390,7 +390,9 @@ public class MinecraftVars {
     public static Long getPing() {
         EntityPlayer player = getPlayer();
 
-        if (player == null || getMinecraft().isSingleplayer()) {
+        if (player == null
+                || getMinecraft().isSingleplayer()
+                || getMinecraft().getCurrentServerData() == null) {
             return 5L;
         }
 

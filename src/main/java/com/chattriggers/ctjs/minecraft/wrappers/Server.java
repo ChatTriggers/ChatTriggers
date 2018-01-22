@@ -46,7 +46,9 @@ public class Server {
     public static Long getPing() {
         EntityPlayer player = Player.getPlayer();
 
-        if (player == null || Client.getMinecraft().isSingleplayer()) {
+        if (player == null
+                || Client.getMinecraft().isSingleplayer()
+                || Client.getMinecraft().getCurrentServerData() == null) {
             return 5L;
         }
 
