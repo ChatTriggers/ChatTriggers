@@ -290,15 +290,7 @@ public class ChatLib {
     }
 
     public static ArrayList<String> getChatLines() {
-        List<ChatLine> chatLines =  ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
-                "drawnChatLines", "field_146253_i");
-        ArrayList<String> messages = new ArrayList<>();
-
-        for (ChatLine chatLine : chatLines) {
-            messages.add(removeFormatting(chatLine.getChatComponent().getUnformattedText()));
-        }
-
-        return messages;
+        return CTJS.getInstance().getChatListener().getChatHistory();
     }
 
     /**
