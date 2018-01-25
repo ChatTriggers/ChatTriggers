@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.FontRenderer;
@@ -93,7 +94,7 @@ public class RenderLib {
      * @return the font renderer object
      */
     public static FontRenderer getFontRenderer() {
-        return MinecraftVars.getMinecraft().fontRendererObj;
+        return Client.getMinecraft().fontRendererObj;
     }
 
     /**
@@ -638,7 +639,7 @@ public class RenderLib {
     public static void drawPlayerOnScreen(int posX, int posY, int scale, boolean rotate) {
         float mouseX = -30;
         float mouseY = 0;
-        EntityLivingBase ent = MinecraftVars.getPlayer();
+        EntityLivingBase ent = Player.getPlayer();
 
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();

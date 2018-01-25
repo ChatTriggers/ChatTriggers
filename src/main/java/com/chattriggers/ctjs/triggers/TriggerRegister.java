@@ -124,21 +124,6 @@ public class TriggerRegister {
     }
 
     /**
-     * Register a new method that receives a command input.
-     * @deprecated Use {@link #registerCommand(String)} with modifiers instead.
-     * @param methodName the name of the method to callback when the event is fired
-     * @param commandName the name of the command
-     * @param commandUsage the usage for the command
-     */
-    @Deprecated
-    public static void registerCommand(String methodName, String commandName, String commandUsage) {
-        OnCommandTrigger trigger = new OnCommandTrigger(methodName);
-        Command command = new Command(trigger, commandName, commandUsage);
-        CTJS.getInstance().getCommandHandler().getCommandList().add(command);
-        ClientCommandHandler.instance.registerCommand(command);
-    }
-
-    /**
      * Registers a new method that receives a command input.<br>
      * Available modifications:<br>
      * {@link OnCommandTrigger#setCommandName(String)} Sets the command name<br>

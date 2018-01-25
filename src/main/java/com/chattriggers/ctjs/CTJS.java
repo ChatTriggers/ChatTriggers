@@ -3,7 +3,6 @@ package com.chattriggers.ctjs;
 import com.chattriggers.ctjs.commands.CTCommand;
 import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
 import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
-import com.chattriggers.ctjs.minecraft.libs.MinecraftVars;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
@@ -26,7 +25,6 @@ import net.minecraft.client.resources.IResourcePack;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -140,11 +138,6 @@ public class CTJS {
     }
 
     private void registerHooks() {
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyLeftArrow);
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyRightArrow);
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyUpArrow);
-        ClientRegistry.registerKeyBinding(MinecraftVars.keyDownArrow);
-
         ClientCommandHandler.instance.registerCommand(new CTCommand());
 
         Runtime.getRuntime().addShutdownHook(new Thread(TriggerType.GAME_UNLOAD::triggerAll));

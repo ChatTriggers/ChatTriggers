@@ -169,6 +169,6 @@ public class Client {
         float my = (float) Mouse.getY();
         float rh = (float) RenderLib.getRenderHeight();
         float dh = (float) getMinecraft().displayHeight;
-        return rh - my * rh / dh - 1;
+        return rh - my * rh / dh - 1L;
     }
 }

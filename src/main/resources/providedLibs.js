@@ -44,113 +44,15 @@ var CPS = Java.type("com.chattriggers.ctjs.CTJS").getInstance().getCps();
 var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.handlers.DisplayHandler");
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 
-/*Built in Vars */
-var MinecraftVars = Java.type("com.chattriggers.ctjs.minecraft.libs.MinecraftVars");
-
-// Constant
-var playerName = MinecraftVars.getPlayerName();
-var uuid = MinecraftVars.getPlayerUUID();
-var mcVersion = MinecraftVars.getMinecraftVersion();
-
-// Update every tick
-var hp = MinecraftVars.getPlayerHP();
-var hunger = MinecraftVars.getPlayerHunger();
-var saturation = MinecraftVars.getPlayerSaturation();
-var armorPoints = MinecraftVars.getPlayerArmorPoints();
-var airLevel = MinecraftVars.getPlayerAirLevel();
-var xpLevel = MinecraftVars.getXPLevel();
-var xpProgress = MinecraftVars.getXPProgress();
-var inChat = MinecraftVars.isInChat();
-var inTab = MinecraftVars.isInTab();
-var isSprinting = MinecraftVars.isSprinting();
-var isSneaking = MinecraftVars.isSneaking();
-var ping = MinecraftVars.getPing();
-var posX = MinecraftVars.getPlayerPosX();
-var posY = MinecraftVars.getPlayerPosY();
-var posZ = MinecraftVars.getPlayerPosZ();
-var motionX = MinecraftVars.getPlayerMotionX();
-var motionY = MinecraftVars.getPlayerMotionY();
-var motionZ = MinecraftVars.getPlayerMotionZ();
-var biome = MinecraftVars.getPlayerBiome();
-var lightLevel = MinecraftVars.getPlayerLightLevel();
-var cameraPitch = MinecraftVars.getPlayerPitch();
-var cameraYaw = MinecraftVars.getPlayerYaw();
-var fps = MinecraftVars.getPlayerFPS();
-var facing = MinecraftVars.getPlayerFacing();
-var leftArrow = MinecraftVars.isLeftArrowDown();
-var rightArrow = MinecraftVars.isRightArrowDown();
-var upArrow = MinecraftVars.isUpArrowDown();
-var downArrow = MinecraftVars.isDownArrowDown();
-var tabbedIn = MinecraftVars.isUserTabbedIn();
-var potEffects = MinecraftVars.getActivePotionEffects();
-var maxMem = MinecraftVars.getMaxMemory();
-var totalMem = MinecraftVars.getTotalMemory();
-var freeMem = MinecraftVars.getFreeMemory();
-var memUsage = MinecraftVars.getMemoryUsage();
-var scoreboardTitle = ScoreboardReader.getScoreboardTitle();
-var scoreboardNames = ScoreboardReader.getScoreboardNames();
-var isFlying = MinecraftVars.isFlying();
-var isSleeping = MinecraftVars.isSleeping();
-var mouseX = MinecraftVars.getMouseX();
-var mouseY = MinecraftVars.getMouseY();
-
-// Update every world load
-var serverIP = MinecraftVars.getServerIP();
-var serverMOTD = MinecraftVars.getServerMOTD();
-var server = MinecraftVars.getServerName();
 
 /*End Built in Vars */
 
 function updateProvidedLibsTick() {
-    hp = MinecraftVars.getPlayerHP();
-    hunger = MinecraftVars.getPlayerHunger();
-    saturation = MinecraftVars.getPlayerSaturation();
-    armorPoints = MinecraftVars.getPlayerArmorPoints();
-    airLevel = MinecraftVars.getPlayerAirLevel();
-    xpLevel = MinecraftVars.getXPLevel();
-    xpProgress = MinecraftVars.getXPProgress();
-    inChat = MinecraftVars.isInChat();
-    inTab = MinecraftVars.isInTab();
-    isSprinting = MinecraftVars.isSprinting();
-    isSneaking = MinecraftVars.isSneaking();
-    ping = MinecraftVars.getPing();
-    posX = MinecraftVars.getPlayerPosX();
-    posY = MinecraftVars.getPlayerPosY();
-    posZ = MinecraftVars.getPlayerPosZ();
-    motionX = MinecraftVars.getPlayerMotionX();
-    motionY = MinecraftVars.getPlayerMotionY();
-    motionZ = MinecraftVars.getPlayerMotionZ();
-    biome = MinecraftVars.getPlayerBiome();
-    lightLevel = MinecraftVars.getPlayerLightLevel();
-    cameraPitch = MinecraftVars.getPlayerPitch();
-    cameraYaw = MinecraftVars.getPlayerYaw();
-    fps = MinecraftVars.getPlayerFPS();
-    facing = MinecraftVars.getPlayerFacing();
-    leftArrow = MinecraftVars.isLeftArrowDown();
-    rightArrow = MinecraftVars.isRightArrowDown();
-    upArrow = MinecraftVars.isUpArrowDown();
-    downArrow = MinecraftVars.isDownArrowDown();
-    tabbedIn = MinecraftVars.isUserTabbedIn();
-    potEffects = MinecraftVars.getActivePotionEffects();
-    maxMem = MinecraftVars.getMaxMemory();
-    totalMem = MinecraftVars.getTotalMemory();
-    freeMem = MinecraftVars.getFreeMemory();
-    memUsage = MinecraftVars.getMemoryUsage();
-    ScoreboardReader.resetCache();
-    scoreboardTitle = ScoreboardReader.getScoreboardTitle();
-    scoreboardNames = ScoreboardReader.getScoreboardNames();
-    isFlying = MinecraftVars.isFlying();
-    isSleeping = MinecraftVars.isSleeping();
-    mouseX = MinecraftVars.getMouseX();
-    mouseY = MinecraftVars.getMouseY();
-
     LookingAt.update();
 }
 
 function updateProvidedLibsWorld() {
-    serverIP = MinecraftVars.getServerIP();
-    serverMOTD = MinecraftVars.getServerMOTD();
-    server = MinecraftVars.getServerName();
+
 }
 
 // simplified methods
