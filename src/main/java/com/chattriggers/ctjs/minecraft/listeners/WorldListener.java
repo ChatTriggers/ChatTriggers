@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.listeners;
+package com.chattriggers.ctjs.minecraft.listeners;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Server;
 import com.chattriggers.ctjs.triggers.TriggerType;
