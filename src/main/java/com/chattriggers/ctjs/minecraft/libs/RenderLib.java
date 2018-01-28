@@ -247,10 +247,10 @@ public class RenderLib {
     }
 
     /**
-     * Gets a determined rainbow color based on step and speed.
+     * Gets a determined rainbow color array based on step and speed.
      * @param step time elapsed
      * @param speed speed of time
-     * @return integer color
+     * @return the array of colors {red,green,blue}
      */
     public static int[] getRainbowColors(float step, float speed) {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
