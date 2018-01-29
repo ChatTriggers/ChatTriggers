@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.objects.Message;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
@@ -290,15 +291,11 @@ public class ChatLib {
     }
 
     public static ArrayList<String> getChatLines() {
-        List<ChatLine> chatLines =  ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
-                "drawnChatLines", "field_146253_i");
-        ArrayList<String> messages = new ArrayList<>();
-
-        for (ChatLine chatLine : chatLines) {
-            messages.add(removeFormatting(chatLine.getChatComponent().getUnformattedText()));
-        }
-
-        return messages;
+        ArrayList<String> out = new ArrayList<>();
+        ArrayList<String> in = CTJS.getInstance().getChatListener().getChatHistory();
+        for (int i = in.size() - 1; i >= 0; i--)
+            out.add(in.get(i));
+        return out;
     }
 
     /**

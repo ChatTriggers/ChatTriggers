@@ -234,18 +234,6 @@ public class Display {
     }
 
     /**
-     * Adds a number of empty lines to a display.
-     * @param lines the number of lines to add
-     * @return the display to allow for method chaining
-     */
-    public Display addLines(int lines) {
-        for (int i=0; i<lines; i++) {
-            this.lines.add(new DisplayLine(""));
-        }
-        return this;
-    }
-
-    /**
      * Clears all the lines in the display.
      * @return the display to allow for method chaining
      */
@@ -341,6 +329,19 @@ public class Display {
             this.mouseState = new HashMap<>();
             for (int i = 0; i < 5; i++)
                 this.mouseState.put(i, false);
+        }
+
+        /**
+         * Sets the line's text.<br>
+         * Use this to update a display line instead of
+         * re-instancing it every display update for dynamic lines
+         * @param text the text
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine setText(String text) {
+            this.text = ChatLib.addColor(text);
+            this.textWidth = RenderLib.getStringWidth(this.text);
+            return this;
         }
 
         /**

@@ -44,6 +44,7 @@ public class TabList {
         List<String> names = new ArrayList<>();
 
         Ordering<NetworkPlayerInfo> tab = Ordering.from(new PlayerComparator());
+        if (Player.getPlayer() == null) return names;
         NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().sendQueue;
         List<NetworkPlayerInfo> list = tab.sortedCopy(nethandlerplayclient.getPlayerInfoMap());
 

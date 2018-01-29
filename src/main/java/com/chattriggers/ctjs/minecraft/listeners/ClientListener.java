@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.listeners;
+package com.chattriggers.ctjs.minecraft.listeners;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;

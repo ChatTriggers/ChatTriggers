@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.listeners;
+package com.chattriggers.ctjs.minecraft.listeners;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
@@ -19,6 +19,10 @@ public class ChatListener {
     @SubscribeEvent
     public void onReceiveChat(ClientChatReceivedEvent event) {
         if (EventLib.getType(event) == 0 || EventLib.getType(event) == 1) {
+            // save to chatHistory
+            chatHistory.add(ChatLib.getChatMessage(event, true));
+            if (chatHistory.size() > 1000) chatHistory.remove(0);
+
             // normal Chat Message
             TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event);
 
@@ -26,10 +30,6 @@ public class ChatListener {
             if (CTJS.getInstance().getConfig().getPrintChatToConsole()) {
                 Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
             }
-
-            // save to chatHistory
-            chatHistory.add(ChatLib.getChatMessage(event, true));
-            if (chatHistory.size() > 1000) chatHistory.remove(0);
         }
     }
 
