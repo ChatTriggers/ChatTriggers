@@ -10,4 +10,12 @@ public class World {
     public static WorldClient getWorld() {
         return Client.getMinecraft().theWorld;
     }
+
+    /**
+     * Gets the world time
+     * @return the world time
+     */
+    public static long getWorldTime() {
+        return Client.getMinecraft().theWorld.getWorldTime();
+    }
 }
