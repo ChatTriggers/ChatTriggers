@@ -69,7 +69,7 @@ function easeOut(start, finish, speed, jump) {
     if (!jump) {
         jump = 1;
     }
-    
+
     if (Math.floor(Math.abs(finish - start) / jump) > 0) {
         return start + (finish - start) / speed;
     } else {
