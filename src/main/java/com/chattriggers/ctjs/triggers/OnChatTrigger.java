@@ -42,7 +42,10 @@ public class OnChatTrigger extends OnTrigger {
     }
 
     /**
-     * Sets the chat criteria for {@link #matchesChatCriteria(String)}.
+     * Sets the chat criteria for {@link #matchesChatCriteria(String)}.<br>
+     * Arguments for the trigger's method can be passed in using ${variable}.<br>
+     *     Example: <code>OnChatTrigger.setChatCriteria("&lt;${name}&gt; ${message}");</code><br>
+     * Use ${*} to match a chat message but ignore the pass through.
      * @param chatCriteria the chat criteria to set
      * @return the trigger object for method chaining
      */
@@ -57,6 +60,15 @@ public class OnChatTrigger extends OnTrigger {
         this.criteriaPattern = Pattern.compile("".equals(chatCriteria) ? ".+" : replacedCriteria);
 
         return this;
+    }
+
+    /**
+     * Alias for {@link #setChatCriteria(String)}.
+     * @param chatCriteria the chat criteria to set
+     * @return the trigger object for method chaining
+     */
+    public OnChatTrigger setCriteria(String chatCriteria) {
+        return setChatCriteria(chatCriteria);
     }
 
     /**

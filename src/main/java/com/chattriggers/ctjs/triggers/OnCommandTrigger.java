@@ -45,7 +45,7 @@ public class OnCommandTrigger extends OnTrigger {
     }
 
     /**
-     * Alias for {@link OnCommandTrigger#setCommandName(String)}
+     * Alias for {@link #setCommandName(String)}
      * @param commandName The command name
      * @return the trigger for additional modification
      */
