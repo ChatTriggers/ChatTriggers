@@ -19,8 +19,7 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 public class CTCommand extends CommandBase {
@@ -107,8 +106,10 @@ public class CTCommand extends CommandBase {
                     break;
                 case("dump"):
                     try {
-                        if (args.length > 1 && args[1] != null) dumpChat(Integer.parseInt(args[1]));
-                        else dumpChat(100);
+                        if (args.length > 1 && args[1] != null)
+                            dumpChat(Integer.parseInt(args[1]));
+                        else
+                            dumpChat(100);
                     } catch (NumberFormatException e) {
                         ChatLib.chat("&cThe second command argument must be an integer!");
                     }
@@ -152,13 +153,8 @@ public class CTCommand extends CommandBase {
 
     private void copyArgsToClipboard(String[] args) {
         clearOldDump();
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 1; i < args.length; i++) {
-            sb.append(args[i]).append(" ");
-        }
-
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(sb.toString()), null);
+        String toCopy = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(toCopy), null);
     }
 
     private void clearOldDump() {
