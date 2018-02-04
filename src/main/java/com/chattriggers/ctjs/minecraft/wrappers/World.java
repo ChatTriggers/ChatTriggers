@@ -139,6 +139,5 @@ public class World {
         public static long getTimeUntilTarget() {
             return getWorld().getWorldBorder().getTimeUntilTarget();
         }
->>>>>>> upstream/master
     }
 }
