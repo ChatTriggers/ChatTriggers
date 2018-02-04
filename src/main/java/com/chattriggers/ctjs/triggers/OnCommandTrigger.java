@@ -45,6 +45,15 @@ public class OnCommandTrigger extends OnTrigger {
     }
 
     /**
+     * Alias for {@link #setCommandName(String)}
+     * @param commandName The command name
+     * @return the trigger for additional modification
+     */
+    public OnCommandTrigger setName(String commandName) {
+        return setCommandName(commandName);
+    }
+
+    /**
      * Sets the command usage.
      * @param commandUsage The command usage
      * @return the trigger for additional modification
@@ -56,6 +65,15 @@ public class OnCommandTrigger extends OnTrigger {
             reInstance();
 
         return this;
+    }
+
+    /**
+     * Alias for {@link OnCommandTrigger#setUsage(String)}
+     * @param commandUsage The command usage
+     * @return the trigger for additional modification
+     */
+    public OnCommandTrigger setUsage(String commandUsage) {
+        return setCommandUsage(commandUsage);
     }
 
     private void reInstance() {
