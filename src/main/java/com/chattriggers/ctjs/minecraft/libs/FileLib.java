@@ -23,19 +23,31 @@ public class FileLib {
     }
 
     /**
-     * Reads a file from folder in Imports.
+     * Reads a file from folder in Imports.<br>
+     * Returns an empty string if file is not found.
      * @param importName name of the import
      * @param fileName name of the file
      * @return the string in the file
      */
     public static String read(String importName, String fileName) {
+        return read("./config/ChatTriggers/modules/" + importName + "/" + fileName);
+    }
+
+    /**
+     * Reads a file from anywhere on the system.<br>
+     * Use "./" for the ".minecraft" folder.<br>
+     * Returns an empty string if file is not found.
+     * @param fileLocation The location and file name
+     * @return the string in the file
+     */
+    public static String read(String fileLocation) {
         try {
-            File file = new File("./config/ChatTriggers/modules/" + importName + "/" + fileName);
+            File file = new File(fileLocation);
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
 
             if (!file.exists() || br.readLine() == null) {
                 br.close();
-                return null;
+                return "";
             }
 
             br.close();
@@ -44,7 +56,7 @@ public class FileLib {
             Console.getConsole().printStackTrace(exception);
         }
 
-        return null;
+        return "";
     }
 
     /**
