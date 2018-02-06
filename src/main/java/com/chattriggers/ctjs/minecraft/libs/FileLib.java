@@ -15,8 +15,18 @@ public class FileLib {
      * @param toWrite string to write in file
      */
     public static void write(String importName, String fileName, String toWrite) {
+        write("./config/ChatTriggers/modules/" + importName + "/" + fileName, toWrite);
+    }
+
+    /**
+     * Writes a file to anywhere on the system.<br>
+     * Use "./" for the ".minecraft" folder.<br>
+     * @param fileLocation the location and file name
+     * @param toWrite string to write in file
+     */
+    public static void write(String fileLocation, String toWrite) {
         try {
-            FileUtils.write(new File("./config/ChatTriggers/modules/" + importName + "/" + fileName), toWrite);
+            FileUtils.write(new File(fileLocation), toWrite);
         } catch (IOException exception) {
             Console.getConsole().printStackTrace(exception);
         }
@@ -37,7 +47,7 @@ public class FileLib {
      * Reads a file from anywhere on the system.<br>
      * Use "./" for the ".minecraft" folder.<br>
      * Returns an empty string if file is not found.
-     * @param fileLocation The location and file name
+     * @param fileLocation the location and file name
      * @return the string in the file
      */
     public static String read(String fileLocation) {
