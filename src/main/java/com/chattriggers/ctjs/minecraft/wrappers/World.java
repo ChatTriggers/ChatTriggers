@@ -52,35 +52,6 @@ public class World {
     }
 
     /**
-     * World spawn object for getting spawn location.
-     */
-    public static class spawn {
-        /**
-         * Gets the spawn x location.
-         * @return the spawn x location.
-         */
-        public static int getX() {
-            return getWorld().getSpawnPoint().getX();
-        }
-
-        /**
-         * Gets the spawn y location.
-         * @return the spawn y location.
-         */
-        public static int getY() {
-            return getWorld().getSpawnPoint().getY();
-        }
-
-        /**
-         * Gets the spawn z location.
-         * @return the spawn z location.
-         */
-        public static int getZ() {
-            return getWorld().getSpawnPoint().getZ();
-        }
-    }
-
-    /**
      * Gets the world seed.
      * @return the world seed
      */
@@ -138,6 +109,35 @@ public class World {
          */
         public static long getTimeUntilTarget() {
             return getWorld().getWorldBorder().getTimeUntilTarget();
+        }
+    }
+
+    /**
+     * World spawn object for getting spawn location.
+     */
+    public static class spawn {
+        /**
+         * Gets the spawn x location.
+         * @return the spawn x location.
+         */
+        public static int getX() {
+            return getWorld().getSpawnPoint().getX();
+        }
+
+        /**
+         * Gets the spawn y location.
+         * @return the spawn y location.
+         */
+        public static int getY() {
+            return getWorld().getSpawnPoint().getY();
+        }
+
+        /**
+         * Gets the spawn z location.
+         * @return the spawn z location.
+         */
+        public static int getZ() {
+            return getWorld().getSpawnPoint().getZ();
         }
     }
 }

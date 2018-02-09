@@ -162,25 +162,24 @@ public class OnChatTrigger extends OnTrigger {
         if (!"".equals(chatCriteria))
             variables = matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
 
-        if (variables != null) {
+        if (variables == null) return;
 
-            Sentry.getContext().recordBreadcrumb(
-                new BreadcrumbBuilder()
-                    .setCategory("generic")
-                    .setLevel(Breadcrumb.Level.INFO)
-                    .setTimestamp(new Date())
-                    .setType(Breadcrumb.Type.DEFAULT)
-                    .setMessage("Chat message: " + chatMessage)
-                    .build()
-            );
+        Sentry.getContext().recordBreadcrumb(
+            new BreadcrumbBuilder()
+                .setCategory("generic")
+                .setLevel(Breadcrumb.Level.INFO)
+                .setTimestamp(new Date())
+                .setType(Breadcrumb.Type.DEFAULT)
+                .setMessage("Chat message: " + chatMessage)
+                .build()
+        );
 
-            try {
-                variables.add(chatEvent);
-                CTJS.getInstance().getModuleManager().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
-            } catch (ScriptException | NoSuchMethodException e) {
-                Console.getConsole().printStackTrace(e, this);
-                TriggerType.CHAT.removeTrigger(this);
-            }
+        try {
+            variables.add(chatEvent);
+            CTJS.getInstance().getModuleManager().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
+        } catch (ScriptException | NoSuchMethodException e) {
+            Console.getConsole().printStackTrace(e, this);
+            TriggerType.CHAT.removeTrigger(this);
         }
     }
 

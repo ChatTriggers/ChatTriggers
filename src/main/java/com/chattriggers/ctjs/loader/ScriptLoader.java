@@ -38,11 +38,11 @@ public abstract class ScriptLoader {
             throw new IllegalArgumentException("ResourcePath cannot be null or empty");
         }
 
-        resourceName = resourceName.replace('\\', '/');
-        InputStream in = this.getClass().getResourceAsStream(resourceName);
+        String parsedResourceName = resourceName.replace('\\', '/');
+        InputStream in = this.getClass().getResourceAsStream(parsedResourceName);
 
         if (in == null) {
-            throw new IllegalArgumentException("The embedded resource '" + resourceName + "' cannot be found.");
+            throw new IllegalArgumentException("The embedded resource '" + parsedResourceName + "' cannot be found.");
         }
 
         File outDir = outputFile.getParentFile();
