@@ -315,6 +315,7 @@ public class Display {
         private OnTrigger onHovered;
         private OnTrigger onDragged;
         private HashMap<Integer, Boolean> mouseState;
+        private HashMap<Integer, Float[]> draggedState = new HashMap<>();
 
         public DisplayLine(String text) {
             this.text = ChatLib.addColor(text);
@@ -458,21 +459,20 @@ public class Display {
         private void handleInput(float x, float y, float width, float height) {
             if (!Mouse.isCreated()) return;
 
+            for (int button = 0; button < 5; button++)
+                handleDragged(button);
+
             if (Client.getMouseX() > x && Client.getMouseX() < x + width
                     && Client.getMouseY() > y && Client.getMouseY() < y + height) {
 
                 handleHovered();
 
                 for (int button = 0; button < 5; button++) {
-
-                    // dragged
-                    if (Mouse.isButtonDown(button))
-                        handleDragged(button);
-
-                    // clicked
                     if (Mouse.isButtonDown(button) == this.mouseState.get(button)) continue;
                     handleClicked(button);
                     this.mouseState.put(button, Mouse.isButtonDown(button));
+                    if (Mouse.isButtonDown(button))
+                        this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
                 }
             }
 
@@ -484,8 +484,6 @@ public class Display {
                 this.draggedState.remove(button);
             }
         }
-
-        private HashMap<Integer, Float[]> draggedState = new HashMap<>();
 
         private void handleClicked(int button) {
             if (this.onClicked == null) return;
@@ -511,7 +509,7 @@ public class Display {
             if (this.onDragged == null) return;
 
             if (!this.draggedState.containsKey(button))
-                this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
+                return;
 
             this.onDragged.trigger(
                     Client.getMouseX() - this.draggedState.get(button)[0],
