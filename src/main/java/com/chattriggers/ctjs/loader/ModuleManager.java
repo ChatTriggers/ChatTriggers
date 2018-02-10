@@ -26,6 +26,10 @@ public class ModuleManager {
     }
 
     public void load() {
+        load(false);
+    }
+
+    public void load(Boolean updateCheck) {
         this.isLoading = true;
         scriptLoaders.add(new JSScriptLoader());
 
@@ -34,7 +38,7 @@ public class ModuleManager {
         }
 
         for (ScriptLoader sl : scriptLoaders) {
-            sl.loadModules();
+            sl.loadModules(updateCheck);
         }
 
         for (ScriptLoader sl : scriptLoaders) {
@@ -65,7 +69,7 @@ public class ModuleManager {
         ArrayList<Module> modules = new ArrayList<>();
 
         for (ScriptLoader sl : scriptLoaders) {
-            modules.addAll(sl.loadModules());
+            modules.addAll(sl.loadModules(false));
         }
 
         return modules;
