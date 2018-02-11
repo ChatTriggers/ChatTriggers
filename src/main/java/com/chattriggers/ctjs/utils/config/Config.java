@@ -31,11 +31,15 @@ public class Config {
     private String fg;
     @Getter
     private String bg;
+    @Getter
+    private String modulesFolder;
 
 
     private void saveConfig() {
         this.printChatToConsole = this.config.getBoolean("print chat to console", "ct", true, "Chat printing to console");
         this.showCapes = this.config.getBoolean("show capes", "ct", true, "Show developer and creator capes");
+
+        this.modulesFolder = this.config.getString("modules folder", "ct", "config/ChatTriggers/modules/", "Folder to load modules from");
 
         this.consoleTheme = this.config.getString("console theme", "ct",
             "default.dark", "Console theme", new String[]{

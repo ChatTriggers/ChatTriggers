@@ -182,7 +182,7 @@ public class ModulesGui extends GuiScreen {
 
             // directory
             RenderLib.drawStringWithShadow(
-                    ChatFormatting.DARK_GRAY + "/config/ChatTriggers/modules/" + this.module.getName() + "/",
+                    ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder() + this.module.getName() + "/",
                     x + 2,
                     y + height - 12,
                     0xffffffff

@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.objects.KeyBind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Mouse;
@@ -170,5 +171,23 @@ public class Client {
         float rh = (float) RenderLib.getRenderHeight();
         float dh = (float) getMinecraft().displayHeight;
         return rh - my * rh / dh - 1L;
+    }
+
+    public static boolean isInGui() {
+        return gui.get() != null;
+    }
+
+    public static class gui {
+        public static GuiScreen get() {
+            return getMinecraft().currentScreen;
+        }
+
+        public static String getType() {
+            return get() == null ? "null" : get().getClass().getSimpleName();
+        }
+
+        public static void close() {
+            getMinecraft().displayGuiScreen(null);
+        }
     }
 }

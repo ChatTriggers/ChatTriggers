@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 import org.apache.commons.io.FileUtils;
 
@@ -15,7 +16,7 @@ public class FileLib {
      * @param toWrite string to write in file
      */
     public static void write(String importName, String fileName, String toWrite) {
-        write("./config/ChatTriggers/modules/" + importName + "/" + fileName, toWrite);
+        write(CTJS.getInstance().getConfig().getModulesFolder() + importName + "/" + fileName, toWrite);
     }
 
     /**
@@ -40,7 +41,7 @@ public class FileLib {
      * @return the string in the file
      */
     public static String read(String importName, String fileName) {
-        return read("./config/ChatTriggers/modules/" + importName + "/" + fileName);
+        return read(CTJS.getInstance().getConfig().getModulesFolder() + importName + "/" + fileName);
     }
 
     /**
