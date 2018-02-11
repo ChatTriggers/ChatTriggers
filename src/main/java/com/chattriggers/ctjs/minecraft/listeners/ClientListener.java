@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -85,5 +86,10 @@ public class ClientListener {
         if (guiKeyBind.isPressed()) {
             CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
         }
+    }
+
+    @SubscribeEvent
+    public void onGuiOpened(GuiOpenEvent event) {
+        TriggerType.GUI_OPENED.triggerAll(event);
     }
 }

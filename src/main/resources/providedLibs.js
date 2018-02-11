@@ -64,6 +64,10 @@ function cancel(event) {
     event.setCanceled(true);
 }
 
+function register(triggerType, methodName) {
+    return TriggerRegister.register(triggerType, methodName);
+}
+
 // animation
 function easeOut(start, finish, speed, jump) {
     if (!jump) {

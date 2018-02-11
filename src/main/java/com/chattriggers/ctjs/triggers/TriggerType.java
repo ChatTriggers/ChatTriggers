@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 
 public enum TriggerType {
     // client
-    CHAT, TICK, STEP, RENDER_OVERLAY, GAME_UNLOAD, GAME_LOAD, CLICKED,
+    CHAT, TICK, STEP, RENDER_OVERLAY, GAME_UNLOAD, GAME_LOAD, CLICKED, GUI_OPENED,
 
     // world
     SOUND_PLAY, WORLD_LOAD, WORLD_UNLOAD,

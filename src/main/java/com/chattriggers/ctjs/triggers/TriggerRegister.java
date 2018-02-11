@@ -1,9 +1,38 @@
 package com.chattriggers.ctjs.triggers;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.modules.Module;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class TriggerRegister {
     public static Module currentModule = null;
+
+    public static OnTrigger register(String triggerType, String methodName) {
+        String capitalizedName = triggerType.substring(0, 1).toUpperCase() + triggerType.substring(1);
+
+        Method method = null;
+
+        try {
+             method = TriggerRegister.class.getDeclaredMethod(
+                    "register" + capitalizedName,
+                    String.class
+            );
+        } catch (NoSuchMethodException e) {
+            CTJS.getInstance().getConsole().printStackTrace(e);
+            return null;
+        }
+
+        try {
+            Object returned = method.invoke(null, methodName);
+
+            return (OnTrigger) returned;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            CTJS.getInstance().getConsole().printStackTrace(e);
+            return null;
+        }
+    }
 
     /**
      * Registers a new chat trigger.<br>
@@ -131,5 +160,14 @@ public class TriggerRegister {
      */
     public static OnCommandTrigger registerCommand(String methodName) {
         return new OnCommandTrigger(methodName);
+    }
+
+    /**
+     * Registers a new method that gets run when a new gui is opened.
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger (useless)
+     */
+    public static OnRegularTrigger registerGuiOpened(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.GUI_OPENED);
     }
 }
