@@ -81,7 +81,7 @@ public class CTJS {
 
         registerHooks();
 
-        moduleManager.load();
+        moduleManager.load(true);
     }
 
     @EventHandler

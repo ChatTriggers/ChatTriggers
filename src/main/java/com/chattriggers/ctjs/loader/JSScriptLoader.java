@@ -74,7 +74,7 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
     @Override
-    public ArrayList<Module> loadModules() {
+    public ArrayList<Module> loadModules(Boolean updateCheck) {
         if (cachedModules != null && !cachedModules.isEmpty()) {
             return cachedModules;
         }
@@ -82,7 +82,7 @@ public class JSScriptLoader extends ScriptLoader {
         ArrayList<Module> modules = new ArrayList<>();
 
         for (File dir : getFoldersInDirectory(modulesDir)) {
-            Module mod = loadModule(dir, true);
+            Module mod = loadModule(dir, updateCheck);
 
             if (mod == null) continue;
 

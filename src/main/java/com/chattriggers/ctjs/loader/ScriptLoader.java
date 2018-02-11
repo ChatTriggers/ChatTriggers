@@ -22,7 +22,7 @@ public abstract class ScriptLoader {
 
     }
 
-    protected abstract ArrayList<Module> loadModules();
+    protected abstract ArrayList<Module> loadModules(Boolean updateCheck);
     protected abstract ArrayList<String> getIllegalLines();
     public abstract ScriptEngine getScriptEngine();
     protected abstract Invocable getInvocableEngine();

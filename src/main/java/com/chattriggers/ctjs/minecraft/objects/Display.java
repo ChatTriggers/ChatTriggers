@@ -312,7 +312,10 @@ public class Display {
         private Integer backgroundColor;
 
         private OnTrigger onClicked;
+        private OnTrigger onHovered;
+        private OnTrigger onDragged;
         private HashMap<Integer, Boolean> mouseState;
+        private HashMap<Integer, Float[]> draggedState = new HashMap<>();
 
         public DisplayLine(String text) {
             this.text = ChatLib.addColor(text);
@@ -410,7 +413,7 @@ public class Display {
         }
 
         /**
-         * Registers a method to be run when the line is clicked (pressed or released).
+         * Registers a method to be run when the line is clicked (pressed or released).<br>
          * Arguments passed through to method:<br>
          *     int mouseX<br>
          *     int mouseY<br>
@@ -424,18 +427,99 @@ public class Display {
             return this;
         }
 
+        /**
+         * Registers a method to be run when the line is hovered over.<br>
+         * Arguments passed through to method:<br>
+         *     int mouseX<br>
+         *     int mouseY
+         * @param methodName the method to run
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine registerHovered(String methodName) {
+            onHovered = new OnRegularTrigger(methodName, TriggerType.OTHER);
+            return this;
+        }
+
+        /**
+         * Registers a method to be run when the line is dragged.<br>
+         * Arguments passed through to method:<br>
+         *     int deltaMouseX<br>
+         *     int deltaMouseY<br>
+         *     int mouseX<br>
+         *     int mouseY<br>
+         *     int button
+         * @param methodName the method to run
+         * @return the DisplayLine to allow for method chaining
+         */
+        public DisplayLine registerDragged(String methodName) {
+            onDragged = new OnRegularTrigger(methodName, TriggerType.OTHER);
+            return this;
+        }
+
         private void handleInput(float x, float y, float width, float height) {
-            if (this.onClicked == null) return;
             if (!Mouse.isCreated()) return;
+
+            for (int button = 0; button < 5; button++)
+                handleDragged(button);
 
             if (Client.getMouseX() > x && Client.getMouseX() < x + width
                     && Client.getMouseY() > y && Client.getMouseY() < y + height) {
-                for (int i = 0; i < 5; i++) {
-                    if (Mouse.isButtonDown(i) == this.mouseState.get(i)) continue;
-                    this.onClicked.trigger(Client.getMouseX(), Client.getMouseY(), i, Mouse.isButtonDown(i));
-                    this.mouseState.put(i, Mouse.isButtonDown(i));
+
+                handleHovered();
+
+                for (int button = 0; button < 5; button++) {
+                    if (Mouse.isButtonDown(button) == this.mouseState.get(button)) continue;
+                    handleClicked(button);
+                    this.mouseState.put(button, Mouse.isButtonDown(button));
+                    if (Mouse.isButtonDown(button))
+                        this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
                 }
             }
+
+            // remove dragged values if button is not down
+            for (int button = 0; button < 5; button++) {
+                if (Mouse.isButtonDown(button)) continue;
+                if (!this.draggedState.containsKey(button)) continue;
+
+                this.draggedState.remove(button);
+            }
+        }
+
+        private void handleClicked(int button) {
+            if (this.onClicked == null) return;
+
+            this.onClicked.trigger(
+                    Client.getMouseX(),
+                    Client.getMouseY(),
+                    button,
+                    Mouse.isButtonDown(button)
+            );
+        }
+
+        private void handleHovered() {
+            if (this.onHovered == null) return;
+
+            this.onHovered.trigger(
+                    Client.getMouseX(),
+                    Client.getMouseY()
+            );
+        }
+
+        private void handleDragged(int button) {
+            if (this.onDragged == null) return;
+
+            if (!this.draggedState.containsKey(button))
+                return;
+
+            this.onDragged.trigger(
+                    Client.getMouseX() - this.draggedState.get(button)[0],
+                    Client.getMouseY() - this.draggedState.get(button)[1],
+                    Client.getMouseX(),
+                    Client.getMouseY(),
+                    button
+            );
+
+            this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
         }
 
         private void drawFullBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
