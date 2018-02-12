@@ -23,6 +23,7 @@ public class ClientListener {
     private int ticksPassed;
     private KeyBinding guiKeyBind;
     private HashMap<Integer, Boolean> mouseState;
+    private HashMap<Integer, Float[]> draggedState;
 
     public ClientListener() {
         this.guiKeyBind = new KeyBinding("Key to open import gui", Keyboard.KEY_L, "CT Controls");
@@ -33,6 +34,7 @@ public class ClientListener {
         this.mouseState = new HashMap<>();
         for (int i = 0; i < 5; i++)
             this.mouseState.put(i, false);
+        draggedState = new HashMap<>();
     }
 
     @SubscribeEvent
@@ -47,11 +49,39 @@ public class ClientListener {
     private void handleMouseInput() {
         if (!Mouse.isCreated()) return;
 
-        for (int i = 0; i < 5; i++) {
-            if (Mouse.isButtonDown(i) == this.mouseState.get(i)) continue;
-            TriggerType.CLICKED.triggerAll(Client.getMouseX(), Client.getMouseY(), i, Mouse.isButtonDown(i));
-            this.mouseState.put(i, Mouse.isButtonDown(i));
+        for (int button = 0; button < 5; button++) {
+            handleDragged(button);
+
+            // normal clicked
+            if (Mouse.isButtonDown(button) == this.mouseState.get(button)) continue;
+            TriggerType.CLICKED.triggerAll(Client.getMouseX(), Client.getMouseY(), button, Mouse.isButtonDown(button));
+            this.mouseState.put(button, Mouse.isButtonDown(button));
+
+            // add new dragged
+            if (Mouse.isButtonDown(button))
+                this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
+
+            // remove old dragged
+            if (Mouse.isButtonDown(button)) continue;
+            if (!this.draggedState.containsKey(button)) continue;
+            this.draggedState.remove(button);
         }
+    }
+
+    private void handleDragged(int button) {
+        if (!this.draggedState.containsKey(button))
+            return;
+
+        TriggerType.DRAGGED.triggerAll(
+                Client.getMouseX() - this.draggedState.get(button)[0],
+                Client.getMouseY() - this.draggedState.get(button)[1],
+                Client.getMouseX(),
+                Client.getMouseY(),
+                button
+        );
+
+        // update dragged
+        this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
     }
 
     @SubscribeEvent

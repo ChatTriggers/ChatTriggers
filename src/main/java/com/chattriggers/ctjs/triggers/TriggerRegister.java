@@ -9,10 +9,17 @@ import java.lang.reflect.Method;
 public class TriggerRegister {
     public static Module currentModule = null;
 
+    /**
+     * Helper method to make registering a trigger more like JavaScript.<br>
+     * Used from provided libraries as <code>register("trigger type", "function name");</code><br>
+     * Example: <code>register("chat","triggerOnChat");</code>
+     * @param triggerType the type of trigger
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnTrigger register(String triggerType, String methodName) {
         String capitalizedName = triggerType.substring(0, 1).toUpperCase() + triggerType.substring(1);
-
-        Method method = null;
+        Method method;
 
         try {
              method = TriggerRegister.class.getDeclaredMethod(
@@ -26,7 +33,6 @@ public class TriggerRegister {
 
         try {
             Object returned = method.invoke(null, methodName);
-
             return (OnTrigger) returned;
         } catch (IllegalAccessException | InvocationTargetException e) {
             CTJS.getInstance().getConsole().printStackTrace(e);
@@ -71,13 +77,37 @@ public class TriggerRegister {
 
     /**
      * Registers a new clicked trigger.<br>
+     * Runs on both down and up action on the mouse for mouse buttons 0 through 5.<br>
+     * Passes through 4 arguments:<br>
+     *     &nbsp;mouseX<br>
+     *     &nbsp;mouseY<br>
+     *     &nbsp;button<br>
+     *     &nbsp;buttonState<br>
      * Available modifications:<br>
-     * {@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
+     *     &nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
     public static OnRegularTrigger registerClicked(String methodName) {
         return new OnRegularTrigger(methodName, TriggerType.CLICKED);
+    }
+
+    /**
+     * Registers a new dragged trigger.<br>
+     * Runs while a mouse button is being held down.<br>
+     * Passes through 5 arguments:<br>
+     *     &nbsp;deltaMouseX<br>
+     *     &nbsp;deltaMouseY<br>
+     *     &nbsp;mouseX<br>
+     *     &nbsp;mouseY<br>
+     *     button<br>
+     * Available modifications:<br>
+     *     &nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerDragged(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.DRAGGED);
     }
 
     /**

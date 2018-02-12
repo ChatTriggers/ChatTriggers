@@ -315,7 +315,7 @@ public class Display {
         private OnTrigger onHovered;
         private OnTrigger onDragged;
         private HashMap<Integer, Boolean> mouseState;
-        private HashMap<Integer, Float[]> draggedState = new HashMap<>();
+        private HashMap<Integer, Float[]> draggedState;
 
         public DisplayLine(String text) {
             this.text = ChatLib.addColor(text);
@@ -332,6 +332,7 @@ public class Display {
             this.mouseState = new HashMap<>();
             for (int i = 0; i < 5; i++)
                 this.mouseState.put(i, false);
+            this.draggedState = new HashMap<>();
         }
 
         /**
