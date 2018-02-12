@@ -90,7 +90,7 @@ public class TriggerRegister {
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse button<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse button state<br>
      * Available modifications:<br>
-     *     &nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
