@@ -142,9 +142,5 @@ public class CTJS {
 
         Runtime.getRuntime().addShutdownHook(new Thread(TriggerType.GAME_UNLOAD::triggerAll));
     }
-
-    private void testing() {
-        
-    }
 }
 
