@@ -172,6 +172,62 @@ public class TriggerRegister {
     }
 
     /**
+     * Registers a new render player list trigger.<br>
+     * Runs when the player list is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderPlayerList(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_PLAYER_LIST);
+    }
+
+    /**
+     * Registers a new render crosshair trigger.<br>
+     * Runs when the crosshair is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderCrosshair(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_CROSSHAIR);
+    }
+
+    /**
+     * Registers a new render debug trigger.<br>
+     * Runs when the debug screen (f3) is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderDebug(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_DEBUG);
+    }
+
+    /**
+     * Registers a new render boss health trigger.<br>
+     * Runs when the boss health bar is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderBossHealth(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_BOSS_HEALTH);
+    }
+
+    /**
      * Registers a new game load trigger.<br>
      * Runs directly after the game loads.<br>
      * Available modifications:<br>

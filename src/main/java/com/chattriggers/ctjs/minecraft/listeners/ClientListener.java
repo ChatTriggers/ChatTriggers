@@ -11,6 +11,7 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -86,20 +87,30 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-        if (EventLib.getType(event) != RenderGameOverlayEvent.ElementType.TEXT)
-            return;
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.PLAYER_LIST)
+            TriggerType.RENDER_PLAYER_LIST.triggerAll(event);
 
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+            TriggerType.RENDER_CROSSHAIR.triggerAll(event);
 
-        // render overlay trigger
-        TriggerType.RENDER_OVERLAY.triggerAll();
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.DEBUG)
+            TriggerType.RENDER_DEBUG.triggerAll(event);
 
-        // step trigger
-        TriggerType.STEP.triggerAll();
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.BOSSHEALTH)
+            TriggerType.RENDER_BOSS_HEALTH.triggerAll(event);
 
-        // mouse clicked trigger
-        handleMouseInput();
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
+            // render overlay trigger
+            TriggerType.RENDER_OVERLAY.triggerAll();
 
-        CTJS.getInstance().getCps().clickCalc();
+            // step trigger
+            TriggerType.STEP.triggerAll();
+
+            // mouse clicked trigger
+            handleMouseInput();
+
+            CTJS.getInstance().getCps().clickCalc();
+        }
     }
 
     @SubscribeEvent
