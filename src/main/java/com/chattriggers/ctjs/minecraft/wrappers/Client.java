@@ -6,10 +6,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+
+import java.lang.reflect.Field;
 
 public class Client {
     /**
@@ -175,6 +178,31 @@ public class Client {
 
     public static boolean isInGui() {
         return gui.get() != null;
+    }
+
+    /**
+     * Gets the chat message currently typed into the chat gui.
+     * @return A blank string if the gui isn't open, otherwise, the message
+     */
+    public static String getCurrentChatMessage() {
+        if (!isInChat()) {
+            return "";
+        }
+
+        GuiChat chatGui = ((GuiChat) getMinecraft().currentScreen);
+
+        try {
+            Field inputField = chatGui.getClass().getDeclaredField("inputField");
+            inputField.setAccessible(true);
+
+            GuiTextField textField = (GuiTextField) inputField.get(chatGui);
+
+            return textField.getText();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
     public static class gui {
