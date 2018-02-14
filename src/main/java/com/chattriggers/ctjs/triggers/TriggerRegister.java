@@ -228,6 +228,62 @@ public class TriggerRegister {
     }
 
     /**
+     * Registers a new render health trigger.<br>
+     * Runs when the player's health is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderHealth(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_HEALTH);
+    }
+
+    /**
+     * Registers a new render food trigger.<br>
+     * Runs when the player's food (hunger) is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderFood(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_FOOD);
+    }
+
+    /**
+     * Registers a new render mount health trigger.<br>
+     * Runs when the mount's health (Example: horse or pig) is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderMountHealth(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_MOUNT_HEALTH);
+    }
+
+    /**
+     * Registers a new render experience trigger.<br>
+     * Runs when the player's experience bar is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderExperience(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_EXPERIENCE);
+    }
+
+    /**
      * Registers a new game load trigger.<br>
      * Runs directly after the game loads.<br>
      * Available modifications:<br>

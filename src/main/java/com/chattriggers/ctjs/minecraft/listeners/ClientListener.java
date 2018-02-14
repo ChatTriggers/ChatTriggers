@@ -98,6 +98,18 @@ public class ClientListener {
         if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.BOSSHEALTH)
             TriggerType.RENDER_BOSS_HEALTH.triggerAll(event);
 
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.HEALTH)
+            TriggerType.RENDER_HEALTH.triggerAll(event);
+
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.FOOD)
+            TriggerType.RENDER_FOOD.triggerAll(event);
+
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.HEALTHMOUNT)
+            TriggerType.RENDER_MOUNT_HEALTH.triggerAll(event);
+
+        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.EXPERIENCE)
+            TriggerType.RENDER_EXPERIENCE.triggerAll(event);
+
         if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
             // render overlay trigger
             TriggerType.RENDER_OVERLAY.triggerAll();
