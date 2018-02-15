@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.objects.Item;
+
 public class Inventory {
     /**
      * Gets the slot of the player's currently held item.
