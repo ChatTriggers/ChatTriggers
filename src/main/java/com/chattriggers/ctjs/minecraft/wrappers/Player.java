@@ -264,6 +264,10 @@ public class Player {
         return effects.toArray(new String[effects.size()]);
     }
 
+    /**
+     * Gets the current {@link Block} that the player is looking at.
+     * @return the {@link Block}
+     */
     public static Block lookingAt() {
         if (getPlayer() == null
                 || World.getWorld() == null
