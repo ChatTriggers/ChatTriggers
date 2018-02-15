@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.modules.Module;
+import com.chattriggers.ctjs.utils.console.Console;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,7 +28,7 @@ public class TriggerRegister {
                     String.class
             );
         } catch (NoSuchMethodException e) {
-            CTJS.getInstance().getConsole().printStackTrace(e);
+            Console.getConsole().printStackTrace(e);
             return null;
         }
 
@@ -35,7 +36,7 @@ public class TriggerRegister {
             Object returned = method.invoke(null, methodName);
             return (OnTrigger) returned;
         } catch (IllegalAccessException | InvocationTargetException e) {
-            CTJS.getInstance().getConsole().printStackTrace(e);
+            Console.getConsole().printStackTrace(e);
             return null;
         }
     }

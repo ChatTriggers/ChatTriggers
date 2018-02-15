@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiNewChat;
@@ -9,6 +10,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
@@ -192,17 +194,32 @@ public class Client {
         GuiChat chatGui = ((GuiChat) getMinecraft().currentScreen);
 
         try {
-            Field inputField = chatGui.getClass().getDeclaredField("inputField");
-            inputField.setAccessible(true);
-
-            GuiTextField textField = (GuiTextField) inputField.get(chatGui);
+            GuiTextField textField = ReflectionHelper.getPrivateValue(GuiChat.class, chatGui, "inputField", "field_146415_a");
 
             return textField.getText();
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Console.getConsole().printStackTrace(e);
         }
 
         return "";
+    }
+
+    public static void setCurrentChatMessage(String message) {
+        if (!isInChat()) {
+            Client.getMinecraft().displayGuiScreen(new GuiChat(message));
+            return;
+        }
+
+        GuiChat chatGui = ((GuiChat) getMinecraft().currentScreen);
+
+        try {
+            Field inputField = chatGui.getClass().getDeclaredField("");
+            inputField.setAccessible(true);
+
+            ReflectionHelper.setPrivateValue(GuiChat.class, chatGui, message,"inputField", "field_146415_a");
+        } catch (Exception e) {
+            Console.getConsole().printStackTrace(e);
+        }
     }
 
     public static class gui {

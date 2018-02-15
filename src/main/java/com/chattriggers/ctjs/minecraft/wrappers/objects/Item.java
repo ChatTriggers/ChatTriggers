@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.objects;
+package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import lombok.Getter;
 import net.minecraft.item.ItemStack;

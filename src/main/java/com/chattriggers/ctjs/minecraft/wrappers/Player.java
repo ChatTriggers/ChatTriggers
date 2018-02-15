@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;

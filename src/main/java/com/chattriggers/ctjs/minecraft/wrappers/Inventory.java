@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.objects.Item;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 
 public class Inventory {
     /**
