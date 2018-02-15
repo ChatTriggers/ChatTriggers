@@ -1,10 +1,14 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import net.minecraft.item.ItemStack;
+
 public class Item {
     private net.minecraft.item.Item item;
+    private ItemStack itemStack;
 
-    public Item(net.minecraft.item.Item item) {
-        this.item = item;
+    public Item(ItemStack item) {
+        this.item = item.getItem();
+        this.itemStack = item;
     }
 
     public String getUnlocalizedName() {
