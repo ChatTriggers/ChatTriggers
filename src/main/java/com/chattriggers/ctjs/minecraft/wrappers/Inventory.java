@@ -8,9 +8,8 @@ public class Inventory {
     public static Item getHeldItem() {
         return new Item(Player.getPlayer().inventory.getCurrentItem());
     }
-    
+
     public static Item getItemInSlot(int slot) {
         return new Item(Player.getPlayer().getInventory()[slot]);
     }
-
 }

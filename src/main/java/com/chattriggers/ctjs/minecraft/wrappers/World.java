@@ -1,12 +1,9 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.libs.WorldLib;
-import com.chattriggers.ctjs.minecraft.objects.GeneralTexture;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumParticleTypes;
 
 import java.lang.reflect.InvocationTargetException;

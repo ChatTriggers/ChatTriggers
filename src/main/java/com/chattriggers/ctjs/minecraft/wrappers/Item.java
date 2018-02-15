@@ -18,4 +18,8 @@ public class Item {
     public String getRegistryName() {
         return this.item.getRegistryName();
     }
+
+    public int getStackSize() {
+        return this.itemStack.stackSize;
+    }
 }
