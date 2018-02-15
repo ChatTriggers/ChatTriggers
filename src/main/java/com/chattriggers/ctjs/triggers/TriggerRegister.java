@@ -47,6 +47,7 @@ public class TriggerRegister {
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any number of chat criteria variables<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the chat event<br>
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnChatTrigger#setChatCriteria(String)} Sets the chat criteria<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnChatTrigger#setParameter(String)} Sets the chat parameter<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
@@ -177,12 +178,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderPlayerList(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_PLAYER_LIST);
+    public static OnRenderTrigger registerRenderPlayerList(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_PLAYER_LIST);
     }
 
     /**
@@ -191,12 +193,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderCrosshair(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_CROSSHAIR);
+    public static OnRenderTrigger registerRenderCrosshair(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_CROSSHAIR);
     }
 
     /**
@@ -205,12 +208,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderDebug(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_DEBUG);
+    public static OnRenderTrigger registerRenderDebug(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_DEBUG);
     }
 
     /**
@@ -219,12 +223,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderBossHealth(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_BOSS_HEALTH);
+    public static OnRenderTrigger registerRenderBossHealth(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_BOSS_HEALTH);
     }
 
     /**
@@ -233,12 +238,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderHealth(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_HEALTH);
+    public static OnRenderTrigger registerRenderHealth(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_HEALTH);
     }
 
     /**
@@ -247,12 +253,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderFood(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_FOOD);
+    public static OnRenderTrigger registerRenderFood(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_FOOD);
     }
 
     /**
@@ -261,12 +268,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderMountHealth(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_MOUNT_HEALTH);
+    public static OnRenderTrigger registerRenderMountHealth(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_MOUNT_HEALTH);
     }
 
     /**
@@ -275,12 +283,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderExperience(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_EXPERIENCE);
+    public static OnRenderTrigger registerRenderExperience(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_EXPERIENCE);
     }
 
     /**
@@ -289,12 +298,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderHotbar(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_HOTBAR);
+    public static OnRenderTrigger registerRenderHotbar(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_HOTBAR);
     }
 
     /**
@@ -303,12 +313,13 @@ public class TriggerRegister {
      * Passes through 1 argument:<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
      * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderAir(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_AIR);
+    public static OnRenderTrigger registerRenderAir(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_AIR);
     }
 
     /**
