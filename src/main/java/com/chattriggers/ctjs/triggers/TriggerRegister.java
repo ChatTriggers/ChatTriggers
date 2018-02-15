@@ -284,6 +284,34 @@ public class TriggerRegister {
     }
 
     /**
+     * Registers a new render hotbar trigger.<br>
+     * Runs when the player's hotbar is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderHotbar(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_HOTBAR);
+    }
+
+    /**
+     * Registers a new render air trigger.<br>
+     * Runs when the player's air level (underwater) is being drawn.<br>
+     * Passes through 1 argument:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * Available modifications:<br>
+     *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderAir(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_AIR);
+    }
+
+    /**
      * Registers a new game load trigger.<br>
      * Runs directly after the game loads.<br>
      * Available modifications:<br>

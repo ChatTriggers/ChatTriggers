@@ -86,31 +86,39 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.PLAYER_LIST)
+        RenderGameOverlayEvent.ElementType element = EventLib.getType(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.PLAYER_LIST)
             TriggerType.RENDER_PLAYER_LIST.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+        if (element == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
             TriggerType.RENDER_CROSSHAIR.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.DEBUG)
+        if (element == RenderGameOverlayEvent.ElementType.DEBUG)
             TriggerType.RENDER_DEBUG.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.BOSSHEALTH)
+        if (element == RenderGameOverlayEvent.ElementType.BOSSHEALTH)
             TriggerType.RENDER_BOSS_HEALTH.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.HEALTH)
+        if (element == RenderGameOverlayEvent.ElementType.HEALTH)
             TriggerType.RENDER_HEALTH.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.FOOD)
+        if (element == RenderGameOverlayEvent.ElementType.FOOD)
             TriggerType.RENDER_FOOD.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.HEALTHMOUNT)
+        if (element == RenderGameOverlayEvent.ElementType.HEALTHMOUNT)
             TriggerType.RENDER_MOUNT_HEALTH.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        if (element == RenderGameOverlayEvent.ElementType.EXPERIENCE)
             TriggerType.RENDER_EXPERIENCE.triggerAll(event);
 
-        if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
+        if (element == RenderGameOverlayEvent.ElementType.HOTBAR)
+            TriggerType.RENDER_HOTBAR.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.AIR)
+            TriggerType.RENDER_AIR.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.TEXT) {
             // render overlay trigger
             TriggerType.RENDER_OVERLAY.triggerAll();
 
