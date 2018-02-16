@@ -105,18 +105,37 @@ public class Item {
         return this.itemStack.getDisplayName();
     }
 
+    /**
+     * Returns a map of the enchantments on an item.
+     * @return the map of enchantments
+     */
     public Map<Integer, Integer> getEnchantments() {
         return EnchantmentHelper.getEnchantments(this.itemStack);
     }
 
+    /**
+     * Gets if the item can be placed on a {@link Block}.
+     * @param block the {@link Block} to place the item on
+     * @return true if the item can be placed on the {@link Block}
+     */
     public Boolean canPlaceOn(Block block) {
         return this.itemStack.canPlaceOn(block.getBlock());
     }
 
+    /**
+     * Gets if the item can harvest a {@link Block}.
+     * @param block the {@link Block} for the item to harvest
+     * @return true if the item can harvest the {@link Block}
+     */
     public Boolean canHarvest(Block block) {
         return this.itemStack.canHarvestBlock(block.getBlock());
     }
 
+    /**
+     * Gets if the item can destroy a {@link Block}.
+     * @param block the {@link Block} for the item to destroy
+     * @return true if the item can destroy the {@link Block}
+     */
     public Boolean canDestroy(Block block) {
         return this.itemStack.canDestroy(block.getBlock());
     }
