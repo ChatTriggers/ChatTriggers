@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class World {
     /**
@@ -174,7 +175,13 @@ public class World {
          * @return the array of name strings
          */
         public static String[] getParticleNames() {
-            return EnumParticleTypes.getParticleNames();
+            String[] names = new String[EnumParticleTypes.values().length];
+
+            for (int i = 0; i < EnumParticleTypes.values().length; i++) {
+                names[i] = EnumParticleTypes.values()[i].name();
+            }
+
+            return names;
         }
 
         public static Particle spawnParticle(String particle, double x, double y, double z, double dx, double dy, double dz) {
@@ -195,13 +202,14 @@ public class World {
                         double.class,
                         double.class,
                         double.class,
-                        double.class
+                        double.class,
+                        int[].class
                 );
 
                 EntityFX fx = (EntityFX) method.invoke(Client.getMinecraft().renderGlobal,
                         particleType.getParticleID(),
                         particleType.getShouldIgnoreRange(),
-                        x, y, z, dx, dy, dz
+                        x, y, z, dx, dy, dz, new int[]{}
                 );
 
                 return new Particle(fx);

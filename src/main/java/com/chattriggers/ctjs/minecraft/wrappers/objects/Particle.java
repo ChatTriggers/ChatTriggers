@@ -42,6 +42,14 @@ public class Particle {
         this.underlyingEntity.setAlphaF(a);
     }
 
+    /*public void setLocation(float x, float y, float z) {
+        this.underlyingEntity.loca
+    }*/
+
+    public void remove() {
+        this.underlyingEntity.setDead();
+    }
+
     /*public void setTexture(String textureName) {
         this.underlyingEntity.setParticleIcon(new GeneralTexture(textureName));
     }*/
