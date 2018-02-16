@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.loader;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
@@ -42,8 +43,11 @@ public class JSScriptLoader extends ScriptLoader {
             for (File dir : getFoldersInDirectory(modulesDir)) {
                 for (File file : dir.listFiles()) {
                     if (file.getName().endsWith(".jar")) {
-                        File jar = new File("config/ChatTriggers/modules/" + dir.getName()
-                                + "/" + file.getName());
+                        File jar = new File(
+                                CTJS.getInstance().getConfig().getModulesFolder()
+                                        + dir.getName()
+                                        + "/" + file.getName()
+                        );
 
                         files.add(jar.toURI().toURL());
                     }
@@ -70,7 +74,7 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
     @Override
-    public ArrayList<Module> loadModules() {
+    public ArrayList<Module> loadModules(Boolean updateCheck) {
         if (cachedModules != null && !cachedModules.isEmpty()) {
             return cachedModules;
         }
@@ -78,7 +82,7 @@ public class JSScriptLoader extends ScriptLoader {
         ArrayList<Module> modules = new ArrayList<>();
 
         for (File dir : getFoldersInDirectory(modulesDir)) {
-            Module mod = loadModule(dir, true);
+            Module mod = loadModule(dir, updateCheck);
 
             if (mod == null) continue;
 
@@ -155,7 +159,7 @@ public class JSScriptLoader extends ScriptLoader {
                 return false;
             }
 
-            new File(modulesDir,  "currMetadata.json").delete();
+            new File(modulesDir, "currMetadata.json").delete();
         }
 
         try {
@@ -172,7 +176,7 @@ public class JSScriptLoader extends ScriptLoader {
             ZipInputStream zis = new ZipInputStream(new FileInputStream(downloadZip));
             ZipEntry zipEntry = zis.getNextEntry();
 
-            while(zipEntry != null){
+            while (zipEntry != null) {
                 String fileName = zipEntry.getName();
                 File newFile = new File(outputDir, fileName.replaceAll("(?i)" + name + "/", ""));
 
@@ -230,6 +234,7 @@ public class JSScriptLoader extends ScriptLoader {
 
     /**
      * Gets the script that provides modules basic libraries.
+     *
      * @return a string of the compiled script
      */
     public String getProvidedLibsScript() {
@@ -244,6 +249,7 @@ public class JSScriptLoader extends ScriptLoader {
     /**
      * Compiles all text from multiple files
      * into a singular string for loading.
+     *
      * @param files a list of files to be compiled
      * @return the string after compilation
      * @throws IOException thrown if a file doesn't exist
@@ -269,7 +275,6 @@ public class JSScriptLoader extends ScriptLoader {
 
         return compiledScript.toString();
     }
-
 
 
     private HashMap<String, List<String>> getAllFiles(File... files) {

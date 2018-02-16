@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 import org.apache.commons.io.FileUtils;
 
@@ -15,27 +16,49 @@ public class FileLib {
      * @param toWrite string to write in file
      */
     public static void write(String importName, String fileName, String toWrite) {
+        write(CTJS.getInstance().getConfig().getModulesFolder() + importName + "/" + fileName, toWrite);
+    }
+
+    /**
+     * Writes a file to anywhere on the system.<br>
+     * Use "./" for the ".minecraft" folder.<br>
+     * @param fileLocation the location and file name
+     * @param toWrite string to write in file
+     */
+    public static void write(String fileLocation, String toWrite) {
         try {
-            FileUtils.write(new File("./config/ChatTriggers/modules/" + importName + "/" + fileName), toWrite);
+            FileUtils.write(new File(fileLocation), toWrite);
         } catch (IOException exception) {
             Console.getConsole().printStackTrace(exception);
         }
     }
 
     /**
-     * Reads a file from folder in Imports.
+     * Reads a file from folder in Imports.<br>
+     * Returns an empty string if file is not found.
      * @param importName name of the import
      * @param fileName name of the file
      * @return the string in the file
      */
     public static String read(String importName, String fileName) {
+        return read(CTJS.getInstance().getConfig().getModulesFolder() + importName + "/" + fileName);
+    }
+
+    /**
+     * Reads a file from anywhere on the system.<br>
+     * Use "./" for the ".minecraft" folder.<br>
+     * Returns an empty string if file is not found.
+     * @param fileLocation the location and file name
+     * @return the string in the file
+     */
+    public static String read(String fileLocation) {
         try {
-            File file = new File("./config/ChatTriggers/modules/" + importName + "/" + fileName);
+            File file = new File(fileLocation);
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
 
             if (!file.exists() || br.readLine() == null) {
                 br.close();
-                return null;
+                return "";
             }
 
             br.close();
@@ -44,7 +67,7 @@ public class FileLib {
             Console.getConsole().printStackTrace(exception);
         }
 
-        return null;
+        return "";
     }
 
     /**

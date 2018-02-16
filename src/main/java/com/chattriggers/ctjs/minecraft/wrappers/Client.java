@@ -2,13 +2,19 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
+import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+
+import java.lang.reflect.Field;
 
 public class Client {
     /**
@@ -170,5 +176,63 @@ public class Client {
         float rh = (float) RenderLib.getRenderHeight();
         float dh = (float) getMinecraft().displayHeight;
         return rh - my * rh / dh - 1L;
+    }
+
+    public static boolean isInGui() {
+        return gui.get() != null;
+    }
+
+    /**
+     * Gets the chat message currently typed into the chat gui.
+     * @return A blank string if the gui isn't open, otherwise, the message
+     */
+    public static String getCurrentChatMessage() {
+        if (!isInChat()) {
+            return "";
+        }
+
+        GuiChat chatGui = ((GuiChat) getMinecraft().currentScreen);
+
+        try {
+            GuiTextField textField = ReflectionHelper.getPrivateValue(GuiChat.class, chatGui, "inputField", "field_146415_a");
+
+            return textField.getText();
+        } catch (Exception e) {
+            Console.getConsole().printStackTrace(e);
+        }
+
+        return "";
+    }
+
+    public static void setCurrentChatMessage(String message) {
+        if (!isInChat()) {
+            Client.getMinecraft().displayGuiScreen(new GuiChat(message));
+            return;
+        }
+
+        GuiChat chatGui = ((GuiChat) getMinecraft().currentScreen);
+
+        try {
+            Field inputField = chatGui.getClass().getDeclaredField("");
+            inputField.setAccessible(true);
+
+            ReflectionHelper.setPrivateValue(GuiChat.class, chatGui, message,"inputField", "field_146415_a");
+        } catch (Exception e) {
+            Console.getConsole().printStackTrace(e);
+        }
+    }
+
+    public static class gui {
+        public static GuiScreen get() {
+            return getMinecraft().currentScreen;
+        }
+
+        public static String getType() {
+            return get() == null ? "null" : get().getClass().getSimpleName();
+        }
+
+        public static void close() {
+            getMinecraft().displayGuiScreen(null);
+        }
     }
 }

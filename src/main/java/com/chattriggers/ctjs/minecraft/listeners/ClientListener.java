@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -22,6 +23,7 @@ public class ClientListener {
     private int ticksPassed;
     private KeyBinding guiKeyBind;
     private HashMap<Integer, Boolean> mouseState;
+    private HashMap<Integer, Float[]> draggedState;
 
     public ClientListener() {
         this.guiKeyBind = new KeyBinding("Key to open import gui", Keyboard.KEY_L, "CT Controls");
@@ -32,6 +34,7 @@ public class ClientListener {
         this.mouseState = new HashMap<>();
         for (int i = 0; i < 5; i++)
             this.mouseState.put(i, false);
+        draggedState = new HashMap<>();
     }
 
     @SubscribeEvent
@@ -46,29 +49,87 @@ public class ClientListener {
     private void handleMouseInput() {
         if (!Mouse.isCreated()) return;
 
-        for (int i = 0; i < 5; i++) {
-            if (Mouse.isButtonDown(i) == this.mouseState.get(i)) continue;
-            TriggerType.CLICKED.triggerAll(Client.getMouseX(), Client.getMouseY(), i, Mouse.isButtonDown(i));
-            this.mouseState.put(i, Mouse.isButtonDown(i));
+        for (int button = 0; button < 5; button++) {
+            handleDragged(button);
+
+            // normal clicked
+            if (Mouse.isButtonDown(button) == this.mouseState.get(button)) continue;
+            TriggerType.CLICKED.triggerAll(Client.getMouseX(), Client.getMouseY(), button, Mouse.isButtonDown(button));
+            this.mouseState.put(button, Mouse.isButtonDown(button));
+
+            // add new dragged
+            if (Mouse.isButtonDown(button))
+                this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
+
+            // remove old dragged
+            if (Mouse.isButtonDown(button)) continue;
+            if (!this.draggedState.containsKey(button)) continue;
+            this.draggedState.remove(button);
         }
+    }
+
+    private void handleDragged(int button) {
+        if (!this.draggedState.containsKey(button))
+            return;
+
+        TriggerType.DRAGGED.triggerAll(
+                Client.getMouseX() - this.draggedState.get(button)[0],
+                Client.getMouseY() - this.draggedState.get(button)[1],
+                Client.getMouseX(),
+                Client.getMouseY(),
+                button
+        );
+
+        // update dragged
+        this.draggedState.put(button, new Float[]{Client.getMouseX(), Client.getMouseY()});
     }
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-        if (EventLib.getType(event) != RenderGameOverlayEvent.ElementType.TEXT)
-            return;
+        RenderGameOverlayEvent.ElementType element = EventLib.getType(event);
 
+        if (element == RenderGameOverlayEvent.ElementType.PLAYER_LIST)
+            TriggerType.RENDER_PLAYER_LIST.triggerAll(event);
 
-        // render overlay trigger
-        TriggerType.RENDER_OVERLAY.triggerAll();
+        if (element == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+            TriggerType.RENDER_CROSSHAIR.triggerAll(event);
 
-        // step trigger
-        TriggerType.STEP.triggerAll();
+        if (element == RenderGameOverlayEvent.ElementType.DEBUG)
+            TriggerType.RENDER_DEBUG.triggerAll(event);
 
-        // mouse clicked trigger
-        handleMouseInput();
+        if (element == RenderGameOverlayEvent.ElementType.BOSSHEALTH)
+            TriggerType.RENDER_BOSS_HEALTH.triggerAll(event);
 
-        CTJS.getInstance().getCps().clickCalc();
+        if (element == RenderGameOverlayEvent.ElementType.HEALTH)
+            TriggerType.RENDER_HEALTH.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.FOOD)
+            TriggerType.RENDER_FOOD.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.HEALTHMOUNT)
+            TriggerType.RENDER_MOUNT_HEALTH.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.EXPERIENCE)
+            TriggerType.RENDER_EXPERIENCE.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.HOTBAR)
+            TriggerType.RENDER_HOTBAR.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.AIR)
+            TriggerType.RENDER_AIR.triggerAll(event);
+
+        if (element == RenderGameOverlayEvent.ElementType.TEXT) {
+            // render overlay trigger
+            TriggerType.RENDER_OVERLAY.triggerAll();
+
+            // step trigger
+            TriggerType.STEP.triggerAll();
+
+            // mouse clicked trigger
+            handleMouseInput();
+
+            CTJS.getInstance().getCps().clickCalc();
+        }
     }
 
     @SubscribeEvent
@@ -85,5 +146,10 @@ public class ClientListener {
         if (guiKeyBind.isPressed()) {
             CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
         }
+    }
+
+    @SubscribeEvent
+    public void onGuiOpened(GuiOpenEvent event) {
+        TriggerType.GUI_OPENED.triggerAll(event);
     }
 }

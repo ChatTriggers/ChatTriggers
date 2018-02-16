@@ -16,6 +16,10 @@ import net.minecraft.world.EnumSkyBlock;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @deprecated use {@link Player#lookingAt()}
+ */
+@Deprecated
 public class LookingAt {
     private static MovingObjectPosition mop;
 

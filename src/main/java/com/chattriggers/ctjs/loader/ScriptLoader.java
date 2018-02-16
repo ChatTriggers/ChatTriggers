@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ScriptLoader {
-    protected File modulesDir = new File("./config/ChatTriggers/modules/");
+    protected File modulesDir = new File(CTJS.getInstance().getConfig().getModulesFolder());
 
     public void preLoad() {
         loadAssets();
@@ -22,7 +22,7 @@ public abstract class ScriptLoader {
 
     }
 
-    protected abstract ArrayList<Module> loadModules();
+    protected abstract ArrayList<Module> loadModules(Boolean updateCheck);
     protected abstract ArrayList<String> getIllegalLines();
     public abstract ScriptEngine getScriptEngine();
     protected abstract Invocable getInvocableEngine();
@@ -38,11 +38,11 @@ public abstract class ScriptLoader {
             throw new IllegalArgumentException("ResourcePath cannot be null or empty");
         }
 
-        resourceName = resourceName.replace('\\', '/');
-        InputStream in = this.getClass().getResourceAsStream(resourceName);
+        String parsedResourceName = resourceName.replace('\\', '/');
+        InputStream in = this.getClass().getResourceAsStream(parsedResourceName);
 
         if (in == null) {
-            throw new IllegalArgumentException("The embedded resource '" + resourceName + "' cannot be found.");
+            throw new IllegalArgumentException("The embedded resource '" + parsedResourceName + "' cannot be found.");
         }
 
         File outDir = outputFile.getParentFile();

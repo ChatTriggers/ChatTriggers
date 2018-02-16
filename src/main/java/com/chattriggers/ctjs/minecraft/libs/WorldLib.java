@@ -2,7 +2,9 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.chattriggers.ctjs.minecraft.wrappers.World;
 import lombok.experimental.UtilityClass;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -1,8 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 
@@ -259,5 +262,26 @@ public class Player {
             effects.add(effect.toString());
         }
         return effects.toArray(new String[effects.size()]);
+    }
+
+    /**
+     * Gets the current {@link Block} that the player is looking at.
+     * @return the {@link Block}
+     */
+    public static Block lookingAt() {
+        if (getPlayer() == null
+                || World.getWorld() == null
+                || Client.getMinecraft().objectMouseOver == null)
+            return new Block(0);
+
+        MovingObjectPosition mop = Client.getMinecraft().objectMouseOver;
+
+        if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            BlockPos pos = mop.getBlockPos();
+            return new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
+        }
+
+        //TODO add entity support
+        return new Block(0);
     }
 }
