@@ -1,7 +1,10 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import lombok.Getter;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+
+import java.util.Map;
 
 public class Item {
     @Getter
@@ -99,6 +102,22 @@ public class Item {
      * @return the item's stack display name
      */
     public String getName() {
-        return this.item.getItemStackDisplayName(this.itemStack);
+        return this.itemStack.getDisplayName();
+    }
+
+    public Map<Integer, Integer> getEnchantments() {
+        return EnchantmentHelper.getEnchantments(this.itemStack);
+    }
+
+    public Boolean canPlaceOn(Block block) {
+        return this.itemStack.canPlaceOn(block.getBlock());
+    }
+
+    public Boolean canHarvest(Block block) {
+        return this.itemStack.canHarvestBlock(block.getBlock());
+    }
+
+    public Boolean canDestroy(Block block) {
+        return this.itemStack.canDestroy(block.getBlock());
     }
 }
