@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.utils.console.Console;
 
