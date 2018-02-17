@@ -184,7 +184,7 @@ public class World {
             return names;
         }
 
-        public static Particle spawnParticle(String particle, double x, double y, double z, double dx, double dy, double dz) {
+        public static Particle spawnParticle(String particle, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             EnumParticleTypes particleType = EnumParticleTypes.valueOf(particle);
 
             try {
@@ -209,7 +209,7 @@ public class World {
                 EntityFX fx = (EntityFX) method.invoke(Client.getMinecraft().renderGlobal,
                         particleType.getParticleID(),
                         particleType.getShouldIgnoreRange(),
-                        x, y, z, dx, dy, dz, new int[]{}
+                        x, y, z, xSpeed, ySpeed, zSpeed, new int[]{}
                 );
 
                 return new Particle(fx);
@@ -218,6 +218,10 @@ public class World {
             }
 
             return null;
+        }
+
+        public static void spawnParticle(EntityFX particle) {
+            Client.getMinecraft().effectRenderer.addEffect(particle);
         }
     }
 }
