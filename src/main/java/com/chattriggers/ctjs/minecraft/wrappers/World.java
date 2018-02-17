@@ -1,10 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
 import com.chattriggers.ctjs.utils.console.Console;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
@@ -81,6 +84,21 @@ public class World {
      */
     public static String getType() {
         return getWorld().getWorldType().getWorldTypeName();
+    }
+
+    /**
+     * Gets the {@link Block} at a location in the world.
+     *
+     * @param x the x position
+     * @param y the y position
+     * @param z the z position
+     * @return the {@link Block} at the location
+     */
+    public static Block getBlockAt(int x, int y, int z) {
+        BlockPos blockPos = new BlockPos(x, y, z);
+        IBlockState blockState = World.getWorld().getBlockState(blockPos);
+
+        return new Block(blockState.getBlock()).setBlockPos(blockPos);
     }
 
     /**
@@ -167,7 +185,8 @@ public class World {
 
     public static class particle {
         /**
-         * Gets an array of all the different particle names you can pass to {@link #spawnParticle(String, double, double, double, double, double, double)}
+         * Gets an array of all the different particle names you can pass
+         * to {@link #spawnParticle(String, double, double, double, double, double, double)}
          *
          * @return the array of name strings
          */
