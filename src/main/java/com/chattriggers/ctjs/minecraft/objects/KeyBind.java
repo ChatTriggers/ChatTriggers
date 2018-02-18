@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.apache.commons.lang3.ArrayUtils;
@@ -15,8 +15,9 @@ public class KeyBind {
 
     /**
      * Create a new key bind, editable in the user's controls.
+     *
      * @param description what the key bind does
-     * @param keyCode the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
+     * @param keyCode     the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
     public KeyBind(String description, int keyCode) {
@@ -42,6 +43,7 @@ public class KeyBind {
 
     /**
      * Returns true if the key is pressed (used for continuous querying).
+     *
      * @return whether or not the key is pressed
      */
     public boolean isKeyDown() {
@@ -50,6 +52,7 @@ public class KeyBind {
 
     /**
      * Returns true on the initial key press. For continuous querying use {@link #isKeyDown()}.
+     *
      * @return whether or not the key has just been pressed
      */
     public boolean isPressed() {

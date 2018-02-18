@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -39,6 +39,7 @@ public class Gui extends GuiScreen {
 
     /**
      * Get if the gui object is open.
+     *
      * @return true if this gui is open
      */
     public boolean isOpen() {
@@ -49,9 +50,10 @@ public class Gui extends GuiScreen {
      * Registers a method to be ran while gui is open.
      * Registered method runs on draw.<br>
      * Arguments passed through to method:<br>
-     *     int mouseX<br>
-     *     int mouseY<br>
-     *     float partialTicks
+     * int mouseX<br>
+     * int mouseY<br>
+     * float partialTicks
+     *
      * @param methodName the method to run
      * @return the trigger
      */
@@ -64,9 +66,10 @@ public class Gui extends GuiScreen {
      * Registers a method to be ran while gui is open.
      * Registered method runs on mouse click.<br>
      * Arguments passed through to method:<br>
-     *     int mouseX<br>
-     *     int mouseY<br>
-     *     int button
+     * int mouseX<br>
+     * int mouseY<br>
+     * int button
+     *
      * @param methodName the method to run
      * @return the trigger
      */
@@ -79,8 +82,9 @@ public class Gui extends GuiScreen {
      * Registers a method to be ran while gui is open.
      * Registered method runs on key input.<br>
      * Arguments passed through to method:<br>
-     *     char typed character<br>
-     *     int key code
+     * char typed character<br>
+     * int key code
+     *
      * @param methodName the method to run
      * @return the trigger
      */
@@ -92,6 +96,7 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on key input.
+     *
      * @param methodName the method to run
      * @return the trigger
      */
@@ -103,6 +108,7 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on key input.
+     *
      * @param methodName the method to run
      * @return the trigger
      */
@@ -114,6 +120,7 @@ public class Gui extends GuiScreen {
     /**
      * Registers a method to be ran while gui is open.
      * Registered method runs on key input.
+     *
      * @param methodName the method to run
      * @return the trigger
      */
@@ -190,9 +197,10 @@ public class Gui extends GuiScreen {
 
     /**
      * Add a base minecraft button to the gui
-     * @param buttonId id for the button
-     * @param x X position of the button
-     * @param y Y position of the button
+     *
+     * @param buttonId   id for the button
+     * @param x          X position of the button
+     * @param y          Y position of the button
      * @param buttonText the label of the button
      */
     public void addButton(int buttonId, int x, int y, String buttonText) {
@@ -201,11 +209,12 @@ public class Gui extends GuiScreen {
 
     /**
      * Add a base minecraft button to the gui
-     * @param buttonId id for the button
-     * @param x X position of the button
-     * @param y Y position of the button
-     * @param width the width of the button
-     * @param height the height of the button
+     *
+     * @param buttonId   id for the button
+     * @param x          X position of the button
+     * @param y          Y position of the button
+     * @param width      the width of the button
+     * @param height     the height of the button
      * @param buttonText the label of the button
      */
     public void addButton(int buttonId, int x, int y, int width, int height, String buttonText) {

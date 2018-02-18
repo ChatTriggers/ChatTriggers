@@ -173,6 +173,7 @@ public class Block {
 
     /**
      * Gets the current metadata of the block
+     *
      * @return the metadata
      */
     public int getMetadata() {
@@ -181,6 +182,7 @@ public class Block {
 
     /**
      * Checks whether this block can output redstone power
+     *
      * @return whether the block provides power
      */
     public boolean canProvidePower() {
@@ -189,6 +191,7 @@ public class Block {
 
     /**
      * Checks whether the block is receiving power
+     *
      * @return whether the block is receiving power
      */
     public boolean isPowered() {
@@ -197,6 +200,7 @@ public class Block {
 
     /**
      * Gets the redstone power level of the block
+     *
      * @return the redstone strength
      */
     public int getRedstoneStength() {
@@ -205,6 +209,7 @@ public class Block {
 
     /**
      * Checks whether the block can be mined with the tool in the player's hand
+     *
      * @return whether the block can be mined
      */
     public boolean canBeHarvested() {
@@ -213,10 +218,11 @@ public class Block {
 
     /**
      * Checks whether the block can be mined with a certain item
+     *
      * @param item the item to use when checking if the block can be broken
      * @return whether the block can be mined
      */
     public boolean canBeHarvestedWith(Item item) {
-        return ForgeHooks.canToolHarvestBlock(World.getWorld(), this.blockPos, item.getItemStack());
+        return item.canHarvest(this);
     }
 }

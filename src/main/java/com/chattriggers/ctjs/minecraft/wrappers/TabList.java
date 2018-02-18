@@ -12,11 +12,15 @@ import net.minecraft.world.WorldSettings;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 public class TabList {
     /**
      * Gets names set in scoreboard objectives (useful for newer games)
+     *
      * @return The formatted names
      */
     public static List<String> getNamesByObjectives() {
@@ -38,6 +42,7 @@ public class TabList {
 
     /**
      * Gets all names in tabs without formatting
+     *
      * @return the unformatted names
      */
     public static List<String> getNames() {
@@ -57,7 +62,8 @@ public class TabList {
 
     @SideOnly(Side.CLIENT)
     static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
-        private PlayerComparator(){}
+        private PlayerComparator() {
+        }
 
         public int compare(NetworkPlayerInfo p_compare_1_, NetworkPlayerInfo p_compare_2_) {
             ScorePlayerTeam scoreplayerteam = p_compare_1_.getPlayerTeam();

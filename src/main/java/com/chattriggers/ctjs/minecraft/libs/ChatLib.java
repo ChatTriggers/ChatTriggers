@@ -2,9 +2,8 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.objects.Message;
-import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
-import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
@@ -29,7 +28,8 @@ public class ChatLib {
 
     /**
      * Adds as many chat message to chat as passed.
-     * @param message the message to be printed
+     *
+     * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
      */
     public static void chat(String message, boolean recursive) {
@@ -48,6 +48,7 @@ public class ChatLib {
     /**
      * Adds a message to chat (IS RECURSIVE! See {@link #chat(String, boolean)}
      * to specify it being recursive.
+     *
      * @param message the message to be printed
      */
     public static void chat(String message) {
@@ -56,7 +57,8 @@ public class ChatLib {
 
     /**
      * Print a {@link Message} in chat.
-     * @param message the message to be printed
+     *
+     * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
      */
     public static void chat(Message message, boolean recursive) {
@@ -75,6 +77,7 @@ public class ChatLib {
     /**
      * Print a {@link Message} in chat (not recursive by default. See {@link #chat(Message, boolean)}
      * to specify it being recursive.
+     *
      * @param message the message to be printed
      */
     public static void chat(Message message) {
@@ -85,7 +88,8 @@ public class ChatLib {
      * Add a chat message to chat, but with a special ID which allows
      * them to be clear with {@link #clearChat(int...)}.
      * This ID can't be used more than once.
-     * @param message the message to be printed
+     *
+     * @param message    the message to be printed
      * @param chatLineID the chat line to save the message under (pass to clearChat)
      */
     public static void chat(String message, int chatLineID) {
@@ -97,6 +101,7 @@ public class ChatLib {
 
     /**
      * Add a raw chat message to chat (no formatting).
+     *
      * @param message the message to be printed
      */
     public static void raw(String message) {
@@ -105,7 +110,8 @@ public class ChatLib {
 
     /**
      * Add a raw chat message to chat (no formatting).
-     * @param message the message to be printed
+     *
+     * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
      */
     public static void raw(String message, Boolean recursive) {
@@ -123,7 +129,8 @@ public class ChatLib {
 
     /**
      * Add a raw chat message to chat (no formatting).
-     * @param message the message to be printed
+     *
+     * @param message    the message to be printed
      * @param chatLineID the chat line to save the message under (pass to clearChat)
      */
     public static void raw(String message, int chatLineID) {
@@ -145,6 +152,7 @@ public class ChatLib {
 
     /**
      * Say chat message.
+     *
      * @param message the message to be sent
      */
     public static void say(String message) {
@@ -155,6 +163,7 @@ public class ChatLib {
 
     /**
      * Run a command.
+     *
      * @param command the command to run, without the leading slash (Ex. "help")
      */
     public static void command(String command) {
@@ -172,6 +181,7 @@ public class ChatLib {
 
     /**
      * Clear chat messages with the specified ID
+     *
      * @param chatLineIDs the id(s) to be cleared
      */
     public static void clearChat(int... chatLineIDs) {
@@ -183,6 +193,7 @@ public class ChatLib {
     /**
      * Get a message that will be perfectly one line of chat,
      * the sepearator repeated as many times as necessary.
+     *
      * @param seperator the message to split chat with
      * @return the message that would split chat
      */
@@ -199,6 +210,7 @@ public class ChatLib {
 
     /**
      * Gets the width of minecraft's chat
+     *
      * @return the width of chat
      */
     public static int getChatWidth() {
@@ -207,6 +219,7 @@ public class ChatLib {
 
     /**
      * Remove all formatting
+     *
      * @param toRemove the string to un-format
      * @return the unformatted string
      */
@@ -217,6 +230,7 @@ public class ChatLib {
 
     /**
      * Replaces minecraft formatted text with normal formatted text
+     *
      * @param toUnformat the formatted string
      * @return the unformatted string
      */
@@ -226,6 +240,7 @@ public class ChatLib {
 
     /**
      * Get a message that will be perfectly centered in chat.
+     *
      * @param input the text to be centered
      * @return the centered message
      */
@@ -253,8 +268,9 @@ public class ChatLib {
 
     /**
      * Edits an already sent chat message
+     *
      * @param chatMessage the unformatted text of the message to be replaced
-     * @param toReplace the new message to be put in replace of the old one
+     * @param toReplace   the new message to be put in replace of the old one
      */
     public static void editChat(String chatMessage, String toReplace) {
         editChat(chatMessage, toReplace, false);
@@ -262,8 +278,9 @@ public class ChatLib {
 
     /**
      * Edits an already sent chat message
+     *
      * @param chatMessage the unformatted text of the message to be replaced
-     * @param toReplace the new message to be put in replace of the old one
+     * @param toReplace   the new message to be put in replace of the old one
      */
     public static void editChat(String chatMessage, String toReplace, boolean once) {
         List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
@@ -301,9 +318,10 @@ public class ChatLib {
     /**
      * Create a clickable message in chat, to be used with {@link Message}.
      * Also shows text on hover.
-     * @param text the text to show in the message
-     * @param action the action to perform
-     * @param value the value to perform the action with
+     *
+     * @param text      the text to show in the message
+     * @param action    the action to perform
+     * @param value     the value to perform the action with
      * @param hoverText the text to show when hovered over
      * @return the chat component created
      */
@@ -325,9 +343,10 @@ public class ChatLib {
 
     /**
      * Create a clickable message in chat, to be used with {@link Message}.
-     * @param text the text to show in the message
+     *
+     * @param text   the text to show in the message
      * @param action the action to perform
-     * @param value the value to perform the action with
+     * @param value  the value to perform the action with
      * @return the chat component created
      */
     public static IChatComponent clickable(String text, String action, String value) {
@@ -336,7 +355,8 @@ public class ChatLib {
 
     /**
      * Create a hoverable message in chat, to be used with {@link Message}
-     * @param text the text to show in the message
+     *
+     * @param text  the text to show in the message
      * @param hover the text to show when hovered over
      * @return the chat component created
      */
@@ -352,10 +372,11 @@ public class ChatLib {
 
     /**
      * Get the text of a chat event.
+     *
      * @param event     The chat event passed in by a chat trigger
      * @param formatted If true, returns formatted text. Otherwise, returns
-     *                   unformatted text
-     * @return          The text of the event
+     *                  unformatted text
+     * @return The text of the event
      */
     public static String getChatMessage(ClientChatReceivedEvent event, boolean formatted) {
         if (formatted) {
@@ -367,8 +388,9 @@ public class ChatLib {
 
     /**
      * Get the unformatted text of a chat event.
+     *
      * @param event The chat event passed in by a chat trigger
-     * @return      The unformatted text
+     * @return The unformatted text
      */
     public static String getChatMessage(ClientChatReceivedEvent event) {
         return getChatMessage(event, false);
@@ -385,6 +407,7 @@ public class ChatLib {
 
     /**
      * Replaces the easier to type '&amp;' color codes with proper color codes in a string.
+     *
      * @param message The string to add color codes to
      * @return the formatted message
      */

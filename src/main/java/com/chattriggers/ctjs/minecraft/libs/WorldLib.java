@@ -1,10 +1,8 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
-import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
-import com.chattriggers.ctjs.minecraft.wrappers.World;
 import lombok.experimental.UtilityClass;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -13,9 +11,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class WorldLib {
     /**
      * Play a sound at the player location.
-     * @param name the name of the sound
+     *
+     * @param name   the name of the sound
      * @param volume the volume of the sound
-     * @param pitch the pitch of the sound
+     * @param pitch  the pitch of the sound
      */
     public static void playSound(String name, float volume, float pitch) {
         Player.getPlayer().playSound(name, volume, pitch);
@@ -23,11 +22,12 @@ public class WorldLib {
 
     /**
      * Display a title.
-     * @param title title text
+     *
+     * @param title    title text
      * @param subtitle subtitle text
-     * @param fadeIn time to fade in
-     * @param time time to stay on screen
-     * @param fadeOut time to fade out
+     * @param fadeIn   time to fade in
+     * @param time     time to stay on screen
+     * @param fadeOut  time to fade out
      */
     public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
         Client.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut);

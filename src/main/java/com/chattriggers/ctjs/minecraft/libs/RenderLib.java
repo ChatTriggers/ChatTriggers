@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.experimental.UtilityClass;
@@ -49,40 +49,41 @@ public class RenderLib {
 
     /**
      * Gets a color based off of a hex integer input
+     *
      * @param color the hex integer
      * @return the color
      */
     public static int getColor(int color) {
-        switch(color) {
-            case(0):
+        switch (color) {
+            case (0):
                 return BLACK;
-            case(1):
+            case (1):
                 return DARK_BLUE;
-            case(2):
+            case (2):
                 return DARK_GREEN;
-            case(3):
+            case (3):
                 return DARK_AQUA;
-            case(4):
+            case (4):
                 return DARK_RED;
-            case(5):
+            case (5):
                 return DARK_PURPLE;
-            case(6):
+            case (6):
                 return GOLD;
-            case(7):
+            case (7):
                 return GRAY;
-            case(8):
+            case (8):
                 return DARK_GRAY;
-            case(9):
+            case (9):
                 return BLUE;
-            case(10):
+            case (10):
                 return GREEN;
-            case(11):
+            case (11):
                 return AQUA;
-            case(12):
+            case (12):
                 return RED;
-            case(13):
+            case (13):
                 return LIGHT_PURPLE;
-            case(14):
+            case (14):
                 return YELLOW;
             default:
                 return WHITE;
@@ -91,6 +92,7 @@ public class RenderLib {
 
     /**
      * Gets the font renderer object.
+     *
      * @return the font renderer object
      */
     public static FontRenderer getFontRenderer() {
@@ -99,6 +101,7 @@ public class RenderLib {
 
     /**
      * Gets a strings width.
+     *
      * @param text the text to get the width of
      * @return the width of the text
      */
@@ -108,8 +111,9 @@ public class RenderLib {
 
     /**
      * Returns a wrapped list of lines based on a max width with a max number of lines.
-     * @param lines the input list of lines
-     * @param width the max width of a line
+     *
+     * @param lines    the input list of lines
+     * @param width    the max width of a line
      * @param maxLines the max number of lines
      * @return the wrapped line list
      */
@@ -158,7 +162,7 @@ public class RenderLib {
             if (lines.size() > maxLines) {
                 addExtra = true;
                 while (lines.size() > maxLines) {
-                    lines.remove(lines.size()-1);
+                    lines.remove(lines.size() - 1);
                 }
                 break;
             }
@@ -171,9 +175,10 @@ public class RenderLib {
 
     /**
      * Draws a string to the screen.
-     * @param text the text to draw
-     * @param x the x coordinate on screen
-     * @param y the y coordinate on screen
+     *
+     * @param text  the text to draw
+     * @param x     the x coordinate on screen
+     * @param y     the y coordinate on screen
      * @param scale scales the text size
      * @param color the color
      */
@@ -188,9 +193,10 @@ public class RenderLib {
 
     /**
      * Draws a string to the screen.
-     * @param text the text to draw
-     * @param x the x coordinate on screen
-     * @param y the y coordinate on screen
+     *
+     * @param text  the text to draw
+     * @param x     the x coordinate on screen
+     * @param y     the y coordinate on screen
      * @param color the color
      */
     public static void drawString(String text, float x, float y, int color) {
@@ -199,9 +205,10 @@ public class RenderLib {
 
     /**
      * Draws a string with drop shadow to the screen.
-     * @param text the text to draw
-     * @param x the x coordinate on screen
-     * @param y the y coordinate on screen
+     *
+     * @param text  the text to draw
+     * @param x     the x coordinate on screen
+     * @param y     the y coordinate on screen
      * @param scale scales the text size
      * @param color the color
      */
@@ -211,9 +218,10 @@ public class RenderLib {
 
     /**
      * Draws a string with drop shadow to the screen.
-     * @param text the text to draw
-     * @param x the x coordinate on screen
-     * @param y the y coordinate on screen
+     *
+     * @param text  the text to draw
+     * @param x     the x coordinate on screen
+     * @param y     the y coordinate on screen
      * @param color the color
      */
     public static void drawStringWithShadow(String text, float x, float y, int color) {
@@ -223,9 +231,10 @@ public class RenderLib {
     /**
      * Gets a color int based on 0-255 rgba values.
      * This can be used in settings background and text color.
-     * @param red value between 0 and 255
+     *
+     * @param red   value between 0 and 255
      * @param green value between 0 and 255
-     * @param blue value between 0 and 255
+     * @param blue  value between 0 and 255
      * @param alpha value between 0 and 255
      * @return integer color
      */
@@ -235,7 +244,8 @@ public class RenderLib {
 
     /**
      * Gets a determined rainbow color based on step and speed.
-     * @param step time elapsed
+     *
+     * @param step  time elapsed
      * @param speed speed of time
      * @return integer color
      */
@@ -243,12 +253,13 @@ public class RenderLib {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
         int green = (int) ((Math.sin(step / speed + ((2 * Math.PI) / 3)) + 0.75) * 170);
         int blue = (int) ((Math.sin(step / speed + ((4 * Math.PI) / 3)) + 0.75) * 170);
-        return 0xff000000 + (limit255(red)*0x10000) + (limit255(green)*0x100) + limit255(blue);
+        return 0xff000000 + (limit255(red) * 0x10000) + (limit255(green) * 0x100) + limit255(blue);
     }
 
     /**
      * Gets a determined rainbow color array based on step and speed.
-     * @param step time elapsed
+     *
+     * @param step  time elapsed
      * @param speed speed of time
      * @return the array of colors {red,green,blue}
      */
@@ -256,11 +267,12 @@ public class RenderLib {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
         int green = (int) ((Math.sin(step / speed + ((2 * Math.PI) / 3)) + 0.75) * 170);
         int blue = (int) ((Math.sin(step / speed + ((4 * Math.PI) / 3)) + 0.75) * 170);
-        return new int[] {red, green, blue};
+        return new int[]{red, green, blue};
     }
 
     /**
      * Gets a determined rainbow color based on step with a default speed of 1.
+     *
      * @param step time elapsed
      * @return integer color
      */
@@ -275,6 +287,7 @@ public class RenderLib {
 
     /**
      * gets the current resolution width scaled to guiScale.
+     *
      * @return scaled width
      */
     public static int getRenderWidth() {
@@ -284,6 +297,7 @@ public class RenderLib {
 
     /**
      * gets the current resolution height scaled to guiScale.
+     *
      * @return scaled height
      */
     public static int getRenderHeight() {
@@ -295,11 +309,12 @@ public class RenderLib {
      * Draws a shape with a certain amount of sides, centered around
      * the x and y parameters. Ex. 5 segments makes a pentagon, 360
      * makes a circle.
+     *
      * @param segments the number of sides the shape should have
-     * @param color the color of the shape
-     * @param x the x coordinate for the shape to be centered around
-     * @param y the y coordinate for the shape to be centered around
-     * @param r the radius of the shape
+     * @param color    the color of the shape
+     * @param x        the x coordinate for the shape to be centered around
+     * @param y        the y coordinate for the shape to be centered around
+     * @param r        the radius of the shape
      */
     public static void drawShape(int color, int segments, float x, float y, float r) {
         double theta = 2 * Math.PI / (segments);
@@ -319,7 +334,7 @@ public class RenderLib {
         GlStateManager.color(red, green, blue, alpha);
 
         GL11.glBegin(GL11.GL_LINE_LOOP);
-        for(int i = 0; i < segments; i++) {
+        for (int i = 0; i < segments; i++) {
             GL11.glVertex2d(unitCircleX * r + x, unitCircleY * r + y);
             xHolder = unitCircleX;
             unitCircleX = cos * unitCircleX - sin * unitCircleY;
@@ -332,10 +347,11 @@ public class RenderLib {
 
     /**
      * Draws a rectangle on screen with location x and y with width and height.
-     * @param color the color of the rectangle
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param width the width
+     *
+     * @param color  the color of the rectangle
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     * @param width  the width
      * @param height the height
      */
     public static void drawRectangle(int color, float x, float y, float width, float height) {
@@ -381,10 +397,11 @@ public class RenderLib {
 
     /**
      * Draws a line with thickness to the screen.
-     * @param color color of the line
+     *
+     * @param color     color of the line
      * @param thickness thickness of the line
-     * @param xy1 [x,y] array for point 1
-     * @param xy2 [x,y] array for point 2
+     * @param xy1       [x,y] array for point 1
+     * @param xy2       [x,y] array for point 2
      */
     public static void drawLine(int color, Double thickness, Double[] xy1, Double[] xy2) {
         if (xy1.length == 2 && xy2.length == 2) {
@@ -435,14 +452,15 @@ public class RenderLib {
 
     /**
      * Draws a polygon to the screen.
-     * @param color color of the polygon
+     *
+     * @param color  color of the polygon
      * @param points [x,y] array for points
      */
     public static void drawPolygon(int color, Double[]... points) {
-        float f3 = (float)(color >> 24 & 255) / 255.0F;
-        float f = (float)(color >> 16 & 255) / 255.0F;
-        float f1 = (float)(color >> 8 & 255) / 255.0F;
-        float f2 = (float)(color & 255) / 255.0F;
+        float f3 = (float) (color >> 24 & 255) / 255.0F;
+        float f = (float) (color >> 16 & 255) / 255.0F;
+        float f1 = (float) (color >> 8 & 255) / 255.0F;
+        float f2 = (float) (color & 255) / 255.0F;
 
         GlStateManager.pushMatrix();
 
@@ -462,7 +480,7 @@ public class RenderLib {
         }
 
         tessellator.draw();
-        GlStateManager.color(1, 1, 1,1);
+        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
 
@@ -473,14 +491,15 @@ public class RenderLib {
      * Draws an image to the screen.<br>
      * Images must be in the modules /assets/ directory on launch, <br>
      * and have a size of 256x256.
-     * @param resourceName the file name, i.e. block.png
-     * @param renderXLoc the x position on the screen to render to
-     * @param renderYLoc the y position on the screen to render to
-     * @param textureMapX the x position on the image to start rendering from, usually 0
-     * @param textureMapY the y position on the image to start rendering from, usually 0
-     * @param textureWidth the width of the image to render, usually 256
+     *
+     * @param resourceName  the file name, i.e. block.png
+     * @param renderXLoc    the x position on the screen to render to
+     * @param renderYLoc    the y position on the screen to render to
+     * @param textureMapX   the x position on the image to start rendering from, usually 0
+     * @param textureMapY   the y position on the image to start rendering from, usually 0
+     * @param textureWidth  the width of the image to render, usually 256
      * @param textureHeight the height of the image to render, usually 256
-     * @param scale the scale of the image, can use decimals, i.e. 0.5, 1.5
+     * @param scale         the scale of the image, can use decimals, i.e. 0.5, 1.5
      */
     public static void drawImage(String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
@@ -492,15 +511,16 @@ public class RenderLib {
      * Draws an image to the screen.<br>
      * Images must be in the modules /assets/ directory on launch, <br>
      * and have a size of 256x256.
+     *
      * @param resourceDomain the domain of the file, i.e minecraft
-     * @param resourceName the file name, i.e. block.png
-     * @param renderXLoc the x position on the screen to render to
-     * @param renderYLoc the y position on the screen to render to
-     * @param textureMapX the x position on the image to start rendering from, usually 0
-     * @param textureMapY the y position on the image to start rendering from, usually 0
-     * @param textureWidth the width of the image to render, usually 256
-     * @param textureHeight the height of the image to render, usually 256
-     * @param scale the scale of the image, can use decimals, i.e. 0.5, 1.5
+     * @param resourceName   the file name, i.e. block.png
+     * @param renderXLoc     the x position on the screen to render to
+     * @param renderYLoc     the y position on the screen to render to
+     * @param textureMapX    the x position on the image to start rendering from, usually 0
+     * @param textureMapY    the y position on the image to start rendering from, usually 0
+     * @param textureWidth   the width of the image to render, usually 256
+     * @param textureHeight  the height of the image to render, usually 256
+     * @param scale          the scale of the image, can use decimals, i.e. 0.5, 1.5
      */
     public static void drawImage(String resourceDomain, String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
@@ -524,7 +544,7 @@ public class RenderLib {
 
         GL11.glPopMatrix();
     }
-    
+
     public static void downloadImage(String url, String resourceName) {
         downloadImage(url, resourceName, true);
     }
@@ -532,20 +552,20 @@ public class RenderLib {
     public static void downloadImage(String url, String resourceName, boolean shouldResize) {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
-            
+
             if (shouldResize) {
                 BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g = resized.createGraphics();
                 g.drawImage(image, 0, 0, 256, 256, null);
                 g.dispose();
 
-            File resourceFile = new File(CTJS.getInstance().getAssetsDir(), resourceName);
+                File resourceFile = new File(CTJS.getInstance().getAssetsDir(), resourceName);
 
-            if (resourceFile.exists()) {
-                resourceFile.delete();
-            }
+                if (resourceFile.exists()) {
+                    resourceFile.delete();
+                }
 
-            resourceFile.createNewFile();
+                resourceFile.createNewFile();
 
                 ImageIO.write(resized, "png", resourceFile);
             } else {
@@ -562,10 +582,10 @@ public class RenderLib {
     /**
      * Renders an item icon on screen.
      *
-     * @param x x coordinate to render item icon to
-     * @param y y coordinate to render item icon to
-     * @param scale scales the icon size
-     * @param item name or id of item to render
+     * @param x        x coordinate to render item icon to
+     * @param y        y coordinate to render item icon to
+     * @param scale    scales the icon size
+     * @param item     name or id of item to render
      * @param metadata metadata of item to render
      */
     public static void drawItemIcon(int x, int y, float scale, String item, Integer metadata) {
@@ -609,9 +629,9 @@ public class RenderLib {
     /**
      * Renders an item icon on screen.
      *
-     * @param x x coordinate to render item icon to
-     * @param y y coordinate to render item icon to
-     * @param item name or id of item to render
+     * @param x        x coordinate to render item icon to
+     * @param y        y coordinate to render item icon to
+     * @param item     name or id of item to render
      * @param metadata metadata of item to render
      */
     public static void drawItemIcon(int x, int y, String item, Integer metadata) {
@@ -620,9 +640,9 @@ public class RenderLib {
 
     /**
      * Renders an item icon on screen.
-     * 
-     * @param x x coordinate to render item icon to
-     * @param y y coordinate to render item icon to
+     *
+     * @param x    x coordinate to render item icon to
+     * @param y    y coordinate to render item icon to
      * @param item name or id of item to render
      */
     public static void drawItemIcon(int x, int y, String item) {
@@ -631,9 +651,10 @@ public class RenderLib {
 
     /**
      * Render the player model on to the screen
-     * @param posX the x position on the screen
-     * @param posY the y position on the screen
-     * @param scale how much to scale the entity by
+     *
+     * @param posX   the x position on the screen
+     * @param posY   the y position on the screen
+     * @param scale  how much to scale the entity by
      * @param rotate whether or not the drawn player should rotate
      */
     public static void drawPlayerOnScreen(int posX, int posY, int scale, boolean rotate) {
@@ -643,8 +664,8 @@ public class RenderLib {
 
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)posX, (float)posY, 50.0F);
-        GlStateManager.scale((float)(-scale), (float)scale, (float)scale);
+        GlStateManager.translate((float) posX, (float) posY, 50.0F);
+        GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         float f = ent.renderYawOffset;
         float f1 = ent.rotationYaw;
@@ -654,7 +675,7 @@ public class RenderLib {
         GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
         GlStateManager.rotate(-45.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-((float)Math.atan((double)(mouseY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(-((float) Math.atan((double) (mouseY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
         if (!rotate) {
             ent.renderYawOffset = (float) Math.atan((double) (mouseX / 40.0F)) * 20.0F;
             ent.rotationYaw = (float) Math.atan((double) (mouseX / 40.0F)) * 40.0F;

@@ -1,17 +1,34 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
+import lombok.Getter;
+import net.minecraft.inventory.IInventory;
 
 public class Inventory {
-    /**
-     * Gets the slot of the player's currently held item.
-     * @return {@link Item} of currently selected hotbar position.
-     */
-    public static Item getHeldItem() {
-        return new Item(Player.getPlayer().inventory.getCurrentItem());
+    @Getter
+    private IInventory inventory;
+
+    public Inventory(IInventory inventory) {
+        this.inventory = inventory;
     }
 
-    public static Item getItemInSlot(int slot) {
-        return new Item(Player.getPlayer().getInventory()[slot]);
+    public int getSize() {
+        return this.inventory.getSizeInventory();
+    }
+
+    public Item getStackInSlot(int slot) {
+        return new Item(this.inventory.getStackInSlot(slot));
+    }
+
+    public boolean isItemValidForSlot(int slot, Item item) {
+        return this.inventory.isItemValidForSlot(slot, item.getItemStack());
+    }
+
+    public String getName() {
+        return this.inventory.getName();
+    }
+
+    public String getClassName() {
+        return this.inventory.getClass().getSimpleName();
     }
 }

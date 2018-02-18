@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
@@ -16,6 +17,7 @@ public class Player {
 
     /**
      * Gets the player object.
+     *
      * @return the player object
      */
     public static EntityPlayerSP getPlayer() {
@@ -24,6 +26,7 @@ public class Player {
 
     /**
      * Gets the player's x position.
+     *
      * @return the player's x position
      */
     public static double getX() {
@@ -32,6 +35,7 @@ public class Player {
 
     /**
      * Gets the player's y position.
+     *
      * @return the player's y position
      */
     public static double getY() {
@@ -40,6 +44,7 @@ public class Player {
 
     /**
      * Gets the player's z position.
+     *
      * @return the player's z position
      */
     public static double getZ() {
@@ -48,6 +53,7 @@ public class Player {
 
     /**
      * Gets the player's x motion.
+     *
      * @return the player's x motion
      */
     public static Double getMotionX() {
@@ -56,6 +62,7 @@ public class Player {
 
     /**
      * Gets the player's y motion.
+     *
      * @return the player's y motion
      */
     public static Double getMotionY() {
@@ -64,6 +71,7 @@ public class Player {
 
     /**
      * Gets the player's z motion.
+     *
      * @return the player's z motion
      */
     public static Double getMotionZ() {
@@ -72,6 +80,7 @@ public class Player {
 
     /**
      * Gets the player's camera pitch.
+     *
      * @return the player's camera pitch
      */
     public static Float getPitch() {
@@ -80,6 +89,7 @@ public class Player {
 
     /**
      * Gets the player's camera yaw.
+     *
      * @return the player's camera yaw
      */
     public static Float getYaw() {
@@ -88,6 +98,7 @@ public class Player {
 
     /**
      * Gets the player's username.
+     *
      * @return the player's username
      */
     public static String getName() {
@@ -96,6 +107,7 @@ public class Player {
 
     /**
      * Gets the player's uuid.
+     *
      * @return the player's uuid
      */
     public static String getUUID() {
@@ -104,6 +116,7 @@ public class Player {
 
     /**
      * Gets the player's hp.
+     *
      * @return the player's hp
      */
     public static Float getHP() {
@@ -112,6 +125,7 @@ public class Player {
 
     /**
      * Gets the player's hunger.
+     *
      * @return the player's hunger
      */
     public static Integer getHunger() {
@@ -120,6 +134,7 @@ public class Player {
 
     /**
      * Gets the player's saturation.
+     *
      * @return the player's saturation
      */
     public static Float getSaturation() {
@@ -128,6 +143,7 @@ public class Player {
 
     /**
      * Gets the player's armor points.
+     *
      * @return the player's armor points
      */
     public static Integer getArmorPoints() {
@@ -148,6 +164,7 @@ public class Player {
 
     /**
      * Gets the player's xp level.
+     *
      * @return the player's xp level
      */
     public static Integer getXPLevel() {
@@ -156,6 +173,7 @@ public class Player {
 
     /**
      * Gets the player's xp progress.
+     *
      * @return the player's xp progress
      */
     public static Float getXPProgress() {
@@ -164,6 +182,7 @@ public class Player {
 
     /**
      * Gets the biome the player is currently in.
+     *
      * @return the biome name
      */
     public static String getBiome() {
@@ -179,6 +198,7 @@ public class Player {
 
     /**
      * Gets the light level at the player's current position.
+     *
      * @return the light level at the player's current position
      */
     public static Integer getLightLevel() {
@@ -189,6 +209,7 @@ public class Player {
 
     /**
      * Checks if if the player is sneaking.
+     *
      * @return true if the player is sneaking, false otherwise
      */
     public static boolean isSneaking() {
@@ -197,6 +218,7 @@ public class Player {
 
     /**
      * Checks if the player is sprinting.
+     *
      * @return true if the player is sprinting, false otherwise
      */
     public static boolean isSprinting() {
@@ -205,22 +227,25 @@ public class Player {
 
     /**
      * Checks if player can be pushed by water.
+     *
      * @return true if the player is flying, false otherwise
      */
-    public static boolean isFlying(){
+    public static boolean isFlying() {
         return !(getPlayer() != null && getPlayer().isPushedByWater());
     }
 
     /**
      * Checks if player is sleeping.
+     *
      * @return true if the player is sleeping, false otherwise
      */
-    public static boolean isSleeping(){
+    public static boolean isSleeping() {
         return getPlayer() != null && getPlayer().isPlayerSleeping();
     }
 
     /**
      * Gets the direction the player is facing.
+     *
      * @return The direction the player is facing, one of the four cardinal directions
      */
     public static String facing() {
@@ -230,7 +255,7 @@ public class Player {
 
         Float yaw = getYaw();
 
-        if(yaw < 22.5 && yaw > -22.5) {
+        if (yaw < 22.5 && yaw > -22.5) {
             return "South";
         } else if (yaw < 67.5 && yaw > 22.5) {
             return "South West";
@@ -253,13 +278,14 @@ public class Player {
 
     /**
      * Gets the player's active potion effects.\
+     *
      * @return The player's active potion effects.
      */
     public static String[] getActivePotionEffects() {
         if (getPlayer() == null) return new String[]{};
 
         ArrayList<String> effects = new ArrayList<>();
-        for(PotionEffect effect : getPlayer().getActivePotionEffects()){
+        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
             effects.add(effect.toString());
         }
         return effects.toArray(new String[effects.size()]);
@@ -267,6 +293,7 @@ public class Player {
 
     /**
      * Gets the current {@link Block} that the player is looking at.
+     *
      * @return the {@link Block}
      */
     public static Block lookingAt() {
@@ -288,6 +315,7 @@ public class Player {
 
     /**
      * Gets the player's currently held item.
+     *
      * @return the item
      */
     public static Item getHeldItem() {
