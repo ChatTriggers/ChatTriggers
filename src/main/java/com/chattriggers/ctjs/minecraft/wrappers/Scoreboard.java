@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
+import net.minecraftforge.client.GuiIngameForge;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import java.util.Collection;
  *
  * @author palechip
  */
-public class ScoreboardReader {
+public class Scoreboard {
     private static boolean needsUpdate = true;
     private static ArrayList<String> scoreboardNames;
     private static String scoreboardTitle;
@@ -24,7 +24,7 @@ public class ScoreboardReader {
     }
 
     // prevent instantiation
-    private ScoreboardReader() {
+    private Scoreboard() {
     }
 
     /**
@@ -50,13 +50,42 @@ public class ScoreboardReader {
      * Get all currently visible strings on the scoreboard. (excluding title)
      * Be aware that this can contain color codes.
      */
-    public static ArrayList<String> getScoreboardNames() {
+    public static ArrayList<String> getLines() {
         // the array will only be updated upon request
         if (needsUpdate) {
             updateNames();
             needsUpdate = false;
         }
         return scoreboardNames;
+    }
+
+    /**
+     * Gets the line at the specified index (0 based)
+     * Equivalent to Scoreboard.getLines().get(index)
+     *
+     * @param index the line index
+     * @return the string at the index
+     */
+    public static String getLine(int index) {
+        return getLines().get(index);
+    }
+
+    /**
+     * Sets whether the scoreboard should be rendered
+     *
+     * @param shouldRender whether the scoreboard should be rendered
+     */
+    public static void setShouldRender(boolean shouldRender) {
+        GuiIngameForge.renderObjective = shouldRender;
+    }
+
+    /**
+     * Gets if the scoreboard should be rendered
+     *
+     * @return whether the scoreboard whether the scoreboard should be rendered
+     */
+    public static boolean getShouldRender() {
+        return GuiIngameForge.renderObjective;
     }
 
     private static void updateNames() {
@@ -70,7 +99,7 @@ public class ScoreboardReader {
 
         try {
             // Get the scoreboard.
-            Scoreboard scoreboard = World.getWorld().getScoreboard();
+            net.minecraft.scoreboard.Scoreboard scoreboard = World.getWorld().getScoreboard();
             // Get the right objective. I think the 1 stands for the sidebar objective but I've just copied it from the rendering code.
             ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
             // only update if there actually is something to update
