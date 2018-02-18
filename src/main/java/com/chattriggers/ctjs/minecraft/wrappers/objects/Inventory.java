@@ -104,4 +104,9 @@ public class Inventory {
     public String getClassName() {
         return this.inventory != null ? this.inventory.getClass().getSimpleName() : this.container.getClass().getSimpleName();
     }
+
+    @Override
+    public String toString() {
+        return "Inventory{" + getClassName() + "}";
+    }
 }
