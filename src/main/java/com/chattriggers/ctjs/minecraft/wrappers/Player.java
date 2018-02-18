@@ -329,4 +329,38 @@ public class Player {
     public static Inventory getOpenedInventory() {
         return new Inventory(getPlayer().openContainer);
     }
+
+    public static class armor {
+        /**
+         * Gets the item in the player's helmet slot
+         * @return the {@link Item} in the helmet slot
+         */
+        public static Item getHelmet() {
+            return getInventory().getStackInSlot(36);
+        }
+
+        /**
+         * Gets the item in the player's chestplate slot
+         * @return the {@link Item} in the chestplate slot
+         */
+        public static Item getChestplate() {
+            return getInventory().getStackInSlot(37);
+        }
+
+        /**
+         * Gets the item in the player's leggings slot
+         * @return the {@link Item} in the leggings slot
+         */
+        public static Item getLeggings() {
+            return getInventory().getStackInSlot(38);
+        }
+
+        /**
+         * Gets the item in the player's boots slot
+         * @return the {@link Item} in the boots slot
+         */
+        public static Item getBoots() {
+            return getInventory().getStackInSlot(39);
+        }
+    }
 }
