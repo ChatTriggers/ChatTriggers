@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -295,25 +296,27 @@ public class Player {
     }
 
     /**
-     * Gets the current {@link Block} that the player is looking at.
+     * Gets the current object that the player is looking at,
+     * whether that be null, a block, or an entity
      *
-     * @return the {@link Block}
+     * @return the {@link Block} or {@link Entity} being looked at
      */
-    public static Block lookingAt() {
+    public static Object lookingAt() {
         if (getPlayer() == null
                 || World.getWorld() == null
                 || Client.getMinecraft().objectMouseOver == null)
-            return new Block(0);
+            return null;
 
         MovingObjectPosition mop = Client.getMinecraft().objectMouseOver;
 
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             BlockPos pos = mop.getBlockPos();
             return new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
+        } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+            return new Entity(mop.entityHit);
+        } else {
+            return null;
         }
-
-        //TODO add entity support
-        return new Block(0);
     }
 
     /**
