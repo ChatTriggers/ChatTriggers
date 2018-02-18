@@ -53,28 +53,31 @@ public class Player {
 
     /**
      * Gets the player's x motion.
+     * This is the amount the player will move in the x direction next tick.
      *
      * @return the player's x motion
      */
-    public static Double getMotionX() {
+    public static double getMotionX() {
         return getPlayer() == null ? 0 : getPlayer().motionX;
     }
 
     /**
      * Gets the player's y motion.
+     * This is the amount the player will move in the y direction next tick.
      *
      * @return the player's y motion
      */
-    public static Double getMotionY() {
+    public static double getMotionY() {
         return getPlayer() == null ? 0 : getPlayer().motionY;
     }
 
     /**
      * Gets the player's z motion.
+     * This is the amount the player will move in the z direction next tick.
      *
      * @return the player's z motion
      */
-    public static Double getMotionZ() {
+    public static double getMotionZ() {
         return getPlayer() == null ? 0 : getPlayer().motionZ;
     }
 
@@ -83,7 +86,7 @@ public class Player {
      *
      * @return the player's camera pitch
      */
-    public static Float getPitch() {
+    public static float getPitch() {
         return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
     }
 
@@ -92,7 +95,7 @@ public class Player {
      *
      * @return the player's camera yaw
      */
-    public static Float getYaw() {
+    public static float getYaw() {
         return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
     }
 
@@ -119,7 +122,7 @@ public class Player {
      *
      * @return the player's hp
      */
-    public static Float getHP() {
+    public static float getHP() {
         return getPlayer() == null ? 0 : getPlayer().getHealth();
     }
 
@@ -128,7 +131,7 @@ public class Player {
      *
      * @return the player's hunger
      */
-    public static Integer getHunger() {
+    public static int getHunger() {
         return getPlayer() == null ? 0 : getPlayer().getFoodStats().getFoodLevel();
     }
 
@@ -137,7 +140,7 @@ public class Player {
      *
      * @return the player's saturation
      */
-    public static Float getSaturation() {
+    public static float getSaturation() {
         return getPlayer() == null ? 0 : getPlayer().getFoodStats().getSaturationLevel();
     }
 
@@ -146,7 +149,7 @@ public class Player {
      *
      * @return the player's armor points
      */
-    public static Integer getArmorPoints() {
+    public static int getArmorPoints() {
         return getPlayer() == null ? 0 : getPlayer().getTotalArmorValue();
     }
 
@@ -158,7 +161,7 @@ public class Player {
      *
      * @return the player's air level
      */
-    public static Integer getAirLevel() {
+    public static int getAirLevel() {
         return getPlayer() == null ? 0 : getPlayer().getAir();
     }
 
@@ -167,7 +170,7 @@ public class Player {
      *
      * @return the player's xp level
      */
-    public static Integer getXPLevel() {
+    public static int getXPLevel() {
         return getPlayer() == null ? 0 : getPlayer().experienceLevel;
     }
 
@@ -176,7 +179,7 @@ public class Player {
      *
      * @return the player's xp progress
      */
-    public static Float getXPProgress() {
+    public static float getXPProgress() {
         return getPlayer() == null ? 0 : getPlayer().experience;
     }
 
@@ -201,7 +204,7 @@ public class Player {
      *
      * @return the light level at the player's current position
      */
-    public static Integer getLightLevel() {
+    public static int getLightLevel() {
         if (getPlayer() == null || World.getWorld() == null) return 0;
 
         return World.getWorld().getLight(getPlayer().getPosition());
