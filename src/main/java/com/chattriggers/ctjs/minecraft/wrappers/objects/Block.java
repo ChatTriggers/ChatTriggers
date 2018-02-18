@@ -1,10 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.chattriggers.ctjs.minecraft.wrappers.World;
 import lombok.Getter;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.common.ForgeHooks;
 
 public class Block {
     @Getter
@@ -107,8 +108,8 @@ public class Block {
      * Gets the block's block state.
      * @return the block's block state
      */
-    public BlockState getState() {
-        return this.block.getBlockState();
+    public IBlockState getState() {
+        return World.getWorld().getBlockState(this.blockPos);
     }
 
     /**
@@ -152,5 +153,54 @@ public class Block {
      */
     public int getZ() {
         return this.blockPos.getZ();
+    }
+
+    /**
+     * Gets the current metadata of the block
+     * @return the metadata
+     */
+    public int getMetadata() {
+        return this.block.getMetaFromState(this.getState());
+    }
+
+    /**
+     * Checks whether this block can output redstone power
+     * @return whether the block provides power
+     */
+    public boolean canProvidePower() {
+        return this.block.canProvidePower();
+    }
+
+    /**
+     * Checks whether the block is receiving power
+     * @return whether the block is receiving power
+     */
+    public boolean isPowered() {
+        return World.getWorld().isBlockPowered(this.blockPos);
+    }
+
+    /**
+     * Gets the redstone power level of the block
+     * @return the redstone strength
+     */
+    public int getRedstoneStength() {
+        return World.getWorld().getStrongPower(this.blockPos);
+    }
+
+    /**
+     * Checks whether the block can be mined with the tool in the player's hand
+     * @return whether the block can be mined
+     */
+    public boolean canHarvest() {
+        return this.block.canHarvestBlock(World.getWorld(), this.blockPos, Player.getPlayer());
+    }
+
+    /**
+     * Checks whether the block can be mined with a certain item
+     * @param item the item to use when checking if the block can be broken
+     * @return whether the block can be mined
+     */
+    public boolean canHarvestWith(Item item) {
+        return ForgeHooks.canToolHarvestBlock(World.getWorld(), this.blockPos, item.getItemStack());
     }
 }
