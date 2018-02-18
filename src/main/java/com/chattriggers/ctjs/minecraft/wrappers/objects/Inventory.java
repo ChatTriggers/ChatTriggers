@@ -1,6 +1,5 @@
-package com.chattriggers.ctjs.minecraft.wrappers;
+package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import lombok.Getter;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;

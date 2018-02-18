@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.experimental.UtilityClass;
 import net.minecraftforge.fml.relauncher.Side;

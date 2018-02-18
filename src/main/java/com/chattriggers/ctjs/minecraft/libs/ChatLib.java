@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.objects.Message;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;

@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Inventory;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
@@ -306,7 +306,7 @@ public class Player {
         if (getPlayer() == null
                 || World.getWorld() == null
                 || Client.getMinecraft().objectMouseOver == null)
-            return new Block(0);;
+            return new Block(0);
 
         MovingObjectPosition mop = Client.getMinecraft().objectMouseOver;
 

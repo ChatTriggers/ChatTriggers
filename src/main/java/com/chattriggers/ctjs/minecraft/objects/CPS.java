@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
 
 import java.util.ArrayList;

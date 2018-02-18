@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.wrappers.objects;
+package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;

@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Client;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.UUID;
