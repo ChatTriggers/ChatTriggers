@@ -207,7 +207,7 @@ public class Block {
      * Checks whether the block can be mined with the tool in the player's hand
      * @return whether the block can be mined
      */
-    public boolean canHarvest() {
+    public boolean canBeHarvested() {
         return this.block.canHarvestBlock(World.getWorld(), this.blockPos, Player.getPlayer());
     }
 
@@ -216,7 +216,7 @@ public class Block {
      * @param item the item to use when checking if the block can be broken
      * @return whether the block can be mined
      */
-    public boolean canHarvestWith(Item item) {
+    public boolean canBeHarvestedWith(Item item) {
         return ForgeHooks.canToolHarvestBlock(World.getWorld(), this.blockPos, item.getItemStack());
     }
 }
