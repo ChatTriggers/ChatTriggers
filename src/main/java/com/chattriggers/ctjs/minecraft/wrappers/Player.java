@@ -289,9 +289,11 @@ public class Player {
         if (getPlayer() == null) return new String[]{};
 
         ArrayList<String> effects = new ArrayList<>();
+
         for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
             effects.add(effect.toString());
         }
+
         return effects.toArray(new String[effects.size()]);
     }
 

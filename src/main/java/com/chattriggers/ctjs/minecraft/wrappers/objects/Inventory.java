@@ -32,6 +32,16 @@ public class Inventory {
         return this.inventory == null || this.inventory.isItemValidForSlot(slot, item.getItemStack());
     }
 
+    public boolean contains(Item item) {
+        for (int i = 0; i < getSize(); i++) {
+            Item itemInSlot = getStackInSlot(i);
+
+            if (itemInSlot.equals(item)) return true;
+        }
+
+        return false;
+    }
+
     public String getName() {
         return this.inventory != null ? this.inventory.getName() : "container";
     }

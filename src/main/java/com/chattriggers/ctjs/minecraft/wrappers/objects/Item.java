@@ -23,6 +23,10 @@ public class Item {
      * @param itemStack the minecraft ItemStack
      */
     public Item(ItemStack itemStack) {
+        if (itemStack == null) {
+            itemStack = new ItemStack(new Block(0).getBlock());
+        }
+
         this.item = itemStack.getItem();
         this.itemStack = itemStack;
     }
@@ -220,5 +224,16 @@ public class Item {
      */
     public Boolean isDamagable() {
         return this.itemStack.isItemStackDamageable();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Item) {
+            return this.itemStack.isItemEqual(((Item) obj).itemStack);
+        } else if (obj instanceof ItemStack) {
+            return this.itemStack.isItemEqual(((ItemStack) obj));
+        }
+
+        return false;
     }
 }
