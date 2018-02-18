@@ -224,4 +224,14 @@ public class Block {
     public boolean canBeHarvestedWith(Item item) {
         return item.canHarvest(this);
     }
+
+    @Override
+    public String toString() {
+        return "Block{"
+                + net.minecraft.block.Block.blockRegistry.getNameForObject(this.block)
+                + ",x:" + getX()
+                + ",y:" + getY()
+                + ",z:" + getZ()
+                + "}";
+    }
 }

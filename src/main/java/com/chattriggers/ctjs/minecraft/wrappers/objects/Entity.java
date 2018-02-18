@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 
@@ -136,5 +137,15 @@ public class Entity {
 
     public String getClassName() {
         return this.entity.getClass().getSimpleName();
+    }
+
+    @Override
+    public String toString() {
+        return "Entity{"
+                + EntityList.getEntityString(this.entity)
+                + ",x:" + getX()
+                + ",y:" + getY()
+                + ",z:" + getZ()
+                + "}";
     }
 }
