@@ -1,9 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import lombok.Getter;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Item {
@@ -116,12 +118,24 @@ public class Item {
     }
 
     /**
-     * Returns a map of the enchantments on an item.
+     * Returns a map of the enchantment name to level for all
+     * the enchantments on an item.
      *
      * @return the map of enchantments
      */
-    public Map<Integer, Integer> getEnchantments() {
-        return EnchantmentHelper.getEnchantments(this.itemStack);
+    public Map<String, Integer> getEnchantments() {
+        Map rawEnchants = EnchantmentHelper.getEnchantments(this.itemStack);
+        Map<String, Integer> mappedEnchants = new HashMap<>();
+
+        for (Object enchantObj : rawEnchants.entrySet()) {
+            Map.Entry<Integer, Integer> rawEnchant = (Map.Entry<Integer, Integer>) enchantObj;
+
+            Enchantment enchant = Enchantment.getEnchantmentById(rawEnchant.getKey());
+
+            mappedEnchants.put(enchant.getName().replace("enchantment.", ""), rawEnchant.getValue());
+        }
+
+        return mappedEnchants;
     }
 
     /**
