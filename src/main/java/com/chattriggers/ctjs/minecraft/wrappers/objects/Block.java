@@ -17,6 +17,7 @@ public class Block {
     /**
      * Creates a Block object from a minecraft block input.<br>
      * This method is not meant for public use.
+     *
      * @param block the minecraft block input
      */
     public Block(net.minecraft.block.Block block) {
@@ -25,6 +26,7 @@ public class Block {
 
     /**
      * Creates a Block object from a string name input.
+     *
      * @param blockName the name of the block
      */
     public Block(String blockName) {
@@ -33,6 +35,7 @@ public class Block {
 
     /**
      * Creates a Block object from an integer ID input.
+     *
      * @param blockID the ID of the block
      */
     public Block(int blockID) {
@@ -41,6 +44,7 @@ public class Block {
 
     /**
      * Creates a Block object from an {@link Item} object input.
+     *
      * @param item the {@link Item}
      */
     public Block(Item item) {
@@ -52,6 +56,7 @@ public class Block {
      * Sets the block position in the world.<br>
      * This is automatically set by {@link Player#lookingAt()}.<br>
      * This method is not meant for public use.
+     *
      * @param blockPos the block position
      * @return the Block object
      */
@@ -62,6 +67,7 @@ public class Block {
 
     /**
      * Gets the block's ID.
+     *
      * @return the block's ID
      */
     public int getID() {
@@ -71,6 +77,7 @@ public class Block {
     /**
      * Gets the block's registry name.<br>
      * Example: <code>minecraft:planks</code>
+     *
      * @return the block's registry name
      */
     public String getRegistryName() {
@@ -80,6 +87,7 @@ public class Block {
     /**
      * Gets the block's unlocalized name.<br>
      * Example: <code>tile.wood</code>
+     *
      * @return the block's unlocalized name
      */
     public String getUnlocalizedName() {
@@ -89,6 +97,7 @@ public class Block {
     /**
      * Gets the block's localized name.<br>
      * Example: <code>Wooden Planks</code>
+     *
      * @return the block's localized name
      */
     public String getName() {
@@ -98,6 +107,7 @@ public class Block {
     /**
      * Gets the block's light value.<br>
      * The level of light the block gives off.
+     *
      * @return the block's light value
      */
     public int getLightValue() {
@@ -106,6 +116,7 @@ public class Block {
 
     /**
      * Gets the block's block state.
+     *
      * @return the block's block state
      */
     public IBlockState getState() {
@@ -114,6 +125,7 @@ public class Block {
 
     /**
      * Gets the block's default state.
+     *
      * @return the block's default state
      */
     public IBlockState getDefaultState() {
@@ -122,6 +134,7 @@ public class Block {
 
     /**
      * Gets the block's meta from the default state.
+     *
      * @return the block's meta
      */
     public int getMeta() {
@@ -131,6 +144,7 @@ public class Block {
     /**
      * Gets the block's x position.<br>
      * 0 by default.
+     *
      * @return the block's x position
      */
     public int getX() {
@@ -140,6 +154,7 @@ public class Block {
     /**
      * Gets the block's y position.<br>
      * 0 by default.
+     *
      * @return the block's y position
      */
     public int getY() {
@@ -149,6 +164,7 @@ public class Block {
     /**
      * Gets the block's z position.<br>
      * 0 by default.
+     *
      * @return the block's z position
      */
     public int getZ() {

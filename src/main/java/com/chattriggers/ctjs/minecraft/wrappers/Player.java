@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;
@@ -283,5 +284,13 @@ public class Player {
 
         //TODO add entity support
         return new Block(0);
+    }
+
+    /**
+     * Gets the player's currently held item.
+     * @return the item
+     */
+    public static Item getHeldItem() {
+        return new Item(Player.getPlayer().inventory.getCurrentItem());
     }
 }

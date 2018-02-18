@@ -5,7 +5,6 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.capes.DLCape;
 import lombok.Getter;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -21,8 +20,6 @@ public class ModuleManager {
 
     public ModuleManager() {
         this.scriptLoaders = new ArrayList<>();
-
-        DLCape.getCapes();
     }
 
     public void load() {
