@@ -281,7 +281,7 @@ public class Player {
     }
 
     /**
-     * Gets the player's active potion effects.\
+     * Gets the player's active potion effects.
      *
      * @return The player's active potion effects.
      */

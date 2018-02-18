@@ -115,26 +115,61 @@ public class Entity {
                 : new Entity(this.entity.riddenByEntity);
     }
 
+    /**
+     * Checks whether or not the entity is dead.
+     * This is a fairly loose term, dead for a particle could mean it has faded,
+     * while dead for an entity means it has no health.
+     *
+     * @return whether or not an entity is dead
+     */
     public boolean isDead() {
         return this.entity.isDead;
     }
 
+    /**
+     * Gets the entire width of the entity's hitbox
+     *
+     * @return the entity's width
+     */
     public float getWidth() {
         return this.entity.width;
     }
 
+    /**
+     * Gets the entire height of the entity's hitbox
+     *
+     * @return the entity's height
+     */
     public float getHeight() {
         return this.entity.height;
     }
 
+    /**
+     * Gets the height of the eyes on the entity,
+     * can be added to its Y coordinate to get the actual Y location of the eyes.
+     * This value defaults to 85% of an entity's height, however is different for some entities.
+     *
+     * @return the height of the entity's eyes
+     */
     public float getEyeHeight() {
         return this.entity.getEyeHeight();
     }
 
+    /**
+     * Gets the name of the entity, could be "Villager",
+     * or, if the entity has a custom name, it returns that.
+     *
+     * @return the (custom) name of the entity
+     */
     public String getName() {
         return this.entity.getName();
     }
 
+    /**
+     * Gets the Java class name of the entity, for example "EntityVillager"
+     *
+     * @return the entity's class name
+     */
     public String getClassName() {
         return this.entity.getClass().getSimpleName();
     }

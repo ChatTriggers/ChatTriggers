@@ -222,6 +222,11 @@ public class Client {
         return "";
     }
 
+    /**
+     * Sets the current chat message, if the chat gui is not open, one will be opened.
+     *
+     * @param message the message to put in the chat text box.
+     */
     public static void setCurrentChatMessage(String message) {
         if (!isInChat()) {
             Client.getMinecraft().displayGuiScreen(new GuiChat(message));
@@ -241,14 +246,27 @@ public class Client {
     }
 
     public static class gui {
+        /**
+         * Gets the Minecraft gui class that is currently open
+         *
+         * @return the Minecraft gui
+         */
         public static GuiScreen get() {
             return getMinecraft().currentScreen;
         }
 
-        public static String getType() {
+        /**
+         * Gets the Java class name of the currently open gui, for example, "GuiChest"
+         *
+         * @return the class name of the current gui
+         */
+        public static String getClassName() {
             return get() == null ? "null" : get().getClass().getSimpleName();
         }
 
+        /**
+         * Closes the currently open gui
+         */
         public static void close() {
             getMinecraft().displayGuiScreen(null);
         }

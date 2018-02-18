@@ -42,7 +42,7 @@ public class Item {
     }
 
     /**
-     * Creates an Item object from an integer ID input.
+     * Creates an Item object from an integer ID input, 0 for air.
      *
      * @param itemID the ID of the item
      */
@@ -237,6 +237,13 @@ public class Item {
         return this.itemStack.isItemStackDamageable();
     }
 
+    /**
+     * Checks whether another Item is the same as this one.
+     * It compares id, stack size, and durability.
+     *
+     * @param obj the object to compare to
+     * @return whether the objects are equal
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Item) {

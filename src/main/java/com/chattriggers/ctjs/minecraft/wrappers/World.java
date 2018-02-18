@@ -200,6 +200,19 @@ public class World {
             return names;
         }
 
+        /**
+         * Spawns a particle into the world with the given attributes,
+         * which can be configured further with the returned {@link Particle}
+         *
+         * @param particle the name of the particle to spawn, see {@link #getParticleNames()}
+         * @param x the x coordinate to spawn the particle at
+         * @param y the y coordinate to spawn the particle at
+         * @param z the z coordinate to spawn the particle at
+         * @param xSpeed the motion the particle should have in the x direction
+         * @param ySpeed the motion the particle should have in the y direction
+         * @param zSpeed the motion the particle should have in the z direction
+         * @return the actual particle for further configuration
+         */
         public static Particle spawnParticle(String particle, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             EnumParticleTypes particleType = EnumParticleTypes.valueOf(particle);
 
