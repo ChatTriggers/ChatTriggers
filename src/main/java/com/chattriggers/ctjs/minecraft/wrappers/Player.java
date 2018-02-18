@@ -322,42 +322,48 @@ public class Player {
         return new Item(Player.getPlayer().inventory.getCurrentItem());
     }
 
+    /**
+     * Gets the inventory of the player, i.e. the inventory accessed by 'e'.
+     *
+     * @return the player's inventory
+     */
     public static Inventory getInventory() {
         return new Inventory(getPlayer().inventory);
     }
 
+    /**
+     * Gets the inventory the user currently has open, i.e. a chest.
+     *
+     * @return the currently opened inventory
+     */
     public static Inventory getOpenedInventory() {
         return new Inventory(getPlayer().openContainer);
     }
 
     public static class armor {
         /**
-         * Gets the item in the player's helmet slot
-         * @return the {@link Item} in the helmet slot
+         * @return the item in the player's helmet slot
          */
         public static Item getHelmet() {
             return getInventory().getStackInSlot(36);
         }
 
         /**
-         * Gets the item in the player's chestplate slot
-         * @return the {@link Item} in the chestplate slot
+         * @return the item in the player's chestplate slot
          */
         public static Item getChestplate() {
             return getInventory().getStackInSlot(37);
         }
 
         /**
-         * Gets the item in the player's leggings slot
-         * @return the {@link Item} in the leggings slot
+         * @return the item in the player's leggings slot
          */
         public static Item getLeggings() {
             return getInventory().getStackInSlot(38);
         }
 
         /**
-         * Gets the item in the player's boots slot
-         * @return the {@link Item} in the boots slot
+         * @return the item in the player's boots slot
          */
         public static Item getBoots() {
             return getInventory().getStackInSlot(39);
