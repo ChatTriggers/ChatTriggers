@@ -225,6 +225,16 @@ public class Block {
         return item.canHarvest(this);
     }
 
+    /**
+     * Gets whether this block is translucent, i.e. is see through.
+     * Any translucent block will not suffocate entities.
+     *
+     * @return whether the block is translucent.
+     */
+    public boolean isTranslucent() {
+        return this.block.isTranslucent();
+    }
+
     @Override
     public String toString() {
         return "Block{"
