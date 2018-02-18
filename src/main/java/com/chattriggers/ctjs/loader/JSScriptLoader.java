@@ -178,7 +178,7 @@ public class JSScriptLoader extends ScriptLoader {
 
             while (zipEntry != null) {
                 String fileName = zipEntry.getName();
-                File newFile = new File(outputDir, fileName.replaceAll("(?i)" + name + "/", ""));
+                File newFile = new File(outputDir, fileName);
 
                 if (zipEntry.isDirectory()) {
                     newFile.mkdir();

@@ -40,6 +40,7 @@ var ScoreboardReader = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Score
 var CPS = Java.type("com.chattriggers.ctjs.CTJS").getInstance().getCps();
 var Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Item");
 var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Block");
+var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
 
 // deprecated
 var LookingAt = Java.type("com.chattriggers.ctjs.minecraft.wrappers.LookingAt");
