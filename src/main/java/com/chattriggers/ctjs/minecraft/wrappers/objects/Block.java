@@ -5,7 +5,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.World;
 import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.common.ForgeHooks;
 
 public class Block {
     @Getter

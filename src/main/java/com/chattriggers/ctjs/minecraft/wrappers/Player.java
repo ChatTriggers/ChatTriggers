@@ -321,4 +321,12 @@ public class Player {
     public static Item getHeldItem() {
         return new Item(Player.getPlayer().inventory.getCurrentItem());
     }
+
+    public static Inventory getInventory() {
+        return new Inventory(getPlayer().inventory);
+    }
+
+    public static Inventory getOpenedInventory() {
+        return new Inventory(getPlayer().openContainer);
+    }
 }
