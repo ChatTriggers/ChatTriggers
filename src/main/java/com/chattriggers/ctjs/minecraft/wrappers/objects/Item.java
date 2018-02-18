@@ -118,7 +118,7 @@ public class Item {
      * @return the item's stack display name
      */
     public String getName() {
-        return this.itemStack.getDisplayName();
+        return getID() == 0 ? "air" : this.itemStack.getDisplayName();
     }
 
     /**
@@ -200,12 +200,23 @@ public class Item {
     }
 
     /**
-     * Gets the items damage.
+     * Gets the item's damage.
      *
-     * @return the items damage
+     * @return the damage value
      */
     public int getDamage() {
         return this.itemStack.getItemDamage();
+    }
+
+    /**
+     * Sets the item's damage.
+     *
+     * @param damage the damage value
+     */
+    public Item setDamage(int damage) {
+        this.itemStack.setItemDamage(damage);
+
+        return this;
     }
 
     /**
@@ -229,11 +240,18 @@ public class Item {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Item) {
-            return this.itemStack.isItemEqual(((Item) obj).itemStack);
-        } else if (obj instanceof ItemStack) {
-            return this.itemStack.isItemEqual(((ItemStack) obj));
+            Item other = ((Item) obj);
+
+            return getID() == other.getID()
+                    && getStackSize() == other.getStackSize()
+                    && getDamage() == other.getDamage();
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.itemStack.toString();
     }
 }
