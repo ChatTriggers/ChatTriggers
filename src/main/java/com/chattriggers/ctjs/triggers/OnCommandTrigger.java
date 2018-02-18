@@ -9,7 +9,6 @@ import javax.script.ScriptException;
 
 public class OnCommandTrigger extends OnTrigger {
     private String commandName = null;
-    private String commandUsage = null;
 
     public OnCommandTrigger(String methodName) {
         super(methodName, TriggerType.COMMAND);
@@ -31,13 +30,12 @@ public class OnCommandTrigger extends OnTrigger {
      * Example:<br>
      * OnCommandTrigger.setCommandName("test")<br>
      * would result in the command being /test
+     *
      * @param commandName The command name
      * @return the trigger for additional modification
      */
     public OnCommandTrigger setCommandName(String commandName) {
         this.commandName = commandName;
-        if (commandUsage == null)
-            commandUsage = "/" + commandName;
 
         reInstance();
 
@@ -46,34 +44,12 @@ public class OnCommandTrigger extends OnTrigger {
 
     /**
      * Alias for {@link #setCommandName(String)}
+     *
      * @param commandName The command name
      * @return the trigger for additional modification
      */
     public OnCommandTrigger setName(String commandName) {
         return setCommandName(commandName);
-    }
-
-    /**
-     * Sets the command usage.
-     * @param commandUsage The command usage
-     * @return the trigger for additional modification
-     */
-    public OnCommandTrigger setCommandUsage(String commandUsage) {
-        this.commandUsage = commandUsage;
-
-        if (this.commandName != null)
-            reInstance();
-
-        return this;
-    }
-
-    /**
-     * Alias for {@link OnCommandTrigger#setUsage(String)}
-     * @param commandUsage The command usage
-     * @return the trigger for additional modification
-     */
-    public OnCommandTrigger setUsage(String commandUsage) {
-        return setCommandUsage(commandUsage);
     }
 
     private void reInstance() {
@@ -84,7 +60,7 @@ public class OnCommandTrigger extends OnTrigger {
             }
         }
 
-        Command command = new Command(this, this.commandName, this.commandUsage);
+        Command command = new Command(this, this.commandName, "/" + this.commandName);
         ClientCommandHandler.instance.registerCommand(command);
         CTJS.getInstance().getCommandHandler().getCommandList().add(command);
     }
