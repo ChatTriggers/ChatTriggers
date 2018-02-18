@@ -186,7 +186,7 @@ public class TriggerRegister {
      * Registers a new render player list trigger.<br>
      * Runs when the player list is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -202,7 +202,7 @@ public class TriggerRegister {
      * Registers a new render crosshair trigger.<br>
      * Runs when the crosshair is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -218,7 +218,7 @@ public class TriggerRegister {
      * Registers a new render debug trigger.<br>
      * Runs when the debug screen (f3) is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -234,7 +234,7 @@ public class TriggerRegister {
      * Registers a new render boss health trigger.<br>
      * Runs when the boss health bar is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -250,7 +250,7 @@ public class TriggerRegister {
      * Registers a new render health trigger.<br>
      * Runs when the player's health is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -266,7 +266,7 @@ public class TriggerRegister {
      * Registers a new render food trigger.<br>
      * Runs when the player's food (hunger) is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -282,7 +282,7 @@ public class TriggerRegister {
      * Registers a new render mount health trigger.<br>
      * Runs when the mount's health (Example: horse or pig) is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -298,7 +298,7 @@ public class TriggerRegister {
      * Registers a new render experience trigger.<br>
      * Runs when the player's experience bar is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -314,7 +314,7 @@ public class TriggerRegister {
      * Registers a new render hotbar trigger.<br>
      * Runs when the player's hotbar is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -330,7 +330,7 @@ public class TriggerRegister {
      * Registers a new render air trigger.<br>
      * Runs when the player's air level (underwater) is being drawn.<br>
      * Passes through 1 argument:<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
