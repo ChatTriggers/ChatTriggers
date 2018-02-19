@@ -1,6 +1,9 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Inventory;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;
@@ -15,6 +18,7 @@ public class Player {
 
     /**
      * Gets the player object.
+     *
      * @return the player object
      */
     public static EntityPlayerSP getPlayer() {
@@ -23,6 +27,7 @@ public class Player {
 
     /**
      * Gets the player's x position.
+     *
      * @return the player's x position
      */
     public static double getX() {
@@ -31,6 +36,7 @@ public class Player {
 
     /**
      * Gets the player's y position.
+     *
      * @return the player's y position
      */
     public static double getY() {
@@ -39,6 +45,7 @@ public class Player {
 
     /**
      * Gets the player's z position.
+     *
      * @return the player's z position
      */
     public static double getZ() {
@@ -47,46 +54,55 @@ public class Player {
 
     /**
      * Gets the player's x motion.
+     * This is the amount the player will move in the x direction next tick.
+     *
      * @return the player's x motion
      */
-    public static Double getMotionX() {
+    public static double getMotionX() {
         return getPlayer() == null ? 0 : getPlayer().motionX;
     }
 
     /**
      * Gets the player's y motion.
+     * This is the amount the player will move in the y direction next tick.
+     *
      * @return the player's y motion
      */
-    public static Double getMotionY() {
+    public static double getMotionY() {
         return getPlayer() == null ? 0 : getPlayer().motionY;
     }
 
     /**
      * Gets the player's z motion.
+     * This is the amount the player will move in the z direction next tick.
+     *
      * @return the player's z motion
      */
-    public static Double getMotionZ() {
+    public static double getMotionZ() {
         return getPlayer() == null ? 0 : getPlayer().motionZ;
     }
 
     /**
      * Gets the player's camera pitch.
+     *
      * @return the player's camera pitch
      */
-    public static Float getPitch() {
+    public static float getPitch() {
         return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
     }
 
     /**
      * Gets the player's camera yaw.
+     *
      * @return the player's camera yaw
      */
-    public static Float getYaw() {
+    public static float getYaw() {
         return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
     }
 
     /**
      * Gets the player's username.
+     *
      * @return the player's username
      */
     public static String getName() {
@@ -95,6 +111,7 @@ public class Player {
 
     /**
      * Gets the player's uuid.
+     *
      * @return the player's uuid
      */
     public static String getUUID() {
@@ -103,33 +120,37 @@ public class Player {
 
     /**
      * Gets the player's hp.
+     *
      * @return the player's hp
      */
-    public static Float getHP() {
+    public static float getHP() {
         return getPlayer() == null ? 0 : getPlayer().getHealth();
     }
 
     /**
      * Gets the player's hunger.
+     *
      * @return the player's hunger
      */
-    public static Integer getHunger() {
+    public static int getHunger() {
         return getPlayer() == null ? 0 : getPlayer().getFoodStats().getFoodLevel();
     }
 
     /**
      * Gets the player's saturation.
+     *
      * @return the player's saturation
      */
-    public static Float getSaturation() {
+    public static float getSaturation() {
         return getPlayer() == null ? 0 : getPlayer().getFoodStats().getSaturationLevel();
     }
 
     /**
      * Gets the player's armor points.
+     *
      * @return the player's armor points
      */
-    public static Integer getArmorPoints() {
+    public static int getArmorPoints() {
         return getPlayer() == null ? 0 : getPlayer().getTotalArmorValue();
     }
 
@@ -141,28 +162,31 @@ public class Player {
      *
      * @return the player's air level
      */
-    public static Integer getAirLevel() {
+    public static int getAirLevel() {
         return getPlayer() == null ? 0 : getPlayer().getAir();
     }
 
     /**
      * Gets the player's xp level.
+     *
      * @return the player's xp level
      */
-    public static Integer getXPLevel() {
+    public static int getXPLevel() {
         return getPlayer() == null ? 0 : getPlayer().experienceLevel;
     }
 
     /**
      * Gets the player's xp progress.
+     *
      * @return the player's xp progress
      */
-    public static Float getXPProgress() {
+    public static float getXPProgress() {
         return getPlayer() == null ? 0 : getPlayer().experience;
     }
 
     /**
      * Gets the biome the player is currently in.
+     *
      * @return the biome name
      */
     public static String getBiome() {
@@ -178,9 +202,10 @@ public class Player {
 
     /**
      * Gets the light level at the player's current position.
+     *
      * @return the light level at the player's current position
      */
-    public static Integer getLightLevel() {
+    public static int getLightLevel() {
         if (getPlayer() == null || World.getWorld() == null) return 0;
 
         return World.getWorld().getLight(getPlayer().getPosition());
@@ -188,6 +213,7 @@ public class Player {
 
     /**
      * Checks if if the player is sneaking.
+     *
      * @return true if the player is sneaking, false otherwise
      */
     public static boolean isSneaking() {
@@ -196,6 +222,7 @@ public class Player {
 
     /**
      * Checks if the player is sprinting.
+     *
      * @return true if the player is sprinting, false otherwise
      */
     public static boolean isSprinting() {
@@ -204,22 +231,25 @@ public class Player {
 
     /**
      * Checks if player can be pushed by water.
+     *
      * @return true if the player is flying, false otherwise
      */
-    public static boolean isFlying(){
+    public static boolean isFlying() {
         return !(getPlayer() != null && getPlayer().isPushedByWater());
     }
 
     /**
      * Checks if player is sleeping.
+     *
      * @return true if the player is sleeping, false otherwise
      */
-    public static boolean isSleeping(){
+    public static boolean isSleeping() {
         return getPlayer() != null && getPlayer().isPlayerSleeping();
     }
 
     /**
      * Gets the direction the player is facing.
+     *
      * @return The direction the player is facing, one of the four cardinal directions
      */
     public static String facing() {
@@ -229,7 +259,7 @@ public class Player {
 
         Float yaw = getYaw();
 
-        if(yaw < 22.5 && yaw > -22.5) {
+        if (yaw < 22.5 && yaw > -22.5) {
             return "South";
         } else if (yaw < 67.5 && yaw > 22.5) {
             return "South West";
@@ -251,24 +281,30 @@ public class Player {
     }
 
     /**
-     * Gets the player's active potion effects.\
+     * Gets the player's active potion effects.
+     *
      * @return The player's active potion effects.
      */
     public static String[] getActivePotionEffects() {
         if (getPlayer() == null) return new String[]{};
 
         ArrayList<String> effects = new ArrayList<>();
-        for(PotionEffect effect : getPlayer().getActivePotionEffects()){
+
+        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
             effects.add(effect.toString());
         }
+
         return effects.toArray(new String[effects.size()]);
     }
 
     /**
-     * Gets the current {@link Block} that the player is looking at.
-     * @return the {@link Block}
+     * Gets the current object that the player is looking at,
+     * whether that be a block or an entity. Returns an air block when not looking
+     * at anything.
+     *
+     * @return the {@link Block} or {@link Entity} being looked at
      */
-    public static Block lookingAt() {
+    public static Object lookingAt() {
         if (getPlayer() == null
                 || World.getWorld() == null
                 || Client.getMinecraft().objectMouseOver == null)
@@ -279,9 +315,67 @@ public class Player {
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             BlockPos pos = mop.getBlockPos();
             return new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
+        } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+            return new Entity(mop.entityHit);
+        } else {
+            return new Block(0);
+        }
+    }
+
+    /**
+     * Gets the player's currently held item.
+     *
+     * @return the item
+     */
+    public static Item getHeldItem() {
+        return new Item(Player.getPlayer().inventory.getCurrentItem());
+    }
+
+    /**
+     * Gets the inventory of the player, i.e. the inventory accessed by 'e'.
+     *
+     * @return the player's inventory
+     */
+    public static Inventory getInventory() {
+        return new Inventory(getPlayer().inventory);
+    }
+
+    /**
+     * Gets the inventory the user currently has open, i.e. a chest.
+     *
+     * @return the currently opened inventory
+     */
+    public static Inventory getOpenedInventory() {
+        return new Inventory(getPlayer().openContainer);
+    }
+
+    public static class armor {
+        /**
+         * @return the item in the player's helmet slot
+         */
+        public static Item getHelmet() {
+            return getInventory().getStackInSlot(36);
         }
 
-        //TODO add entity support
-        return new Block(0);
+        /**
+         * @return the item in the player's chestplate slot
+         */
+        public static Item getChestplate() {
+            return getInventory().getStackInSlot(37);
+        }
+
+        /**
+         * @return the item in the player's leggings slot
+         */
+        public static Item getLeggings() {
+            return getInventory().getStackInSlot(38);
+        }
+
+        /**
+         * @return the item in the player's boots slot
+         */
+        public static Item getBoots() {
+            return getInventory().getStackInSlot(39);
+        }
     }
 }

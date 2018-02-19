@@ -49,6 +49,7 @@ public class XMLHttpRequest {
 
     /**
      * Sets the callback method, passes in the XMLHttpRequest object
+     *
      * @param methodName the method to be called back on completion of the request
      */
     public void setCallbackMethod(String methodName) {
@@ -57,6 +58,7 @@ public class XMLHttpRequest {
 
     /**
      * Send a post request to the currently opened connection
+     *
      * @param parameters any number of post data, in the form of <code>"key", "value", "key", "value"</code>
      */
     public void send(String... parameters) {
@@ -118,7 +120,7 @@ public class XMLHttpRequest {
         }
     }
 
-    private void sendGet(){
+    private void sendGet() {
         try {
             this.status = conn.getResponseCode();
             this.statusText = conn.getResponseMessage();
@@ -144,6 +146,7 @@ public class XMLHttpRequest {
 
     /**
      * Get the value of the response header with the specified key
+     *
      * @param headerName the key for the header
      * @return the value of the response header
      */

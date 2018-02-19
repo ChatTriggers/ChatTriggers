@@ -17,13 +17,17 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Display {
-    @Getter @Setter
+    @Getter
+    @Setter
     private ArrayList<DisplayLine> lines;
-    @Getter @Setter
+    @Getter
+    @Setter
     private float renderX;
-    @Getter @Setter
+    @Getter
+    @Setter
     private float renderY;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean shouldRender;
     @Getter
     private DisplayHandler.Background background;
@@ -58,10 +62,10 @@ public class Display {
     }
 
 
-
     /**
      * Sets a display's background type.
      * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}.
+     *
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -73,6 +77,7 @@ public class Display {
     /**
      * Sets a display's background type using string input.
      * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}.
+     *
      * @param background the type of background
      * @return the display to allow for method chaining
      */
@@ -83,6 +88,7 @@ public class Display {
 
     /**
      * Sets a display's background color.
+     *
      * @param color the integer color of the background
      * @return the display to allow for method chaining
      */
@@ -93,6 +99,7 @@ public class Display {
 
     /**
      * Sets a display's text color.
+     *
      * @param color the integer color of the text
      * @return the display to allow for method chaining
      */
@@ -100,10 +107,11 @@ public class Display {
         this.textColor = color;
         return this;
     }
-    
+
     /**
      * Sets a display's text alignment.
      * Use {@link DisplayHandler.Align}.
+     *
      * @param align the type of alignment
      * @return the display to allow for method chaining
      */
@@ -115,6 +123,7 @@ public class Display {
     /**
      * Sets a display's text alignment using string input.
      * Use {@link DisplayHandler.Align}.
+     *
      * @param align the type of alignment
      * @return the display to allow for method chaining
      */
@@ -124,10 +133,10 @@ public class Display {
     }
 
 
-
     /**
      * Sets a display's line order.
      * Use {@link DisplayHandler.Order}.
+     *
      * @param order the order of lines
      * @return the display to allow method chaining
      */
@@ -139,6 +148,7 @@ public class Display {
     /**
      * Sets a display's line order using string input.
      * Use {@link DisplayHandler.Order}.
+     *
      * @param order the order of lines
      * @return the display to allow method chaining
      */
@@ -148,11 +158,11 @@ public class Display {
     }
 
 
-
     /**
      * Sets a display line to a string.
+     *
      * @param lineNumber the line number to set (0 based)
-     * @param line the string to set the line to
+     * @param line       the string to set the line to
      * @return the display to allow for method chaining
      */
     public Display setLine(int lineNumber, String line) {
@@ -166,8 +176,9 @@ public class Display {
 
     /**
      * Sets a display line to a DisplayLine
+     *
      * @param lineNumber the line number to set (0 based)
-     * @param line the DisplayLine to set the line to
+     * @param line       the DisplayLine to set the line to
      * @return the display to allow for method chaining
      */
     public Display setLine(int lineNumber, DisplayLine line) {
@@ -181,6 +192,7 @@ public class Display {
 
     /**
      * Gets a DisplayLine from a line in a display.
+     *
      * @param lineNumber the line number to get
      * @return the string in line of display
      */
@@ -195,6 +207,7 @@ public class Display {
     /**
      * Adds as many lines as you specify onto the end of
      * the display (appends them).
+     *
      * @param lines a variable amount of strings to add
      * @return the display to allow for method chaining
      */
@@ -207,6 +220,7 @@ public class Display {
     /**
      * Adds as many DisplayLines as you specify onto the
      * end of the display (appends them).
+     *
      * @param lines a variable amount of DisplayLine to add
      * @return the display to allow for method chaining
      */
@@ -217,6 +231,7 @@ public class Display {
 
     /**
      * Adds one line to a display.
+     *
      * @param line the string to add
      * @return the display to allow for method chaining
      */
@@ -226,6 +241,7 @@ public class Display {
 
     /**
      * Adds one DisplayLine to a display.
+     *
      * @param line the DisplayLine to add
      * @return the display to allow for method chaining
      */
@@ -235,6 +251,7 @@ public class Display {
 
     /**
      * Clears all the lines in the display.
+     *
      * @return the display to allow for method chaining
      */
     public Display clearLines() {
@@ -244,6 +261,7 @@ public class Display {
 
     /**
      * Sets the minimum width of a display
+     *
      * @param width the width to set
      * @return the display to allow for method chaining
      */
@@ -254,6 +272,7 @@ public class Display {
 
     /**
      * Set the X and Y render position of the display.
+     *
      * @param renderX the x coordinate
      * @param renderY the y coordinate
      * @return the display to allow for method chaining
@@ -263,7 +282,6 @@ public class Display {
         this.renderY = renderY;
         return this;
     }
-
 
 
     // Renders the display on to the player's screen.
@@ -339,6 +357,7 @@ public class Display {
          * Sets the line's text.<br>
          * Use this to update a display line instead of
          * re-instancing it every display update for dynamic lines
+         *
          * @param text the text
          * @return the DisplayLine to allow for method chaining
          */
@@ -350,6 +369,7 @@ public class Display {
 
         /**
          * Sets the alignment of the line (based on max width of display)
+         *
          * @param align the alignment
          * @return the DisplayLine to allow for method chaining
          */
@@ -360,6 +380,7 @@ public class Display {
 
         /**
          * Sets the text color of the line
+         *
          * @param textColor the integer color
          * @return the DisplayLine to allow for method chaining
          */
@@ -370,6 +391,7 @@ public class Display {
 
         /**
          * Sets if a drop shadow is drawn (true by default).
+         *
          * @param shadow if the shadow is drawn
          * @return the DisplayLine to allow for method chaining
          */
@@ -380,6 +402,7 @@ public class Display {
 
         /**
          * Sets the scale of the text (1 by default).
+         *
          * @param scale the scale of the text
          * @return the DisplayLine to allow for method chaining
          */
@@ -393,6 +416,7 @@ public class Display {
          * Sets the lines background (NONE by default).
          * If set to NONE, the line will inherit the background from the display.
          * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}
+         *
          * @param background the background type
          * @return the DisplayLine to allow for method chaining
          */
@@ -405,6 +429,7 @@ public class Display {
          * Sets the line background color.
          * If not set, the line will inherit the background color from the display.
          * Use {@link com.chattriggers.ctjs.minecraft.handlers.DisplayHandler.Background}
+         *
          * @param backgroundColor the background color int
          * @return the DisplayLine to allow for method chaining
          */
@@ -416,10 +441,11 @@ public class Display {
         /**
          * Registers a method to be run when the line is clicked (pressed or released).<br>
          * Arguments passed through to method:<br>
-         *     int mouseX<br>
-         *     int mouseY<br>
-         *     int button<br>
-         *     int button state
+         * int mouseX<br>
+         * int mouseY<br>
+         * int button<br>
+         * int button state
+         *
          * @param methodName the method to run
          * @return the DisplayLine to allow for method chaining
          */
@@ -431,8 +457,9 @@ public class Display {
         /**
          * Registers a method to be run when the line is hovered over.<br>
          * Arguments passed through to method:<br>
-         *     int mouseX<br>
-         *     int mouseY
+         * int mouseX<br>
+         * int mouseY
+         *
          * @param methodName the method to run
          * @return the DisplayLine to allow for method chaining
          */
@@ -444,11 +471,12 @@ public class Display {
         /**
          * Registers a method to be run when the line is dragged.<br>
          * Arguments passed through to method:<br>
-         *     int deltaMouseX<br>
-         *     int deltaMouseY<br>
-         *     int mouseX<br>
-         *     int mouseY<br>
-         *     int button
+         * int deltaMouseX<br>
+         * int deltaMouseY<br>
+         * int mouseX<br>
+         * int mouseY<br>
+         * int button
+         *
          * @param methodName the method to run
          * @return the DisplayLine to allow for method chaining
          */

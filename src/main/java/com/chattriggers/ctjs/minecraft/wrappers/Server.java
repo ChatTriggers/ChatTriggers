@@ -7,8 +7,9 @@ import java.util.UUID;
 public class Server {
     /**
      * Gets the current server's IP.
+     *
      * @return The IP of the current server, or "localhost" if the player
-     *          is in a single player world.
+     * is in a single player world.
      */
     public static String getIP() {
         if (Client.getMinecraft().isSingleplayer()) return "localhost";
@@ -18,8 +19,9 @@ public class Server {
 
     /**
      * Gets the current server's name.
+     *
      * @return The name of the current server, or "SinglePlayer" if the player
-     *          is in a single player world.
+     * is in a single player world.
      */
     public static String getName() {
         if (Client.getMinecraft().isSingleplayer()) return "SinglePlayer";
@@ -29,8 +31,9 @@ public class Server {
 
     /**
      * Gets the current server's MOTD.
+     *
      * @return The MOTD of the current server, or "SinglePlayer" if the player
-     *          is in a single player world.
+     * is in a single player world.
      */
     public static String getMOTD() {
         if (Client.getMinecraft().isSingleplayer()) return "SinglePlayer";
@@ -40,8 +43,9 @@ public class Server {
 
     /**
      * Gets the ping to the current server.
+     *
      * @return The ping to the current server, or 5 if the player
-     *          is in a single player world.
+     * is in a single player world.
      */
     public static Long getPing() {
         EntityPlayer player = Player.getPlayer();
@@ -52,7 +56,7 @@ public class Server {
             return 5L;
         }
 
-        if(Client.getConnection().getPlayerInfo(UUID.fromString(player.getGameProfile().getId().toString())) != null) {
+        if (Client.getConnection().getPlayerInfo(UUID.fromString(player.getGameProfile().getId().toString())) != null) {
             return (long) Client.getConnection().getPlayerInfo(
                     UUID.fromString(player.getGameProfile().getId().toString())
             ).getResponseTime();

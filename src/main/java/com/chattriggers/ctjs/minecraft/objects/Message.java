@@ -2,7 +2,9 @@ package com.chattriggers.ctjs.minecraft.objects;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import lombok.Getter;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.IChatComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +27,7 @@ public class Message {
 
     /**
      * Sets the chat line ID. Useful for deleting messages by ID.
+     *
      * @param id the ID of the message
      * @return the message for method chaining
      */
@@ -36,7 +39,8 @@ public class Message {
 
     /**
      * Sets a part of the message (defined by the splits made in the constructor)
-     * @param part the index of the part to change
+     *
+     * @param part    the index of the part to change
      * @param message the new message to replace with
      * @return the message for method chaining
      */
@@ -49,6 +53,7 @@ public class Message {
 
     /**
      * Get an exact copy of the message
+     *
      * @return the copy of the message
      */
     public Message copy() {

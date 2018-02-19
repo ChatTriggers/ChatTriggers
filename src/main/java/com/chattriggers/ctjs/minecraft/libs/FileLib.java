@@ -11,9 +11,10 @@ import java.net.URLConnection;
 public class FileLib {
     /**
      * Writes a file to folder in Imports.
+     *
      * @param importName name of the import
-     * @param fileName name of the file
-     * @param toWrite string to write in file
+     * @param fileName   name of the file
+     * @param toWrite    string to write in file
      */
     public static void write(String importName, String fileName, String toWrite) {
         write(CTJS.getInstance().getConfig().getModulesFolder() + importName + "/" + fileName, toWrite);
@@ -22,8 +23,9 @@ public class FileLib {
     /**
      * Writes a file to anywhere on the system.<br>
      * Use "./" for the ".minecraft" folder.<br>
+     *
      * @param fileLocation the location and file name
-     * @param toWrite string to write in file
+     * @param toWrite      string to write in file
      */
     public static void write(String fileLocation, String toWrite) {
         try {
@@ -36,8 +38,9 @@ public class FileLib {
     /**
      * Reads a file from folder in Imports.<br>
      * Returns an empty string if file is not found.
+     *
      * @param importName name of the import
-     * @param fileName name of the file
+     * @param fileName   name of the file
      * @return the string in the file
      */
     public static String read(String importName, String fileName) {
@@ -48,6 +51,7 @@ public class FileLib {
      * Reads a file from anywhere on the system.<br>
      * Use "./" for the ".minecraft" folder.<br>
      * Returns an empty string if file is not found.
+     *
      * @param fileLocation the location and file name
      * @return the string in the file
      */
@@ -72,6 +76,7 @@ public class FileLib {
 
     /**
      * Gets the contents of a url as a string
+     *
      * @param theUrl the url to get the data from
      * @return the string stored in the url content
      */

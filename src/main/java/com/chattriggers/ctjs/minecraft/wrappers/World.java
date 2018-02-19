@@ -1,17 +1,17 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
 import com.chattriggers.ctjs.utils.console.Console;
-import lombok.Getter;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 public class World {
     /**
@@ -84,6 +84,21 @@ public class World {
      */
     public static String getType() {
         return getWorld().getWorldType().getWorldTypeName();
+    }
+
+    /**
+     * Gets the {@link Block} at a location in the world.
+     *
+     * @param x the x position
+     * @param y the y position
+     * @param z the z position
+     * @return the {@link Block} at the location
+     */
+    public static Block getBlockAt(int x, int y, int z) {
+        BlockPos blockPos = new BlockPos(x, y, z);
+        IBlockState blockState = World.getWorld().getBlockState(blockPos);
+
+        return new Block(blockState.getBlock()).setBlockPos(blockPos);
     }
 
     /**
@@ -170,7 +185,8 @@ public class World {
 
     public static class particle {
         /**
-         * Gets an array of all the different particle names you can pass to {@link #spawnParticle(String, double, double, double, double, double, double)}
+         * Gets an array of all the different particle names you can pass
+         * to {@link #spawnParticle(String, double, double, double, double, double, double)}
          *
          * @return the array of name strings
          */
@@ -184,7 +200,20 @@ public class World {
             return names;
         }
 
-        public static Particle spawnParticle(String particle, double x, double y, double z, double dx, double dy, double dz) {
+        /**
+         * Spawns a particle into the world with the given attributes,
+         * which can be configured further with the returned {@link Particle}
+         *
+         * @param particle the name of the particle to spawn, see {@link #getParticleNames()}
+         * @param x the x coordinate to spawn the particle at
+         * @param y the y coordinate to spawn the particle at
+         * @param z the z coordinate to spawn the particle at
+         * @param xSpeed the motion the particle should have in the x direction
+         * @param ySpeed the motion the particle should have in the y direction
+         * @param zSpeed the motion the particle should have in the z direction
+         * @return the actual particle for further configuration
+         */
+        public static Particle spawnParticle(String particle, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             EnumParticleTypes particleType = EnumParticleTypes.valueOf(particle);
 
             try {
@@ -209,7 +238,7 @@ public class World {
                 EntityFX fx = (EntityFX) method.invoke(Client.getMinecraft().renderGlobal,
                         particleType.getParticleID(),
                         particleType.getShouldIgnoreRange(),
-                        x, y, z, dx, dy, dz, new int[]{}
+                        x, y, z, xSpeed, ySpeed, zSpeed, new int[]{}
                 );
 
                 return new Particle(fx);
@@ -218,6 +247,10 @@ public class World {
             }
 
             return null;
+        }
+
+        public static void spawnParticle(EntityFX particle) {
+            Client.getMinecraft().effectRenderer.addEffect(particle);
         }
     }
 }

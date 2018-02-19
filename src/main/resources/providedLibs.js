@@ -34,12 +34,13 @@ var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
 var Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
 var World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
 var Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");
-var Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Inventory");
+var Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Inventory");
 var TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
-var ScoreboardReader = Java.type("com.chattriggers.ctjs.minecraft.wrappers.ScoreboardReader");
+var Scoreboard = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Scoreboard");
 var CPS = Java.type("com.chattriggers.ctjs.CTJS").getInstance().getCps();
 var Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Item");
 var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Block");
+var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
 
 // deprecated
 var LookingAt = Java.type("com.chattriggers.ctjs.minecraft.wrappers.LookingAt");

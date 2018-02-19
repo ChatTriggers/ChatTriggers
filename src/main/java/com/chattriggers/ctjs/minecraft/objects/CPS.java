@@ -18,14 +18,16 @@ public class CPS {
      *
      * @return Maximum left clicks.
      */
-    @Getter private int leftClicksMax;
+    @Getter
+    private int leftClicksMax;
 
     /**
      * Gets the maximum right click.
      *
      * @return Maximum right clicks.
      */
-    @Getter private int rightClicksMax;
+    @Getter
+    private int rightClicksMax;
 
     public CPS() {
         this.sysTime = Client.getSystemTime();
