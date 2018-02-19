@@ -140,6 +140,11 @@ public class ChatLib {
         Client.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
     }
 
+    /**
+     * Simulates a chat message to be caught by other triggers for testing
+     *
+     * @param args The message to simulate
+     */
     public static void simulateChat(String[] args) {
         StringBuilder toSend = new StringBuilder();
 
@@ -307,6 +312,11 @@ public class ChatLib {
         }
     }
 
+    /**
+     * Gets all the previous lines of chat
+     *
+     * @return an ArrayList<String> full of previous chat messages
+     */
     public static ArrayList<String> getChatLines() {
         ArrayList<String> out = new ArrayList<>();
         ArrayList<String> in = CTJS.getInstance().getChatListener().getChatHistory();

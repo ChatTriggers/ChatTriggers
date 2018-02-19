@@ -530,6 +530,10 @@ public class RenderLib {
         drawImage(rl, renderXLoc, renderYLoc, textureMapX, textureMapY, textureWidth, textureHeight, scale);
     }
 
+    /**
+     * Draw Image helper method. <br>
+     * Used by the other drawImage method once the resourcelocation object has been created
+     */
     public static void drawImage(ResourceLocation rl, float renderXLoc, float renderYLoc, int textureMapX,
                                  int textureMapY, int textureWidth, int textureHeight, float scale) {
         Client.getMinecraft().getTextureManager().bindTexture(rl);
@@ -545,10 +549,23 @@ public class RenderLib {
         GL11.glPopMatrix();
     }
 
+    /**
+     * Version of downloadImage where shouldResize is automatically true
+     *
+     * @param url url of the image to be downloaded
+     * @param resourceName file name for the image when it is downloaded
+     */
     public static void downloadImage(String url, String resourceName) {
         downloadImage(url, resourceName, true);
     }
 
+    /**
+     * Version of downloadImage
+     *
+     * @param url url of the image to be downloaded
+     * @param resourceName file name for the image when it is downloaded
+     * @param shouldResize whether or not the file should be resized by CT
+     */
     public static void downloadImage(String url, String resourceName, boolean shouldResize) {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
