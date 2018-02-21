@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.CTJS;
 import lombok.Getter;
 
 public abstract class ConfigOption {
@@ -12,7 +11,7 @@ public abstract class ConfigOption {
     ConfigOption(Type type) {
         this.type = type;
 
-        CTJS.getInstance().getConfig().addConfigOption(this);
+        //CTJS.getInstance().getConfig().addConfigOption(this);
     }
 
     public enum Type {
