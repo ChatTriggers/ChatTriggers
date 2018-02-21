@@ -39,6 +39,8 @@ public class Config {
 
 
     public Config() {
+        this.configOptions = new ArrayList<>();
+
         this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/");
         this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true);
 
