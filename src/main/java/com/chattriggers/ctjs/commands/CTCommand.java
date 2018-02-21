@@ -26,6 +26,8 @@ public class CTCommand extends CommandBase {
     private final int idFixed = 90123; // ID for dumped chat
     private Integer idFixedOffset = null; // ID offset (increments)
 
+    private Boolean isLoaded = true;
+
     public String getName() {
         return getCommandName();
     }
@@ -67,6 +69,9 @@ public class CTCommand extends CommandBase {
             switch (args[0].toLowerCase()) {
                 case("reload"):
                 case("load"):
+                    if (!this.isLoaded) return;
+                    this.isLoaded = false;
+
                     TriggerType.GAME_UNLOAD.triggerAll();
                     TriggerType.WORLD_UNLOAD.triggerAll();
                     ChatLib.chat("&cReloading ct.js scripts...");
@@ -80,6 +85,7 @@ public class CTCommand extends CommandBase {
                         CTJS.getInstance().getModuleManager().load();
                         ChatLib.chat("&aDone reloading scripts!");
                         TriggerType.WORLD_LOAD.triggerAll();
+                        this.isLoaded = true;
                     }).start();
                     break;
                 case("files"):
