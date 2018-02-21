@@ -1,80 +1,108 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.Reference;
-import com.chattriggers.ctjs.minecraft.libs.EventLib;
+import com.chattriggers.ctjs.utils.console.Console;
+import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Config {
-    @Getter
     @Setter
-    private Configuration config;
-    @Getter
-    @Setter
-    private File configFile;
-
-    // configuration settings
-    @Getter
-    private Boolean printChatToConsole;
-    @Getter
-    private String consoleTheme;
-    @Getter
-    private Boolean customTheme;
-    @Getter
-    private String fg;
-    @Getter
-    private String bg;
-    @Getter
-    private String modulesFolder;
+    private transient File configFile;
 
 
-    private void saveConfig() {
-        this.printChatToConsole = this.config.getBoolean("print chat to console", "ct", true, "Chat printing to console");
+    @Getter
+    private ConfigString modulesFolder;
+    @Getter
+    private ConfigBoolean printChatToConsole;
 
-        this.modulesFolder = this.config.getString("modules folder", "ct", "config/ChatTriggers/modules/", "Folder to load modules from");
+    @Getter
+    private ConfigStringSelector consoleTheme;
 
-        this.consoleTheme = this.config.getString("console theme", "ct",
-            "default.dark", "Console theme", new String[]{
-                "ashes.dark",
-                "atelierforest.dark",
-                "default.dark",
-                "isotope.dark",
-                "codeschool.dark",
-                "gotham",
-                "hybrid",
-                "3024.light",
-                "chalk.light",
-                "blue",
-                "slate",
-                "red",
-                "green",
-                "aids"
-            });
+    @Getter
+    private ConfigBoolean customTheme;
+    @Getter
+    private ConfigColor consoleForegroundColor;
+    @Getter
+    private ConfigColor consoleBackgroundColor;
 
-        this.customTheme = this.config.getBoolean("custom theme", "ct",
-                false, "Use custom theme");
-        this.bg = this.config.getString("background", "ct",
-                "[21,21,21]", "Custom background color ([r,g,b])");
-        this.fg = this.config.getString("foreground", "ct",
-                "[208,208,208]", "Custom foreground color ([r,g,b])");
 
-        this.config.save();
+    public Config() {
+        this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/");
+        this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true);
+
+        this.consoleTheme = new ConfigStringSelector("Console Theme", 0,
+                new String[]{
+                        "default.dark",
+                        "ashes.dark",
+                        "atelierforest.dark",
+                        "isotope.dark",
+                        "codeschool.dark",
+                        "gotham",
+                        "hybrid",
+                        "3024.light",
+                        "chalk.light",
+                        "blue",
+                        "slate",
+                        "red",
+                        "green",
+                        "aids"
+                });
+
+        this.customTheme = new ConfigBoolean("Custom Console Theme", false);
+        this.consoleForegroundColor = new ConfigColor("Console Foreground Color", new Color(208, 208, 208));
+        this.consoleBackgroundColor = new ConfigColor("Console Background Color", new Color(21, 21, 21));
     }
 
-    public void loadConfig() {
-        this.config = new Configuration(configFile);
-        saveConfig();
+    public void save() {
+        save(false);
     }
 
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (EventLib.getModId(event).equals(Reference.MODID)) {
-            saveConfig();
+    private void save(Boolean secondChance) {
+        try {
+            Path path = Paths.get(configFile.getPath());
+            ArrayList<String> lines = new ArrayList<>();
+            lines.add(new Gson().toJson(this));
+            Files.write(path, lines, Charset.forName("UTF-8"));
+        } catch (FileNotFoundException exception) {
+            createConfig();
+            if (secondChance)
+                Console.getConsole().printStackTrace(exception);
+            else
+                save(true);
+        } catch (IOException exception) {
+            Console.getConsole().printStackTrace(exception);
+        }
+    }
+
+    public void load() {
+        try {
+            Config json = new Gson().fromJson(new FileReader(configFile), Config.class);
+            postLoad();
+        } catch (FileNotFoundException exception) {
+            createConfig();
+        }
+    }
+
+    private void postLoad() {
+
+    }
+
+    private void createConfig() {
+        try {
+            configFile.createNewFile();
+        } catch (IOException exception) {
+            Console.getConsole().printStackTrace(exception);
         }
     }
 }

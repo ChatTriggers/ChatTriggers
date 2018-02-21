@@ -34,7 +34,6 @@ import java.util.List;
 @Mod(modid = Reference.MODID,
         name = Reference.MODNAME,
         version = Reference.MODVERSION,
-        guiFactory = "com.chattriggers.ctjs.utils.config.ConfigGuiFactory",
         clientSideOnly = true)
 public class CTJS {
     @Getter
@@ -69,7 +68,6 @@ public class CTJS {
         this.guiHandler = new GuiHandler();
         this.commandHandler = new CommandHandler();
         this.chatListener = new ChatListener();
-        this.console = new Console();
         this.moduleManager = new ModuleManager();
         this.cps = new CPS();
 
@@ -82,6 +80,8 @@ public class CTJS {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        this.console = new Console();
+
         Sentry.init(Reference.SENTRYDSN);
 
         Sentry.getContext().setUser(
@@ -94,8 +94,9 @@ public class CTJS {
         this.injectResourcePack(event.getModConfigurationDirectory().toString());
 
         this.config = new Config();
-        this.config.setConfigFile(new File(event.getModConfigurationDirectory().toString(), "ChatTriggers.cfg"));
-        this.config.loadConfig();
+        this.config.setConfigFile(new File(event.getModConfigurationDirectory().toString(), "ChatTriggers.json"));
+        this.config.save();
+        this.config.load();
     }
 
     private void injectResourcePack(String path) {

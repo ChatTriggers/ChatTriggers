@@ -75,7 +75,8 @@ public class CTCommand extends CommandBase {
                             type.clearTriggers();
                         CTJS.getInstance().getCommandHandler().getCommandList().clear();
                         CTJS.getInstance().getModuleManager().unload();
-                        CTJS.getInstance().getConfig().loadConfig();
+                        CTJS.getInstance().getConfig().save();
+                        CTJS.getInstance().getConfig().load();
                         CTJS.getInstance().getModuleManager().load();
                         ChatLib.chat("&aDone reloading scripts!");
                         TriggerType.WORLD_LOAD.triggerAll();
