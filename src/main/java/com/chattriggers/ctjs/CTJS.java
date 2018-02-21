@@ -62,8 +62,6 @@ public class CTJS {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        instance = this;
-
         this.displayHandler = new DisplayHandler();
         this.guiHandler = new GuiHandler();
         this.commandHandler = new CommandHandler();
@@ -80,6 +78,8 @@ public class CTJS {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        instance = this;
+
         this.console = new Console();
 
         Sentry.init(Reference.SENTRYDSN);
