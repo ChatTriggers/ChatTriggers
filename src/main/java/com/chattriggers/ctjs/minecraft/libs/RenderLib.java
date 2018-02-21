@@ -532,7 +532,7 @@ public class RenderLib {
 
     /**
      * Draw Image helper method. <br>
-     * Used by the other drawImage method once the resourcelocation object has been created
+     * This method is not meant for public use
      */
     public static void drawImage(ResourceLocation rl, float renderXLoc, float renderYLoc, int textureMapX,
                                  int textureMapY, int textureWidth, int textureHeight, float scale) {
@@ -550,7 +550,7 @@ public class RenderLib {
     }
 
     /**
-     * Version of downloadImage where shouldResize is automatically true
+     * Downloads and resizes an image from a url supplied when calling
      *
      * @param url url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
@@ -560,7 +560,7 @@ public class RenderLib {
     }
 
     /**
-     * Version of downloadImage
+     * Downloads an image from a url supplied when calling, with the option to automatically resize the image
      *
      * @param url url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded

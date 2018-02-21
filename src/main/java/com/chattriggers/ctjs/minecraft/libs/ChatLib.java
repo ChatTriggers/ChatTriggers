@@ -315,7 +315,7 @@ public class ChatLib {
     /**
      * Gets the previous 1000 lines of chat
      *
-     * @return A list of the last 100 chat lines
+     * @return A list of the last 1000 chat lines
      */
     public static ArrayList<String> getChatLines() {
         ArrayList<String> out = new ArrayList<>();
