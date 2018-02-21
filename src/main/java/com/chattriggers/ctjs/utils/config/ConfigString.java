@@ -3,9 +3,7 @@ package com.chattriggers.ctjs.utils.config;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ConfigString {
-    @Getter
-    private String name;
+public class ConfigString extends ConfigOption {
     @Getter
     private String defaultValue;
 
@@ -13,6 +11,8 @@ public class ConfigString {
     private String value = null;
 
     ConfigString(String name, String defaultValue) {
+        super(ConfigOption.Type.STRING);
+
         this.name = name;
         this.defaultValue = defaultValue;
     }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class Config {
     @Setter
     private transient File configFile;
+    private transient ArrayList<ConfigOption> configOptions;
 
 
     @Getter
@@ -62,6 +63,10 @@ public class Config {
         this.customTheme = new ConfigBoolean("Custom Console Theme", false);
         this.consoleForegroundColor = new ConfigColor("Console Foreground Color", new Color(208, 208, 208));
         this.consoleBackgroundColor = new ConfigColor("Console Background Color", new Color(21, 21, 21));
+    }
+
+    void addConfigOption(ConfigOption configOption) {
+        this.configOptions.add(configOption);
     }
 
     public void save() {

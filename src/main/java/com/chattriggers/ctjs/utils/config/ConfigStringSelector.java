@@ -4,9 +4,7 @@ import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ConfigStringSelector {
-    @Getter
-    private String name;
+public class ConfigStringSelector extends ConfigOption {
     @Getter
     private String[] values;
     @Getter
@@ -16,6 +14,8 @@ public class ConfigStringSelector {
     private Integer value = null;
 
     ConfigStringSelector(String name, Integer defaultValue, String[] values) {
+        super(ConfigOption.Type.STRING_SELECTOR);
+
         this.name = name;
         this.defaultValue = defaultValue;
         this.values = values;

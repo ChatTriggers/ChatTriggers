@@ -5,9 +5,7 @@ import lombok.Setter;
 
 import java.awt.*;
 
-public class ConfigColor {
-    @Getter
-    private String name;
+public class ConfigColor extends ConfigOption {
     @Getter
     private Color defaultValue;
 
@@ -15,6 +13,8 @@ public class ConfigColor {
     private Color value = null;
 
     ConfigColor(String name, Color defaultValue) {
+        super(ConfigOption.Type.COLOR);
+
         this.name = name;
         this.defaultValue = defaultValue;
     }
