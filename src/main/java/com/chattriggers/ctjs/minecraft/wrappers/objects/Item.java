@@ -161,12 +161,21 @@ public class Item {
     }
 
     /**
-     * Returns a json string of the item's lore.
+     * Gets the json string of the item's lore.
      *
      * @return the json string of the lore
      */
     public String getLore() {
         return this.itemStack.serializeNBT().toString();
+    }
+
+    /**
+     * Gets the metadata of the item.
+     *
+     * @return the metadata
+     */
+    public int getMetadata() {
+        return this.itemStack.getMetadata();
     }
 
     /**

@@ -132,15 +132,6 @@ public class Block {
     }
 
     /**
-     * Gets the block's meta from the default state.
-     *
-     * @return the block's meta
-     */
-    public int getMeta() {
-        return this.block.getMetaFromState(getDefaultState());
-    }
-
-    /**
      * Gets the block's x position.<br>
      * 0 by default.
      *
@@ -177,6 +168,15 @@ public class Block {
      */
     public int getMetadata() {
         return this.block.getMetaFromState(this.getState());
+    }
+
+    /**
+     * Gets the block's meta from the default state.
+     *
+     * @return the block's meta
+     */
+    public int getDefaultMetadata() {
+        return this.block.getMetaFromState(getDefaultState());
     }
 
     /**
