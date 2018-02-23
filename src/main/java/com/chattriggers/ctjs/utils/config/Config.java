@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.utils.config;
 
+import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import lombok.Getter;
@@ -10,10 +11,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Config {
@@ -77,24 +74,7 @@ public class Config {
     }
 
     public void save() {
-        save(false);
-    }
-
-    private void save(Boolean secondChance) {
-        try {
-            Path path = Paths.get(configFile.getPath());
-            ArrayList<String> lines = new ArrayList<>();
-            lines.add(new Gson().toJson(this));
-            Files.write(path, lines, Charset.forName("UTF-8"));
-        } catch (FileNotFoundException exception) {
-            createConfig();
-            if (secondChance)
-                Console.getConsole().printStackTrace(exception);
-            else
-                save(true);
-        } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
-        }
+        FileLib.write(configFile.getAbsolutePath(), new Gson().toJson(this));
     }
 
     public void load() {
