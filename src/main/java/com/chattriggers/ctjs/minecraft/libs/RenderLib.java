@@ -608,6 +608,36 @@ public class RenderLib {
     }
 
     /**
+     * Renders an item icon on screen from an {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item}
+     *
+     * @param x     x coordinate to render item icon to
+     * @param y     y coordinate to render item icon to
+     * @param scale scales the icon size
+     * @param item  the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} to render
+     */
+    public static void drawItemIcon(int x, int y, float scale, com.chattriggers.ctjs.minecraft.wrappers.objects.Item item) {
+        x /= scale;
+        y /= scale;
+
+        RenderItem itemRenderer = Client.getMinecraft().getRenderItem();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(scale, scale, 1f);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderHelper.enableStandardItemLighting();
+        RenderHelper.enableGUIStandardItemLighting();
+        itemRenderer.zLevel = 200.0F;
+
+        try {
+            itemRenderer.renderItemIntoGUI(item.getItemStack(), x, y);
+        } catch (NullPointerException e) {
+            Console.getConsole().printStackTrace(e);
+        }
+
+        GlStateManager.popMatrix();
+    }
+
+    /**
      * Renders an item icon on screen.
      *
      * @param x        x coordinate to render item icon to
@@ -633,25 +663,7 @@ public class RenderLib {
             itemStack = new ItemStack(Item.getByNameOrId(item));
         }
 
-        x /= scale;
-        y /= scale;
-
-        RenderItem itemRenderer = Client.getMinecraft().getRenderItem();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, 1f);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderHelper.enableStandardItemLighting();
-        RenderHelper.enableGUIStandardItemLighting();
-        itemRenderer.zLevel = 200.0F;
-
-        try {
-            itemRenderer.renderItemIntoGUI(itemStack, x, y);
-        } catch (NullPointerException e) {
-            Console.getConsole().printStackTrace(e);
-        }
-
-        GlStateManager.popMatrix();
+        drawItemIcon(x, y, scale, new com.chattriggers.ctjs.minecraft.wrappers.objects.Item(itemStack));
     }
 
     /**
