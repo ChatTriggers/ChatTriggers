@@ -22,18 +22,6 @@ public class ConfigString extends ConfigOption {
         this.defaultValue = defaultValue;
 
         this.y = y;
-        this.textField = new GuiTextField(
-                0,
-                RenderLib.getFontRenderer(),
-                RenderLib.getRenderWidth() / 2 - 68,
-                this.y + 15,
-                137,
-                20
-        );
-        this.textField.setMaxStringLength(100);
-        this.textField.setText("test");
-        this.textField.setFocused(true);
-        this.textField.setCursorPosition(0);
     }
 
     public String getValue() {
@@ -43,33 +31,46 @@ public class ConfigString extends ConfigOption {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
-        this.textField.updateCursorCounter();
+    public void init() {
+        this.textField = new GuiTextField(
+                0,
+                RenderLib.getFontRenderer(),
+                RenderLib.getRenderWidth() / 2 - 100,
+                this.y + 15,
+                200,
+                20
+        );
+        this.textField.setMaxStringLength(100);
+        this.textField.setText(getValue());
+    }
 
+    @Override
+    public void draw(int mouseX, int mouseY) {
         RenderLib.drawRectangle(
-                0x50000000,
+                0x80000000,
                 RenderLib.getRenderWidth() / 2 - 105,
-                y - 5,
+                this.y - 5,
                 210,
-                60
+                45
         );
 
         RenderLib.drawStringWithShadow(
                 this.name,
                 RenderLib.getRenderWidth() / 2 - 100,
-                y
+                this.y
         );
 
-        try {
-            this.textField.drawTextBox();
-        } catch (NullPointerException exception) {
-            exception.printStackTrace();
-        }
+        this.textField.drawTextBox();
+    }
+
+    @Override
+    public void update() {
+        this.textField.updateCursorCounter();
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        this.textField.mouseClicked(mouseX, mouseX, mouseButton);
+        this.textField.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override

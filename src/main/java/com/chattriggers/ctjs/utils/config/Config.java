@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import lombok.Getter;
@@ -45,8 +44,10 @@ public class Config {
     }
 
     public void init() {
+        this.configOptions.clear();
+
         this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/", 10);
-        this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true);
+        this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true, 65);
 
         this.consoleTheme = new ConfigStringSelector("Console Theme", 0,
                 new String[]{
@@ -64,11 +65,11 @@ public class Config {
                         "red",
                         "green",
                         "aids"
-                });
+                }, 120);
 
-        this.customTheme = new ConfigBoolean("Custom Console Theme", false);
-        this.consoleForegroundColor = new ConfigColor("Console Foreground Color", new Color(208, 208, 208));
-        this.consoleBackgroundColor = new ConfigColor("Console Background Color", new Color(21, 21, 21));
+        this.customTheme = new ConfigBoolean("Custom Console Theme", false, 175);
+        this.consoleForegroundColor = new ConfigColor("Console Foreground Color", new Color(208, 208, 208), 230);
+        this.consoleBackgroundColor = new ConfigColor("Console Background Color", new Color(21, 21, 21), 285);
     }
 
     public void addConfigOption(ConfigOption configOption) {
@@ -98,7 +99,8 @@ public class Config {
 
     public void load() {
         try {
-            CTJS.getInstance().setConfig(new Gson().fromJson(new FileReader(configFile), Config.class));
+            // TODO temporary bypass of loading because it doesn't work yet
+            Config json = new Gson().fromJson(new FileReader(configFile), Config.class);
         } catch (FileNotFoundException exception) {
             createConfig();
         }

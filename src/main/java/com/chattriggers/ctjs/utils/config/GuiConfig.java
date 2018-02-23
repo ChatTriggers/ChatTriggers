@@ -11,19 +11,27 @@ public class GuiConfig extends GuiScreen {
 
     public GuiConfig() {
         this.configOptions = CTJS.getInstance().getConfig().getConfigOptions();
+        for (ConfigOption configOption : this.configOptions)
+            configOption.init();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawBackground(0);
 
-        for (ConfigOption configOption : configOptions)
+        for (ConfigOption configOption : this.configOptions)
             configOption.draw(mouseX, mouseY);
     }
 
     @Override
+    public void updateScreen() {
+        for (ConfigOption configOption : this.configOptions)
+            configOption.update();
+    }
+
+    @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        for (ConfigOption configOption : configOptions)
+        for (ConfigOption configOption : this.configOptions)
             configOption.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -31,7 +39,7 @@ public class GuiConfig extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
 
-        for (ConfigOption configOption : configOptions)
+        for (ConfigOption configOption : this.configOptions)
             configOption.keyTyped(typedChar, keyCode);
     }
 }

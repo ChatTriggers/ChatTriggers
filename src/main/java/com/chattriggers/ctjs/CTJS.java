@@ -54,7 +54,6 @@ public class CTJS {
     @Getter
     private Console console;
     @Getter
-    @Setter
     private Config config;
     @Getter
     private ModuleManager moduleManager;
