@@ -43,7 +43,7 @@ public class ConfigString extends ConfigOption {
     }
 
     @Override
-    void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY) {
         this.textField.updateCursorCounter();
 
         RenderLib.drawRectangle(
@@ -68,12 +68,12 @@ public class ConfigString extends ConfigOption {
     }
 
     @Override
-    void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         this.textField.mouseClicked(mouseX, mouseX, mouseButton);
     }
 
     @Override
-    void keyTyped(char typedChar, int keyCode) {
+    public void keyTyped(char typedChar, int keyCode) {
         if (this.textField.isFocused())
             this.textField.textboxKeyTyped(typedChar, keyCode);
     }

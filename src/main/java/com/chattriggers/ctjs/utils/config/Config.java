@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.utils.config;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import lombok.Getter;
@@ -97,15 +98,10 @@ public class Config {
 
     public void load() {
         try {
-            Config json = new Gson().fromJson(new FileReader(configFile), Config.class);
-            postLoad();
+            CTJS.getInstance().setConfig(new Gson().fromJson(new FileReader(configFile), Config.class));
         } catch (FileNotFoundException exception) {
             createConfig();
         }
-    }
-
-    private void postLoad() {
-
     }
 
     private void createConfig() {

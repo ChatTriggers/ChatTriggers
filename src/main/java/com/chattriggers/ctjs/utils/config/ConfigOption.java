@@ -15,9 +15,9 @@ public abstract class ConfigOption {
         CTJS.getInstance().getConfig().addConfigOption(this);
     }
 
-    abstract void draw(int mouseX, int mouseY);
-    abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
-    abstract void keyTyped(char typedChar, int keyCode);
+    public abstract void draw(int mouseX, int mouseY);
+    public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
+    public abstract void keyTyped(char typedChar, int keyCode);
 
     public enum Type {
         STRING, STRING_SELECTOR, COLOR, BOOLEAN

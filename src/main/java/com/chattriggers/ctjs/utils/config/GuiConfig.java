@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GuiConfig extends GuiScreen {
-    ArrayList<ConfigOption> configOptions;
+    private ArrayList<ConfigOption> configOptions;
 
     public GuiConfig() {
         this.configOptions = CTJS.getInstance().getConfig().getConfigOptions();

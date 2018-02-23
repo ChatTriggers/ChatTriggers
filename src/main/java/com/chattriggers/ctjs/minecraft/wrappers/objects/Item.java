@@ -23,12 +23,12 @@ public class Item {
      * @param itemStack the minecraft ItemStack
      */
     public Item(ItemStack itemStack) {
-        if (itemStack == null) {
-            itemStack = new ItemStack(new Block(0).getBlock());
-        }
+        ItemStack newItemStack = itemStack;
+        if (itemStack == null)
+            newItemStack = new ItemStack(new Block(0).getBlock());
 
-        this.item = itemStack.getItem();
-        this.itemStack = itemStack;
+        this.item = newItemStack.getItem();
+        this.itemStack = newItemStack;
     }
 
     /**
