@@ -35,4 +35,19 @@ public class ConfigStringSelector extends ConfigOption {
 
         return "";
     }
+
+    @Override
+    void draw(int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+
+    }
+
+    @Override
+    void keyTyped(char typedChar, int keyCode) {
+
+    }
 }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class Config {
     @Setter
     private transient File configFile;
+    @Getter
     private transient ArrayList<ConfigOption> configOptions;
 
 
@@ -40,8 +41,10 @@ public class Config {
 
     public Config() {
         this.configOptions = new ArrayList<>();
+    }
 
-        this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/");
+    public void init() {
+        this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/", 10);
         this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true);
 
         this.consoleTheme = new ConfigStringSelector("Console Theme", 0,

@@ -22,4 +22,19 @@ public class ConfigBoolean extends ConfigOption {
             return this.defaultValue;
         return this.value;
     }
+
+    @Override
+    void draw(int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+
+    }
+
+    @Override
+    void keyTyped(char typedChar, int keyCode) {
+
+    }
 }

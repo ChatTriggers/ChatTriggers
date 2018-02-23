@@ -94,6 +94,7 @@ public class CTJS {
         this.injectResourcePack(event.getModConfigurationDirectory().toString());
 
         this.config = new Config();
+        this.config.init();
         this.config.setConfigFile(new File(event.getModConfigurationDirectory().toString(), "ChatTriggers.json"));
         this.config.save();
         this.config.load();

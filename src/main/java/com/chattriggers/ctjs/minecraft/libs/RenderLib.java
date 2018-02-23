@@ -229,6 +229,17 @@ public class RenderLib {
     }
 
     /**
+     * Draws a string with drop shadow to the screen.
+     *
+     * @param text  the text to draw
+     * @param x     the x coordinate on screen
+     * @param y     the y coordinate on screen
+     */
+    public static void drawStringWithShadow(String text, float x, float y) {
+        drawStringWithShadow(text, x, y, 1, 0xffffffff);
+    }
+
+    /**
      * Gets a color int based on 0-255 rgba values.
      * This can be used in settings background and text color.
      *

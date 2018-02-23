@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.minecraft.objects.Message;
+import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -89,6 +90,7 @@ public class CTCommand extends CommandBase {
                     }).start();
                     break;
                 case("files"):
+                case("file"):
                     openFileLocation();
                     break;
                 case("import"):
@@ -102,9 +104,18 @@ public class CTCommand extends CommandBase {
                 case("console"):
                     Console.getConsole().showConsole(true);
                     break;
-                case("gui"):
+                case("modules"):
+                case("module"):
+                case("imports"):
                     CTJS.getInstance().getGuiHandler().openGui(
                             new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
+                    );
+                    break;
+                case("config"):
+                case("settings"):
+                case("setting"):
+                    CTJS.getInstance().getGuiHandler().openGui(
+                            new GuiConfig()
                     );
                     break;
                 case("sim"):
