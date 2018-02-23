@@ -18,9 +18,7 @@ public abstract class ScriptLoader {
         loadAssets();
     }
 
-    public void postLoad() {
-
-    }
+    public abstract void postLoad();
 
     protected abstract ArrayList<Module> loadModules(Boolean updateCheck);
     protected abstract ArrayList<String> getIllegalLines();

@@ -71,7 +71,7 @@ public class Config {
         this.consoleBackgroundColor = new ConfigColor("Console Background Color", new Color(21, 21, 21));
     }
 
-    void addConfigOption(ConfigOption configOption) {
+    public void addConfigOption(ConfigOption configOption) {
         this.configOptions.add(configOption);
     }
 

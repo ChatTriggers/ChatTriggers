@@ -9,13 +9,12 @@ import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.io.FileUtils;
 
-import javax.script.*;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptException;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -183,8 +182,6 @@ public class JSScriptLoader extends ScriptLoader {
 
     @Override
     public void postLoad() {
-        super.postLoad();
-
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -264,24 +261,6 @@ public class JSScriptLoader extends ScriptLoader {
         }
 
         return allFiles;
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        try {
-            getInvocableEngine().invokeFunction("updateProvidedLibsTick");
-        } catch (ScriptException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onWorldLoad(WorldEvent.Load event) {
-        try {
-            getInvocableEngine().invokeFunction("updateProvidedLibsWorld");
-        } catch (ScriptException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

@@ -86,49 +86,42 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+        handleOverlayTriggers(event);
+
+        if (!(EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT))
+            return;
+
+        TriggerType.STEP.triggerAll();
+
+        handleMouseInput();
+        CTJS.getInstance().getCps().clickCalc();
+    }
+
+    private void handleOverlayTriggers(RenderGameOverlayEvent event) {
         RenderGameOverlayEvent.ElementType element = EventLib.getType(event);
 
-        if (element == RenderGameOverlayEvent.ElementType.PLAYER_LIST)
+        if (element == RenderGameOverlayEvent.ElementType.PLAYER_LIST) {
             TriggerType.RENDER_PLAYER_LIST.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+        } else if (element == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
             TriggerType.RENDER_CROSSHAIR.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.DEBUG)
+        } else if (element == RenderGameOverlayEvent.ElementType.DEBUG) {
             TriggerType.RENDER_DEBUG.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.BOSSHEALTH)
+        } else if (element == RenderGameOverlayEvent.ElementType.BOSSHEALTH) {
             TriggerType.RENDER_BOSS_HEALTH.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.HEALTH)
+        } else if (element == RenderGameOverlayEvent.ElementType.HEALTH) {
             TriggerType.RENDER_HEALTH.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.FOOD)
+        } else if (element == RenderGameOverlayEvent.ElementType.FOOD) {
             TriggerType.RENDER_FOOD.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.HEALTHMOUNT)
+        } else if (element == RenderGameOverlayEvent.ElementType.HEALTHMOUNT) {
             TriggerType.RENDER_MOUNT_HEALTH.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        } else if (element == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
             TriggerType.RENDER_EXPERIENCE.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.HOTBAR)
+        } else if (element == RenderGameOverlayEvent.ElementType.HOTBAR) {
             TriggerType.RENDER_HOTBAR.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.AIR)
+        } else if (element == RenderGameOverlayEvent.ElementType.AIR) {
             TriggerType.RENDER_AIR.triggerAll(event);
-
-        if (element == RenderGameOverlayEvent.ElementType.TEXT) {
-            // render overlay trigger
+        } else if (element == RenderGameOverlayEvent.ElementType.TEXT) {
             TriggerType.RENDER_OVERLAY.triggerAll();
-
-            // step trigger
-            TriggerType.STEP.triggerAll();
-
-            // mouse clicked trigger
-            handleMouseInput();
-
-            CTJS.getInstance().getCps().clickCalc();
         }
     }
 

@@ -42,24 +42,13 @@ var Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Item");
 var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Block");
 var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
 
-// deprecated
-var LookingAt = Java.type("com.chattriggers.ctjs.minecraft.wrappers.LookingAt");
-
 // Misc
 var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.handlers.DisplayHandler");
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 
-
 /*End Built in Vars */
 
-function updateProvidedLibsTick() {
-    // deprecated
-    LookingAt.update();
-}
 
-function updateProvidedLibsWorld() {
-
-}
 
 // simplified methods
 function print(toPrint) {

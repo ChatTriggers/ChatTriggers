@@ -95,20 +95,36 @@ public class CPS {
             leftClicksAverage.add((double) leftClicks.size());
             rightClicksAverage.add((double) rightClicks.size());
 
-            if (leftClicksAverage.size() > 100) leftClicksAverage.remove(0);
-            if (rightClicksAverage.size() > 100) rightClicksAverage.remove(0);
+            limitAverage(leftClicksAverage);
+            limitAverage(rightClicksAverage);
 
-            if (leftClicksAverage.size() > 0 && leftClicksAverage.get(leftClicksAverage.size() - 1) == 0) {
-                leftClicksAverage.clear();
-                leftClicksMax = 0;
-            }
-
-            if (rightClicksAverage.size() > 0 && rightClicksAverage.get(rightClicksAverage.size() - 1) == 0) {
-                rightClicksAverage.clear();
-                rightClicksMax = 0;
-            }
+            clearOldLeft();
+            clearOldRight();
         }
 
+        findMax();
+    }
+
+    private void limitAverage(ArrayList<Double> average) {
+        if (average.size() > 100)
+            average.remove(0);
+    }
+
+    private void clearOldLeft() {
+        if (leftClicksAverage.size() > 0 && leftClicksAverage.get(leftClicksAverage.size() - 1) == 0) {
+            leftClicksAverage.clear();
+            leftClicksMax = 0;
+        }
+    }
+
+    private void clearOldRight() {
+        if (rightClicksAverage.size() > 0 && rightClicksAverage.get(rightClicksAverage.size() - 1) == 0) {
+            rightClicksAverage.clear();
+            rightClicksMax = 0;
+        }
+    }
+
+    private void findMax() {
         if (leftClicks.size() > leftClicksMax) leftClicksMax = leftClicks.size();
         if (rightClicks.size() > rightClicksMax) rightClicksMax = rightClicks.size();
     }
