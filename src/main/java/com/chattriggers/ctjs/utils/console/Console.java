@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import io.sentry.Sentry;
 import lombok.Getter;
@@ -137,31 +136,14 @@ public class Console {
     public void showConsole(boolean show) {
         this.frame.setVisible(show);
 
-        Color bg = new Color(29, 31, 33);
-        Color fg = new Color(197, 200, 198);
+        Color bg;
+        Color fg;
 
-        if (CTJS.getInstance().getConfig().getCustomTheme()) {
-            String bgColor = CTJS.getInstance().getConfig().getBg();
-            bgColor = bgColor.substring(1, bgColor.length() - 1);
-            String[] bgColors = bgColor.split(",");
-
-            bg = new Color(RenderLib.limit255(Integer.parseInt(bgColors[0].trim())),
-                    RenderLib.limit255(Integer.parseInt(bgColors[1].trim())),
-                    RenderLib.limit255(Integer.parseInt(bgColors[2].trim())));
-
-            String fgColor = CTJS.getInstance().getConfig().getFg();
-            fgColor = fgColor.substring(1, fgColor.length() - 1);
-            String[] fgColors = fgColor.split(",");
-
-            fg = new Color(RenderLib.limit255(Integer.parseInt(fgColors[0].trim())),
-                    RenderLib.limit255(Integer.parseInt(fgColors[1].trim())),
-                    RenderLib.limit255(Integer.parseInt(fgColors[2].trim())));
+        if (CTJS.getInstance().getConfig().getCustomTheme().getValue()) {
+            bg = CTJS.getInstance().getConfig().getConsoleBackgroundColor().getValue();
+            fg = CTJS.getInstance().getConfig().getConsoleForegroundColor().getValue();
         } else {
-            switch (CTJS.getInstance().getConfig().getConsoleTheme()) {
-                case "default.dark":
-                    bg = new Color(21, 21, 21);
-                    fg = new Color(208, 208, 208);
-                    break;
+            switch (CTJS.getInstance().getConfig().getConsoleTheme().getValue()) {
                 case "ashes.dark":
                     bg = new Color(28, 32, 35);
                     fg = new Color(199, 204, 209);
@@ -214,6 +196,7 @@ public class Console {
                     bg = new Color(251, 251, 28);
                     fg = new Color(192, 20, 214);
                     break;
+                case "default.dark":
                 default:
                     bg = new Color(21, 21, 21);
                     fg = new Color(208, 208, 208);
