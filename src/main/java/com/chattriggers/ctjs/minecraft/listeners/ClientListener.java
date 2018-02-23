@@ -88,7 +88,7 @@ public class ClientListener {
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
         handleOverlayTriggers(event);
 
-        if (!(EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT))
+        if (EventLib.getType(event) != RenderGameOverlayEvent.ElementType.TEXT)
             return;
 
         TriggerType.STEP.triggerAll();
