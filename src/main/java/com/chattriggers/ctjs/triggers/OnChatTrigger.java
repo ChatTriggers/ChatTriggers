@@ -148,39 +148,57 @@ public class OnChatTrigger extends OnTrigger {
             throw new IllegalArgumentException("Argument 1 must be a String, Argument 2 must be a ClientChatReceivedEvent");
 
         ClientChatReceivedEvent chatEvent = (ClientChatReceivedEvent) args[1];
+
         if (!this.triggerIfCanceled && chatEvent.isCanceled()) return;
 
-        String chatMessage = (String) args[0];
+        String chatMessage = getChatMessage(chatEvent, (String) args[0]);
 
-        if (chatCriteria.contains("&"))
-            chatMessage = EventLib.getMessage((ClientChatReceivedEvent) args[1]).getFormattedText().replace("\u00a7", "&");
-
-        for (String ignore : this.ignored)
-            chatMessage = chatMessage.replace(ignore, "");
-
-        List<Object> variables = new ArrayList<>();
-        if (!"".equals(chatCriteria))
-            variables = matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
-
+        List<Object> variables = getVariables(chatMessage);
         if (variables == null) return;
+        variables.add(chatEvent);
 
-        Sentry.getContext().recordBreadcrumb(
-            new BreadcrumbBuilder()
-                .setCategory("generic")
-                .setLevel(Breadcrumb.Level.INFO)
-                .setTimestamp(new Date())
-                .setType(Breadcrumb.Type.DEFAULT)
-                .setMessage("Chat message: " + chatMessage)
-                .build()
-        );
+        recordBreadcrumb(chatMessage);
 
         try {
-            variables.add(chatEvent);
             CTJS.getInstance().getModuleManager().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e, this);
             TriggerType.CHAT.removeTrigger(this);
         }
+    }
+
+    // helper method to get the proper chat message based on the presence of color codes
+    private String getChatMessage(ClientChatReceivedEvent chatEvent, String defaultChatMessage) {
+        String chatMessage;
+
+        chatMessage = defaultChatMessage;
+        if (this.chatCriteria.contains("&"))
+            chatMessage =  EventLib.getMessage(chatEvent).getFormattedText().replace("\u00a7", "&");
+
+        for (String ignore : this.ignored)
+            chatMessage = chatMessage.replace(ignore, "");
+
+        return chatMessage;
+    }
+
+    // helper method to get the variables to pass through
+    private List<Object> getVariables(String chatMessage) {
+        if (!"".equals(this.chatCriteria))
+            return matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"));
+        return new ArrayList<>();
+    }
+
+    // helper method to record a breadcrumb for sentry
+    private void recordBreadcrumb(String chatMessage) {
+        Sentry.getContext().recordBreadcrumb(
+                new BreadcrumbBuilder()
+                        .setCategory("generic")
+                        .setLevel(Breadcrumb.Level.INFO)
+                        .setTimestamp(new Date())
+                        .setType(Breadcrumb.Type.DEFAULT)
+                        .setMessage("Chat message: " + chatMessage)
+                        .build()
+        );
     }
 
     /**
@@ -190,7 +208,7 @@ public class OnChatTrigger extends OnTrigger {
      * @param chat the chat message to compare against
      * @return a list of the variables, in order or null if it doesn't match
      */
-    public List<Object> matchesChatCriteria(String chat) {
+    private List<Object> matchesChatCriteria(String chat) {
         Matcher matcher = criteriaPattern.matcher(chat);
 
         if (parameters.isEmpty()) {
