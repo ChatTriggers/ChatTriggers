@@ -27,7 +27,9 @@ public class ConfigColor extends ConfigOption {
 
         this.x = x;
         this.y = y;
-        this.redHeld = this.blueHeld = this.greenHeld = false;
+        this.redHeld = false;
+        this.blueHeld = false;
+        this.greenHeld = false;
     }
 
     public Color getValue() {
@@ -145,6 +147,8 @@ public class ConfigColor extends ConfigOption {
 
     @Override
     public void mouseReleased() {
-        this.redHeld = this.blueHeld = this.greenHeld = false;
+        this.redHeld = false;
+        this.blueHeld = false;
+        this.greenHeld = false;
     }
 }
