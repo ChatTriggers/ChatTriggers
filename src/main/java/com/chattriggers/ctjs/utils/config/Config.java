@@ -43,8 +43,8 @@ public class Config {
     public void init() {
         this.configOptions.clear();
 
-        this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/", 10);
-        this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true, 65);
+        this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/", -110, 10);
+        this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true, -110, 65);
 
         this.consoleTheme = new ConfigStringSelector("Console Theme", 0,
                 new String[]{
@@ -62,11 +62,11 @@ public class Config {
                         "red",
                         "green",
                         "aids"
-                }, 120);
+                }, -110, 120);
 
-        this.customTheme = new ConfigBoolean("Custom Console Theme", false, 175);
-        this.consoleForegroundColor = new ConfigColor("Console Foreground Color", new Color(208, 208, 208), 230);
-        this.consoleBackgroundColor = new ConfigColor("Console Background Color", new Color(21, 21, 21), 285);
+        this.customTheme = new ConfigBoolean("Custom Console Theme", false, 110, 10);
+        this.consoleForegroundColor = new ConfigColor("Console Foreground Color", new Color(208, 208, 208), 110, 65);
+        this.consoleBackgroundColor = new ConfigColor("Console Background Color", new Color(21, 21, 21), 110, 140);
     }
 
     public void addConfigOption(ConfigOption configOption) {

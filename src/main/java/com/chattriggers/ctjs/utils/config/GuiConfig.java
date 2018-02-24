@@ -24,15 +24,15 @@ public class GuiConfig extends GuiScreen {
     }
 
     @Override
-    public void updateScreen() {
-        for (ConfigOption configOption : this.configOptions)
-            configOption.update();
-    }
-
-    @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         for (ConfigOption configOption : this.configOptions)
             configOption.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY, int state) {
+        for (ConfigOption configOption : this.configOptions)
+            configOption.mouseReleased();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiTextField;
@@ -13,15 +14,17 @@ public class ConfigString extends ConfigOption {
     private String value = null;
 
     private transient GuiTextField textField;
-    private transient int y;
+    private transient Long systemTime;
 
-    ConfigString(String name, String defaultValue, int y) {
+    ConfigString(String name, String defaultValue, int x, int y) {
         super(ConfigOption.Type.STRING);
 
         this.name = name;
         this.defaultValue = defaultValue;
 
+        this.x = x;
         this.y = y;
+        this.systemTime = Client.getSystemTime();
     }
 
     public String getValue() {
@@ -35,7 +38,7 @@ public class ConfigString extends ConfigOption {
         this.textField = new GuiTextField(
                 0,
                 RenderLib.getFontRenderer(),
-                RenderLib.getRenderWidth() / 2 - 100,
+                RenderLib.getRenderWidth() / 2 - 100 + this.x,
                 this.y + 15,
                 200,
                 20
@@ -46,26 +49,30 @@ public class ConfigString extends ConfigOption {
 
     @Override
     public void draw(int mouseX, int mouseY) {
+        update();
+
         RenderLib.drawRectangle(
                 0x80000000,
-                RenderLib.getRenderWidth() / 2 - 105,
+                RenderLib.getRenderWidth() / 2 - 105 + this.x,
                 this.y - 5,
                 210,
                 45
         );
 
-        RenderLib.drawStringWithShadow(
+        RenderLib.drawString(
                 this.name,
-                RenderLib.getRenderWidth() / 2 - 100,
+                RenderLib.getRenderWidth() / 2 - 100 + this.x,
                 this.y
         );
 
         this.textField.drawTextBox();
     }
 
-    @Override
-    public void update() {
-        this.textField.updateCursorCounter();
+    private void update() {
+        while (this.systemTime < Client.getSystemTime() + 50) {
+            this.systemTime += 50;
+            this.textField.updateCursorCounter();
+        }
     }
 
     @Override

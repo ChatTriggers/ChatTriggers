@@ -204,6 +204,17 @@ public class RenderLib {
     }
 
     /**
+     * Draws a string to the screen.
+     *
+     * @param text  the text to draw
+     * @param x     the x coordinate on screen
+     * @param y     the y coordinate on screen
+     */
+    public static void drawString(String text, float x, float y) {
+        drawString(text, x, y, 1, 0xffffffff, false);
+    }
+
+    /**
      * Draws a string with drop shadow to the screen.
      *
      * @param text  the text to draw

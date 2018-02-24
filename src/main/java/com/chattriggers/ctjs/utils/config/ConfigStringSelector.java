@@ -14,15 +14,14 @@ public class ConfigStringSelector extends ConfigOption {
     @Setter
     private Integer value = null;
 
-    private transient int y;
-
-    ConfigStringSelector(String name, Integer defaultValue, String[] values, int y) {
+    ConfigStringSelector(String name, Integer defaultValue, String[] values, int x, int y) {
         super(ConfigOption.Type.STRING_SELECTOR);
 
         this.name = name;
         this.defaultValue = defaultValue;
         this.values = values;
 
+        this.x = x;
         this.y = y;
     }
 
@@ -50,31 +49,21 @@ public class ConfigStringSelector extends ConfigOption {
     public void draw(int mouseX, int mouseY) {
         RenderLib.drawRectangle(
                 0x80000000,
-                RenderLib.getRenderWidth() / 2 - 105,
+                RenderLib.getRenderWidth() / 2 - 105 + this.x,
                 this.y - 5,
                 210,
                 45
         );
 
-        RenderLib.drawStringWithShadow(
+        RenderLib.drawString(
                 this.name,
-                RenderLib.getRenderWidth() / 2 - 100,
+                RenderLib.getRenderWidth() / 2 - 100 + this.x,
                 this.y
         );
     }
 
     @Override
-    public void update() {
-
-    }
-
-    @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-
-    }
-
-    @Override
-    public void keyTyped(char typedChar, int keyCode) {
 
     }
 }

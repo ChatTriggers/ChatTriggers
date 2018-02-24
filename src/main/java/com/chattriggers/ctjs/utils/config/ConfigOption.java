@@ -9,6 +9,9 @@ public abstract class ConfigOption {
     @Getter
     protected transient Type type;
 
+    protected transient int x;
+    protected transient int y;
+
     ConfigOption(Type type) {
         this.type = type;
 
@@ -17,9 +20,9 @@ public abstract class ConfigOption {
 
     public abstract void init();
     public abstract void draw(int mouseX, int mouseY);
-    public abstract void update();
     public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
-    public abstract void keyTyped(char typedChar, int keyCode);
+    public void mouseReleased() {}
+    public void keyTyped(char typedChar, int keyCode) {}
 
     public enum Type {
         STRING, STRING_SELECTOR, COLOR, BOOLEAN

@@ -15,14 +15,14 @@ public class ConfigBoolean extends ConfigOption {
     private Boolean value = null;
 
     private transient GuiButton button;
-    private transient int y;
 
-    ConfigBoolean(String name, Boolean defaultValue, int y) {
+    ConfigBoolean(String name, Boolean defaultValue, int x, int y) {
         super(ConfigOption.Type.BOOLEAN);
 
         this.name = name;
         this.defaultValue = defaultValue;
 
+        this.x = x;
         this.y = y;
     }
 
@@ -42,7 +42,7 @@ public class ConfigBoolean extends ConfigOption {
     public void init() {
         this.button = new GuiButton(
                 0,
-                RenderLib.getRenderWidth() / 2 - 100,
+                RenderLib.getRenderWidth() / 2 - 100 + this.x,
                 this.y + 15,
                 getStringValue()
         );
@@ -52,24 +52,19 @@ public class ConfigBoolean extends ConfigOption {
     public void draw(int mouseX, int mouseY) {
         RenderLib.drawRectangle(
                 0x80000000,
-                RenderLib.getRenderWidth() / 2 - 105,
+                RenderLib.getRenderWidth() / 2 - 105 + this.x,
                 this.y - 5,
                 210,
                 45
         );
 
-        RenderLib.drawStringWithShadow(
+        RenderLib.drawString(
                 this.name,
-                RenderLib.getRenderWidth() / 2 - 100,
+                RenderLib.getRenderWidth() / 2 - 100 + this.x,
                 this.y
         );
 
         this.button.drawButton(Client.getMinecraft(), mouseX, mouseY);
-    }
-
-    @Override
-    public void update() {
-
     }
 
     @Override
@@ -79,10 +74,5 @@ public class ConfigBoolean extends ConfigOption {
             this.button.displayString = getStringValue();
             this.button.playPressSound(Client.getMinecraft().getSoundHandler());
         }
-    }
-
-    @Override
-    public void keyTyped(char typedChar, int keyCode) {
-
     }
 }
