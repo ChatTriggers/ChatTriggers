@@ -42,7 +42,7 @@ public class ConfigColor extends ConfigOption {
 
         this.redButton = new GuiButton(
                 0,
-                (int) MathLib.map(getValue().getRed(), 0, 255, middle - 100 + this.x, middle + 97 + this.x),
+                (int) MathLib.map(getValue().getRed(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
                 this.y + 15,
                 5,
                 10,
@@ -51,7 +51,7 @@ public class ConfigColor extends ConfigOption {
 
         this.greenButton = new GuiButton(
                 0,
-                (int) MathLib.map(getValue().getGreen(), 0, 255, middle - 100 + this.x, middle + 97 + this.x),
+                (int) MathLib.map(getValue().getGreen(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
                 this.y + 30,
                 5,
                 10,
@@ -60,7 +60,7 @@ public class ConfigColor extends ConfigOption {
 
         this.blueButton = new GuiButton(
                 0,
-                (int) MathLib.map(getValue().getBlue(), 0, 255, middle - 100 + this.x, middle + 97 + this.x),
+                (int) MathLib.map(getValue().getBlue(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
                 this.y + 45,
                 5,
                 10,
@@ -78,19 +78,23 @@ public class ConfigColor extends ConfigOption {
         RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
         // red slider
-        RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 18, 202, 5);
-        RenderLib.drawRectangle(0xffaa0000, middle - 100 + this.x, this.y + 19, 200, 3);
+        RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 18, 157, 5);
+        RenderLib.drawRectangle(0xffaa0000, middle - 100 + this.x, this.y + 19, 155, 3);
         this.redButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // green slider
-        RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 33, 202, 5);
-        RenderLib.drawRectangle(0xff008800, middle - 100 + this.x, this.y + 34, 200, 3);
+        RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 33, 157, 5);
+        RenderLib.drawRectangle(0xff008800, middle - 100 + this.x, this.y + 34, 155, 3);
         this.greenButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // blue slider
-        RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 48, 202, 5);
-        RenderLib.drawRectangle(0xff0000cc, middle - 100 + this.x, this.y + 49, 200, 3);
+        RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 48, 157, 5);
+        RenderLib.drawRectangle(0xff0000cc, middle - 100 + this.x, this.y + 49, 155, 3);
         this.blueButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
+
+        // color preview
+        RenderLib.drawRectangle(0xff000000, middle + this.x + 59, this.y + 14, 42, 42);
+        RenderLib.drawRectangle(getValue().getRGB(), middle + this.x + 60, this.y + 15, 40, 40);
 
         handleHeldButtons(mouseX, middle);
     }
@@ -106,9 +110,9 @@ public class ConfigColor extends ConfigOption {
         limitHeldButtons(this.redButton, this.blueButton, this.greenButton);
 
         this.value = new Color(
-                (int) MathLib.map(redButton.xPosition, middle - 100 + this.x, middle + 97 + this.x, 0, 255),
-                (int) MathLib.map(greenButton.xPosition, middle - 100 + this.x, middle + 97 + this.x, 0, 255),
-                (int) MathLib.map(blueButton.xPosition, middle - 100 + this.x, middle + 97 + this.x, 0, 255)
+                (int) MathLib.map(redButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
+                (int) MathLib.map(greenButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
+                (int) MathLib.map(blueButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255)
         );
     }
 
@@ -116,8 +120,8 @@ public class ConfigColor extends ConfigOption {
         for (GuiButton button : buttons) {
             if (button.xPosition < RenderLib.getRenderWidth() / 2 - 100 + this.x)
                 button.xPosition = RenderLib.getRenderWidth() / 2 - 100 + this.x;
-            if (button.xPosition > RenderLib.getRenderWidth() / 2 + 97 + this.x)
-                button.xPosition = RenderLib.getRenderWidth() / 2 + 97 + this.x;
+            if (button.xPosition > RenderLib.getRenderWidth() / 2 + 52 + this.x)
+                button.xPosition = RenderLib.getRenderWidth() / 2 + 52 + this.x;
         }
     }
 
