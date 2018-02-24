@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
@@ -71,24 +70,12 @@ public class ConfigColor extends ConfigOption {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        if (!CTJS.getInstance().getConfig().getCustomTheme().getValue())
-            return;
+        if (this.hidden) return;
 
         int middle = RenderLib.getRenderWidth() / 2;
 
-        RenderLib.drawRectangle(
-                0x80000000,
-                middle - 105 + this.x,
-                this.y - 5,
-                210,
-                65
-        );
-
-        RenderLib.drawString(
-                this.name,
-                middle - 100 + this.x,
-                this.y
-        );
+        RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 65);
+        RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
         // red slider
         RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 18, 202, 5);
@@ -136,8 +123,7 @@ public class ConfigColor extends ConfigOption {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (!CTJS.getInstance().getConfig().getCustomTheme().getValue())
-            return;
+        if (this.hidden) return;
 
         if (this.redButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
             this.redHeld = true;

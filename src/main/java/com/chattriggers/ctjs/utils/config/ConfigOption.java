@@ -11,6 +11,7 @@ public abstract class ConfigOption {
 
     protected transient int x;
     protected transient int y;
+    protected transient boolean hidden;
 
     ConfigOption(Type type) {
         this.type = type;

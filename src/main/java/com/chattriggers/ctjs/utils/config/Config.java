@@ -62,7 +62,7 @@ public class Config {
                         "red",
                         "green",
                         "aids"
-                }, -110, 120);
+                }, 110, 65);
 
         this.customTheme = new ConfigBoolean("Custom Console Theme", false, 110, 10);
         this.consoleForegroundColor = new ConfigColor("Console Foreground Color", new Color(208, 208, 208), 110, 65);
@@ -91,6 +91,18 @@ public class Config {
             configFile.createNewFile();
         } catch (IOException exception) {
             Console.getConsole().printStackTrace(exception);
+        }
+    }
+
+    public void updateHidden() {
+        if (this.customTheme.getValue()) {
+            this.consoleForegroundColor.hidden = false;
+            this.consoleBackgroundColor.hidden = false;
+            this.consoleTheme.hidden = true;
+        } else {
+            this.consoleForegroundColor.hidden = true;
+            this.consoleBackgroundColor.hidden = true;
+            this.consoleTheme.hidden = false;
         }
     }
 }

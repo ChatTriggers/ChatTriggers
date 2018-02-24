@@ -49,21 +49,14 @@ public class ConfigString extends ConfigOption {
 
     @Override
     public void draw(int mouseX, int mouseY) {
+        if (this.hidden) return;
+
         update();
 
-        RenderLib.drawRectangle(
-                0x80000000,
-                RenderLib.getRenderWidth() / 2 - 105 + this.x,
-                this.y - 5,
-                210,
-                45
-        );
+        int middle = RenderLib.getRenderWidth() / 2;
 
-        RenderLib.drawString(
-                this.name,
-                RenderLib.getRenderWidth() / 2 - 100 + this.x,
-                this.y
-        );
+        RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
+        RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
         this.textField.drawTextBox();
     }
@@ -77,6 +70,8 @@ public class ConfigString extends ConfigOption {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        if (this.hidden) return;
+
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
     }
 

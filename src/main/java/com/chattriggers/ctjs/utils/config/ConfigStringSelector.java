@@ -50,7 +50,7 @@ public class ConfigStringSelector extends ConfigOption {
         this.leftArrowButton = new GuiButton(
                 0,
                 RenderLib.getRenderWidth() / 2 - 100 + this.x,
-                this.y +5,
+                this.y + 15,
                 30,
                 20,
                 "<"
@@ -59,7 +59,7 @@ public class ConfigStringSelector extends ConfigOption {
         this.rightArrowButton = new GuiButton(
                 0,
                 RenderLib.getRenderWidth() / 2 + 70 + this.x,
-                this.y + 5,
+                this.y + 15,
                 30,
                 20,
                 ">"
@@ -68,18 +68,17 @@ public class ConfigStringSelector extends ConfigOption {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        RenderLib.drawRectangle(
-                0x80000000,
-                RenderLib.getRenderWidth() / 2 - 105 + this.x,
-                this.y - 5,
-                210,
-                45
-        );
+        if (this.hidden) return;
+
+        int middle = RenderLib.getRenderWidth() / 2;
+
+        RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
+        RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
         RenderLib.drawString(
                 getValue(),
-                RenderLib.getRenderWidth() / 2 - 50 + this.x,
-                this.y + 10
+                middle + this.x - RenderLib.getStringWidth(getValue()) / 2,
+                this.y + 20
         );
 
         this.leftArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
@@ -88,6 +87,8 @@ public class ConfigStringSelector extends ConfigOption {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        if (this.hidden) return;
+
         if (this.leftArrowButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
             this.value--;
 

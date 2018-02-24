@@ -17,6 +17,8 @@ public class GuiConfig extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        CTJS.getInstance().getConfig().updateHidden();
+
         drawBackground(0);
 
         for (ConfigOption configOption : this.configOptions)
