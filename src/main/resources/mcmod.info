@@ -3,7 +3,7 @@
     "modid": "ct.js",
     "name": "ChatTrigger.js",
     "description": "Customize your chat",
-    "version": "0.1-SNAPSHOT",
+    "version": "0.9-SNAPSHOT",
     "mcversion": "1.8.9",
     "url": "http://chattriggers.com",
     "updateUrl": "",
