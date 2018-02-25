@@ -3,16 +3,13 @@ package com.chattriggers.ctjs.utils.config;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 
 public class ConfigBoolean extends ConfigOption {
-    @Getter
-    private Boolean defaultValue;
-
     @Setter
     private Boolean value = null;
+    private transient Boolean defaultValue;
 
     private transient GuiButton button;
 

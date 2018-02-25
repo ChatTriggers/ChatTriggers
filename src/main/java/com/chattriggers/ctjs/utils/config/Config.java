@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.utils.config;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,6 +45,7 @@ public class Config {
         this.configOptions.clear();
 
         this.modulesFolder = new ConfigString("Directory", "./config/ChatTriggers/modules/", -110, 10);
+        this.modulesFolder.setDirectory(true);
         this.printChatToConsole = new ConfigBoolean("Print Chat To Console", true, -110, 65);
 
         this.consoleTheme = new ConfigStringSelector("Console Theme", 0,
@@ -74,7 +76,8 @@ public class Config {
     }
 
     public void save() {
-        FileLib.write(configFile.getAbsolutePath(), new Gson().toJson(this));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        FileLib.write(configFile.getAbsolutePath(), gson.toJson(this));
     }
 
     public void load() {

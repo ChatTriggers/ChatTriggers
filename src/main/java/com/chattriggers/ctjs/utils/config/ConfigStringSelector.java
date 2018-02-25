@@ -3,17 +3,14 @@ package com.chattriggers.ctjs.utils.config;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.utils.console.Console;
-import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 
 public class ConfigStringSelector extends ConfigOption {
-    @Getter
-    private transient String[] values;
-    @Getter
-    private Integer defaultValue;
     @Setter
     private Integer value = null;
+    private transient String[] values;
+    private transient Integer defaultValue;
 
     private transient GuiButton leftArrowButton;
     private transient GuiButton rightArrowButton;

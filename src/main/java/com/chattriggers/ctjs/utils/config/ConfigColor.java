@@ -3,18 +3,15 @@ package com.chattriggers.ctjs.utils.config;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 
 import java.awt.*;
 
 public class ConfigColor extends ConfigOption {
-    @Getter
-    private Color defaultValue;
-
     @Setter
     private Color value = null;
+    private transient Color defaultValue;
 
     private transient GuiButton redButton, greenButton, blueButton;
     private transient boolean redHeld, blueHeld, greenHeld;

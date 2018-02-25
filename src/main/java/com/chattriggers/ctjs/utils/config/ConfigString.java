@@ -1,20 +1,24 @@
 package com.chattriggers.ctjs.utils.config;
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiTextField;
 
-public class ConfigString extends ConfigOption {
-    @Getter
-    private String defaultValue;
+import java.io.File;
 
+public class ConfigString extends ConfigOption {
     @Setter
     private String value = null;
+    private transient String defaultValue;
 
     private transient GuiTextField textField;
-    private transient Long systemTime;
+    private transient long systemTime;
+    @Setter
+    private transient boolean isValid;
+    @Setter
+    private transient boolean isDirectory;
 
     ConfigString(String name, String defaultValue, int x, int y) {
         super(ConfigOption.Type.STRING);
@@ -25,6 +29,8 @@ public class ConfigString extends ConfigOption {
         this.x = x;
         this.y = y;
         this.systemTime = Client.getSystemTime();
+        this.isValid = true;
+        this.isDirectory = false;
     }
 
     public String getValue() {
@@ -33,8 +39,19 @@ public class ConfigString extends ConfigOption {
         return value;
     }
 
+    private void updateValidDirectory(String directory) {
+        this.isValid = !this.isDirectory || new File(directory).isDirectory();
+    }
+
+    private String getIsValidColor() {
+        if (this.isValid)
+            return ChatLib.addColor("&a");
+        return ChatLib.addColor("&c");
+    }
+
     @Override
     public void init() {
+        updateValidDirectory(getValue());
         this.textField = new GuiTextField(
                 0,
                 RenderLib.getFontRenderer(),
@@ -44,7 +61,7 @@ public class ConfigString extends ConfigOption {
                 20
         );
         this.textField.setMaxStringLength(100);
-        this.textField.setText(getValue());
+        this.textField.setText(getIsValidColor() + getValue());
     }
 
     @Override
@@ -77,7 +94,15 @@ public class ConfigString extends ConfigOption {
 
     @Override
     public void keyTyped(char typedChar, int keyCode) {
-        if (this.textField.isFocused())
+        if (this.textField.isFocused()) {
             this.textField.textboxKeyTyped(typedChar, keyCode);
+
+            String text = ChatLib.removeFormatting(this.textField.getText());
+            updateValidDirectory(text);
+            this.textField.setText(getIsValidColor() + text);
+
+            if (this.isValid)
+                this.value = text;
+        }
     }
 }
