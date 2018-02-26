@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Chat;
+import com.chattriggers.ctjs.minecraft.wrappers.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import net.minecraft.client.gui.GuiButton;
 
@@ -30,8 +30,8 @@ public class ConfigBoolean extends ConfigOption {
 
     private String getStringValue() {
         if (this.value)
-            return ChatLib.addColor("&aTrue");
-        return ChatLib.addColor("&cFalse");
+            return Chat.addColor("&aTrue");
+        return Chat.addColor("&cFalse");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ConfigBoolean extends ConfigOption {
 
         this.button = new GuiButton(
                 0,
-                RenderLib.getRenderWidth() / 2 - 100 + this.x,
+                Renderer.getRenderWidth() / 2 - 100 + this.x,
                 this.y + 15,
                 getStringValue()
         );
@@ -50,10 +50,10 @@ public class ConfigBoolean extends ConfigOption {
     public void draw(int mouseX, int mouseY) {
         if (this.hidden) return;
 
-        int middle = RenderLib.getRenderWidth() / 2;
+        int middle = Renderer.getRenderWidth() / 2;
 
-        RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
-        RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
+        Renderer.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
+        Renderer.drawString(this.name, middle - 100 + this.x, this.y);
 
         this.button.xPosition = middle - 100 + this.x;
         this.button.drawButton(Client.getMinecraft(), mouseX, mouseY);

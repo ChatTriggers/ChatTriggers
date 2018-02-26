@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Chat;
 import com.chattriggers.ctjs.minecraft.objects.Message;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -45,7 +45,7 @@ public class CTCommand extends CommandBase {
         return getCommandUsage(sender);
     }
     public String getCommandUsage(ICommandSender sender) {
-        return "&b&m" + ChatLib.getChatBreak("-") + "\n" +
+        return "&b&m" + Chat.getChatBreak("-") + "\n" +
                 "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
                 "&c/ct import [module] &7- &oImports a module.\n" +
                 "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
@@ -53,7 +53,7 @@ public class CTCommand extends CommandBase {
                 "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
                 "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
                 "&c/ct &7- &oDisplays this help dialog\n" +
-                "&b&m" + ChatLib.getChatBreak("-");
+                "&b&m" + Chat.getChatBreak("-");
     }
 
     public List<String> getAliases() {
@@ -76,7 +76,7 @@ public class CTCommand extends CommandBase {
 
                     TriggerType.GAME_UNLOAD.triggerAll();
                     TriggerType.WORLD_UNLOAD.triggerAll();
-                    ChatLib.chat("&cReloading ct.js scripts...");
+                    Chat.chat("&cReloading ct.js scripts...");
                     new Thread(() -> {
                         for (TriggerType type : TriggerType.values())
                             type.clearTriggers();
@@ -86,7 +86,7 @@ public class CTCommand extends CommandBase {
                         CTJS.getInstance().setupConfig();
 
                         CTJS.getInstance().getModuleManager().load();
-                        ChatLib.chat("&aDone reloading scripts!");
+                        Chat.chat("&aDone reloading scripts!");
                         TriggerType.WORLD_LOAD.triggerAll();
                         this.isLoaded = true;
                     }).start();
@@ -97,9 +97,9 @@ public class CTCommand extends CommandBase {
                     break;
                 case("import"):
                     if (args.length == 1) {
-                        ChatLib.chat("&c/ct import [module name]");
+                        Chat.chat("&c/ct import [module name]");
                     } else {
-                        ChatLib.chat("&6Importing " + args[1]);
+                        Chat.chat("&6Importing " + args[1]);
                         CTJS.getInstance().getModuleManager().importModule(args[1]);
                     }
                     break;
@@ -122,7 +122,7 @@ public class CTCommand extends CommandBase {
                     break;
                 case("sim"):
                 case("simulate"):
-                    ChatLib.simulateChat(args);
+                    Chat.simulateChat(args);
                     break;
                 case("dump"):
                     try {
@@ -131,18 +131,18 @@ public class CTCommand extends CommandBase {
                         else
                             dumpChat(100);
                     } catch (NumberFormatException e) {
-                        ChatLib.chat("&cThe second command argument must be an integer!");
+                        Chat.chat("&cThe second command argument must be an integer!");
                     }
                     break;
                 case("copy"):
                     copyArgsToClipboard(args);
                     break;
                 default:
-                    ChatLib.chat(getCommandUsage(sender));
+                    Chat.chat(getCommandUsage(sender));
                     break;
             }
         } else {
-            ChatLib.chat(getCommandUsage(sender));
+            Chat.chat(getCommandUsage(sender));
         }
     }
 
@@ -152,10 +152,10 @@ public class CTCommand extends CommandBase {
 
         int amount = lines;
         if (amount > messages.size()) amount = messages.size();
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed);
+        Chat.chat("&6&m" + Chat.getChatBreak("-"), idFixed);
         String msg;
         for (int i = 0; i < amount; i++) {
-            msg = ChatLib.replaceFormatting(messages.get(messages.size() - amount + i));
+            msg = Chat.replaceFormatting(messages.get(messages.size() - amount + i));
             ChatComponentText cct = new ChatComponentText(msg);
 
             cct.setChatStyle(new ChatStyle()
@@ -164,9 +164,9 @@ public class CTCommand extends CommandBase {
                     .setChatHoverEvent(
                             new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message."))));
 
-            ChatLib.chat(new Message(cct).setChatLineId(idFixed + i + 1));
+            Chat.chat(new Message(cct).setChatLineId(idFixed + i + 1));
         }
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + amount + 1);
+        Chat.chat("&6&m" + Chat.getChatBreak("-"), idFixed + amount + 1);
 
         idFixedOffset = idFixed + amount + 1;
     }
@@ -181,7 +181,7 @@ public class CTCommand extends CommandBase {
         if (idFixedOffset == null) return;
 
         while (idFixedOffset >= idFixed) {
-            ChatLib.clearChat(idFixedOffset--);
+            Chat.clearChat(idFixedOffset--);
         }
 
         idFixedOffset = null;
@@ -193,7 +193,7 @@ public class CTCommand extends CommandBase {
             Desktop.getDesktop().open(new File("./config/ChatTriggers"));
         } catch (IOException exception) {
             Console.getConsole().printStackTrace(exception);
-            ChatLib.chat("&cCould not open file location");
+            Chat.chat("&cCould not open file location");
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Chat;
 import lombok.Getter;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
@@ -69,7 +69,7 @@ public class Message {
 
         for (Object message : messages) {
             if (message instanceof String) {
-                ChatComponentText cct = new ChatComponentText(ChatLib.addColor((String) message));
+                ChatComponentText cct = new ChatComponentText(Chat.addColor((String) message));
                 cct.setChatStyle(new ChatStyle().setParentStyle(null));
 
                 chatMessage.appendSibling(cct);

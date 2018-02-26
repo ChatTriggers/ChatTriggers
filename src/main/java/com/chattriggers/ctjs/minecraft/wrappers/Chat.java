@@ -1,8 +1,7 @@
-package com.chattriggers.ctjs.minecraft.libs;
+package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.objects.Message;
-import com.chattriggers.ctjs.minecraft.wrappers.*;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
@@ -23,8 +22,7 @@ import java.util.List;
 
 @UtilityClass
 @SideOnly(Side.CLIENT)
-@Deprecated
-public class ChatLib {
+public class Chat {
 
     /**
      * Adds as many chat message to chat as passed.
@@ -32,7 +30,6 @@ public class ChatLib {
      * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
      */
-    @Deprecated
     public static void chat(String message, boolean recursive) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
@@ -52,7 +49,6 @@ public class ChatLib {
      *
      * @param message the message to be printed
      */
-    @Deprecated
     public static void chat(String message) {
         chat(message, false);
     }
@@ -63,7 +59,6 @@ public class ChatLib {
      * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
      */
-    @Deprecated
     public static void chat(Message message, boolean recursive) {
         if (message.getChatLineId() != -1) {
             Client.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
@@ -83,7 +78,6 @@ public class ChatLib {
      *
      * @param message the message to be printed
      */
-    @Deprecated
     public static void chat(Message message) {
         chat(message, false);
     }
@@ -96,7 +90,6 @@ public class ChatLib {
      * @param message    the message to be printed
      * @param chatLineID the chat line to save the message under (pass to clearChat)
      */
-    @Deprecated
     public static void chat(String message, int chatLineID) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
@@ -109,7 +102,6 @@ public class ChatLib {
      *
      * @param message the message to be printed
      */
-    @Deprecated
     public static void raw(String message) {
         raw(message, false);
     }
@@ -120,7 +112,6 @@ public class ChatLib {
      * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
      */
-    @Deprecated
     public static void raw(String message, Boolean recursive) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
@@ -140,7 +131,6 @@ public class ChatLib {
      * @param message    the message to be printed
      * @param chatLineID the chat line to save the message under (pass to clearChat)
      */
-    @Deprecated
     public static void raw(String message, int chatLineID) {
         if (!isPlayer("[RAW]: " + message)) return;
 
@@ -153,7 +143,6 @@ public class ChatLib {
      *
      * @param args The message to simulate
      */
-    @Deprecated
     public static void simulateChat(String[] args) {
         StringBuilder toSend = new StringBuilder();
 
@@ -169,7 +158,6 @@ public class ChatLib {
      *
      * @param message the message to be sent
      */
-    @Deprecated
     public static void say(String message) {
         if (!isPlayer("[SAY]: " + message)) return;
 
@@ -181,7 +169,6 @@ public class ChatLib {
      *
      * @param command the command to run, without the leading slash (Ex. "help")
      */
-    @Deprecated
     public static void command(String command) {
         if (!isPlayer("[COMMAND]: /" + command)) return;
 
@@ -191,7 +178,6 @@ public class ChatLib {
     /**
      * Clear chat
      */
-    @Deprecated
     public static void clearChat() {
         Client.getChatGUI().clearChatMessages();
     }
@@ -201,7 +187,6 @@ public class ChatLib {
      *
      * @param chatLineIDs the id(s) to be cleared
      */
-    @Deprecated
     public static void clearChat(int... chatLineIDs) {
         for (int chatLineID : chatLineIDs) {
             Client.getChatGUI().deleteChatLine(chatLineID);
@@ -215,7 +200,6 @@ public class ChatLib {
      * @param seperator the message to split chat with
      * @return the message that would split chat
      */
-    @Deprecated
     public static String getChatBreak(String seperator) {
         StringBuilder stringBuilder = new StringBuilder();
         FontRenderer fRenderer = Renderer.getFontRenderer();
@@ -232,7 +216,6 @@ public class ChatLib {
      *
      * @return the width of chat
      */
-    @Deprecated
     public static int getChatWidth() {
         return Client.getChatGUI().getChatWidth();
     }
@@ -243,7 +226,6 @@ public class ChatLib {
      * @param toRemove the string to un-format
      * @return the unformatted string
      */
-    @Deprecated
     public static String removeFormatting(String toRemove) {
         return toRemove.replaceAll("\\u00a7[0-9a-fklmnor]", "")
                 .replaceAll("&[0-9a-fklmnor]", "");
@@ -255,7 +237,6 @@ public class ChatLib {
      * @param toUnformat the formatted string
      * @return the unformatted string
      */
-    @Deprecated
     public static String replaceFormatting(String toUnformat) {
         return toUnformat.replaceAll("\\u00a7(?![^0-9a-fklmnor]|$)", "&");
     }
@@ -266,7 +247,6 @@ public class ChatLib {
      * @param input the text to be centered
      * @return the centered message
      */
-    @Deprecated
     public static String getCenteredText(String input) {
         boolean left = true;
         StringBuilder stringBuilder = new StringBuilder(removeFormatting(input));
@@ -295,7 +275,6 @@ public class ChatLib {
      * @param chatMessage the unformatted text of the message to be replaced
      * @param toReplace   the new message to be put in replace of the old one
      */
-    @Deprecated
     public static void editChat(String chatMessage, String toReplace) {
         editChat(chatMessage, toReplace, false);
     }
@@ -306,7 +285,6 @@ public class ChatLib {
      * @param chatMessage the unformatted text of the message to be replaced
      * @param toReplace   the new message to be put in replace of the old one
      */
-    @Deprecated
     public static void editChat(String chatMessage, String toReplace, boolean once) {
         List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
                 "drawnChatLines", "field_146252_h");
@@ -337,7 +315,6 @@ public class ChatLib {
      *
      * @return A list of the last 1000 chat lines
      */
-    @Deprecated
     public static ArrayList<String> getChatLines() {
         ArrayList<String> out = new ArrayList<>();
         ArrayList<String> in = CTJS.getInstance().getChatListener().getChatHistory();
@@ -356,7 +333,6 @@ public class ChatLib {
      * @param hoverText the text to show when hovered over
      * @return the chat component created
      */
-    @Deprecated
     public static IChatComponent clickable(String text, String action, String value, String hoverText) {
         ChatComponentText cct = new ChatComponentText(addColor(text));
 
@@ -381,7 +357,6 @@ public class ChatLib {
      * @param value  the value to perform the action with
      * @return the chat component created
      */
-    @Deprecated
     public static IChatComponent clickable(String text, String action, String value) {
         return clickable(text, action, value, null);
     }
@@ -393,7 +368,6 @@ public class ChatLib {
      * @param hover the text to show when hovered over
      * @return the chat component created
      */
-    @Deprecated
     public static IChatComponent hover(String text, String hover) {
         ChatComponentText cct = new ChatComponentText(addColor(text));
 
@@ -412,12 +386,11 @@ public class ChatLib {
      *                  unformatted text
      * @return The text of the event
      */
-    @Deprecated
     public static String getChatMessage(ClientChatReceivedEvent event, boolean formatted) {
         if (formatted) {
-            return EventLib.getMessage(event).getFormattedText().replace('\u00A7', '&');
+            return Events.getMessage(event).getFormattedText().replace('\u00A7', '&');
         } else {
-            return EventLib.getMessage(event).getUnformattedText();
+            return Events.getMessage(event).getUnformattedText();
         }
     }
 
@@ -427,7 +400,6 @@ public class ChatLib {
      * @param event The chat event passed in by a chat trigger
      * @return The unformatted text
      */
-    @Deprecated
     public static String getChatMessage(ClientChatReceivedEvent event) {
         return getChatMessage(event, false);
     }
@@ -447,7 +419,6 @@ public class ChatLib {
      * @param message The string to add color codes to
      * @return the formatted message
      */
-    @Deprecated
     public static String addColor(String message) {
         if (message == null)
             message = "null";

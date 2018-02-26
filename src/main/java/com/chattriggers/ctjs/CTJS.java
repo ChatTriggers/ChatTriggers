@@ -5,8 +5,8 @@ import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
-import com.chattriggers.ctjs.minecraft.libs.FileLib;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.wrappers.FileSystem;
+import com.chattriggers.ctjs.minecraft.wrappers.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
@@ -33,10 +33,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -48,7 +45,8 @@ public class CTJS {
     @Getter
     private static CTJS instance;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private DisplayHandler displayHandler;
     @Getter
     private GuiHandler guiHandler;
@@ -99,10 +97,10 @@ public class CTJS {
         Sentry.init(Reference.SENTRYDSN);
 
         Sentry.getContext().setUser(
-            new UserBuilder()
-                .setUsername(Player.getName())
-                .setId(Player.getUUID())
-                .build()
+                new UserBuilder()
+                        .setUsername(Player.getName())
+                        .setId(Player.getUUID())
+                        .build()
         );
 
         this.injectResourcePack(event.getModConfigurationDirectory().toString());
@@ -121,7 +119,7 @@ public class CTJS {
     public void saveConfig() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String path = new File(this.configLocation, "ChatTriggers.json").getAbsolutePath();
-        FileLib.write(path, gson.toJson(this.config));
+        FileSystem.write(path, gson.toJson(this.config));
     }
 
     private boolean loadConfig() {
@@ -151,8 +149,7 @@ public class CTJS {
             packs.add(imagesPack);
             pictures.mkdirs();
             assetsDir = pictures;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
@@ -176,7 +173,7 @@ public class CTJS {
 
     @EventHandler
     private void postInit(FMLPostInitializationEvent event) {
-        RenderLib.downloadImage("https://i.imgur.com/JAPDKMG.png", "CT_logo.png", true);
+        Renderer.downloadImage("https://i.imgur.com/JAPDKMG.png", "CT_logo.png", true);
     }
 }
 

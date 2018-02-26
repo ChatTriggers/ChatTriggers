@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.listeners;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Events;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
@@ -88,7 +88,7 @@ public class ClientListener {
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
         handleOverlayTriggers(event);
 
-        if (EventLib.getType(event) != RenderGameOverlayEvent.ElementType.TEXT)
+        if (Events.getType(event) != RenderGameOverlayEvent.ElementType.TEXT)
             return;
 
         TriggerType.STEP.triggerAll();
@@ -98,7 +98,7 @@ public class ClientListener {
     }
 
     private void handleOverlayTriggers(RenderGameOverlayEvent event) {
-        RenderGameOverlayEvent.ElementType element = EventLib.getType(event);
+        RenderGameOverlayEvent.ElementType element = Events.getType(event);
 
         if (element == RenderGameOverlayEvent.ElementType.PLAYER_LIST) {
             TriggerType.RENDER_PLAYER_LIST.triggerAll(event);
@@ -127,11 +127,11 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onMouseEvent(MouseEvent event) {
-        if (EventLib.getButton(event) == -1) return;
+        if (Events.getButton(event) == -1) return;
 
         // add to cps
-        if (EventLib.getButton(event) == 0 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addLeftClicks();
-        if (EventLib.getButton(event) == 1 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addRightClicks();
+        if (Events.getButton(event) == 0 && Events.getButtonState(event)) CTJS.getInstance().getCps().addLeftClicks();
+        if (Events.getButton(event) == 1 && Events.getButtonState(event)) CTJS.getInstance().getCps().addRightClicks();
     }
 
     @SubscribeEvent

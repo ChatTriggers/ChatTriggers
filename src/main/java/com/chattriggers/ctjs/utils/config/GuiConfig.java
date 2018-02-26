@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Renderer;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -36,7 +36,7 @@ public class GuiConfig extends GuiScreen {
         for (ConfigOption configOption : this.configOptions)
             configOption.draw(mouseX, mouseY);
 
-        RenderLib.drawImage("CT_logo.png", 0, RenderLib.getRenderHeight() - 64, 0, 0, 256, 256, .25f);
+        Renderer.drawImage("CT_logo.png", 0, Renderer.getRenderHeight() - 64, 0, 0, 256, 256, .25f);
     }
 
     @Override

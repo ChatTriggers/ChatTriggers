@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Chat;
+import com.chattriggers.ctjs.minecraft.wrappers.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiTextField;
@@ -44,8 +44,8 @@ public class ConfigString extends ConfigOption {
 
     private String getIsValidColor() {
         if (this.isValid)
-            return ChatLib.addColor("&a");
-        return ChatLib.addColor("&c");
+            return Chat.addColor("&a");
+        return Chat.addColor("&c");
     }
 
     @Override
@@ -55,8 +55,8 @@ public class ConfigString extends ConfigOption {
         updateValidDirectory(this.value);
         this.textField = new GuiTextField(
                 0,
-                RenderLib.getFontRenderer(),
-                RenderLib.getRenderWidth() / 2 - 100 + this.x,
+                Renderer.getFontRenderer(),
+                Renderer.getRenderWidth() / 2 - 100 + this.x,
                 this.y + 15,
                 200,
                 20
@@ -71,10 +71,10 @@ public class ConfigString extends ConfigOption {
 
         update();
 
-        int middle = RenderLib.getRenderWidth() / 2;
+        int middle = Renderer.getRenderWidth() / 2;
 
-        RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
-        RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
+        Renderer.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
+        Renderer.drawString(this.name, middle - 100 + this.x, this.y);
 
         this.textField.xPosition = middle - 100 + this.x;
         this.textField.drawTextBox();
@@ -109,7 +109,7 @@ public class ConfigString extends ConfigOption {
         if (this.textField.isFocused()) {
             this.textField.textboxKeyTyped(typedChar, keyCode);
 
-            String text = ChatLib.removeFormatting(this.textField.getText());
+            String text = Chat.removeFormatting(this.textField.getText());
             updateValidDirectory(text);
             this.textField.setText(getIsValidColor() + text);
 

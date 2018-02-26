@@ -14,10 +14,10 @@ var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerR
 var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 
 // Events
-var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
-var WorldLib = Java.type("com.chattriggers.ctjs.minecraft.libs.WorldLib");
-var RenderLib = Java.type("com.chattriggers.ctjs.minecraft.libs.RenderLib");
-var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
+var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");        // Deprecated
+var WorldLib = Java.type("com.chattriggers.ctjs.minecraft.libs.WorldLib");      // Deprecated
+var RenderLib = Java.type("com.chattriggers.ctjs.minecraft.libs.RenderLib");    // Deprecated
+var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");        // Deprecated
 var MathLib = Java.type("com.chattriggers.ctjs.minecraft.libs.MathLib");
 
 // Objects
@@ -41,6 +41,9 @@ var CPS = Java.type("com.chattriggers.ctjs.CTJS").getInstance().getCps();
 var Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Item");
 var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Block");
 var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
+var Chat = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Chat");
+var Renderer = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Renderer");
+var FileSystem = Java.type("com.chattriggers.ctjs.minecraft.wrappers.FileSystem");
 
 // Misc
 var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.handlers.DisplayHandler");
