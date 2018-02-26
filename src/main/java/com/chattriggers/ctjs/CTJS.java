@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
+import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
@@ -29,6 +30,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
@@ -73,7 +75,7 @@ public class CTJS {
     private File configLocation;
 
     @EventHandler
-    public void init(FMLInitializationEvent event) {
+    private void init(FMLInitializationEvent event) {
         this.displayHandler = new DisplayHandler();
         this.guiHandler = new GuiHandler();
         this.commandHandler = new CommandHandler();
@@ -89,7 +91,7 @@ public class CTJS {
     }
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+    private void preInit(FMLPreInitializationEvent event) {
         instance = this;
 
         this.console = new Console();
@@ -170,6 +172,11 @@ public class CTJS {
         ClientCommandHandler.instance.registerCommand(new CTCommand());
 
         Runtime.getRuntime().addShutdownHook(new Thread(TriggerType.GAME_UNLOAD::triggerAll));
+    }
+
+    @EventHandler
+    private void postInit(FMLPostInitializationEvent event) {
+        RenderLib.downloadImage("https://i.imgur.com/JAPDKMG.png", "CT_logo.png", true);
     }
 }
 

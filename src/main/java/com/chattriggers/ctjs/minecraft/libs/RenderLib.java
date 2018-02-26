@@ -556,16 +556,16 @@ public class RenderLib {
      * Draw Image helper method. <br>
      * This method is not meant for public use
      */
-    public static void drawImage(ResourceLocation rl, float renderXLoc, float renderYLoc, int textureMapX,
-                                 int textureMapY, int textureWidth, int textureHeight, float scale) {
+    public static void drawImage(ResourceLocation rl, float x, float y, int textureX,
+                                 int textureY, int width, int height, float scale) {
         Client.getMinecraft().getTextureManager().bindTexture(rl);
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glTranslatef(renderXLoc, renderYLoc, 0);
+        GL11.glTranslatef(x, y, 100);
         GL11.glScalef(scale, scale, scale);
-        Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureMapX, textureMapY, textureWidth, textureHeight);
+        Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, textureX, textureY, width, height);
         GL11.glDisable(GL11.GL_BLEND);
 
         GL11.glPopMatrix();

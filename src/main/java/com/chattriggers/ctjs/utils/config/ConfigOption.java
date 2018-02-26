@@ -35,6 +35,7 @@ public abstract class ConfigOption {
         );
     }
     public void draw(int mouseX, int mouseY) {
+        this.resetButton.xPosition = RenderLib.getRenderWidth() / 2 - 100 + this.x + 185;
         this.resetButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         RenderLib.drawString(

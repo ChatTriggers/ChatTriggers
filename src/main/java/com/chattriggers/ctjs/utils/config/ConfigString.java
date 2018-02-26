@@ -76,6 +76,7 @@ public class ConfigString extends ConfigOption {
         RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
         RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
+        this.textField.xPosition = middle - 100 + this.x;
         this.textField.drawTextBox();
 
         super.draw(mouseX, mouseY);

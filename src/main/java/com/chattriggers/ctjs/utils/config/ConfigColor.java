@@ -79,16 +79,19 @@ public class ConfigColor extends ConfigOption {
         // red slider
         RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 18, 157, 5);
         RenderLib.drawRectangle(0xffaa0000, middle - 100 + this.x, this.y + 19, 155, 3);
+        this.redButton.xPosition = (int) MathLib.map(this.value.getRed(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
         this.redButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // green slider
         RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 33, 157, 5);
         RenderLib.drawRectangle(0xff008800, middle - 100 + this.x, this.y + 34, 155, 3);
+        this.greenButton.xPosition = (int) MathLib.map(this.value.getGreen(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
         this.greenButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // blue slider
         RenderLib.drawRectangle(0xff000000, middle - 101 + this.x, this.y + 48, 157, 5);
         RenderLib.drawRectangle(0xff0000cc, middle - 100 + this.x, this.y + 49, 155, 3);
+        this.blueButton.xPosition = (int) MathLib.map(this.value.getBlue(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
         this.blueButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // color preview
@@ -101,29 +104,40 @@ public class ConfigColor extends ConfigOption {
     }
 
     private void handleHeldButtons(int mouseX, int middle) {
-        if (this.redHeld)
-            this.redButton.xPosition = mouseX - 2;
-        if (this.greenHeld)
-            this.greenButton.xPosition = mouseX - 2;
-        if (this.blueHeld)
-            this.blueButton.xPosition = mouseX - 2;
-
-        limitHeldButtons(this.redButton, this.blueButton, this.greenButton);
-
-        this.value = new Color(
-                (int) MathLib.map(this.redButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
-                (int) MathLib.map(this.greenButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
-                (int) MathLib.map(this.blueButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255)
-        );
+        if (this.redHeld) {
+            this.redButton.xPosition = mouseX - 1;
+            limitHeldButton(this.redButton);
+            this.value = new Color(
+                    (int) MathLib.map(this.redButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
+                    this.value.getGreen(),
+                    this.value.getBlue()
+            );
+        }
+        if (this.greenHeld) {
+            this.greenButton.xPosition = mouseX - 1;
+            limitHeldButton(this.greenButton);
+            this.value = new Color(
+                    this.value.getRed(),
+                    (int) MathLib.map(this.greenButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
+                    this.value.getBlue()
+            );
+        }
+        if (this.blueHeld) {
+            this.blueButton.xPosition = mouseX - 1;
+            limitHeldButton(this.blueButton);
+            this.value = new Color(
+                    this.value.getRed(),
+                    this.value.getGreen(),
+                    (int) MathLib.map(this.blueButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255)
+            );
+        }
     }
 
-    private void limitHeldButtons(GuiButton... buttons) {
-        for (GuiButton button : buttons) {
-            if (button.xPosition < RenderLib.getRenderWidth() / 2 - 100 + this.x)
-                button.xPosition = RenderLib.getRenderWidth() / 2 - 100 + this.x;
-            if (button.xPosition > RenderLib.getRenderWidth() / 2 + 52 + this.x)
-                button.xPosition = RenderLib.getRenderWidth() / 2 + 52 + this.x;
-        }
+    private void limitHeldButton(GuiButton button) {
+        if (button.xPosition < RenderLib.getRenderWidth() / 2 - 100 + this.x)
+            button.xPosition = RenderLib.getRenderWidth() / 2 - 100 + this.x;
+        if (button.xPosition > RenderLib.getRenderWidth() / 2 + 52 + this.x)
+            button.xPosition = RenderLib.getRenderWidth() / 2 + 52 + this.x;
     }
 
     @Override

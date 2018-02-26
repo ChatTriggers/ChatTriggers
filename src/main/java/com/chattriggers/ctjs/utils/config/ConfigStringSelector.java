@@ -82,6 +82,8 @@ public class ConfigStringSelector extends ConfigOption {
                 this.y + 20
         );
 
+        this.leftArrowButton.xPosition = middle - 100 + this.x;
+        this.rightArrowButton.xPosition = middle + 70 + this.x;
         this.leftArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
         this.rightArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
