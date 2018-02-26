@@ -36,6 +36,8 @@ public class ConfigBoolean extends ConfigOption {
 
     @Override
     public void init() {
+        super.init();
+
         this.button = new GuiButton(
                 0,
                 RenderLib.getRenderWidth() / 2 - 100 + this.x,
@@ -46,20 +48,32 @@ public class ConfigBoolean extends ConfigOption {
 
     @Override
     public void draw(int mouseX, int mouseY) {
+        if (this.hidden) return;
+
         int middle = RenderLib.getRenderWidth() / 2;
 
         RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
         RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
         this.button.drawButton(Client.getMinecraft(), mouseX, mouseY);
+
+        super.draw(mouseX, mouseY);
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        if (this.hidden) return;
+
         if (this.button.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
             this.value = !this.value;
-            this.button.displayString = getStringValue();
             this.button.playPressSound(Client.getMinecraft().getSoundHandler());
         }
+
+        if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
+            this.value = this.defaultValue;
+            this.resetButton.playPressSound(Client.getMinecraft().getSoundHandler());
+        }
+
+        this.button.displayString = getStringValue();
     }
 }

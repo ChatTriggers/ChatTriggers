@@ -50,6 +50,8 @@ public class ConfigString extends ConfigOption {
 
     @Override
     public void init() {
+        super.init();
+
         updateValidDirectory(this.value);
         this.textField = new GuiTextField(
                 0,
@@ -75,6 +77,8 @@ public class ConfigString extends ConfigOption {
         RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
         this.textField.drawTextBox();
+
+        super.draw(mouseX, mouseY);
     }
 
     private void update() {
@@ -89,10 +93,18 @@ public class ConfigString extends ConfigOption {
         if (this.hidden) return;
 
         this.textField.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
+            this.value = this.defaultValue;
+            this.textField.setText(getIsValidColor() + this.value);
+            this.resetButton.playPressSound(Client.getMinecraft().getSoundHandler());
+        }
     }
 
     @Override
     public void keyTyped(char typedChar, int keyCode) {
+        if (this.hidden) return;
+
         if (this.textField.isFocused()) {
             this.textField.textboxKeyTyped(typedChar, keyCode);
 

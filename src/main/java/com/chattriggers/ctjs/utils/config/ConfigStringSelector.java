@@ -46,6 +46,8 @@ public class ConfigStringSelector extends ConfigOption {
 
     @Override
     public void init() {
+        super.init();
+
         this.leftArrowButton = new GuiButton(
                 0,
                 RenderLib.getRenderWidth() / 2 - 100 + this.x,
@@ -82,6 +84,8 @@ public class ConfigStringSelector extends ConfigOption {
 
         this.leftArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
         this.rightArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
+
+        super.draw(mouseX, mouseY);
     }
 
     @Override
@@ -100,6 +104,11 @@ public class ConfigStringSelector extends ConfigOption {
             if (this.value >= this.values.length) this.value = 0;
 
             this.rightArrowButton.playPressSound(Client.getMinecraft().getSoundHandler());
+        }
+
+        if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
+            this.value = this.defaultValue;
+            this.resetButton.playPressSound(Client.getMinecraft().getSoundHandler());
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
+import net.minecraft.client.gui.GuiButton;
 
 public abstract class ConfigOption {
     @Getter
@@ -13,14 +16,36 @@ public abstract class ConfigOption {
     protected int y;
     protected boolean hidden;
 
+    protected GuiButton resetButton;
+
     ConfigOption(Type type) {
         this.type = type;
 
         CTJS.getInstance().getGuiConfig().addConfigOption(this);
     }
 
-    public abstract void init();
-    public abstract void draw(int mouseX, int mouseY);
+    public void init() {
+        this.resetButton = new GuiButton(
+                0,
+                RenderLib.getRenderWidth() / 2 - 100 + this.x + 185,
+                this.y - 2,
+                14,
+                12,
+                ""
+        );
+    }
+    public void draw(int mouseX, int mouseY) {
+        this.resetButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
+
+        RenderLib.drawString(
+                "\u21BA",
+                RenderLib.getRenderWidth() / 2 - 100 + this.x + 189,
+                this.y - 4,
+                2,
+                0xffffffff,
+                true
+        );
+    }
     public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
     public void mouseReleased() {}
     public void keyTyped(char typedChar, int keyCode) {}

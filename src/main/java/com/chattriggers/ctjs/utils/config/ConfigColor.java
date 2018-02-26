@@ -31,6 +31,8 @@ public class ConfigColor extends ConfigOption {
 
     @Override
     public void init() {
+        super.init();
+
         this.redHeld = false;
         this.blueHeld = false;
         this.greenHeld = false;
@@ -94,6 +96,8 @@ public class ConfigColor extends ConfigOption {
         RenderLib.drawRectangle(this.value.getRGB(), middle + this.x + 60, this.y + 15, 40, 40);
 
         handleHeldButtons(mouseX, middle);
+
+        super.draw(mouseX, mouseY);
     }
 
     private void handleHeldButtons(int mouseX, int middle) {
@@ -137,6 +141,15 @@ public class ConfigColor extends ConfigOption {
         if (this.blueButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
             this.blueHeld = true;
             this.blueButton.playPressSound(Client.getMinecraft().getSoundHandler());
+        }
+
+        if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
+            this.value = this.defaultValue;
+            int middle = RenderLib.getRenderWidth() / 2;
+            this.redButton.xPosition = (int) MathLib.map(this.value.getRed(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
+            this.greenButton.xPosition = (int) MathLib.map(this.value.getGreen(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
+            this.blueButton.xPosition = (int) MathLib.map(this.value.getBlue(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
+            this.resetButton.playPressSound(Client.getMinecraft().getSoundHandler());
         }
     }
 
