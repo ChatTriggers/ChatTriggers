@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Events;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 
@@ -33,7 +33,7 @@ public class OnSoundPlayTrigger extends OnTrigger {
 
         PlaySoundEvent event = (PlaySoundEvent) args[0];
 
-        if (soundNameCriteria != null && !EventLib.getName(event).equalsIgnoreCase(soundNameCriteria)) {
+        if (soundNameCriteria != null && !Events.getName(event).equalsIgnoreCase(soundNameCriteria)) {
             return;
         }
 

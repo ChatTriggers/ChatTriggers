@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.libs;
+package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -7,8 +7,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-@Deprecated
-public class FileLib {
+
+public class FileSystem {
     /**
      * Writes a file to folder in Imports.
      *
@@ -16,7 +16,6 @@ public class FileLib {
      * @param fileName   name of the file
      * @param toWrite    string to write in file
      */
-    @Deprecated
     public static void write(String importName, String fileName, String toWrite) {
         write(CTJS.getInstance().getConfig().getModulesFolder().value + "/" + importName + "/" + fileName, toWrite);
     }
@@ -28,7 +27,6 @@ public class FileLib {
      * @param fileLocation the location and file name
      * @param toWrite      string to write in file
      */
-    @Deprecated
     public static void write(String fileLocation, String toWrite) {
         try {
             FileUtils.write(new File(fileLocation), toWrite);
@@ -45,7 +43,6 @@ public class FileLib {
      * @param fileName   name of the file
      * @return the string in the file
      */
-    @Deprecated
     public static String read(String importName, String fileName) {
         return read(CTJS.getInstance().getConfig().getModulesFolder().value + "/" + importName + "/" + fileName);
     }
@@ -58,7 +55,6 @@ public class FileLib {
      * @param fileLocation the location and file name
      * @return the string in the file
      */
-    @Deprecated
     public static String read(String fileLocation) {
         try {
             File file = new File(fileLocation);
@@ -84,7 +80,6 @@ public class FileLib {
      * @param theUrl the url to get the data from
      * @return the string stored in the url content
      */
-    @Deprecated
     public static String getUrlContent(String theUrl) {
         StringBuilder content = new StringBuilder();
 

@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.libs;
+package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
@@ -29,24 +29,23 @@ import java.util.ArrayList;
 
 @UtilityClass
 @SideOnly(Side.CLIENT)
-@Deprecated
-public class RenderLib {
-    @Deprecated public static final int BLACK = color(0, 0, 0, 255);
-    @Deprecated public static final int DARK_BLUE = color(0, 0, 190, 255);
-    @Deprecated public static final int DARK_GREEN = color(0, 190, 0, 255);
-    @Deprecated public static final int DARK_AQUA = color(0, 190, 190, 255);
-    @Deprecated public static final int DARK_RED = color(190, 0, 0, 255);
-    @Deprecated public static final int DARK_PURPLE = color(190, 0, 190, 255);
-    @Deprecated public static final int GOLD = color(217, 163, 52, 255);
-    @Deprecated public static final int GRAY = color(190, 190, 190, 255);
-    @Deprecated public static final int DARK_GRAY = color(63, 63, 63, 255);
-    @Deprecated public static final int BLUE = color(63, 63, 254, 255);
-    @Deprecated public static final int GREEN = color(63, 254, 63, 255);
-    @Deprecated public static final int AQUA = color(63, 254, 254, 255);
-    @Deprecated public static final int RED = color(254, 63, 63, 255);
-    @Deprecated public static final int LIGHT_PURPLE = color(254, 63, 254, 255);
-    @Deprecated public static final int YELLOW = color(254, 254, 63, 255);
-    @Deprecated public static final int WHITE = color(255, 255, 255, 255);
+public class Renderer {
+    public static final int BLACK = color(0, 0, 0, 255);
+    public static final int DARK_BLUE = color(0, 0, 190, 255);
+    public static final int DARK_GREEN = color(0, 190, 0, 255);
+    public static final int DARK_AQUA = color(0, 190, 190, 255);
+    public static final int DARK_RED = color(190, 0, 0, 255);
+    public static final int DARK_PURPLE = color(190, 0, 190, 255);
+    public static final int GOLD = color(217, 163, 52, 255);
+    public static final int GRAY = color(190, 190, 190, 255);
+    public static final int DARK_GRAY = color(63, 63, 63, 255);
+    public static final int BLUE = color(63, 63, 254, 255);
+    public static final int GREEN = color(63, 254, 63, 255);
+    public static final int AQUA = color(63, 254, 254, 255);
+    public static final int RED = color(254, 63, 63, 255);
+    public static final int LIGHT_PURPLE = color(254, 63, 254, 255);
+    public static final int YELLOW = color(254, 254, 63, 255);
+    public static final int WHITE = color(255, 255, 255, 255);
 
     /**
      * Gets a color based off of a hex integer input
@@ -54,7 +53,6 @@ public class RenderLib {
      * @param color the hex integer
      * @return the color
      */
-    @Deprecated
     public static int getColor(int color) {
         switch (color) {
             case (0):
@@ -97,7 +95,6 @@ public class RenderLib {
      *
      * @return the font renderer object
      */
-    @Deprecated
     public static FontRenderer getFontRenderer() {
         return Client.getMinecraft().fontRendererObj;
     }
@@ -108,7 +105,6 @@ public class RenderLib {
      * @param text the text to get the width of
      * @return the width of the text
      */
-    @Deprecated
     public static int getStringWidth(String text) {
         return getFontRenderer().getStringWidth(text);
     }
@@ -121,7 +117,6 @@ public class RenderLib {
      * @param maxLines the max number of lines
      * @return the wrapped line list
      */
-    @Deprecated
     public static ArrayList<String> lineWrap(ArrayList<String> lines, int width, int maxLines) {
         int lineWrapIterator = 0;
         Boolean lineWrapContinue = true;
@@ -187,7 +182,6 @@ public class RenderLib {
      * @param scale scales the text size
      * @param color the color
      */
-    @Deprecated
     public static void drawString(String text, float x, float y, float scale, int color, Boolean dropShadow) {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
@@ -205,7 +199,6 @@ public class RenderLib {
      * @param y     the y coordinate on screen
      * @param color the color
      */
-    @Deprecated
     public static void drawString(String text, float x, float y, int color) {
         drawString(text, x, y, 1, color, false);
     }
@@ -217,7 +210,6 @@ public class RenderLib {
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      */
-    @Deprecated
     public static void drawString(String text, float x, float y) {
         drawString(text, x, y, 1, 0xffffffff, false);
     }
@@ -231,7 +223,6 @@ public class RenderLib {
      * @param scale scales the text size
      * @param color the color
      */
-    @Deprecated
     public static void drawStringWithShadow(String text, float x, float y, float scale, int color) {
         drawString(text, x, y, scale, color, true);
     }
@@ -244,7 +235,6 @@ public class RenderLib {
      * @param y     the y coordinate on screen
      * @param color the color
      */
-    @Deprecated
     public static void drawStringWithShadow(String text, float x, float y, int color) {
         drawStringWithShadow(text, x, y, 1, color);
     }
@@ -256,7 +246,6 @@ public class RenderLib {
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      */
-    @Deprecated
     public static void drawStringWithShadow(String text, float x, float y) {
         drawStringWithShadow(text, x, y, 1, 0xffffffff);
     }
@@ -271,7 +260,6 @@ public class RenderLib {
      * @param alpha value between 0 and 255
      * @return integer color
      */
-    @Deprecated
     public static int color(int red, int green, int blue, int alpha) {
         return (limit255(alpha) * 0x1000000) + (limit255(red) * 0x10000) + (limit255(green) * 0x100) + blue;
     }
@@ -283,7 +271,6 @@ public class RenderLib {
      * @param speed speed of time
      * @return integer color
      */
-    @Deprecated
     public static int getRainbow(float step, float speed) {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
         int green = (int) ((Math.sin(step / speed + ((2 * Math.PI) / 3)) + 0.75) * 170);
@@ -298,7 +285,6 @@ public class RenderLib {
      * @param speed speed of time
      * @return the array of colors {red,green,blue}
      */
-    @Deprecated
     public static int[] getRainbowColors(float step, float speed) {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
         int green = (int) ((Math.sin(step / speed + ((2 * Math.PI) / 3)) + 0.75) * 170);
@@ -312,13 +298,11 @@ public class RenderLib {
      * @param step time elapsed
      * @return integer color
      */
-    @Deprecated
     public static int getRainbow(float step) {
         return getRainbow(step, 1f);
     }
 
     // helper method to limit numbers between 0 and 255
-    @Deprecated
     public static int limit255(int a) {
         return (a > 255) ? 255 : (a < 0 ? 0 : a);
     }
@@ -328,7 +312,6 @@ public class RenderLib {
      *
      * @return scaled width
      */
-    @Deprecated
     public static int getRenderWidth() {
         ScaledResolution res = new ScaledResolution(Client.getMinecraft());
         return res.getScaledWidth();
@@ -339,7 +322,6 @@ public class RenderLib {
      *
      * @return scaled height
      */
-    @Deprecated
     public static int getRenderHeight() {
         ScaledResolution res = new ScaledResolution(Client.getMinecraft());
         return res.getScaledHeight();
@@ -356,7 +338,6 @@ public class RenderLib {
      * @param y        the y coordinate for the shape to be centered around
      * @param r        the radius of the shape
      */
-    @Deprecated
     public static void drawShape(int color, int segments, float x, float y, float r) {
         double theta = 2 * Math.PI / (segments);
         double cos = Math.cos(theta);
@@ -395,7 +376,6 @@ public class RenderLib {
      * @param width  the width
      * @param height the height
      */
-    @Deprecated
     public static void drawRectangle(int color, float x, float y, float width, float height) {
         float x2 = x + width;
         float y2 = y + height;
@@ -445,7 +425,6 @@ public class RenderLib {
      * @param xy1       [x,y] array for point 1
      * @param xy2       [x,y] array for point 2
      */
-    @Deprecated
     public static void drawLine(int color, Double thickness, Double[] xy1, Double[] xy2) {
         if (xy1.length == 2 && xy2.length == 2) {
             double theta = -Math.atan2(xy2[1] - xy1[1], xy2[0] - xy1[0]);
@@ -499,7 +478,6 @@ public class RenderLib {
      * @param color  color of the polygon
      * @param points [x,y] array for points
      */
-    @Deprecated
     public static void drawPolygon(int color, Double[]... points) {
         float f3 = (float) (color >> 24 & 255) / 255.0F;
         float f = (float) (color >> 16 & 255) / 255.0F;
@@ -545,7 +523,6 @@ public class RenderLib {
      * @param textureHeight the height of the image to render, usually 256
      * @param scale         the scale of the image, can use decimals, i.e. 0.5, 1.5
      */
-    @Deprecated
     public static void drawImage(String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
         drawImage("ctjs.images", resourceName, renderXLoc, renderYLoc,
@@ -567,7 +544,6 @@ public class RenderLib {
      * @param textureHeight  the height of the image to render, usually 256
      * @param scale          the scale of the image, can use decimals, i.e. 0.5, 1.5
      */
-    @Deprecated
     public static void drawImage(String resourceDomain, String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
 
@@ -580,7 +556,6 @@ public class RenderLib {
      * Draw Image helper method. <br>
      * This method is not meant for public use
      */
-    @Deprecated
     public static void drawImage(ResourceLocation rl, float x, float y, int textureX,
                                  int textureY, int width, int height, float scale) {
         Client.getMinecraft().getTextureManager().bindTexture(rl);
@@ -602,7 +577,6 @@ public class RenderLib {
      * @param url url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
      */
-    @Deprecated
     public static void downloadImage(String url, String resourceName) {
         downloadImage(url, resourceName, true);
     }
@@ -614,7 +588,6 @@ public class RenderLib {
      * @param resourceName file name for the image when it is downloaded
      * @param shouldResize whether or not the file should be resized by CT
      */
-    @Deprecated
     public static void downloadImage(String url, String resourceName, boolean shouldResize) {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
@@ -653,7 +626,6 @@ public class RenderLib {
      * @param scale scales the icon size
      * @param item  the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} to render
      */
-    @Deprecated
     public static void drawItemIcon(int x, int y, float scale, com.chattriggers.ctjs.minecraft.wrappers.objects.Item item) {
         x /= scale;
         y /= scale;
@@ -685,7 +657,6 @@ public class RenderLib {
      * @param item     name or id of item to render
      * @param metadata metadata of item to render
      */
-    @Deprecated
     public static void drawItemIcon(int x, int y, float scale, String item, Integer metadata) {
         if (item.equals("minecraft:air")) return;
 
@@ -714,7 +685,6 @@ public class RenderLib {
      * @param item     name or id of item to render
      * @param metadata metadata of item to render
      */
-    @Deprecated
     public static void drawItemIcon(int x, int y, String item, Integer metadata) {
         drawItemIcon(x, y, 1, item, metadata);
     }
@@ -726,7 +696,6 @@ public class RenderLib {
      * @param y    y coordinate to render item icon to
      * @param item name or id of item to render
      */
-    @Deprecated
     public static void drawItemIcon(int x, int y, String item) {
         drawItemIcon(x, y, 1, item, null);
     }
@@ -739,7 +708,6 @@ public class RenderLib {
      * @param scale  how much to scale the entity by
      * @param rotate whether or not the drawn player should rotate
      */
-    @Deprecated
     public static void drawPlayerOnScreen(int posX, int posY, int scale, boolean rotate) {
         float mouseX = -30;
         float mouseY = 0;

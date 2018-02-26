@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.commands;
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Chat;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
@@ -49,8 +49,8 @@ public class Command extends CommandBase {
             for (OnTrigger trigger : triggers)
                 trigger.trigger((Object[]) args);
         } catch (Exception exception) {
-            ChatLib.chat("&cSomething went wrong while running that command");
-            ChatLib.chat("&cCheck the ct console for more information");
+            Chat.chat("&cSomething went wrong while running that command");
+            Chat.chat("&cCheck the ct console for more information");
             Console.getConsole().printStackTrace(exception);
         }
     }

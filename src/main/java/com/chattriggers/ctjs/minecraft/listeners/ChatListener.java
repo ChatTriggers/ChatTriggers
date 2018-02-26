@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.minecraft.listeners;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Chat;
+import com.chattriggers.ctjs.minecraft.wrappers.Events;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import lombok.Getter;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -18,17 +18,17 @@ public class ChatListener {
 
     @SubscribeEvent
     public void onReceiveChat(ClientChatReceivedEvent event) {
-        if (EventLib.getType(event) == 0 || EventLib.getType(event) == 1) {
+        if (Events.getType(event) == 0 || Events.getType(event) == 1) {
             // save to chatHistory
-            chatHistory.add(ChatLib.getChatMessage(event, true));
+            chatHistory.add(Chat.getChatMessage(event, true));
             if (chatHistory.size() > 1000) chatHistory.remove(0);
 
             // normal Chat Message
-            TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event);
+            TriggerType.CHAT.triggerAll(Chat.getChatMessage(event, false), event);
 
             // print to console
             if (CTJS.getInstance().getConfig().getPrintChatToConsole().value) {
-                Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
+                Console.getConsole().out.println("[CHAT] " + Chat.replaceFormatting(Chat.getChatMessage(event, true)));
             }
         }
     }

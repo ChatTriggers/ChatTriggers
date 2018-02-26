@@ -102,6 +102,21 @@ public class World {
     }
 
     /**
+     * Display a title.
+     *
+     * @param title    title text
+     * @param subtitle subtitle text
+     * @param fadeIn   time to fade in
+     * @param time     time to stay on screen
+     * @param fadeOut  time to fade out
+     */
+    public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
+        Client.getMinecraft().ingameGUI.displayTitle(Chat.addColor(title), null, fadeIn, time, fadeOut);
+        Client.getMinecraft().ingameGUI.displayTitle(null, Chat.addColor(subtitle), 0, 0, 0);
+        Client.getMinecraft().ingameGUI.displayTitle(null, null, fadeIn, time, fadeOut);
+    }
+
+    /**
      * World border object to get border parameters
      */
     public static class border {
@@ -251,6 +266,19 @@ public class World {
 
         public static void spawnParticle(EntityFX particle) {
             Client.getMinecraft().effectRenderer.addEffect(particle);
+        }
+    }
+
+    public static class sound {
+        /**
+         * Play a sound at the player location.
+         *
+         * @param name   the name of the sound
+         * @param volume the volume of the sound
+         * @param pitch  the pitch of the sound
+         */
+        public static void playSound(String name, float volume, float pitch) {
+            Player.getPlayer().playSound(name, volume, pitch);
         }
     }
 }

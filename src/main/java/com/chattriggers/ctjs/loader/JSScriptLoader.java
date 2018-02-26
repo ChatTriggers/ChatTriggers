@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Chat;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
@@ -119,7 +119,7 @@ public class JSScriptLoader extends ScriptLoader {
                     if (newVersion > currVersion) {
                         downloadModule(metadata.getName(), false);
 
-                        ChatLib.chat("&6Updated " + metadata.getName());
+                        Chat.chat("&6Updated " + metadata.getName());
                     }
 
                     newMetadataFile.delete();
@@ -154,7 +154,7 @@ public class JSScriptLoader extends ScriptLoader {
                 FileUtils.copyURLToFile(new URL("https://chattriggers.com/downloads/metadata/" + name),
                         new File(modulesDir, "currMetadata.json"));
             } catch (IOException e) {
-                ChatLib.chat("&cModule not found!");
+                Chat.chat("&cModule not found!");
                 return false;
             }
 

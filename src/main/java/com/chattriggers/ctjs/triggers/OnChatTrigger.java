@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.wrappers.Events;
 import com.chattriggers.ctjs.utils.console.Console;
 import io.sentry.Sentry;
 import io.sentry.event.Breadcrumb;
@@ -173,7 +173,7 @@ public class OnChatTrigger extends OnTrigger {
 
         chatMessage = defaultChatMessage;
         if (this.chatCriteria.contains("&"))
-            chatMessage =  EventLib.getMessage(chatEvent).getFormattedText().replace("\u00a7", "&");
+            chatMessage =  Events.getMessage(chatEvent).getFormattedText().replace("\u00a7", "&");
 
         for (String ignore : this.ignored)
             chatMessage = chatMessage.replace(ignore, "");
