@@ -1,19 +1,23 @@
 package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
+import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
+import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
-import com.chattriggers.ctjs.loader.ModuleManager;
-import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.CPS;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.config.Config;
+import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.sentry.Sentry;
 import io.sentry.event.UserBuilder;
 import lombok.Getter;
@@ -28,6 +32,9 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -54,11 +61,16 @@ public class CTJS {
     @Getter
     private Console console;
     @Getter
+    @Setter
     private Config config;
+    @Getter
+    private GuiConfig guiConfig;
     @Getter
     private ModuleManager moduleManager;
     @Getter
     private CPS cps;
+
+    private File configLocation;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
@@ -93,11 +105,37 @@ public class CTJS {
 
         this.injectResourcePack(event.getModConfigurationDirectory().toString());
 
+        this.configLocation = event.getModConfigurationDirectory();
+
+        setupConfig();
+    }
+
+    public void setupConfig() {
+        this.guiConfig = new GuiConfig();
         this.config = new Config();
-        this.config.init();
-        this.config.setConfigFile(new File(event.getModConfigurationDirectory().toString(), "ChatTriggers.json"));
-        this.config.save();
-        this.config.load();
+        if (loadConfig()) this.config.init();
+    }
+
+    public void saveConfig() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String path = new File(this.configLocation, "ChatTriggers.json").getAbsolutePath();
+        FileLib.write(path, gson.toJson(this.config));
+    }
+
+    private boolean loadConfig() {
+        try {
+            this.config = new Gson().fromJson(new FileReader(new File(this.configLocation, "ChatTriggers.json")), this.config.getClass());
+            return true;
+        } catch (FileNotFoundException exception) {
+            try {
+                new File(this.configLocation, "ChatTriggers.json").createNewFile();
+                this.config.init();
+                saveConfig();
+            } catch (IOException ioexception) {
+                ioexception.printStackTrace();
+            }
+        }
+        return false;
     }
 
     private void injectResourcePack(String path) {

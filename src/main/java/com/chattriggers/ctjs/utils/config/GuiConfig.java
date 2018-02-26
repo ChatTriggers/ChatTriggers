@@ -1,28 +1,45 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.CTJS;
+import lombok.Getter;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class GuiConfig extends GuiScreen {
+    @Getter
     private ArrayList<ConfigOption> configOptions;
+    private Boolean isOpen = false;
 
     public GuiConfig() {
-        this.configOptions = CTJS.getInstance().getConfig().getConfigOptions();
-        for (ConfigOption configOption : this.configOptions)
-            configOption.init();
+        this.configOptions = new ArrayList<>();
+    }
+
+    public void addConfigOption(ConfigOption configOption) {
+        this.configOptions.add(configOption);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        if (!this.isOpen) {
+            this.isOpen = true;
+            for (ConfigOption configOption : this.configOptions)
+                configOption.init();
+        }
+
         CTJS.getInstance().getConfig().updateHidden();
 
         drawBackground(0);
 
         for (ConfigOption configOption : this.configOptions)
             configOption.draw(mouseX, mouseY);
+    }
+
+    @Override
+    public void onGuiClosed() {
+        this.isOpen = false;
+        CTJS.getInstance().saveConfig();
     }
 
     @Override

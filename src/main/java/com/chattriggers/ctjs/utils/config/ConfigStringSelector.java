@@ -3,25 +3,29 @@ package com.chattriggers.ctjs.utils.config;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.utils.console.Console;
-import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 
+import javax.annotation.Nullable;
+
 public class ConfigStringSelector extends ConfigOption {
-    @Setter
-    private Integer value = null;
-    private transient String[] values;
-    private transient Integer defaultValue;
+    public Integer value = null;
+    private Integer defaultValue;
+    private String[] values;
 
     private transient GuiButton leftArrowButton;
     private transient GuiButton rightArrowButton;
 
-    ConfigStringSelector(String name, Integer defaultValue, String[] values, int x, int y) {
+    ConfigStringSelector(@Nullable ConfigStringSelector previous, String name, Integer defaultValue, String[] values, int x, int y) {
         super(ConfigOption.Type.STRING_SELECTOR);
 
         this.name = name;
         this.defaultValue = defaultValue;
-        this.value = defaultValue;
         this.values = values;
+
+        if (previous == null)
+            this.value = this.defaultValue;
+        else
+            this.value = previous.value;
 
         this.x = x;
         this.y = y;
@@ -29,12 +33,10 @@ public class ConfigStringSelector extends ConfigOption {
 
     public String getValue() {
         try {
-            if (this.value == null)
-                return values[defaultValue];
-            return values[value];
+            return this.values[this.value];
         } catch (IndexOutOfBoundsException exception) {
-            if (values.length > 0)
-                return values[0];
+            if (this.values.length > 0)
+                return this.values[0];
             else
                 Console.getConsole().printStackTrace(exception);
         }

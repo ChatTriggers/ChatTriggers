@@ -1,11 +1,10 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.minecraft.objects.Message;
-import com.chattriggers.ctjs.utils.config.GuiConfig;
+import com.chattriggers.ctjs.modules.gui.ModulesGui;
+import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -20,7 +19,9 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CTCommand extends CommandBase {
@@ -82,9 +83,7 @@ public class CTCommand extends CommandBase {
                         CTJS.getInstance().getCommandHandler().getCommandList().clear();
                         CTJS.getInstance().getModuleManager().unload();
 
-                        CTJS.getInstance().getConfig().save();
-                        CTJS.getInstance().getConfig().load();
-                        CTJS.getInstance().getConfig().init();
+                        CTJS.getInstance().setupConfig();
 
                         CTJS.getInstance().getModuleManager().load();
                         ChatLib.chat("&aDone reloading scripts!");
@@ -118,7 +117,7 @@ public class CTCommand extends CommandBase {
                 case("settings"):
                 case("setting"):
                     CTJS.getInstance().getGuiHandler().openGui(
-                            new GuiConfig()
+                            CTJS.getInstance().getGuiConfig()
                     );
                     break;
                 case("sim"):

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ScriptLoader {
-    protected File modulesDir = new File(CTJS.getInstance().getConfig().getModulesFolder().getValue());
+    protected File modulesDir = new File(CTJS.getInstance().getConfig().getModulesFolder().value);
 
     public void preLoad() {
         loadAssets();

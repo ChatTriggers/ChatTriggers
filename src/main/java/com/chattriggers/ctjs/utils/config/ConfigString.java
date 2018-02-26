@@ -6,37 +6,36 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiTextField;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
 public class ConfigString extends ConfigOption {
-    @Setter
-    private String value = null;
-    private transient String defaultValue;
+    public String value = null;
+    private String defaultValue;
 
     private transient GuiTextField textField;
     private transient long systemTime;
     @Setter
-    private transient boolean isValid;
+    private boolean isValid;
     @Setter
-    private transient boolean isDirectory;
+    private boolean isDirectory;
 
-    ConfigString(String name, String defaultValue, int x, int y) {
+    ConfigString(@Nullable ConfigString previous, String name, String defaultValue, int x, int y) {
         super(ConfigOption.Type.STRING);
 
         this.name = name;
         this.defaultValue = defaultValue;
+
+        if (previous == null)
+            this.value = this.defaultValue;
+        else
+            this.value = previous.value;
 
         this.x = x;
         this.y = y;
         this.systemTime = Client.getSystemTime();
         this.isValid = true;
         this.isDirectory = false;
-    }
-
-    public String getValue() {
-        if (value == null)
-            return defaultValue;
-        return value;
     }
 
     private void updateValidDirectory(String directory) {
@@ -51,7 +50,7 @@ public class ConfigString extends ConfigOption {
 
     @Override
     public void init() {
-        updateValidDirectory(getValue());
+        updateValidDirectory(this.value);
         this.textField = new GuiTextField(
                 0,
                 RenderLib.getFontRenderer(),
@@ -61,7 +60,7 @@ public class ConfigString extends ConfigOption {
                 20
         );
         this.textField.setMaxStringLength(100);
-        this.textField.setText(getIsValidColor() + getValue());
+        this.textField.setText(getIsValidColor() + this.value);
     }
 
     @Override

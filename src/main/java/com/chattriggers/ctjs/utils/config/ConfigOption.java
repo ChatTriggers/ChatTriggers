@@ -9,14 +9,14 @@ public abstract class ConfigOption {
     @Getter
     protected transient Type type;
 
-    protected transient int x;
-    protected transient int y;
-    protected transient boolean hidden;
+    protected int x;
+    protected int y;
+    protected boolean hidden;
 
     ConfigOption(Type type) {
         this.type = type;
 
-        CTJS.getInstance().getConfig().addConfigOption(this);
+        CTJS.getInstance().getGuiConfig().addConfigOption(this);
     }
 
     public abstract void init();

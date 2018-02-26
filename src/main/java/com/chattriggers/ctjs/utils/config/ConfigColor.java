@@ -3,45 +3,43 @@ package com.chattriggers.ctjs.utils.config;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 
 import java.awt.*;
 
 public class ConfigColor extends ConfigOption {
-    @Setter
-    private Color value = null;
-    private transient Color defaultValue;
+    public Color value = null;
+    private Color defaultValue;
 
     private transient GuiButton redButton, greenButton, blueButton;
     private transient boolean redHeld, blueHeld, greenHeld;
 
-    ConfigColor(String name, Color defaultValue, int x, int y) {
+    ConfigColor(ConfigColor previous, String name, Color defaultValue, int x, int y) {
         super(ConfigOption.Type.COLOR);
 
         this.name = name;
         this.defaultValue = defaultValue;
 
+        if (previous == null)
+            this.value = this.defaultValue;
+        else
+            this.value = previous.value;
+
         this.x = x;
         this.y = y;
-        this.redHeld = false;
-        this.blueHeld = false;
-        this.greenHeld = false;
-    }
-
-    public Color getValue() {
-        if (value == null)
-            return defaultValue;
-        return value;
     }
 
     @Override
     public void init() {
+        this.redHeld = false;
+        this.blueHeld = false;
+        this.greenHeld = false;
+
         int middle = RenderLib.getRenderWidth() / 2;
 
         this.redButton = new GuiButton(
                 0,
-                (int) MathLib.map(getValue().getRed(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
+                (int) MathLib.map(this.value.getRed(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
                 this.y + 15,
                 5,
                 10,
@@ -50,7 +48,7 @@ public class ConfigColor extends ConfigOption {
 
         this.greenButton = new GuiButton(
                 0,
-                (int) MathLib.map(getValue().getGreen(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
+                (int) MathLib.map(this.value.getGreen(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
                 this.y + 30,
                 5,
                 10,
@@ -59,7 +57,7 @@ public class ConfigColor extends ConfigOption {
 
         this.blueButton = new GuiButton(
                 0,
-                (int) MathLib.map(getValue().getBlue(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
+                (int) MathLib.map(this.value.getBlue(), 0, 255, middle - 100 + this.x, middle + 52 + this.x),
                 this.y + 45,
                 5,
                 10,
@@ -93,7 +91,7 @@ public class ConfigColor extends ConfigOption {
 
         // color preview
         RenderLib.drawRectangle(0xff000000, middle + this.x + 59, this.y + 14, 42, 42);
-        RenderLib.drawRectangle(getValue().getRGB(), middle + this.x + 60, this.y + 15, 40, 40);
+        RenderLib.drawRectangle(this.value.getRGB(), middle + this.x + 60, this.y + 15, 40, 40);
 
         handleHeldButtons(mouseX, middle);
     }
@@ -109,9 +107,9 @@ public class ConfigColor extends ConfigOption {
         limitHeldButtons(this.redButton, this.blueButton, this.greenButton);
 
         this.value = new Color(
-                (int) MathLib.map(redButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
-                (int) MathLib.map(greenButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
-                (int) MathLib.map(blueButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255)
+                (int) MathLib.map(this.redButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
+                (int) MathLib.map(this.greenButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255),
+                (int) MathLib.map(this.blueButton.xPosition, middle - 100 + this.x, middle + 52 + this.x, 0, 255)
         );
     }
 

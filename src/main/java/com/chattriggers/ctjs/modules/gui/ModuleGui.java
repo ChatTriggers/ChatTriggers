@@ -103,7 +103,7 @@ public class ModuleGui extends GuiScreen {
 
         // directory
         RenderLib.drawStringWithShadow(
-                ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().getValue() + this.module.getName() + "/",
+                ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/",
                 22, infoHeight - scrolled,
                 0xffffffff
         );

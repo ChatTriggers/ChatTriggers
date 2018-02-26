@@ -139,9 +139,9 @@ public class Console {
         Color bg;
         Color fg;
 
-        if (CTJS.getInstance().getConfig().getCustomTheme().getValue()) {
-            bg = CTJS.getInstance().getConfig().getConsoleBackgroundColor().getValue();
-            fg = CTJS.getInstance().getConfig().getConsoleForegroundColor().getValue();
+        if (CTJS.getInstance().getConfig().getCustomTheme().value) {
+            bg = CTJS.getInstance().getConfig().getConsoleBackgroundColor().value;
+            fg = CTJS.getInstance().getConfig().getConsoleForegroundColor().value;
         } else {
             switch (CTJS.getInstance().getConfig().getConsoleTheme().getValue()) {
                 case "ashes.dark":

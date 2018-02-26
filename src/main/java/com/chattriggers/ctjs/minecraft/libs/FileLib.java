@@ -17,7 +17,7 @@ public class FileLib {
      * @param toWrite    string to write in file
      */
     public static void write(String importName, String fileName, String toWrite) {
-        write(CTJS.getInstance().getConfig().getModulesFolder().getValue() + "/" + importName + "/" + fileName, toWrite);
+        write(CTJS.getInstance().getConfig().getModulesFolder().value + "/" + importName + "/" + fileName, toWrite);
     }
 
     /**
@@ -44,7 +44,7 @@ public class FileLib {
      * @return the string in the file
      */
     public static String read(String importName, String fileName) {
-        return read(CTJS.getInstance().getConfig().getModulesFolder().getValue() + "/" + importName + "/" + fileName);
+        return read(CTJS.getInstance().getConfig().getModulesFolder().value + "/" + importName + "/" + fileName);
     }
 
     /**

@@ -27,7 +27,7 @@ public class ChatListener {
             TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event);
 
             // print to console
-            if (CTJS.getInstance().getConfig().getPrintChatToConsole().getValue()) {
+            if (CTJS.getInstance().getConfig().getPrintChatToConsole().value) {
                 Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
             }
         }
