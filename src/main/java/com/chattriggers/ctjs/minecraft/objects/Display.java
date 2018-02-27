@@ -553,12 +553,12 @@ public class Display {
 
         private void drawFullBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
             if (bg == DisplayHandler.Background.FULL)
-                new Renderer.rectangle(color, x, y, width, height).draw();
+                Renderer.rectangle(color, x, y, width, height).draw();
         }
 
         private void drawPerLineBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
             if (bg == DisplayHandler.Background.PER_LINE)
-                new Renderer.rectangle(color, x, y, width, height).draw();
+                Renderer.rectangle(color, x, y, width, height).draw();
         }
 
         private void drawLeft(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {

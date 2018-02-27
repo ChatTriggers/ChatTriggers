@@ -756,6 +756,19 @@ public class Renderer {
     }
 
     /**
+     * Creates a new {@link Renderer.rectangle} object.
+     *
+     * @param color  the {@link Renderer#color(int, int, int, int)} of the rectangle
+     * @param x      the x position of the rectangle
+     * @param y      the y position of the rectangle
+     * @param width  the width of the rectangle
+     * @param height the height of the rectangle
+     */
+    public rectangle rectangle(int color, float x, float y, float width, float height) {
+        return new rectangle(color, x, y, width, height);
+    }
+
+    /**
      * Used for creating and drawing rectangles onto client's overlay.
      */
     public class rectangle {
@@ -774,16 +787,7 @@ public class Renderer {
         private int outlineColor;
         private float thickness;
 
-        /**
-         * Creates a new rectangle object.
-         *
-         * @param color  the {@link Renderer#color(int, int, int, int)} of the rectangle
-         * @param x      the x position of the rectangle
-         * @param y      the y position of the rectangle
-         * @param width  the width of the rectangle
-         * @param height the height of the rectangle
-         */
-        public rectangle(int color, float x, float y, float width, float height) {
+        private rectangle(int color, float x, float y, float width, float height) {
             this.color = color;
             this.x = x;
             this.y = y;

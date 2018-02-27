@@ -44,7 +44,7 @@ public class ModulesGui extends GuiScreen {
         if (scrollHeight < 20) scrollHeight = 20;
         if (scrollHeight < Renderer.getRenderHeight()) {
             int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.getRenderHeight() - scrollHeight - 10);
-            new Renderer.rectangle(
+            Renderer.rectangle(
                     0xa0000000,
                     Renderer.getRenderWidth() - 5,
                     scrollY,
@@ -142,7 +142,7 @@ public class ModulesGui extends GuiScreen {
             int height = 105;
 
             // background
-            new Renderer.rectangle(0x80000000, x, y, width, height).draw();
+            Renderer.rectangle(0x80000000, x, y, width, height).draw();
 
             // name
             Renderer.drawStringWithShadow(
@@ -164,7 +164,7 @@ public class ModulesGui extends GuiScreen {
             }
 
             // line break
-            new Renderer.rectangle(0xa0000000, x + 2, y+12, width - 4, 2).draw();
+            Renderer.rectangle(0xa0000000, x + 2, y+12, width - 4, 2).draw();
 
             // description
             String description = (this.module.getMetadata().getDescription() == null)

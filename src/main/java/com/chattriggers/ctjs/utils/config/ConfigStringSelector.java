@@ -73,7 +73,7 @@ public class ConfigStringSelector extends ConfigOption {
 
         int middle = Renderer.getRenderWidth() / 2;
 
-        new Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45)
+        Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45)
                 .setShadow(0xd0000000, 3, 3)
                 .draw();
         Renderer.drawString(this.name, middle - 100 + this.x, this.y);

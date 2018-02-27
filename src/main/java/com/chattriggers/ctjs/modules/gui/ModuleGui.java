@@ -66,7 +66,7 @@ public class ModuleGui extends GuiScreen {
         drawScroll();
 
         // info box
-        new Renderer.rectangle(
+        Renderer.rectangle(
                 0x80000000,
                 20, 10 - scrolled,
                 width, infoHeight
@@ -87,7 +87,7 @@ public class ModuleGui extends GuiScreen {
         );
 
         // line break
-        new Renderer.rectangle(
+        Renderer.rectangle(
                 0xa0000000,
                 22, 22 - scrolled,
                 width - 4, 2
@@ -125,7 +125,7 @@ public class ModuleGui extends GuiScreen {
     }
 
     private int drawFile(Map.Entry<String, List<String>> file, int fileOffset) {
-        new Renderer.rectangle(
+        Renderer.rectangle(
                 0x80000000,
                 20,
                 infoHeight + fileOffset - scrolled,
@@ -156,7 +156,7 @@ public class ModuleGui extends GuiScreen {
 
     private void drawJump() {
         if (scrolled > infoHeight) {
-            new Renderer.rectangle(
+            Renderer.rectangle(
                     0x80000000,
                     width + 20,
                     height - 20,
@@ -177,7 +177,7 @@ public class ModuleGui extends GuiScreen {
         if (scrollHeight < 20) scrollHeight = 20;
         if (scrollHeight < Renderer.getRenderHeight()) {
             int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.getRenderHeight() - scrollHeight - 10);
-            new Renderer.rectangle(
+            Renderer.rectangle(
                     0xa0000000,
                     Renderer.getRenderWidth() - 5,
                     scrollY,

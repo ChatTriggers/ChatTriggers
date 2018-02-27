@@ -73,34 +73,34 @@ public class ConfigColor extends ConfigOption {
 
         int middle = Renderer.getRenderWidth() / 2;
 
-        new Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 65)
+        Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 65)
                 .setShadow(0xd0000000, 3, 3)
                 .draw();
         Renderer.drawString(this.name, middle - 100 + this.x, this.y);
 
         // red slider
-        new Renderer.rectangle(0xffaa0000, middle - 100 + this.x, this.y + 19, 155, 3)
+        Renderer.rectangle(0xffaa0000, middle - 100 + this.x, this.y + 19, 155, 3)
                 .setOutline(0xff000000, 1)
                 .draw();
         this.redButton.xPosition = (int) MathLib.map(this.value.getRed(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
         this.redButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // green slider
-        new Renderer.rectangle(0xff008800, middle - 100 + this.x, this.y + 34, 155, 3)
+        Renderer.rectangle(0xff008800, middle - 100 + this.x, this.y + 34, 155, 3)
                 .setOutline(0xff000000, 1)
                 .draw();
         this.greenButton.xPosition = (int) MathLib.map(this.value.getGreen(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
         this.greenButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // blue slider
-        new Renderer.rectangle(0xff0000cc, middle - 100 + this.x, this.y + 49, 155, 3)
+        Renderer.rectangle(0xff0000cc, middle - 100 + this.x, this.y + 49, 155, 3)
                 .setOutline(0xff000000, 1)
                 .draw();
         this.blueButton.xPosition = (int) MathLib.map(this.value.getBlue(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
         this.blueButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
         // color preview
-        new Renderer.rectangle(this.value.getRGB(), middle + this.x + 60, this.y + 15, 40, 40)
+        Renderer.rectangle(this.value.getRGB(), middle + this.x + 60, this.y + 15, 40, 40)
                 .setOutline(0xff000000, 1)
                 .draw();
 
