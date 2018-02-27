@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.utils.console.Console;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -175,6 +176,7 @@ public class Renderer {
 
     /**
      * Draws a string to the screen.
+     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
@@ -182,6 +184,7 @@ public class Renderer {
      * @param scale scales the text size
      * @param color the color
      */
+    @Deprecated
     public static void drawString(String text, float x, float y, float scale, int color, Boolean dropShadow) {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
@@ -193,29 +196,34 @@ public class Renderer {
 
     /**
      * Draws a string to the screen.
+     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      * @param color the color
      */
+    @Deprecated
     public static void drawString(String text, float x, float y, int color) {
         drawString(text, x, y, 1, color, false);
     }
 
     /**
      * Draws a string to the screen.
+     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text the text to draw
      * @param x    the x coordinate on screen
      * @param y    the y coordinate on screen
      */
+    @Deprecated
     public static void drawString(String text, float x, float y) {
         drawString(text, x, y, 1, 0xffffffff, false);
     }
 
     /**
      * Draws a string with drop shadow to the screen.
+     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
@@ -223,29 +231,34 @@ public class Renderer {
      * @param scale scales the text size
      * @param color the color
      */
+    @Deprecated
     public static void drawStringWithShadow(String text, float x, float y, float scale, int color) {
         drawString(text, x, y, scale, color, true);
     }
 
     /**
      * Draws a string with drop shadow to the screen.
+     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      * @param color the color
      */
+    @Deprecated
     public static void drawStringWithShadow(String text, float x, float y, int color) {
         drawStringWithShadow(text, x, y, 1, color);
     }
 
     /**
      * Draws a string with drop shadow to the screen.
+     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text the text to draw
      * @param x    the x coordinate on screen
      * @param y    the y coordinate on screen
      */
+    @Deprecated
     public static void drawStringWithShadow(String text, float x, float y) {
         drawStringWithShadow(text, x, y, 1, 0xffffffff);
     }
@@ -375,7 +388,7 @@ public class Renderer {
      * @param y      the y coordinate
      * @param width  the width
      * @param height the height
-     * @deprecated use {@link Renderer.rectangle}
+     * @deprecated use {@link rectangle}
      */
     @Deprecated
     public static void drawRectangle(int color, float x, float y, float width, float height) {
@@ -763,29 +776,141 @@ public class Renderer {
      * @param y      the y position of the rectangle
      * @param width  the width of the rectangle
      * @param height the height of the rectangle
+     * @return a new {@link Renderer.rectangle} object
      */
     public rectangle rectangle(int color, float x, float y, float width, float height) {
         return new rectangle(color, x, y, width, height);
     }
 
     /**
-     * Used for creating and drawing rectangles onto client's overlay.
+     * Creates a new {@link Renderer.text} object.
+     *
+     * @param text the text string
+     * @param x    the x position
+     * @param y    the y position
+     * @return a new {@link Renderer.text} object
      */
+    public text text(String text, float x, float y) {
+        return new text(text, x, y);
+    }
+
+
+    public class text {
+        @Getter private String string;
+        @Getter private int color;
+        @Getter private float x;
+        @Getter private float y;
+        @Getter private float scale;
+        @Getter private boolean dropShadow;
+
+        private text(String text, float x, float y) {
+            this.string = text;
+            this.x = x;
+            this.y = y;
+
+            this.color = 0xffffffff;
+            this.scale = 1;
+            this.dropShadow = false;
+        }
+
+        /**
+         * Sets the text x position.
+         *
+         * @param x the x position
+         * @return the text to allow for method chaining
+         */
+        public text setX(float x) {
+            this.x = x;
+            return this;
+        }
+
+        /**
+         * Sets the text y position.
+         *
+         * @param y the y position
+         * @return the text to allow for method chaining
+         */
+        public text setY(float y) {
+            this.y = y;
+            return this;
+        }
+
+        /**
+         * Sets the text color.
+         *
+         * @param color the {@link Renderer#color(int, int, int, int)}
+         * @return the text to allow for method chaining
+         */
+        public text setColor(int color) {
+            this.color = color;
+            return this;
+        }
+
+        /**
+         * Sets the text scale.
+         *
+         * @param scale the scale of the text
+         * @return the text to allow for method chaining
+         */
+        public text setScale(float scale) {
+            this.scale = scale;
+            return this;
+        }
+
+        /**
+         * Sets the drop shadow of the text.
+         *
+         * @param dropShadow if the text has a drop shadow
+         * @return the text to allow for method chaining
+         */
+        public text setShadow(boolean dropShadow) {
+            this.dropShadow = dropShadow;
+            return this;
+        }
+
+        /**
+         * Sets the string of the text
+         *
+         * @param string the string of the text
+         * @return the text to allow for method chaining
+         */
+        public text setString(String string) {
+            this.string = string;
+            return this;
+        }
+
+        /**
+         * Draws the text onto the client's overlay.
+         *
+         * @return the text to allow for method chaining
+         */
+        public text draw() {
+            GlStateManager.pushMatrix();
+            GlStateManager.enableBlend();
+            GlStateManager.scale(this.scale, this.scale, this.scale);
+            getFontRenderer().drawString(this.string, this.x / this.scale, this.y / this.scale, this.color, this.dropShadow);
+            GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
+
+            return this;
+        }
+    }
+
     public class rectangle {
-        private int color;
-        private float x;
-        private float y;
-        private float width;
-        private float height;
+        @Getter private int color;
+        @Getter private float x;
+        @Getter private float y;
+        @Getter private float width;
+        @Getter private float height;
 
-        private boolean dropShadow;
-        private int shadowColor;
-        private float offsetX;
-        private float offsetY;
+        @Getter private boolean dropShadow;
+        @Getter private int shadowColor;
+        @Getter private float offsetX;
+        @Getter private float offsetY;
 
-        private boolean outline;
-        private int outlineColor;
-        private float thickness;
+        @Getter private boolean outline;
+        @Getter private int outlineColor;
+        @Getter private float thickness;
 
         private rectangle(int color, float x, float y, float width, float height) {
             this.color = color;
@@ -796,6 +921,61 @@ public class Renderer {
 
             this.dropShadow = false;
             this.outline = false;
+        }
+
+        /**
+         * Sets the rectangle {@link Renderer#color(int, int, int, int)}.
+         *
+         * @param color the {@link Renderer#color(int, int, int, int)}
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle setColor(int color) {
+            this.color = color;
+            return this;
+        }
+
+        /**
+         * Sets the rectangle x position.
+         *
+         * @param x the x position
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle setX(float x) {
+            this.x = x;
+            return this;
+        }
+
+        /**
+         * Sets the rectangle y position.
+         *
+         * @param y the y position
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle setY(float y) {
+            this.y = y;
+            return this;
+        }
+
+        /**
+         * Sets the rectangle width.
+         *
+         * @param width the width
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle setWidth(float width) {
+            this.width = width;
+            return this;
+        }
+
+        /**
+         * Sets the rectangle height.
+         *
+         * @param height the height
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle setHeight(float height) {
+            this.height = height;
+            return this;
         }
 
         /**

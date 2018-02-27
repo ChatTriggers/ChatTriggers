@@ -76,13 +76,13 @@ public class ConfigStringSelector extends ConfigOption {
         Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45)
                 .setShadow(0xd0000000, 3, 3)
                 .draw();
-        Renderer.drawString(this.name, middle - 100 + this.x, this.y);
+        Renderer.text(this.name, middle - 100 + this.x, this.y).draw();
 
-        Renderer.drawString(
+        Renderer.text(
                 getValue(),
                 middle + this.x - Renderer.getStringWidth(getValue()) / 2,
                 this.y + 20
-        );
+        ).draw();
 
         this.leftArrowButton.xPosition = middle - 100 + this.x;
         this.rightArrowButton.xPosition = middle + 70 + this.x;

@@ -38,14 +38,11 @@ public abstract class ConfigOption {
         this.resetButton.xPosition = Renderer.getRenderWidth() / 2 - 100 + this.x + 185;
         this.resetButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
-        Renderer.drawString(
-                "\u21BA",
-                Renderer.getRenderWidth() / 2 - 100 + this.x + 189,
-                this.y - 4,
-                2,
-                0xffffffff,
-                true
-        );
+        Renderer.text("\u21BA", Renderer.getRenderWidth() / 2 - 100 + this.x + 189, this.y - 4)
+                .setScale(2)
+                .setColor(0xffffffff)
+                .setShadow(true)
+                .draw();
     }
     public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
     public void mouseReleased() {}

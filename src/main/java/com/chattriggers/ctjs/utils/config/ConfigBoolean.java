@@ -56,7 +56,7 @@ public class ConfigBoolean extends ConfigOption {
                 .setShadow(0xd0000000, 3, 3)
                 .draw();
 
-        Renderer.drawString(this.name, middle - 100 + this.x, this.y);
+        Renderer.text(this.name, middle - 100 + this.x, this.y).draw();
 
         this.button.xPosition = middle - 100 + this.x;
         this.button.drawButton(Client.getMinecraft(), mouseX, mouseY);

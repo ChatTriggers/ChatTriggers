@@ -73,18 +73,13 @@ public class ModuleGui extends GuiScreen {
         ).draw();
 
         // name
-        Renderer.drawStringWithShadow(
-                name,
-                22, 12 - scrolled,
-                0xffffffff
-        );
+        Renderer.text(name, 22, 12 - scrolled)
+                .setShadow(true).draw();
 
         // version
-        Renderer.drawStringWithShadow(
-                ChatFormatting.GRAY + version,
-                width - Renderer.getStringWidth(version) + 18, 12 - scrolled,
-                0xffffffff
-        );
+        Renderer.text(
+                ChatFormatting.GRAY + version, width - Renderer.getStringWidth(version) + 18, 12 - scrolled)
+                .setShadow(true).draw();
 
         // line break
         Renderer.rectangle(
@@ -95,19 +90,13 @@ public class ModuleGui extends GuiScreen {
 
         // description
         for (int i = 0; i < description.size(); i++) {
-            Renderer.drawStringWithShadow(
-                    ChatLib.addColor(description.get(i)),
-                    22, 30 + i * 10 - scrolled,
-                    0xffffffff
-            );
+            Renderer.text(ChatLib.addColor(description.get(i)), 22, 30 + i * 10 - scrolled)
+                    .setShadow(true).draw();
         }
 
         // directory
-        Renderer.drawStringWithShadow(
-                ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/",
-                22, infoHeight - scrolled,
-                0xffffffff
-        );
+        Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", 22, infoHeight - scrolled)
+                .setShadow(true).draw();
 
         // back
         drawBack();
@@ -133,21 +122,16 @@ public class ModuleGui extends GuiScreen {
                 file.getValue().size() * 9 + 12
         ).draw();
 
-        Renderer.drawStringWithShadow(
-                ChatFormatting.DARK_GRAY + file.getKey(),
-                22,
-                infoHeight + fileOffset - scrolled + 2,
-                0xffffffff
-        );
+        Renderer.text(ChatFormatting.DARK_GRAY + file.getKey(), 22, infoHeight + fileOffset - scrolled + 2)
+                .setShadow(true)
+                .draw();
 
         int i = 0;
         for (String line : file.getValue()) {
-            Renderer.drawStringWithShadow(
-                    colorLine(line).replace("\u0009", "     "),
-                    22,
-                    i * 9 + infoHeight + fileOffset - scrolled + 12,
-                    0xffffffff
-            );
+            Renderer.text(
+                    colorLine(line).replace("\u0009", "     "), 22, i * 9 + infoHeight + fileOffset - scrolled + 12)
+                    .setShadow(true)
+                    .draw();
             i++;
         }
 
@@ -163,12 +147,9 @@ public class ModuleGui extends GuiScreen {
                     20,
                     20
             ).draw();
-            Renderer.drawStringWithShadow(
-                    "^",
-                    width + 31 - Renderer.getStringWidth("^") / 2,
-                    height - 12,
-                    0xffffffff
-            );
+            Renderer.text("^", width + 31 - Renderer.getStringWidth("^") / 2, height - 12)
+                    .setShadow(true)
+                    .draw();
         }
     }
 
@@ -189,23 +170,17 @@ public class ModuleGui extends GuiScreen {
 
     private void drawBack() {
         String back = isHovered ? "< back" : "&8< back";
-        Renderer.drawStringWithShadow(
-                ChatLib.addColor(back),
-                20 + width - Renderer.getStringWidth("< back") - 2,
-                infoHeight - scrolled,
-                0xffffffff
-        );
+        Renderer.text(ChatLib.addColor(back), 20 + width - Renderer.getStringWidth("< back") - 2, infoHeight - scrolled)
+                .setShadow(true)
+                .draw();
     }
 
     private int drawRequires() {
         if (this.module.getMetadata().getRequires() == null) return 0;
 
-        Renderer.drawStringWithShadow(
-                "Requires: " + this.module.getMetadata().getRequires(),
-                22,
-                infoHeight - scrolled + 20,
-                0xffffffff
-        );
+        Renderer.text("Requires: " + this.module.getMetadata().getRequires(), 22, infoHeight - scrolled + 20)
+                .setShadow(true)
+                .draw();
 
         return 20;
     }

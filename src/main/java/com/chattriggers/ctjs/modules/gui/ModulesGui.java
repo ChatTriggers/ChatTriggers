@@ -145,22 +145,14 @@ public class ModulesGui extends GuiScreen {
             Renderer.rectangle(0x80000000, x, y, width, height).draw();
 
             // name
-            Renderer.drawStringWithShadow(
-                    name,
-                    x + 2,
-                    y + 2,
-                    0xffffffff
-            );
+            Renderer.text(name, x + 2, y + 2)
+                    .setShadow(true).draw();
 
             // version
             if (this.module.getMetadata().getVersion() != null) {
                 String version = ChatFormatting.GRAY  + "v" + this.module.getMetadata().getVersion();
-                Renderer.drawStringWithShadow(
-                        version,
-                        x + width - Renderer.getStringWidth(version) - 2,
-                        y + 2,
-                        0xffffffff
-                );
+                Renderer.text(version, x + width - Renderer.getStringWidth(version) - 2, y + 2)
+                        .setShadow(true).draw();
             }
 
             // line break
@@ -172,30 +164,19 @@ public class ModulesGui extends GuiScreen {
                     : this.module.getMetadata().getDescription();
             ArrayList<String> descriptionLines = Renderer.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
             for (int j = 0; j < descriptionLines.size(); j++) {
-                Renderer.drawStringWithShadow(
-                        ChatLib.addColor(descriptionLines.get(j)),
-                        x + 2,
-                        y + 20 + j * 10,
-                        0xffffffff
-                );
+                Renderer.text(
+                        ChatLib.addColor(descriptionLines.get(j)), x + 2, y + 20 + j * 10)
+                        .setShadow(true).draw();
             }
 
             // directory
-            Renderer.drawStringWithShadow(
-                    ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/",
-                    x + 2,
-                    y + height - 12,
-                    0xffffffff
-            );
+            Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", x + 2, y + height - 12)
+                    .setShadow(true).draw();
 
             // show code
             String finalShowCode = isHovered ? "show code >" : "&8show code >";
-            Renderer.drawStringWithShadow(
-                    ChatLib.addColor(finalShowCode),
-                    x + width - Renderer.getStringWidth("show code >") - 2,
-                    y + height - 12,
-                    0xffffffff
-            );
+            Renderer.text(ChatLib.addColor(finalShowCode), x + width - Renderer.getStringWidth("show code >") - 2, y + height - 12)
+                    .setShadow(true).draw();
         }
     }
 }

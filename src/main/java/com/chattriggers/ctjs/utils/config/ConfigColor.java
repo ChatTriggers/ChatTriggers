@@ -76,7 +76,7 @@ public class ConfigColor extends ConfigOption {
         Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 65)
                 .setShadow(0xd0000000, 3, 3)
                 .draw();
-        Renderer.drawString(this.name, middle - 100 + this.x, this.y);
+        Renderer.text(this.name, middle - 100 + this.x, this.y).draw();
 
         // red slider
         Renderer.rectangle(0xffaa0000, middle - 100 + this.x, this.y + 19, 155, 3)

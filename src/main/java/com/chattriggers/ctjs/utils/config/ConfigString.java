@@ -76,7 +76,7 @@ public class ConfigString extends ConfigOption {
         Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45)
                 .setShadow(0xd0000000, 3, 3)
                 .draw();
-        Renderer.drawString(this.name, middle - 100 + this.x, this.y);
+        Renderer.text(this.name, middle - 100 + this.x, this.y).draw();
 
         this.textField.xPosition = middle - 100 + this.x;
         this.textField.drawTextBox();
