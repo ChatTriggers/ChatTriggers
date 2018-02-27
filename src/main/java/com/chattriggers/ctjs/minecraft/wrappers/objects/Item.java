@@ -315,8 +315,8 @@ public class Item {
      * Renders the item icon to the client's overlay.
      */
     public void draw() {
-        float finalX = this.x /= this.scale;
-        float finalY = this.y /= this.scale;
+        float finalX = this.x / this.scale;
+        float finalY = this.y / this.scale;
 
         RenderItem itemRenderer = Client.getMinecraft().getRenderItem();
 
