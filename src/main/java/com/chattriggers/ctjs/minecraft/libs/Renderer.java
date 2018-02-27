@@ -794,7 +794,9 @@ public class Renderer {
         return new text(text, x, y);
     }
 
-
+    /**
+     * Used for creating and drawing text onto client's overlay
+     */
     public class text {
         @Getter private String string;
         @Getter private int color;
