@@ -635,12 +635,14 @@ public class Renderer {
 
     /**
      * Renders an item icon on screen from an {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item}
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x     x coordinate to render item icon to
      * @param y     y coordinate to render item icon to
      * @param scale scales the icon size
      * @param item  the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} to render
      */
+    @Deprecated
     public static void drawItemIcon(int x, int y, float scale, com.chattriggers.ctjs.minecraft.wrappers.objects.Item item) {
         x /= scale;
         y /= scale;
@@ -665,6 +667,7 @@ public class Renderer {
 
     /**
      * Renders an item icon on screen.
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x        x coordinate to render item icon to
      * @param y        y coordinate to render item icon to
@@ -672,6 +675,7 @@ public class Renderer {
      * @param item     name or id of item to render
      * @param metadata metadata of item to render
      */
+    @Deprecated
     public static void drawItemIcon(int x, int y, float scale, String item, Integer metadata) {
         if (item.equals("minecraft:air")) return;
 
@@ -694,23 +698,27 @@ public class Renderer {
 
     /**
      * Renders an item icon on screen.
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x        x coordinate to render item icon to
      * @param y        y coordinate to render item icon to
      * @param item     name or id of item to render
      * @param metadata metadata of item to render
      */
+    @Deprecated
     public static void drawItemIcon(int x, int y, String item, Integer metadata) {
         drawItemIcon(x, y, 1, item, metadata);
     }
 
     /**
      * Renders an item icon on screen.
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x    x coordinate to render item icon to
      * @param y    y coordinate to render item icon to
      * @param item name or id of item to render
      */
+    @Deprecated
     public static void drawItemIcon(int x, int y, String item) {
         drawItemIcon(x, y, 1, item, null);
     }

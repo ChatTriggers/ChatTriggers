@@ -1,18 +1,25 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Item {
-    @Getter
-    private net.minecraft.item.Item item;
-    @Getter
-    private ItemStack itemStack;
+    @Getter private net.minecraft.item.Item item;
+    @Getter private ItemStack itemStack;
+
+    @Getter private float x = 0;
+    @Getter private float y = 0;
+    @Getter private float scale = 1;
 
     /* Constructors */
 
@@ -269,5 +276,62 @@ public class Item {
     @Override
     public String toString() {
         return this.itemStack.toString();
+    }
+
+    /**
+     * Sets the Item's x position on screen for use with {@link Item#draw()}.
+     *
+     * @param x the x position
+     * @return the Item for method chaining
+     */
+    public Item setX(float x) {
+        this.x = x;
+        return this;
+    }
+
+    /**
+     * Sets the Item's y position on screen for use with {@link Item#draw()}.
+     *
+     * @param y the y position
+     * @return the Item for method chaining
+     */
+    public Item setY(float y) {
+        this.y = y;
+        return this;
+    }
+
+    /**
+     * Sets the Item's scale on screen for use with {@link Item#draw()}.
+     *
+     * @param scale the x position
+     * @return the Item for method chaining
+     */
+    public Item setScale(float scale) {
+        this.scale = scale;
+        return this;
+    }
+
+    /**
+     * Renders the item icon to the client's overlay.
+     */
+    public void draw() {
+        float finalX = this.x /= this.scale;
+        float finalY = this.y /= this.scale;
+
+        RenderItem itemRenderer = Client.getMinecraft().getRenderItem();
+
+        GlStateManager.pushMatrix();
+
+        GlStateManager.scale(this.scale, this.scale, 1f);
+        GlStateManager.translate(finalX, finalY, 0);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+        RenderHelper.enableStandardItemLighting();
+        RenderHelper.enableGUIStandardItemLighting();
+        itemRenderer.zLevel = 200.0F;
+
+        itemRenderer.renderItemIntoGUI(getItemStack(), 0, 0);
+
+        GlStateManager.popMatrix();
     }
 }
