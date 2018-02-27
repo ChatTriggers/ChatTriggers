@@ -74,6 +74,8 @@ public class ConfigColor extends ConfigOption {
         int middle = RenderLib.getRenderWidth() / 2;
 
         RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 65);
+        RenderLib.drawRectangle(0xd0000000, middle - 102 + this.x, this.y + 60, 210, 3);
+        RenderLib.drawRectangle(0xd0000000, middle + 105 + this.x, this.y -2, 3, 62);
         RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
 
         // red slider
