@@ -1,10 +1,10 @@
 package com.chattriggers.ctjs.modules.gui;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.minecraft.libs.Renderer;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
@@ -27,7 +27,7 @@ public class ModulesGui extends GuiScreen {
         }
 
         this.scrolled = 0;
-        this.maxScroll = this.modules.size() * 110 + 10 - RenderLib.getRenderHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.getRenderHeight();
 
     }
 
@@ -35,22 +35,22 @@ public class ModulesGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        this.maxScroll = this.modules.size() * 110 + 10 - RenderLib.getRenderHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.getRenderHeight();
 
         drawBackground(0);
 
         // draw scroll bar
-        int scrollHeight = RenderLib.getRenderHeight() - this.maxScroll;
+        int scrollHeight = Renderer.getRenderHeight() - this.maxScroll;
         if (scrollHeight < 20) scrollHeight = 20;
-        if (scrollHeight < RenderLib.getRenderHeight()) {
-            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, RenderLib.getRenderHeight() - scrollHeight - 10);
-            RenderLib.drawRectangle(
+        if (scrollHeight < Renderer.getRenderHeight()) {
+            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.getRenderHeight() - scrollHeight - 10);
+            new Renderer.rectangle(
                     0xa0000000,
-                    RenderLib.getRenderWidth() - 5,
+                    Renderer.getRenderWidth() - 5,
                     scrollY,
                     5,
                     scrollHeight
-            );
+            ).draw();
         }
 
         for (GuiModule module : this.modules) {
@@ -126,10 +126,10 @@ public class ModulesGui extends GuiScreen {
         }
 
         private void checkHover(int mouseX, int mouseY) {
-            int width = RenderLib.getRenderWidth() - 40;
+            int width = Renderer.getRenderWidth() - 40;
             int height = 105;
 
-            isHovered = (mouseX > x + width - RenderLib.getStringWidth("show code >") - 2
+            isHovered = (mouseX > x + width - Renderer.getStringWidth("show code >") - 2
                 && mouseX < x + width - 2
                 && mouseY > y + height - 12
                 && mouseY < y + height - 2);
@@ -138,14 +138,14 @@ public class ModulesGui extends GuiScreen {
         private void draw() {
             x = 20;
             y = getY(i);
-            int width = RenderLib.getRenderWidth() - 40;
+            int width = Renderer.getRenderWidth() - 40;
             int height = 105;
 
             // background
-           RenderLib.drawRectangle(0x80000000, x, y, width, height);
+            new Renderer.rectangle(0x80000000, x, y, width, height).draw();
 
             // name
-            RenderLib.drawStringWithShadow(
+            Renderer.drawStringWithShadow(
                     name,
                     x + 2,
                     y + 2,
@@ -155,24 +155,24 @@ public class ModulesGui extends GuiScreen {
             // version
             if (this.module.getMetadata().getVersion() != null) {
                 String version = ChatFormatting.GRAY  + "v" + this.module.getMetadata().getVersion();
-                RenderLib.drawStringWithShadow(
+                Renderer.drawStringWithShadow(
                         version,
-                        x + width - RenderLib.getStringWidth(version) - 2,
+                        x + width - Renderer.getStringWidth(version) - 2,
                         y + 2,
                         0xffffffff
                 );
             }
 
             // line break
-            RenderLib.drawRectangle(0xa0000000, x + 2, y+12, width - 4, 2);
+            new Renderer.rectangle(0xa0000000, x + 2, y+12, width - 4, 2).draw();
 
             // description
             String description = (this.module.getMetadata().getDescription() == null)
                     ? "No description provided"
                     : this.module.getMetadata().getDescription();
-            ArrayList<String> descriptionLines = RenderLib.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
+            ArrayList<String> descriptionLines = Renderer.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
             for (int j = 0; j < descriptionLines.size(); j++) {
-                RenderLib.drawStringWithShadow(
+                Renderer.drawStringWithShadow(
                         ChatLib.addColor(descriptionLines.get(j)),
                         x + 2,
                         y + 20 + j * 10,
@@ -181,7 +181,7 @@ public class ModulesGui extends GuiScreen {
             }
 
             // directory
-            RenderLib.drawStringWithShadow(
+            Renderer.drawStringWithShadow(
                     ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/",
                     x + 2,
                     y + height - 12,
@@ -190,9 +190,9 @@ public class ModulesGui extends GuiScreen {
 
             // show code
             String finalShowCode = isHovered ? "show code >" : "&8show code >";
-            RenderLib.drawStringWithShadow(
+            Renderer.drawStringWithShadow(
                     ChatLib.addColor(finalShowCode),
-                    x + width - RenderLib.getStringWidth("show code >") - 2,
+                    x + width - Renderer.getStringWidth("show code >") - 2,
                     y + height - 12,
                     0xffffffff
             );

@@ -204,7 +204,7 @@ public class ChatLib {
      */
     public static String getChatBreak(String seperator) {
         StringBuilder stringBuilder = new StringBuilder();
-        FontRenderer fRenderer = RenderLib.getFontRenderer();
+        FontRenderer fRenderer = Renderer.getFontRenderer();
 
         while (fRenderer.getStringWidth(stringBuilder.toString()) < Client.getChatGUI().getChatWidth()) {
             stringBuilder.append(seperator);

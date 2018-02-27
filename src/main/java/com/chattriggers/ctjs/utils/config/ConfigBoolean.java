@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.libs.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import net.minecraft.client.gui.GuiButton;
 
@@ -40,7 +40,7 @@ public class ConfigBoolean extends ConfigOption {
 
         this.button = new GuiButton(
                 0,
-                RenderLib.getRenderWidth() / 2 - 100 + this.x,
+                Renderer.getRenderWidth() / 2 - 100 + this.x,
                 this.y + 15,
                 getStringValue()
         );
@@ -50,12 +50,13 @@ public class ConfigBoolean extends ConfigOption {
     public void draw(int mouseX, int mouseY) {
         if (this.hidden) return;
 
-        int middle = RenderLib.getRenderWidth() / 2;
+        int middle = Renderer.getRenderWidth() / 2;
 
-        RenderLib.drawRectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45);
-        RenderLib.drawRectangle(0xd0000000, middle - 102 + this.x, this.y + 40, 210, 3);
-        RenderLib.drawRectangle(0xd0000000, middle + 105 + this.x, this.y -2, 3, 42);
-        RenderLib.drawString(this.name, middle - 100 + this.x, this.y);
+        new Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45)
+                .setShadow(0xd0000000, 3, 3)
+                .draw();
+
+        Renderer.drawString(this.name, middle - 100 + this.x, this.y);
 
         this.button.xPosition = middle - 100 + this.x;
         this.button.drawButton(Client.getMinecraft(), mouseX, mouseY);

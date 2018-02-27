@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.minecraft.objects;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.libs.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.OnTrigger;
@@ -290,8 +290,8 @@ public class Display {
 
         int maxWidth = this.minWidth;
         for (DisplayLine line : lines) {
-            if (RenderLib.getStringWidth(line.getText()) > maxWidth)
-                maxWidth = (int) Math.ceil(RenderLib.getStringWidth(line.getText()) * line.getScale());
+            if (Renderer.getStringWidth(line.getText()) > maxWidth)
+                maxWidth = (int) Math.ceil(Renderer.getStringWidth(line.getText()) * line.getScale());
         }
 
         float i = 0;
@@ -337,7 +337,7 @@ public class Display {
 
         public DisplayLine(String text) {
             this.text = ChatLib.addColor(text);
-            this.textWidth = RenderLib.getStringWidth(this.text);
+            this.textWidth = Renderer.getStringWidth(this.text);
 
             this.textColor = null;
             this.align = DisplayHandler.Align.NONE;
@@ -363,7 +363,7 @@ public class Display {
          */
         public DisplayLine setText(String text) {
             this.text = ChatLib.addColor(text);
-            this.textWidth = RenderLib.getStringWidth(this.text);
+            this.textWidth = Renderer.getStringWidth(this.text);
             return this;
         }
 
@@ -408,7 +408,7 @@ public class Display {
          */
         public DisplayLine setScale(float scale) {
             this.scale = scale;
-            this.textWidth = (int) Math.ceil(RenderLib.getStringWidth(text) * scale);
+            this.textWidth = (int) Math.ceil(Renderer.getStringWidth(text) * scale);
             return this;
         }
 
@@ -553,12 +553,12 @@ public class Display {
 
         private void drawFullBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
             if (bg == DisplayHandler.Background.FULL)
-                RenderLib.drawRectangle(color, x, y, width, height);
+                new Renderer.rectangle(color, x, y, width, height).draw();
         }
 
         private void drawPerLineBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
             if (bg == DisplayHandler.Background.PER_LINE)
-                RenderLib.drawRectangle(color, x, y, width, height);
+                new Renderer.rectangle(color, x, y, width, height).draw();
         }
 
         private void drawLeft(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
@@ -590,7 +590,7 @@ public class Display {
             }
 
             drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-            RenderLib.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
+            Renderer.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
 
             handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
         }
@@ -624,7 +624,7 @@ public class Display {
             }
 
             drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-            RenderLib.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
+            Renderer.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
 
             handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
         }
@@ -658,7 +658,7 @@ public class Display {
             }
 
             drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-            RenderLib.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
+            Renderer.drawString(this.text, xOff, y, this.scale, textCol, this.shadow);
 
             handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
         }

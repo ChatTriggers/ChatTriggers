@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
-import com.chattriggers.ctjs.minecraft.libs.RenderLib;
+import com.chattriggers.ctjs.minecraft.libs.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
@@ -176,7 +176,7 @@ public class CTJS {
 
     @EventHandler
     private void postInit(FMLPostInitializationEvent event) {
-        RenderLib.downloadImage("https://i.imgur.com/JAPDKMG.png", "CT_logo.png", true);
+        Renderer.downloadImage("https://i.imgur.com/JAPDKMG.png", "CT_logo.png", true);
     }
 }
 

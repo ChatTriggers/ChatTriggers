@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 @UtilityClass
 @SideOnly(Side.CLIENT)
-public class RenderLib {
+public class Renderer {
     public static final int BLACK = color(0, 0, 0, 255);
     public static final int DARK_BLUE = color(0, 0, 190, 255);
     public static final int DARK_GREEN = color(0, 190, 0, 255);
@@ -206,9 +206,9 @@ public class RenderLib {
     /**
      * Draws a string to the screen.
      *
-     * @param text  the text to draw
-     * @param x     the x coordinate on screen
-     * @param y     the y coordinate on screen
+     * @param text the text to draw
+     * @param x    the x coordinate on screen
+     * @param y    the y coordinate on screen
      */
     public static void drawString(String text, float x, float y) {
         drawString(text, x, y, 1, 0xffffffff, false);
@@ -242,9 +242,9 @@ public class RenderLib {
     /**
      * Draws a string with drop shadow to the screen.
      *
-     * @param text  the text to draw
-     * @param x     the x coordinate on screen
-     * @param y     the y coordinate on screen
+     * @param text the text to draw
+     * @param x    the x coordinate on screen
+     * @param y    the y coordinate on screen
      */
     public static void drawStringWithShadow(String text, float x, float y) {
         drawStringWithShadow(text, x, y, 1, 0xffffffff);
@@ -375,7 +375,9 @@ public class RenderLib {
      * @param y      the y coordinate
      * @param width  the width
      * @param height the height
+     * @deprecated use {@link Renderer.rectangle}
      */
+    @Deprecated
     public static void drawRectangle(int color, float x, float y, float width, float height) {
         float x2 = x + width;
         float y2 = y + height;
@@ -574,7 +576,7 @@ public class RenderLib {
     /**
      * Downloads and resizes an image from a url supplied when calling
      *
-     * @param url url of the image to be downloaded
+     * @param url          url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
      */
     public static void downloadImage(String url, String resourceName) {
@@ -584,7 +586,7 @@ public class RenderLib {
     /**
      * Downloads an image from a url supplied when calling, with the option to automatically resize the image
      *
-     * @param url url of the image to be downloaded
+     * @param url          url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
      * @param shouldResize whether or not the file should be resized by CT
      */
@@ -751,5 +753,149 @@ public class RenderLib {
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+
+    /**
+     * Used for creating and drawing rectangles onto client's overlay.
+     */
+    public class rectangle {
+        private int color;
+        private float x;
+        private float y;
+        private float width;
+        private float height;
+
+        private boolean dropShadow;
+        private int shadowColor;
+        private float offsetX;
+        private float offsetY;
+
+        private boolean outline;
+        private int outlineColor;
+        private float thickness;
+
+        /**
+         * Creates a new rectangle object.
+         *
+         * @param color  the {@link Renderer#color(int, int, int, int)} of the rectangle
+         * @param x      the x position of the rectangle
+         * @param y      the y position of the rectangle
+         * @param width  the width of the rectangle
+         * @param height the height of the rectangle
+         */
+        public rectangle(int color, float x, float y, float width, float height) {
+            this.color = color;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+
+            this.dropShadow = false;
+            this.outline = false;
+        }
+
+        /**
+         * Sets the drop shadow of the rectangle.
+         *
+         * @param color   the {@link Renderer#color(int, int, int, int)} of the drop shadow
+         * @param offsetX the x offset of the drop shadow
+         * @param offsetY the y offset of the drop shadow
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle setShadow(int color, float offsetX, float offsetY) {
+            this.dropShadow = true;
+
+            this.shadowColor = color;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+
+            return this;
+        }
+
+        /**
+         * Sets the outline of the rectangle.
+         *
+         * @param color     the {@link Renderer#color(int, int, int, int)} of the outline
+         * @param thickness the thickness of the outline
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle setOutline(int color, float thickness) {
+            this.outline = true;
+
+            this.outlineColor = color;
+            this.thickness = thickness;
+
+            return this;
+        }
+
+        /**
+         * Draws the rectangle onto the client's overlay.
+         *
+         * @return the rectangle to allow for method chaining
+         */
+        public rectangle draw() {
+            dropShadow();
+            outline();
+            drawRect(this.color, this.x, this.y, this.width, this.height);
+
+            return this;
+        }
+
+        // helper method to draw the outline
+        private void outline() {
+            if (!outline) return;
+
+            drawRect(this.outlineColor, this.x - this.thickness, this.y - this.thickness, this.width + this.thickness * 2, this.height + this.thickness * 2);
+        }
+
+        // helper method to draw the drop shadow
+        private void dropShadow() {
+            if (!dropShadow) return;
+
+            drawRect(this.shadowColor, this.x + this.offsetX, this.y + this.height, this.width, this.offsetY);
+            drawRect(this.shadowColor, this.x + this.width, this.y + this.offsetY, this.offsetX, this.height - this.offsetY);
+        }
+
+        // helper method to draw a rectangle
+        private void drawRect(int color, float x, float y, float width, float height) {
+            float x2 = x + width;
+            float y2 = y + height;
+
+            if (x > x2) {
+                float k = x;
+                x = x2;
+                x2 = k;
+            }
+            if (y > y2) {
+                float k = y;
+                y = y2;
+                y2 = k;
+            }
+
+            float a = (float) (color >> 24 & 255) / 255.0F;
+            float r = (float) (color >> 16 & 255) / 255.0F;
+            float g = (float) (color >> 8 & 255) / 255.0F;
+            float b = (float) (color & 255) / 255.0F;
+
+            GlStateManager.pushMatrix();
+            GlStateManager.enableBlend();
+            GlStateManager.disableTexture2D();
+
+            Tessellator tessellator = Tessellator.getInstance();
+            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            GlStateManager.color(r, g, b, a);
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+            worldrenderer.pos(x, y2, 0.0D).endVertex();
+            worldrenderer.pos(x2, y2, 0.0D).endVertex();
+            worldrenderer.pos(x2, y, 0.0D).endVertex();
+            worldrenderer.pos(x, y, 0.0D).endVertex();
+            tessellator.draw();
+            GlStateManager.color(1, 1, 1, 1);
+
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
+        }
     }
 }
