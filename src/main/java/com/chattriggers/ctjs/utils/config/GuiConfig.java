@@ -36,7 +36,8 @@ public class GuiConfig extends GuiScreen {
         for (ConfigOption configOption : this.configOptions)
             configOption.draw(mouseX, mouseY);
 
-        Renderer.drawImage("CT_logo.png", 0, Renderer.getRenderHeight() - 64, 0, 0, 256, 256, .25f);
+        CTJS.getInstance().getIcon().setY(Renderer.getRenderHeight() - 64);
+        CTJS.getInstance().getIcon().draw();
     }
 
     @Override

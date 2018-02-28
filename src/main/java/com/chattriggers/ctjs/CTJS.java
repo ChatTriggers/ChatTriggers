@@ -73,6 +73,8 @@ public class CTJS {
     private CPS cps;
 
     private File configLocation;
+    @Getter
+    private Renderer.image icon;
 
     @EventHandler
     private void init(FMLInitializationEvent event) {
@@ -176,7 +178,9 @@ public class CTJS {
 
     @EventHandler
     private void postInit(FMLPostInitializationEvent event) {
-        Renderer.downloadImage("https://i.imgur.com/JAPDKMG.png", "CT_logo.png", true);
+        this.icon = Renderer.image("CT_logo.png")
+                .download("https://i.imgur.com/JAPDKMG.png", true)
+                .setScale(0.25f);
     }
 }
 

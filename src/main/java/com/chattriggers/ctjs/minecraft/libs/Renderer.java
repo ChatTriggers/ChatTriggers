@@ -176,13 +176,13 @@ public class Renderer {
 
     /**
      * Draws a string to the screen.
-     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      * @param scale scales the text size
      * @param color the color
+     * @deprecated use {@link Renderer#text(String, float, float)}
      */
     @Deprecated
     public static void drawString(String text, float x, float y, float scale, int color, Boolean dropShadow) {
@@ -196,12 +196,12 @@ public class Renderer {
 
     /**
      * Draws a string to the screen.
-     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      * @param color the color
+     * @deprecated use {@link Renderer#text(String, float, float)}
      */
     @Deprecated
     public static void drawString(String text, float x, float y, int color) {
@@ -210,11 +210,11 @@ public class Renderer {
 
     /**
      * Draws a string to the screen.
-     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text the text to draw
      * @param x    the x coordinate on screen
      * @param y    the y coordinate on screen
+     * @deprecated use {@link Renderer#text(String, float, float)}
      */
     @Deprecated
     public static void drawString(String text, float x, float y) {
@@ -223,13 +223,13 @@ public class Renderer {
 
     /**
      * Draws a string with drop shadow to the screen.
-     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      * @param scale scales the text size
      * @param color the color
+     * @deprecated use {@link Renderer#text(String, float, float)}
      */
     @Deprecated
     public static void drawStringWithShadow(String text, float x, float y, float scale, int color) {
@@ -238,12 +238,12 @@ public class Renderer {
 
     /**
      * Draws a string with drop shadow to the screen.
-     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text  the text to draw
      * @param x     the x coordinate on screen
      * @param y     the y coordinate on screen
      * @param color the color
+     * @deprecated use {@link Renderer#text(String, float, float)}
      */
     @Deprecated
     public static void drawStringWithShadow(String text, float x, float y, int color) {
@@ -252,11 +252,11 @@ public class Renderer {
 
     /**
      * Draws a string with drop shadow to the screen.
-     * @deprecated use {@link Renderer#text(String, float, float)}
      *
      * @param text the text to draw
      * @param x    the x coordinate on screen
      * @param y    the y coordinate on screen
+     * @deprecated use {@link Renderer#text(String, float, float)}
      */
     @Deprecated
     public static void drawStringWithShadow(String text, float x, float y) {
@@ -537,7 +537,9 @@ public class Renderer {
      * @param textureWidth  the width of the image to render, usually 256
      * @param textureHeight the height of the image to render, usually 256
      * @param scale         the scale of the image, can use decimals, i.e. 0.5, 1.5
+     * @deprecated {@link Renderer.image}
      */
+    @Deprecated
     public static void drawImage(String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
         drawImage("ctjs.images", resourceName, renderXLoc, renderYLoc,
@@ -558,7 +560,9 @@ public class Renderer {
      * @param textureWidth   the width of the image to render, usually 256
      * @param textureHeight  the height of the image to render, usually 256
      * @param scale          the scale of the image, can use decimals, i.e. 0.5, 1.5
+     * @deprecated {@link Renderer.image}
      */
+    @Deprecated
     public static void drawImage(String resourceDomain, String resourceName, float renderXLoc, float renderYLoc,
                                  int textureMapX, int textureMapY, int textureWidth, int textureHeight, float scale) {
 
@@ -571,8 +575,8 @@ public class Renderer {
      * Draw Image helper method. <br>
      * This method is not meant for public use
      */
-    public static void drawImage(ResourceLocation rl, float x, float y, int textureX,
-                                 int textureY, int width, int height, float scale) {
+    private static void drawImage(ResourceLocation rl, float x, float y, int textureX,
+                                  int textureY, int width, int height, float scale) {
         Client.getMinecraft().getTextureManager().bindTexture(rl);
 
         GL11.glPushMatrix();
@@ -591,7 +595,9 @@ public class Renderer {
      *
      * @param url          url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
+     * @deprecated use {@link Renderer.image}
      */
+    @Deprecated
     public static void downloadImage(String url, String resourceName) {
         downloadImage(url, resourceName, true);
     }
@@ -602,7 +608,9 @@ public class Renderer {
      * @param url          url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
      * @param shouldResize whether or not the file should be resized by CT
+     * @deprecated {@link Renderer.image}
      */
+    @Deprecated
     public static void downloadImage(String url, String resourceName, boolean shouldResize) {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
@@ -635,12 +643,12 @@ public class Renderer {
 
     /**
      * Renders an item icon on screen from an {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item}
-     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x     x coordinate to render item icon to
      * @param y     y coordinate to render item icon to
      * @param scale scales the icon size
      * @param item  the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} to render
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      */
     @Deprecated
     public static void drawItemIcon(int x, int y, float scale, com.chattriggers.ctjs.minecraft.wrappers.objects.Item item) {
@@ -667,13 +675,13 @@ public class Renderer {
 
     /**
      * Renders an item icon on screen.
-     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x        x coordinate to render item icon to
      * @param y        y coordinate to render item icon to
      * @param scale    scales the icon size
      * @param item     name or id of item to render
      * @param metadata metadata of item to render
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      */
     @Deprecated
     public static void drawItemIcon(int x, int y, float scale, String item, Integer metadata) {
@@ -698,12 +706,12 @@ public class Renderer {
 
     /**
      * Renders an item icon on screen.
-     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x        x coordinate to render item icon to
      * @param y        y coordinate to render item icon to
      * @param item     name or id of item to render
      * @param metadata metadata of item to render
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      */
     @Deprecated
     public static void drawItemIcon(int x, int y, String item, Integer metadata) {
@@ -712,11 +720,11 @@ public class Renderer {
 
     /**
      * Renders an item icon on screen.
-     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      *
      * @param x    x coordinate to render item icon to
      * @param y    y coordinate to render item icon to
      * @param item name or id of item to render
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item#draw()}
      */
     @Deprecated
     public static void drawItemIcon(int x, int y, String item) {
@@ -777,17 +785,13 @@ public class Renderer {
     }
 
     /**
-     * Creates a new {@link Renderer.rectangle} object.
+     * Creates a new {@link Renderer.image} object.
      *
-     * @param color  the {@link Renderer#color(int, int, int, int)} of the rectangle
-     * @param x      the x position of the rectangle
-     * @param y      the y position of the rectangle
-     * @param width  the width of the rectangle
-     * @param height the height of the rectangle
-     * @return a new {@link Renderer.rectangle} object
+     * @param resourceName the name of the resource (image-name.png)
+     * @return a new {@link Renderer.image} object
      */
-    public rectangle rectangle(int color, float x, float y, float width, float height) {
-        return new rectangle(color, x, y, width, height);
+    public image image(String resourceName) {
+        return new image(resourceName);
     }
 
     /**
@@ -803,15 +807,234 @@ public class Renderer {
     }
 
     /**
+     * Creates a new {@link Renderer.rectangle} object.
+     *
+     * @param color  the {@link Renderer#color(int, int, int, int)} of the rectangle
+     * @param x      the x position of the rectangle
+     * @param y      the y position of the rectangle
+     * @param width  the width of the rectangle
+     * @param height the height of the rectangle
+     * @return a new {@link Renderer.rectangle} object
+     */
+    public rectangle rectangle(int color, float x, float y, float width, float height) {
+        return new rectangle(color, x, y, width, height);
+    }
+
+
+    /**
+     * Used for creating and drawing an image onto client's overlay
+     */
+    public class image {
+        @Getter
+        private float x;
+        @Getter
+        private float y;
+        @Getter
+        private int textureWidth;
+        @Getter
+        private int textureHeight;
+        @Getter
+        private int textureX;
+        @Getter
+        private int textureY;
+        @Getter
+        private float scale;
+        @Getter
+        private String resourceName;
+        @Getter
+        private String resourceDomain;
+
+        private image(String resourceName) {
+            this.resourceName = resourceName;
+
+            this.x = 0;
+            this.y = 0;
+            this.textureWidth = 256;
+            this.textureHeight = 256;
+            this.textureX = 0;
+            this.textureY = 0;
+            this.scale = 0;
+            this.resourceDomain = "ctjs.images";
+        }
+
+        /**
+         * Sets the image x position.
+         *
+         * @param x the x position
+         * @return the image to allow for method chaining
+         */
+        public image setX(float x) {
+            this.x = x;
+            return this;
+        }
+
+        /**
+         * Sets the image y position.
+         *
+         * @param y the y position
+         * @return the image to allow for method chaining
+         */
+        public image setY(float y) {
+            this.y = y;
+            return this;
+        }
+
+        /**
+         * Sets the image scale.
+         *
+         * @param scale the scale
+         * @return the image to allow for method chaining
+         */
+        public image setScale(float scale) {
+            this.scale = scale;
+            return this;
+        }
+
+        /**
+         * Sets the texture width.
+         *
+         * @param width the width of the texture
+         * @return the image to allow for method chaining
+         */
+        public image setTextureWidth(int width) {
+            this.textureWidth = width;
+            return this;
+        }
+
+        /**
+         * Sets the texture height.
+         *
+         * @param height the height of the texture
+         * @return the image to allow for method chaining
+         */
+        public image setTextureHeight(int height) {
+            this.textureHeight = height;
+            return this;
+        }
+
+        /**
+         * Sets the texture x location.
+         *
+         * @param x the x location
+         * @return the image to allow for method chaining
+         */
+        public image setTextureX(int x) {
+            this.textureX = x;
+            return this;
+        }
+
+        /**
+         * Sets the texture y location.
+         *
+         * @param y the y location
+         * @return the image to allow for method chaining
+         */
+        public image setTextureY(int y) {
+            this.textureY = y;
+            return this;
+        }
+
+        /**
+         * Sets the image resource name.
+         *
+         * @param name the name
+         * @return the image to allow for method chaining
+         */
+        public image setResourceName(String name) {
+            this.resourceName = name;
+            return this;
+        }
+
+        /**
+         * Sets the image resource domain.
+         *
+         * @param domain the domain
+         * @return the image to allow for method chaining
+         */
+        public image setResourceDomain(String domain) {
+            this.resourceDomain = domain;
+            return this;
+        }
+
+        /**
+         * Downloads an image to store at the resource name location.
+         *
+         * @param url          the url to download the image from
+         * @param shouldResize if the image should be resized to 256x256
+         * @return the image to allow for method chaining
+         */
+        public image download(String url, boolean shouldResize) {
+            try {
+                BufferedImage image = ImageIO.read(new URL(url));
+
+                if (shouldResize) {
+                    BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g = resized.createGraphics();
+                    g.drawImage(image, 0, 0, 256, 256, null);
+                    g.dispose();
+
+                    File resourceFile = new File(CTJS.getInstance().getAssetsDir(), this.resourceName);
+
+                    if (resourceFile.exists()) {
+                        resourceFile.delete();
+                    }
+
+                    resourceFile.createNewFile();
+
+                    ImageIO.write(resized, "png", resourceFile);
+                } else {
+                    File resourceFile = new File(CTJS.getInstance().getAssetsDir(), this.resourceName);
+                    resourceFile.createNewFile();
+
+                    ImageIO.write(image, "png", resourceFile);
+                }
+            } catch (IOException e) {
+                Console.getConsole().printStackTrace(e);
+            }
+
+            return this;
+        }
+
+        /**
+         * Draws the image on screen
+         *
+         * @return the image to allow for method chaining
+         */
+        public image draw() {
+            ResourceLocation rl = new ResourceLocation(resourceDomain, resourceName);
+
+            Client.getMinecraft().getTextureManager().bindTexture(rl);
+
+            GL11.glPushMatrix();
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            GL11.glTranslatef(this.x, this.y, 100);
+            GL11.glScalef(scale, scale, scale);
+            Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, this.textureX, this.textureY, this.textureWidth, this.textureHeight);
+            GL11.glDisable(GL11.GL_BLEND);
+
+            GL11.glPopMatrix();
+
+            return this;
+        }
+    }
+
+    /**
      * Used for creating and drawing text onto client's overlay
      */
     public class text {
-        @Getter private String string;
-        @Getter private int color;
-        @Getter private float x;
-        @Getter private float y;
-        @Getter private float scale;
-        @Getter private boolean dropShadow;
+        @Getter
+        private String string;
+        @Getter
+        private int color;
+        @Getter
+        private float x;
+        @Getter
+        private float y;
+        @Getter
+        private float scale;
+        @Getter
+        private boolean dropShadow;
 
         private text(String text, float x, float y) {
             this.string = text;
@@ -907,20 +1130,32 @@ public class Renderer {
     }
 
     public class rectangle {
-        @Getter private int color;
-        @Getter private float x;
-        @Getter private float y;
-        @Getter private float width;
-        @Getter private float height;
+        @Getter
+        private int color;
+        @Getter
+        private float x;
+        @Getter
+        private float y;
+        @Getter
+        private float width;
+        @Getter
+        private float height;
 
-        @Getter private boolean dropShadow;
-        @Getter private int shadowColor;
-        @Getter private float offsetX;
-        @Getter private float offsetY;
+        @Getter
+        private boolean dropShadow;
+        @Getter
+        private int shadowColor;
+        @Getter
+        private float offsetX;
+        @Getter
+        private float offsetY;
 
-        @Getter private boolean outline;
-        @Getter private int outlineColor;
-        @Getter private float thickness;
+        @Getter
+        private boolean outline;
+        @Getter
+        private int outlineColor;
+        @Getter
+        private float thickness;
 
         private rectangle(int color, float x, float y, float width, float height) {
             this.color = color;
