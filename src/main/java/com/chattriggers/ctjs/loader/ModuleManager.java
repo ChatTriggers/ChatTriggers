@@ -59,7 +59,6 @@ public class ModuleManager {
         KeyBind.clearKeyBinds();
         TriggerType.clearAllTriggers();
         CTJS.getInstance().getDisplayHandler().clearDisplays();
-        CTJS.getInstance().getConsole().clearConsole();
     }
 
     public ArrayList<Module> getModules() {

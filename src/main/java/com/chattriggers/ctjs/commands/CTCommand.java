@@ -83,6 +83,9 @@ public class CTCommand extends CommandBase {
                         CTJS.getInstance().getCommandHandler().getCommandList().clear();
                         CTJS.getInstance().getModuleManager().unload();
 
+                        if (CTJS.getInstance().getConfig().getClearConsoleOnLoad().value)
+                            CTJS.getInstance().getConsole().clearConsole();
+
                         CTJS.getInstance().setupConfig();
 
                         CTJS.getInstance().getModuleManager().load();

@@ -367,7 +367,9 @@ public class Renderer {
      * @param x        the x coordinate for the shape to be centered around
      * @param y        the y coordinate for the shape to be centered around
      * @param r        the radius of the shape
+     * @deprecated use {@link Renderer.shape#setCircle(float, float, float, int)}
      */
+    @Deprecated
     public static void drawShape(int color, int segments, float x, float y, float r) {
         double theta = 2 * Math.PI / (segments);
         double cos = Math.cos(theta);
@@ -1456,6 +1458,36 @@ public class Renderer {
             this.vertexes.add(new Vector2d(bx, by));
             this.vertexes.add(new Vector2d(cx, cy));
             this.vertexes.add(new Vector2d(dx, dy));
+
+            return this;
+        }
+
+        /**
+         * Sets the shape as a circle.
+         *
+         * @param x      the x position
+         * @param y      the y position
+         * @param radius the radius
+         * @param steps  the number of steps to take to complete the circle
+         * @return the shape to allow for method chaining
+         */
+        public shape setCircle(float x, float y, float radius, int steps) {
+            this.vertexes.clear();
+
+            double theta = 2 * Math.PI / steps;
+            double cos = Math.cos(theta);
+            double sin = Math.sin(theta);
+
+            double xHolder;
+            double circleX = 1;
+            double circleY = 0;
+
+            for (int i = 0; i < steps; i++) {
+                this.vertexes.add(new Vector2d(circleX * radius + x, circleY * radius + y));
+                xHolder = circleX;
+                circleX = cos * circleX - sin * circleY;
+                circleY = sin * xHolder + cos * circleY;
+            }
 
             return this;
         }

@@ -9,6 +9,8 @@ public class Config {
     private ConfigString modulesFolder;
     @Getter
     private ConfigBoolean printChatToConsole;
+    @Getter
+    private ConfigBoolean clearConsoleOnLoad;
 
     @Getter
     private ConfigStringSelector consoleTheme;
@@ -25,6 +27,7 @@ public class Config {
         this.modulesFolder.setDirectory(true);
 
         this.printChatToConsole = new ConfigBoolean(this.printChatToConsole,"Print Chat To Console", true, -110, 65);
+        this.clearConsoleOnLoad = new ConfigBoolean(this.clearConsoleOnLoad, "Clear Console On Load", true, -110, 120);
 
         String[] themes = new String[]{"default.dark", "ashes.dark", "atelierforest.dark", "isotope.dark", "codeschool.dark", "gotham", "hybrid", "3024.light", "chalk.light", "blue", "slate", "red", "green", "aids"};
         this.consoleTheme = new ConfigStringSelector(this.consoleTheme, "Console Theme", 0, themes, 110, 65);
