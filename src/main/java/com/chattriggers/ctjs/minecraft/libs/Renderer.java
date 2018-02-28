@@ -266,16 +266,27 @@ public class Renderer {
 
     /**
      * Gets a color int based on 0-255 rgba values.
-     * This can be used in settings background and text color.
      *
-     * @param red   value between 0 and 255
-     * @param green value between 0 and 255
-     * @param blue  value between 0 and 255
-     * @param alpha value between 0 and 255
+     * @param red   red value
+     * @param green green value
+     * @param blue  blue value
+     * @param alpha alpha value
      * @return integer color
      */
     public static int color(int red, int green, int blue, int alpha) {
         return (limit255(alpha) * 0x1000000) + (limit255(red) * 0x10000) + (limit255(green) * 0x100) + blue;
+    }
+
+    /**
+     * Gets a color int based on 0-255 rgb values.
+     *
+     * @param red   red value
+     * @param green green value
+     * @param blue  blue value
+     * @return integer color
+     */
+    public static int color(int red, int green, int blue) {
+        return color(red, green, blue, 255);
     }
 
     /**
@@ -316,9 +327,14 @@ public class Renderer {
         return getRainbow(step, 1f);
     }
 
-    // helper method to limit numbers between 0 and 255
-    public static int limit255(int a) {
-        return (a > 255) ? 255 : (a < 0 ? 0 : a);
+    /**
+     * Limits a number between 0 and 255 for use with {@link Renderer#color(int, int, int, int)}.
+     *
+     * @param number the number to limit
+     * @return the limited number
+     */
+    public static int limit255(int number) {
+        return (number > 255) ? 255 : (number < 0 ? 0 : number);
     }
 
     /**
@@ -1362,6 +1378,7 @@ public class Renderer {
 
         /**
          * Sets the shape color.
+         *
          * @param color {@link Renderer#color(int, int, int, int)}
          * @return the shape to allow for method chaining
          */
@@ -1372,6 +1389,7 @@ public class Renderer {
 
         /**
          * Adds a vertex to the shape.
+         *
          * @param x the x position
          * @param y the y position
          * @return the shape to allow for method chaining
@@ -1383,6 +1401,7 @@ public class Renderer {
 
         /**
          * Inserts a vertex into the shape
+         *
          * @param i the index of the insertion
          * @param x the x position
          * @param y the y position
@@ -1395,6 +1414,7 @@ public class Renderer {
 
         /**
          * Removes a vertex from the shape
+         *
          * @param i the index to remove
          * @return the shape to allow for method chaining
          */
@@ -1405,6 +1425,7 @@ public class Renderer {
 
         /**
          * Draws the shape onto the client's overlay.
+         *
          * @return the shape to allow for method chaining
          */
         public shape draw() {
