@@ -77,7 +77,7 @@ public class CTJS {
     private Renderer.image icon;
 
     @EventHandler
-    private void init(FMLInitializationEvent event) {
+    public void init(FMLInitializationEvent event) {
         this.displayHandler = new DisplayHandler();
         this.guiHandler = new GuiHandler();
         this.commandHandler = new CommandHandler();
@@ -93,7 +93,7 @@ public class CTJS {
     }
 
     @EventHandler
-    private void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLPreInitializationEvent event) {
         instance = this;
 
         this.console = new Console();
@@ -177,7 +177,7 @@ public class CTJS {
     }
 
     @EventHandler
-    private void postInit(FMLPostInitializationEvent event) {
+    public void postInit(FMLPostInitializationEvent event) {
         this.icon = Renderer.image("CT_logo.png")
                 .download("https://i.imgur.com/JAPDKMG.png", true)
                 .setScale(0.25f);

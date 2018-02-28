@@ -1129,6 +1129,9 @@ public class Renderer {
         }
     }
 
+    /**
+     * Used for creating and drawing a rectangle onto client's overlay
+     */
     public class rectangle {
         @Getter
         private int color;
