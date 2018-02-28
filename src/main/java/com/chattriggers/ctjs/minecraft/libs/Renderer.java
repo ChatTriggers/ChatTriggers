@@ -456,7 +456,9 @@ public class Renderer {
      * @param thickness thickness of the line
      * @param xy1       [x,y] array for point 1
      * @param xy2       [x,y] array for point 2
+     * @deprecated use {@link Renderer.shape#setLine(float, float, float, float, float)}
      */
+    @Deprecated
     public static void drawLine(int color, Double thickness, Double[] xy1, Double[] xy2) {
         if (xy1.length == 2 && xy2.length == 2) {
             double theta = -Math.atan2(xy2[1] - xy1[1], xy2[0] - xy1[0]);
@@ -1420,6 +1422,41 @@ public class Renderer {
          */
         public shape removeVertex(int i) {
             this.vertexes.remove(i);
+            return this;
+        }
+
+        /**
+         * Sets the shape as a line pointing from x1 y1 to x2 y2
+         *
+         * @param x1        the x starting position
+         * @param y1        the y starting position
+         * @param x2        the x ending position
+         * @param y2        the y ending position
+         * @param thickness the thickness
+         * @return the shape to allow for method chaining
+         */
+        public shape setLine(float x1, float y1, float x2, float y2, float thickness) {
+            this.vertexes.clear();
+
+            double theta = -Math.atan2(y2 - y1, x2 - x1);
+            double i = Math.sin(theta) * (thickness / 2);
+            double j = Math.cos(theta) * (thickness / 2);
+
+            double ax = x1 + i;
+            double ay = y1 + j;
+            double dx = x1 - i;
+            double dy = y1 - j;
+
+            double bx = x2 + i;
+            double by = y2 + j;
+            double cx = x2 - i;
+            double cy = y2 - j;
+
+            this.vertexes.add(new Vector2d(ax, ay));
+            this.vertexes.add(new Vector2d(bx, by));
+            this.vertexes.add(new Vector2d(cx, cy));
+            this.vertexes.add(new Vector2d(dx, dy));
+
             return this;
         }
 
