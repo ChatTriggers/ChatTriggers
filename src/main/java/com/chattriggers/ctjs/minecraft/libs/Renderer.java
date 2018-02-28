@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
+import javax.vecmath.Vector2d;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -492,7 +493,9 @@ public class Renderer {
      *
      * @param color  color of the polygon
      * @param points [x,y] array for points
+     * @deprecated use {@link Renderer.shape}
      */
+    @Deprecated
     public static void drawPolygon(int color, Double[]... points) {
         float f3 = (float) (color >> 24 & 255) / 255.0F;
         float f = (float) (color >> 16 & 255) / 255.0F;
@@ -575,6 +578,7 @@ public class Renderer {
      * Draw Image helper method. <br>
      * This method is not meant for public use
      */
+    @Deprecated
     private static void drawImage(ResourceLocation rl, float x, float y, int textureX,
                                   int textureY, int width, int height, float scale) {
         Client.getMinecraft().getTextureManager().bindTexture(rl);
@@ -820,6 +824,16 @@ public class Renderer {
         return new rectangle(color, x, y, width, height);
     }
 
+    /**
+     * Creates a new {@link Renderer.shape} object.
+     *
+     * @param color the {@link Renderer#color(int, int, int, int)} of the shape
+     * @return a new {@link Renderer.shape} object
+     */
+    public shape shape(int color) {
+        return new shape(color);
+    }
+
 
     /**
      * Used for creating and drawing an image onto client's overlay
@@ -1001,7 +1015,7 @@ public class Renderer {
          * @return the image to allow for method chaining
          */
         public image draw() {
-            ResourceLocation rl = new ResourceLocation(resourceDomain, resourceName);
+            ResourceLocation rl = new ResourceLocation(this.resourceDomain, this.resourceName);
 
             Client.getMinecraft().getTextureManager().bindTexture(rl);
 
@@ -1009,7 +1023,7 @@ public class Renderer {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glTranslatef(this.x, this.y, 100);
-            GL11.glScalef(scale, scale, scale);
+            GL11.glScalef(this.scale, this.scale, this.scale);
             Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, this.textureX, this.textureY, this.textureWidth, this.textureHeight);
             GL11.glDisable(GL11.GL_BLEND);
 
@@ -1328,6 +1342,99 @@ public class Renderer {
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
+        }
+    }
+
+    /**
+     * Used for creating and drawing a shape onto the client's overlay
+     */
+    public class shape {
+        @Getter
+        ArrayList<Vector2d> vertexes;
+        @Getter
+        int color;
+
+        private shape(int color) {
+            this.color = color;
+
+            this.vertexes = new ArrayList<>();
+        }
+
+        /**
+         * Sets the shape color.
+         * @param color {@link Renderer#color(int, int, int, int)}
+         * @return the shape to allow for method chaining
+         */
+        public shape setColor(int color) {
+            this.color = color;
+            return this;
+        }
+
+        /**
+         * Adds a vertex to the shape.
+         * @param x the x position
+         * @param y the y position
+         * @return the shape to allow for method chaining
+         */
+        public shape addVertex(float x, float y) {
+            this.vertexes.add(new Vector2d(x, y));
+            return this;
+        }
+
+        /**
+         * Inserts a vertex into the shape
+         * @param i the index of the insertion
+         * @param x the x position
+         * @param y the y position
+         * @return the shape to allow for method chaining
+         */
+        public shape insertVertex(int i, float x, float y) {
+            this.vertexes.add(i, new Vector2d(x, y));
+            return this;
+        }
+
+        /**
+         * Removes a vertex from the shape
+         * @param i the index to remove
+         * @return the shape to allow for method chaining
+         */
+        public shape removeVertex(int i) {
+            this.vertexes.remove(i);
+            return this;
+        }
+
+        /**
+         * Draws the shape onto the client's overlay.
+         * @return the shape to allow for method chaining
+         */
+        public shape draw() {
+            float a = (float) (this.color >> 24 & 255) / 255.0F;
+            float r = (float) (this.color >> 16 & 255) / 255.0F;
+            float g = (float) (this.color >> 8 & 255) / 255.0F;
+            float b = (float) (this.color & 255) / 255.0F;
+
+            GlStateManager.pushMatrix();
+
+            Tessellator tessellator = Tessellator.getInstance();
+            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+            GlStateManager.enableBlend();
+            GlStateManager.disableTexture2D();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            GlStateManager.color(r, g, b, a);
+
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+
+            for (Vector2d vertex : vertexes)
+                worldrenderer.pos(vertex.getX(), vertex.getY(), 0.0D).endVertex();
+
+            tessellator.draw();
+            GlStateManager.color(1, 1, 1, 1);
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
+
+            GlStateManager.popMatrix();
+
+            return this;
         }
     }
 }
