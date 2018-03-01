@@ -1373,11 +1373,35 @@ public class Renderer {
         ArrayList<Vector2d> vertexes;
         @Getter
         int color;
+        @Getter
+        int drawMode;
 
         private shape(int color) {
             this.color = color;
 
             this.vertexes = new ArrayList<>();
+            this.drawMode = 9;
+        }
+
+        /**
+         * Sets the GL draw mode for the shape.<br>
+         * 0 = points<br>
+         * 1 = lines<br>
+         * 2 = line loop<br>
+         * 3 = line strip<br>
+         * 5 = triangles<br>
+         * 5 = triangle strip<br>
+         * 6 = triangle fan<br>
+         * 7 = quads<br>
+         * 8 = quad strip<br>
+         * 9 = polygon
+         *
+         * @param mode the draw mode
+         * @return the shape to allow for method chaining
+         */
+        public shape setDrawMode(int mode) {
+            this.drawMode = mode;
+            return this;
         }
 
         /**
@@ -1459,6 +1483,8 @@ public class Renderer {
             this.vertexes.add(new Vector2d(cx, cy));
             this.vertexes.add(new Vector2d(dx, dy));
 
+            this.drawMode = 9;
+
             return this;
         }
 
@@ -1483,11 +1509,15 @@ public class Renderer {
             double circleY = 0;
 
             for (int i = 0; i < steps; i++) {
+                this.vertexes.add(new Vector2d(x, y));
                 this.vertexes.add(new Vector2d(circleX * radius + x, circleY * radius + y));
                 xHolder = circleX;
                 circleX = cos * circleX - sin * circleY;
                 circleY = sin * xHolder + cos * circleY;
+                this.vertexes.add(new Vector2d(circleX * radius + x, circleY * radius + y));
             }
+
+           this.drawMode = 5;
 
             return this;
         }
@@ -1512,9 +1542,9 @@ public class Renderer {
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.color(r, g, b, a);
 
-            worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+            worldrenderer.begin(this.drawMode, DefaultVertexFormats.POSITION);
 
-            for (Vector2d vertex : vertexes)
+            for (Vector2d vertex : this.vertexes)
                 worldrenderer.pos(vertex.getX(), vertex.getY(), 0.0D).endVertex();
 
             tessellator.draw();
