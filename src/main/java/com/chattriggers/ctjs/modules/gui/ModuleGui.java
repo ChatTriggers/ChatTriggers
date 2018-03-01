@@ -1,10 +1,11 @@
 package com.chattriggers.ctjs.modules.gui;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
-import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
+import com.chattriggers.ctjs.modules.Module;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
@@ -23,7 +24,7 @@ public class ModuleGui extends GuiScreen {
 
     private String name;
     private String version;
-    private ArrayList<String> description;
+    private Text description;
     private HashMap<String, List<String>> coloredFiles;
 
     private boolean isHovered;
@@ -31,9 +32,16 @@ public class ModuleGui extends GuiScreen {
     ModuleGui(Module module) {
         this.module = module;
 
+        this.scrolled = 0;
+
+        String preDescription = module.getMetadata().getDescription() == null
+                ? "No description provided"
+                : module.getMetadata().getDescription();
+        this.description = Renderer.text(preDescription, 22, 30).setShadow(true);
+
         updateScaling(0, 0, 0);
 
-        scrolled = 0;
+
         isHovered = false;
 
         name = ChatLib.addColor(this.module.getMetadata().getDisplayName()== null
@@ -89,10 +97,7 @@ public class ModuleGui extends GuiScreen {
         ).draw();
 
         // description
-        for (int i = 0; i < description.size(); i++) {
-            Renderer.text(ChatLib.addColor(description.get(i)), 22, 30 + i * 10 - scrolled)
-                    .setShadow(true).draw();
-        }
+        description.setY(30 - this.scrolled).draw();
 
         // directory
         Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", 22, infoHeight - scrolled)
@@ -256,20 +261,17 @@ public class ModuleGui extends GuiScreen {
     }
 
     private void updateScaling(int mouseX, int mouseY, int fileOffset) {
-        width = Renderer.getRenderWidth() - 40;
+        this.width = Renderer.getRenderWidth() - 40;
 
-        String preDescription = module.getMetadata().getDescription() == null
-                ? "No description provided"
-                : module.getMetadata().getDescription();
-        description = Renderer.lineWrap(new ArrayList<>(Arrays.asList(preDescription.split("\n"))), width - 5, 100);
+        this.description.setWidth(this.width - 5);
 
-        infoHeight = description.size() * 10 + 35;
+        this.infoHeight = this.description.getHeight() + 35;
 
-        maxScroll = fileOffset + infoHeight - Renderer.getRenderHeight();
+        this.maxScroll = fileOffset + this.infoHeight - Renderer.getRenderHeight();
 
-        isHovered = (mouseX > 20 + width - Renderer.getStringWidth("< back") - 2
-                && mouseX < 20 + width - 2
-                && mouseY > infoHeight - scrolled - 2
-                && mouseY < infoHeight - scrolled + 10);
+        this.isHovered = (mouseX > 20 + this.width - Renderer.getStringWidth("< back") - 2
+                && mouseX < 20 + this.width - 2
+                && mouseY > this.infoHeight - this.scrolled - 2
+                && mouseY < this.infoHeight - this.scrolled + 10);
     }
 }

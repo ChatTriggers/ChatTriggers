@@ -13,6 +13,10 @@ public class Text {
     @Getter
     private float y;
     @Getter
+    private int width;
+    @Getter
+    private int maxLines;
+    @Getter
     private float scale;
     @Getter
     private boolean dropShadow;
@@ -22,6 +26,8 @@ public class Text {
         this.x = x;
         this.y = y;
 
+        this.width = 0;
+        this.maxLines = 0;
         this.color = 0xffffffff;
         this.scale = 1;
         this.dropShadow = false;
@@ -47,6 +53,46 @@ public class Text {
     public Text setY(float y) {
         this.y = y;
         return this;
+    }
+
+    /**
+     * Sets the text max width for line wrapping.
+     * @param width the max width
+     * @return the text to allow for method chaining
+     */
+    public Text setWidth(int width) {
+        this.width = width;
+        return this;
+    }
+
+    /**
+     * Sets the max number of lines to draw.
+     * @param lines the max number of lines
+     * @return the text to allow for method chaining
+     */
+    public Text setMaxLines(int lines) {
+        this.maxLines = lines;
+        return this;
+    }
+
+    /**
+     * Gets whether or not the line wrapped text exceeds the max lines.
+     * @return true if wrapped text exceeds max lines
+     */
+    public boolean exceedsMaxLines() {
+        return this.width != 0
+                && Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width).size() > this.maxLines;
+
+    }
+
+    /**
+     * Gets the text height based on width.
+     * @return the text height
+     */
+    public int getHeight() {
+        return this.width == 0
+                ? 9
+                :  Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width).size() * 9;
     }
 
     /**
@@ -102,7 +148,19 @@ public class Text {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.scale(this.scale, this.scale, this.scale);
-        Renderer.getFontRenderer().drawString(this.string, this.x / this.scale, this.y / this.scale, this.color, this.dropShadow);
+        if (this.width > 0) {
+            float maxLinesHolder = this.maxLines;
+            float yHolder = this.y;
+            for (String line : Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)) {
+                Renderer.getFontRenderer().drawString(line, this.x / this.scale, yHolder / this.scale, this.color, this.dropShadow);
+                yHolder += 9;
+                maxLinesHolder--;
+                if (maxLinesHolder == 0)
+                    break;
+            }
+        } else {
+            Renderer.getFontRenderer().drawString(this.string, this.x / this.scale, this.y / this.scale, this.color, this.dropShadow);
+        }
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
 

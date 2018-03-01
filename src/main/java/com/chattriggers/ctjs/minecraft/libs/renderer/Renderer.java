@@ -116,7 +116,9 @@ public class Renderer {
      * @param width    the max width of a line
      * @param maxLines the max number of lines
      * @return the wrapped line list
+     * @deprecated use {@link Text#setWidth(int)}
      */
+    @Deprecated
     public static ArrayList<String> lineWrap(ArrayList<String> lines, int width, int maxLines) {
         int lineWrapIterator = 0;
         Boolean lineWrapContinue = true;
