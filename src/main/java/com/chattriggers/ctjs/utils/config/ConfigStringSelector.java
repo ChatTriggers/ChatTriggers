@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.gui.GuiButton;

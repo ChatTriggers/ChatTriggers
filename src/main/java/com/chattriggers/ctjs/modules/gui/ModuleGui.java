@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.modules.gui;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;

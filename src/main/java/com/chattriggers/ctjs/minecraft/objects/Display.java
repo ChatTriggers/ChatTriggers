@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.minecraft.objects;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.OnTrigger;

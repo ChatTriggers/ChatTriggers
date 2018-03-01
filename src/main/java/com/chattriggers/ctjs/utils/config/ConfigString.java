@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiTextField;

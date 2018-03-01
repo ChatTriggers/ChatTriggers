@@ -1,10 +1,9 @@
-package com.chattriggers.ctjs.minecraft.libs;
+package com.chattriggers.ctjs.minecraft.libs.renderer;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.utils.console.Console;
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -21,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
-import javax.vecmath.Vector2d;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -367,7 +365,7 @@ public class Renderer {
      * @param x        the x coordinate for the shape to be centered around
      * @param y        the y coordinate for the shape to be centered around
      * @param r        the radius of the shape
-     * @deprecated use {@link Renderer.shape#setCircle(float, float, float, int)}
+     * @deprecated use {@link Shape#setCircle(float, float, float, int)}
      */
     @Deprecated
     public static void drawShape(int color, int segments, float x, float y, float r) {
@@ -407,7 +405,7 @@ public class Renderer {
      * @param y      the y coordinate
      * @param width  the width
      * @param height the height
-     * @deprecated use {@link rectangle}
+     * @deprecated use {@link Rectangle}
      */
     @Deprecated
     public static void drawRectangle(int color, float x, float y, float width, float height) {
@@ -458,7 +456,7 @@ public class Renderer {
      * @param thickness thickness of the line
      * @param xy1       [x,y] array for point 1
      * @param xy2       [x,y] array for point 2
-     * @deprecated use {@link Renderer.shape#setLine(float, float, float, float, float)}
+     * @deprecated use {@link Shape#setLine(float, float, float, float, float)}
      */
     @Deprecated
     public static void drawLine(int color, Double thickness, Double[] xy1, Double[] xy2) {
@@ -513,7 +511,7 @@ public class Renderer {
      *
      * @param color  color of the polygon
      * @param points [x,y] array for points
-     * @deprecated use {@link Renderer.shape}
+     * @deprecated use {@link Shape}
      */
     @Deprecated
     public static void drawPolygon(int color, Double[]... points) {
@@ -560,7 +558,7 @@ public class Renderer {
      * @param textureWidth  the width of the image to render, usually 256
      * @param textureHeight the height of the image to render, usually 256
      * @param scale         the scale of the image, can use decimals, i.e. 0.5, 1.5
-     * @deprecated {@link Renderer.image}
+     * @deprecated {@link Image}
      */
     @Deprecated
     public static void drawImage(String resourceName, float renderXLoc, float renderYLoc,
@@ -583,7 +581,7 @@ public class Renderer {
      * @param textureWidth   the width of the image to render, usually 256
      * @param textureHeight  the height of the image to render, usually 256
      * @param scale          the scale of the image, can use decimals, i.e. 0.5, 1.5
-     * @deprecated {@link Renderer.image}
+     * @deprecated {@link Image}
      */
     @Deprecated
     public static void drawImage(String resourceDomain, String resourceName, float renderXLoc, float renderYLoc,
@@ -619,7 +617,7 @@ public class Renderer {
      *
      * @param url          url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
-     * @deprecated use {@link Renderer.image}
+     * @deprecated use {@link Image}
      */
     @Deprecated
     public static void downloadImage(String url, String resourceName) {
@@ -632,7 +630,7 @@ public class Renderer {
      * @param url          url of the image to be downloaded
      * @param resourceName file name for the image when it is downloaded
      * @param shouldResize whether or not the file should be resized by CT
-     * @deprecated {@link Renderer.image}
+     * @deprecated {@link Image}
      */
     @Deprecated
     public static void downloadImage(String url, String resourceName, boolean shouldResize) {
@@ -809,752 +807,48 @@ public class Renderer {
     }
 
     /**
-     * Creates a new {@link Renderer.image} object.
+     * Creates a new {@link Image} object.
      *
      * @param resourceName the name of the resource (image-name.png)
-     * @return a new {@link Renderer.image} object
+     * @return a new {@link Image} object
      */
-    public image image(String resourceName) {
-        return new image(resourceName);
+    public Image image(String resourceName) {
+        return new Image(resourceName);
     }
 
     /**
-     * Creates a new {@link Renderer.text} object.
+     * Creates a new {@link Text} object.
      *
      * @param text the text string
      * @param x    the x position
      * @param y    the y position
-     * @return a new {@link Renderer.text} object
+     * @return a new {@link Text} object
      */
-    public text text(String text, float x, float y) {
-        return new text(text, x, y);
+    public Text text(String text, float x, float y) {
+        return new Text(text, x, y);
     }
 
     /**
-     * Creates a new {@link Renderer.rectangle} object.
+     * Creates a new {@link Rectangle} object.
      *
      * @param color  the {@link Renderer#color(int, int, int, int)} of the rectangle
      * @param x      the x position of the rectangle
      * @param y      the y position of the rectangle
      * @param width  the width of the rectangle
      * @param height the height of the rectangle
-     * @return a new {@link Renderer.rectangle} object
+     * @return a new {@link Rectangle} object
      */
-    public rectangle rectangle(int color, float x, float y, float width, float height) {
-        return new rectangle(color, x, y, width, height);
+    public Rectangle rectangle(int color, float x, float y, float width, float height) {
+        return new Rectangle(color, x, y, width, height);
     }
 
     /**
-     * Creates a new {@link Renderer.shape} object.
+     * Creates a new {@link Shape} object.
      *
      * @param color the {@link Renderer#color(int, int, int, int)} of the shape
-     * @return a new {@link Renderer.shape} object
+     * @return a new {@link Shape} object
      */
-    public shape shape(int color) {
-        return new shape(color);
-    }
-
-
-    /**
-     * Used for creating and drawing an image onto client's overlay
-     */
-    public class image {
-        @Getter
-        private float x;
-        @Getter
-        private float y;
-        @Getter
-        private int textureWidth;
-        @Getter
-        private int textureHeight;
-        @Getter
-        private int textureX;
-        @Getter
-        private int textureY;
-        @Getter
-        private float scale;
-        @Getter
-        private String resourceName;
-        @Getter
-        private String resourceDomain;
-
-        private image(String resourceName) {
-            this.resourceName = resourceName;
-
-            this.x = 0;
-            this.y = 0;
-            this.textureWidth = 256;
-            this.textureHeight = 256;
-            this.textureX = 0;
-            this.textureY = 0;
-            this.scale = 0;
-            this.resourceDomain = "ctjs.images";
-        }
-
-        /**
-         * Sets the image x position.
-         *
-         * @param x the x position
-         * @return the image to allow for method chaining
-         */
-        public image setX(float x) {
-            this.x = x;
-            return this;
-        }
-
-        /**
-         * Sets the image y position.
-         *
-         * @param y the y position
-         * @return the image to allow for method chaining
-         */
-        public image setY(float y) {
-            this.y = y;
-            return this;
-        }
-
-        /**
-         * Sets the image scale.
-         *
-         * @param scale the scale
-         * @return the image to allow for method chaining
-         */
-        public image setScale(float scale) {
-            this.scale = scale;
-            return this;
-        }
-
-        /**
-         * Sets the texture width.
-         *
-         * @param width the width of the texture
-         * @return the image to allow for method chaining
-         */
-        public image setTextureWidth(int width) {
-            this.textureWidth = width;
-            return this;
-        }
-
-        /**
-         * Sets the texture height.
-         *
-         * @param height the height of the texture
-         * @return the image to allow for method chaining
-         */
-        public image setTextureHeight(int height) {
-            this.textureHeight = height;
-            return this;
-        }
-
-        /**
-         * Sets the texture x location.
-         *
-         * @param x the x location
-         * @return the image to allow for method chaining
-         */
-        public image setTextureX(int x) {
-            this.textureX = x;
-            return this;
-        }
-
-        /**
-         * Sets the texture y location.
-         *
-         * @param y the y location
-         * @return the image to allow for method chaining
-         */
-        public image setTextureY(int y) {
-            this.textureY = y;
-            return this;
-        }
-
-        /**
-         * Sets the image resource name.
-         *
-         * @param name the name
-         * @return the image to allow for method chaining
-         */
-        public image setResourceName(String name) {
-            this.resourceName = name;
-            return this;
-        }
-
-        /**
-         * Sets the image resource domain.
-         *
-         * @param domain the domain
-         * @return the image to allow for method chaining
-         */
-        public image setResourceDomain(String domain) {
-            this.resourceDomain = domain;
-            return this;
-        }
-
-        /**
-         * Downloads an image to store at the resource name location.
-         *
-         * @param url          the url to download the image from
-         * @param shouldResize if the image should be resized to 256x256
-         * @return the image to allow for method chaining
-         */
-        public image download(String url, boolean shouldResize) {
-            try {
-                BufferedImage image = ImageIO.read(new URL(url));
-
-                if (shouldResize) {
-                    BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g = resized.createGraphics();
-                    g.drawImage(image, 0, 0, 256, 256, null);
-                    g.dispose();
-
-                    File resourceFile = new File(CTJS.getInstance().getAssetsDir(), this.resourceName);
-
-                    if (resourceFile.exists()) {
-                        resourceFile.delete();
-                    }
-
-                    resourceFile.createNewFile();
-
-                    ImageIO.write(resized, "png", resourceFile);
-                } else {
-                    File resourceFile = new File(CTJS.getInstance().getAssetsDir(), this.resourceName);
-                    resourceFile.createNewFile();
-
-                    ImageIO.write(image, "png", resourceFile);
-                }
-            } catch (IOException e) {
-                Console.getConsole().printStackTrace(e);
-            }
-
-            return this;
-        }
-
-        /**
-         * Draws the image on screen
-         *
-         * @return the image to allow for method chaining
-         */
-        public image draw() {
-            ResourceLocation rl = new ResourceLocation(this.resourceDomain, this.resourceName);
-
-            Client.getMinecraft().getTextureManager().bindTexture(rl);
-
-            GL11.glPushMatrix();
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glColor4f(1F, 1F, 1F, 1F);
-            GL11.glTranslatef(this.x, this.y, 100);
-            GL11.glScalef(this.scale, this.scale, this.scale);
-            Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, this.textureX, this.textureY, this.textureWidth, this.textureHeight);
-            GL11.glDisable(GL11.GL_BLEND);
-
-            GL11.glPopMatrix();
-
-            return this;
-        }
-    }
-
-    /**
-     * Used for creating and drawing text onto client's overlay
-     */
-    public class text {
-        @Getter
-        private String string;
-        @Getter
-        private int color;
-        @Getter
-        private float x;
-        @Getter
-        private float y;
-        @Getter
-        private float scale;
-        @Getter
-        private boolean dropShadow;
-
-        private text(String text, float x, float y) {
-            this.string = text;
-            this.x = x;
-            this.y = y;
-
-            this.color = 0xffffffff;
-            this.scale = 1;
-            this.dropShadow = false;
-        }
-
-        /**
-         * Sets the text x position.
-         *
-         * @param x the x position
-         * @return the text to allow for method chaining
-         */
-        public text setX(float x) {
-            this.x = x;
-            return this;
-        }
-
-        /**
-         * Sets the text y position.
-         *
-         * @param y the y position
-         * @return the text to allow for method chaining
-         */
-        public text setY(float y) {
-            this.y = y;
-            return this;
-        }
-
-        /**
-         * Sets the text color.
-         *
-         * @param color the {@link Renderer#color(int, int, int, int)}
-         * @return the text to allow for method chaining
-         */
-        public text setColor(int color) {
-            this.color = color;
-            return this;
-        }
-
-        /**
-         * Sets the text scale.
-         *
-         * @param scale the scale of the text
-         * @return the text to allow for method chaining
-         */
-        public text setScale(float scale) {
-            this.scale = scale;
-            return this;
-        }
-
-        /**
-         * Sets the drop shadow of the text.
-         *
-         * @param dropShadow if the text has a drop shadow
-         * @return the text to allow for method chaining
-         */
-        public text setShadow(boolean dropShadow) {
-            this.dropShadow = dropShadow;
-            return this;
-        }
-
-        /**
-         * Sets the string of the text
-         *
-         * @param string the string of the text
-         * @return the text to allow for method chaining
-         */
-        public text setString(String string) {
-            this.string = string;
-            return this;
-        }
-
-        /**
-         * Draws the text onto the client's overlay.
-         *
-         * @return the text to allow for method chaining
-         */
-        public text draw() {
-            GlStateManager.pushMatrix();
-            GlStateManager.enableBlend();
-            GlStateManager.scale(this.scale, this.scale, this.scale);
-            getFontRenderer().drawString(this.string, this.x / this.scale, this.y / this.scale, this.color, this.dropShadow);
-            GlStateManager.disableBlend();
-            GlStateManager.popMatrix();
-
-            return this;
-        }
-    }
-
-    /**
-     * Used for creating and drawing a rectangle onto client's overlay
-     */
-    public class rectangle {
-        @Getter
-        private int color;
-        @Getter
-        private float x;
-        @Getter
-        private float y;
-        @Getter
-        private float width;
-        @Getter
-        private float height;
-
-        @Getter
-        private boolean dropShadow;
-        @Getter
-        private int shadowColor;
-        @Getter
-        private float offsetX;
-        @Getter
-        private float offsetY;
-
-        @Getter
-        private boolean outline;
-        @Getter
-        private int outlineColor;
-        @Getter
-        private float thickness;
-
-        private rectangle(int color, float x, float y, float width, float height) {
-            this.color = color;
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-
-            this.dropShadow = false;
-            this.outline = false;
-        }
-
-        /**
-         * Sets the rectangle {@link Renderer#color(int, int, int, int)}.
-         *
-         * @param color the {@link Renderer#color(int, int, int, int)}
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle setColor(int color) {
-            this.color = color;
-            return this;
-        }
-
-        /**
-         * Sets the rectangle x position.
-         *
-         * @param x the x position
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle setX(float x) {
-            this.x = x;
-            return this;
-        }
-
-        /**
-         * Sets the rectangle y position.
-         *
-         * @param y the y position
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle setY(float y) {
-            this.y = y;
-            return this;
-        }
-
-        /**
-         * Sets the rectangle width.
-         *
-         * @param width the width
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle setWidth(float width) {
-            this.width = width;
-            return this;
-        }
-
-        /**
-         * Sets the rectangle height.
-         *
-         * @param height the height
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle setHeight(float height) {
-            this.height = height;
-            return this;
-        }
-
-        /**
-         * Sets the drop shadow of the rectangle.
-         *
-         * @param color   the {@link Renderer#color(int, int, int, int)} of the drop shadow
-         * @param offsetX the x offset of the drop shadow
-         * @param offsetY the y offset of the drop shadow
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle setShadow(int color, float offsetX, float offsetY) {
-            this.dropShadow = true;
-
-            this.shadowColor = color;
-            this.offsetX = offsetX;
-            this.offsetY = offsetY;
-
-            return this;
-        }
-
-        /**
-         * Sets the outline of the rectangle.
-         *
-         * @param color     the {@link Renderer#color(int, int, int, int)} of the outline
-         * @param thickness the thickness of the outline
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle setOutline(int color, float thickness) {
-            this.outline = true;
-
-            this.outlineColor = color;
-            this.thickness = thickness;
-
-            return this;
-        }
-
-        /**
-         * Draws the rectangle onto the client's overlay.
-         *
-         * @return the rectangle to allow for method chaining
-         */
-        public rectangle draw() {
-            dropShadow();
-            outline();
-            drawRect(this.color, this.x, this.y, this.width, this.height);
-
-            return this;
-        }
-
-        // helper method to draw the outline
-        private void outline() {
-            if (!outline) return;
-
-            drawRect(this.outlineColor, this.x - this.thickness, this.y - this.thickness, this.width + this.thickness * 2, this.height + this.thickness * 2);
-        }
-
-        // helper method to draw the drop shadow
-        private void dropShadow() {
-            if (!dropShadow) return;
-
-            drawRect(this.shadowColor, this.x + this.offsetX, this.y + this.height, this.width, this.offsetY);
-            drawRect(this.shadowColor, this.x + this.width, this.y + this.offsetY, this.offsetX, this.height - this.offsetY);
-        }
-
-        // helper method to draw a rectangle
-        private void drawRect(int color, float x, float y, float width, float height) {
-            float x2 = x + width;
-            float y2 = y + height;
-
-            if (x > x2) {
-                float k = x;
-                x = x2;
-                x2 = k;
-            }
-            if (y > y2) {
-                float k = y;
-                y = y2;
-                y2 = k;
-            }
-
-            float a = (float) (color >> 24 & 255) / 255.0F;
-            float r = (float) (color >> 16 & 255) / 255.0F;
-            float g = (float) (color >> 8 & 255) / 255.0F;
-            float b = (float) (color & 255) / 255.0F;
-
-            GlStateManager.pushMatrix();
-            GlStateManager.enableBlend();
-            GlStateManager.disableTexture2D();
-
-            Tessellator tessellator = Tessellator.getInstance();
-            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-            GlStateManager.color(r, g, b, a);
-            worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-            worldrenderer.pos(x, y2, 0.0D).endVertex();
-            worldrenderer.pos(x2, y2, 0.0D).endVertex();
-            worldrenderer.pos(x2, y, 0.0D).endVertex();
-            worldrenderer.pos(x, y, 0.0D).endVertex();
-            tessellator.draw();
-            GlStateManager.color(1, 1, 1, 1);
-
-            GlStateManager.enableTexture2D();
-            GlStateManager.disableBlend();
-            GlStateManager.popMatrix();
-        }
-    }
-
-    /**
-     * Used for creating and drawing a shape onto the client's overlay
-     */
-    public class shape {
-        @Getter
-        ArrayList<Vector2d> vertexes;
-        @Getter
-        int color;
-        @Getter
-        int drawMode;
-
-        private shape(int color) {
-            this.color = color;
-
-            this.vertexes = new ArrayList<>();
-            this.drawMode = 9;
-        }
-
-        /**
-         * Sets the GL draw mode for the shape.<br>
-         * 0 = points<br>
-         * 1 = lines<br>
-         * 2 = line loop<br>
-         * 3 = line strip<br>
-         * 5 = triangles<br>
-         * 5 = triangle strip<br>
-         * 6 = triangle fan<br>
-         * 7 = quads<br>
-         * 8 = quad strip<br>
-         * 9 = polygon
-         *
-         * @param mode the draw mode
-         * @return the shape to allow for method chaining
-         */
-        public shape setDrawMode(int mode) {
-            this.drawMode = mode;
-            return this;
-        }
-
-        /**
-         * Sets the shape color.
-         *
-         * @param color {@link Renderer#color(int, int, int, int)}
-         * @return the shape to allow for method chaining
-         */
-        public shape setColor(int color) {
-            this.color = color;
-            return this;
-        }
-
-        /**
-         * Adds a vertex to the shape.
-         *
-         * @param x the x position
-         * @param y the y position
-         * @return the shape to allow for method chaining
-         */
-        public shape addVertex(float x, float y) {
-            this.vertexes.add(new Vector2d(x, y));
-            return this;
-        }
-
-        /**
-         * Inserts a vertex into the shape
-         *
-         * @param i the index of the insertion
-         * @param x the x position
-         * @param y the y position
-         * @return the shape to allow for method chaining
-         */
-        public shape insertVertex(int i, float x, float y) {
-            this.vertexes.add(i, new Vector2d(x, y));
-            return this;
-        }
-
-        /**
-         * Removes a vertex from the shape
-         *
-         * @param i the index to remove
-         * @return the shape to allow for method chaining
-         */
-        public shape removeVertex(int i) {
-            this.vertexes.remove(i);
-            return this;
-        }
-
-        /**
-         * Sets the shape as a line pointing from x1 y1 to x2 y2
-         *
-         * @param x1        the x starting position
-         * @param y1        the y starting position
-         * @param x2        the x ending position
-         * @param y2        the y ending position
-         * @param thickness the thickness
-         * @return the shape to allow for method chaining
-         */
-        public shape setLine(float x1, float y1, float x2, float y2, float thickness) {
-            this.vertexes.clear();
-
-            double theta = -Math.atan2(y2 - y1, x2 - x1);
-            double i = Math.sin(theta) * (thickness / 2);
-            double j = Math.cos(theta) * (thickness / 2);
-
-            double ax = x1 + i;
-            double ay = y1 + j;
-            double dx = x1 - i;
-            double dy = y1 - j;
-
-            double bx = x2 + i;
-            double by = y2 + j;
-            double cx = x2 - i;
-            double cy = y2 - j;
-
-            this.vertexes.add(new Vector2d(ax, ay));
-            this.vertexes.add(new Vector2d(bx, by));
-            this.vertexes.add(new Vector2d(cx, cy));
-            this.vertexes.add(new Vector2d(dx, dy));
-
-            this.drawMode = 9;
-
-            return this;
-        }
-
-        /**
-         * Sets the shape as a circle.
-         *
-         * @param x      the x position
-         * @param y      the y position
-         * @param radius the radius
-         * @param steps  the number of steps to take to complete the circle
-         * @return the shape to allow for method chaining
-         */
-        public shape setCircle(float x, float y, float radius, int steps) {
-            this.vertexes.clear();
-
-            double theta = 2 * Math.PI / steps;
-            double cos = Math.cos(theta);
-            double sin = Math.sin(theta);
-
-            double xHolder;
-            double circleX = 1;
-            double circleY = 0;
-
-            for (int i = 0; i < steps; i++) {
-                this.vertexes.add(new Vector2d(x, y));
-                this.vertexes.add(new Vector2d(circleX * radius + x, circleY * radius + y));
-                xHolder = circleX;
-                circleX = cos * circleX - sin * circleY;
-                circleY = sin * xHolder + cos * circleY;
-                this.vertexes.add(new Vector2d(circleX * radius + x, circleY * radius + y));
-            }
-
-           this.drawMode = 5;
-
-            return this;
-        }
-
-        /**
-         * Draws the shape onto the client's overlay.
-         *
-         * @return the shape to allow for method chaining
-         */
-        public shape draw() {
-            float a = (float) (this.color >> 24 & 255) / 255.0F;
-            float r = (float) (this.color >> 16 & 255) / 255.0F;
-            float g = (float) (this.color >> 8 & 255) / 255.0F;
-            float b = (float) (this.color & 255) / 255.0F;
-
-            GlStateManager.pushMatrix();
-
-            Tessellator tessellator = Tessellator.getInstance();
-            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-            GlStateManager.enableBlend();
-            GlStateManager.disableTexture2D();
-            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-            GlStateManager.color(r, g, b, a);
-
-            worldrenderer.begin(this.drawMode, DefaultVertexFormats.POSITION);
-
-            for (Vector2d vertex : this.vertexes)
-                worldrenderer.pos(vertex.getX(), vertex.getY(), 0.0D).endVertex();
-
-            tessellator.draw();
-            GlStateManager.color(1, 1, 1, 1);
-            GlStateManager.enableTexture2D();
-            GlStateManager.disableBlend();
-
-            GlStateManager.popMatrix();
-
-            return this;
-        }
+    public Shape shape(int color) {
+        return new Shape(color);
     }
 }

@@ -6,7 +6,8 @@ import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
 import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Image;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
@@ -74,7 +75,7 @@ public class CTJS {
 
     private File configLocation;
     @Getter
-    private Renderer.image icon;
+    private Image icon;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
