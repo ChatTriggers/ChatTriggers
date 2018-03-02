@@ -3,7 +3,7 @@
     "modid": "ct.js",
     "name": "ChatTriggers",
     "description": "CTjs is a framework that allows for live scripting and client modification using JavaScript.",
-    "version": "0.10-SNAPSHOT",
+    "version": "0.10.1-SNAPSHOT",
     "mcversion": "1.8.9",
     "url": "https://www.chattriggers.com",
     "updateUrl": "",
