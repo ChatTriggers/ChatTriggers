@@ -50,7 +50,7 @@ public class ConfigStringSelector extends ConfigOption {
 
         this.leftArrowButton = new GuiButton(
                 0,
-                Renderer.getRenderWidth() / 2 - 100 + this.x,
+                Renderer.screen.getWidth() / 2 - 100 + this.x,
                 this.y + 15,
                 30,
                 20,
@@ -59,7 +59,7 @@ public class ConfigStringSelector extends ConfigOption {
 
         this.rightArrowButton = new GuiButton(
                 0,
-                Renderer.getRenderWidth() / 2 + 70 + this.x,
+                Renderer.screen.getWidth() / 2 + 70 + this.x,
                 this.y + 15,
                 30,
                 20,
@@ -71,7 +71,7 @@ public class ConfigStringSelector extends ConfigOption {
     public void draw(int mouseX, int mouseY) {
         if (this.hidden) return;
 
-        int middle = Renderer.getRenderWidth() / 2;
+        int middle = Renderer.screen.getWidth() / 2;
 
         Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45)
                 .setShadow(0xd0000000, 3, 3)

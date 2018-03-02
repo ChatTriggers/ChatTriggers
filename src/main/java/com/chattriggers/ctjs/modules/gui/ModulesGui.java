@@ -27,7 +27,7 @@ public class ModulesGui extends GuiScreen {
         }
 
         this.scrolled = 0;
-        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.getRenderHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.screen.getHeight();
 
     }
 
@@ -35,18 +35,18 @@ public class ModulesGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.getRenderHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.screen.getHeight();
 
         drawBackground(0);
 
         // draw scroll bar
-        int scrollHeight = Renderer.getRenderHeight() - this.maxScroll;
+        int scrollHeight = Renderer.screen.getHeight() - this.maxScroll;
         if (scrollHeight < 20) scrollHeight = 20;
-        if (scrollHeight < Renderer.getRenderHeight()) {
-            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.getRenderHeight() - scrollHeight - 10);
+        if (scrollHeight < Renderer.screen.getHeight()) {
+            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.screen.getHeight() - scrollHeight - 10);
             Renderer.rectangle(
                     0xa0000000,
-                    Renderer.getRenderWidth() - 5,
+                    Renderer.screen.getWidth() - 5,
                     scrollY,
                     5,
                     scrollHeight
@@ -126,7 +126,7 @@ public class ModulesGui extends GuiScreen {
         }
 
         private void checkHover(int mouseX, int mouseY) {
-            int width = Renderer.getRenderWidth() - 40;
+            int width = Renderer.screen.getWidth() - 40;
             int height = 105;
 
             isHovered = (mouseX > x + width - Renderer.getStringWidth("show code >") - 2
@@ -138,7 +138,7 @@ public class ModulesGui extends GuiScreen {
         private void draw() {
             x = 20;
             y = getY(i);
-            int width = Renderer.getRenderWidth() - 40;
+            int width = Renderer.screen.getWidth() - 40;
             int height = 105;
 
             // background

@@ -27,7 +27,7 @@ public abstract class ConfigOption {
     public void init() {
         this.resetButton = new GuiButton(
                 0,
-                Renderer.getRenderWidth() / 2 - 100 + this.x + 185,
+                Renderer.screen.getWidth() / 2 - 100 + this.x + 185,
                 this.y - 2,
                 14,
                 12,
@@ -35,10 +35,10 @@ public abstract class ConfigOption {
         );
     }
     public void draw(int mouseX, int mouseY) {
-        this.resetButton.xPosition = Renderer.getRenderWidth() / 2 - 100 + this.x + 185;
+        this.resetButton.xPosition = Renderer.screen.getWidth() / 2 - 100 + this.x + 185;
         this.resetButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
 
-        Renderer.text("\u21BA", Renderer.getRenderWidth() / 2 - 100 + this.x + 189, this.y - 4)
+        Renderer.text("\u21BA", Renderer.screen.getWidth() / 2 - 100 + this.x + 189, this.y - 4)
                 .setScale(2)
                 .setColor(0xffffffff)
                 .setShadow(true)

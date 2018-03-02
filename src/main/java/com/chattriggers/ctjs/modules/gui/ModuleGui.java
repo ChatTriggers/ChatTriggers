@@ -159,13 +159,13 @@ public class ModuleGui extends GuiScreen {
     }
 
     private void drawScroll() {
-        int scrollHeight = Renderer.getRenderHeight() - this.maxScroll;
+        int scrollHeight = Renderer.screen.getHeight() - this.maxScroll;
         if (scrollHeight < 20) scrollHeight = 20;
-        if (scrollHeight < Renderer.getRenderHeight()) {
-            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.getRenderHeight() - scrollHeight - 10);
+        if (scrollHeight < Renderer.screen.getHeight()) {
+            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.screen.getHeight() - scrollHeight - 10);
             Renderer.rectangle(
                     0xa0000000,
-                    Renderer.getRenderWidth() - 5,
+                    Renderer.screen.getWidth() - 5,
                     scrollY,
                     5,
                     scrollHeight
@@ -261,13 +261,13 @@ public class ModuleGui extends GuiScreen {
     }
 
     private void updateScaling(int mouseX, int mouseY, int fileOffset) {
-        this.width = Renderer.getRenderWidth() - 40;
+        this.width = Renderer.screen.getWidth() - 40;
 
         this.description.setWidth(this.width - 5);
 
         this.infoHeight = this.description.getHeight() + 35;
 
-        this.maxScroll = fileOffset + this.infoHeight - Renderer.getRenderHeight();
+        this.maxScroll = fileOffset + this.infoHeight - Renderer.screen.getHeight();
 
         this.isHovered = (mouseX > 20 + this.width - Renderer.getStringWidth("< back") - 2
                 && mouseX < 20 + this.width - 2

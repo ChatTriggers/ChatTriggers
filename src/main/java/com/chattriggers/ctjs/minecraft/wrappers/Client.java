@@ -178,7 +178,7 @@ public class Client {
      */
     public static float getMouseX() {
         float mx = (float) Mouse.getX();
-        float rw = (float) Renderer.getRenderWidth();
+        float rw = (float) Renderer.screen.getWidth();
         float dw = (float) getMinecraft().displayWidth;
         return mx * rw / dw;
     }
@@ -190,7 +190,7 @@ public class Client {
      */
     public static float getMouseY() {
         float my = (float) Mouse.getY();
-        float rh = (float) Renderer.getRenderHeight();
+        float rh = (float) Renderer.screen.getWidth();
         float dh = (float) getMinecraft().displayHeight;
         return rh - my * rh / dh - 1L;
     }
