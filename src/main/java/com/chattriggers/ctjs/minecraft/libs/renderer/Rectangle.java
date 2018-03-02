@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -9,32 +11,182 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 /**
  * Used in {@link Renderer#rectangle(int, float, float, float, float)}
  */
+@Accessors(chain = true)
 public class Rectangle {
-    @Getter
+    /**
+     * -- GETTER --
+     * Gets the rectangle {@link Renderer#color(int, int, int, int)}
+     *
+     * @return The rectangle {@link Renderer#color(int, int, int, int)}
+     *
+     * -- SETTER --
+     * Sets the rectangle {@link Renderer#color(int, int, int, int)}
+     *
+     * @param color The new {@link Renderer#color(int, int, int, int)}
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private int color;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the rectangle x position
+     *
+     * @return The rectangle x position
+     *
+     * -- SETTER --
+     * Sets the rectangle x position
+     *
+     * @param x The new rectangle x position
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private float x;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the rectangle y position
+     *
+     * @return The rectangle y position
+     *
+     * -- SETTER --
+     * Sets the rectangle y position
+     *
+     * @param y The new rectangle y position
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private float y;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the rectangle width
+     *
+     * @return The rectangle width
+     *
+     * -- SETTER --
+     * Sets the rectangle width
+     *
+     * @param width The new rectangle width
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private float width;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the rectangle height
+     *
+     * @return The rectangle height
+     *
+     * -- SETTER --
+     * Sets the rectangle height
+     *
+     * @param height The new rectangle height
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private float height;
 
-    @Getter
+    /**
+     * -- GETTER --
+     * Gets the drop shadow of the rectangle (boolean)
+     *
+     * @return The drop shadow of the rectangle (boolean)
+     *
+     * -- SETTER --
+     * Sets the drop shadow of the rectangle
+     *
+     * @param dropShadow True to enable drop shadow
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private boolean dropShadow;
-    @Getter
-    private int shadowColor;
-    @Getter
-    private float offsetX;
-    @Getter
-    private float offsetY;
 
+    /**
+     * -- GETTER --
+     * Gets the shadow color of the rectangle
+     *
+     * @return The shadow color of the rectangle
+     *
+     * -- SETTER --
+     * Sets the shadow color of the rectangle
+     *
+     * @param shadowColor The new shadow color of the rectangle
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
+    private int shadowColor;
+
+    /**
+     * -- GETTER --
+     * Gets the x-offset of the rectangle drop shadow
+     *
+     * @return The x-offset of the rectangle drop shadow
+     *
+     * -- SETTER --
+     * Sets the x-offset of the rectangle drop shadow
+     *
+     * @param shadowOffsetX The new drop shadow x-offset
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
+    private float shadowOffsetX;
+
+    /**
+     * -- GETTER --
+     * Gets the y-offset of the rectangle drop shadow
+     *
+     * @return The y-offset of the rectangle drop shadow
+     *
+     * -- SETTER --
+     * Sets the y-offset of the rectangle drop shadow
+     *
+     * @param shadowOffsetY The new drop shadow y-offset
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
+    private float shadowOffsetY;
+
+    /**
+     * -- GETTER --
+     * Gets the outline of the rectangle (boolean)
+     *
+     * @return True if the rectangle outline is enabled
+     * @see Rectangle#setOutline(int, float)
+     */
     @Getter
     private boolean outline;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the rectangle outline color
+     *
+     * @return The rectangle outline color
+     *
+     * -- SETTER --
+     * Sets the rectangle outline color
+     *
+     *
+     * @param outlineColor The new rectangle outline color
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private int outlineColor;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the rectangle outline thickness
+     *
+     * @return The rectangle outline thickness
+     *
+     * -- SETTER --
+     * Sets the rectangle outline thickness
+     *
+     * @param thickness The new rectangle outline thickness
+     * @return The Rectangle object to allow for method chaining
+     */
+    @Getter @Setter
     private float thickness;
 
     Rectangle(int color, float x, float y, float width, float height) {
@@ -49,74 +201,19 @@ public class Rectangle {
     }
 
     /**
-     * Sets the rectangle {@link Renderer#color(int, int, int, int)}.
-     *
-     * @param color the {@link Renderer#color(int, int, int, int)}
-     * @return the rectangle to allow for method chaining
-     */
-    public Rectangle setColor(int color) {
-        this.color = color;
-        return this;
-    }
-
-    /**
-     * Sets the rectangle x position.
-     *
-     * @param x the x position
-     * @return the rectangle to allow for method chaining
-     */
-    public Rectangle setX(float x) {
-        this.x = x;
-        return this;
-    }
-
-    /**
-     * Sets the rectangle y position.
-     *
-     * @param y the y position
-     * @return the rectangle to allow for method chaining
-     */
-    public Rectangle setY(float y) {
-        this.y = y;
-        return this;
-    }
-
-    /**
-     * Sets the rectangle width.
-     *
-     * @param width the width
-     * @return the rectangle to allow for method chaining
-     */
-    public Rectangle setWidth(float width) {
-        this.width = width;
-        return this;
-    }
-
-    /**
-     * Sets the rectangle height.
-     *
-     * @param height the height
-     * @return the rectangle to allow for method chaining
-     */
-    public Rectangle setHeight(float height) {
-        this.height = height;
-        return this;
-    }
-
-    /**
      * Sets the drop shadow of the rectangle.
      *
-     * @param color   the {@link Renderer#color(int, int, int, int)} of the drop shadow
-     * @param offsetX the x offset of the drop shadow
-     * @param offsetY the y offset of the drop shadow
-     * @return the rectangle to allow for method chaining
+     * @param color   The {@link Renderer#color(int, int, int, int)} of the drop shadow
+     * @param offsetX The x offset of the drop shadow
+     * @param offsetY The y offset of the drop shadow
+     * @return The rectangle to allow for method chaining
      */
     public Rectangle setShadow(int color, float offsetX, float offsetY) {
-        this.dropShadow = true;
+        setDropShadow(true);
 
-        this.shadowColor = color;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+        setShadowColor(color);
+        setShadowOffsetX(offsetX);
+        setShadowOffsetY(offsetY);
 
         return this;
     }
@@ -124,15 +221,15 @@ public class Rectangle {
     /**
      * Sets the outline of the rectangle.
      *
-     * @param color     the {@link Renderer#color(int, int, int, int)} of the outline
-     * @param thickness the thickness of the outline
-     * @return the rectangle to allow for method chaining
+     * @param color     The {@link Renderer#color(int, int, int, int)} of the outline
+     * @param thickness The thickness of the outline
+     * @return The rectangle to allow for method chaining
      */
     public Rectangle setOutline(int color, float thickness) {
         this.outline = true;
 
-        this.outlineColor = color;
-        this.thickness = thickness;
+        setOutlineColor(color);
+        setThickness(thickness);
 
         return this;
     }
@@ -140,7 +237,7 @@ public class Rectangle {
     /**
      * Draws the rectangle onto the client's overlay.
      *
-     * @return the rectangle to allow for method chaining
+     * @return The rectangle to allow for method chaining
      */
     public Rectangle draw() {
         dropShadow();
@@ -161,8 +258,8 @@ public class Rectangle {
     private void dropShadow() {
         if (!dropShadow) return;
 
-        drawRect(this.shadowColor, this.x + this.offsetX, this.y + this.height, this.width, this.offsetY);
-        drawRect(this.shadowColor, this.x + this.width, this.y + this.offsetY, this.offsetX, this.height - this.offsetY);
+        drawRect(this.shadowColor, this.x + this.shadowOffsetX, this.y + this.height, this.width, this.shadowOffsetY);
+        drawRect(this.shadowColor, this.x + this.width, this.y + this.shadowOffsetY, this.shadowOffsetX, this.height - this.shadowOffsetY);
     }
 
     // helper method to draw a rectangle

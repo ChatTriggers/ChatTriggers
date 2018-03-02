@@ -4,6 +4,8 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -17,24 +19,141 @@ import java.net.URL;
 /**
  * Used in {@link Renderer#image(String)}
  */
+@Accessors(chain = true)
 public class Image {
-    @Getter
+    /**
+     * -- GETTER --
+     * Gets the image x position
+     *
+     * @return The image x position
+     *
+     * -- SETTER --
+     * Sets the image x position
+     *
+     * @param x The new image x position
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private float x;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the image y position
+     *
+     * @return The image y position
+     *
+     * -- SETTER --
+     * Sets the image y position
+     *
+     * @param y The new image y position
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private float y;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the texture width
+     *
+     * @return The texture width
+     *
+     * -- SETTER --
+     * Sets the texture width
+     *
+     * @param textureWidth The new texture width
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private int textureWidth;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the texture height
+     *
+     * @return The texture height
+     *
+     * -- SETTER --
+     * Sets the texture height
+     *
+     * @param textureHeight The new texture height
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private int textureHeight;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the texture x location
+     *
+     * @return The texture x location
+     *
+     * -- SETTER --
+     * Sets the texture x location
+     *
+     * @param textureX The new texture x location
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private int textureX;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the texture y location
+     *
+     * @return The texture y location
+     *
+     * -- SETTER --
+     * Sets the texture y location
+     *
+     * @param textureY The new texture y location
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private int textureY;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the image scale
+     *
+     * @return The image scale
+     *
+     * -- SETTER --
+     * Sets the image scale
+     *
+     * @param scale The new image scale
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private float scale;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the image resource name
+     *
+     * @return The image resource name
+     *
+     * -- SETTER --
+     * Sets the image resource name
+     *
+     * @param resourceName The new image resource name
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private String resourceName;
-    @Getter
+
+    /**
+     * -- GETTER --
+     * Gets the image resource domain
+     *
+     * @return The image resource domain
+     *
+     * -- SETTER --
+     * Sets the image resource domain
+     *
+     * @param resourceDomain The new image resource domain
+     * @return The Image object to allow for method chaining
+     */
+    @Getter @Setter
     private String resourceDomain;
 
     Image(String resourceName) {
@@ -51,110 +170,11 @@ public class Image {
     }
 
     /**
-     * Sets the image x position.
-     *
-     * @param x the x position
-     * @return the image to allow for method chaining
-     */
-    public Image setX(float x) {
-        this.x = x;
-        return this;
-    }
-
-    /**
-     * Sets the image y position.
-     *
-     * @param y the y position
-     * @return the image to allow for method chaining
-     */
-    public Image setY(float y) {
-        this.y = y;
-        return this;
-    }
-
-    /**
-     * Sets the image scale.
-     *
-     * @param scale the scale
-     * @return the image to allow for method chaining
-     */
-    public Image setScale(float scale) {
-        this.scale = scale;
-        return this;
-    }
-
-    /**
-     * Sets the texture width.
-     *
-     * @param width the width of the texture
-     * @return the image to allow for method chaining
-     */
-    public Image setTextureWidth(int width) {
-        this.textureWidth = width;
-        return this;
-    }
-
-    /**
-     * Sets the texture height.
-     *
-     * @param height the height of the texture
-     * @return the image to allow for method chaining
-     */
-    public Image setTextureHeight(int height) {
-        this.textureHeight = height;
-        return this;
-    }
-
-    /**
-     * Sets the texture x location.
-     *
-     * @param x the x location
-     * @return the image to allow for method chaining
-     */
-    public Image setTextureX(int x) {
-        this.textureX = x;
-        return this;
-    }
-
-    /**
-     * Sets the texture y location.
-     *
-     * @param y the y location
-     * @return the image to allow for method chaining
-     */
-    public Image setTextureY(int y) {
-        this.textureY = y;
-        return this;
-    }
-
-    /**
-     * Sets the image resource name.
-     *
-     * @param name the name
-     * @return the image to allow for method chaining
-     */
-    public Image setResourceName(String name) {
-        this.resourceName = name;
-        return this;
-    }
-
-    /**
-     * Sets the image resource domain.
-     *
-     * @param domain the domain
-     * @return the image to allow for method chaining
-     */
-    public Image setResourceDomain(String domain) {
-        this.resourceDomain = domain;
-        return this;
-    }
-
-    /**
      * Downloads an image to store at the resource name location.
      *
-     * @param url          the url to download the image from
-     * @param shouldResize if the image should be resized to 256x256
-     * @return the image to allow for method chaining
+     * @param url          The url to download the image from
+     * @param shouldResize If the image should be resized to 256x256
+     * @return The Image object to allow for method chaining
      */
     public Image download(String url, boolean shouldResize) {
         try {
@@ -191,7 +211,7 @@ public class Image {
     /**
      * Draws the image on screen
      *
-     * @return the image to allow for method chaining
+     * @return The Image object to allow for method chaining
      */
     public Image draw() {
         ResourceLocation rl = new ResourceLocation(this.resourceDomain, this.resourceName);

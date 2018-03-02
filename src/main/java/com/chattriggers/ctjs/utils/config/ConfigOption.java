@@ -41,7 +41,7 @@ public abstract class ConfigOption {
         Renderer.text("\u21BA", Renderer.screen.getWidth() / 2 - 100 + this.x + 189, this.y - 4)
                 .setScale(2)
                 .setColor(0xffffffff)
-                .setShadow(true)
+                .setDropShadow(true)
                 .draw();
     }
     public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
