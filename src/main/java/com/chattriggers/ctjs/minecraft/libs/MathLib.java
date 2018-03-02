@@ -14,4 +14,28 @@ public class MathLib {
     public static float map(float number, float in_min, float in_max, float out_min, float out_max) {
         return (number - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
+
+    /**
+     * Clamps a number between two values.
+     *
+     * @param number the number to clamp
+     * @param min    the minimum
+     * @param max    the maximum
+     * @return the clamped number
+     */
+    public static float clamp(float number, float min, float max) {
+        return number < min ? min : number > max ? max : number;
+    }
+
+    /**
+     * Clamps a number between two values.
+     *
+     * @param number the number to clamp
+     * @param min    the minimum
+     * @param max    the maximum
+     * @return the clamped number
+     */
+    public static int clamp(int number, int min, int max) {
+        return number < min ? min : number > max ? max : number;
+    }
 }

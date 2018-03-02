@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -273,8 +274,11 @@ public class Renderer {
      * @param alpha alpha value
      * @return integer color
      */
-    public static int color(int red, int green, int blue, int alpha) {
-        return (limit255(alpha) * 0x1000000) + (limit255(red) * 0x10000) + (limit255(green) * 0x100) + blue;
+    public int color(int red, int green, int blue, int alpha) {
+        return (MathLib.clamp(alpha, 0, 255) * 0x1000000)
+                + (MathLib.clamp(red, 0, 255) * 0x10000)
+                + (MathLib.clamp(green, 0, 255) * 0x100)
+                + MathLib.clamp(blue, 0, 255);
     }
 
     /**
@@ -285,7 +289,7 @@ public class Renderer {
      * @param blue  blue value
      * @return integer color
      */
-    public static int color(int red, int green, int blue) {
+    public int color(int red, int green, int blue) {
         return color(red, green, blue, 255);
     }
 
@@ -296,11 +300,14 @@ public class Renderer {
      * @param speed speed of time
      * @return integer color
      */
-    public static int getRainbow(float step, float speed) {
+    public int getRainbow(float step, float speed) {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
         int green = (int) ((Math.sin(step / speed + ((2 * Math.PI) / 3)) + 0.75) * 170);
         int blue = (int) ((Math.sin(step / speed + ((4 * Math.PI) / 3)) + 0.75) * 170);
-        return 0xff000000 + (limit255(red) * 0x10000) + (limit255(green) * 0x100) + limit255(blue);
+        return 0xff000000
+                + (MathLib.clamp(red, 0, 255) * 0x10000)
+                + (MathLib.clamp(green, 0, 255) * 0x100)
+                + MathLib.clamp(blue, 0, 255);
     }
 
     /**
@@ -310,7 +317,7 @@ public class Renderer {
      * @param speed speed of time
      * @return the array of colors {red,green,blue}
      */
-    public static int[] getRainbowColors(float step, float speed) {
+    public int[] getRainbowColors(float step, float speed) {
         int red = (int) ((Math.sin(step / speed) + 0.75) * 170);
         int green = (int) ((Math.sin(step / speed + ((2 * Math.PI) / 3)) + 0.75) * 170);
         int blue = (int) ((Math.sin(step / speed + ((4 * Math.PI) / 3)) + 0.75) * 170);
@@ -323,7 +330,7 @@ public class Renderer {
      * @param step time elapsed
      * @return integer color
      */
-    public static int getRainbow(float step) {
+    public int getRainbow(float step) {
         return getRainbow(step, 1f);
     }
 
@@ -332,7 +339,9 @@ public class Renderer {
      *
      * @param number the number to limit
      * @return the limited number
+     * @deprecated use {@link com.chattriggers.ctjs.minecraft.libs.MathLib#clamp(float, float, float)}
      */
+    @Deprecated
     public static int limit255(int number) {
         return (number > 255) ? 255 : (number < 0 ? 0 : number);
     }
@@ -341,7 +350,9 @@ public class Renderer {
      * gets the current resolution width scaled to guiScale.
      *
      * @return scaled width
+     * @deprecated use {@link screen#getWidth()}
      */
+    @Deprecated
     public static int getRenderWidth() {
         ScaledResolution res = new ScaledResolution(Client.getMinecraft());
         return res.getScaledWidth();
@@ -351,7 +362,9 @@ public class Renderer {
      * gets the current resolution height scaled to guiScale.
      *
      * @return scaled height
+     * @deprecated use {@link screen#getHeight()}
      */
+    @Deprecated
     public static int getRenderHeight() {
         ScaledResolution res = new ScaledResolution(Client.getMinecraft());
         return res.getScaledHeight();
@@ -852,5 +865,19 @@ public class Renderer {
      */
     public Shape shape(int color) {
         return new Shape(color);
+    }
+
+    public class screen {
+        public static int getWidth() {
+            return new ScaledResolution(Client.getMinecraft()).getScaledWidth();
+        }
+
+        public static int getHeight() {
+            return new ScaledResolution(Client.getMinecraft()).getScaledHeight();
+        }
+
+        public static int getScale() {
+            return new ScaledResolution(Client.getMinecraft()).getScaleFactor();
+        }
     }
 }
