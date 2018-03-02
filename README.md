@@ -72,5 +72,10 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![install lombok](http://i67.tinypic.com/t8sv2p.png)
   - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing
 ![enable annotation processing](http://i66.tinypic.com/676slz.png)
+### 5. Debug client setup
+  - run > edit configuration<br>
+![edit configuration](http://i65.tinypic.com/t6yq7b.png)
+  - Use classpath for module > select the main ct.js (it might be named differently depending on your fork)<br>
+![classpath](http://i67.tinypic.com/15z34fd.png)
 
 Everything should be set up and ready to open pull requests
