@@ -6,6 +6,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
+/**
+ * Used in {@link Renderer#rectangle(int, float, float, float, float)}
+ */
 public class Rectangle {
     @Getter
     private int color;

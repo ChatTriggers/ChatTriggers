@@ -3,6 +3,9 @@ package com.chattriggers.ctjs.minecraft.libs.renderer;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 
+/**
+ * Used in {@link Renderer#text(String, float, float)}
+ */
 public class Text {
     @Getter
     private String string;

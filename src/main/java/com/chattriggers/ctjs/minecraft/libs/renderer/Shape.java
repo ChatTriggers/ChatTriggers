@@ -9,6 +9,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import javax.vecmath.Vector2d;
 import java.util.ArrayList;
 
+/**
+ * Used in {@link Renderer#shape(int)}
+ */
 public class Shape {
     @Getter
     ArrayList<Vector2d> vertexes;

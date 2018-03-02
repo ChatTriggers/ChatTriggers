@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Used in {@link Renderer#image(String)}
+ */
 public class Image {
     @Getter
     private float x;
