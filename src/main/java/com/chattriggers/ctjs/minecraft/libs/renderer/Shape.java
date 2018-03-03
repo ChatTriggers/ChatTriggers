@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -12,23 +14,41 @@ import java.util.ArrayList;
 /**
  * Used in {@link Renderer#shape(int)}
  */
+@Accessors(chain = true)
 public class Shape {
+    /**
+     * -- GETTER --
+     * Gets an array list of vector vertices
+     *
+     * @return An ArrayList of Java Vector2d objects
+     */
     @Getter
     ArrayList<Vector2d> vertexes;
-    @Getter
-    int color;
-    @Getter
-    int drawMode;
-
-    Shape(int color) {
-        this.color = color;
-
-        this.vertexes = new ArrayList<>();
-        this.drawMode = 9;
-    }
 
     /**
-     * Sets the GL draw mode for the shape.<br>
+     * -- GETTER --
+     * Gets the shape color
+     *
+     * @return The shape color
+     *
+     * -- SETTER --
+     * Sets the shape color
+     *
+     * @param color The new shape color
+     * @return The Shape object to allow for method chaining
+     */
+    @Getter @Setter
+    int color;
+
+    /**
+     * -- GETTER --
+     * Gets the GL draw mode of the shape
+     *
+     * @see Shape#setDrawMode(int)
+     * @return The GL draw mode of the shape
+     *
+     * -- SETTER --
+     * Sets the GL draw mode of the shape. Possible draw modes are:<br>
      * 0 = points<br>
      * 1 = lines<br>
      * 2 = line loop<br>
@@ -40,31 +60,25 @@ public class Shape {
      * 8 = quad strip<br>
      * 9 = polygon
      *
-     * @param mode the draw mode
-     * @return the shape to allow for method chaining
+     * @param drawMode The new shape draw mode
+     * @return The Shape object to allow for method chaining
      */
-    public Shape setDrawMode(int mode) {
-        this.drawMode = mode;
-        return this;
-    }
+    @Getter @Setter
+    int drawMode;
 
-    /**
-     * Sets the shape color.
-     *
-     * @param color {@link Renderer#color(int, int, int, int)}
-     * @return the shape to allow for method chaining
-     */
-    public Shape setColor(int color) {
+    Shape(int color) {
         this.color = color;
-        return this;
+
+        this.vertexes = new ArrayList<>();
+        this.drawMode = 9;
     }
 
     /**
      * Adds a vertex to the shape.
      *
-     * @param x the x position
-     * @param y the y position
-     * @return the shape to allow for method chaining
+     * @param x The x position
+     * @param y The y position
+     * @return The shape to allow for method chaining
      */
     public Shape addVertex(float x, float y) {
         this.vertexes.add(new Vector2d(x, y));
@@ -74,10 +88,10 @@ public class Shape {
     /**
      * Inserts a vertex into the shape
      *
-     * @param i the index of the insertion
-     * @param x the x position
-     * @param y the y position
-     * @return the shape to allow for method chaining
+     * @param i The index of the insertion
+     * @param x The x position
+     * @param y The y position
+     * @return The shape to allow for method chaining
      */
     public Shape insertVertex(int i, float x, float y) {
         this.vertexes.add(i, new Vector2d(x, y));
@@ -87,8 +101,8 @@ public class Shape {
     /**
      * Removes a vertex from the shape
      *
-     * @param i the index to remove
-     * @return the shape to allow for method chaining
+     * @param i The index to remove
+     * @return The shape to allow for method chaining
      */
     public Shape removeVertex(int i) {
         this.vertexes.remove(i);
@@ -98,12 +112,12 @@ public class Shape {
     /**
      * Sets the shape as a line pointing from x1 y1 to x2 y2
      *
-     * @param x1        the x starting position
-     * @param y1        the y starting position
-     * @param x2        the x ending position
-     * @param y2        the y ending position
-     * @param thickness the thickness
-     * @return the shape to allow for method chaining
+     * @param x1        The x starting position
+     * @param y1        The y starting position
+     * @param x2        The x ending position
+     * @param y2        The y ending position
+     * @param thickness The thickness
+     * @return The shape to allow for method chaining
      */
     public Shape setLine(float x1, float y1, float x2, float y2, float thickness) {
         this.vertexes.clear();
@@ -135,11 +149,11 @@ public class Shape {
     /**
      * Sets the shape as a circle.
      *
-     * @param x      the x position
-     * @param y      the y position
-     * @param radius the radius
-     * @param steps  the number of steps to take to complete the circle
-     * @return the shape to allow for method chaining
+     * @param x      The x position
+     * @param y      The y position
+     * @param radius The radius
+     * @param steps  The number of steps to take to complete the circle
+     * @return The shape to allow for method chaining
      */
     public Shape setCircle(float x, float y, float radius, int steps) {
         this.vertexes.clear();
@@ -169,7 +183,7 @@ public class Shape {
     /**
      * Draws the shape onto the client's overlay.
      *
-     * @return the shape to allow for method chaining
+     * @return The shape to allow for method chaining
      */
     public Shape draw() {
         float a = (float) (this.color >> 24 & 255) / 255.0F;
