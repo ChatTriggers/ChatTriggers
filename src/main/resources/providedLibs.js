@@ -25,7 +25,7 @@ var RenderLib = Renderer;
 
 // Objects
 var Display = Java.type("com.chattriggers.ctjs.minecraft.objects.Display");
-var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.Display.DisplayLine");
+var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.DisplayLine");
 var Gui = Java.type("com.chattriggers.ctjs.minecraft.objects.Gui");
 var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.Message");
 var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
