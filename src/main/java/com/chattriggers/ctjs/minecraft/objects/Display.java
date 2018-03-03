@@ -18,7 +18,7 @@ public class Display {
      * Gets the list of lines currently displayed
      *
      * @return An ArrayList of {@link DisplayLine} objects
-     * <p>
+     *
      * -- SETTER --
      * Sets the list of lines currently displayed
      * @param lines An ArrayList of {@link DisplayLine} objects
@@ -33,7 +33,7 @@ public class Display {
      * Gets the x position of the display
      *
      * @return The x position of the display
-     * <p>
+     *
      * -- SETTER --
      * Sets the x position of the display
      * @param renderX The new x location
@@ -48,7 +48,7 @@ public class Display {
      * Gets the y position of the display
      *
      * @return The y position of the display
-     * <p>
+     *
      * -- SETTER --
      * Sets the y position of the display
      * @param renderY The new y location
@@ -63,7 +63,7 @@ public class Display {
      * Gets the render status of the diplay (boolean)
      *
      * @return True if the display is set to render
-     * <p>
+     *
      * -- SETTER --
      * Sets whether or not the display should render
      * @param shouldRender True if the display should render
@@ -78,7 +78,7 @@ public class Display {
      * Gets a display's background type
      *
      * @return The display's background
-     * <p>
+     *
      * -- SETTER --
      * Sets a display's background type.
      * @param background The new display background
@@ -95,7 +95,7 @@ public class Display {
      * Gets the display's background color
      *
      * @return The display's background color
-     * <p>
+     *
      * -- SETTER --
      * Sets the display's background color
      * @param backgroundColor The integer color of the background
@@ -110,7 +110,7 @@ public class Display {
      * Gets the display's text color
      *
      * @return The display's text color
-     * <p>
+     *
      * -- SETTER --
      * Sets the display's text color
      * @param textColor The integer color of the text
@@ -125,7 +125,7 @@ public class Display {
      * Gets the display's text alignment
      *
      * @return The display's text alignment
-     * <p>
+     *
      * -- SETTER --
      * Sets the displays text alignment
      * @param align The new display alignment
@@ -142,7 +142,7 @@ public class Display {
      * Gets the display's line order
      *
      * @return The display's line order
-     * <p>
+     *
      * -- SETTER --
      * Sets the display's line order
      * @param order The new display line order
@@ -159,7 +159,7 @@ public class Display {
      * Gets the minimum width of the display
      *
      * @return The minimum width of the display
-     * <p>
+     *
      * -- SETTER --
      * Sets the minimum width of the display
      * @param minWidth The new minimum display width
