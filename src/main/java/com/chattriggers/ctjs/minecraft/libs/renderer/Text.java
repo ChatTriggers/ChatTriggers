@@ -124,11 +124,26 @@ public class Text {
      * -- SETTER --
      * Sets the drop shadow
      *
-     * @param dropShadow True to enable drop shadow
+     * @param shadow True to enable drop shadow
      * @return The Text object for method chaining
      */
     @Getter @Setter
-    private boolean dropShadow;
+    private boolean shadow;
+
+    /**
+     * -- GETTER --
+     * Gets the text alignment of the text
+     *
+     * @return String the alignment
+     *
+     * -- SETTER --
+     * Sets the alignment of the text
+     *
+     * @param align The alignment
+     * @return The Text object for method chaining
+     */
+    @Getter @Setter
+    private String align;
 
     Text(String text, float x, float y) {
         this.string = text;
@@ -139,7 +154,8 @@ public class Text {
         this.maxLines = 0;
         this.color = 0xffffffff;
         this.scale = 1;
-        this.dropShadow = false;
+        this.shadow = false;
+        this.align = "left";
     }
 
     /**
@@ -177,18 +193,32 @@ public class Text {
             float maxLinesHolder = this.maxLines;
             float yHolder = this.y;
             for (String line : Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)) {
-                Renderer.getFontRenderer().drawString(line, this.x / this.scale, yHolder / this.scale, this.color, this.dropShadow);
+                Renderer.getFontRenderer().drawString(line, getXAlign(line), yHolder / this.scale, this.color, this.shadow);
                 yHolder += 9;
                 maxLinesHolder--;
                 if (maxLinesHolder == 0)
                     break;
             }
         } else {
-            Renderer.getFontRenderer().drawString(this.string, this.x / this.scale, this.y / this.scale, this.color, this.dropShadow);
+            Renderer.getFontRenderer().drawString(this.string, getXAlign(this.string), this.y / this.scale, this.color, this.shadow);
         }
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
 
         return this;
+    }
+
+    // helper method to get the x alignment
+    private float getXAlign(String string) {
+        float x = this.x / this.scale;
+        switch (this.align.toLowerCase()) {
+            case("center"):
+                return x - Renderer.getStringWidth(string);
+            case("right"):
+                return x - Renderer.getStringWidth(string) / 2;
+            case("left"):
+            default:
+                return x;
+        }
     }
 }

@@ -97,11 +97,11 @@ public class Rectangle {
      * -- SETTER --
      * Sets the drop shadow of the rectangle
      *
-     * @param dropShadow True to enable drop shadow
+     * @param shadow True to enable drop shadow
      * @return The Rectangle object to allow for method chaining
      */
     @Getter @Setter
-    private boolean dropShadow;
+    private boolean shadow;
 
     /**
      * -- GETTER --
@@ -196,7 +196,7 @@ public class Rectangle {
         this.width = width;
         this.height = height;
 
-        this.dropShadow = false;
+        this.shadow = false;
         this.outline = false;
     }
 
@@ -209,7 +209,7 @@ public class Rectangle {
      * @return The rectangle to allow for method chaining
      */
     public Rectangle setShadow(int color, float offsetX, float offsetY) {
-        setDropShadow(true);
+        setShadow(true);
 
         setShadowColor(color);
         setShadowOffsetX(offsetX);
@@ -256,7 +256,7 @@ public class Rectangle {
 
     // helper method to draw the drop shadow
     private void dropShadow() {
-        if (!dropShadow) return;
+        if (!shadow) return;
 
         drawRect(this.shadowColor, this.x + this.shadowOffsetX, this.y + this.height, this.width, this.shadowOffsetY);
         drawRect(this.shadowColor, this.x + this.width, this.y + this.shadowOffsetY, this.shadowOffsetX, this.height - this.shadowOffsetY);

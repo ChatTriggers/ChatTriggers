@@ -37,7 +37,7 @@ public class ModuleGui extends GuiScreen {
         String preDescription = module.getMetadata().getDescription() == null
                 ? "No description provided"
                 : module.getMetadata().getDescription();
-        this.description = Renderer.text(preDescription, 22, 30).setDropShadow(true);
+        this.description = Renderer.text(preDescription, 22, 30).setShadow(true);
 
         updateScaling(0, 0, 0);
 
@@ -82,12 +82,12 @@ public class ModuleGui extends GuiScreen {
 
         // name
         Renderer.text(name, 22, 12 - scrolled)
-                .setDropShadow(true).draw();
+                .setShadow(true).draw();
 
         // version
         Renderer.text(
                 ChatFormatting.GRAY + version, width - Renderer.getStringWidth(version) + 18, 12 - scrolled)
-                .setDropShadow(true).draw();
+                .setShadow(true).draw();
 
         // line break
         Renderer.rectangle(
@@ -101,7 +101,7 @@ public class ModuleGui extends GuiScreen {
 
         // directory
         Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", 22, infoHeight - scrolled)
-                .setDropShadow(true).draw();
+                .setShadow(true).draw();
 
         // back
         drawBack();
@@ -128,14 +128,14 @@ public class ModuleGui extends GuiScreen {
         ).draw();
 
         Renderer.text(ChatFormatting.DARK_GRAY + file.getKey(), 22, infoHeight + fileOffset - scrolled + 2)
-                .setDropShadow(true)
+                .setShadow(true)
                 .draw();
 
         int i = 0;
         for (String line : file.getValue()) {
             Renderer.text(
                     colorLine(line).replace("\u0009", "     "), 22, i * 9 + infoHeight + fileOffset - scrolled + 12)
-                    .setDropShadow(true)
+                    .setShadow(true)
                     .draw();
             i++;
         }
@@ -153,7 +153,7 @@ public class ModuleGui extends GuiScreen {
                     20
             ).draw();
             Renderer.text("^", width + 31 - Renderer.getStringWidth("^") / 2, height - 12)
-                    .setDropShadow(true)
+                    .setShadow(true)
                     .draw();
         }
     }
@@ -176,7 +176,7 @@ public class ModuleGui extends GuiScreen {
     private void drawBack() {
         String back = isHovered ? "< back" : "&8< back";
         Renderer.text(ChatLib.addColor(back), 20 + width - Renderer.getStringWidth("< back") - 2, infoHeight - scrolled)
-                .setDropShadow(true)
+                .setShadow(true)
                 .draw();
     }
 
@@ -184,7 +184,7 @@ public class ModuleGui extends GuiScreen {
         if (this.module.getMetadata().getRequires() == null) return 0;
 
         Renderer.text("Requires: " + this.module.getMetadata().getRequires(), 22, infoHeight - scrolled + 20)
-                .setDropShadow(true)
+                .setShadow(true)
                 .draw();
 
         return 20;

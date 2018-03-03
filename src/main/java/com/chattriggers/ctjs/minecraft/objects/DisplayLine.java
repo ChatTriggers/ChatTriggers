@@ -349,7 +349,7 @@ public class DisplayLine {
         }
 
         drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setDropShadow(this.shadow).draw();
+        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setShadow(this.shadow).draw();
 
         handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
     }
@@ -383,7 +383,7 @@ public class DisplayLine {
         }
 
         drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setDropShadow(this.shadow).draw();
+        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setShadow(this.shadow).draw();
 
         handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
     }
@@ -417,7 +417,7 @@ public class DisplayLine {
         }
 
         drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setDropShadow(this.shadow).draw();
+        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setShadow(this.shadow).draw();
 
         handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
     }

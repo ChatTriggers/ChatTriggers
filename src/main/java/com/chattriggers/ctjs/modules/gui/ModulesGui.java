@@ -146,13 +146,13 @@ public class ModulesGui extends GuiScreen {
 
             // name
             Renderer.text(name, x + 2, y + 2)
-                    .setDropShadow(true).draw();
+                    .setShadow(true).draw();
 
             // version
             if (this.module.getMetadata().getVersion() != null) {
                 String version = ChatFormatting.GRAY  + "v" + this.module.getMetadata().getVersion();
                 Renderer.text(version, x + width - Renderer.getStringWidth(version) - 2, y + 2)
-                        .setDropShadow(true).draw();
+                        .setShadow(true).draw();
             }
 
             // line break
@@ -169,12 +169,12 @@ public class ModulesGui extends GuiScreen {
 
             // directory
             Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", x + 2, y + height - 12)
-                    .setDropShadow(true).draw();
+                    .setShadow(true).draw();
 
             // show code
             String finalShowCode = isHovered ? "show code >" : "&8show code >";
             Renderer.text(ChatLib.addColor(finalShowCode), x + width - Renderer.getStringWidth("show code >") - 2, y + height - 12)
-                    .setDropShadow(true).draw();
+                    .setShadow(true).draw();
         }
     }
 }
