@@ -213,9 +213,9 @@ public class Text {
         float x = this.x / this.scale;
         switch (this.align.toLowerCase()) {
             case("center"):
-                return x - Renderer.getStringWidth(string);
-            case("right"):
                 return x - Renderer.getStringWidth(string) / 2;
+            case("right"):
+                return x - Renderer.getStringWidth(string);
             case("left"):
             default:
                 return x;
