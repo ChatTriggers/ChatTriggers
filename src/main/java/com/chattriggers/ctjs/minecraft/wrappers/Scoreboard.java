@@ -35,10 +35,21 @@ public class Scoreboard {
     }
 
     /**
-     * Get the top-most string which is displayed on the scoreboard. (doesn't have a score on the side)
-     * Be aware that this can contain color codes.
+     * Alias for {@link Scoreboard#getTitle()}.
+     *
+     * @return the scoreboard title
      */
     public static String getScoreboardTitle() {
+        return getTitle();
+    }
+
+    /**
+     * Gets the top-most string which is displayed on the scoreboard. (doesn't have a score on the side).<br>
+     * Be aware that this can contain color codes.
+     *
+     * @return the scoreboard title
+     */
+    public static String getTitle() {
         if (needsUpdate) {
             updateNames();
             needsUpdate = false;
@@ -47,8 +58,10 @@ public class Scoreboard {
     }
 
     /**
-     * Get all currently visible strings on the scoreboard. (excluding title)
+     * Get all currently visible strings on the scoreboard. (excluding title)<br>
      * Be aware that this can contain color codes.
+     *
+     * @return the list of lines
      */
     public static ArrayList<String> getLines() {
         // the array will only be updated upon request
