@@ -180,6 +180,21 @@ public class Text {
                 :  Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width).size() * 9;
     }
 
+    public int getMaxWidth() {
+        if (this.width == 0) {
+            return Renderer.getStringWidth(this.string);
+        } else {
+            int maxWidth = 0;
+
+            for (String line : Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)) {
+                if (Renderer.getStringWidth(line) > maxWidth)
+                    maxWidth = Renderer.getStringWidth(line);
+            }
+
+            return maxWidth;
+        }
+    }
+
     /**
      * Draws the text onto the client's overlay.
      *

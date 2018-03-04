@@ -225,7 +225,7 @@ public class Renderer {
      * @param y the y offset
      */
     public void translate(float x, float y) {
-        GlStateManager.translate(x, 0, y);
+        GlStateManager.translate(x, y, 0);
     }
 
     /**
