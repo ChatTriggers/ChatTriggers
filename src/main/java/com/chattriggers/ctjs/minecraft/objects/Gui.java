@@ -5,6 +5,8 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
@@ -21,6 +23,9 @@ public class Gui extends GuiScreen {
 
     private int mouseX = 0;
     private int mouseY = 0;
+
+    @Getter @Setter
+    private boolean doesPauseGame = true;
 
     /**
      * Displays the gui object to Minecraft.
@@ -193,6 +198,11 @@ public class Gui extends GuiScreen {
 
         if (onKeyTyped != null)
             onKeyTyped.trigger(typedChar, keyCode);
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return this.doesPauseGame;
     }
 
     /**
