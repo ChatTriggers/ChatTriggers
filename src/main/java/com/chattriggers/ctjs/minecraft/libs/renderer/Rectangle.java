@@ -283,7 +283,6 @@ public class Rectangle {
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
 
-        GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
 
@@ -301,6 +300,8 @@ public class Rectangle {
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+
         GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
     }
 }

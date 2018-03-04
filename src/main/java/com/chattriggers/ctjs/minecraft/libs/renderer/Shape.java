@@ -73,6 +73,13 @@ public class Shape {
         this.drawMode = 9;
     }
 
+    public Shape clone() {
+        Shape clone = new Shape(this.color);
+        clone.vertexes.addAll(this.vertexes);
+        clone.setDrawMode(this.drawMode);
+        return clone;
+    }
+
     /**
      * Adds a vertex to the shape.
      *
@@ -191,8 +198,6 @@ public class Shape {
         float g = (float) (this.color >> 8 & 255) / 255.0F;
         float b = (float) (this.color & 255) / 255.0F;
 
-        GlStateManager.pushMatrix();
-
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.enableBlend();
@@ -211,6 +216,7 @@ public class Shape {
         GlStateManager.disableBlend();
 
         GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
 
         return this;
     }

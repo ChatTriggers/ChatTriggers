@@ -218,7 +218,6 @@ public class Image {
 
         Client.getMinecraft().getTextureManager().bindTexture(rl);
 
-        GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glTranslatef(this.x, this.y, 100);
@@ -227,6 +226,7 @@ public class Image {
         GL11.glDisable(GL11.GL_BLEND);
 
         GL11.glPopMatrix();
+        GL11.glPushMatrix();
 
         return this;
     }

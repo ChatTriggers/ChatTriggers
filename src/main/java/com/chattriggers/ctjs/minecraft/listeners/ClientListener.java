@@ -121,7 +121,7 @@ public class ClientListener {
         } else if (element == RenderGameOverlayEvent.ElementType.AIR) {
             TriggerType.RENDER_AIR.triggerAll(event);
         } else if (element == RenderGameOverlayEvent.ElementType.TEXT) {
-            TriggerType.RENDER_OVERLAY.triggerAll();
+            TriggerType.RENDER_OVERLAY.triggerAll(event);
         }
     }
 

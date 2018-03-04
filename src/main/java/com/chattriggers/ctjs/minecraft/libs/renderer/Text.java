@@ -186,7 +186,6 @@ public class Text {
      * @return The text to allow for method chaining
      */
     public Text draw() {
-        GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.scale(this.scale, this.scale, this.scale);
         if (this.width > 0) {
@@ -203,7 +202,9 @@ public class Text {
             Renderer.getFontRenderer().drawString(this.string, getXAlign(this.string), this.y / this.scale, this.color, this.shadow);
         }
         GlStateManager.disableBlend();
+
         GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
 
         return this;
     }
