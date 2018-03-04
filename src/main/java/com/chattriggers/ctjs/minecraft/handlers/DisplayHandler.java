@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.handlers;
 
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import com.chattriggers.ctjs.minecraft.objects.Display;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -25,11 +26,15 @@ public class DisplayHandler {
 
     @SubscribeEvent
     public void renderDisplays(RenderGameOverlayEvent event) {
+        GlStateManager.pushMatrix();
+
         if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
             for (Display display : displays) {
                 display.render();
             }
         }
+
+        GlStateManager.popMatrix();
     }
 
     /**
