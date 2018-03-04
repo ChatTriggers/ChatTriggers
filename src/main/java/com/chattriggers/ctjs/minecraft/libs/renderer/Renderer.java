@@ -219,6 +219,44 @@ public class Renderer {
     }
 
     /**
+     * Offset by x and y.
+     *
+     * @param x the x offset
+     * @param y the y offset
+     */
+    public void translate(float x, float y) {
+        GlStateManager.translate(x, 0, y);
+    }
+
+    /**
+     * Scale by scale.
+     *
+     * @param scale the scale
+     */
+    public void scale(float scale) {
+        GlStateManager.scale(scale, scale, 1);
+    }
+
+    /**
+     * Scale by scaleX and scaleY.
+     *
+     * @param scaleX the x scale
+     * @param scaleY the y scale
+     */
+    public void scale(float scaleX, float scaleY) {
+        GlStateManager.scale(scaleX, scaleY, 1);
+    }
+
+    /**
+     * Rotate by angle.
+     *
+     * @param angle the angle
+     */
+    public void rotate(float angle) {
+        GlStateManager.rotate(angle, 0, 0, 1);
+    }
+
+    /**
      * Creates a new {@link Image} object.
      *
      * @param resourceName the name of the resource (image-name.png)
