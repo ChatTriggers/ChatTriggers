@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import net.minecraft.client.gui.GuiButton;
 
@@ -37,7 +37,7 @@ public class ConfigColor extends ConfigOption {
         this.blueHeld = false;
         this.greenHeld = false;
 
-        int middle = Renderer.getRenderWidth() / 2;
+        int middle = Renderer.screen.getWidth() / 2;
 
         this.redButton = new GuiButton(
                 0,
@@ -71,7 +71,7 @@ public class ConfigColor extends ConfigOption {
     public void draw(int mouseX, int mouseY) {
         if (this.hidden) return;
 
-        int middle = Renderer.getRenderWidth() / 2;
+        int middle = Renderer.screen.getWidth() / 2;
 
         Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 65)
                 .setShadow(0xd0000000, 3, 3)
@@ -140,10 +140,10 @@ public class ConfigColor extends ConfigOption {
     }
 
     private void limitHeldButton(GuiButton button) {
-        if (button.xPosition < Renderer.getRenderWidth() / 2 - 100 + this.x)
-            button.xPosition = Renderer.getRenderWidth() / 2 - 100 + this.x;
-        if (button.xPosition > Renderer.getRenderWidth() / 2 + 52 + this.x)
-            button.xPosition = Renderer.getRenderWidth() / 2 + 52 + this.x;
+        if (button.xPosition < Renderer.screen.getWidth() / 2 - 100 + this.x)
+            button.xPosition = Renderer.screen.getWidth() / 2 - 100 + this.x;
+        if (button.xPosition > Renderer.screen.getWidth() / 2 + 52 + this.x)
+            button.xPosition = Renderer.screen.getWidth() / 2 + 52 + this.x;
     }
 
     @Override
@@ -165,7 +165,7 @@ public class ConfigColor extends ConfigOption {
 
         if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
             this.value = this.defaultValue;
-            int middle = Renderer.getRenderWidth() / 2;
+            int middle = Renderer.screen.getWidth() / 2;
             this.redButton.xPosition = (int) MathLib.map(this.value.getRed(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
             this.greenButton.xPosition = (int) MathLib.map(this.value.getGreen(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);
             this.blueButton.xPosition = (int) MathLib.map(this.value.getBlue(), 0, 255, middle - 100 + this.x, middle + 52 + this.x);

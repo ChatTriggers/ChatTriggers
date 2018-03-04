@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import javax.script.ScriptException;
@@ -34,7 +35,9 @@ public class OnRenderTrigger extends OnTrigger {
         if (!triggerIfCanceled && event.isCanceled()) return;
 
         try {
+            GlStateManager.pushMatrix();
             CTJS.getInstance().getModuleManager().invokeFunction(methodName, args);
+            GlStateManager.popMatrix();
         } catch (ScriptException | NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e, this);
             type.removeTrigger(this);

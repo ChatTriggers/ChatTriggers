@@ -12,7 +12,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
         classpath "io.franzbecker:gradle-lombok:1.10"
     }
 }
@@ -33,14 +33,14 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.9-SNAPSHOT"
+version = "0.10.1-SNAPSHOT"
 group = "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ctjs"
 
-apply plugin: 'java'
+apply plugin: "java"
 compileJava {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
 }
 
 configurations {
@@ -64,9 +64,9 @@ minecraft {
 }
 
 dependencies {
-    compile files('libs/nashorn.jar')
-    provided files('libs/sentry.jar')
-    provided group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.3'
+    compile files("libs/nashorn.jar")
+    provided files("libs/sentry.jar")
+    provided group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.3"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -97,29 +97,48 @@ jar {
     }
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
+processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include "mcmod.info"
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand "version":project.version, "mcversion":project.minecraft.version
     }
 
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "mcmod.info"
+    }
+}
+
+
+/*
+ * Userdocs
+ */
+
+import io.franzbecker.gradle.lombok.task.DelombokTask
+
+task delombok(type: DelombokTask, dependsOn: compileJava) {
+    description "Delomboks source code in order to compile javadocs"
+    group "Documentation"
+
+    ext.outputDir = file("$buildDir/src-delomboked")
+    sourceSets.main.java.srcDirs.each {
+        args(it, "-f", "pretty", "-d", outputDir)
     }
 }
 
 task userdocs(type: Javadoc) {
+    description = "Generate the docs to be used by scripters, excludes internal classes"
+    group = "documentation"
+
+    setDependsOn(["delombok"])
     options.links("https://docs.oracle.com/javase/8/docs/api/")
-    source = sourceSets.main.allJava
+    source = "$buildDir/src-delomboked"
     classpath += configurations.compile
     exclude "com/chattriggers/ctjs/commands/**.java"
     exclude "com/chattriggers/ctjs/listeners/**.java"
@@ -130,9 +149,4 @@ task userdocs(type: Javadoc) {
     exclude "com/chattriggers/ctjs/loader/**.java"
     exclude "com/chattriggers/ctjs/handlers/GuiHandler.java"
     exclude "com/chattriggers/ctjs/utils/*.java"
-}
-
-configure(userdocs) {
-    group = 'documentation'
-    description = "Generate the docs to be used by scripters, excludes internal classes"
 }

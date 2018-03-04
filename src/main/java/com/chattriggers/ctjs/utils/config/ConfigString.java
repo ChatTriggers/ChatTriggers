@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiTextField;
@@ -56,7 +56,7 @@ public class ConfigString extends ConfigOption {
         this.textField = new GuiTextField(
                 0,
                 Renderer.getFontRenderer(),
-                Renderer.getRenderWidth() / 2 - 100 + this.x,
+                Renderer.screen.getWidth() / 2 - 100 + this.x,
                 this.y + 15,
                 200,
                 20
@@ -71,7 +71,7 @@ public class ConfigString extends ConfigOption {
 
         update();
 
-        int middle = Renderer.getRenderWidth() / 2;
+        int middle = Renderer.screen.getWidth() / 2;
 
         Renderer.rectangle(0x80000000, middle - 105 + this.x, this.y - 5, 210, 45)
                 .setShadow(0xd0000000, 3, 3)

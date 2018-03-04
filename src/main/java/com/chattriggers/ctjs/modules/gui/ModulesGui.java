@@ -1,17 +1,17 @@
 package com.chattriggers.ctjs.modules.gui;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.Renderer;
-import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
+import com.chattriggers.ctjs.modules.Module;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ModulesGui extends GuiScreen {
     private ArrayList<GuiModule> modules = new ArrayList<>();
@@ -27,7 +27,7 @@ public class ModulesGui extends GuiScreen {
         }
 
         this.scrolled = 0;
-        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.getRenderHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.screen.getHeight();
 
     }
 
@@ -35,18 +35,18 @@ public class ModulesGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.getRenderHeight();
+        this.maxScroll = this.modules.size() * 110 + 10 - Renderer.screen.getHeight();
 
         drawBackground(0);
 
         // draw scroll bar
-        int scrollHeight = Renderer.getRenderHeight() - this.maxScroll;
+        int scrollHeight = Renderer.screen.getHeight() - this.maxScroll;
         if (scrollHeight < 20) scrollHeight = 20;
-        if (scrollHeight < Renderer.getRenderHeight()) {
-            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.getRenderHeight() - scrollHeight - 10);
+        if (scrollHeight < Renderer.screen.getHeight()) {
+            int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.screen.getHeight() - scrollHeight - 10);
             Renderer.rectangle(
                     0xa0000000,
-                    Renderer.getRenderWidth() - 5,
+                    Renderer.screen.getWidth() - 5,
                     scrollY,
                     5,
                     scrollHeight
@@ -126,7 +126,7 @@ public class ModulesGui extends GuiScreen {
         }
 
         private void checkHover(int mouseX, int mouseY) {
-            int width = Renderer.getRenderWidth() - 40;
+            int width = Renderer.screen.getWidth() - 40;
             int height = 105;
 
             isHovered = (mouseX > x + width - Renderer.getStringWidth("show code >") - 2
@@ -138,7 +138,7 @@ public class ModulesGui extends GuiScreen {
         private void draw() {
             x = 20;
             y = getY(i);
-            int width = Renderer.getRenderWidth() - 40;
+            int width = Renderer.screen.getWidth() - 40;
             int height = 105;
 
             // background
@@ -162,12 +162,10 @@ public class ModulesGui extends GuiScreen {
             String description = (this.module.getMetadata().getDescription() == null)
                     ? "No description provided"
                     : this.module.getMetadata().getDescription();
-            ArrayList<String> descriptionLines = Renderer.lineWrap(new ArrayList<>(Arrays.asList(description.split("\n"))), width - 5, 6);
-            for (int j = 0; j < descriptionLines.size(); j++) {
-                Renderer.text(
-                        ChatLib.addColor(descriptionLines.get(j)), x + 2, y + 20 + j * 10)
-                        .setShadow(true).draw();
-            }
+            Text desc = Renderer.text(description, x + 2, y + 20).setWidth(width - 5).setMaxLines(6).draw();
+            if (desc.exceedsMaxLines())
+                Renderer.text("...", x + 2, y + 73).draw();
+
 
             // directory
             Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", x + 2, y + height - 12)

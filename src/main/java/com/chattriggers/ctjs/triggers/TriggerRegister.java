@@ -178,8 +178,8 @@ public class TriggerRegister {
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderOverlay(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_OVERLAY);
+    public static OnRenderTrigger registerRenderOverlay(String methodName) {
+        return new OnRenderTrigger(methodName, TriggerType.RENDER_OVERLAY);
     }
 
     /**
