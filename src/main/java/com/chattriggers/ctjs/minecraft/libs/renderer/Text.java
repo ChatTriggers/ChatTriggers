@@ -5,6 +5,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.GlStateManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Used in {@link Renderer#text(String, float, float)}
  */
@@ -24,6 +28,15 @@ public class Text {
      */
     @Getter @Setter
     private String string;
+
+    /**
+     * -- GETTER --
+     * Gets a list of lines based on the text width
+     *
+     * @return a list of lines
+     */
+    @Getter
+    private List<String> lines;
 
     /**
      * -- GETTER --
@@ -75,14 +88,8 @@ public class Text {
      * Gets the max width for line wrapping
      *
      * @return Max width for line wrapping
-     *
-     * -- SETTER --
-     * Sets the max width for line wrapping
-     *
-     * @param width The new max width
-     * @return The Text object for method chaining
      */
-    @Getter @Setter
+    @Getter
     private int width;
 
     /**
@@ -147,6 +154,7 @@ public class Text {
 
     Text(String text, float x, float y) {
         this.string = text;
+        this.lines = new ArrayList<>(Collections.singleton(this.string));
         this.x = x;
         this.y = y;
 
@@ -159,13 +167,26 @@ public class Text {
     }
 
     /**
+     * Sets the max width for line wrapping
+     *
+     * @param width The new max width
+     * @return The Text object for method chaining
+     */
+    public Text setWidth(int width) {
+        this.width = width;
+        this.lines = Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width);
+
+        return this;
+    }
+
+    /**
      * Gets whether or not the line wrapped text exceeds the max lines.
      *
      * @return True if wrapped text exceeds max lines
      */
     public boolean exceedsMaxLines() {
         return this.width != 0
-                && Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width).size() > this.maxLines;
+                && this.lines.size() > this.maxLines;
 
     }
 
@@ -177,7 +198,7 @@ public class Text {
     public int getHeight() {
         return this.width == 0
                 ? 9
-                :  Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width).size() * 9;
+                :  this.lines.size() * 9;
     }
 
     public int getMaxWidth() {
@@ -186,7 +207,7 @@ public class Text {
         } else {
             int maxWidth = 0;
 
-            for (String line : Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)) {
+            for (String line : this.lines) {
                 if (Renderer.getStringWidth(line) > maxWidth)
                     maxWidth = Renderer.getStringWidth(line);
             }
@@ -206,7 +227,7 @@ public class Text {
         if (this.width > 0) {
             float maxLinesHolder = this.maxLines;
             float yHolder = this.y;
-            for (String line : Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)) {
+            for (String line : this.lines) {
                 Renderer.getFontRenderer().drawString(line, getXAlign(line), yHolder / this.scale, this.color, this.shadow);
                 yHolder += 9;
                 maxLinesHolder--;

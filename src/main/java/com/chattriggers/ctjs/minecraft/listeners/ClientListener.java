@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.listeners;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -43,6 +44,8 @@ public class ClientListener {
 
         TriggerType.TICK.triggerAll(this.ticksPassed);
         this.ticksPassed++;
+        
+        Scoreboard.resetCache();
     }
 
 
