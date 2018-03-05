@@ -77,5 +77,7 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![edit configuration](http://i65.tinypic.com/t6yq7b.png)
   - Use classpath for module > select the main ct.js (it might be named differently depending on your fork)<br>
 ![classpath](http://i67.tinypic.com/15z34fd.png)
+  - Add "--mixin mixins.ctjs.json" to Program arguments
+![mixin](https://i.imgur.com/CLpJvmA.png)
 
 Everything should be set up and ready to open pull requests
