@@ -1,0 +1,9 @@
+{
+  "package": "com.chattriggers.ctjs.minecraft.mixins",
+  "refmap": "mixins.ctjs.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinPlayerTabOverlay"
+  ]
+}
