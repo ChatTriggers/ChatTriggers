@@ -135,6 +135,8 @@ public class JSScriptLoader extends ScriptLoader {
                     metadata
             );
 
+            getRequiredModules(metadata);
+
             TriggerRegister.currentModule = module;
 
             getScriptEngine().eval(module.getCompiledScript());
@@ -146,6 +148,15 @@ public class JSScriptLoader extends ScriptLoader {
         }
 
         return null;
+    }
+
+    private void getRequiredModules(ModuleMetadata metadata) {
+        if (metadata == null || metadata.getRequires() == null) return;
+
+        for (String require : metadata.getRequires()) {
+            if (new File(modulesDir, require).exists()) continue;
+            CTJS.getInstance().getModuleManager().importModule(require);
+        }
     }
 
     public boolean downloadModule(String name, boolean existCheck) {
