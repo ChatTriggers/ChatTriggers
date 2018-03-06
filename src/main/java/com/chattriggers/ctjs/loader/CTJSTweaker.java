@@ -21,8 +21,8 @@ public class CTJSTweaker implements ITweaker {
         MixinBootstrap.init();
 
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
-        Mixins.addConfiguration("mixins.ctjs.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
+        Mixins.addConfiguration("mixins.ctjs.json");
     }
 
     @Override

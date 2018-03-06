@@ -102,57 +102,50 @@ jar {
     manifest.attributes(
             'TweakClass': 'com.chattriggers.ctjs.loader.CTJSTweaker',
             'TweakOrder': '0',
-            'MixinConfigs': 'mixins.ctjs.json',
-            'FMLCorePluginContainsFMLMod': 'true',
+            'MixinConfigs': 'mixins.ctjs.json'
     )
-}
-
-sourceSets {
-    main {
-        refMap = "mixins.myplugin.refmap.json"
-    }
 }
 
 mixin {
     // Specify "notch" or "searge" here
     defaultObfuscationEnv searge
-    add sourceSets.main, "mixin.hyperium.refmap.json"
+    add sourceSets.main, "mixins.ctjs.refmap.json"
 }
 
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-
-        // replace version and mcversion
-        expand "version":project.version, "mcversion":project.minecraft.version
-    }
-
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
-    }
-}
-
-
-/*
- * Userdocs
- */
-
-import io.franzbecker.gradle.lombok.task.DelombokTask
-
-task delombok(type: DelombokTask, dependsOn: compileJava) {
-    description "Delomboks source code in order to compile javadocs"
-    group "Documentation"
-
-    ext.outputDir = file("$buildDir/src-delomboked")
-    sourceSets.main.java.srcDirs.each {
-        args(it, "-f", "pretty", "-d", outputDir)
-    }
-}
+//processResources {
+//    inputs.property "version", project.version
+//    inputs.property "mcversion", project.minecraft.version
+//
+//    // replace stuff in mcmod.info, nothing else
+//    from(sourceSets.main.resources.srcDirs) {
+//        include "mcmod.info"
+//
+//        // replace version and mcversion
+//        expand "version":project.version, "mcversion":project.minecraft.version
+//    }
+//
+//    // copy everything else, thats not the mcmod.info
+//    from(sourceSets.main.resources.srcDirs) {
+//        exclude "mcmod.info"
+//    }
+//}
+//
+//
+///*
+// * Userdocs
+// */
+//
+//import io.franzbecker.gradle.lombok.task.DelombokTask
+//
+//task delombok(type: DelombokTask, dependsOn: compileJava) {
+//    description "Delomboks source code in order to compile javadocs"
+//    group "Documentation"
+//
+//    ext.outputDir = file("$buildDir/src-delomboked")
+//    sourceSets.main.java.srcDirs.each {
+//        args(it, "-f", "pretty", "-d", outputDir)
+//    }
+//}
 
 task userdocs(type: Javadoc) {
     description = "Generate the docs to be used by scripters, excludes internal classes"
