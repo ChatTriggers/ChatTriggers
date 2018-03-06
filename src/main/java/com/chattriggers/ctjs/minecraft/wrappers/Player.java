@@ -115,7 +115,7 @@ public class Player {
      * @return the player's uuid
      */
     public static String getUUID() {
-        return Client.getMinecraft().getSession().getPlayerID();
+        return Client.getMinecraft().getSession().getProfile().getId().toString();
     }
 
     /**
