@@ -10,7 +10,7 @@ The basic premise of CTjs is that everything is based around Triggers. From a mo
 register("chat", "chatFunction").setChatCriteria("<${name}> ${message}");
 function chatFunction(name, message, event) {
   cancel(event);
-  chat("${name}: ${message}");
+  ChatLib.chat(name + ": " + message);
 }
 
 register("renderCrosshair", "crosshairFunction");
