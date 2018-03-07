@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import lombok.Getter;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -11,13 +10,13 @@ public class PlayerMP extends Entity {
     @Getter
     private EntityOtherPlayerMP player;
 
-    public PlayerMP(EntityPlayer player) throws InvalidArgumentException {
+    public PlayerMP(EntityPlayer player) throws IllegalArgumentException {
         super(player);
 
         if (player instanceof EntityOtherPlayerMP) {
             this.player = ((EntityOtherPlayerMP) player);
         } else {
-            throw new InvalidArgumentException(new String[]{"The player provided is not valid!"});
+            throw new IllegalArgumentException("The player provided is not valid!");
         }
     }
 
