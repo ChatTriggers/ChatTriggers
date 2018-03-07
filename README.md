@@ -16,12 +16,12 @@ function chatFunction(name, message, event) {
 register("renderCrosshair", "crosshairFunction");
 function crosshairFunction(event) {
   cancel(event);
-  RenderLib.drawRectangle(
+  RenderLib.rectangle(
     0x50ffffff,
-    RenderLib.getRenderWidth()/2 - 1,
-    RenderLib.getRenderHeight()/2 -1,
+    RenderLib.screen.getWidth()/2 - 1,
+    RenderLib.screen.getHeight()/2 -1,
     2, 2
-  );
+  ).draw();
 }
 ```
 
@@ -77,7 +77,5 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![edit configuration](http://i65.tinypic.com/t6yq7b.png)
   - Use classpath for module > select the main ct.js (it might be named differently depending on your fork)<br>
 ![classpath](http://i67.tinypic.com/15z34fd.png)
-  - Add "--mixin mixins.ctjs.json" to Program arguments<br>
-![mixin](https://i.imgur.com/CLpJvmA.png)
 
 Everything should be set up and ready to open pull requests
