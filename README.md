@@ -52,18 +52,15 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ### 1. Clone the repository to your computer<br>
 ![clone repo](http://i66.tinypic.com/9jdlp5.png)
 ### 2. Open PowerShell/command prompt
-  - shift + right click > open PowerShell<br>
-![open PowerShell](http://i65.tinypic.com/mszjnk.png)
+  - shift + right click > open PowerShell
 ### 3. Run gradle setup commands
   - cmd         `gradlew setupDecompWorkspace`
-  - PowerShell  `./gradlew setupDecompWorkspace`<br>
-![gradle setup 1](http://i66.tinypic.com/dsk5f.png)
+  - PowerShell  `./gradlew setupDecompWorkspace`
   - cmd         `gradlew idea`
-  - PowerShell  `./gradlew idea`<br>
-![gradle setup 2](http://i64.tinypic.com/2nqf8rp.png)
+  - PowerShell  `./gradlew idea`
 ### 4. Set up intellij idea
   - right click project > open module settings<br>
-![open module settings](http://i67.tinypic.com/3348306.png)
+![open module settings](https://i.imgur.com/F7clio5.png)
   - project > project language level > SDK default (8)<br>
 ![set language level](http://i66.tinypic.com/2rormrn.png)
   - file > settings<br>
