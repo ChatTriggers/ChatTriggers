@@ -25,6 +25,7 @@ public enum TriggerType {
     RENDER_HEALTH, RENDER_FOOD, RENDER_MOUNT_HEALTH, RENDER_AIR,
 
     // world
+    PLAYER_JOIN,
     SOUND_PLAY,
     WORLD_LOAD, WORLD_UNLOAD,
 

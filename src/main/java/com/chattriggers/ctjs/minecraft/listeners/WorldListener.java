@@ -3,8 +3,10 @@ package com.chattriggers.ctjs.minecraft.listeners;
 import com.chattriggers.ctjs.minecraft.wrappers.Server;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import io.sentry.Sentry;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -35,5 +37,11 @@ public class WorldListener {
     @SubscribeEvent
     public void onSoundPlay(PlaySoundEvent event) {
         TriggerType.SOUND_PLAY.triggerAll(event);
+    }
+
+    @SubscribeEvent
+    public void onPlayerJoined(EntityJoinWorldEvent event) {
+        if (event.entity instanceof EntityOtherPlayerMP)
+            TriggerType.PLAYER_JOIN.triggerAll((EntityOtherPlayerMP) event.entity);
     }
 }

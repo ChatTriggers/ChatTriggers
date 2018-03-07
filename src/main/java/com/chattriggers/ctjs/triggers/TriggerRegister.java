@@ -393,9 +393,23 @@ public class TriggerRegister {
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
      * @param methodName the name of the method to callback when the event is fired
-     * @return the trigger (useless)
+     * @return the trigger for additional modification
      */
     public static OnRegularTrigger registerGuiOpened(String methodName) {
         return new OnRegularTrigger(methodName, TriggerType.GUI_OPENED);
+    }
+
+    /**
+     * Registers a new method that gets run when a player logs in.<br>
+     * Runs when a player logs in.<br>
+     * Passes through 1 argument:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP} object<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnPlayerTrigger registerPlayerJoined(String methodName) {
+        return new OnPlayerTrigger(methodName);
     }
 }
