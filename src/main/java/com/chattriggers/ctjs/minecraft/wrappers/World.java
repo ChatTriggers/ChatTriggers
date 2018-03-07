@@ -2,11 +2,15 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.utils.console.Console;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -99,6 +103,36 @@ public class World {
         IBlockState blockState = World.getWorld().getBlockState(blockPos);
 
         return new Block(blockState.getBlock()).setBlockPos(blockPos);
+    }
+
+    /**
+     * Gets all of the players in the world, and returns their wrapped versions.
+     *
+     * @return the players
+     */
+    public static PlayerMP[] getAllPlayers() {
+        PlayerMP[] players = new PlayerMP[getWorld().playerEntities.size()];
+
+        for (int i = 0; i < players.length; i++) {
+            EntityPlayer player = getWorld().playerEntities.get(i);
+
+            if (player instanceof EntityOtherPlayerMP) {
+                players[i] = new PlayerMP((EntityOtherPlayerMP) player);
+            }
+        }
+
+        return players;
+    }
+
+    /**
+     * Gets a player by their username, must be in the currently loaded world!
+     *
+     * @param name the username
+     * @return the player with said username
+     * @throws InvalidArgumentException if the player is not valid
+     */
+    public static PlayerMP getPlayerByName(String name) throws InvalidArgumentException {
+        return new PlayerMP(getWorld().getPlayerEntityByName(name));
     }
 
     /**
