@@ -4,16 +4,21 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Command extends CommandBase {
     private String name;
     private String usage;
+    @Setter
+    private List<String> tabComplete;
     @Getter
     private ArrayList<OnTrigger> triggers = new ArrayList<>();
 
@@ -28,6 +33,10 @@ public class Command extends CommandBase {
     }
     public String getCommandName() {
         return name;
+    }
+
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        return tabComplete;
     }
 
     public int getRequiredPermissionLevel() {
