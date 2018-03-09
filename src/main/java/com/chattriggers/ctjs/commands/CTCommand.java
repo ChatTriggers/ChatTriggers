@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.objects.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -12,6 +12,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 
@@ -41,6 +42,23 @@ public class CTCommand extends CommandBase {
         return 0;
     }
 
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        List<String> tabOptions = new ArrayList<>();
+
+        tabOptions.add("help");
+        tabOptions.add("load");
+        tabOptions.add("settings");
+        tabOptions.add("import");
+        tabOptions.add("modules");
+        tabOptions.add("files");
+        tabOptions.add("console");
+        tabOptions.add("simulate");
+        tabOptions.add("dump");
+        tabOptions.add("copy");
+
+        return tabOptions;
+    }
+
     public String getUsage(ICommandSender sender) {
         return getCommandUsage(sender);
     }
@@ -52,6 +70,7 @@ public class CTCommand extends CommandBase {
                 "&c/ct console &7- &oOpens the ct console.\n" +
                 "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
                 "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
+                "&c/ct settings &7- &oChange ChatTrigger's settings" +
                 "&c/ct &7- &oDisplays this help dialog\n" +
                 "&b&m" + ChatLib.getChatBreak("-");
     }

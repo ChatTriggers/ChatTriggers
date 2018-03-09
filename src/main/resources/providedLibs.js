@@ -13,24 +13,22 @@ var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister"
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 
-// Events
+// Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
-var WorldLib = Java.type("com.chattriggers.ctjs.minecraft.libs.WorldLib");
 var Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
 var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
 var MathLib = Java.type("com.chattriggers.ctjs.minecraft.libs.MathLib");
-
-// deprecated
-var RenderLib = Renderer;
+var XMLHttpRequest = Java.type("com.chattriggers.ctjs.minecraft.libs.XMLHttpRequest");
 
 // Objects
-var Display = Java.type("com.chattriggers.ctjs.minecraft.objects.Display");
-var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.DisplayLine");
-var Gui = Java.type("com.chattriggers.ctjs.minecraft.objects.Gui");
-var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.Message");
+var Display = Java.type("com.chattriggers.ctjs.minecraft.objects.display.Display");
+var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayLine");
+var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler");
+var Gui = Java.type("com.chattriggers.ctjs.minecraft.objects.gui.Gui");
+var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Message");
+var ChatComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.ChatComponent");
 var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
-var XMLHttpRequest = Java.type("com.chattriggers.ctjs.minecraft.objects.XMLHttpRequest");
 
 // Wrappers
 var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
@@ -46,8 +44,10 @@ var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Block");
 var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
 
 // Misc
-var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.handlers.DisplayHandler");
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
+
+// Deprecated
+var WorldLib = Java.type("com.chattriggers.ctjs.minecraft.libs.WorldLib");
 
 /*End Built in Vars */
 

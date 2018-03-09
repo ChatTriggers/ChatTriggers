@@ -2,7 +2,8 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
-import com.chattriggers.ctjs.minecraft.objects.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.ChatComponent;
+import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.experimental.UtilityClass;
@@ -32,7 +33,9 @@ public class ChatLib {
      *
      * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
+     * @deprecated use {@link Message#setRecursive(boolean)}
      */
+    @Deprecated
     public static void chat(String message, boolean recursive) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
@@ -47,13 +50,15 @@ public class ChatLib {
     }
 
     /**
-     * Adds a message to chat (IS RECURSIVE! See {@link #chat(String, boolean)}
-     * to specify it being recursive.
+     * Adds a message to chat
      *
-     * @param message the message to be printed
+     * @param text the message to be printed
      */
-    public static void chat(String message) {
-        chat(message, false);
+    public static void chat(String text) {
+        if (!isPlayer("[CHAT]: " + text)) return;
+
+        ChatComponentText cct = new ChatComponentText(addColor(text));
+        Player.getPlayer().addChatMessage(cct);
     }
 
     /**
@@ -61,7 +66,9 @@ public class ChatLib {
      *
      * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
+     * @deprecated use {@link Message#setRecursive(boolean)}
      */
+    @Deprecated
     public static void chat(Message message, boolean recursive) {
         if (message.getChatLineId() != -1) {
             Client.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
@@ -82,7 +89,11 @@ public class ChatLib {
      * @param message the message to be printed
      */
     public static void chat(Message message) {
-        chat(message, false);
+        message.chat();
+    }
+
+    public static void chat(ChatComponent component) {
+        new Message(component).chat();
     }
 
     /**
@@ -92,7 +103,9 @@ public class ChatLib {
      *
      * @param message    the message to be printed
      * @param chatLineID the chat line to save the message under (pass to clearChat)
+     * @deprecated use {@link Message#setChatLineId(int)}
      */
+    @Deprecated
     public static void chat(String message, int chatLineID) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
@@ -104,7 +117,9 @@ public class ChatLib {
      * Add a raw chat message to chat (no formatting).
      *
      * @param message the message to be printed
+     * @deprecated use {@link Message#setFormatted(boolean)}
      */
+    @Deprecated
     public static void raw(String message) {
         raw(message, false);
     }
@@ -114,7 +129,9 @@ public class ChatLib {
      *
      * @param message   the message to be printed
      * @param recursive whether or not triggers should be triggered by this message
+     * @deprecated use {@link Message#setFormatted(boolean)}
      */
+    @Deprecated
     public static void raw(String message, Boolean recursive) {
         if (!isPlayer("[CHAT]: " + message)) return;
 
@@ -133,7 +150,9 @@ public class ChatLib {
      *
      * @param message    the message to be printed
      * @param chatLineID the chat line to save the message under (pass to clearChat)
+     * @deprecated use use {@link Message#setFormatted(boolean)}
      */
+    @Deprecated
     public static void raw(String message, int chatLineID) {
         if (!isPlayer("[RAW]: " + message)) return;
 

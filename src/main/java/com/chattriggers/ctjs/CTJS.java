@@ -2,9 +2,9 @@ package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
 import com.chattriggers.ctjs.loader.ModuleManager;
-import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
-import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
-import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
+import com.chattriggers.ctjs.commands.CommandHandler;
+import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;

@@ -400,16 +400,32 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new method that gets run when a player logs in.<br>
-     * Runs when a player logs in.<br>
+     * Registers a new method that gets run when a player joins the world.<br>
+     * Runs when a player joins.<br>
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP} object<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
     public static OnPlayerTrigger registerPlayerJoined(String methodName) {
         return new OnPlayerTrigger(methodName);
+    }
+
+    /**
+     * Registers a new method that gets run when a player leaves the world.<br>
+     * Runs when a player leaves.<br>
+     * Passes through 1 argument:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the name of the player that left<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerPlayerLeft(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.PLAYER_LEAVE);
     }
 }

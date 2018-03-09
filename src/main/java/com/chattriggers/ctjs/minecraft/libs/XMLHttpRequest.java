@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.objects;
+package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;

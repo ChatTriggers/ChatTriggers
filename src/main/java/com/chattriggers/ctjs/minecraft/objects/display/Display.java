@@ -1,7 +1,6 @@
-package com.chattriggers.ctjs.minecraft.objects;
+package com.chattriggers.ctjs.minecraft.objects.display;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import lombok.Getter;
 import lombok.Setter;
