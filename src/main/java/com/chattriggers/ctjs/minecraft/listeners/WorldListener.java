@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.Server;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import io.sentry.Sentry;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
@@ -61,7 +60,7 @@ public class WorldListener {
             currentPlayer = player;
             try {
                 World.getPlayerByName(player);
-            } catch (InvalidArgumentException exception) {
+            } catch (Exception exception) {
                 this.playerList.remove(currentPlayer);
                 TriggerType.PLAYER_LEAVE.triggerAll(currentPlayer);
                 break;

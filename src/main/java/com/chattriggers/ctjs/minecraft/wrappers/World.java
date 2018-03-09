@@ -5,7 +5,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.utils.console.Console;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -158,9 +157,9 @@ public class World {
      *
      * @param name the username
      * @return the player with said username
-     * @throws InvalidArgumentException if the player is not valid
+     * @throws Exception if the player is not valid
      */
-    public static PlayerMP getPlayerByName(String name) throws InvalidArgumentException {
+    public static PlayerMP getPlayerByName(String name) throws Exception {
         return new PlayerMP(getWorld().getPlayerEntityByName(name));
     }
 
