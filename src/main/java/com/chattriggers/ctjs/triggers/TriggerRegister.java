@@ -412,4 +412,8 @@ public class TriggerRegister {
     public static OnPlayerTrigger registerPlayerJoined(String methodName) {
         return new OnPlayerTrigger(methodName);
     }
+
+    public static OnRegularTrigger registerPlayerLeft(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.PLAYER_LEAVE);
+    }
 }

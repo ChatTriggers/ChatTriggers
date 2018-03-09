@@ -16,6 +16,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class World {
     /**
@@ -110,14 +112,14 @@ public class World {
      *
      * @return the players
      */
-    public static PlayerMP[] getAllPlayers() {
-        PlayerMP[] players = new PlayerMP[getWorld().playerEntities.size()];
+    public static List<PlayerMP> getAllPlayers() {
+        List<PlayerMP> players = new ArrayList<>();
 
-        for (int i = 0; i < players.length; i++) {
-            EntityPlayer player = getWorld().playerEntities.get(i);
-
-            if (player instanceof EntityOtherPlayerMP) {
-                players[i] = new PlayerMP((EntityOtherPlayerMP) player);
+        if (getWorld() != null) {
+            for (EntityPlayer player : getWorld().playerEntities) {
+                if (player instanceof EntityOtherPlayerMP) {
+                    players.add(new PlayerMP((EntityOtherPlayerMP) player));
+                }
             }
         }
 
