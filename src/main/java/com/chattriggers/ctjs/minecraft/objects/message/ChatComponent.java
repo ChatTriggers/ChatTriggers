@@ -6,11 +6,12 @@ import lombok.experimental.Accessors;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
 @Accessors(chain = true)
 public class ChatComponent {
     @Getter
-    private ChatComponentText chatComponentText;
+    private IChatComponent chatComponentText;
 
     /**
      * -- GETTER --
@@ -73,6 +74,10 @@ public class ChatComponent {
         this.formatted = true;
 
         reInstance();
+    }
+
+    public ChatComponent(IChatComponent chatComponent) {
+        this.chatComponentText = chatComponent;
     }
 
     /**

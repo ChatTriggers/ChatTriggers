@@ -1,11 +1,14 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.objects.message.ChatComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Inventory;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -338,6 +341,33 @@ public class Player {
      */
     public static Inventory getInventory() {
         return new Inventory(getPlayer().inventory);
+    }
+
+    /**
+     * Gets the display name for the player,
+     * i.e. the name shown in tab list and in the player's nametag.
+     * @return the display name
+     */
+    public static ChatComponent getDisplayName() {
+        return new ChatComponent(getPlayerName(getPlayerInfo()));
+    }
+
+    /**
+     * Sets the name for this player shown in tab list
+     *
+     * @param chatComponent the new name to display
+     */
+    public static void setTabDisplayName(ChatComponent chatComponent) {
+        getPlayerInfo().setDisplayName(chatComponent.getChatComponentText());
+    }
+
+    private static String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn)
+    {
+        return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
+    }
+
+    private static NetworkPlayerInfo getPlayerInfo() {
+        return Client.getMinecraft().getNetHandler().getPlayerInfo(getPlayer().getUniqueID());
     }
 
     /**
