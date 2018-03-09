@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
@@ -27,6 +28,32 @@ public class World {
      */
     public static WorldClient getWorld() {
         return Client.getMinecraft().theWorld;
+    }
+
+    /**
+     * Play a sound at the player location.
+     *
+     * @param name   the name of the sound
+     * @param volume the volume of the sound
+     * @param pitch  the pitch of the sound
+     */
+    public static void playSound(String name, float volume, float pitch) {
+        Player.getPlayer().playSound(name, volume, pitch);
+    }
+
+    /**
+     * Display a title.
+     *
+     * @param title    title text
+     * @param subtitle subtitle text
+     * @param fadeIn   time to fade in
+     * @param time     time to stay on screen
+     * @param fadeOut  time to fade out
+     */
+    public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
+        Client.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut);
+        Client.getMinecraft().ingameGUI.displayTitle(null, ChatLib.addColor(subtitle), 0, 0, 0);
+        Client.getMinecraft().ingameGUI.displayTitle(null, null, fadeIn, time, fadeOut);
     }
 
     /**
