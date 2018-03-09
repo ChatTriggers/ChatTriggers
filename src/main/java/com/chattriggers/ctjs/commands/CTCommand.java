@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.objects.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
