@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.message;
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
 import java.util.ArrayList;
@@ -145,7 +147,12 @@ public class Message {
 
         for (Object message : messages) {
             if (message instanceof String) {
-                this.chatMessage.appendSibling(new ChatComponent((String) message).setFormatted(this.formatted).getChatComponentText());
+                String toAdd = ((String) message);
+
+                ChatComponentText cct = new ChatComponentText(this.formatted ? ChatLib.addColor(toAdd) : toAdd);
+                cct.setChatStyle(new ChatStyle().setParentStyle(null));
+
+                this.chatMessage.appendSibling(cct);
             } else if (message instanceof IChatComponent) {
                 this.chatMessage.appendSibling((IChatComponent) message);
             } else if (message instanceof ChatComponent) {
