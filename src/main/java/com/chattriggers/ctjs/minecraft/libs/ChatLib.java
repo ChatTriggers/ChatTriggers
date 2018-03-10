@@ -172,7 +172,7 @@ public class ChatLib {
             if (!arg.equals(args[0])) toSend.append(arg).append(" ");
         }
 
-        chat(toSend.toString(), true);
+        new Message(toSend.toString()).setRecursive(true).chat();
     }
 
     /**
