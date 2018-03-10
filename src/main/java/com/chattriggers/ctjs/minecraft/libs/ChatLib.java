@@ -354,7 +354,9 @@ public class ChatLib {
      * @param value     the value to perform the action with
      * @param hoverText the text to show when hovered over
      * @return the chat component created
+     * @deprecated use {@link TextComponent#setClickAction(String)} and {@link TextComponent#setClickValue(String)}
      */
+    @Deprecated
     public static IChatComponent clickable(String text, String action, String value, String hoverText) {
         ChatComponentText cct = new ChatComponentText(addColor(text));
 
@@ -378,7 +380,9 @@ public class ChatLib {
      * @param action the action to perform
      * @param value  the value to perform the action with
      * @return the chat component created
+     * @deprecated use {@link TextComponent#setClickAction(String)} and {@link TextComponent#setClickValue(String)}
      */
+    @Deprecated
     public static IChatComponent clickable(String text, String action, String value) {
         return clickable(text, action, value, null);
     }
@@ -389,7 +393,9 @@ public class ChatLib {
      * @param text  the text to show in the message
      * @param hover the text to show when hovered over
      * @return the chat component created
+     * @deprecated use {@link TextComponent#setHoverAction(String)} and {@link TextComponent#setHoverValue(String)}
      */
+    @Deprecated
     public static IChatComponent hover(String text, String hover) {
         ChatComponentText cct = new ChatComponentText(addColor(text));
 
