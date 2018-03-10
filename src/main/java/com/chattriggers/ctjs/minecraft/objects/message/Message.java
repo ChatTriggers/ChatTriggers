@@ -12,7 +12,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * Used to create a Message object to be sent to the Client's chat.<br>
@@ -69,24 +69,17 @@ public class Message {
      * @return the message for method chaining
      */
     @Getter
+    @Setter
     private boolean formatted;
 
     public Message(Object... messages) {
-        this.messageParts = new ArrayList<>();
-
         this.chatLineId = -1;
         this.recursive = false;
         this.formatted = true;
 
-        Collections.addAll(this.messageParts, messages);
-        parseMessages(messages);
-    }
-
-    public Message setFormatted(boolean formatted) {
-        this.formatted = formatted;
-        parseMessages(this.messageParts);
-
-        return this;
+        this.messageParts = new ArrayList<>();
+        this.messageParts.addAll(Arrays.asList(messages));
+        System.out.println(this.messageParts);
     }
 
     /**
@@ -98,7 +91,6 @@ public class Message {
      */
     public Message setMessagePart(int part, Object message) {
         this.messageParts.set(part, message);
-        parseMessages(this.messageParts);
 
         return this;
     }
@@ -129,6 +121,8 @@ public class Message {
      * Outputs the message into the client's chat.
      */
     public void chat() {
+        parseMessages();
+
         if (this.chatLineId != -1) {
             Client.getChatGUI().printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId);
             return;
@@ -142,10 +136,10 @@ public class Message {
     }
 
     // helper method to parse chat component parts
-    private void parseMessages(Object... messages) {
+    private void parseMessages() {
         this.chatMessage = new ChatComponentText("");
 
-        for (Object message : messages) {
+        for (Object message : this.messageParts) {
             if (message instanceof String) {
                 String toAdd = ((String) message);
 
