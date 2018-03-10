@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class GuiConfig extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        GlStateManager.pushMatrix();
+
         if (!this.isOpen) {
             this.isOpen = true;
             for (ConfigOption configOption : this.configOptions)
@@ -38,6 +41,8 @@ public class GuiConfig extends GuiScreen {
 
         CTJS.getInstance().getIcon().setY(Renderer.screen.getHeight() - 64);
         CTJS.getInstance().getIcon().draw();
+
+        GlStateManager.popMatrix();
     }
 
     @Override

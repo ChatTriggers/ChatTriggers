@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
 import com.chattriggers.ctjs.modules.Module;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -35,6 +36,8 @@ public class ModulesGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GlStateManager.pushMatrix();
+
         this.maxScroll = this.modules.size() * 110 + 10 - Renderer.screen.getHeight();
 
         drawBackground(0);
@@ -57,6 +60,8 @@ public class ModulesGui extends GuiScreen {
             module.draw();
             module.checkHover(mouseX, mouseY);
         }
+
+        GlStateManager.popMatrix();
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
 import com.chattriggers.ctjs.modules.Module;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -68,6 +69,8 @@ public class ModuleGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GlStateManager.pushMatrix();
+
         drawBackground(0);
 
         // scrollbar
@@ -116,6 +119,8 @@ public class ModuleGui extends GuiScreen {
         drawJump();
 
         updateScaling(mouseX, mouseY, fileOffset);
+
+        GlStateManager.popMatrix();
     }
 
     private int drawFile(Map.Entry<String, List<String>> file, int fileOffset) {
