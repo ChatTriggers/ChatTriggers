@@ -26,7 +26,7 @@ var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.display.Dis
 var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler");
 var Gui = Java.type("com.chattriggers.ctjs.minecraft.objects.gui.Gui");
 var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Message");
-var ChatComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.ChatComponent");
+var TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.TextComponent");
 var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
 
