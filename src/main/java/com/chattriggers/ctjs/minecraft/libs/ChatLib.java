@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
-import com.chattriggers.ctjs.minecraft.objects.message.ChatComponent;
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
@@ -92,7 +92,7 @@ public class ChatLib {
         message.chat();
     }
 
-    public static void chat(ChatComponent component) {
+    public static void chat(TextComponent component) {
         new Message(component).chat();
     }
 

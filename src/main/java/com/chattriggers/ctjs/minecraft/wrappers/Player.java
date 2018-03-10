@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import com.chattriggers.ctjs.minecraft.objects.message.ChatComponent;
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Inventory;
@@ -348,17 +348,17 @@ public class Player {
      * i.e. the name shown in tab list and in the player's nametag.
      * @return the display name
      */
-    public static ChatComponent getDisplayName() {
-        return new ChatComponent(getPlayerName(getPlayerInfo()));
+    public static TextComponent getDisplayName() {
+        return new TextComponent(getPlayerName(getPlayerInfo()));
     }
 
     /**
      * Sets the name for this player shown in tab list
      *
-     * @param chatComponent the new name to display
+     * @param textComponent the new name to display
      */
-    public static void setTabDisplayName(ChatComponent chatComponent) {
-        getPlayerInfo().setDisplayName(chatComponent.getChatComponentText());
+    public static void setTabDisplayName(TextComponent textComponent) {
+        getPlayerInfo().setDisplayName(textComponent.getChatComponentText());
     }
 
     private static String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn)
