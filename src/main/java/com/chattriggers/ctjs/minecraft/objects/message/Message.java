@@ -123,6 +123,8 @@ public class Message {
     public void chat() {
         parseMessages();
 
+        if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.getFormattedText())) return;
+
         if (this.chatLineId != -1) {
             Client.getChatGUI().printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId);
             return;
@@ -154,4 +156,6 @@ public class Message {
             }
         }
     }
+
+
 }
