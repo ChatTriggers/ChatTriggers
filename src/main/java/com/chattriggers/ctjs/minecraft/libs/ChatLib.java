@@ -37,6 +37,7 @@ public class ChatLib {
      */
     @Deprecated
     public static void chat(String message, boolean recursive) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.chat(String, boolean)");
         if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(addColor(message));
@@ -55,10 +56,7 @@ public class ChatLib {
      * @param text the message to be printed
      */
     public static void chat(String text) {
-        if (!isPlayer("[CHAT]: " + text)) return;
-
-        ChatComponentText cct = new ChatComponentText(addColor(text));
-        Player.getPlayer().addChatMessage(cct);
+        new Message(text).chat();
     }
 
     /**
@@ -70,6 +68,7 @@ public class ChatLib {
      */
     @Deprecated
     public static void chat(Message message, boolean recursive) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.chat(Message, boolean)");
         if (message.getChatLineId() != -1) {
             Client.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
             return;
@@ -107,6 +106,7 @@ public class ChatLib {
      */
     @Deprecated
     public static void chat(String message, int chatLineID) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.chat(String, int)");
         if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(addColor(message));
@@ -121,6 +121,7 @@ public class ChatLib {
      */
     @Deprecated
     public static void raw(String message) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.raw(String)");
         raw(message, false);
     }
 
@@ -133,6 +134,7 @@ public class ChatLib {
      */
     @Deprecated
     public static void raw(String message, Boolean recursive) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.raw(String, Boolean)");
         if (!isPlayer("[CHAT]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(message);
@@ -154,6 +156,7 @@ public class ChatLib {
      */
     @Deprecated
     public static void raw(String message, int chatLineID) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.raw(String, int)");
         if (!isPlayer("[RAW]: " + message)) return;
 
         ChatComponentText cct = new ChatComponentText(message);
@@ -358,6 +361,7 @@ public class ChatLib {
      */
     @Deprecated
     public static IChatComponent clickable(String text, String action, String value, String hoverText) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.clickable(String, String, String, String)");
         ChatComponentText cct = new ChatComponentText(addColor(text));
 
         cct.setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(
@@ -384,6 +388,7 @@ public class ChatLib {
      */
     @Deprecated
     public static IChatComponent clickable(String text, String action, String value) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.clickable(String, String, String)");
         return clickable(text, action, value, null);
     }
 
@@ -397,6 +402,7 @@ public class ChatLib {
      */
     @Deprecated
     public static IChatComponent hover(String text, String hover) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.hover(String, String)");
         ChatComponentText cct = new ChatComponentText(addColor(text));
 
         cct.setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(
@@ -432,15 +438,6 @@ public class ChatLib {
         return getChatMessage(event, false);
     }
 
-    private Boolean isPlayer(String out) {
-        if (Player.getPlayer() == null) {
-            CTJS.getInstance().getConsole().out.println(out);
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * Replaces the easier to type '&amp;' color codes with proper color codes in a string.
      *
@@ -452,5 +449,15 @@ public class ChatLib {
             message = "null";
 
         return message.replaceAll("(?:(?<!\\\\))&(?![^0-9a-fklmnor]|$)", "\u00a7");
+    }
+
+    // helper method to make sure player exists before putting something in chat
+    public Boolean isPlayer(String out) {
+        if (Player.getPlayer() == null) {
+            CTJS.getInstance().getConsole().out.println(out);
+            return false;
+        }
+
+        return true;
     }
 }

@@ -133,6 +133,10 @@ public class Console {
         printStackTrace(error);
     }
 
+    public void printDeprecatedWarning(String method) {
+        out.println("WARNING: Use of deprecated method " + method);
+    }
+
     public void showConsole(boolean show) {
         this.frame.setVisible(show);
 
