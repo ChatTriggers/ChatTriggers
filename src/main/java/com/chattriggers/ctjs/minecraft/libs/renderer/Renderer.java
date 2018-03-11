@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.libs.renderer;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -165,6 +166,16 @@ public class Renderer {
         return new int[]{red, green, blue};
     }
 
+    /**
+     * Simple method to draw a rectangle on the Client's overlay.<br>
+     * For more rectangle options, use {@link Rectangle}
+     *
+     * @param color the color
+     * @param x the x position
+     * @param y the y position
+     * @param width the width
+     * @param height the height
+     */
     public static void drawRect(int color, float x, float y, float width, float height) {
         Rectangle.drawRect(color, x, y, width, height);
 
@@ -172,6 +183,14 @@ public class Renderer {
         GlStateManager.pushMatrix();
     }
 
+    /**
+     * Simple method to draw a string to the Client's overlay.<br>
+     * For more text options, use {@link Text}
+     *
+     * @param text the string
+     * @param x the x position
+     * @param y the y position
+     */
     public static void drawString(String text, float x, float y) {
         getFontRenderer().drawString(text, x, y, 0xffffffff, false);
 
@@ -179,6 +198,14 @@ public class Renderer {
         GlStateManager.pushMatrix();
     }
 
+    /**
+     * Simple method to draw a string with a drop shadow to the Client's overlay.<br>
+     * For more text options, use {@link Text}
+     *
+     * @param text the string
+     * @param x the x position
+     * @param y the y position
+     */
     public static void drawStringWithShadow(String text, float x, float y) {
         getFontRenderer().drawString(text, x, y, 0xffffffff, true);
 
@@ -189,27 +216,31 @@ public class Renderer {
     /**
      * Render the player model on to the screen
      *
-     * @param posX   the x position on the screen
-     * @param posY   the y position on the screen
-     * @param scale  how much to scale the entity by
+     * @param player the player to render
+     * @param x   the x position on the screen
+     * @param y   the y position on the screen
      * @param rotate whether or not the drawn player should rotate
      */
-    public static void drawPlayerOnScreen(int posX, int posY, int scale, boolean rotate) {
+    public static void drawPlayer(Object player, int x, int y, boolean rotate) {
         float mouseX = -30;
         float mouseY = 0;
+
         EntityLivingBase ent = Player.getPlayer();
+        if (player instanceof PlayerMP)
+            ent = ((PlayerMP) player).getPlayer();
 
         GlStateManager.enableColorMaterial();
-        GlStateManager.translate((float) posX, (float) posY, 50.0F);
-        GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
-        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+        RenderHelper.enableStandardItemLighting();
+
         float f = ent.renderYawOffset;
         float f1 = ent.rotationYaw;
         float f2 = ent.rotationPitch;
         float f3 = ent.prevRotationYawHead;
         float f4 = ent.rotationYawHead;
+
+        GlStateManager.translate((float) x, (float) y, 50.0F);
+        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
         GlStateManager.rotate(-45.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(-((float) Math.atan((double) (mouseY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
         if (!rotate) {
@@ -220,16 +251,19 @@ public class Renderer {
             ent.prevRotationYawHead = ent.rotationYaw;
         }
         GlStateManager.translate(0.0F, 0.0F, 0.0F);
+
         RenderManager rendermanager = Client.getMinecraft().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
         rendermanager.renderEntityWithPosYaw(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
         rendermanager.setRenderShadow(true);
+
         ent.renderYawOffset = f;
         ent.rotationYaw = f1;
         ent.rotationPitch = f2;
         ent.prevRotationYawHead = f3;
         ent.rotationYawHead = f4;
+
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
@@ -251,16 +285,16 @@ public class Renderer {
     }
 
     /**
-     * Scale by scale.
+     * Scales a drawn overlay object using GlStateManager.
      *
      * @param scale the scale
      */
     public void scale(float scale) {
-        GlStateManager.scale(scale, scale, 1);
+        scale(scale, scale);
     }
 
     /**
-     * Scale by scaleX and scaleY.
+     * Scales a drawn overlay object disproportionally using GlStateManager.
      *
      * @param scaleX the x scale
      * @param scaleY the y scale
@@ -270,12 +304,41 @@ public class Renderer {
     }
 
     /**
-     * Rotate by angle.
+     * Rotate a drawn overlay object using GlStateManager.
      *
      * @param angle the angle
      */
     public void rotate(float angle) {
         GlStateManager.rotate(angle, 0, 0, 1);
+    }
+
+    /**
+     * Shifts the color of a drawn overlay object using GlStateManager.
+     *
+     * @param red the red value
+     * @param green the green value
+     * @param blue the blue value
+     * @param alpha the alpha value
+     */
+    public void colorize(int red, int green, int blue, int alpha) {
+        GlStateManager.color(
+                MathLib.clamp(red, 0, 255),
+                MathLib.clamp(green, 0, 255),
+                MathLib.clamp(blue, 0, 255),
+                MathLib.clamp(alpha, 0, 255)
+        );
+    }
+
+    /**
+     * Shifts the color of a drawn overlay object using GlStateManager.<br>
+     * This method defaults alpha to 255.
+     *
+     * @param red the red value
+     * @param green the green value
+     * @param blue the blue value
+     */
+    public void colorize(int red, int green, int blue) {
+        colorize(red, green, blue, 255);
     }
 
     /**

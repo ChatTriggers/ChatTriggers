@@ -266,7 +266,7 @@ public class Rectangle {
     }
 
     // helper method to draw a rectangle
-    static void drawRect(int color, float x, float y, float width, float height) {
+    public static void drawRect(int color, float x, float y, float width, float height) {
         float x2 = x + width;
         float y2 = y + height;
 
