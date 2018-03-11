@@ -244,6 +244,9 @@ public class Rectangle {
         outline();
         drawRect(this.color, this.x, this.y, this.width, this.height);
 
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+
         return this;
     }
 
@@ -300,8 +303,5 @@ public class Rectangle {
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
-
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
     }
 }

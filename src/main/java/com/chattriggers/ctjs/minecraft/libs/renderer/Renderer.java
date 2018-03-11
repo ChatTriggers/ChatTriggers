@@ -167,14 +167,23 @@ public class Renderer {
 
     public static void drawRect(int color, float x, float y, float width, float height) {
         Rectangle.drawRect(color, x, y, width, height);
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
     }
 
     public static void drawString(String text, float x, float y) {
         getFontRenderer().drawString(text, x, y, 0xffffffff, false);
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
     }
 
     public static void drawStringWithShadow(String text, float x, float y) {
         getFontRenderer().drawString(text, x, y, 0xffffffff, true);
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
     }
 
     /**
@@ -191,7 +200,6 @@ public class Renderer {
         EntityLivingBase ent = Player.getPlayer();
 
         GlStateManager.enableColorMaterial();
-        GlStateManager.pushMatrix();
         GlStateManager.translate((float) posX, (float) posY, 50.0F);
         GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
@@ -222,12 +230,14 @@ public class Renderer {
         ent.rotationPitch = f2;
         ent.prevRotationYawHead = f3;
         ent.rotationYawHead = f4;
-        GlStateManager.popMatrix();
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
     }
 
     /**
