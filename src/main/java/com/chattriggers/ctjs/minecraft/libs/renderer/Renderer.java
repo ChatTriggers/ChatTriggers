@@ -142,6 +142,16 @@ public class Renderer {
     }
 
     /**
+     * Gets a determined rainbow color based on step with a default speed of 1.
+     *
+     * @param step time elapsed
+     * @return integer color
+     */
+    public int getRainbow(float step) {
+        return getRainbow(step, 1f);
+    }
+
+    /**
      * Gets a determined rainbow color array based on step and speed.
      *
      * @param step  time elapsed
@@ -155,14 +165,16 @@ public class Renderer {
         return new int[]{red, green, blue};
     }
 
-    /**
-     * Gets a determined rainbow color based on step with a default speed of 1.
-     *
-     * @param step time elapsed
-     * @return integer color
-     */
-    public int getRainbow(float step) {
-        return getRainbow(step, 1f);
+    public static void drawRect(int color, float x, float y, float width, float height) {
+        Rectangle.drawRect(color, x, y, width, height);
+    }
+
+    public static void drawString(String text, float x, float y) {
+        getFontRenderer().drawString(text, x, y, 0xffffffff, false);
+    }
+
+    public static void drawStringWithShadow(String text, float x, float y) {
+        getFontRenderer().drawString(text, x, y, 0xffffffff, true);
     }
 
     /**
