@@ -7,10 +7,7 @@ import io.sentry.context.Context;
 import io.sentry.event.Breadcrumb;
 import io.sentry.event.BreadcrumbBuilder;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public enum TriggerType {
     // client
@@ -32,14 +29,10 @@ public enum TriggerType {
     // misc
     COMMAND, OTHER;
 
-    private Comparator<OnTrigger> triggerComparator = (o1, o2) -> {
-        if (o1.priority.ordinal() > o2.priority.ordinal()) return -1;
-        else if (o2.priority.ordinal() > o1.priority.ordinal()) return 1;
+    private Comparator<OnTrigger> triggerComparator = (o1, o2)
+            -> Integer.compare(o2.priority.ordinal(), o1.priority.ordinal());
 
-        return 0;
-    };
-
-    private PriorityQueue<OnTrigger> triggers = new PriorityQueue<>(triggerComparator);
+    private TreeSet<OnTrigger> triggers = new TreeSet<>(triggerComparator);
 
     private ArrayList<OnTrigger> triggersRemove = new ArrayList<>();
 
@@ -56,7 +49,7 @@ public enum TriggerType {
         triggersRemove.add(trigger);
     }
 
-    public PriorityQueue<OnTrigger> getTriggers() {
+    public TreeSet<OnTrigger> getTriggers() {
         return triggers;
     }
 
@@ -81,7 +74,7 @@ public enum TriggerType {
         );
 
         while (!triggers.isEmpty()){
-            OnTrigger trigger = triggers.poll();
+            OnTrigger trigger = triggers.pollFirst();
             triggersCopy.add(trigger);
 
             // Check for removal of broken trigger before running
