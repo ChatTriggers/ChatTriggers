@@ -9,13 +9,13 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
 @Accessors(chain = true)
-public class ChatComponent {
+public class TextComponent {
     @Getter
     private IChatComponent chatComponentText;
 
     /**
      * -- GETTER --
-     * Gets the String text of the ChatComponent.
+     * Gets the String text of the TextComponent.
      *
      * @return the text
      */
@@ -33,7 +33,7 @@ public class ChatComponent {
 
     /**
      * -- GETTER --
-     * Gets the String clickAction of the ChatComponent.
+     * Gets the String clickAction of the TextComponent.
      *
      * @return the clickAction
      */
@@ -41,7 +41,7 @@ public class ChatComponent {
     private String clickAction = null;
     /**
      * -- GETTER --
-     * Gets the String clickValue of the ChatComponent.
+     * Gets the String clickValue of the TextComponent.
      *
      * @return the clickValue
      */
@@ -50,7 +50,7 @@ public class ChatComponent {
 
     /**
      * -- GETTER --
-     * Gets the String hoverAction of the ChatComponent. show_text by default.
+     * Gets the String hoverAction of the TextComponent. show_text by default.
      *
      * @return the hoverAction
      */
@@ -58,7 +58,7 @@ public class ChatComponent {
     private String hoverAction = "show_text";
     /**
      * -- GETTER --
-     * Gets the String hoverValue of the ChatComponent.
+     * Gets the String hoverValue of the TextComponent.
      *
      * @return the hoverValue
      */
@@ -66,17 +66,17 @@ public class ChatComponent {
     private String hoverValue = null;
 
     /**
-     * Creates a new ChatComponent to be used in {@link Message}
+     * Creates a new TextComponent to be used in {@link Message}
      * @param text the component text
      */
-    public ChatComponent(String text) {
+    public TextComponent(String text) {
         this.text = text;
         this.formatted = true;
 
         reInstance();
     }
 
-    public ChatComponent(IChatComponent chatComponent) {
+    public TextComponent(IChatComponent chatComponent) {
         this.chatComponentText = chatComponent;
     }
 
@@ -86,7 +86,7 @@ public class ChatComponent {
      * @param text the component text
      * @return the component for method chaining
      */
-    public ChatComponent setText(String text) {
+    public TextComponent setText(String text) {
         this.text = text;
         reInstance();
 
@@ -99,7 +99,7 @@ public class ChatComponent {
      * @param formatted if the component is formatted
      * @return the component for method chaining
      */
-    public ChatComponent setFormatted(boolean formatted) {
+    public TextComponent setFormatted(boolean formatted) {
         this.formatted = formatted;
         reInstance();
 
@@ -112,7 +112,7 @@ public class ChatComponent {
      * @param action the component click action
      * @return the component for method chaining
      */
-    public ChatComponent setClickAction(String action) {
+    public TextComponent setClickAction(String action) {
         this.clickAction = action;
         reInstanceClick();
 
@@ -125,7 +125,22 @@ public class ChatComponent {
      * @param value the component click value
      * @return the component for method chaining
      */
-    public ChatComponent setClickValue(String value) {
+    public TextComponent setClickValue(String value) {
+        this.clickValue = value;
+        reInstanceClick();
+
+        return this;
+    }
+
+    /**
+     * Sets the component's click action and value.
+     *
+     * @param action the component click action
+     * @param value the component click value
+     * @return the component for method chaining
+     */
+    public TextComponent setClick(String action, String value) {
+        this.clickAction = action;
         this.clickValue = value;
         reInstanceClick();
 
@@ -138,7 +153,7 @@ public class ChatComponent {
      * @param action the component hover action
      * @return the component for method chaining
      */
-    public ChatComponent setHoverAction(String action) {
+    public TextComponent setHoverAction(String action) {
         this.hoverAction = action;
         reInstanceHover();
 
@@ -151,7 +166,22 @@ public class ChatComponent {
      * @param value the component hover value
      * @return the component for method chaining
      */
-    public ChatComponent setHoverValue(String value) {
+    public TextComponent setHoverValue(String value) {
+        this.hoverValue = value;
+        reInstanceHover();
+
+        return this;
+    }
+
+    /**
+     * Sets the component's hover action and value.
+     *
+     * @param action the component hover action
+     * @param value the component hover value
+     * @return the component for method chaining
+     */
+    public TextComponent setHover(String action, String value) {
+        this.hoverAction = action;
         this.hoverValue = value;
         reInstanceHover();
 

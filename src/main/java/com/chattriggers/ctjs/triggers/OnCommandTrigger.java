@@ -67,6 +67,19 @@ public class OnCommandTrigger extends OnTrigger {
         return this;
     }
 
+    /**
+     * Adds a tab complete option
+     *
+     * @param option the option to add
+     * @return the trigger for additional modification
+     */
+    public OnCommandTrigger addTabCompleteOption(String option) {
+        this.command.addTabComplete(option);
+
+        return this;
+    }
+
+    // helper method to re instance the command
     private void reInstance() {
         for (Command command : CTJS.getInstance().getCommandHandler().getCommandList()) {
             if (command.getCommandName().equals(this.commandName)) {

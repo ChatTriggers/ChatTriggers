@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -185,11 +186,16 @@ public class Gui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        GlStateManager.pushMatrix();
+
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
         if (onDraw != null)
             onDraw.trigger(mouseX, mouseY, partialTicks);
+
+        GlStateManager.popMatrix();
     }
 
     @Override

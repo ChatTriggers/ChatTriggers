@@ -123,6 +123,8 @@ public class Message {
     public void chat() {
         parseMessages();
 
+        if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.getFormattedText())) return;
+
         if (this.chatLineId != -1) {
             Client.getChatGUI().printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId);
             return;
@@ -149,9 +151,11 @@ public class Message {
                 this.chatMessage.appendSibling(cct);
             } else if (message instanceof IChatComponent) {
                 this.chatMessage.appendSibling((IChatComponent) message);
-            } else if (message instanceof ChatComponent) {
-                this.chatMessage.appendSibling(((ChatComponent) message).getChatComponentText());
+            } else if (message instanceof TextComponent) {
+                this.chatMessage.appendSibling(((TextComponent) message).getChatComponentText());
             }
         }
     }
+
+
 }

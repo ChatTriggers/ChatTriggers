@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.experimental.UtilityClass;
@@ -20,6 +21,7 @@ public class WorldLib {
      */
     @Deprecated
     public static void playSound(String name, float volume, float pitch) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("WorldLib.playSound(String, float, float)");
         Player.getPlayer().playSound(name, volume, pitch);
     }
 
@@ -35,6 +37,7 @@ public class WorldLib {
      */
     @Deprecated
     public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
+        CTJS.getInstance().getConsole().printDeprecatedWarning("WorldLib.showTitle(String, String, int, int, int)");
         Client.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut);
         Client.getMinecraft().ingameGUI.displayTitle(null, ChatLib.addColor(subtitle), 0, 0, 0);
         Client.getMinecraft().ingameGUI.displayTitle(null, null, fadeIn, time, fadeOut);

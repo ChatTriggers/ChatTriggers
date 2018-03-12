@@ -16,6 +16,7 @@ var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
 var Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
+var Render = Renderer;
 var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
 var MathLib = Java.type("com.chattriggers.ctjs.minecraft.libs.MathLib");
 var XMLHttpRequest = Java.type("com.chattriggers.ctjs.minecraft.libs.XMLHttpRequest");
@@ -26,7 +27,7 @@ var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.display.Dis
 var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler");
 var Gui = Java.type("com.chattriggers.ctjs.minecraft.objects.gui.Gui");
 var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Message");
-var ChatComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.ChatComponent");
+var TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.TextComponent");
 var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
 

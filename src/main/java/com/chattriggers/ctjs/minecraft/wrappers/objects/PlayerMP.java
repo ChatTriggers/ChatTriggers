@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
-import com.chattriggers.ctjs.minecraft.objects.message.ChatComponent;
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -68,30 +68,30 @@ public class PlayerMP extends Entity {
      * i.e. the name shown in tab list and in the player's nametag.
      * @return the display name
      */
-    public ChatComponent getDisplayName() {
-        return new ChatComponent(getPlayerName(getPlayerInfo()));
+    public TextComponent getDisplayName() {
+        return new TextComponent(getPlayerName(getPlayerInfo()));
     }
 
     /**
      * Sets the name for this player shown in tab list
      *
-     * @param chatComponent the new name to display
+     * @param textComponent the new name to display
      */
-    public void setTabDisplayName(ChatComponent chatComponent) {
-        getPlayerInfo().setDisplayName(chatComponent.getChatComponentText());
+    public void setTabDisplayName(TextComponent textComponent) {
+        getPlayerInfo().setDisplayName(textComponent.getChatComponentText());
     }
 
     /**
      * Sets the name for this player shown above their head,
      * in their name tag
      *
-     * @param chatComponent the new name to display
+     * @param textComponent the new name to display
      */
-    public void setNametagName(ChatComponent chatComponent) {
+    public void setNametagName(TextComponent textComponent) {
         ReflectionHelper.setPrivateValue(
                 EntityPlayer.class,
                 player,
-                chatComponent.getChatComponentText().getFormattedText(),
+                textComponent.getChatComponentText().getFormattedText(),
                 "displayname"
         );
     }
