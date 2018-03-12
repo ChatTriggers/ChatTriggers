@@ -133,6 +133,21 @@ public class TextComponent {
     }
 
     /**
+     * Sets the component's click action and value.
+     *
+     * @param action the component click action
+     * @param value the component click value
+     * @return the component for method chaining
+     */
+    public TextComponent setClick(String action, String value) {
+        this.clickAction = action;
+        this.clickValue = value;
+        reInstanceClick();
+
+        return this;
+    }
+
+    /**
      * Sets the component's hover action (show_text by default).
      *
      * @param action the component hover action
@@ -152,6 +167,21 @@ public class TextComponent {
      * @return the component for method chaining
      */
     public TextComponent setHoverValue(String value) {
+        this.hoverValue = value;
+        reInstanceHover();
+
+        return this;
+    }
+
+    /**
+     * Sets the component's hover action and value.
+     *
+     * @param action the component hover action
+     * @param value the component hover value
+     * @return the component for method chaining
+     */
+    public TextComponent setHover(String action, String value) {
+        this.hoverAction = action;
         this.hoverValue = value;
         reInstanceHover();
 
