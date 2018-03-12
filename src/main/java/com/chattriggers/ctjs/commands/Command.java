@@ -28,6 +28,10 @@ public class Command extends CommandBase {
         this.usage = usage;
     }
 
+    public void addTabComplete(String option) {
+        this.tabComplete.add(option);
+    }
+
     public String getName() {
         return getCommandName();
     }
