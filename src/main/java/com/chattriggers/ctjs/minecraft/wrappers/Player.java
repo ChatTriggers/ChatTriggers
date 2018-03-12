@@ -366,7 +366,7 @@ public class Player {
         return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
     }
 
-    private static NetworkPlayerInfo getPlayerInfo() {
+    public static NetworkPlayerInfo getPlayerInfo() {
         return Client.getMinecraft().getNetHandler().getPlayerInfo(getPlayer().getUniqueID());
     }
 

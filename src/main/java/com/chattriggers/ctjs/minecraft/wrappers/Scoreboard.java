@@ -83,6 +83,18 @@ public class Scoreboard {
         return getLines().get(index);
     }
 
+    public static void setLine(int index, String line) {
+        try {
+            net.minecraft.scoreboard.Scoreboard scoreboard = World.getWorld().getScoreboard();
+
+            ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
+
+            Score score = scoreboard.getValueFromObjective(line, sidebarObjective);
+
+            score.setScorePoints(index);
+        } catch (Exception ignored) { }
+    }
+
     /**
      * Sets whether the scoreboard should be rendered
      *
