@@ -233,7 +233,6 @@ public class ModuleGui extends GuiScreen {
                         .replaceAll("(\\d+)", "&6$1&r")
                         .replace("TriggerRegister", "&cTriggerRegister&r")
                         .replace("ChatLib", "&cChatLib&r")
-                        .replace("WorldLib", "&cWorldLib&r")
                         .replace("Renderer", "&cRenderLib&r")
                         .replace("MathLib", "&cMathLib&r")
                         .replace("FileLib", "&cFileLib&r")

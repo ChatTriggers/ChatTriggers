@@ -48,9 +48,6 @@ var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity"
 // Misc
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 
-// Deprecated
-var WorldLib = Java.type("com.chattriggers.ctjs.minecraft.libs.WorldLib");
-
 /*End Built in Vars */
 
 
