@@ -3,6 +3,7 @@ package com.chattriggers.ctjs;
 import com.chattriggers.ctjs.commands.CTCommand;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.commands.CommandHandler;
+import com.chattriggers.ctjs.minecraft.libs.Tessellator;
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
@@ -72,6 +73,8 @@ public class CTJS {
     private ModuleManager moduleManager;
     @Getter
     private CPS cps;
+    @Getter
+    private Tessellator tessellator;
 
     private File configLocation;
     @Getter
@@ -85,6 +88,7 @@ public class CTJS {
         this.chatListener = new ChatListener();
         this.moduleManager = new ModuleManager();
         this.cps = new CPS();
+        this.tessellator = new Tessellator();
 
         registerListeners();
 
