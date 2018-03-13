@@ -179,7 +179,6 @@ public class CTCommand extends CommandBase {
         String msg;
         for (int i = 0; i < amount; i++) {
             msg = ChatLib.replaceFormatting(messages.get(messages.size() - amount + i));
-            System.out.println(msg);
             new Message(
                 new TextComponent(msg)
                     .setClick("run_command", "/ct copy " + msg)
