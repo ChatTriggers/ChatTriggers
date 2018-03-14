@@ -37,8 +37,7 @@ public class ChatLib {
     }
 
     /**
-     * Print a {@link Message} in chat (not recursive by default. See {@link #chat(Message, boolean)}
-     * to specify it being recursive.
+     * Print a {@link Message} in chat.
      *
      * @param message the message to be printed
      */
@@ -46,6 +45,11 @@ public class ChatLib {
         message.chat();
     }
 
+    /**
+     * Prints a {@link TextComponent} in chat.
+     * 
+     * @param component the component to be printed
+     */
     public static void chat(TextComponent component) {
         new Message(component).chat();
     }
