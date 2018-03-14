@@ -10,11 +10,13 @@ import net.minecraft.util.ResourceLocation;
 public class Tessellator {
     private net.minecraft.client.renderer.Tessellator tessellator;
     private WorldRenderer worldRenderer;
+    private boolean firstVertex;
 
 
     public Tessellator() {
         this.tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
-        worldRenderer = tessellator.getWorldRenderer();
+        this.worldRenderer = this.tessellator.getWorldRenderer();
+        this.firstVertex = true;
     }
 
     public Tessellator bindTexture(String texture, String domain) {
@@ -39,6 +41,7 @@ public class Tessellator {
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);
 
         this.worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION);
+        this.firstVertex = true;
 
         return this;
     }
@@ -48,12 +51,22 @@ public class Tessellator {
     }
 
     public Tessellator pos(float x, float y, float z) {
-        this.worldRenderer.pos(x, y, z).endVertex();
+        if (!this.firstVertex)
+            this.worldRenderer.endVertex();
+        this.worldRenderer.pos(x, y, z);
+        this.firstVertex = false;
+
+        return this;
+    }
+
+    public Tessellator tex(float u, float v) {
+        this.worldRenderer.tex(u, v);
 
         return this;
     }
 
     public void draw() {
+        this.worldRenderer.endVertex();
         this.tessellator.draw();
 
         GlStateManager.disableBlend();
