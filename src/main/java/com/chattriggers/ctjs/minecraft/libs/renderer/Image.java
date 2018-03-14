@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -225,7 +228,15 @@ public class Image {
         GlStateManager.translate(this.x, this.y, 100);
         GlStateManager.scale(this.scale, this.scale, 100);
 
-        Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, this.textureX, this.textureY, this.textureWidth, this.textureHeight);
+        float f = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(0,                 this.textureHeight, 0).tex( this.textureX * f,                       (this.textureY + this.textureHeight) * f).endVertex();
+        worldrenderer.pos(this.textureWidth,    this.textureHeight, 0).tex( (this.textureX + this.textureWidth) * f, (this.textureY + this.textureHeight) * f).endVertex();
+        worldrenderer.pos(this.textureWidth,    0,               0).tex( (this.textureX + this.textureWidth) * f, this.textureY * f)                       .endVertex();
+        worldrenderer.pos(0,                 0,               0).tex( this.textureX * f,                       this.textureY * f)                       .endVertex();
+        tessellator.draw();
 
         GlStateManager.disableBlend();
 
