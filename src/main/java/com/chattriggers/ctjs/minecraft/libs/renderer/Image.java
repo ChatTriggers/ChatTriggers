@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -218,15 +219,19 @@ public class Image {
 
         Client.getMinecraft().getTextureManager().bindTexture(rl);
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glTranslatef(this.x, this.y, 100);
-        GL11.glScalef(this.scale, this.scale, this.scale);
-        Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, this.textureX, this.textureY, this.textureWidth, this.textureHeight);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.enableBlend();
 
-        GL11.glPopMatrix();
-        GL11.glPushMatrix();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.translate(this.x, this.y, 100);
+        GlStateManager.scale(this.scale, this.scale, 100);
+
+        Client.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, this.textureX, this.textureY, this.textureWidth, this.textureHeight);
+
+        GlStateManager.disableBlend();
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+
 
         return this;
     }

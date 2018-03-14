@@ -88,9 +88,7 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
-        GlStateManager.pushMatrix();
         TriggerType.RENDER_WORLD.triggerAll();
-        GlStateManager.popMatrix();
     }
 
     @SubscribeEvent
