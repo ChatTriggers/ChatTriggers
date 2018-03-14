@@ -1,75 +1,64 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-import javax.vecmath.Vector3d;
-import java.util.ArrayList;
-
-@Accessors(chain = true)
 public class Tessellator {
-    @Getter
-    private ArrayList<Vector3d> vertexes;
-    @Getter
-    @Setter
-    private String resourceName = null;
-    @Getter
-    @Setter
-    private String resourceDomain;
-    @Getter
-    @Setter
-    private int drawMode;
-    @Getter
-    @Setter
-    private boolean inWorld;
+    private net.minecraft.client.renderer.Tessellator tessellator;
+    private WorldRenderer worldRenderer;
+
 
     public Tessellator() {
-        this.vertexes = new ArrayList<>();
-        this.resourceDomain = "ctjs.images";
-        this.drawMode = 7;
-        this.inWorld = true;
+        this.tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
+        worldRenderer = tessellator.getWorldRenderer();
     }
 
-    public Tessellator pos(float x, float y, float z) {
-        this.vertexes.add(new Vector3d(x, y, z));
+    public Tessellator bindTexture(String texture, String domain) {
+        ResourceLocation rl = new ResourceLocation(domain, texture);
+        Client.getMinecraft().getTextureManager().bindTexture(rl);
+
         return this;
     }
 
-    public void draw() {
-        if (resourceName == null) return;
+    public Tessellator bindTexture(String texture) {
+        return bindTexture(texture, "ctjs.images");
+    }
 
-        ResourceLocation rl = new ResourceLocation(this.resourceDomain, this.resourceName);
-        Client.getMinecraft().getTextureManager().bindTexture(rl);
-
-        net.minecraft.client.renderer.Tessellator tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+    public Tessellator begin(int drawMode) {
+        GlStateManager.pushMatrix();
 
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.disableTexture2D();
 
-        if (this.inWorld) {
-            RenderManager renderManager = Client.getMinecraft().getRenderManager();
-            GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);
-        }
+        RenderManager renderManager = Client.getMinecraft().getRenderManager();
+        GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);
 
-        worldrenderer.begin(this.drawMode, DefaultVertexFormats.POSITION);
-        for (Vector3d vertex : vertexes)
-            worldrenderer.pos(vertex.getX(), vertex.getY(), vertex.getZ()).endVertex();
-        tessellator.draw();
+        this.worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION);
 
+        return this;
+    }
+
+    public Tessellator begin() {
+        return begin(7);
+    }
+
+    public Tessellator pos(float x, float y, float z) {
+        this.worldRenderer.pos(x, y, z).endVertex();
+
+        return this;
+    }
+
+    public void draw() {
+        this.tessellator.draw();
+
+        GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
 
         GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
-
-        vertexes.clear();
     }
 }
