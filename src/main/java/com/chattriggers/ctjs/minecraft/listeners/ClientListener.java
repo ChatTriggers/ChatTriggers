@@ -7,7 +7,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
