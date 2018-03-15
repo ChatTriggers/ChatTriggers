@@ -71,8 +71,8 @@ public class CTCommand extends CommandBase {
                 "&c/ct console &7- &oOpens the ct console.\n" +
                 "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
                 "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
-                "&c/ct settings &7- &oChange ChatTrigger's settings" +
-                "&c/ct &7- &oDisplays this help dialog\n" +
+                "&c/ct settings &7- &oChange ChatTrigger's settings.\n" +
+                "&c/ct &7- &oDisplays this help dialog.\n" +
                 "&b&m" + ChatLib.getChatBreak("-");
     }
 
