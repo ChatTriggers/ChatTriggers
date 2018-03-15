@@ -6,12 +6,12 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class Tessellator {
     private net.minecraft.client.renderer.Tessellator tessellator;
     private WorldRenderer worldRenderer;
     private boolean firstVertex;
-
 
     public Tessellator() {
         this.tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
@@ -30,24 +30,27 @@ public class Tessellator {
         return bindTexture(texture, "ctjs.images");
     }
 
-    public Tessellator begin(int drawMode) {
+    public Tessellator begin(int drawMode, boolean textured) {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.disableTexture2D();
+        //GlStateManager.disableTexture2D();
+
+        // TODO: NEEDS OWN FUNC
+        GL11.glColor4f(1F, 1F, 1F, 1F);
 
         RenderManager renderManager = Client.getMinecraft().getRenderManager();
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);
 
-        this.worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION);
+        this.worldRenderer.begin(drawMode, textured ? DefaultVertexFormats.POSITION_TEX : DefaultVertexFormats.POSITION);
         this.firstVertex = true;
 
         return this;
     }
 
     public Tessellator begin() {
-        return begin(7);
+        return begin(7, false);
     }
 
     public Tessellator pos(float x, float y, float z) {
