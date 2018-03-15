@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.minecraft.libs.renderer;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -29,14 +28,14 @@ public class Image {
      * Gets the image x position
      *
      * @return The image x position
-     *
+     * <p>
      * -- SETTER --
      * Sets the image x position
-     *
      * @param x The new image x position
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private float x;
 
     /**
@@ -44,14 +43,14 @@ public class Image {
      * Gets the image y position
      *
      * @return The image y position
-     *
+     * <p>
      * -- SETTER --
      * Sets the image y position
-     *
      * @param y The new image y position
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private float y;
 
     /**
@@ -59,14 +58,14 @@ public class Image {
      * Gets the texture width
      *
      * @return The texture width
-     *
+     * <p>
      * -- SETTER --
      * Sets the texture width
-     *
      * @param textureWidth The new texture width
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private int textureWidth;
 
     /**
@@ -74,14 +73,14 @@ public class Image {
      * Gets the texture height
      *
      * @return The texture height
-     *
+     * <p>
      * -- SETTER --
      * Sets the texture height
-     *
      * @param textureHeight The new texture height
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private int textureHeight;
 
     /**
@@ -89,14 +88,14 @@ public class Image {
      * Gets the texture x location
      *
      * @return The texture x location
-     *
+     * <p>
      * -- SETTER --
      * Sets the texture x location
-     *
      * @param textureX The new texture x location
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private int textureX;
 
     /**
@@ -104,14 +103,14 @@ public class Image {
      * Gets the texture y location
      *
      * @return The texture y location
-     *
+     * <p>
      * -- SETTER --
      * Sets the texture y location
-     *
      * @param textureY The new texture y location
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private int textureY;
 
     /**
@@ -119,14 +118,14 @@ public class Image {
      * Gets the image scale
      *
      * @return The image scale
-     *
+     * <p>
      * -- SETTER --
      * Sets the image scale
-     *
      * @param scale The new image scale
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private float scale;
 
     /**
@@ -134,14 +133,14 @@ public class Image {
      * Gets the image resource name
      *
      * @return The image resource name
-     *
+     * <p>
      * -- SETTER --
      * Sets the image resource name
-     *
      * @param resourceName The new image resource name
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private String resourceName;
 
     /**
@@ -149,14 +148,14 @@ public class Image {
      * Gets the image resource domain
      *
      * @return The image resource domain
-     *
+     * <p>
      * -- SETTER --
      * Sets the image resource domain
-     *
      * @param resourceDomain The new image resource domain
      * @return The Image object to allow for method chaining
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private String resourceDomain;
 
     Image(String resourceName) {
@@ -168,7 +167,7 @@ public class Image {
         this.textureHeight = 256;
         this.textureX = 0;
         this.textureY = 0;
-        this.scale = 0;
+        this.scale = 1;
         this.resourceDomain = "ctjs.images";
     }
 
@@ -183,29 +182,20 @@ public class Image {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
 
+            File resourceFile = new File(CTJS.getInstance().getAssetsDir(), this.resourceName);
+            resourceFile.createNewFile();
+
             if (shouldResize) {
                 BufferedImage resized = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g = resized.createGraphics();
                 g.drawImage(image, 0, 0, 256, 256, null);
                 g.dispose();
-
-                File resourceFile = new File(CTJS.getInstance().getAssetsDir(), this.resourceName);
-
-                if (resourceFile.exists()) {
-                    resourceFile.delete();
-                }
-
-                resourceFile.createNewFile();
-
-                ImageIO.write(resized, "png", resourceFile);
-            } else {
-                File resourceFile = new File(CTJS.getInstance().getAssetsDir(), this.resourceName);
-                resourceFile.createNewFile();
-
-                ImageIO.write(image, "png", resourceFile);
+                image = resized;
             }
+
+            ImageIO.write(image, "png", resourceFile);
         } catch (IOException e) {
-            Console.getConsole().printStackTrace(e);
+            e.printStackTrace();
         }
 
         return this;
@@ -231,10 +221,10 @@ public class Image {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(0,                 this.textureHeight, 0).tex( this.textureX * f,                       (this.textureY + this.textureHeight) * f).endVertex();
-        worldrenderer.pos(this.textureWidth,    this.textureHeight, 0).tex( (this.textureX + this.textureWidth) * f, (this.textureY + this.textureHeight) * f).endVertex();
-        worldrenderer.pos(this.textureWidth,    0,               0).tex( (this.textureX + this.textureWidth) * f, this.textureY * f)                       .endVertex();
-        worldrenderer.pos(0,                 0,               0).tex( this.textureX * f,                       this.textureY * f)                       .endVertex();
+        worldrenderer.pos(0, this.textureHeight, 0).tex(this.textureX * f, (this.textureY + this.textureHeight) * f).endVertex();
+        worldrenderer.pos(this.textureWidth, this.textureHeight, 0).tex((this.textureX + this.textureWidth) * f, (this.textureY + this.textureHeight) * f).endVertex();
+        worldrenderer.pos(this.textureWidth, 0, 0).tex((this.textureX + this.textureWidth) * f, this.textureY * f).endVertex();
+        worldrenderer.pos(0, 0, 0).tex(this.textureX * f, this.textureY * f).endVertex();
         tessellator.draw();
 
         GlStateManager.disableBlend();
