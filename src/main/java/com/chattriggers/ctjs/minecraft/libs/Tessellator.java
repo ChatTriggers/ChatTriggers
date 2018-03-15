@@ -50,7 +50,7 @@ public class Tessellator {
     }
 
     public Tessellator begin() {
-        return begin(7, false);
+        return begin(GL11.GL_QUADS, true);
     }
 
     public Tessellator pos(float x, float y, float z) {
