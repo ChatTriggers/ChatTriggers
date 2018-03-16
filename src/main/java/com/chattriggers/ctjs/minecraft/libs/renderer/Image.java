@@ -172,6 +172,24 @@ public class Image {
     }
 
     /**
+     * Sets the texture location on the bound image.
+     *
+     * @param x The texture x position
+     * @param y The texture y position
+     * @param width The texture width
+     * @param height The texture height
+     * @return The Image object to allow for method chaining
+     */
+    public Image setTextureLocation(int x, int y, int width, int height) {
+        this.textureX = x;
+        this.textureY = y;
+        this.textureWidth = width;
+        this.textureHeight = height;
+
+        return this;
+    }
+
+    /**
      * Downloads an image to store at the resource name location.
      *
      * @param url          The url to download the image from
