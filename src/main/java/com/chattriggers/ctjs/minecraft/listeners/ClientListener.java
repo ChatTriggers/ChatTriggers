@@ -20,14 +20,10 @@ import java.util.HashMap;
 
 public class ClientListener {
     private int ticksPassed;
-    private KeyBinding guiKeyBind;
     private HashMap<Integer, Boolean> mouseState;
     private HashMap<Integer, Float[]> draggedState;
 
     public ClientListener() {
-        this.guiKeyBind = new KeyBinding("Key to open import gui", Keyboard.KEY_L, "CT Controls");
-        ClientRegistry.registerKeyBinding(this.guiKeyBind);
-
         this.ticksPassed = 0;
 
         this.mouseState = new HashMap<>();
@@ -138,13 +134,6 @@ public class ClientListener {
         // add to cps
         if (EventLib.getButton(event) == 0 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addLeftClicks();
         if (EventLib.getButton(event) == 1 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addRightClicks();
-    }
-
-    @SubscribeEvent
-    public void onKeyPress(InputEvent.KeyInputEvent e) {
-        if (guiKeyBind.isPressed()) {
-            CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
-        }
     }
 
     @SubscribeEvent
