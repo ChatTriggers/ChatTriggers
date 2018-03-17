@@ -68,6 +68,7 @@ public class CTCommand extends CommandBase {
                 "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
                 "&c/ct import [module] &7- &oImports a module.\n" +
                 "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
+                "&c/ct modules &7- &oOpens the modules gui\n" +
                 "&c/ct console &7- &oOpens the ct console.\n" +
                 "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
                 "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +

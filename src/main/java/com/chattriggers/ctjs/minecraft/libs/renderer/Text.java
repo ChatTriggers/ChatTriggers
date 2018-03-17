@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer;
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -49,9 +50,19 @@ public class Text {
      *
      * @see Renderer#color(int, int, int, int)
      * @param color The new color
+     * @return The Text object for method chaining
      */
     @Getter @Setter
     private int color;
+
+    /**
+     * -- GETTER --
+     * Gets if the text is formatted (true by default)
+     *
+     * @return True if the text is formatted
+     */
+    @Getter
+    private boolean formatted;
 
     /**
      * -- GETTER --
@@ -155,6 +166,8 @@ public class Text {
     Text(String text, float x, float y) {
         this.string = text;
         this.lines = new ArrayList<>(Collections.singleton(this.string));
+        this.formatted = true;
+        updateFormatting();
         this.x = x;
         this.y = y;
 
@@ -164,6 +177,26 @@ public class Text {
         this.scale = 1;
         this.shadow = false;
         this.align = "left";
+    }
+
+    private void updateFormatting() {
+        if (this.formatted)
+            this.string = ChatLib.addColor(this.string);
+        else
+            this.string = ChatLib.replaceFormatting(this.string);
+    }
+
+    /**
+     * Sets if the text is formatted (true by default)
+     *
+     * @param formatted if the text is formatted
+     * @return the Text object for method chaining
+     */
+    public Text setFormatted(boolean formatted) {
+        this.formatted = formatted;
+        updateFormatting();
+        
+        return this;
     }
 
     /**

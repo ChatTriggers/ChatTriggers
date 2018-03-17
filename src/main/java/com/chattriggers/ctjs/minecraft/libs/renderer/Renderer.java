@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer;
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
@@ -192,7 +193,7 @@ public class Renderer {
      * @param y the y position
      */
     public static void drawString(String text, float x, float y) {
-        getFontRenderer().drawString(text, x, y, 0xffffffff, false);
+        getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff, false);
 
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
@@ -207,7 +208,7 @@ public class Renderer {
      * @param y the y position
      */
     public static void drawStringWithShadow(String text, float x, float y) {
-        getFontRenderer().drawString(text, x, y, 0xffffffff, true);
+        getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff, true);
 
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
