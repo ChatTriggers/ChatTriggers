@@ -14,5 +14,5 @@ script:
 - "./gradlew userdocs -q"
 after_success:
 - cd .utility/
-- npm run deploy-docs
-- npm run deploy-jars
+#- npm run deploy-docs
+#- npm run deploy-jars
