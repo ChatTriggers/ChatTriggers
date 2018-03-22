@@ -161,15 +161,17 @@ public class JSScriptLoader extends ScriptLoader {
 
     public boolean downloadModule(String name, boolean existCheck) {
         if (existCheck) {
+            File currentMetadata = new File(modulesDir, "currMetadata.json");
             try {
                 FileUtils.copyURLToFile(new URL("https://chattriggers.com/downloads/metadata/" + name),
-                        new File(modulesDir, "currMetadata.json"));
-            } catch (IOException e) {
+                        currentMetadata);
+            } catch (IOException exception) {
+                Console.getConsole().printStackTrace(exception);
                 ChatLib.chat("&cModule not found!");
                 return false;
             }
 
-            new File(modulesDir, "currMetadata.json").delete();
+            currentMetadata.delete();
         }
 
         try {
@@ -183,8 +185,8 @@ public class JSScriptLoader extends ScriptLoader {
             unzip(downloadZip.getAbsolutePath(), modulesDir.getAbsolutePath());
 
             downloadZip.delete();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            Console.getConsole().printStackTrace(exception);
             return false;
         }
 
