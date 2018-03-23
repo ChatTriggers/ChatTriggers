@@ -32,7 +32,7 @@ public enum TriggerType {
     private Comparator<OnTrigger> triggerComparator = (o1, o2)
             -> Integer.compare(o2.priority.ordinal(), o1.priority.ordinal());
 
-    private TreeSet<OnTrigger> triggers = new TreeSet<>(triggerComparator);
+    private PriorityQueue<OnTrigger> triggers = new PriorityQueue<>(triggerComparator);
 
     private ArrayList<OnTrigger> triggersRemove = new ArrayList<>();
 
@@ -49,7 +49,7 @@ public enum TriggerType {
         triggersRemove.add(trigger);
     }
 
-    public TreeSet<OnTrigger> getTriggers() {
+    public PriorityQueue<OnTrigger> getTriggers() {
         return triggers;
     }
 
@@ -73,8 +73,8 @@ public enum TriggerType {
                 .build()
         );
 
-        while (!triggers.isEmpty()){
-            OnTrigger trigger = triggers.pollFirst();
+        while (!triggers.isEmpty()) {
+            OnTrigger trigger = triggers.poll();
             triggersCopy.add(trigger);
 
             // Check for removal of broken trigger before running
