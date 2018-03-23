@@ -44,7 +44,6 @@ import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.util.List;
 
 @Mod(modid = Reference.MODID,
@@ -200,16 +199,11 @@ public class CTJS {
 
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             try (InputStream caInput = instance.getClass().getResourceAsStream("/chattriggerscom.der")) {
-                System.out.println(caInput);
                 Certificate crt = cf.generateCertificate(caInput);
-                System.out.println("Added Cert for " + ((X509Certificate) crt)
-                        .getSubjectDN());
-
                 keyStore.setCertificateEntry("chattriggerscom", crt);
             }
 
-            TrustManagerFactory tmf = TrustManagerFactory
-                    .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(keyStore);
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), null);
