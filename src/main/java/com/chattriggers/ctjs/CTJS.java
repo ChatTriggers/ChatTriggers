@@ -199,10 +199,8 @@ public class CTJS {
             keyStore.load(Files.newInputStream(ksPath), "changeit".toCharArray());
 
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            try (InputStream caInput = new BufferedInputStream(
-                    // this files is shipped with the application
-                    instance.getClass().getResourceAsStream("chattriggerscom.der")
-            )) {
+            try (InputStream caInput = instance.getClass().getResourceAsStream("/chattriggerscom.der")) {
+                System.out.println(caInput);
                 Certificate crt = cf.generateCertificate(caInput);
                 System.out.println("Added Cert for " + ((X509Certificate) crt)
                         .getSubjectDN());
@@ -217,6 +215,7 @@ public class CTJS {
             sslContext.init(null, tmf.getTrustManagers(), null);
             SSLContext.setDefault(sslContext);
         } catch (Exception exception) {
+            exception.printStackTrace();
             Console.getConsole().printStackTrace(exception);
         }
     }

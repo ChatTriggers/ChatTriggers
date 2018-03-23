@@ -168,6 +168,7 @@ public class JSScriptLoader extends ScriptLoader {
             } catch (IOException exception) {
                 Console.getConsole().printStackTrace(exception);
                 ChatLib.chat("&cModule not found!");
+                currentMetadata.delete();
                 return false;
             }
 
