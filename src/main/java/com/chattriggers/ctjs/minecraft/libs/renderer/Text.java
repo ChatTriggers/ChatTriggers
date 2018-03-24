@@ -44,15 +44,8 @@ public class Text {
      * Gets the text color
      *
      * @return A color integer
-     *
-     * -- SETTER --
-     * Sets the text color
-     *
-     * @see Renderer#color(int, int, int, int)
-     * @param color The new color
-     * @return The Text object for method chaining
      */
-    @Getter @Setter
+    @Getter
     private int color;
 
     /**
@@ -200,6 +193,19 @@ public class Text {
     }
 
     /**
+     * Sets the text color
+     *
+     * @see Renderer#color(int, int, int, int)
+     * @param color The new color
+     * @return The Text object for method chaining
+     */
+    public Text setColor(int color) {
+        this.color = fixAlpha(color);
+
+        return this;
+    }
+
+    /**
      * Sets the max width for line wrapping
      *
      * @param width The new max width
@@ -276,6 +282,14 @@ public class Text {
         GlStateManager.pushMatrix();
 
         return this;
+    }
+
+    // helper method to fix alpha
+    private int fixAlpha(int color) {
+        int alpha = color >> 24 & 255;
+        if (alpha < 10)
+            return Renderer.color(color >> 16 & 255, color >> 8 & 255, color & 255, 10);
+        return color;
     }
 
     // helper method to get the x alignment
