@@ -1,12 +1,14 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
-import net.minecraft.scoreboard.Score;
+import lombok.Getter;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraftforge.client.GuiIngameForge;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A helper which reads the scoreboard.
@@ -15,7 +17,7 @@ import java.util.Collection;
  */
 public class Scoreboard {
     private static boolean needsUpdate = true;
-    private static ArrayList<String> scoreboardNames;
+    private static List<Score> scoreboardNames;
     private static String scoreboardTitle;
 
     static {
@@ -63,12 +65,13 @@ public class Scoreboard {
      *
      * @return the list of lines
      */
-    public static ArrayList<String> getLines() {
+    public static List<Score> getLines() {
         // the array will only be updated upon request
         if (needsUpdate) {
             updateNames();
             needsUpdate = false;
         }
+
         return scoreboardNames;
     }
 
@@ -77,21 +80,52 @@ public class Scoreboard {
      * Equivalent to Scoreboard.getLines().get(index)
      *
      * @param index the line index
-     * @return the string at the index
+     * @return the score object at the index
      */
-    public static String getLine(int index) {
+    public static Score getLineByIndex(int index) {
         return getLines().get(index);
     }
 
-    public static void setLine(int index, String line) {
+    /**
+     * Gets a list of lines that have a certain score,
+     * i.e. the numbers shown on the right
+     *
+     * @param score the score to look for
+     * @return a list of actual score objects
+     */
+    public static List<Score> getLinesByScore(int score) {
+        return getLines()
+                .stream()
+                .filter(theScore -> theScore.getPoints() == score)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Sets a line in the scoreboard to the specified name and score.
+     *
+     * @param score the score value for this item
+     * @param line the string to display on said line
+     * @param override whether or not to remove old lines with the same score
+     */
+    public static void setLine(int score, String line, boolean override) {
         try {
             net.minecraft.scoreboard.Scoreboard scoreboard = World.getWorld().getScoreboard();
 
             ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
 
-            Score score = scoreboard.getValueFromObjective(line, sidebarObjective);
+            Collection<net.minecraft.scoreboard.Score> scores = scoreboard.getSortedScores(sidebarObjective);
 
-            score.setScorePoints(index);
+            if (override) {
+                for (net.minecraft.scoreboard.Score theScore : scores) {
+                    if (theScore.getScorePoints() == score) {
+                        scoreboard.removeObjectiveFromEntity(theScore.getPlayerName(), sidebarObjective);
+                    }
+                }
+            }
+
+            net.minecraft.scoreboard.Score theScore = scoreboard.getValueFromObjective(line, sidebarObjective);
+
+            theScore.setScorePoints(score);
         } catch (Exception ignored) { }
     }
 
@@ -114,34 +148,54 @@ public class Scoreboard {
     }
 
     private static void updateNames() {
-        // All the magic happens here...
-
-        // Clear the array
         if (!scoreboardNames.isEmpty()) {
             scoreboardNames.clear();
         }
         scoreboardTitle = "";
 
         try {
-            // Get the scoreboard.
             net.minecraft.scoreboard.Scoreboard scoreboard = World.getWorld().getScoreboard();
-            // Get the right objective. I think the 1 stands for the sidebar objective but I've just copied it from the rendering code.
-            ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
-            // only update if there actually is something to update
-            scoreboardTitle = sidebarObjective.getDisplayName();
-            // Get a collection of all scores
-            Collection<Score> scores = scoreboard.getSortedScores(sidebarObjective);
-            // Process all scores
-            for (Score score : scores) {
-                // Get the team for the fake player
-                ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
-                // Add the nm to the array. formatPlayerName() is used to add prefix and suffix which are used to circumvent the 16 char limit for the nm.
-                scoreboardNames.add(ScorePlayerTeam.formatPlayerName(team, score.getPlayerName()));
 
-            }
-        } catch (Exception e) {
-            // it is possible that there is a null pointer exception thrown when there is no scoreboard
-            // just ignore this
+            ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
+
+            scoreboardTitle = sidebarObjective.getDisplayName();
+
+            Collection<net.minecraft.scoreboard.Score> scores = scoreboard.getSortedScores(sidebarObjective);
+
+            scoreboardNames = scores
+                    .stream()
+                    .map(Score::new)
+                    .collect(Collectors.toList());
+        } catch (Exception ignored) { }
+    }
+
+    public static class Score {
+        @Getter
+        private net.minecraft.scoreboard.Score score;
+
+        private Score(net.minecraft.scoreboard.Score score) {
+            this.score = score;
+        }
+
+        /**
+         * Gets the score point value for this score,
+         * i.e. the number on the right of the board
+         *
+         * @return the actual point value
+         */
+        public int getPoints() {
+            return score.getScorePoints();
+        }
+
+        /**
+         * Gets the display string of this score
+         *
+         * @return the display name
+         */
+        public String getName() {
+            ScorePlayerTeam team = World.getWorld().getScoreboard().getPlayersTeam(score.getPlayerName());
+
+            return ScorePlayerTeam.formatPlayerName(team, score.getPlayerName());
         }
     }
 }
