@@ -170,6 +170,19 @@ public class TriggerRegister {
     }
 
     /**
+     * Registers a new render world trigger.<br>
+     * Runs when the world is getting drawn every frame.<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerRenderWorld(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.RENDER_WORLD);
+    }
+
+    /**
      * Registers a new render overlay trigger.<br>
      * Runs when the overlay is getting drawn every frame.<br>
      * Available modifications:<br>

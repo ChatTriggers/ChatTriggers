@@ -202,7 +202,7 @@ public class JSScriptLoader extends ScriptLoader {
     @Override
     public ArrayList<String> getIllegalLines() {
         return new ArrayList<>(Arrays.asList(
-                "module.export", "load(\"http"
+                "module.export", " load(\"http"
         ));
     }
 

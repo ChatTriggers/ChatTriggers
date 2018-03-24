@@ -47,13 +47,13 @@ public class ModulesGui extends GuiScreen {
         if (scrollHeight < 20) scrollHeight = 20;
         if (scrollHeight < Renderer.screen.getHeight()) {
             int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.screen.getHeight() - scrollHeight - 10);
-            Renderer.rectangle(
+            Renderer.drawRect(
                     0xa0000000,
                     Renderer.screen.getWidth() - 5,
                     scrollY,
                     5,
                     scrollHeight
-            ).draw();
+            );
         }
 
         for (GuiModule module : this.modules) {
@@ -147,7 +147,7 @@ public class ModulesGui extends GuiScreen {
             int height = 105;
 
             // background
-            Renderer.rectangle(0x80000000, x, y, width, height).draw();
+            Renderer.drawRect(0x80000000, x, y, width, height);
 
             // name
             Renderer.text(name, x + 2, y + 2)
@@ -161,7 +161,7 @@ public class ModulesGui extends GuiScreen {
             }
 
             // line break
-            Renderer.rectangle(0xa0000000, x + 2, y+12, width - 4, 2).draw();
+            Renderer.drawRect(0xa0000000, x + 2, y+12, width - 4, 2);
 
             // description
             String description = (this.module.getMetadata().getDescription() == null)

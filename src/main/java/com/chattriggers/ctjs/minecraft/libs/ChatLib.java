@@ -27,29 +27,6 @@ import java.util.List;
 @UtilityClass
 @SideOnly(Side.CLIENT)
 public class ChatLib {
-
-    /**
-     * Adds as many chat message to chat as passed.
-     *
-     * @param message   the message to be printed
-     * @param recursive whether or not triggers should be triggered by this message
-     * @deprecated use {@link Message#setRecursive(boolean)}
-     */
-    @Deprecated
-    public static void chat(String message, boolean recursive) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.chat(String, boolean)");
-        if (!isPlayer("[CHAT]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(addColor(message));
-
-        if (recursive) {
-            Client.getConnection().handleChat(new S02PacketChat(cct, (byte) 0));
-        } else {
-            Player.getPlayer().addChatMessage(cct);
-            CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
-        }
-    }
-
     /**
      * Adds a message to chat
      *
@@ -62,105 +39,19 @@ public class ChatLib {
     /**
      * Print a {@link Message} in chat.
      *
-     * @param message   the message to be printed
-     * @param recursive whether or not triggers should be triggered by this message
-     * @deprecated use {@link Message#setRecursive(boolean)}
-     */
-    @Deprecated
-    public static void chat(Message message, boolean recursive) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.chat(Message, boolean)");
-        if (message.getChatLineId() != -1) {
-            Client.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
-            return;
-        }
-
-        if (recursive) {
-            Client.getConnection().handleChat(new S02PacketChat(message.getChatMessage(), (byte) 0));
-        } else {
-            Player.getPlayer().addChatMessage(message.getChatMessage());
-        }
-    }
-
-    /**
-     * Print a {@link Message} in chat (not recursive by default. See {@link #chat(Message, boolean)}
-     * to specify it being recursive.
-     *
      * @param message the message to be printed
      */
     public static void chat(Message message) {
         message.chat();
     }
 
+    /**
+     * Prints a {@link TextComponent} in chat.
+     * 
+     * @param component the component to be printed
+     */
     public static void chat(TextComponent component) {
         new Message(component).chat();
-    }
-
-    /**
-     * Add a chat message to chat, but with a special ID which allows
-     * them to be clear with {@link #clearChat(int...)}.
-     * This ID can't be used more than once.
-     *
-     * @param message    the message to be printed
-     * @param chatLineID the chat line to save the message under (pass to clearChat)
-     * @deprecated use {@link Message#setChatLineId(int)}
-     */
-    @Deprecated
-    public static void chat(String message, int chatLineID) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.chat(String, int)");
-        if (!isPlayer("[CHAT]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(addColor(message));
-        Client.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
-    }
-
-    /**
-     * Add a raw chat message to chat (no formatting).
-     *
-     * @param message the message to be printed
-     * @deprecated use {@link Message#setFormatted(boolean)}
-     */
-    @Deprecated
-    public static void raw(String message) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.raw(String)");
-        raw(message, false);
-    }
-
-    /**
-     * Add a raw chat message to chat (no formatting).
-     *
-     * @param message   the message to be printed
-     * @param recursive whether or not triggers should be triggered by this message
-     * @deprecated use {@link Message#setFormatted(boolean)}
-     */
-    @Deprecated
-    public static void raw(String message, Boolean recursive) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.raw(String, Boolean)");
-        if (!isPlayer("[CHAT]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(message);
-
-        if (recursive) {
-            Client.getConnection().handleChat(new S02PacketChat(cct, (byte) 0));
-        } else {
-            Player.getPlayer().addChatMessage(cct);
-            CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
-        }
-    }
-
-    /**
-     * Add a raw chat message to chat (no formatting).
-     *
-     * @param message    the message to be printed
-     * @param chatLineID the chat line to save the message under (pass to clearChat)
-     * @deprecated use use {@link Message#setFormatted(boolean)}
-     */
-    @Deprecated
-    public static void raw(String message, int chatLineID) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.raw(String, int)");
-        if (!isPlayer("[RAW]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(message);
-        Client.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
     }
 
     /**
@@ -346,70 +237,6 @@ public class ChatLib {
         for (int i = in.size() - 1; i >= 0; i--)
             out.add(in.get(i));
         return out;
-    }
-
-    /**
-     * Create a clickable message in chat, to be used with {@link Message}.
-     * Also shows text on hover.
-     *
-     * @param text      the text to show in the message
-     * @param action    the action to perform
-     * @param value     the value to perform the action with
-     * @param hoverText the text to show when hovered over
-     * @return the chat component created
-     * @deprecated use {@link TextComponent#setClickAction(String)} and {@link TextComponent#setClickValue(String)}
-     */
-    @Deprecated
-    public static IChatComponent clickable(String text, String action, String value, String hoverText) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.clickable(String, String, String, String)");
-        ChatComponentText cct = new ChatComponentText(addColor(text));
-
-        cct.setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(
-                ClickEvent.Action.getValueByCanonicalName(action), value
-        )));
-
-        if (hoverText != null) {
-            cct.getChatStyle().setChatHoverEvent(new HoverEvent(
-                    HoverEvent.Action.SHOW_TEXT, new ChatComponentText(addColor(hoverText))
-            ));
-        }
-
-        return cct;
-    }
-
-    /**
-     * Create a clickable message in chat, to be used with {@link Message}.
-     *
-     * @param text   the text to show in the message
-     * @param action the action to perform
-     * @param value  the value to perform the action with
-     * @return the chat component created
-     * @deprecated use {@link TextComponent#setClickAction(String)} and {@link TextComponent#setClickValue(String)}
-     */
-    @Deprecated
-    public static IChatComponent clickable(String text, String action, String value) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.clickable(String, String, String)");
-        return clickable(text, action, value, null);
-    }
-
-    /**
-     * Create a hoverable message in chat, to be used with {@link Message}
-     *
-     * @param text  the text to show in the message
-     * @param hover the text to show when hovered over
-     * @return the chat component created
-     * @deprecated use {@link TextComponent#setHoverAction(String)} and {@link TextComponent#setHoverValue(String)}
-     */
-    @Deprecated
-    public static IChatComponent hover(String text, String hover) {
-        CTJS.getInstance().getConsole().printDeprecatedWarning("ChatLib.hover(String, String)");
-        ChatComponentText cct = new ChatComponentText(addColor(text));
-
-        cct.setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT, new ChatComponentText(addColor(hover))
-        )));
-
-        return cct;
     }
 
     /**

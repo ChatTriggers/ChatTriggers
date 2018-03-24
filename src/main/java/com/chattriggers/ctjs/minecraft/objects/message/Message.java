@@ -149,8 +149,6 @@ public class Message {
                 cct.setChatStyle(new ChatStyle().setParentStyle(null));
 
                 this.chatMessage.appendSibling(cct);
-            } else if (message instanceof IChatComponent) {
-                this.chatMessage.appendSibling((IChatComponent) message);
             } else if (message instanceof TextComponent) {
                 this.chatMessage.appendSibling(((TextComponent) message).getChatComponentText());
             }
