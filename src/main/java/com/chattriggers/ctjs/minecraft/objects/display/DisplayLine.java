@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects.display;
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
+import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.OnTrigger;
@@ -23,8 +23,9 @@ public class DisplayLine {
      * @return The display line text
      */
     @Getter
-    private String text;
+    private Text text;
 
+    @Getter
     private int textWidth;
 
     /**
@@ -59,30 +60,6 @@ public class DisplayLine {
      */
     @Getter @Setter
     private DisplayHandler.Align align;
-
-    /**
-     * -- GETTER --
-     * Gets whether or not a drop shadow is drawn (true by default)
-     *
-     * @return Whether or not a drop shadow is drawn
-     *
-     * -- SETTER --
-     * Sets whether or not a drop shadow is drawn (true by default)
-     *
-     * @param shadow True to enable drop shadow rendering
-     * @return The DisplayLine object to allow for method chaining
-     */
-    @Getter @Setter
-    private Boolean shadow;
-
-    /**
-     * -- GETTER --
-     * Gets the scale of the text (1 by default)
-     *
-     * @return The text scale
-     */
-    @Getter
-    private float scale;
 
     /**
      * -- GETTER --
@@ -127,7 +104,6 @@ public class DisplayLine {
     private HashMap<Integer, Float[]> draggedState;
 
     public DisplayLine(String text) {
-        this.scale = 1;
         setText(text);
 
         setTextColor(null);
@@ -152,8 +128,19 @@ public class DisplayLine {
      * @return the DisplayLine to allow for method chaining
      */
     public DisplayLine setText(String text) {
-        this.text = ChatLib.addColor(text);
-        this.textWidth = (int) Math.ceil(Renderer.getStringWidth(this.text) * scale);
+        this.text = Renderer.text(text, 0, 0);
+        this.textWidth = (int) Math.ceil(Renderer.getStringWidth(this.text.getString()) * this.text.getScale());
+        return this;
+    }
+
+    /**
+     * Sets the line's shadow.
+     *
+     * @param shadow if there is text shadow
+     * @return the DisplayLine to allow for method chaining
+     */
+    public DisplayLine setShadow(boolean shadow) {
+        this.text.setShadow(shadow);
         return this;
     }
 
@@ -164,8 +151,8 @@ public class DisplayLine {
      * @return the DisplayLine to allow for method chaining
      */
     public DisplayLine setScale(float scale) {
-        this.scale = scale;
-        this.textWidth = (int) Math.ceil(Renderer.getStringWidth(text) * scale);
+        text.setScale(scale);
+        this.textWidth = (int) Math.ceil(Renderer.getStringWidth(text.getString()) * scale);
         return this;
     }
 
@@ -311,12 +298,12 @@ public class DisplayLine {
 
     private void drawFullBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
         if (bg == DisplayHandler.Background.FULL)
-            Renderer.rectangle(color, x, y, width, height).draw();
+            Renderer.drawRect(color, x, y, width, height);
     }
 
     private void drawPerLineBG(DisplayHandler.Background bg, int color, float x, float y, float width, float height) {
         if (bg == DisplayHandler.Background.PER_LINE)
-            Renderer.rectangle(color, x, y, width, height).draw();
+            Renderer.drawRect(color, x, y, width, height);
     }
 
     public void drawLeft(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
@@ -333,7 +320,7 @@ public class DisplayLine {
             textCol = this.textColor;
 
         // full background
-        drawFullBG(bg, bgColor, x - 1, y - 1, maxWidth + 2, 10 * this.scale);
+        drawFullBG(bg, bgColor, x - 1, y - 1, maxWidth + 2, 10 * this.text.getScale());
 
         // blank line
         if (this.text.equals("")) return;
@@ -347,10 +334,10 @@ public class DisplayLine {
             xOff = x - this.textWidth / 2 + maxWidth / 2;
         }
 
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setShadow(this.shadow).draw();
+        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.text.getScale());
+        this.text.setX(xOff).setY(y).setColor(textCol).draw();
 
-        handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
+        handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.text.getScale());
     }
 
     public void drawRight(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
@@ -367,7 +354,7 @@ public class DisplayLine {
             textCol = this.textColor;
 
         // full background
-        drawFullBG(bg, bgColor, x - maxWidth - 1, y - 1, maxWidth + 2, 10 * this.scale);
+        drawFullBG(bg, bgColor, x - maxWidth - 1, y - 1, maxWidth + 2, 10 * this.text.getScale());
 
         // blank line
         if (this.text.equals("")) return;
@@ -381,10 +368,10 @@ public class DisplayLine {
             xOff = x - this.textWidth / 2 - maxWidth / 2;
         }
 
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setShadow(this.shadow).draw();
+        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.text.getScale());
+        this.text.setX(xOff).setY(y).setColor(textCol).draw();
 
-        handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
+        handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.text.getScale());
     }
 
     public void drawCenter(float x, float y, float maxWidth, DisplayHandler.Background background, int backgroundColor, int textColor) {
@@ -401,7 +388,7 @@ public class DisplayLine {
             textCol = this.textColor;
 
         // full background
-        drawFullBG(bg, bgColor, x - maxWidth / 2 - 1, y - 1, maxWidth + 2, 10 * this.scale);
+        drawFullBG(bg, bgColor, x - maxWidth / 2 - 1, y - 1, maxWidth + 2, 10 * this.text.getScale());
 
         // blank line
         if (this.text.equals("")) return;
@@ -415,9 +402,9 @@ public class DisplayLine {
             xOff = x + maxWidth / 2 - this.textWidth;
         }
 
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
-        Renderer.text(this.text, xOff, y).setScale(this.scale).setColor(textCol).setShadow(this.shadow).draw();
+        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, this.textWidth + 2, 10 * this.text.getScale());
+        this.text.setX(xOff).setY(y).setColor(textCol).draw();
 
-        handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.scale);
+        handleInput(xOff - 1, y - 1, this.textWidth + 2, 10 * this.text.getScale());
     }
 }
