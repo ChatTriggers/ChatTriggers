@@ -142,7 +142,7 @@ public class CTCommand extends CommandBase {
                     break;
                 case("sim"):
                 case("simulate"):
-                    ChatLib.simulateChat(args);
+                    ChatLib.simulateChat(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
                     break;
                 case("dump"):
                     try {

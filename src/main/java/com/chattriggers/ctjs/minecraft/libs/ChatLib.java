@@ -2,20 +2,15 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
-import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -55,18 +50,12 @@ public class ChatLib {
     }
 
     /**
-     * Simulates a chat message to be caught by other triggers for testing
+     * Simulates a chat message to be caught by other triggers for testing.
      *
-     * @param args The message to simulate
+     * @param message The message to simulate
      */
-    public static void simulateChat(String[] args) {
-        StringBuilder toSend = new StringBuilder();
-
-        for (String arg : args) {
-            if (!arg.equals(args[0])) toSend.append(arg).append(" ");
-        }
-
-        new Message(toSend.toString()).setRecursive(true).chat();
+    public static void simulateChat(String message) {
+        new Message(message).setRecursive(true).chat();
     }
 
     /**
