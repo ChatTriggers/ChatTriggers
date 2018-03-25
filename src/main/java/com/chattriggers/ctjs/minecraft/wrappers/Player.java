@@ -384,28 +384,28 @@ public class Player {
          * @return the item in the player's helmet slot
          */
         public static Item getHelmet() {
-            return getInventory().getStackInSlot(36);
+            return getInventory().getStackInSlot(39);
         }
 
         /**
          * @return the item in the player's chestplate slot
          */
         public static Item getChestplate() {
-            return getInventory().getStackInSlot(37);
+            return getInventory().getStackInSlot(38);
         }
 
         /**
          * @return the item in the player's leggings slot
          */
         public static Item getLeggings() {
-            return getInventory().getStackInSlot(38);
+            return getInventory().getStackInSlot(37);
         }
 
         /**
          * @return the item in the player's boots slot
          */
         public static Item getBoots() {
-            return getInventory().getStackInSlot(39);
+            return getInventory().getStackInSlot(36);
         }
     }
 }
