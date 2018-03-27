@@ -211,7 +211,7 @@ public class Image {
                 image = resized;
             }
 
-            ImageIO.write(image, "png", resourceFile);
+            ImageIO.write(image, url.endsWith("jpeg") || url.endsWith("jpg") ? "jpg" : "png", resourceFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
