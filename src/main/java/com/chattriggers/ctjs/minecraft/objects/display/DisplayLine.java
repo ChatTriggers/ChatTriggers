@@ -323,7 +323,7 @@ public class DisplayLine {
         drawFullBG(bg, bgColor, x - 1, y - 1, maxWidth + 2, 10 * this.text.getScale());
 
         // blank line
-        if (this.text.equals("")) return;
+        if ("".equals(this.text.getString())) return;
 
         // text and per line background
         float xOff = x;
@@ -357,7 +357,7 @@ public class DisplayLine {
         drawFullBG(bg, bgColor, x - maxWidth - 1, y - 1, maxWidth + 2, 10 * this.text.getScale());
 
         // blank line
-        if (this.text.equals("")) return;
+        if ("".equals(this.text.getString())) return;
 
         // text and per line background\
         float xOff = x - this.textWidth;
@@ -391,7 +391,7 @@ public class DisplayLine {
         drawFullBG(bg, bgColor, x - maxWidth / 2 - 1, y - 1, maxWidth + 2, 10 * this.text.getScale());
 
         // blank line
-        if (this.text.equals("")) return;
+        if ("".equals(this.text.getString())) return;
 
         // text and per line background
         float xOff = x - this.textWidth / 2;
