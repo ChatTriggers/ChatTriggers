@@ -179,7 +179,7 @@ public class CTCommand extends CommandBase {
             new Message(
                 new TextComponent(msg)
                     .setClick("run_command", "/ct copy " + msg)
-                    .setHoverValue("&eClick here to copy this message.")
+                    .setHoverValue(ChatLib.addColor("&eClick here to copy this message."))
                     .setFormatted(false)
             ).setFormatted(false).setChatLineId(this.idFixed + i + 1).chat();
         }
