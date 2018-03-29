@@ -197,25 +197,35 @@ public class CTJS {
 
     private void setupSSL() {
         try {
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            Path ksPath = Paths.get(System.getProperty("java.home"), "lib", "security", "cacerts");
-            keyStore.load(Files.newInputStream(ksPath), "changeit".toCharArray());
-
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            try (InputStream caInput = instance.getClass().getResourceAsStream("/chattriggerscom.der")) {
-                Certificate crt = cf.generateCertificate(caInput);
-                keyStore.setCertificateEntry("chattriggerscom", crt);
+            attemptSSL("/chattriggerscom.der");
+        } catch (Exception exception1) {
+            console.printStackTrace(exception1);
+            console.out.println("Failed to authenticate SSL certificate. Trying again.");
+            try {
+                attemptSSL("/chattriggerscom.crt");
+            } catch (Exception exception2) {
+                console.printStackTrace(exception2);
+                console.out.println("Failed to authenticate SSL certificate again. Importing will not work.");
             }
-
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(keyStore);
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, tmf.getTrustManagers(), null);
-            SSLContext.setDefault(sslContext);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            Console.getConsole().printStackTrace(exception);
         }
+    }
+
+    private void attemptSSL(String cert) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        Path ksPath = Paths.get(System.getProperty("java.home"), "lib", "security", "cacerts");
+        keyStore.load(Files.newInputStream(ksPath), "changeit".toCharArray());
+
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+        try (InputStream caInput = instance.getClass().getResourceAsStream(cert)) {
+            Certificate crt = cf.generateCertificate(caInput);
+            keyStore.setCertificateEntry("chattriggerscom", crt);
+        }
+
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        tmf.init(keyStore);
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, tmf.getTrustManagers(), null);
+        SSLContext.setDefault(sslContext);
     }
 }
 
