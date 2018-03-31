@@ -89,13 +89,25 @@ public class Renderer {
     }
 
     /**
-     * Gets a strings width.
+     * Gets a strings width when rendered.
+     *
+     * @param text the text to get the width of
+     * @param removeFormatting if formatting should be removed
+     * @return the width of the text
+     */
+    public static int getStringWidth(String text, boolean removeFormatting) {
+        if (removeFormatting) text = ChatLib.removeFormatting(text);
+        return getFontRenderer().getStringWidth(text);
+    }
+
+    /**
+     * Gets a strings width when rendered with formatting removed.
      *
      * @param text the text to get the width of
      * @return the width of the text
      */
     public static int getStringWidth(String text) {
-        return getFontRenderer().getStringWidth(text);
+        return getStringWidth(text, true);
     }
 
     /**
