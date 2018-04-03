@@ -2,17 +2,17 @@ package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
 import com.chattriggers.ctjs.commands.CommandHandler;
-import com.chattriggers.ctjs.minecraft.libs.Tessellator;
-import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
-import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
+import com.chattriggers.ctjs.minecraft.libs.Tessellator;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
 import com.chattriggers.ctjs.minecraft.objects.CPS;
+import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
@@ -35,16 +35,11 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.util.List;
 
 @Mod(modid = Reference.MODID,
@@ -107,8 +102,6 @@ public class CTJS {
         instance = this;
 
         this.console = new Console();
-
-        setupSSL();
 
         Sentry.init(Reference.SENTRYDSN);
 
@@ -193,29 +186,6 @@ public class CTJS {
         this.icon = Renderer.image("CT_logo.png")
                 .download("https://i.imgur.com/JAPDKMG.png", true)
                 .setScale(0.25f);
-    }
-
-    private void setupSSL() {
-        try {
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            Path ksPath = Paths.get(System.getProperty("java.home"), "lib", "security", "cacerts");
-            keyStore.load(Files.newInputStream(ksPath), "changeit".toCharArray());
-
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            try (InputStream caInput = instance.getClass().getResourceAsStream("/chattriggerscom.der")) {
-                Certificate crt = cf.generateCertificate(caInput);
-                keyStore.setCertificateEntry("chattriggerscom", crt);
-            }
-
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(keyStore);
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, tmf.getTrustManagers(), null);
-            SSLContext.setDefault(sslContext);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            Console.getConsole().printStackTrace(exception);
-        }
     }
 }
 
