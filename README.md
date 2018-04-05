@@ -1,11 +1,25 @@
-# ChatTriggers.js<br>[![Build Status](https://travis-ci.org/ChatTriggers/ct.js.svg?branch=master)](https://travis-ci.org/ChatTriggers/ct.js) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f3bccfe6845d4f6b8733c3948314ea95)](https://www.codacy.com/app/FalseHonesty/ct.js?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ChatTriggers/ct.js&amp;utm_campaign=Badge_Grade)<br>
+<div align="center">
+  <p>
+    <a href="https://chattriggers.com">
+      <img src="https://chattriggers.com/assets/images/logo-final.png" width="546" alt="ChatTriggers.js" />
+    </a>
+  </p>
+  <p>
+    <a href="https://travis-ci.org/ChatTriggers/ct.js">
+      <img src="https://travis-ci.org/ChatTriggers/ct.js.svg?branch=master" alt="Build Status" />
+    </a>
+    <a href="https://www.codacy.com/app/FalseHonesty/ct.js?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ChatTriggers/ct.js&amp;utm_campaign=Badge_Grade">
+      <img src="https://api.codacy.com/project/badge/Grade/f3bccfe6845d4f6b8733c3948314ea95" alt="Grade" />
+    </a>
+  </p>
+</div>
 
 ### *Beta*
 [![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)<br>
 CTjs is currently in early beta. Although we try to follow standard version conventions and deprecate old method before removing them, there may be times where we need to restructure something to the point where deprecation is impossible. Modules can and will break at any  time.
 
 # About
-CTjs is a framework for minecraft that allows for live scripting and client modification using JavaScript. We provide libraries, wrappers, objects and more to make your life as a modder as easy as possible. Even without the proper wrapper, you can still use exposed Minecraft methods and variables but you will need knowledge of FML mappings. The entire CTjs engine is built on Nashorn using Java 8 so you have access to any Nashorn methods and functions and up to ES5 support. As soon as the Minecraft launcher supports a higher version of Java, ES6 will also be supported.
+CTjs is a framework for minecraft that allows for live scripting and client modification using JavaScript. We provide libraries, wrappers, objects and more to make your life as a modder as easy as possible. Even without the proper wrapper, you can still use exposed Minecraft methods and variables but you will need knowledge of FML mappings. The entire CTjs engine is built on Nashorn using Java 8 so you have access to any Nashorn methods and functions and up to ES5 support.
 
 The basic premise of CTjs is that everything is based around Triggers. From a modding standpoint, Triggers can be thought of as event listeners. These can range from a chat Trigger that runs on a specific chat event matching criteria to a render overlay Trigger that runs when the crosshair is being rendered. We are constantly adding more Triggers and Trigger types as the mod evolves for more integration with Minecraft.
 ```JavaScript
@@ -33,7 +47,7 @@ You can learn the basics of scripting with CTjs from the [Slate tutorial](https:
 The [ChatTriggers website](https://www.chattriggers.com/) will always be kept up to date with the latest release. As of beta version 0.6.4, we have started to move the release changelog along with a .jar download (mirror of the website) to the [GitHub releases page](https://github.com/ChatTriggers/ct.js/releases).
 
 # Feature changes
-Starting in beta 0.10, we are moving feature changes to seperate branches labeled as such. This will avoid the issue of waiting after a release to fix bugs when we want to be working on new features. Any contributors will have to abide by the same standard. New features get their own branch and bug fixes require a pull request on the master branch.
+Any major features are moved to seperate branches before being merged into master. This will avoid the issue of waiting after a release to fix bugs when we want to be working on new features. Any contributors will have to abide by the same standard. New features get their own branch and bug fixes require a pull request on the master branch.
 
 # Issues
 Any issue can be opened using the normal [GitHub issue page](https://github.com/ChatTriggers/ct.js/issues). Issues can be anything from bug reports to feature requests. For us to consider an issue to be valid, its needs a simple, but effective title that conveys the problem in a few words and a well thought out and well written description.
