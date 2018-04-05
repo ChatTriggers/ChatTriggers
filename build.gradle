@@ -142,17 +142,17 @@ processResources {
 // * Userdocs
 // */
 //
-//import io.franzbecker.gradle.lombok.task.DelombokTask
-//
-//task delombok(type: DelombokTask, dependsOn: compileJava) {
-//    description "Delomboks source code in order to compile javadocs"
-//    group "Documentation"
-//
-//    ext.outputDir = file("$buildDir/src-delomboked")
-//    sourceSets.main.java.srcDirs.each {
-//        args(it, "-f", "pretty", "-d", outputDir)
-//    }
-//}
+import io.franzbecker.gradle.lombok.task.DelombokTask
+
+task delombok(type: DelombokTask, dependsOn: compileJava) {
+    description "Delomboks source code in order to compile javadocs"
+    group "Documentation"
+
+    ext.outputDir = file("$buildDir/src-delomboked")
+    sourceSets.main.java.srcDirs.each {
+        args(it, "-f", "pretty", "-d", outputDir)
+    }
+}
 
 task userdocs(type: Javadoc) {
     description = "Generate the docs to be used by scripters, excludes internal classes"
