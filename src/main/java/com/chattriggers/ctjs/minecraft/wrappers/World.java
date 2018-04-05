@@ -1,17 +1,23 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class World {
     /**
@@ -21,6 +27,32 @@ public class World {
      */
     public static WorldClient getWorld() {
         return Client.getMinecraft().theWorld;
+    }
+
+    /**
+     * Play a sound at the player location.
+     *
+     * @param name   the name of the sound
+     * @param volume the volume of the sound
+     * @param pitch  the pitch of the sound
+     */
+    public static void playSound(String name, float volume, float pitch) {
+        Player.getPlayer().playSound(name, volume, pitch);
+    }
+
+    /**
+     * Display a title.
+     *
+     * @param title    title text
+     * @param subtitle subtitle text
+     * @param fadeIn   time to fade in
+     * @param time     time to stay on screen
+     * @param fadeOut  time to fade out
+     */
+    public static void showTitle(String title, String subtitle, int fadeIn, int time, int fadeOut) {
+        Client.getMinecraft().ingameGUI.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut);
+        Client.getMinecraft().ingameGUI.displayTitle(null, ChatLib.addColor(subtitle), 0, 0, 0);
+        Client.getMinecraft().ingameGUI.displayTitle(null, null, fadeIn, time, fadeOut);
     }
 
     /**
@@ -99,6 +131,36 @@ public class World {
         IBlockState blockState = World.getWorld().getBlockState(blockPos);
 
         return new Block(blockState.getBlock()).setBlockPos(blockPos);
+    }
+
+    /**
+     * Gets all of the players in the world, and returns their wrapped versions.
+     *
+     * @return the players
+     */
+    public static List<PlayerMP> getAllPlayers() {
+        List<PlayerMP> players = new ArrayList<>();
+
+        if (getWorld() != null) {
+            for (EntityPlayer player : getWorld().playerEntities) {
+                if (player instanceof EntityOtherPlayerMP) {
+                    players.add(new PlayerMP((EntityOtherPlayerMP) player));
+                }
+            }
+        }
+
+        return players;
+    }
+
+    /**
+     * Gets a player by their username, must be in the currently loaded world!
+     *
+     * @param name the username
+     * @return the player with said username
+     * @throws IllegalArgumentException if the player is not valid
+     */
+    public static PlayerMP getPlayerByName(String name) throws IllegalArgumentException {
+        return new PlayerMP(getWorld().getPlayerEntityByName(name));
     }
 
     /**

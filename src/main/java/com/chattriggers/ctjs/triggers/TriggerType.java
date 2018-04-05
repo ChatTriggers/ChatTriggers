@@ -7,10 +7,7 @@ import io.sentry.context.Context;
 import io.sentry.event.Breadcrumb;
 import io.sentry.event.BreadcrumbBuilder;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public enum TriggerType {
     // client
@@ -20,23 +17,21 @@ public enum TriggerType {
     GUI_OPENED,
 
     // rendering
+    RENDER_WORLD,
     RENDER_OVERLAY, RENDER_PLAYER_LIST, RENDER_BOSS_HEALTH, RENDER_DEBUG,
     RENDER_CROSSHAIR, RENDER_HOTBAR, RENDER_EXPERIENCE,
     RENDER_HEALTH, RENDER_FOOD, RENDER_MOUNT_HEALTH, RENDER_AIR,
 
     // world
+    PLAYER_JOIN, PLAYER_LEAVE,
     SOUND_PLAY,
     WORLD_LOAD, WORLD_UNLOAD,
 
     // misc
     COMMAND, OTHER;
 
-    private Comparator<OnTrigger> triggerComparator = (o1, o2) -> {
-        if (o1.priority.ordinal() > o2.priority.ordinal()) return -1;
-        else if (o2.priority.ordinal() > o1.priority.ordinal()) return 1;
-
-        return 0;
-    };
+    private Comparator<OnTrigger> triggerComparator = (o1, o2)
+            -> Integer.compare(o2.priority.ordinal(), o1.priority.ordinal());
 
     private PriorityQueue<OnTrigger> triggers = new PriorityQueue<>(triggerComparator);
 
@@ -79,7 +74,7 @@ public enum TriggerType {
                 .build()
         );
 
-        while (!triggers.isEmpty()){
+        while (!triggers.isEmpty()) {
             OnTrigger trigger = triggers.poll();
             triggersCopy.add(trigger);
 

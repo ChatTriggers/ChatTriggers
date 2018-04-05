@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.objects;
+package com.chattriggers.ctjs.minecraft.objects.gui;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class Gui extends GuiScreen {
     }
 
     /**
-     * Registers a method to be ran while gui is open.
+     * Registers a method to be ran while gui is open.<br>
      * Registered method runs on draw.<br>
      * Arguments passed through to method:<br>
      * int mouseX<br>
@@ -68,7 +69,7 @@ public class Gui extends GuiScreen {
     }
 
     /**
-     * Registers a method to be ran while gui is open.
+     * Registers a method to be ran while gui is open.<br>
      * Registered method runs on mouse click.<br>
      * Arguments passed through to method:<br>
      * int mouseX<br>
@@ -84,7 +85,7 @@ public class Gui extends GuiScreen {
     }
 
     /**
-     * Registers a method to be ran while gui is open.
+     * Registers a method to be ran while gui is open.<br>
      * Registered method runs on key input.<br>
      * Arguments passed through to method:<br>
      * char typed character<br>
@@ -99,8 +100,13 @@ public class Gui extends GuiScreen {
     }
 
     /**
-     * Registers a method to be ran while gui is open.
-     * Registered method runs on key input.
+     * Registers a method to be ran while gui is open.<br>
+     * Registered method runs on key input.<br>
+     * Arguments passed through to method:<br>
+     * mouseX<br>
+     * mouseY<br>
+     * clickedMouseButton<br>
+     * timeSinceLastClick
      *
      * @param methodName the method to run
      * @return the trigger
@@ -111,20 +117,26 @@ public class Gui extends GuiScreen {
     }
 
     /**
-     * Registers a method to be ran while gui is open.
-     * Registered method runs on key input.
+     * Registers a method to be ran while gui is open.<br>
+     * Registered method runs on mouse release.<br>
+     * Arguments passed through to method:<br>
+     * mouseX<br>
+     * mouseY<br>
+     * button
      *
      * @param methodName the method to run
      * @return the trigger
      */
     public OnRegularTrigger registerMouseReleased(String methodName) {
-        onMouseDragged = new OnRegularTrigger(methodName, TriggerType.OTHER);
-        return onMouseDragged;
+        onMouseReleased = new OnRegularTrigger(methodName, TriggerType.OTHER);
+        return onMouseReleased;
     }
 
     /**
-     * Registers a method to be ran while gui is open.
-     * Registered method runs on key input.
+     * Registers a method to be ran while gui is open.<br>
+     * Registered method runs when an action is performed (clicking a button)<br>
+     * Arguments passed through to method:<br>
+     * the button that is clicked
      *
      * @param methodName the method to run
      * @return the trigger
@@ -142,11 +154,11 @@ public class Gui extends GuiScreen {
     }
 
     @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        super.mouseReleased(mouseX, mouseY, state);
+    protected void mouseReleased(int mouseX, int mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
 
         if (onMouseReleased != null)
-            onMouseReleased.trigger(mouseX, mouseY, state);
+            onMouseReleased.trigger(mouseX, mouseY, button);
     }
 
     @Override
@@ -185,11 +197,16 @@ public class Gui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        GlStateManager.pushMatrix();
+
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
         if (onDraw != null)
             onDraw.trigger(mouseX, mouseY, partialTicks);
+
+        GlStateManager.popMatrix();
     }
 
     @Override

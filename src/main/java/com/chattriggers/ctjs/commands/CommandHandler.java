@@ -1,6 +1,5 @@
-package com.chattriggers.ctjs.minecraft.handlers;
+package com.chattriggers.ctjs.commands;
 
-import com.chattriggers.ctjs.commands.Command;
 import lombok.Getter;
 
 import java.util.ArrayList;

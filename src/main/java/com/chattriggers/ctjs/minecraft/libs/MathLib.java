@@ -23,7 +23,7 @@ public class MathLib {
      * @param max    the maximum
      * @return the clamped number
      */
-    public static float clamp(float number, float min, float max) {
+    public static float clampFloat(float number, float min, float max) {
         return number < min ? min : number > max ? max : number;
     }
 

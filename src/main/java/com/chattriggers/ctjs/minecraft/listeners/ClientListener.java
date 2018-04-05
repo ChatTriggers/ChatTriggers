@@ -5,31 +5,23 @@ import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
-import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.util.HashMap;
 
 public class ClientListener {
     private int ticksPassed;
-    private KeyBinding guiKeyBind;
     private HashMap<Integer, Boolean> mouseState;
     private HashMap<Integer, Float[]> draggedState;
 
     public ClientListener() {
-        this.guiKeyBind = new KeyBinding("Key to open import gui", Keyboard.KEY_L, "CT Controls");
-        ClientRegistry.registerKeyBinding(this.guiKeyBind);
-
         this.ticksPassed = 0;
 
         this.mouseState = new HashMap<>();
@@ -88,6 +80,11 @@ public class ClientListener {
     }
 
     @SubscribeEvent
+    public void onRenderWorld(RenderWorldLastEvent event) {
+        TriggerType.RENDER_WORLD.triggerAll();
+    }
+
+    @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
         handleOverlayTriggers(event);
 
@@ -135,13 +132,6 @@ public class ClientListener {
         // add to cps
         if (EventLib.getButton(event) == 0 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addLeftClicks();
         if (EventLib.getButton(event) == 1 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addRightClicks();
-    }
-
-    @SubscribeEvent
-    public void onKeyPress(InputEvent.KeyInputEvent e) {
-        if (guiKeyBind.isPressed()) {
-            CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
-        }
     }
 
     @SubscribeEvent

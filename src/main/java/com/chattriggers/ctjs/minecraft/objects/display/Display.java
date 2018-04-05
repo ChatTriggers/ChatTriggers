@@ -1,8 +1,6 @@
-package com.chattriggers.ctjs.minecraft.objects;
+package com.chattriggers.ctjs.minecraft.objects.display;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
-import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -341,8 +339,8 @@ public class Display {
 
         int maxWidth = this.minWidth;
         for (DisplayLine line : lines) {
-            if (Renderer.getStringWidth(line.getText()) > maxWidth)
-                maxWidth = (int) Math.ceil(Renderer.getStringWidth(line.getText()) * line.getScale());
+            if (line.getTextWidth() > maxWidth)
+                maxWidth = (int) Math.ceil(line.getTextWidth());
         }
 
         float i = 0;
@@ -351,9 +349,9 @@ public class Display {
             drawLine(line, this.renderX, this.renderY + (i * 10), maxWidth);
 
             if (order == DisplayHandler.Order.DOWN)
-                i += line.getScale();
+                i += line.getText().getScale();
             else if (order == DisplayHandler.Order.UP)
-                i -= line.getScale();
+                i -= line.getText().getScale();
         }
     }
 

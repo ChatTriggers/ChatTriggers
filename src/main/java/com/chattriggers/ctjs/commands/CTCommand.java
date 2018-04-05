@@ -2,18 +2,16 @@ package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.objects.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
+import net.minecraft.util.BlockPos;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -41,6 +39,23 @@ public class CTCommand extends CommandBase {
         return 0;
     }
 
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        List<String> tabOptions = new ArrayList<>();
+
+        tabOptions.add("help");
+        tabOptions.add("load");
+        tabOptions.add("settings");
+        tabOptions.add("import");
+        tabOptions.add("modules");
+        tabOptions.add("files");
+        tabOptions.add("console");
+        tabOptions.add("simulate");
+        tabOptions.add("dump");
+        tabOptions.add("copy");
+
+        return tabOptions;
+    }
+
     public String getUsage(ICommandSender sender) {
         return getCommandUsage(sender);
     }
@@ -49,10 +64,12 @@ public class CTCommand extends CommandBase {
                 "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
                 "&c/ct import [module] &7- &oImports a module.\n" +
                 "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
+                "&c/ct modules &7- &oOpens the modules gui\n" +
                 "&c/ct console &7- &oOpens the ct console.\n" +
                 "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
                 "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
-                "&c/ct &7- &oDisplays this help dialog\n" +
+                "&c/ct settings &7- &oChange ChatTrigger's settings.\n" +
+                "&c/ct &7- &oDisplays this help dialog.\n" +
                 "&b&m" + ChatLib.getChatBreak("-");
     }
 
@@ -125,7 +142,7 @@ public class CTCommand extends CommandBase {
                     break;
                 case("sim"):
                 case("simulate"):
-                    ChatLib.simulateChat(args);
+                    ChatLib.simulateChat(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
                     break;
                 case("dump"):
                     try {
@@ -155,21 +172,18 @@ public class CTCommand extends CommandBase {
 
         int amount = lines;
         if (amount > messages.size()) amount = messages.size();
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed);
+        new Message("&6&m" + ChatLib.getChatBreak("-")).setChatLineId(this.idFixed).chat();
         String msg;
         for (int i = 0; i < amount; i++) {
             msg = ChatLib.replaceFormatting(messages.get(messages.size() - amount + i));
-            ChatComponentText cct = new ChatComponentText(msg);
-
-            cct.setChatStyle(new ChatStyle()
-                    .setChatClickEvent(
-                            new ClickEvent(ClickEvent.Action.getValueByCanonicalName("run_command"), "/ct copy " + msg))
-                    .setChatHoverEvent(
-                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§eClick here to copy this message."))));
-
-            ChatLib.chat(new Message(cct).setChatLineId(idFixed + i + 1));
+            new Message(
+                new TextComponent(msg)
+                    .setClick("run_command", "/ct copy " + msg)
+                    .setHoverValue(ChatLib.addColor("&eClick here to copy this message."))
+                    .setFormatted(false)
+            ).setFormatted(false).setChatLineId(this.idFixed + i + 1).chat();
         }
-        ChatLib.chat("&6&m" + ChatLib.getChatBreak("-"), idFixed + amount + 1);
+        new Message("&6&m" + ChatLib.getChatBreak("-")).setChatLineId(this.idFixed + amount + 1).chat();
 
         idFixedOffset = idFixed + amount + 1;
     }

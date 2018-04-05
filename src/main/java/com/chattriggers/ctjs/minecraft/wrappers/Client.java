@@ -271,4 +271,30 @@ public class Client {
             getMinecraft().displayGuiScreen(null);
         }
     }
+
+    public static class camera {
+        /**
+         * Gets the camera's x position
+         * @return the camera's x position
+         */
+        public static double getX() {
+            return Client.getMinecraft().getRenderManager().viewerPosX;
+        }
+
+        /**
+         * Gets the camera's y position
+         * @return the camera's y position
+         */
+        public static double getY() {
+            return Client.getMinecraft().getRenderManager().viewerPosY;
+        }
+
+        /**
+         * Gets the camera's z position
+         * @return the camera's z position
+         */
+        public static double getZ() {
+            return Client.getMinecraft().getRenderManager().viewerPosZ;
+        }
+    }
 }

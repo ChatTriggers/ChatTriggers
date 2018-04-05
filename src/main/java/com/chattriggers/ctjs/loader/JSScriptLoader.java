@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
@@ -24,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class JSScriptLoader extends ScriptLoader {
     private ScriptEngine scriptEngine;
@@ -135,6 +134,8 @@ public class JSScriptLoader extends ScriptLoader {
                     metadata
             );
 
+            getRequiredModules(metadata);
+
             TriggerRegister.currentModule = module;
 
             getScriptEngine().eval(module.getCompiledScript());
@@ -148,32 +149,44 @@ public class JSScriptLoader extends ScriptLoader {
         return null;
     }
 
+    private void getRequiredModules(ModuleMetadata metadata) {
+        if (metadata == null || metadata.getRequires() == null) return;
+
+        for (String require : metadata.getRequires()) {
+            if (new File(modulesDir, require).exists()) continue;
+            CTJS.getInstance().getModuleManager().importModule(require);
+        }
+    }
+
     public boolean downloadModule(String name, boolean existCheck) {
         if (existCheck) {
+            File currentMetadata = new File(modulesDir, "currMetadata.json");
             try {
-                FileUtils.copyURLToFile(new URL("https://chattriggers.com/downloads/metadata/" + name),
-                        new File(modulesDir, "currMetadata.json"));
-            } catch (IOException e) {
+                FileUtils.copyURLToFile(new URL("http://chattriggers.com/downloads/metadata/" + name),
+                        currentMetadata);
+            } catch (IOException exception) {
+                Console.getConsole().printStackTrace(exception);
                 ChatLib.chat("&cModule not found!");
+                currentMetadata.delete();
                 return false;
             }
 
-            new File(modulesDir, "currMetadata.json").delete();
+            currentMetadata.delete();
         }
 
         try {
             File downloadZip = new File(modulesDir, "currDownload.zip");
 
             FileUtils.copyURLToFile(
-                    new URL("https://chattriggers.com/downloads/scripts/" + name),
+                    new URL("http://chattriggers.com/downloads/scripts/" + name),
                     downloadZip
             );
 
-            unzip(downloadZip.getAbsolutePath(), modulesDir.getAbsolutePath());
+            FileLib.unzip(downloadZip.getAbsolutePath(), modulesDir.getAbsolutePath());
 
             downloadZip.delete();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            Console.getConsole().printStackTrace(exception);
             return false;
         }
 
@@ -188,7 +201,7 @@ public class JSScriptLoader extends ScriptLoader {
     @Override
     public ArrayList<String> getIllegalLines() {
         return new ArrayList<>(Arrays.asList(
-                "module.export", "load(\"http"
+                "module.export", " load(\"http"
         ));
     }
 
@@ -261,56 +274,5 @@ public class JSScriptLoader extends ScriptLoader {
         }
 
         return allFiles;
-    }
-
-    /**
-     * Extracts a zip file specified by the zipFilePath to a directory specified by
-     * destDirectory (will be created if does not exists)
-     * @param zipFilePath
-     * @param destDirectory
-     * @throws IOException
-     */
-    public void unzip(String zipFilePath, String destDirectory) throws IOException {
-        File destDir = new File(destDirectory);
-        if (!destDir.exists()) {
-            destDir.mkdir();
-        }
-        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
-        ZipEntry entry = zipIn.getNextEntry();
-        // iterates over entries in the zip file
-        while (entry != null) {
-            String filePath = destDirectory + File.separator + entry.getName();
-            if (!entry.isDirectory()) {
-                // if the entry is a file, extracts it
-                extractFile(zipIn, filePath);
-            } else {
-                // if the entry is a directory, make the directory
-                File dir = new File(filePath);
-                dir.mkdir();
-            }
-            zipIn.closeEntry();
-            entry = zipIn.getNextEntry();
-        }
-        zipIn.close();
-    }
-
-    /**
-     * Extracts a zip entry (file entry)
-     * @param zipIn
-     * @param filePath
-     * @throws IOException
-     */
-    private void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
-        File toWrite = new File(filePath);
-        toWrite.getParentFile().mkdirs();
-        toWrite.createNewFile();
-
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-        byte[] bytesIn = new byte[4096];
-        int read = 0;
-        while ((read = zipIn.read(bytesIn)) != -1) {
-            bos.write(bytesIn, 0, read);
-        }
-        bos.close();
     }
 }

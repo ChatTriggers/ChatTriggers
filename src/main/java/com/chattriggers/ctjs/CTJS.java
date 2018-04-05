@@ -1,17 +1,18 @@
 package com.chattriggers.ctjs;
 
 import com.chattriggers.ctjs.commands.CTCommand;
+import com.chattriggers.ctjs.commands.CommandHandler;
 import com.chattriggers.ctjs.loader.ModuleManager;
-import com.chattriggers.ctjs.minecraft.handlers.CommandHandler;
-import com.chattriggers.ctjs.minecraft.handlers.DisplayHandler;
-import com.chattriggers.ctjs.minecraft.handlers.GuiHandler;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
+import com.chattriggers.ctjs.minecraft.libs.Tessellator;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
 import com.chattriggers.ctjs.minecraft.objects.CPS;
+import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
@@ -73,6 +74,8 @@ public class CTJS {
     private ModuleManager moduleManager;
     @Getter
     private CPS cps;
+    @Getter
+    private Tessellator tessellator;
 
     private File configLocation;
     @Getter
@@ -86,6 +89,7 @@ public class CTJS {
         this.chatListener = new ChatListener();
         this.moduleManager = new ModuleManager();
         this.cps = new CPS();
+        this.tessellator = new Tessellator();
 
         registerListeners();
 

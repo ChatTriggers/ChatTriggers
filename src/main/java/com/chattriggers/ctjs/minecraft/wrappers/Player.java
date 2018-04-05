@@ -1,11 +1,14 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Inventory;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -115,7 +118,7 @@ public class Player {
      * @return the player's uuid
      */
     public static String getUUID() {
-        return Client.getMinecraft().getSession().getPlayerID();
+        return Client.getMinecraft().getSession().getProfile().getId().toString();
     }
 
     /**
@@ -341,6 +344,33 @@ public class Player {
     }
 
     /**
+     * Gets the display name for the player,
+     * i.e. the name shown in tab list and in the player's nametag.
+     * @return the display name
+     */
+    public static TextComponent getDisplayName() {
+        return new TextComponent(getPlayerName(getPlayerInfo()));
+    }
+
+    /**
+     * Sets the name for this player shown in tab list
+     *
+     * @param textComponent the new name to display
+     */
+    public static void setTabDisplayName(TextComponent textComponent) {
+        getPlayerInfo().setDisplayName(textComponent.getChatComponentText());
+    }
+
+    private static String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn)
+    {
+        return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
+    }
+
+    public static NetworkPlayerInfo getPlayerInfo() {
+        return Client.getMinecraft().getNetHandler().getPlayerInfo(getPlayer().getUniqueID());
+    }
+
+    /**
      * Gets the inventory the user currently has open, i.e. a chest.
      *
      * @return the currently opened inventory
@@ -354,28 +384,28 @@ public class Player {
          * @return the item in the player's helmet slot
          */
         public static Item getHelmet() {
-            return getInventory().getStackInSlot(36);
+            return getInventory().getStackInSlot(39);
         }
 
         /**
          * @return the item in the player's chestplate slot
          */
         public static Item getChestplate() {
-            return getInventory().getStackInSlot(37);
+            return getInventory().getStackInSlot(38);
         }
 
         /**
          * @return the item in the player's leggings slot
          */
         public static Item getLeggings() {
-            return getInventory().getStackInSlot(38);
+            return getInventory().getStackInSlot(37);
         }
 
         /**
          * @return the item in the player's boots slot
          */
         public static Item getBoots() {
-            return getInventory().getStackInSlot(39);
+            return getInventory().getStackInSlot(36);
         }
     }
 }

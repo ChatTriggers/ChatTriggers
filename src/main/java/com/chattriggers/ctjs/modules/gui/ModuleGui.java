@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
 import com.chattriggers.ctjs.modules.Module;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class ModuleGui extends GuiScreen {
         String preDescription = module.getMetadata().getDescription() == null
                 ? "No description provided"
                 : module.getMetadata().getDescription();
-        this.description = Renderer.text(preDescription, 22, 30).setShadow(true);
+        this.description = Renderer.text(preDescription, 22, 30).setShadow(false);
 
         updateScaling(0, 0, 0);
 
@@ -68,40 +69,30 @@ public class ModuleGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GlStateManager.pushMatrix();
+
         drawBackground(0);
 
         // scrollbar
         drawScroll();
 
         // info box
-        Renderer.rectangle(
-                0x80000000,
-                20, 10 - scrolled,
-                width, infoHeight
-        ).draw();
+        Renderer.drawRect(0x80000000, 20, 10 - scrolled, width, infoHeight);
 
         // name
-        Renderer.text(name, 22, 12 - scrolled)
-                .setShadow(true).draw();
+        Renderer.drawStringWithShadow(name, 22, 12 - scrolled);
 
         // version
-        Renderer.text(
-                ChatFormatting.GRAY + version, width - Renderer.getStringWidth(version) + 18, 12 - scrolled)
-                .setShadow(true).draw();
+        Renderer.drawStringWithShadow(ChatFormatting.GRAY + version, width - Renderer.getStringWidth(version) + 18, 12 - scrolled);
 
         // line break
-        Renderer.rectangle(
-                0xa0000000,
-                22, 22 - scrolled,
-                width - 4, 2
-        ).draw();
+        Renderer.drawRect(0xa0000000, 22, 22 - scrolled, width - 4, 2);
 
         // description
         description.setY(30 - this.scrolled).draw();
 
         // directory
-        Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", 22, infoHeight - scrolled)
-                .setShadow(true).draw();
+        Renderer.drawStringWithShadow(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", 22, infoHeight - scrolled);
 
         // back
         drawBack();
@@ -116,27 +107,25 @@ public class ModuleGui extends GuiScreen {
         drawJump();
 
         updateScaling(mouseX, mouseY, fileOffset);
+
+        GlStateManager.popMatrix();
     }
 
     private int drawFile(Map.Entry<String, List<String>> file, int fileOffset) {
-        Renderer.rectangle(
+        Renderer.drawRect(
                 0x80000000,
                 20,
                 infoHeight + fileOffset - scrolled,
                 width,
                 file.getValue().size() * 9 + 12
-        ).draw();
+        );
 
-        Renderer.text(ChatFormatting.DARK_GRAY + file.getKey(), 22, infoHeight + fileOffset - scrolled + 2)
-                .setShadow(true)
-                .draw();
+        Renderer.drawStringWithShadow(ChatFormatting.DARK_GRAY + file.getKey(), 22, infoHeight + fileOffset - scrolled + 2);
 
         int i = 0;
         for (String line : file.getValue()) {
-            Renderer.text(
-                    colorLine(line).replace("\u0009", "     "), 22, i * 9 + infoHeight + fileOffset - scrolled + 12)
-                    .setShadow(true)
-                    .draw();
+            Renderer.drawStringWithShadow(
+                    colorLine(line).replace("\u0009", "     "), 22, i * 9 + infoHeight + fileOffset - scrolled + 12);
             i++;
         }
 
@@ -145,16 +134,14 @@ public class ModuleGui extends GuiScreen {
 
     private void drawJump() {
         if (scrolled > infoHeight) {
-            Renderer.rectangle(
+            Renderer.drawRect(
                     0x80000000,
                     width + 20,
                     height - 20,
                     20,
                     20
-            ).draw();
-            Renderer.text("^", width + 31 - Renderer.getStringWidth("^") / 2, height - 12)
-                    .setShadow(true)
-                    .draw();
+            );
+            Renderer.drawStringWithShadow("^", width + 31 - Renderer.getStringWidth("^") / 2, height - 12);
         }
     }
 
@@ -163,29 +150,25 @@ public class ModuleGui extends GuiScreen {
         if (scrollHeight < 20) scrollHeight = 20;
         if (scrollHeight < Renderer.screen.getHeight()) {
             int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.screen.getHeight() - scrollHeight - 10);
-            Renderer.rectangle(
+            Renderer.drawRect(
                     0xa0000000,
                     Renderer.screen.getWidth() - 5,
                     scrollY,
                     5,
                     scrollHeight
-            ).draw();
+            );
         }
     }
 
     private void drawBack() {
         String back = isHovered ? "< back" : "&8< back";
-        Renderer.text(ChatLib.addColor(back), 20 + width - Renderer.getStringWidth("< back") - 2, infoHeight - scrolled)
-                .setShadow(true)
-                .draw();
+        Renderer.drawStringWithShadow(back, 20 + width - Renderer.getStringWidth("< back") - 2, infoHeight - scrolled);
     }
 
     private int drawRequires() {
         if (this.module.getMetadata().getRequires() == null) return 0;
 
-        Renderer.text("Requires: " + this.module.getMetadata().getRequires(), 22, infoHeight - scrolled + 20)
-                .setShadow(true)
-                .draw();
+        Renderer.drawStringWithShadow("Requires: " + this.module.getMetadata().getRequires(), 22, infoHeight - scrolled + 20);
 
         return 20;
     }
@@ -228,7 +211,6 @@ public class ModuleGui extends GuiScreen {
                         .replaceAll("(\\d+)", "&6$1&r")
                         .replace("TriggerRegister", "&cTriggerRegister&r")
                         .replace("ChatLib", "&cChatLib&r")
-                        .replace("WorldLib", "&cWorldLib&r")
                         .replace("Renderer", "&cRenderLib&r")
                         .replace("MathLib", "&cMathLib&r")
                         .replace("FileLib", "&cFileLib&r")

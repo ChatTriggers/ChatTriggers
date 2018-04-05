@@ -6,9 +6,12 @@ import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.ClientCommandHandler;
 
 import javax.script.ScriptException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class OnCommandTrigger extends OnTrigger {
     private String commandName = null;
+    private Command command = null;
 
     public OnCommandTrigger(String methodName) {
         super(methodName, TriggerType.COMMAND);
@@ -52,6 +55,31 @@ public class OnCommandTrigger extends OnTrigger {
         return setCommandName(commandName);
     }
 
+    /**
+     * Sets the tab complete options
+     * 
+     * @param options the options to for tab complete
+     * @return the trigger for additional modification
+     */
+    public OnCommandTrigger setTabCompleteOptions(String... options) {
+        this.command.setTabComplete(new ArrayList<>(Arrays.asList(options)));
+
+        return this;
+    }
+
+    /**
+     * Adds a tab complete option
+     *
+     * @param option the option to add
+     * @return the trigger for additional modification
+     */
+    public OnCommandTrigger addTabCompleteOption(String option) {
+        this.command.addTabComplete(option);
+
+        return this;
+    }
+
+    // helper method to re instance the command
     private void reInstance() {
         for (Command command : CTJS.getInstance().getCommandHandler().getCommandList()) {
             if (command.getCommandName().equals(this.commandName)) {
@@ -60,8 +88,8 @@ public class OnCommandTrigger extends OnTrigger {
             }
         }
 
-        Command command = new Command(this, this.commandName, "/" + this.commandName);
-        ClientCommandHandler.instance.registerCommand(command);
-        CTJS.getInstance().getCommandHandler().getCommandList().add(command);
+        this.command = new Command(this, this.commandName, "/" + this.commandName);
+        ClientCommandHandler.instance.registerCommand(this.command);
+        CTJS.getInstance().getCommandHandler().getCommandList().add(this.command);
     }
 }

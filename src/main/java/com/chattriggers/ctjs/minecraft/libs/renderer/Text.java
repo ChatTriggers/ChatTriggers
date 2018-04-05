@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer;
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -43,15 +44,18 @@ public class Text {
      * Gets the text color
      *
      * @return A color integer
-     *
-     * -- SETTER --
-     * Sets the text color
-     *
-     * @see Renderer#color(int, int, int, int)
-     * @param color The new color
      */
-    @Getter @Setter
+    @Getter
     private int color;
+
+    /**
+     * -- GETTER --
+     * Gets if the text is formatted (true by default)
+     *
+     * @return True if the text is formatted
+     */
+    @Getter
+    private boolean formatted;
 
     /**
      * -- GETTER --
@@ -155,6 +159,8 @@ public class Text {
     Text(String text, float x, float y) {
         this.string = text;
         this.lines = new ArrayList<>(Collections.singleton(this.string));
+        this.formatted = true;
+        updateFormatting();
         this.x = x;
         this.y = y;
 
@@ -164,6 +170,39 @@ public class Text {
         this.scale = 1;
         this.shadow = false;
         this.align = "left";
+    }
+
+    private void updateFormatting() {
+        if (this.formatted)
+            this.string = ChatLib.addColor(this.string);
+        else
+            this.string = ChatLib.replaceFormatting(this.string);
+    }
+
+    /**
+     * Sets if the text is formatted (true by default)
+     *
+     * @param formatted if the text is formatted
+     * @return the Text object for method chaining
+     */
+    public Text setFormatted(boolean formatted) {
+        this.formatted = formatted;
+        updateFormatting();
+        
+        return this;
+    }
+
+    /**
+     * Sets the text color
+     *
+     * @see Renderer#color(int, int, int, int)
+     * @param color The new color
+     * @return The Text object for method chaining
+     */
+    public Text setColor(int color) {
+        this.color = fixAlpha(color);
+
+        return this;
     }
 
     /**
@@ -243,6 +282,14 @@ public class Text {
         GlStateManager.pushMatrix();
 
         return this;
+    }
+
+    // helper method to fix alpha
+    private int fixAlpha(int color) {
+        int alpha = color >> 24 & 255;
+        if (alpha < 10)
+            return Renderer.color(color >> 16 & 255, color >> 8 & 255, color & 255, 10);
+        return color;
     }
 
     // helper method to get the x alignment

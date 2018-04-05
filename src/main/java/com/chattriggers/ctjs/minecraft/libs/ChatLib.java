@@ -2,19 +2,15 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
-import com.chattriggers.ctjs.minecraft.objects.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.Message;
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
-import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,134 +22,40 @@ import java.util.List;
 @UtilityClass
 @SideOnly(Side.CLIENT)
 public class ChatLib {
-
     /**
-     * Adds as many chat message to chat as passed.
+     * Adds a message to chat
      *
-     * @param message   the message to be printed
-     * @param recursive whether or not triggers should be triggered by this message
+     * @param text the message to be printed
      */
-    public static void chat(String message, boolean recursive) {
-        if (!isPlayer("[CHAT]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(addColor(message));
-
-        if (recursive) {
-            Client.getConnection().handleChat(new S02PacketChat(cct, (byte) 0));
-        } else {
-            Player.getPlayer().addChatMessage(cct);
-            CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
-        }
-    }
-
-    /**
-     * Adds a message to chat (IS RECURSIVE! See {@link #chat(String, boolean)}
-     * to specify it being recursive.
-     *
-     * @param message the message to be printed
-     */
-    public static void chat(String message) {
-        chat(message, false);
+    public static void chat(String text) {
+        new Message(text).chat();
     }
 
     /**
      * Print a {@link Message} in chat.
      *
-     * @param message   the message to be printed
-     * @param recursive whether or not triggers should be triggered by this message
-     */
-    public static void chat(Message message, boolean recursive) {
-        if (message.getChatLineId() != -1) {
-            Client.getChatGUI().printChatMessageWithOptionalDeletion(message.getChatMessage(), message.getChatLineId());
-            return;
-        }
-
-        if (recursive) {
-            Client.getConnection().handleChat(new S02PacketChat(message.getChatMessage(), (byte) 0));
-        } else {
-            Player.getPlayer().addChatMessage(message.getChatMessage());
-        }
-    }
-
-    /**
-     * Print a {@link Message} in chat (not recursive by default. See {@link #chat(Message, boolean)}
-     * to specify it being recursive.
-     *
      * @param message the message to be printed
      */
     public static void chat(Message message) {
-        chat(message, false);
+        message.chat();
     }
 
     /**
-     * Add a chat message to chat, but with a special ID which allows
-     * them to be clear with {@link #clearChat(int...)}.
-     * This ID can't be used more than once.
-     *
-     * @param message    the message to be printed
-     * @param chatLineID the chat line to save the message under (pass to clearChat)
+     * Prints a {@link TextComponent} in chat.
+     * 
+     * @param component the component to be printed
      */
-    public static void chat(String message, int chatLineID) {
-        if (!isPlayer("[CHAT]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(addColor(message));
-        Client.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
+    public static void chat(TextComponent component) {
+        new Message(component).chat();
     }
 
     /**
-     * Add a raw chat message to chat (no formatting).
+     * Simulates a chat message to be caught by other triggers for testing.
      *
-     * @param message the message to be printed
+     * @param message The message to simulate
      */
-    public static void raw(String message) {
-        raw(message, false);
-    }
-
-    /**
-     * Add a raw chat message to chat (no formatting).
-     *
-     * @param message   the message to be printed
-     * @param recursive whether or not triggers should be triggered by this message
-     */
-    public static void raw(String message, Boolean recursive) {
-        if (!isPlayer("[CHAT]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(message);
-
-        if (recursive) {
-            Client.getConnection().handleChat(new S02PacketChat(cct, (byte) 0));
-        } else {
-            Player.getPlayer().addChatMessage(cct);
-            CTJS.getInstance().getChatListener().addMessageToChatHistory(cct.getFormattedText().replace('\u00A7', '&'));
-        }
-    }
-
-    /**
-     * Add a raw chat message to chat (no formatting).
-     *
-     * @param message    the message to be printed
-     * @param chatLineID the chat line to save the message under (pass to clearChat)
-     */
-    public static void raw(String message, int chatLineID) {
-        if (!isPlayer("[RAW]: " + message)) return;
-
-        ChatComponentText cct = new ChatComponentText(message);
-        Client.getChatGUI().printChatMessageWithOptionalDeletion(cct, chatLineID);
-    }
-
-    /**
-     * Simulates a chat message to be caught by other triggers for testing
-     *
-     * @param args The message to simulate
-     */
-    public static void simulateChat(String[] args) {
-        StringBuilder toSend = new StringBuilder();
-
-        for (String arg : args) {
-            if (!arg.equals(args[0])) toSend.append(arg).append(" ");
-        }
-
-        chat(toSend.toString(), true);
+    public static void simulateChat(String message) {
+        new Message(message).setRecursive(true).chat();
     }
 
     /**
@@ -327,61 +229,6 @@ public class ChatLib {
     }
 
     /**
-     * Create a clickable message in chat, to be used with {@link Message}.
-     * Also shows text on hover.
-     *
-     * @param text      the text to show in the message
-     * @param action    the action to perform
-     * @param value     the value to perform the action with
-     * @param hoverText the text to show when hovered over
-     * @return the chat component created
-     */
-    public static IChatComponent clickable(String text, String action, String value, String hoverText) {
-        ChatComponentText cct = new ChatComponentText(addColor(text));
-
-        cct.setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(
-                ClickEvent.Action.getValueByCanonicalName(action), value
-        )));
-
-        if (hoverText != null) {
-            cct.getChatStyle().setChatHoverEvent(new HoverEvent(
-                    HoverEvent.Action.SHOW_TEXT, new ChatComponentText(addColor(hoverText))
-            ));
-        }
-
-        return cct;
-    }
-
-    /**
-     * Create a clickable message in chat, to be used with {@link Message}.
-     *
-     * @param text   the text to show in the message
-     * @param action the action to perform
-     * @param value  the value to perform the action with
-     * @return the chat component created
-     */
-    public static IChatComponent clickable(String text, String action, String value) {
-        return clickable(text, action, value, null);
-    }
-
-    /**
-     * Create a hoverable message in chat, to be used with {@link Message}
-     *
-     * @param text  the text to show in the message
-     * @param hover the text to show when hovered over
-     * @return the chat component created
-     */
-    public static IChatComponent hover(String text, String hover) {
-        ChatComponentText cct = new ChatComponentText(addColor(text));
-
-        cct.setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT, new ChatComponentText(addColor(hover))
-        )));
-
-        return cct;
-    }
-
-    /**
      * Get the text of a chat event.
      *
      * @param event     The chat event passed in by a chat trigger
@@ -407,15 +254,6 @@ public class ChatLib {
         return getChatMessage(event, false);
     }
 
-    private Boolean isPlayer(String out) {
-        if (Player.getPlayer() == null) {
-            CTJS.getInstance().getConsole().out.println(out);
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * Replaces the easier to type '&amp;' color codes with proper color codes in a string.
      *
@@ -427,5 +265,15 @@ public class ChatLib {
             message = "null";
 
         return message.replaceAll("(?:(?<!\\\\))&(?![^0-9a-fklmnor]|$)", "\u00a7");
+    }
+
+    // helper method to make sure player exists before putting something in chat
+    public Boolean isPlayer(String out) {
+        if (Player.getPlayer() == null) {
+            CTJS.getInstance().getConsole().out.println(out);
+            return false;
+        }
+
+        return true;
     }
 }

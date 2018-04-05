@@ -49,6 +49,6 @@ public class ImagesPack implements IResourcePack {
 
     @Override
     public String getPackName() {
-        return "ctjs images";
+        return "CTJS Images";
     }
 }
