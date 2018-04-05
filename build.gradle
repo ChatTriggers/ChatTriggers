@@ -47,14 +47,10 @@ configurations {
 minecraft {
     version = "1.8.9-11.15.1.1722"
     runDir = "run"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
+
     mappings = "stable_22"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    makeObfSourceJar = true
+    clientJvmArgs = ["--tweakClass", "com.chattriggers.ctjs.launch.CTJSTweaker"]
 }
 
 repositories {
@@ -66,7 +62,16 @@ repositories {
 }
 
 dependencies {
-    provided 'org.spongepowered:mixin:0.6.4-SNAPSHOT'
+    provided ('org.spongepowered:mixin:0.6.4-SNAPSHOT') {
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+        exclude module: 'log4j-core'
+    }
+
+    // You should fork the repo, apply your modifications
+    // and either use jitpack (simplest) or create your own maven repo for it
     compile files("libs/nashorn.jar")
     provided files("libs/sentry.jar")
     provided group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.3"
@@ -100,10 +105,11 @@ jar {
     }
 
     manifest.attributes(
-            'TweakClass': 'com.chattriggers.ctjs.loader.CTJSTweaker',
+            'MixinConfigs': 'mixins.ctjs.json',
             'TweakOrder': '0',
-            'MixinConfigs': 'mixins.ctjs.json'
+            'TweakClass': 'com.chattriggers.ctjs.launch.CTJSTweaker'
     )
+
 }
 
 mixin {
@@ -112,23 +118,24 @@ mixin {
     add sourceSets.main, "mixins.ctjs.refmap.json"
 }
 
-//processResources {
-//    inputs.property "version", project.version
-//    inputs.property "mcversion", project.minecraft.version
-//
-//    // replace stuff in mcmod.info, nothing else
-//    from(sourceSets.main.resources.srcDirs) {
-//        include "mcmod.info"
-//
-//        // replace version and mcversion
-//        expand "version":project.version, "mcversion":project.minecraft.version
-//    }
-//
-//    // copy everything else, thats not the mcmod.info
-//    from(sourceSets.main.resources.srcDirs) {
-//        exclude "mcmod.info"
-//    }
-//}
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+
+        // replace version and mcversion
+        expand "version":project.version, "mcversion":project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+    }
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
 //
 //
 ///*
