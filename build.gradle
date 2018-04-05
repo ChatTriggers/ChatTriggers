@@ -50,7 +50,7 @@ minecraft {
 
     mappings = "stable_22"
     makeObfSourceJar = true
-    clientJvmArgs = ["--tweakClass", "com.chattriggers.ctjs.loader.CTJSTweaker"]
+    clientJvmArgs = ["--tweakClass", "com.chattriggers.ctjs.launch.CTJSTweaker"]
 }
 
 repositories {
