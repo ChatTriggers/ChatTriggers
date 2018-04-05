@@ -5,6 +5,9 @@
     </a>
   </p>
   <p>
+    <a href="https://discord.gg/0fNjZyopOvBHZyG8">
+      <img src="https://discordapp.com/api/guilds/119493402902528000/embed.png" alt="Discord" />
+    </a>
     <a href="https://travis-ci.org/ChatTriggers/ct.js">
       <img src="https://travis-ci.org/ChatTriggers/ct.js.svg?branch=master" alt="Build Status" />
     </a>
