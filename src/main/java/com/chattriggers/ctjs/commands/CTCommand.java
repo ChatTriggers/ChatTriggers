@@ -2,11 +2,15 @@ package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.Prime;
 import com.chattriggers.ctjs.utils.console.Console;
+import com.google.gson.Gson;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -61,6 +65,7 @@ public class CTCommand extends CommandBase {
     }
     public String getCommandUsage(ICommandSender sender) {
         return "&b&m" + ChatLib.getChatBreak("-") + "\n" +
+                "&c/ct prime <code> &7- &oRegister Prime subscription or Prime Module\n" +
                 "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
                 "&c/ct import [module] &7- &oImports a module.\n" +
                 "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
@@ -86,6 +91,12 @@ public class CTCommand extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
+                case("prime"):
+                    if (args.length == 1) {
+                        ChatLib.chat("&c/ct prime <code>");
+                    } else {
+                        confirmPrime(args[1]);
+                    }
                 case("reload"):
                 case("load"):
                     if (!this.isLoaded) return;
@@ -116,11 +127,15 @@ public class CTCommand extends CommandBase {
                     openFileLocation();
                     break;
                 case("import"):
-                    if (args.length == 1) {
-                        ChatLib.chat("&c/ct import [module name]");
+                    if (CTJS.getInstance().getPrime().getStatus()) {
+                        if (args.length == 1) {
+                            ChatLib.chat("&c/ct import [module name]");
+                        } else {
+                            ChatLib.chat("&6Importing " + args[1]);
+                            CTJS.getInstance().getModuleManager().importModule(args[1]);
+                        }
                     } else {
-                        ChatLib.chat("&6Importing " + args[1]);
-                        CTJS.getInstance().getModuleManager().importModule(args[1]);
+                        ChatLib.chat("&cYou must be subscribed to Prime to use this");
                     }
                     break;
                 case("console"):
@@ -164,6 +179,15 @@ public class CTCommand extends CommandBase {
         } else {
             ChatLib.chat(getCommandUsage(sender));
         }
+    }
+
+    private void confirmPrime(String code) {
+        String url = "https://prime.chattriggers.com/registerMinecraftUUID";
+        url += "?uuid=" + Player.getUUID();
+        url += "&code=" + code;
+        String confirmation = FileLib.getUrlContent(url);
+        Prime.PrimeConfirmation primeConfirmation = new Gson().fromJson(confirmation, Prime.PrimeConfirmation.class);
+        primeConfirmation.checkConfirmation();
     }
 
     private void dumpChat(int lines) {
