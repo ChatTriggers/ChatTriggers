@@ -16,7 +16,6 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
-import com.chattriggers.ctjs.utils.Prime;
 import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -81,10 +80,6 @@ public class CTJS {
     @Getter
     private Image icon;
 
-    @Getter
-    @Setter
-    private Prime prime;
-
     @EventHandler
     public void init(FMLInitializationEvent event) {
         this.displayHandler = new DisplayHandler();
@@ -94,7 +89,6 @@ public class CTJS {
         this.moduleManager = new ModuleManager();
         this.cps = new CPS();
         this.tessellator = new Tessellator();
-        this.prime = new Prime();
 
         registerListeners();
 
