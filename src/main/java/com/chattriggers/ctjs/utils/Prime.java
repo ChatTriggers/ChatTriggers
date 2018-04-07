@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.utils;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,16 +12,12 @@ public class Prime {
     @Getter
     @Setter
     private List<PrimeModule> purchasedModules;
-    private String error;
 
     public boolean getStatus() {
         return status;
     }
 
     private void updatePrime() {
-        if (this.error != null) {
-            ChatLib.chat("&cERROR: " + error);
-        }
         CTJS.getInstance().setPrime(this);
     }
 
