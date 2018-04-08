@@ -12,9 +12,11 @@ public class GuiConfig extends GuiScreen {
     @Getter
     private ArrayList<ConfigOption> configOptions;
     private Boolean isOpen = false;
+    private IconHandler iconHandler;
 
     public GuiConfig() {
         this.configOptions = new ArrayList<>();
+        this.iconHandler = new IconHandler();
     }
 
     public void addConfigOption(ConfigOption configOption) {
@@ -38,7 +40,7 @@ public class GuiConfig extends GuiScreen {
         for (ConfigOption configOption : this.configOptions)
             configOption.draw(mouseX, mouseY);
 
-        CTJS.getInstance().getIconHandler().drawIcons();
+        iconHandler.drawIcons();
 
         GlStateManager.popMatrix();
     }
@@ -56,7 +58,7 @@ public class GuiConfig extends GuiScreen {
         for (ConfigOption configOption : this.configOptions)
             configOption.mouseClicked(mouseX, mouseY);
 
-        CTJS.getInstance().getIconHandler().clickIcons(mouseX, mouseY);
+        iconHandler.clickIcons(mouseX, mouseY);
     }
 
     @Override

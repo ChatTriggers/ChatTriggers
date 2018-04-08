@@ -10,10 +10,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IconHandler {
+class IconHandler {
     private List<Icon> icons;
 
-    public IconHandler() {
+    IconHandler() {
         this.icons = new ArrayList<>();
 
         String imageUrl = "https://chattriggers.com/assets/images/";
@@ -24,13 +24,13 @@ public class IconHandler {
         this.icons.add(new Icon("CT_Discord.png", imageUrl + "discord-dark.png", "https://discordapp.com/invite/0fNjZyopOvBHZyG8", 3));
     }
 
-    public void drawIcons() {
+    void drawIcons() {
         for (Icon icon : icons) {
             icon.draw();
         }
     }
 
-    public void clickIcons(int x, int y) {
+    void clickIcons(int x, int y) {
         for (Icon icon : icons) {
             icon.click(x, y);
         }

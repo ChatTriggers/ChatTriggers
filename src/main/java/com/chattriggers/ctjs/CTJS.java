@@ -16,7 +16,6 @@ import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
 import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.config.GuiConfig;
-import com.chattriggers.ctjs.utils.config.IconHandler;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,7 +30,6 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
@@ -76,9 +74,6 @@ public class CTJS {
     private Tessellator tessellator;
 
     private File configLocation;
-
-    @Getter
-    private IconHandler iconHandler;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
@@ -179,11 +174,6 @@ public class CTJS {
         ClientCommandHandler.instance.registerCommand(new CTCommand());
 
         Runtime.getRuntime().addShutdownHook(new Thread(TriggerType.GAME_UNLOAD::triggerAll));
-    }
-
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        this.iconHandler = new IconHandler();
     }
 }
 
