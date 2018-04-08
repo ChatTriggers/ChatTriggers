@@ -65,7 +65,7 @@ public class ConfigBoolean extends ConfigOption {
     }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+    public void mouseClicked(int mouseX, int mouseY) {
         if (this.hidden) return;
 
         if (this.button.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {

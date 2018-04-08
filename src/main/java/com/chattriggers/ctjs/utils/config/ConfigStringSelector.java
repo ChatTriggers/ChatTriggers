@@ -93,7 +93,7 @@ public class ConfigStringSelector extends ConfigOption {
     }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+    public void mouseClicked(int mouseX, int mouseY) {
         if (this.hidden) return;
 
         if (this.leftArrowButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
