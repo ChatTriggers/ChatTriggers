@@ -16,6 +16,7 @@ public enum TriggerType {
     CLICKED, DRAGGED,
     GUI_OPENED, SCREENSHOT_TAKEN,
     PICKUP_ITEM,
+    MESSAGE_SENT,
 
     // rendering
     RENDER_WORLD, BLOCK_HIGHLIGHT,

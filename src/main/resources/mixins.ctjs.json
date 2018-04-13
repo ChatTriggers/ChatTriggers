@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinGuiChat",
+    "MixinGuiScreen",
     "MixinScreenShotHelper",
     "MixinMinecraft"
   ]
