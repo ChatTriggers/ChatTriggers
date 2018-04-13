@@ -5,8 +5,10 @@ import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
@@ -138,12 +140,27 @@ public class ClientListener {
     }
 
     @SubscribeEvent
-    public void onBlockHighlightEvent(DrawBlockHighlightEvent event) {
+    public void onBlockHighlight(DrawBlockHighlightEvent event) {
         Vector3d position = new Vector3d(
                 event.target.getBlockPos().getX(),
                 event.target.getBlockPos().getY(),
                 event.target.getBlockPos().getZ()
         );
         TriggerType.BLOCK_HIGHLIGHT.triggerAll(event, position);
+    }
+
+    @SubscribeEvent
+    public void onPickupItem(EntityItemPickupEvent event) {
+        Vector3d position = new Vector3d(
+                event.item.posX,
+                event.item.posY,
+                event.item.posZ
+        );
+        Vector3d motion = new Vector3d(
+                event.item.motionX,
+                event.item.motionY,
+                event.item.motionZ
+        );
+        TriggerType.PICKUP_ITEM.triggerAll(new Item(event.item.getName()), position, motion);
     }
 }
