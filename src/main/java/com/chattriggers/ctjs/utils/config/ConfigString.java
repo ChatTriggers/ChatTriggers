@@ -92,10 +92,10 @@ public class ConfigString extends ConfigOption {
     }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+    public void mouseClicked(int mouseX, int mouseY) {
         if (this.hidden) return;
 
-        this.textField.mouseClicked(mouseX, mouseY, mouseButton);
+        this.textField.mouseClicked(mouseX, mouseY, 0);
 
         if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
             this.value = this.defaultValue;

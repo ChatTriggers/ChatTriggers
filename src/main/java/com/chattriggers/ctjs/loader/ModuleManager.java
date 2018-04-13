@@ -83,12 +83,13 @@ public class ModuleManager {
     }
 
     public void importModule(String name) {
+        ChatLib.chat("&7Importing " + name);
         new Thread(() -> {
             JSScriptLoader scriptLoader = (JSScriptLoader) scriptLoaders.get(0);
             if(scriptLoader.downloadModule(name,true)) {
-                    scriptLoader.loadModule(new File(scriptLoader.modulesDir, name), false);
-                    ChatLib.chat("&6Successfully imported " + name + "!");
-                }
+                scriptLoader.loadModule(new File(scriptLoader.modulesDir, name), false);
+                ChatLib.chat("&6Successfully imported " + name + "!");
+            }
         }).start();
     }
 }

@@ -44,7 +44,7 @@ public abstract class ConfigOption {
                 .setShadow(true)
                 .draw();
     }
-    public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
+    public abstract void mouseClicked(int mouseX, int mouseY);
     public void mouseReleased() {}
     public void keyTyped(char typedChar, int keyCode) {}
 

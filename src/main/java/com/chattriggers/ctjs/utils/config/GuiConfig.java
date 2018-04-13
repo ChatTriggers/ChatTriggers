@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.utils.config;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,9 +12,11 @@ public class GuiConfig extends GuiScreen {
     @Getter
     private ArrayList<ConfigOption> configOptions;
     private Boolean isOpen = false;
+    private IconHandler iconHandler;
 
     public GuiConfig() {
         this.configOptions = new ArrayList<>();
+        this.iconHandler = new IconHandler();
     }
 
     public void addConfigOption(ConfigOption configOption) {
@@ -39,8 +40,7 @@ public class GuiConfig extends GuiScreen {
         for (ConfigOption configOption : this.configOptions)
             configOption.draw(mouseX, mouseY);
 
-        CTJS.getInstance().getIcon().setY(Renderer.screen.getHeight() - 64);
-        CTJS.getInstance().getIcon().draw();
+        iconHandler.drawIcons();
 
         GlStateManager.popMatrix();
     }
@@ -53,8 +53,12 @@ public class GuiConfig extends GuiScreen {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (mouseButton != 0) return;
+
         for (ConfigOption configOption : this.configOptions)
-            configOption.mouseClicked(mouseX, mouseY, mouseButton);
+            configOption.mouseClicked(mouseX, mouseY);
+
+        iconHandler.clickIcons(mouseX, mouseY);
     }
 
     @Override

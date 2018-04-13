@@ -5,8 +5,6 @@ import com.chattriggers.ctjs.commands.CommandHandler;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.minecraft.libs.Tessellator;
-import com.chattriggers.ctjs.minecraft.libs.renderer.Image;
-import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener;
@@ -32,7 +30,6 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
@@ -78,8 +75,6 @@ public class CTJS {
     private Tessellator tessellator;
 
     private File configLocation;
-    @Getter
-    private Image icon;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
@@ -179,12 +174,5 @@ public class CTJS {
         ClientCommandHandler.instance.registerCommand(new CTCommand());
 
         Runtime.getRuntime().addShutdownHook(new Thread(TriggerType.GAME_UNLOAD::triggerAll));
-    }
-
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        this.icon = Renderer.image("CT_logo.png")
-                .download("https://i.imgur.com/JAPDKMG.png", true)
-                .setScale(0.25f);
     }
 }

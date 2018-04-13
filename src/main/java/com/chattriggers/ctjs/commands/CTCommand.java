@@ -116,12 +116,10 @@ public class CTCommand extends CommandBase {
                     openFileLocation();
                     break;
                 case("import"):
-                    if (args.length == 1) {
+                    if (args.length == 1)
                         ChatLib.chat("&c/ct import [module name]");
-                    } else {
-                        ChatLib.chat("&6Importing " + args[1]);
+                    else
                         CTJS.getInstance().getModuleManager().importModule(args[1]);
-                    }
                     break;
                 case("console"):
                     Console.getConsole().showConsole(true);

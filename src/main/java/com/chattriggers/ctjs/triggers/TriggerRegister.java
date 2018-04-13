@@ -6,6 +6,16 @@ import com.chattriggers.ctjs.utils.console.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * <p>This class is used to register new triggers to run function on minecraft events</p>
+ * <br>
+ * <p>"while" means repeating until the action is stopped</p>
+ * <p>"before" means directly before within the same game tick</p>
+ * <p>"after" means directly after within the same game tick</p>
+ * <br>
+ * <p>Most triggers are synchronous meaning they will happen at the same time as the event.<br>
+ * Triggers that are asynchronous will be labeled as such</p>
+ */
 public class TriggerRegister {
     public static Module currentModule = null;
 
@@ -42,8 +52,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new chat trigger.<br>
-     * Runs on arrival of a chat message before it gets drawn in chat.<br>
+     * Registers a new trigger that runs before a chat message is received.<br>
+     * 
      * Passes through multiple arguments:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any number of chat criteria variables<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the chat event<br>
@@ -61,8 +71,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world load trigger.<br>
-     * Runs every time a world loads.<br>
+     * Registers a trigger that runs before the world loads.<br>
+     * 
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
@@ -74,8 +84,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new world unload trigger.<br>
-     * Runs every time a world unloads.<br>
+     * Registers a new trigger that runs before the world unloads.<br>
+     * 
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
@@ -87,8 +97,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new clicked trigger.<br>
-     * Runs on both down and up action on the mouse for mouse buttons 0 through 5.<br>
+     * Registers a new trigger that runs before a mouse button is being pressed or released.<br>
+     * 
      * Passes through 4 arguments:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse x<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse y<br>
@@ -105,8 +115,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new dragged trigger.<br>
-     * Runs while a mouse button is being held down.<br>
+     * Registers a new trigger that runs while a mouse button is being held down.<br>
+     * 
      * Passes through 5 arguments:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse delta x<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse delta y<br>
@@ -124,10 +134,15 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new sound play trigger.<br>
-     * Runs every time a sound is played.<br>
-     * Passes through 1 argument:<br>
+     * Registers a new trigger that runs before a sound is played.<br>
+     * 
+     * Passes through 6 arguments:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's position<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's name<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's volume<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's pitch<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's category's name<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -140,8 +155,44 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new tick trigger.<br>
-     * Runs every game tick.<br>
+     * Registers a new trigger that runs before a noteblock is played.<br>
+     * 
+     * Passes through 4 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event's Vector3d position<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event's note's name<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event's octave<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerNoteBlockPlay(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.NOTE_BLOCK_PLAY);
+    }
+
+    /**
+     * Registers a new trigger that runs before a noteblock is changed.<br>
+     * 
+     * Passes through 4 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event's Vector3d position<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event's note's name<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event's octave<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerNoteBlockChange(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.NOTE_BLOCK_CHANGE);
+    }
+
+    /**
+     * Registers a new trigger that runs before every game tick.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ticks elapsed<br>
      * Available modifications:<br>
@@ -155,8 +206,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new step trigger.<br>
-     * Runs in predictable intervals, 60 times per second by default.<br>
+     * Registers a new trigger that runs in predictable intervals. (60 per second by default)<br>
+     * 
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnStepTrigger#setFps(long)} Sets the fps<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnStepTrigger#setDelay(long)} Sets the delay in seconds<br>
@@ -170,8 +221,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render world trigger.<br>
-     * Runs when the world is getting drawn every frame.<br>
+     * Registers a new trigger that runs before the world is drawn.<br>
+     * 
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
@@ -183,8 +234,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render overlay trigger.<br>
-     * Runs when the overlay is getting drawn every frame.<br>
+     * Registers a new trigger that runs before the overlay is drawn.<br>
+     * 
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
@@ -196,8 +247,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render player list trigger.<br>
-     * Runs when the player list is being drawn.<br>
+     * Registers a new trigger that runs before the player list is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -212,8 +263,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render crosshair trigger.<br>
-     * Runs when the crosshair is being drawn.<br>
+     * Registers a new trigger that runs before the crosshair is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -228,8 +279,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render debug trigger.<br>
-     * Runs when the debug screen (f3) is being drawn.<br>
+     * Registers a trigger that runs before the debug screen is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -244,8 +295,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render boss health trigger.<br>
-     * Runs when the boss health bar is being drawn.<br>
+     * Registers a new trigger that runs before the boss health bar is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -260,8 +311,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render health trigger.<br>
-     * Runs when the player's health is being drawn.<br>
+     * Registers a new trigger that runs before the player's health is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -276,8 +327,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render food trigger.<br>
-     * Runs when the player's food (hunger) is being drawn.<br>
+     * Registers a new trigger that runs before the player's food is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -292,8 +343,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render mount health trigger.<br>
-     * Runs when the mount's health (Example: horse or pig) is being drawn.<br>
+     * Registers a new trigger that runs before the player's mount's health is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -308,8 +359,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render experience trigger.<br>
-     * Runs when the player's experience bar is being drawn.<br>
+     * Registers a new trigger that runs before the player's experience is being drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -324,8 +375,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render hotbar trigger.<br>
-     * Runs when the player's hotbar is being drawn.<br>
+     * Registers a new trigger that runs before the player's hotbar is drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -340,8 +391,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new render air trigger.<br>
-     * Runs when the player's air level (underwater) is being drawn.<br>
+     * Registers a new trigger that runs before the player's air level is drawn.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      * Available modifications:<br>
@@ -356,8 +407,25 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new game load trigger.<br>
-     * Runs directly after the game loads.<br>
+     * Registers a new trigger that runs before the block highlight box is drawn.<br>
+     * 
+     * Passes through 2 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The draw block highlight event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The draw block highlight event's position<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerDrawBlockHighlight(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.BLOCK_HIGHLIGHT);
+    }
+
+    /**
+     * Registers a new trigger that runs after the game loads.<br>
+     * This runs after the initial loading of the game directly after scripts are loaded and after "/ct load" happens.<br>
+     * 
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
@@ -369,8 +437,9 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new game unload trigger.<br>
-     * Runs directly before the game unloads.<br>
+     * Registers a new trigger that runs before the game unloads.<br>
+     * This runs before shutdown of the JVM and before "/ct load" happens.<br>
+     * 
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
@@ -382,13 +451,13 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new method that receives a command input.<br>
-     * Runs when the command with matching name is run.<br>
+     * Registers a new command that will run the method provided.<br>
+     *
      * Passes through multiple arguments:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The arguments supplied to the command by the user<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnCommandTrigger#setCommandName(String)} Sets the command name<br>
-     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      *
      * @param methodName the name of the method to callback when the event is fired
      * @return the trigger for additional modification
@@ -398,8 +467,8 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new method that gets run when a new gui is opened.<br>
-     * Runs when a gui is opened.<br>
+     * Registers a new trigger that runs when a new gui is first opened.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the gui opened event<br>
      * Available modifications:<br>
@@ -413,8 +482,10 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new method that gets run when a player joins the world.<br>
-     * Runs when a player joins.<br>
+     * Registers a new trigger that runs when a player joins the world.<br>
+     * Maximum is one per tick. Any extras will queue and run in later ticks.<br>
+     * This trigger is asynchronous.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP} object<br>
      * Available modifications:<br>
@@ -428,8 +499,10 @@ public class TriggerRegister {
     }
 
     /**
-     * Registers a new method that gets run when a player leaves the world.<br>
-     * Runs when a player leaves.<br>
+     * Registers a new trigger that runs when a player leaves the world.<br>
+     * Maximum is one per tick. Any extras will queue and run in later ticks.<br>
+     * This trigger is asynchronous.<br>
+     * 
      * Passes through 1 argument:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the name of the player that left<br>
      * Available modifications:<br>
@@ -440,6 +513,23 @@ public class TriggerRegister {
      */
     public static OnRegularTrigger registerPlayerLeft(String methodName) {
         return new OnRegularTrigger(methodName, TriggerType.PLAYER_LEAVE);
+    }
+
+    /**
+     * Registers a new trigger that runs before an item is picked up.<br>
+     *
+     * Passes through 3 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} that is picked up<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's position vector<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's motion vector<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerPickupItem(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.PICKUP_ITEM);
     }
 
     public static OnRegularTrigger registerScreenshotTaken(String methodName) {
