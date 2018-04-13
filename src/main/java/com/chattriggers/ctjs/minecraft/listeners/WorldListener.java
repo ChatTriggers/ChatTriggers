@@ -7,10 +7,12 @@ import com.chattriggers.ctjs.triggers.TriggerType;
 import io.sentry.Sentry;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import javax.vecmath.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +44,20 @@ public class WorldListener {
 
     @SubscribeEvent
     public void onSoundPlay(PlaySoundEvent event) {
-        TriggerType.SOUND_PLAY.triggerAll(event);
+        Vector3d position = new Vector3d(event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF());
+        TriggerType.SOUND_PLAY.triggerAll(event, position, event.name, event.sound.getVolume(), event.sound.getPitch(), event.category.getCategoryName());
+    }
+
+    @SubscribeEvent
+    public void noteBlockEventPlay(NoteBlockEvent.Play event) {
+        Vector3d position = new Vector3d(event.pos.getX(), event.pos.getY(), event.pos.getZ());
+        TriggerType.NOTE_BLOCK_PLAY.triggerAll(event, position, event.getNote().name(), event.getOctave());
+    }
+
+    @SubscribeEvent
+    public void noteBlockEventChange(NoteBlockEvent.Change event) {
+        Vector3d position = new Vector3d(event.pos.getX(), event.pos.getY(), event.pos.getZ());
+        TriggerType.NOTE_BLOCK_CHANGE.triggerAll(event, position, event.getNote().name(), event.getOctave());
     }
 
     @SubscribeEvent

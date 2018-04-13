@@ -6,14 +6,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
 
+import javax.vecmath.Vector3d;
 import java.util.HashMap;
 
 public class ClientListener {
@@ -137,5 +135,15 @@ public class ClientListener {
     @SubscribeEvent
     public void onGuiOpened(GuiOpenEvent event) {
         TriggerType.GUI_OPENED.triggerAll(event);
+    }
+
+    @SubscribeEvent
+    public void onBlockHighlightEvent(DrawBlockHighlightEvent event) {
+        Vector3d position = new Vector3d(
+                event.target.getBlockPos().getX(),
+                event.target.getBlockPos().getY(),
+                event.target.getBlockPos().getZ()
+        );
+        TriggerType.BLOCK_HIGHLIGHT.triggerAll(event, position);
     }
 }

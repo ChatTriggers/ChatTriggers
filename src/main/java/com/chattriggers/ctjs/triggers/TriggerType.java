@@ -15,6 +15,7 @@ public enum TriggerType {
     GAME_UNLOAD, GAME_LOAD,
     CLICKED, DRAGGED,
     GUI_OPENED,
+    BLOCK_HIGHLIGHT,
 
     // rendering
     RENDER_WORLD,
@@ -24,7 +25,7 @@ public enum TriggerType {
 
     // world
     PLAYER_JOIN, PLAYER_LEAVE,
-    SOUND_PLAY,
+    SOUND_PLAY, NOTE_BLOCK_PLAY, NOTE_BLOCK_CHANGE,
     WORLD_LOAD, WORLD_UNLOAD,
 
     // misc

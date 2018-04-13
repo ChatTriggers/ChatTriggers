@@ -126,8 +126,13 @@ public class TriggerRegister {
     /**
      * Registers a new sound play trigger.<br>
      * Runs every time a sound is played.<br>
-     * Passes through 1 argument:<br>
+     * Passes through 6 arguments:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's position<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's name<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's volume<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's pitch<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sound event's category's name<br>
      * Available modifications:<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria<br>
      * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -137,6 +142,42 @@ public class TriggerRegister {
      */
     public static OnSoundPlayTrigger registerSoundPlay(String methodName) {
         return new OnSoundPlayTrigger(methodName);
+    }
+
+    /**
+     * Registers a new note block play trigger.<br>
+     * Runs every time a note block is played.<br>
+     * Passes through 4 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event's Vector3d position<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event's note's name<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block play event's octave<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerNoteBlockPlay(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.NOTE_BLOCK_PLAY);
+    }
+
+    /**
+     * Registers a new note block change trigger.<br>
+     * Runs every time a note block is changed.<br>
+     * Passes through 4 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event's Vector3d position<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event's note's name<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the note block change event's octave<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerNoteBlockChange(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.NOTE_BLOCK_CHANGE);
     }
 
     /**
@@ -353,6 +394,22 @@ public class TriggerRegister {
      */
     public static OnRenderTrigger registerRenderAir(String methodName) {
         return new OnRenderTrigger(methodName, TriggerType.RENDER_AIR);
+    }
+
+    /**
+     * Rgisters a new block highlight trigger.<br>
+     * Runs when the client is hovering over a block and the highlight box is being drawn.<br>
+     * Passes through 2 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The draw block highlight event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The draw block highlight event's position<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerDrawBlockHighlight(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.BLOCK_HIGHLIGHT);
     }
 
     /**
