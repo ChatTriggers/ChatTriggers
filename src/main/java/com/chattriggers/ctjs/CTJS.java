@@ -45,6 +45,7 @@ import java.util.List;
         clientSideOnly = true)
 public class CTJS {
     @Getter
+    @Mod.Instance
     private static CTJS instance;
 
     @Getter @Setter
@@ -94,17 +95,16 @@ public class CTJS {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        instance = this;
 
         this.console = new Console();
 
         Sentry.init(Reference.SENTRYDSN);
 
         Sentry.getContext().setUser(
-            new UserBuilder()
-                .setUsername(Player.getName())
-                .setId(Player.getUUID())
-                .build()
+                new UserBuilder()
+                        .setUsername(Player.getName())
+                        .setId(Player.getUUID())
+                        .build()
         );
 
         this.injectResourcePack(event.getModConfigurationDirectory().toString());
@@ -176,4 +176,3 @@ public class CTJS {
         Runtime.getRuntime().addShutdownHook(new Thread(TriggerType.GAME_UNLOAD::triggerAll));
     }
 }
-
