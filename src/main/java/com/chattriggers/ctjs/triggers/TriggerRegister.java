@@ -441,4 +441,8 @@ public class TriggerRegister {
     public static OnRegularTrigger registerPlayerLeft(String methodName) {
         return new OnRegularTrigger(methodName, TriggerType.PLAYER_LEAVE);
     }
+
+    public static OnRegularTrigger registerScreenshotTaken(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.SCREENSHOT_TAKEN);
+    }
 }

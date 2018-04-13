@@ -3,6 +3,8 @@
   "refmap": "mixins.ctjs.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinGuiChat"
+    "MixinGuiChat",
+    "MixinScreenShotHelper",
+    "MixinMinecraft"
   ]
 }

@@ -14,7 +14,7 @@ public enum TriggerType {
     CHAT, TICK, STEP,
     GAME_UNLOAD, GAME_LOAD,
     CLICKED, DRAGGED,
-    GUI_OPENED,
+    GUI_OPENED, SCREENSHOT_TAKEN,
 
     // rendering
     RENDER_WORLD,
