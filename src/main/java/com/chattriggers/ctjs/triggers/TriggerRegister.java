@@ -535,4 +535,8 @@ public class TriggerRegister {
     public static OnRegularTrigger registerScreenshotTaken(String methodName) {
         return new OnRegularTrigger(methodName, TriggerType.SCREENSHOT_TAKEN);
     }
+
+    public static OnRegularTrigger registerMessageSent(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.MESSAGE_SENT);
+    }
 }
