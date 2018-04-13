@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  * <p>"before" means directly before within the same game tick</p>
  * <p>"after" means directly after within the same game tick</p>
  * <br>
- * <p>Most triggers are synchronous meaning they will happen at the same time as the event.</br>
+ * <p>Most triggers are synchronous meaning they will happen at the same time as the event.<br>
  * Triggers that are asynchronous will be labeled as such</p>
  */
 public class TriggerRegister {
