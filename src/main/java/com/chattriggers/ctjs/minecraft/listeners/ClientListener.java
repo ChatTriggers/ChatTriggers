@@ -141,6 +141,8 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onBlockHighlight(DrawBlockHighlightEvent event) {
+        if (event.target == null || event.target.getBlockPos() == null) return;
+
         Vector3d position = new Vector3d(
                 event.target.getBlockPos().getX(),
                 event.target.getBlockPos().getY(),
