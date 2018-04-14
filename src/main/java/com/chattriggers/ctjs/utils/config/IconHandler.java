@@ -24,23 +24,23 @@ class IconHandler {
         this.icons.add(new Icon("CT_Discord.png", imageUrl + "discord-dark.png", "https://discordapp.com/invite/0fNjZyopOvBHZyG8", 3));
     }
 
-    void drawIcons() {
+    public void drawIcons() {
         for (Icon icon : icons) {
             icon.draw();
         }
     }
 
-    void clickIcons(int x, int y) {
+    public void clickIcons(int x, int y) {
         for (Icon icon : icons) {
             icon.click(x, y);
         }
     }
 
     private class Icon {
-        int y;
-        boolean main;
-        Image image;
-        String url;
+        private int y;
+        private boolean main;
+        private Image image;
+        private String url;
 
         private Icon(String name, String image_url, String url) {
             this.y = 0;
