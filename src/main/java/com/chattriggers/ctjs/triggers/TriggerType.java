@@ -15,7 +15,7 @@ public enum TriggerType {
     GAME_UNLOAD, GAME_LOAD,
     CLICKED, DRAGGED,
     GUI_OPENED, SCREENSHOT_TAKEN,
-    PICKUP_ITEM,
+    PICKUP_ITEM, DROP_ITEM,
     MESSAGE_SENT,
 
     // rendering

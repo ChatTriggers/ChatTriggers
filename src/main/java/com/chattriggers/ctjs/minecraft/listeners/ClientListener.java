@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -163,6 +164,21 @@ public class ClientListener {
                 event.item.motionY,
                 event.item.motionZ
         );
-        TriggerType.PICKUP_ITEM.triggerAll(new Item(event.item.getName()), position, motion);
+        TriggerType.PICKUP_ITEM.triggerAll(new Item(event.item.getEntityItem()), position, motion);
+    }
+
+    @SubscribeEvent
+    public void onDropItem(ItemTossEvent event) {
+        Vector3d position = new Vector3d(
+                event.entityItem.posX,
+                event.entityItem.posY,
+                event.entityItem.posZ
+        );
+        Vector3d motion = new Vector3d(
+                event.entityItem.motionX,
+                event.entityItem.motionY,
+                event.entityItem.motionZ
+        );
+        TriggerType.DROP_ITEM.triggerAll(new Item(event.entityItem.getEntityItem()), position, motion);
     }
 }

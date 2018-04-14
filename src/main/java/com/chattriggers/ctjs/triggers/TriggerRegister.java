@@ -532,10 +532,50 @@ public class TriggerRegister {
         return new OnRegularTrigger(methodName, TriggerType.PICKUP_ITEM);
     }
 
+    /**
+     * Registers a new trigger that runs before an item is dropped.<br>
+     *
+     * Passes through 3 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} that is dropped up<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's position vector<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's motion vector<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnRegularTrigger registerDropItem(String methodName) {
+        return new OnRegularTrigger(methodName, TriggerType.DROP_ITEM);
+    }
+
+    /**
+     * Registers a new trigger that runs before a screenshot is taken.<br>
+     *
+     * Passes through 1 argument:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the screenshot event<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnRegularTrigger registerScreenshotTaken(String methodName) {
         return new OnRegularTrigger(methodName, TriggerType.SCREENSHOT_TAKEN);
     }
 
+    /**
+     * Registers a new trigger that runs before a message is sent in chat.<br>
+     *
+     * Passes through 2 arguments:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the message event<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the message<br>
+     * Available modifications:<br>
+     * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
+     *
+     * @param methodName the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
     public static OnRegularTrigger registerMessageSent(String methodName) {
         return new OnRegularTrigger(methodName, TriggerType.MESSAGE_SENT);
     }
