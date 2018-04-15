@@ -162,7 +162,7 @@ public class JSScriptLoader extends ScriptLoader {
         if (existCheck) {
             File currentMetadata = new File(modulesDir, "currMetadata.json");
             try {
-                FileUtils.copyURLToFile(new URL("http://chattriggers.com/downloads/metadata/" + name),
+                FileUtils.copyURLToFile(new URL("http://167.99.3.229/downloads/metadata/" + name),
                         currentMetadata);
             } catch (IOException exception) {
                 Console.getConsole().printStackTrace(exception);
@@ -178,7 +178,7 @@ public class JSScriptLoader extends ScriptLoader {
             File downloadZip = new File(modulesDir, "currDownload.zip");
 
             FileUtils.copyURLToFile(
-                    new URL("http://chattriggers.com/downloads/scripts/" + name),
+                    new URL("http://167.99.3.229/downloads/scripts/" + name),
                     downloadZip
             );
 
