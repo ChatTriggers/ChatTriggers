@@ -35,12 +35,12 @@ function chatFunction(name, message, event) {
 register("renderCrosshair", "crosshairFunction");
 function crosshairFunction(event) {
   cancel(event);
-  Renderer.rectangle(
+  Renderer.drawRect(
     0x50ffffff,
     RenderLib.screen.getWidth()/2 - 1,
     RenderLib.screen.getHeight()/2 -1,
     2, 2
-  ).draw();
+  );
 }
 ```
 
