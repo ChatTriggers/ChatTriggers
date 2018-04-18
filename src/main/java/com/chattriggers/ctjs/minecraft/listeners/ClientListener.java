@@ -8,7 +8,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.triggers.TriggerType;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -156,8 +156,8 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onPickupItem(EntityItemPickupEvent event) {
-        if (event.entityPlayer instanceof EntityOtherPlayerMP) {
-            EntityOtherPlayerMP player = (EntityOtherPlayerMP) event.entityPlayer;
+        if (event.entityPlayer instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
             Vector3d position = new Vector3d(
                     event.item.posX,
                     event.item.posY,
@@ -179,8 +179,8 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onDropItem(ItemTossEvent event) {
-        if (event.player instanceof EntityOtherPlayerMP) {
-            EntityOtherPlayerMP player = (EntityOtherPlayerMP) event.player;
+        if (event.player instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.player;
             Vector3d position = new Vector3d(
                     event.entityItem.posX,
                     event.entityItem.posY,

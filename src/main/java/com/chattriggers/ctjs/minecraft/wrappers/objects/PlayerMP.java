@@ -3,27 +3,27 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class PlayerMP extends Entity {
     @Getter
-    private EntityOtherPlayerMP player;
+    private EntityPlayerMP player;
 
     public PlayerMP(EntityPlayer player) throws IllegalArgumentException {
         super(player);
 
-        if (player instanceof EntityOtherPlayerMP) {
-            this.player = ((EntityOtherPlayerMP) player);
+        if (player instanceof EntityPlayerMP) {
+            this.player = ((EntityPlayerMP) player);
         } else {
             throw new IllegalArgumentException("The player provided is not valid!");
         }
     }
 
-    public PlayerMP(EntityOtherPlayerMP player) {
+    public PlayerMP(EntityPlayerMP player) {
         super(player);
 
         this.player = player;

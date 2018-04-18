@@ -6,11 +6,11 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -143,8 +143,8 @@ public class World {
 
         if (getWorld() != null) {
             for (EntityPlayer player : getWorld().playerEntities) {
-                if (player instanceof EntityOtherPlayerMP) {
-                    players.add(new PlayerMP((EntityOtherPlayerMP) player));
+                if (player instanceof EntityPlayerMP) {
+                    players.add(new PlayerMP((EntityPlayerMP) player));
                 }
             }
         }
