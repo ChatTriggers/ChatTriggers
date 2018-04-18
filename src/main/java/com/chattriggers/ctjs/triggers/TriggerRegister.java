@@ -520,6 +520,7 @@ public class TriggerRegister {
      * <p>
      *     Passes through 3 arguments:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} that is picked up<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP} that picked up the item<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's position vector<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's motion vector<br>
      *     Available modifications:<br>
@@ -537,6 +538,7 @@ public class TriggerRegister {
      * <p>
      *     Passes through 3 arguments:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} that is dropped up<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP} that dropped the item<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's position vector<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the item's motion vector<br>
      *     Available modifications:<br>

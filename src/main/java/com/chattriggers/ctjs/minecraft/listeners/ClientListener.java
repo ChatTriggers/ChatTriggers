@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -164,7 +165,12 @@ public class ClientListener {
                 event.item.motionY,
                 event.item.motionZ
         );
-        TriggerType.PICKUP_ITEM.triggerAll(new Item(event.item.getEntityItem()), position, motion);
+        TriggerType.PICKUP_ITEM.triggerAll(
+                new Item(event.item.getEntityItem()),
+                new PlayerMP(event.entityPlayer),
+                position,
+                motion
+        );
     }
 
     @SubscribeEvent
@@ -179,6 +185,11 @@ public class ClientListener {
                 event.entityItem.motionY,
                 event.entityItem.motionZ
         );
-        TriggerType.DROP_ITEM.triggerAll(new Item(event.entityItem.getEntityItem()), position, motion);
+        TriggerType.DROP_ITEM.triggerAll(
+                new Item(event.entityItem.getEntityItem()),
+                new PlayerMP(event.player),
+                position,
+                motion
+        );
     }
 }
