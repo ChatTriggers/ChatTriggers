@@ -500,7 +500,7 @@ public class Renderer {
      * Creates a new {@link Shape} object.
      * <p>
      *     <strong>This instances a new object and should be treated as such.</strong><br>
-     *     This should not be used to instance and draw a rectangle every frame.
+     *     This should not be used to instance and draw a shape every frame.
      * </p>
      *
      * @param color the {@link Renderer#color(int, int, int, int)} of the shape
