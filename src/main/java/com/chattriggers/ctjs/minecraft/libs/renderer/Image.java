@@ -115,7 +115,7 @@ public class Image {
      * <p>
      * -- SETTER --
      * Sets the image scale
-     * @param scale The new image x scale
+     * @param scaleX The new image x scale
      * @return The Image object to allow for method chaining
      */
     @Getter
@@ -130,7 +130,7 @@ public class Image {
      * <p>
      * -- SETTER --
      * Sets the image scale
-     * @param scale The new image y scale
+     * @param scaleY The new image y scale
      * @return The Image object to allow for method chaining
      */
     @Getter
