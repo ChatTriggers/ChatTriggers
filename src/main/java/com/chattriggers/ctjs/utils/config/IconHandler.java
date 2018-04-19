@@ -68,8 +68,8 @@ class IconHandler {
         }
 
         private void click(int x, int y) {
-            if (x > this.image.getX() && x < this.image.getX() + 256 * this.image.getScale()
-            && y > this.image.getY() && y < this.image.getY() + 256 * this.image.getScale()) {
+            if (x > this.image.getX() && x < this.image.getX() + 256 * this.image.getScaleX()
+            && y > this.image.getY() && y < this.image.getY() + 256 * this.image.getScaleY()) {
                 try {
                     Desktop.getDesktop().browse(new URL(this.url).toURI());
                     World.playSound("gui.button.press", 100, 1);

@@ -265,8 +265,8 @@ public class Rectangle {
         drawRect(this.shadowColor, this.x + this.width, this.y + this.shadowOffsetY, this.shadowOffsetX, this.height - this.shadowOffsetY);
     }
 
-    // helper method to draw a rectangle
-    public static void drawRect(int color, float x, float y, float width, float height) {
+    // helper method to draw a rectangle without pushing and popping gl matrix
+    private void drawRect(int color, float x, float y, float width, float height) {
         float x2 = x + width;
         float y2 = y + height;
 

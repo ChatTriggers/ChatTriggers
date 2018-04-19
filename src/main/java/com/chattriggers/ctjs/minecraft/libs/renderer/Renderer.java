@@ -8,11 +8,11 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -190,7 +190,42 @@ public class Renderer {
      * @param height the height
      */
     public void drawRect(int color, float x, float y, float width, float height) {
-        Rectangle.drawRect(color, x, y, width, height);
+        float x2 = x + width;
+        float y2 = y + height;
+
+        if (x > x2) {
+            float k = x;
+            x = x2;
+            x2 = k;
+        }
+        if (y > y2) {
+            float k = y;
+            y = y2;
+            y2 = k;
+        }
+
+        float a = (float) (color >> 24 & 255) / 255.0F;
+        float r = (float) (color >> 16 & 255) / 255.0F;
+        float g = (float) (color >> 8 & 255) / 255.0F;
+        float b = (float) (color & 255) / 255.0F;
+
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(r, g, b, a);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(x, y2, 0.0D).endVertex();
+        worldrenderer.pos(x2, y2, 0.0D).endVertex();
+        worldrenderer.pos(x2, y, 0.0D).endVertex();
+        worldrenderer.pos(x, y, 0.0D).endVertex();
+        tessellator.draw();
+        GlStateManager.color(1, 1, 1, 1);
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
 
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
@@ -224,6 +259,59 @@ public class Renderer {
 
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
+    }
+
+    /**
+     * Simple method to draw an image to the Client's overlay<br>
+     * For more options, use {@link Image}
+     *
+     * @param resourceDomain the resource domain
+     * @param resourceName the resource name
+     * @param x the x position
+     * @param y the y position
+     * @param scaleX the x scale
+     * @param scaleY the y scale
+     * @param textureX the texture x position
+     * @param textureY the texture y position
+     * @param textureWidth the texture width
+     * @param textureHeight the texture height
+     */
+    public void drawImage(String resourceDomain, String resourceName, float x, float y, float scaleX, float scaleY, int textureX, int  textureY, int textureWidth, int textureHeight) {
+        ResourceLocation rl = new ResourceLocation(resourceDomain, resourceName);
+
+        Client.getMinecraft().getTextureManager().bindTexture(rl);
+
+        GlStateManager.enableBlend();
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.translate(x, y, 100);
+        GlStateManager.scale(scaleX, scaleY, 100);
+
+        float f = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(0, textureHeight, 0).tex(textureX * f, (textureY + textureHeight) * f).endVertex();
+        worldrenderer.pos(textureWidth, textureHeight, 0).tex((textureX + textureWidth) * f, (textureY + textureHeight) * f).endVertex();
+        worldrenderer.pos(textureWidth, 0, 0).tex((textureX + textureWidth) * f, textureY * f).endVertex();
+        worldrenderer.pos(0, 0, 0).tex(textureX * f, textureY * f).endVertex();
+        tessellator.draw();
+
+        GlStateManager.disableBlend();
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+    }
+
+    /**
+     * Simple method to draw an image to the Client's overlay<br>
+     * for more options, use {@link Renderer#drawImage(String, String, float, float, float, float, int, int, int, int)}
+     * @param resourceName the resource name
+     * @param x the x position
+     * @param y the y position
+     */
+    public void drawImage(String resourceName, float x, float y) {
+        drawImage("ctjs.images", resourceName, x, y, 1, 1, 0, 0, 256, 256);
     }
 
     /**
@@ -356,6 +444,12 @@ public class Renderer {
 
     /**
      * Creates a new {@link Image} object.
+     * <p>
+     *     <strong>This instances a new object and should be treated as such.</strong><br>
+     *     This should not be used to instance and draw an image every frame, instead use
+     *     {@link Renderer#drawImage(String, float, float)} or {@link Renderer#drawImage(String, String, float, float, float, float, int, int, int, int)}
+     *     for simple images.
+     * </p>
      *
      * @param resourceName the name of the resource (image-name.png)
      * @return a new {@link Image} object
@@ -366,6 +460,12 @@ public class Renderer {
 
     /**
      * Creates a new {@link Text} object.
+     * <p>
+     *     <strong>This instances a new object and should be treated as such.</strong><br>
+     *     This should not be used to instance and draw a string every frame, instead use
+     *     {@link Renderer#drawString(String, float, float)} or {@link Renderer#drawStringWithShadow(String, float, float)}
+     *     for simple text.
+     * </p>
      *
      * @param text the text string
      * @param x    the x position
@@ -378,6 +478,12 @@ public class Renderer {
 
     /**
      * Creates a new {@link Rectangle} object.
+     * <p>
+     *     <strong>This instances a new object and should be treated as such.</strong><br>
+     *     This should not be used to instance and draw a rectangle every frame, instead use
+     *     {@link Renderer#drawRect(int, float, float, float, float)}
+     *     for a simple rectangle.
+     * </p>
      *
      * @param color  the {@link Renderer#color(int, int, int, int)} of the rectangle
      * @param x      the x position of the rectangle
@@ -392,6 +498,10 @@ public class Renderer {
 
     /**
      * Creates a new {@link Shape} object.
+     * <p>
+     *     <strong>This instances a new object and should be treated as such.</strong><br>
+     *     This should not be used to instance and draw a rectangle every frame.
+     * </p>
      *
      * @param color the {@link Renderer#color(int, int, int, int)} of the shape
      * @return a new {@link Shape} object

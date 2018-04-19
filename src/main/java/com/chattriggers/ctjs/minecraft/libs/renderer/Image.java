@@ -1,15 +1,9 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer;
 
 import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -115,18 +109,33 @@ public class Image {
 
     /**
      * -- GETTER --
-     * Gets the image scale
+     * Gets the image x scale
      *
-     * @return The image scale
+     * @return The image x scale
      * <p>
      * -- SETTER --
      * Sets the image scale
-     * @param scale The new image scale
+     * @param scale The new image x scale
      * @return The Image object to allow for method chaining
      */
     @Getter
     @Setter
-    private float scale;
+    private float scaleX;
+
+    /**
+     * -- GETTER --
+     * Gets the image y scale
+     *
+     * @return The image y scale
+     * <p>
+     * -- SETTER --
+     * Sets the image scale
+     * @param scale The new image y scale
+     * @return The Image object to allow for method chaining
+     */
+    @Getter
+    @Setter
+    private float scaleY;
 
     /**
      * -- GETTER --
@@ -167,8 +176,21 @@ public class Image {
         this.textureHeight = 256;
         this.textureX = 0;
         this.textureY = 0;
-        this.scale = 1;
+        this.scaleX = 1;
+        this.scaleY = 1;
         this.resourceDomain = "ctjs.images";
+    }
+
+    /**
+     * Sets the image scale
+     *
+     * @return The Image object to allow for method chaining
+     */
+    public Image setScale(float scale) {
+        this.scaleX = scale;
+        this.scaleY = scale;
+
+        return this;
     }
 
     /**
@@ -225,31 +247,7 @@ public class Image {
      * @return The Image object to allow for method chaining
      */
     public Image draw() {
-        ResourceLocation rl = new ResourceLocation(this.resourceDomain, this.resourceName);
-
-        Client.getMinecraft().getTextureManager().bindTexture(rl);
-
-        GlStateManager.enableBlend();
-
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.translate(this.x, this.y, 100);
-        GlStateManager.scale(this.scale, this.scale, 100);
-
-        float f = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(0, this.textureHeight, 0).tex(this.textureX * f, (this.textureY + this.textureHeight) * f).endVertex();
-        worldrenderer.pos(this.textureWidth, this.textureHeight, 0).tex((this.textureX + this.textureWidth) * f, (this.textureY + this.textureHeight) * f).endVertex();
-        worldrenderer.pos(this.textureWidth, 0, 0).tex((this.textureX + this.textureWidth) * f, this.textureY * f).endVertex();
-        worldrenderer.pos(0, 0, 0).tex(this.textureX * f, this.textureY * f).endVertex();
-        tessellator.draw();
-
-        GlStateManager.disableBlend();
-
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
-
+        Renderer.drawImage(this.resourceDomain, this.resourceName, this.x, this.y, this.scaleX, this.scaleY, this.textureX, this.textureY, this.textureWidth, this.textureHeight);
 
         return this;
     }
