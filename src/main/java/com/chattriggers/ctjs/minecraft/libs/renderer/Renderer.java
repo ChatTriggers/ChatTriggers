@@ -19,22 +19,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @UtilityClass
 @SideOnly(Side.CLIENT)
 public class Renderer {
-    public static final int BLACK = color(0, 0, 0, 255);
-    public static final int DARK_BLUE = color(0, 0, 190, 255);
-    public static final int DARK_GREEN = color(0, 190, 0, 255);
-    public static final int DARK_AQUA = color(0, 190, 190, 255);
-    public static final int DARK_RED = color(190, 0, 0, 255);
-    public static final int DARK_PURPLE = color(190, 0, 190, 255);
-    public static final int GOLD = color(217, 163, 52, 255);
-    public static final int GRAY = color(190, 190, 190, 255);
-    public static final int DARK_GRAY = color(63, 63, 63, 255);
-    public static final int BLUE = color(63, 63, 254, 255);
-    public static final int GREEN = color(63, 254, 63, 255);
-    public static final int AQUA = color(63, 254, 254, 255);
-    public static final int RED = color(254, 63, 63, 255);
-    public static final int LIGHT_PURPLE = color(254, 63, 254, 255);
-    public static final int YELLOW = color(254, 254, 63, 255);
-    public static final int WHITE = color(255, 255, 255, 255);
+    public final int BLACK = color(0, 0, 0, 255);
+    public final int DARK_BLUE = color(0, 0, 190, 255);
+    public final int DARK_GREEN = color(0, 190, 0, 255);
+    public final int DARK_AQUA = color(0, 190, 190, 255);
+    public final int DARK_RED = color(190, 0, 0, 255);
+    public final int DARK_PURPLE = color(190, 0, 190, 255);
+    public final int GOLD = color(217, 163, 52, 255);
+    public final int GRAY = color(190, 190, 190, 255);
+    public final int DARK_GRAY = color(63, 63, 63, 255);
+    public final int BLUE = color(63, 63, 254, 255);
+    public final int GREEN = color(63, 254, 63, 255);
+    public final int AQUA = color(63, 254, 254, 255);
+    public final int RED = color(254, 63, 63, 255);
+    public final int LIGHT_PURPLE = color(254, 63, 254, 255);
+    public final int YELLOW = color(254, 254, 63, 255);
+    public final int WHITE = color(255, 255, 255, 255);
 
     /**
      * Gets a color based off of a hex integer input
@@ -42,7 +42,7 @@ public class Renderer {
      * @param color the hex integer
      * @return the color
      */
-    public static int getColor(int color) {
+    public int getColor(int color) {
         switch (color) {
             case (0):
                 return BLACK;
