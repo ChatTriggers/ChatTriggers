@@ -84,7 +84,7 @@ public class Renderer {
      *
      * @return the font renderer object
      */
-    public static FontRenderer getFontRenderer() {
+    public FontRenderer getFontRenderer() {
         return Client.getMinecraft().fontRendererObj;
     }
 
@@ -95,7 +95,7 @@ public class Renderer {
      * @param removeFormatting if formatting should be removed
      * @return the width of the text
      */
-    public static int getStringWidth(String text, boolean removeFormatting) {
+    public int getStringWidth(String text, boolean removeFormatting) {
         if (removeFormatting) text = ChatLib.removeFormatting(text);
         return getFontRenderer().getStringWidth(text);
     }
@@ -106,7 +106,7 @@ public class Renderer {
      * @param text the text to get the width of
      * @return the width of the text
      */
-    public static int getStringWidth(String text) {
+    public int getStringWidth(String text) {
         return getStringWidth(text, true);
     }
 
@@ -189,7 +189,7 @@ public class Renderer {
      * @param width the width
      * @param height the height
      */
-    public static void drawRect(int color, float x, float y, float width, float height) {
+    public void drawRect(int color, float x, float y, float width, float height) {
         Rectangle.drawRect(color, x, y, width, height);
 
         GlStateManager.popMatrix();
@@ -204,7 +204,7 @@ public class Renderer {
      * @param x the x position
      * @param y the y position
      */
-    public static void drawString(String text, float x, float y) {
+    public void drawString(String text, float x, float y) {
         getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff, false);
 
         GlStateManager.popMatrix();
@@ -219,7 +219,7 @@ public class Renderer {
      * @param x the x position
      * @param y the y position
      */
-    public static void drawStringWithShadow(String text, float x, float y) {
+    public void drawStringWithShadow(String text, float x, float y) {
         getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff, true);
 
         GlStateManager.popMatrix();
@@ -234,7 +234,7 @@ public class Renderer {
      * @param y   the y position on the screen
      * @param rotate whether or not the drawn player should rotate
      */
-    public static void drawPlayer(Object player, int x, int y, boolean rotate) {
+    public void drawPlayer(Object player, int x, int y, boolean rotate) {
         float mouseX = -30;
         float mouseY = 0;
 
