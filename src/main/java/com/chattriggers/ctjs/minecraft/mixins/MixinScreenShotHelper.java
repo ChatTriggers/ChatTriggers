@@ -9,16 +9,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 
 @Mixin(ScreenShotHelper.class)
 public abstract class MixinScreenShotHelper {
     @Shadow
-    private static File getTimestampedPNGFileForDirectory(File gameDirectory) {
-        throw new NotImplementedException();
-    }
+    private static File getTimestampedPNGFileForDirectory(File gameDirectory) { return null; }
 
     @Inject(
             method = "saveScreenshot(Ljava/io/File;IILnet/minecraft/client/shader/Framebuffer;)Lnet/minecraft/util/IChatComponent;",

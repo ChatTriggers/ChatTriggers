@@ -78,6 +78,9 @@ public enum TriggerType {
 
         while (!triggers.isEmpty()) {
             OnTrigger trigger = triggers.poll();
+
+            if (trigger == null) continue;
+
             triggersCopy.add(trigger);
 
             // Check for removal of broken trigger before running
@@ -87,11 +90,12 @@ public enum TriggerType {
                     triggers.remove(trigger);
                 } catch (Exception e) {
                     Console.getConsole().out.println("Failed to unregister broken function. Trying again later.");
-                    Console.getConsole().out.println(trigger.methodName);
+                    Console.getConsole().out.println(trigger.getMethod().toString());
                 }
                 return;
             }
 
+            //System.out.println("Triggering p1: " + Arrays.toString(args));
             // run the trigger
             trigger.trigger(args);
         }

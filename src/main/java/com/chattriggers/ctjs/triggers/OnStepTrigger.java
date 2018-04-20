@@ -1,10 +1,6 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import com.chattriggers.ctjs.utils.console.Console;
-
-import javax.script.ScriptException;
 
 public class OnStepTrigger extends OnTrigger {
     private Long fps = 60L;
@@ -12,8 +8,8 @@ public class OnStepTrigger extends OnTrigger {
     private Long systemTime;
     private Long elapsed;
 
-    protected OnStepTrigger(String methodName) {
-        super(methodName, TriggerType.STEP);
+    protected OnStepTrigger(Object method) {
+        super(method, TriggerType.STEP);
         this.systemTime = Client.getSystemTime();
         this.elapsed = 0L;
     }
@@ -54,26 +50,20 @@ public class OnStepTrigger extends OnTrigger {
 
     @Override
     public void trigger(Object... args) {
-        try {
-            if (this.delay == null) {
-                // run trigger based on set fps value (60 per second by default)
-                while (this.systemTime < Client.getSystemTime() + (1000 / this.fps)) {
-                    this.elapsed++;
-                    CTJS.getInstance().getModuleManager().invokeFunction(this.methodName, this.elapsed);
-                    this.systemTime += (1000 / this.fps);
-                }
-            } else {
-                // run trigger based on set delay in seconds
-                while (Client.getSystemTime() > this.systemTime + this.delay * 1000) {
-                    this.elapsed++;
-                    CTJS.getInstance().getModuleManager().invokeFunction(this.methodName, this.elapsed);
-                    this.systemTime += this.delay * 1000;
-                }
-
+        if (this.delay == null) {
+            // run trigger based on set fps value (60 per second by default)
+            while (this.systemTime < Client.getSystemTime() + (1000 / this.fps)) {
+                this.elapsed++;
+                callMethod(this.elapsed);
+                this.systemTime += (1000 / this.fps);
             }
-        } catch (ScriptException | NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e, this);
-            TriggerType.STEP.removeTrigger(this);
+        } else {
+            // run trigger based on set delay in seconds
+            while (Client.getSystemTime() > this.systemTime + this.delay * 1000) {
+                this.elapsed++;
+                callMethod(this.elapsed);
+                this.systemTime += this.delay * 1000;
+            }
         }
     }
 }

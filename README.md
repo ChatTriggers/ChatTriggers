@@ -26,14 +26,12 @@ CTjs is a framework for minecraft that allows for live scripting and client modi
 
 The basic premise of CTjs is that everything is based around Triggers. From a modding standpoint, Triggers can be thought of as event listeners. These can range from a chat Trigger that runs on a specific chat event matching criteria to a render overlay Trigger that runs when the crosshair is being rendered. We are constantly adding more Triggers and Trigger types as the mod evolves for more integration with Minecraft.
 ```JavaScript
-register("chat", "chatFunction").setChatCriteria("<${name}> ${message}");
-function chatFunction(name, message, event) {
+register("chat", function(name, message, event) {
   cancel(event);
   ChatLib.chat(name + ": " + message);
-}
+}).setCriteria("<${name}> ${message}");
 
-register("renderCrosshair", "crosshairFunction");
-function crosshairFunction(event) {
+register("renderCrosshair", function(event) {
   cancel(event);
   Renderer.drawRect(
     0x50ffffff,
@@ -41,7 +39,7 @@ function crosshairFunction(event) {
     RenderLib.screen.getHeight()/2 -1,
     2, 2
   );
-}
+});
 ```
 
 You can learn the basics of scripting with CTjs from the [Slate tutorial](https://www.chattriggers.com/slate/) and once you get the basics, check out the [JavaDocs](https://www.chattriggers.com/javadocs/) for a more in depth look at all of the available methods. 

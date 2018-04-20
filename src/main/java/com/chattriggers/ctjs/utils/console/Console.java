@@ -6,7 +6,6 @@ import io.sentry.Sentry;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
 
-import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -101,20 +100,9 @@ public class Console {
 
     public void printStackTrace(Throwable error, OnTrigger trigger) {
         Sentry.getContext().addTag(
-            "methodName",
-            trigger.getMethodName()
+            "method",
+            trigger.getMethod().toString()
         );
-
-        try {
-            String body = CTJS.getInstance().getModuleManager().eval(trigger.getMethodName()).toString();
-
-            Sentry.getContext().addExtra(
-                "methodBody",
-                body.replace("\n", "<br>")
-            );
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
 
         if (trigger.getOwningModule() != null) {
             Sentry.getContext().addTag(

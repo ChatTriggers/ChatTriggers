@@ -1,14 +1,10 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
-import com.chattriggers.ctjs.utils.console.Console;
-
-import javax.script.ScriptException;
 
 public class OnPlayerTrigger extends OnTrigger {
-    public OnPlayerTrigger(String methodName) {
-        super(methodName, TriggerType.PLAYER_JOIN);
+    public OnPlayerTrigger(Object method) {
+        super(method, TriggerType.PLAYER_JOIN);
     }
 
     @Override
@@ -18,11 +14,7 @@ public class OnPlayerTrigger extends OnTrigger {
 
         PlayerMP player = (PlayerMP) args[0];
 
-        try {
-            CTJS.getInstance().getModuleManager().invokeFunction(methodName, player);
-        } catch (ScriptException | NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e, this);
-            type.removeTrigger(this);
-        }
+        callMethod(player);
+
     }
 }
