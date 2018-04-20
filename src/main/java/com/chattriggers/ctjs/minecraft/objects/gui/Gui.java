@@ -63,7 +63,7 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerDraw(String methodName) {
+    public OnRegularTrigger registerDraw(Object methodName) {
         onDraw = new OnRegularTrigger(methodName, TriggerType.OTHER);
         return onDraw;
     }
@@ -79,7 +79,7 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerClicked(String methodName) {
+    public OnRegularTrigger registerClicked(Object methodName) {
         onClick = new OnRegularTrigger(methodName, TriggerType.OTHER);
         return onClick;
     }
@@ -94,7 +94,7 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerKeyTyped(String methodName) {
+    public OnRegularTrigger registerKeyTyped(Object methodName) {
         onKeyTyped = new OnRegularTrigger(methodName, TriggerType.OTHER);
         return onKeyTyped;
     }
@@ -111,7 +111,7 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerMouseDragged(String methodName) {
+    public OnRegularTrigger registerMouseDragged(Object methodName) {
         onMouseDragged = new OnRegularTrigger(methodName, TriggerType.OTHER);
         return onMouseDragged;
     }
@@ -127,7 +127,7 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerMouseReleased(String methodName) {
+    public OnRegularTrigger registerMouseReleased(Object methodName) {
         onMouseReleased = new OnRegularTrigger(methodName, TriggerType.OTHER);
         return onMouseReleased;
     }
@@ -141,7 +141,7 @@ public class Gui extends GuiScreen {
      * @param methodName the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerActionPerformed(String methodName) {
+    public OnRegularTrigger registerActionPerformed(Object methodName) {
         onActionPerformed = new OnRegularTrigger(methodName, TriggerType.OTHER);
         return onActionPerformed;
     }
