@@ -20,12 +20,19 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![open idea settings](http://i65.tinypic.com/35bco0h.png)
   - plugins > brows all repositories > search "lombok" > install<br>
 ![install lombok](http://i67.tinypic.com/t8sv2p.png)
-  - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing
+  - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing<br>
 ![enable annotation processing](http://i66.tinypic.com/676slz.png)
+  - down that page > Annotation Processor options > green +
+    - Option name: `reobfSrgFile`
+    - Value: `location-of-fork\mappings\stable_22\mcp-srg.srg`<br>
+![set annotation processing option](https://i.imgur.com/PS2t8Yc.png)
 ### 5. Debug client setup
   - run > edit configuration<br>
 ![edit configuration](http://i65.tinypic.com/t6yq7b.png)
   - Use classpath for module > select the main ct.js (it might be named differently depending on your fork)<br>
 ![classpath](http://i67.tinypic.com/15z34fd.png)
+  - Program arguments
+    - `--tweakClass com.chattriggers.ctjs.launch.CTJSTweaker`<br>
+![edit program arguments](https://i.imgur.com/UcVOq71.png)
 
 Everything should be set up and ready to open pull requests
