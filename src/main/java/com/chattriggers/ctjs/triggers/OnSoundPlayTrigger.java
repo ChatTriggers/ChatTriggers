@@ -1,17 +1,13 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
-import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
-
-import javax.script.ScriptException;
 
 public class OnSoundPlayTrigger extends OnTrigger {
     private String soundNameCriteria = "";
 
-    public OnSoundPlayTrigger(String methodName) {
-        super(methodName, TriggerType.SOUND_PLAY);
+    public OnSoundPlayTrigger(Object method) {
+        super(method, TriggerType.SOUND_PLAY);
     }
 
     /**
@@ -37,11 +33,6 @@ public class OnSoundPlayTrigger extends OnTrigger {
             return;
         }
 
-        try {
-            CTJS.getInstance().getModuleManager().invokeFunction(methodName, event);
-        } catch (ScriptException | NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e, this);
-            TriggerType.SOUND_PLAY.removeTrigger(this);
-        }
+        callMethod(event);
     }
 }

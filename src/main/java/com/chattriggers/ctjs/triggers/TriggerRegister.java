@@ -25,17 +25,17 @@ public class TriggerRegister {
      * Example: <code>register("chat","triggerOnChat");</code>
      *
      * @param triggerType the type of trigger
-     * @param methodName  the name of the method to callback when the event is fired
+     * @param method the name of the method or the actual method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnTrigger register(String triggerType, String methodName) {
+    public static OnTrigger register(String triggerType, Object method) {
         String capitalizedName = triggerType.substring(0, 1).toUpperCase() + triggerType.substring(1);
-        Method method;
+        Method registerMethod;
 
         try {
-            method = TriggerRegister.class.getDeclaredMethod(
+            registerMethod = TriggerRegister.class.getDeclaredMethod(
                     "register" + capitalizedName,
-                    String.class
+                    Object.class
             );
         } catch (NoSuchMethodException e) {
             Console.getConsole().printStackTrace(e);
@@ -43,7 +43,7 @@ public class TriggerRegister {
         }
 
         try {
-            Object returned = method.invoke(null, methodName);
+            Object returned = registerMethod.invoke(null, method);
             return (OnTrigger) returned;
         } catch (IllegalAccessException | InvocationTargetException e) {
             Console.getConsole().printStackTrace(e);
@@ -63,11 +63,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnChatTrigger#setParameter(String)} Sets the chat parameter<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnChatTrigger registerChat(String methodName) {
-        return new OnChatTrigger(methodName);
+    public static OnChatTrigger registerChat(Object method) {
+        return new OnChatTrigger(method);
     }
 
     /**
@@ -76,11 +76,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerWorldLoad(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.WORLD_LOAD);
+    public static OnRegularTrigger registerWorldLoad(Object method) {
+        return new OnRegularTrigger(method, TriggerType.WORLD_LOAD);
     }
 
     /**
@@ -89,11 +89,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerWorldUnload(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.WORLD_UNLOAD);
+    public static OnRegularTrigger registerWorldUnload(Object method) {
+        return new OnRegularTrigger(method, TriggerType.WORLD_UNLOAD);
     }
 
     /**
@@ -107,11 +107,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerClicked(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.CLICKED);
+    public static OnRegularTrigger registerClicked(Object method) {
+        return new OnRegularTrigger(method, TriggerType.CLICKED);
     }
 
     /**
@@ -126,11 +126,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerDragged(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.DRAGGED);
+    public static OnRegularTrigger registerDragged(Object method) {
+        return new OnRegularTrigger(method, TriggerType.DRAGGED);
     }
 
     /**
@@ -147,11 +147,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnSoundPlayTrigger#setSoundNameCriteria(String)} Sets the sound name criteria<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnSoundPlayTrigger registerSoundPlay(String methodName) {
-        return new OnSoundPlayTrigger(methodName);
+    public static OnSoundPlayTrigger registerSoundPlay(Object method) {
+        return new OnSoundPlayTrigger(method);
     }
 
     /**
@@ -165,11 +165,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerNoteBlockPlay(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.NOTE_BLOCK_PLAY);
+    public static OnRegularTrigger registerNoteBlockPlay(Object method) {
+        return new OnRegularTrigger(method, TriggerType.NOTE_BLOCK_PLAY);
     }
 
     /**
@@ -183,11 +183,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerNoteBlockChange(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.NOTE_BLOCK_CHANGE);
+    public static OnRegularTrigger registerNoteBlockChange(Object method) {
+        return new OnRegularTrigger(method, TriggerType.NOTE_BLOCK_CHANGE);
     }
 
     /**
@@ -198,11 +198,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerTick(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.TICK);
+    public static OnRegularTrigger registerTick(Object method) {
+        return new OnRegularTrigger(method, TriggerType.TICK);
     }
 
     /**
@@ -213,11 +213,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnStepTrigger#setDelay(long)} Sets the delay in seconds<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnStepTrigger registerStep(String methodName) {
-        return new OnStepTrigger(methodName);
+    public static OnStepTrigger registerStep(Object method) {
+        return new OnStepTrigger(method);
     }
 
     /**
@@ -226,11 +226,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerRenderWorld(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.RENDER_WORLD);
+    public static OnRegularTrigger registerRenderWorld(Object method) {
+        return new OnRegularTrigger(method, TriggerType.RENDER_WORLD);
     }
 
     /**
@@ -239,11 +239,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderOverlay(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_OVERLAY);
+    public static OnRenderTrigger registerRenderOverlay(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_OVERLAY);
     }
 
     /**
@@ -255,11 +255,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderPlayerList(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_PLAYER_LIST);
+    public static OnRenderTrigger registerRenderPlayerList(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_PLAYER_LIST);
     }
 
     /**
@@ -271,11 +271,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderCrosshair(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_CROSSHAIR);
+    public static OnRenderTrigger registerRenderCrosshair(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_CROSSHAIR);
     }
 
     /**
@@ -287,11 +287,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderDebug(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_DEBUG);
+    public static OnRenderTrigger registerRenderDebug(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_DEBUG);
     }
 
     /**
@@ -303,11 +303,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderBossHealth(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_BOSS_HEALTH);
+    public static OnRenderTrigger registerRenderBossHealth(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_BOSS_HEALTH);
     }
 
     /**
@@ -319,11 +319,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderHealth(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_HEALTH);
+    public static OnRenderTrigger registerRenderHealth(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_HEALTH);
     }
 
     /**
@@ -335,11 +335,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderFood(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_FOOD);
+    public static OnRenderTrigger registerRenderFood(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_FOOD);
     }
 
     /**
@@ -351,11 +351,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderMountHealth(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_MOUNT_HEALTH);
+    public static OnRenderTrigger registerRenderMountHealth(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_MOUNT_HEALTH);
     }
 
     /**
@@ -367,11 +367,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderExperience(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_EXPERIENCE);
+    public static OnRenderTrigger registerRenderExperience(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_EXPERIENCE);
     }
 
     /**
@@ -383,11 +383,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderHotbar(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_HOTBAR);
+    public static OnRenderTrigger registerRenderHotbar(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_HOTBAR);
     }
 
     /**
@@ -399,11 +399,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRenderTrigger registerRenderAir(String methodName) {
-        return new OnRenderTrigger(methodName, TriggerType.RENDER_AIR);
+    public static OnRenderTrigger registerRenderAir(Object method) {
+        return new OnRenderTrigger(method, TriggerType.RENDER_AIR);
     }
 
     /**
@@ -415,11 +415,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerDrawBlockHighlight(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.BLOCK_HIGHLIGHT);
+    public static OnRegularTrigger registerDrawBlockHighlight(Object method) {
+        return new OnRegularTrigger(method, TriggerType.BLOCK_HIGHLIGHT);
     }
 
     /**
@@ -429,11 +429,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerGameLoad(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.GAME_LOAD);
+    public static OnRegularTrigger registerGameLoad(Object method) {
+        return new OnRegularTrigger(method, TriggerType.GAME_LOAD);
     }
 
     /**
@@ -443,11 +443,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerGameUnload(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.GAME_UNLOAD);
+    public static OnRegularTrigger registerGameUnload(Object method) {
+        return new OnRegularTrigger(method, TriggerType.GAME_UNLOAD);
     }
 
     /**
@@ -459,11 +459,11 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnCommandTrigger#setCommandName(String)} Sets the command name<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnCommandTrigger registerCommand(String methodName) {
-        return new OnCommandTrigger(methodName);
+    public static OnCommandTrigger registerCommand(Object method) {
+        return new OnCommandTrigger(method);
     }
 
     /**
@@ -474,11 +474,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerGuiOpened(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.GUI_OPENED);
+    public static OnRegularTrigger registerGuiOpened(Object method) {
+        return new OnRegularTrigger(method, TriggerType.GUI_OPENED);
     }
 
     /**
@@ -491,11 +491,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnPlayerTrigger registerPlayerJoined(String methodName) {
-        return new OnPlayerTrigger(methodName);
+    public static OnPlayerTrigger registerPlayerJoined(Object method) {
+        return new OnPlayerTrigger(method);
     }
 
     /**
@@ -508,11 +508,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerPlayerLeft(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.PLAYER_LEAVE);
+    public static OnRegularTrigger registerPlayerLeft(Object method) {
+        return new OnRegularTrigger(method, TriggerType.PLAYER_LEAVE);
     }
 
     /**
@@ -526,11 +526,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerPickupItem(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.PICKUP_ITEM);
+    public static OnRegularTrigger registerPickupItem(Object method) {
+        return new OnRegularTrigger(method, TriggerType.PICKUP_ITEM);
     }
 
     /**
@@ -544,11 +544,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerDropItem(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.DROP_ITEM);
+    public static OnRegularTrigger registerDropItem(Object method) {
+        return new OnRegularTrigger(method, TriggerType.DROP_ITEM);
     }
 
     /**
@@ -560,11 +560,11 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerScreenshotTaken(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.SCREENSHOT_TAKEN);
+    public static OnRegularTrigger registerScreenshotTaken(Object method) {
+        return new OnRegularTrigger(method, TriggerType.SCREENSHOT_TAKEN);
     }
 
     /**
@@ -576,10 +576,10 @@ public class TriggerRegister {
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
-     * @param methodName the name of the method to callback when the event is fired
+     * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnRegularTrigger registerMessageSent(String methodName) {
-        return new OnRegularTrigger(methodName, TriggerType.MESSAGE_SENT);
+    public static OnRegularTrigger registerMessageSent(Object method) {
+        return new OnRegularTrigger(method, TriggerType.MESSAGE_SENT);
     }
 }

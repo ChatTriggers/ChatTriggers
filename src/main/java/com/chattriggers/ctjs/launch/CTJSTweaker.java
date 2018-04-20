@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.CodeSource;
@@ -42,6 +43,12 @@ public class CTJSTweaker implements ITweaker {
         } else {
             System.out.println("No CodeSource, if this is not a development environment we might run into problems!");
             System.out.println(getClass().getProtectionDomain());
+        }
+
+        try {
+            classLoader.addURL(new File(System.getProperty("java.home"), "lib/ext/nashorn.jar").toURI().toURL());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
     }
 

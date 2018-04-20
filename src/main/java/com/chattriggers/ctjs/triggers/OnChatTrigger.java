@@ -1,14 +1,11 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
-import com.chattriggers.ctjs.utils.console.Console;
 import io.sentry.Sentry;
 import io.sentry.event.Breadcrumb;
 import io.sentry.event.BreadcrumbBuilder;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
-import javax.script.ScriptException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,8 +18,8 @@ public class OnChatTrigger extends OnTrigger {
     private List<String> ignored;
     private Boolean triggerIfCanceled;
 
-    public OnChatTrigger(String methodName) {
-        super(methodName, TriggerType.CHAT);
+    public OnChatTrigger(Object method) {
+        super(method, TriggerType.CHAT);
 
         this.chatCriteria = "";
         this.parameters = new ArrayList<>();
@@ -159,12 +156,7 @@ public class OnChatTrigger extends OnTrigger {
 
         recordBreadcrumb(chatMessage);
 
-        try {
-            CTJS.getInstance().getModuleManager().invokeFunction(methodName, variables.toArray(new Object[variables.size()]));
-        } catch (ScriptException | NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e, this);
-            TriggerType.CHAT.removeTrigger(this);
-        }
+        callMethod(variables.toArray());
     }
 
     // helper method to get the proper chat message based on the presence of color codes

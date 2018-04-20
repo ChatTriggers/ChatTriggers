@@ -1,12 +1,20 @@
 package com.chattriggers.ctjs.triggers;
 
+import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.modules.Module;
+import com.chattriggers.ctjs.utils.console.Console;
+import jdk.nashorn.api.scripting.NashornScriptEngine;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import jdk.nashorn.internal.objects.Global;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import javax.script.ScriptException;
 
 public abstract class OnTrigger {
     @Getter
-    protected String methodName;
+    protected Object method;
     @Getter
     protected Priority priority;
     @Getter
@@ -14,8 +22,10 @@ public abstract class OnTrigger {
     @Getter @Setter
     protected Module owningModule;
 
-    protected OnTrigger(String methodName, TriggerType type) {
-        this.methodName = methodName;
+    private Global global;
+
+    protected OnTrigger(Object method, TriggerType type) {
+        this.method = method;
         this.priority = Priority.NORMAL;
         this.type = type;
 
@@ -61,6 +71,53 @@ public abstract class OnTrigger {
      */
     public boolean isRegistered() {
         return this.type.containsTrigger(this);
+    }
+
+    protected void callMethod(Object... args) {
+        try {
+            if (this.method instanceof String) {
+                callNamedMethod(args);
+                return;
+            }
+
+            callActualMethod(args);
+        } catch (Exception e) {
+            Console.getConsole().printStackTrace(e, this);
+            this.type.removeTrigger(this);
+        }
+    }
+
+    protected void callActualMethod(Object... args) {
+
+        ScriptObjectMirror som;
+
+        if (this.method instanceof ScriptObjectMirror) {
+            som = ((ScriptObjectMirror) this.method);
+        } else {
+
+            if (global == null) {
+                global = ReflectionHelper.getPrivateValue(
+                        NashornScriptEngine.class,
+                        ((NashornScriptEngine) CTJS.getInstance().getModuleManager().getScriptLoaders().get(0).getScriptEngine()),
+                        "global"
+                );
+            }
+
+            Object obj = ScriptObjectMirror.wrap(this.method, global);
+
+            som = ((ScriptObjectMirror) obj);
+        }
+
+        som.call(som, args);
+
+        //Thread.currentThread().setContextClassLoader(cl);
+    }
+
+    protected void callNamedMethod(Object... args) throws ScriptException, NoSuchMethodException {
+        CTJS.getInstance().getModuleManager().invokeFunction(
+                ((String) method),
+                args
+        );
     }
 
     public abstract void trigger(Object... args);

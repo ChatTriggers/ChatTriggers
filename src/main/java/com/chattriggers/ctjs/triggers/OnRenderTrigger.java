@@ -1,17 +1,13 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
-import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-
-import javax.script.ScriptException;
 
 public class OnRenderTrigger extends OnTrigger {
     private Boolean triggerIfCanceled;
 
-    public OnRenderTrigger(String methodName, TriggerType triggerType) {
-        super(methodName, triggerType);
+    public OnRenderTrigger(Object method, TriggerType triggerType) {
+        super(method, triggerType);
         triggerIfCanceled = true;
     }
 
@@ -34,13 +30,8 @@ public class OnRenderTrigger extends OnTrigger {
 
         if (!triggerIfCanceled && event.isCanceled()) return;
 
-        try {
-            GlStateManager.pushMatrix();
-            CTJS.getInstance().getModuleManager().invokeFunction(methodName, args);
-            GlStateManager.popMatrix();
-        } catch (ScriptException | NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e, this);
-            type.removeTrigger(this);
-        }
+        GlStateManager.pushMatrix();
+        callMethod(args);
+        GlStateManager.popMatrix();
     }
 }

@@ -17,7 +17,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -27,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class JSScriptLoader extends ScriptLoader {
+    public static ClassLoader newLoader;
+
     private ScriptEngine scriptEngine;
     private ArrayList<Module> cachedModules;
 
@@ -59,7 +60,8 @@ public class JSScriptLoader extends ScriptLoader {
             Method getScriptEngine = factory.getClass().getMethod("getScriptEngine", ClassLoader.class);
 
             this.scriptEngine = (ScriptEngine) getScriptEngine.invoke(factory, ucl);
-        } catch (IOException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            newLoader = ucl;
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
