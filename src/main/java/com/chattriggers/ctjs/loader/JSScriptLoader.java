@@ -8,16 +8,15 @@ import com.chattriggers.ctjs.modules.ModuleMetadata;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.io.FileUtils;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 import java.io.*;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -26,8 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class JSScriptLoader extends ScriptLoader {
-    public static ClassLoader newLoader;
-
     private ScriptEngine scriptEngine;
     private ArrayList<Module> cachedModules;
 
@@ -37,7 +34,6 @@ public class JSScriptLoader extends ScriptLoader {
 
         try {
             ArrayList<URL> files = new ArrayList<>();
-            files.add(new File(System.getProperty("java.home"), "lib/ext/nashorn.jar").toURI().toURL());
 
             for (File dir : getFoldersInDirectory(modulesDir)) {
                 for (File file : dir.listFiles()) {
@@ -53,14 +49,10 @@ public class JSScriptLoader extends ScriptLoader {
                 }
             }
 
-            URLClassLoader ucl = new URLClassLoader(files.toArray(new URL[files.size()]), Minecraft.class.getClassLoader());
+            URLClassLoader ucl = new URLClassLoader((URL[]) files.toArray(), Minecraft.class.getClassLoader());
 
-            Class<?> factoryClass = ucl.loadClass("jdk.nashorn.api.scripting.NashornScriptEngineFactory");
-            ScriptEngineFactory factory = (ScriptEngineFactory) factoryClass.getConstructor().newInstance();
-            Method getScriptEngine = factory.getClass().getMethod("getScriptEngine", ClassLoader.class);
-
-            this.scriptEngine = (ScriptEngine) getScriptEngine.invoke(factory, ucl);
-            newLoader = ucl;
+            NashornScriptEngineFactory nsef = new NashornScriptEngineFactory();
+            this.scriptEngine = nsef.getScriptEngine(ucl);
         } catch (Exception e) {
             e.printStackTrace();
         }
