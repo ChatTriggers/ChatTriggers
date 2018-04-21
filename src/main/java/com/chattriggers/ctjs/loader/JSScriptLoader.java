@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class JSScriptLoader extends ScriptLoader {
+    public static ClassLoader newLoader;
+
     private ScriptEngine scriptEngine;
     private ArrayList<Module> cachedModules;
 
