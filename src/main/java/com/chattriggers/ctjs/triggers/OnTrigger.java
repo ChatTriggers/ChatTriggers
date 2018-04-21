@@ -109,8 +109,6 @@ public abstract class OnTrigger {
         }
 
         som.call(som, args);
-
-        //Thread.currentThread().setContextClassLoader(cl);
     }
 
     protected void callNamedMethod(Object... args) throws ScriptException, NoSuchMethodException {
