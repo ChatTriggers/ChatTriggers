@@ -555,8 +555,8 @@ public class TriggerRegister {
      * Registers a new trigger that runs before a screenshot is taken.<br>
      * <p>
      *     Passes through 2 arguments:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the screenshot event<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the name of the screenshot<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the screenshot event<br>
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
