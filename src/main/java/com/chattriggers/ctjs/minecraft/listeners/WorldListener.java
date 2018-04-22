@@ -45,7 +45,14 @@ public class WorldListener {
     @SubscribeEvent
     public void onSoundPlay(PlaySoundEvent event) {
         Vector3d position = new Vector3d(event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF());
-        TriggerType.SOUND_PLAY.triggerAll(event, position, event.name, event.sound.getVolume(), event.sound.getPitch(), event.category.getCategoryName());
+        TriggerType.SOUND_PLAY.triggerAll(
+                event,
+                position,
+                event.name,
+                event.sound.getVolume(),
+                event.sound.getPitch(),
+                event.category == null ? null : event.category.getCategoryName()
+        );
     }
 
     @SubscribeEvent

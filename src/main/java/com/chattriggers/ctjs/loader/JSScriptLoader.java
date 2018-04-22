@@ -51,7 +51,7 @@ public class JSScriptLoader extends ScriptLoader {
                 }
             }
 
-            URLClassLoader ucl = new URLClassLoader((URL[]) files.toArray(), Minecraft.class.getClassLoader());
+            URLClassLoader ucl = new URLClassLoader(files.toArray(new URL[0]), Minecraft.class.getClassLoader());
 
             NashornScriptEngineFactory nsef = new NashornScriptEngineFactory();
             this.scriptEngine = nsef.getScriptEngine(ucl);
