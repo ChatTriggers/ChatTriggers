@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.modules.gui;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
@@ -14,7 +14,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ModuleGui extends GuiScreen {
     private Module module;
@@ -181,7 +184,7 @@ public class ModuleGui extends GuiScreen {
 
         if (mouseButton == 0) {
             if (isHovered)
-                GuiHandler.getInstance().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
+                GuiHandler.getInstance().openGui(new ModulesGui(ModuleManager.getInstance().getModules()));
 
             if (scrolled > infoHeight
                     && mouseX > width + 20

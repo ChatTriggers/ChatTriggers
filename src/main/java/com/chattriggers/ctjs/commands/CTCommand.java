@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
@@ -101,14 +102,14 @@ public class CTCommand extends CommandBase {
                         for (TriggerType type : TriggerType.values())
                             type.clearTriggers();
                         CommandHandler.getInstance().getCommandList().clear();
-                        CTJS.getInstance().getModuleManager().unload();
+                        ModuleManager.getInstance().unload();
 
                         if (Config.getInstance().getClearConsoleOnLoad().value)
                             CTJS.getInstance().getConsole().clearConsole();
 
                         CTJS.getInstance().setupConfig();
 
-                        CTJS.getInstance().getModuleManager().load();
+                        ModuleManager.getInstance().load();
                         ChatLib.chat("&aDone reloading scripts!");
                         TriggerType.WORLD_LOAD.triggerAll();
                         this.isLoaded = true;
@@ -122,7 +123,7 @@ public class CTCommand extends CommandBase {
                     if (args.length == 1)
                         ChatLib.chat("&c/ct import [module name]");
                     else
-                        CTJS.getInstance().getModuleManager().importModule(args[1]);
+                        ModuleManager.getInstance().importModule(args[1]);
                     break;
                 case("console"):
                     Console.getConsole().showConsole(true);
@@ -131,7 +132,7 @@ public class CTCommand extends CommandBase {
                 case("module"):
                 case("imports"):
                     GuiHandler.getInstance().openGui(
-                            new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
+                            new ModulesGui(ModuleManager.getInstance().getModules())
                     );
                     break;
                 case("config"):

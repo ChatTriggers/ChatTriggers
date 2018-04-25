@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.loader;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.modules.Module;
@@ -151,7 +150,7 @@ public class JSScriptLoader extends ScriptLoader {
 
         for (String require : metadata.getRequires()) {
             if (new File(modulesDir, require).exists()) continue;
-            CTJS.getInstance().getModuleManager().importModule(require);
+            ModuleManager.getInstance().importModule(require);
         }
     }
 

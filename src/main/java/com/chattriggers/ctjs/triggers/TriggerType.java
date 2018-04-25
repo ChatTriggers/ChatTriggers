@@ -1,13 +1,16 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.utils.console.Console;
 import io.sentry.Sentry;
 import io.sentry.context.Context;
 import io.sentry.event.Breadcrumb;
 import io.sentry.event.BreadcrumbBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.PriorityQueue;
 
 public enum TriggerType {
     // client
@@ -61,7 +64,7 @@ public enum TriggerType {
     }
 
     public void triggerAll(Object... args) {
-        if (CTJS.getInstance().getModuleManager().isLoading()) return;
+        if (ModuleManager.getInstance().isLoading()) return;
 
         ArrayList<OnTrigger> triggersCopy = new ArrayList<>(triggers.size());
 

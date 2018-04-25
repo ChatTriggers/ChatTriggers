@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.utils.console.Console;
 
 import java.io.BufferedReader;
@@ -138,7 +138,7 @@ public class XMLHttpRequest {
 
             this.responseText = response.toString();
 
-            CTJS.getInstance().getModuleManager().invokeFunction(this.methodCallback, this);
+            ModuleManager.getInstance().invokeFunction(this.methodCallback, this);
         } catch (Exception e) {
             Console.getConsole().printStackTrace(e);
         }

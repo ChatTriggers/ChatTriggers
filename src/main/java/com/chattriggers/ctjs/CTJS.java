@@ -58,8 +58,6 @@ public class CTJS {
     @Getter
     private Console console;
     @Getter
-    private ModuleManager moduleManager;
-    @Getter
     private CPS cps;
     @Getter
     private Tessellator tessellator;
@@ -72,7 +70,7 @@ public class CTJS {
         new GuiHandler();
         new CommandHandler();
         this.chatListener = new ChatListener();
-        this.moduleManager = new ModuleManager();
+        new ModuleManager();
         this.cps = new CPS();
         this.tessellator = new Tessellator();
 
@@ -82,7 +80,7 @@ public class CTJS {
 
         registerHooks();
 
-        moduleManager.load(true);
+        ModuleManager.getInstance().load(true);
     }
 
     @EventHandler

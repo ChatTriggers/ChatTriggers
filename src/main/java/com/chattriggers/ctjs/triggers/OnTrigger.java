@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.utils.console.Console;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
@@ -98,7 +98,7 @@ public abstract class OnTrigger {
             if (global == null) {
                 global = ReflectionHelper.getPrivateValue(
                         NashornScriptEngine.class,
-                        ((NashornScriptEngine) CTJS.getInstance().getModuleManager().getScriptLoaders().get(0).getScriptEngine()),
+                        ((NashornScriptEngine) ModuleManager.getInstance().getScriptLoaders().get(0).getScriptEngine()),
                         "global"
                 );
             }
@@ -112,7 +112,7 @@ public abstract class OnTrigger {
     }
 
     protected void callNamedMethod(Object... args) throws ScriptException, NoSuchMethodException {
-        CTJS.getInstance().getModuleManager().invokeFunction(
+        ModuleManager.getInstance().invokeFunction(
                 ((String) method),
                 args
         );

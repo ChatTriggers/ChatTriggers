@@ -14,11 +14,16 @@ import java.util.ArrayList;
 
 public class ModuleManager {
     @Getter
+    private static ModuleManager instance;
+
+    @Getter
     private ArrayList<ScriptLoader> scriptLoaders;
     @Getter
     private boolean isLoading;
 
     public ModuleManager() {
+        instance = this;
+
         this.scriptLoaders = new ArrayList<>();
     }
 

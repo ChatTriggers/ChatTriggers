@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.utils.console;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.utils.config.Config;
 import io.sentry.Sentry;
@@ -61,7 +61,7 @@ public class Console {
                     inputField.setText("");
 
                     try {
-                        toPrint = CTJS.getInstance().getModuleManager().eval(command);
+                        toPrint = ModuleManager.getInstance().eval(command);
                     } catch (Exception error) {
                         if (!(error instanceof ThreadQuickExitException)) {
                             printStackTrace(error);
