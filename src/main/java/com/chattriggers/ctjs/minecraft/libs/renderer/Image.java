@@ -3,10 +3,12 @@ package com.chattriggers.ctjs.minecraft.libs.renderer;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,26 +16,28 @@ import java.io.File;
 import java.net.URL;
 
 /**
- * Used in {@link Renderer#image(String)}
+ * Used in {@link Renderer#image(String, String)} )}
  */
 @Accessors(chain = true)
 public class Image {
-    @Getter
-    @Setter
-    private float x;
-
-    @Getter
-    @Setter
-    private float y;
+    private BufferedImage imageToLoad;
 
     @Getter
     private DynamicTexture texture;
 
-    Image(BufferedImage image) {
-        this.x = 0;
-        this.y = 0;
+    private Image(BufferedImage image) {
+        MinecraftForge.EVENT_BUS.register(this);
 
-        this.texture = new DynamicTexture(image);
+        this.imageToLoad = image;
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void render(RenderGameOverlayEvent event) {
+        if (imageToLoad != null) {
+            System.out.println("Loading imageToLoad!");
+            texture = new DynamicTexture(imageToLoad);
+            imageToLoad = null;
+        }
     }
 
     /**
@@ -66,15 +70,9 @@ public class Image {
      *
      * @return The Image object to allow for method chaining
      */
-    public Image draw(int size) {
-        Renderer.drawImage(this, size);
+    public Image draw(int x, int y, int size) {
+        Renderer.drawImage(this, x, y, size);
 
         return this;
-    }
-
-    int transform(int size) {
-        GlStateManager.translate(x, y, 100);
-        GlStateManager.scale(size / 256, size / 256, 100);
-        return size / 256;
     }
 }

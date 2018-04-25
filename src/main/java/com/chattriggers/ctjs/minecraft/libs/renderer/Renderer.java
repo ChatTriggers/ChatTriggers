@@ -260,17 +260,21 @@ public class Renderer {
         GlStateManager.pushMatrix();
     }
 
-    public void drawImage(Image image, int size) {
-        GlStateManager.bindTexture(image.getTexture().getGlTextureId());
+    public void drawImage(Image image, int x, int y, int size) {
+        if (image.getTexture() == null) {
+            System.out.println("Returning");
+            return;
+        }
+
+        float scale = (float) size / (float) 256;
+        float f = 256 * 0.00390625F;
+        float modX = x / scale, modY = y / scale;
 
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.enableBlend();
-
-        int scale = image.transform(size);
-
-        float f = 256 * 0.00390625F;
-
-        float modX = image.getX() / scale, modY = image.getY() / scale;
+        GlStateManager.scale(scale, scale, 50);
+        GlStateManager.bindTexture(image.getTexture().getGlTextureId());
+        GlStateManager.enableTexture2D();
 
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
@@ -428,7 +432,7 @@ public class Renderer {
      * <p>
      *     <strong>This instances a new object and should be treated as such.</strong><br>
      *     This should not be used to instance and draw an image every frame, instead use
-     *     {@link Renderer#drawImage(Image, int)} or {@link Image#draw(int)}
+     *     {@link Renderer#drawImage(Image, int, int, int)} or {@link Image#draw(int, int, int)}
      * </p>
      *
      * @param name the name of the file to save/load from

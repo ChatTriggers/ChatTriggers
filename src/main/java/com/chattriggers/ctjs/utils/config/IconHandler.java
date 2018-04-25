@@ -45,31 +45,39 @@ class IconHandler {
         private Icon(String name, String image_url, String url) {
             this.y = 0;
             this.main = true;
-            this.image = Renderer.image(name).download(image_url, true).setScale(0.25f);
+            this.image = Image.load(name, image_url);
             this.url = url;
         }
 
         private Icon(String name, String image_url, String url, int y) {
             this.y = y;
             this.main = false;
-            this.image = Renderer.image(name).download(image_url, true).setScale(0.083f);
+            this.image = Image.load(name, image_url);
             this.url = url;
         }
 
         private void draw() {
             if (this.main) {
-                this.image.setY(Renderer.screen.getHeight() - 65).draw();
+                this.image.draw(0, Renderer.screen.getHeight() - 65, 64);
             } else {
-                this.image
-                        .setX(65)
-                        .setY(Renderer.screen.getHeight() - (this.y * 21.3f))
-                        .draw();
+                this.image.draw(65, (int) (Renderer.screen.getHeight() - (this.y * 21.3f)), 64 / 3);
             }
         }
 
         private void click(int x, int y) {
-            if (x > this.image.getX() && x < this.image.getX() + 256 * this.image.getScaleX()
-            && y > this.image.getY() && y < this.image.getY() + 256 * this.image.getScaleY()) {
+            float ix, iy, size;
+
+            if (this.main) {
+                ix = 0;
+                iy = Renderer.screen.getHeight() - 65;
+                size = 64;
+            } else {
+                ix = 65;
+                iy = Renderer.screen.getHeight() - (this.y * 21.3f);
+                size = 64 / 3;
+            }
+
+            if (x > ix && x < ix + size && y > iy && y < iy + size) {
                 try {
                     Desktop.getDesktop().browse(new URL(this.url).toURI());
                     World.playSound("gui.button.press", 100, 1);
