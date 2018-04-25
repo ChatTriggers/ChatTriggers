@@ -14,6 +14,7 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.ImagesPack;
+import com.chattriggers.ctjs.utils.UpdateChecker;
 import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -64,11 +65,6 @@ public class CTJS {
     @Getter
     private Console console;
     @Getter
-    @Setter
-    private Config config;
-    @Getter
-    private GuiConfig guiConfig;
-    @Getter
     private ModuleManager moduleManager;
     @Getter
     private CPS cps;
@@ -86,6 +82,8 @@ public class CTJS {
         this.moduleManager = new ModuleManager();
         this.cps = new CPS();
         this.tessellator = new Tessellator();
+
+        new UpdateChecker();
 
         registerListeners();
 
@@ -119,25 +117,25 @@ public class CTJS {
     }
 
     public void setupConfig() {
-        this.guiConfig = new GuiConfig();
-        this.config = new Config();
-        if (loadConfig()) this.config.init();
+        new GuiConfig();
+        new Config();
+        if (loadConfig()) Config.getInstance().init();
     }
 
     public void saveConfig() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String path = new File(this.configLocation, "ChatTriggers.json").getAbsolutePath();
-        FileLib.write(path, gson.toJson(this.config));
+        FileLib.write(path, gson.toJson(Config.getInstance()));
     }
 
     private boolean loadConfig() {
         try {
-            this.config = new Gson().fromJson(new FileReader(new File(this.configLocation, "ChatTriggers.json")), this.config.getClass());
+            Config.setInstance(new Gson().fromJson(new FileReader(new File(this.configLocation, "ChatTriggers.json")), Config.getInstance().getClass()));
             return true;
         } catch (FileNotFoundException exception) {
             try {
                 new File(this.configLocation, "ChatTriggers.json").createNewFile();
-                this.config.init();
+                Config.getInstance().init();
                 saveConfig();
             } catch (IOException ioexception) {
                 ioexception.printStackTrace();
@@ -170,7 +168,6 @@ public class CTJS {
         MinecraftForge.EVENT_BUS.register(this.displayHandler);
         MinecraftForge.EVENT_BUS.register(this.guiHandler);
         MinecraftForge.EVENT_BUS.register(this.chatListener);
-        MinecraftForge.EVENT_BUS.register(this.config);
         MinecraftForge.EVENT_BUS.register(this.cps);
     }
 

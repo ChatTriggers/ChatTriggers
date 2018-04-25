@@ -6,6 +6,8 @@ import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.config.Config;
+import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -100,7 +102,7 @@ public class CTCommand extends CommandBase {
                         CTJS.getInstance().getCommandHandler().getCommandList().clear();
                         CTJS.getInstance().getModuleManager().unload();
 
-                        if (CTJS.getInstance().getConfig().getClearConsoleOnLoad().value)
+                        if (Config.getInstance().getClearConsoleOnLoad().value)
                             CTJS.getInstance().getConsole().clearConsole();
 
                         CTJS.getInstance().setupConfig();
@@ -135,7 +137,7 @@ public class CTCommand extends CommandBase {
                 case("settings"):
                 case("setting"):
                     CTJS.getInstance().getGuiHandler().openGui(
-                            CTJS.getInstance().getGuiConfig()
+                            GuiConfig.getInstance()
                     );
                     break;
                 case("sim"):

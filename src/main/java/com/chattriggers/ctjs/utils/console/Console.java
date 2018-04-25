@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.utils.console;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.triggers.OnTrigger;
+import com.chattriggers.ctjs.utils.config.Config;
 import io.sentry.Sentry;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
@@ -131,11 +132,11 @@ public class Console {
         Color bg;
         Color fg;
 
-        if (CTJS.getInstance().getConfig().getCustomTheme().value) {
-            bg = CTJS.getInstance().getConfig().getConsoleBackgroundColor().value;
-            fg = CTJS.getInstance().getConfig().getConsoleForegroundColor().value;
+        if (Config.getInstance().getCustomTheme().value) {
+            bg = Config.getInstance().getConsoleBackgroundColor().value;
+            fg = Config.getInstance().getConsoleForegroundColor().value;
         } else {
-            switch (CTJS.getInstance().getConfig().getConsoleTheme().getValue()) {
+            switch (Config.getInstance().getConsoleTheme().getValue()) {
                 case "ashes.dark":
                     bg = new Color(28, 32, 35);
                     fg = new Color(199, 204, 209);

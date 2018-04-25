@@ -79,7 +79,6 @@ public class Message {
 
         this.messageParts = new ArrayList<>();
         this.messageParts.addAll(Arrays.asList(messages));
-        System.out.println(this.messageParts);
     }
 
     /**

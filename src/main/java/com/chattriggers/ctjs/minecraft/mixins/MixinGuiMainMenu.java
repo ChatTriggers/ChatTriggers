@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.mixins;
 
+import com.chattriggers.ctjs.utils.UpdateChecker;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +13,6 @@ public class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;II)V"))
     public void onRender(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
-        // DRAW
+        UpdateChecker.getInstance().drawUpdateMessage();
     }
 }

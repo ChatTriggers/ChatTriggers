@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
 import com.chattriggers.ctjs.modules.Module;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -173,7 +174,7 @@ public class ModulesGui extends GuiScreen {
 
 
             // directory
-            Renderer.text(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", x + 2, y + height - 12)
+            Renderer.text(ChatFormatting.DARK_GRAY + Config.getInstance().getModulesFolder().value + this.module.getName() + "/", x + 2, y + height - 12)
                     .setShadow(true).draw();
 
             // show code

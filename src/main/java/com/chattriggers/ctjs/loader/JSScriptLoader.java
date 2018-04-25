@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
@@ -41,7 +42,7 @@ public class JSScriptLoader extends ScriptLoader {
                 for (File file : dir.listFiles()) {
                     if (file.getName().endsWith(".jar")) {
                         File jar = new File(
-                                CTJS.getInstance().getConfig().getModulesFolder()
+                                Config.getInstance().getModulesFolder()
                                         + dir.getName()
                                         + "/" + file.getName()
                         );
