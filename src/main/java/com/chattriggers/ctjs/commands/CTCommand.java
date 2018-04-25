@@ -100,7 +100,7 @@ public class CTCommand extends CommandBase {
                     new Thread(() -> {
                         for (TriggerType type : TriggerType.values())
                             type.clearTriggers();
-                        CTJS.getInstance().getCommandHandler().getCommandList().clear();
+                        CommandHandler.getInstance().getCommandList().clear();
                         CTJS.getInstance().getModuleManager().unload();
 
                         if (Config.getInstance().getClearConsoleOnLoad().value)

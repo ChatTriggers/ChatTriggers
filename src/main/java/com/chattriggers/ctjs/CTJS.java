@@ -50,8 +50,6 @@ public class CTJS {
     private static CTJS instance;
 
     @Getter
-    private CommandHandler commandHandler;
-    @Getter
     private ChatListener chatListener;
     @Getter
     private ImagesPack imagesPack;
@@ -72,7 +70,7 @@ public class CTJS {
     public void init(FMLInitializationEvent event) {
         new DisplayHandler();
         new GuiHandler();
-        this.commandHandler = new CommandHandler();
+        new CommandHandler();
         this.chatListener = new ChatListener();
         this.moduleManager = new ModuleManager();
         this.cps = new CPS();
