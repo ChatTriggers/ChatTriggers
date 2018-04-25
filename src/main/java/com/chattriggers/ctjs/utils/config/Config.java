@@ -8,7 +8,7 @@ import java.awt.*;
 public class Config {
     @Getter
     @Setter
-    private static volatile Config instance;
+    private static transient Config instance;
 
     @Getter
     private ConfigString modulesFolder;

@@ -15,7 +15,7 @@ public abstract class ConfigOption {
     protected int y;
     protected boolean hidden;
 
-    protected GuiButton resetButton;
+    transient GuiButton resetButton;
 
     ConfigOption(Type type) {
         this.type = type;
