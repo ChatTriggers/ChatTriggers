@@ -1,10 +1,10 @@
 package com.chattriggers.ctjs.modules.gui;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.utils.config.Config;
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -127,7 +127,7 @@ public class ModulesGui extends GuiScreen {
 
         private void click() {
             if (isHovered) {
-                CTJS.getInstance().getGuiHandler().openGui(new ModuleGui(module));
+                GuiHandler.getInstance().openGui(new ModuleGui(module));
             }
         }
 

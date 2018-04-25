@@ -50,8 +50,6 @@ public class CTJS {
     private static CTJS instance;
 
     @Getter
-    private GuiHandler guiHandler;
-    @Getter
     private CommandHandler commandHandler;
     @Getter
     private ChatListener chatListener;
@@ -73,7 +71,7 @@ public class CTJS {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         new DisplayHandler();
-        this.guiHandler = new GuiHandler();
+        new GuiHandler();
         this.commandHandler = new CommandHandler();
         this.chatListener = new ChatListener();
         this.moduleManager = new ModuleManager();
@@ -162,7 +160,6 @@ public class CTJS {
         MinecraftForge.EVENT_BUS.register(new WorldListener());
         MinecraftForge.EVENT_BUS.register(new ClientListener());
 
-        MinecraftForge.EVENT_BUS.register(this.guiHandler);
         MinecraftForge.EVENT_BUS.register(this.chatListener);
         MinecraftForge.EVENT_BUS.register(this.cps);
     }

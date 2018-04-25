@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
@@ -129,14 +130,14 @@ public class CTCommand extends CommandBase {
                 case("modules"):
                 case("module"):
                 case("imports"):
-                    CTJS.getInstance().getGuiHandler().openGui(
+                    GuiHandler.getInstance().openGui(
                             new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
                     );
                     break;
                 case("config"):
                 case("settings"):
                 case("setting"):
-                    CTJS.getInstance().getGuiHandler().openGui(
+                    GuiHandler.getInstance().openGui(
                             GuiConfig.getInstance()
                     );
                     break;
