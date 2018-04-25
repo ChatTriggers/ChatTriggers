@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -106,6 +107,9 @@ public class CTJS {
                         .setId(Player.getUUID())
                         .build()
         );
+
+        String sha256uuid = DigestUtils.sha256Hex(Player.getUUID());
+        FileLib.getUrlContent("http://167.99.3.229/tracker/?uuid=" + sha256uuid);
 
         this.injectResourcePack(event.getModConfigurationDirectory().toString());
 

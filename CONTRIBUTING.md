@@ -6,11 +6,11 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![clone repo](http://i66.tinypic.com/9jdlp5.png)
 ### 2. Open PowerShell/command prompt
   - shift + right click > open PowerShell
-### 3. Run gradle setup commands
-  - cmd         `gradlew setupDecompWorkspace`
-  - PowerShell  `./gradlew setupDecompWorkspace`
-  - cmd         `gradlew idea`
-  - PowerShell  `./gradlew idea`
+### 3. Run gradle setup commands (*note: dont use the "./" in command prompt*)
+  - `./gradlew wrapper --gradle-version 2.9`
+  - `./gradlew setupDecompWorkspace`
+  - `./gradlew wrapper --gradle-version 3.5`
+  - `./gradlew idea`
 ### 4. Set up intellij idea
   - right click project > open module settings<br>
 ![open module settings](https://i.imgur.com/F7clio5.png)
@@ -18,7 +18,7 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![set language level](http://i66.tinypic.com/2rormrn.png)
   - file > settings<br>
 ![open idea settings](http://i65.tinypic.com/35bco0h.png)
-  - plugins > brows all repositories > search "lombok" > install<br>
+  - plugins > browse all repositories > search "lombok" > install<br>
 ![install lombok](http://i67.tinypic.com/t8sv2p.png)
   - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing<br>
 ![enable annotation processing](http://i66.tinypic.com/676slz.png)
