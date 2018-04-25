@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -261,57 +260,37 @@ public class Renderer {
         GlStateManager.pushMatrix();
     }
 
-    /**
-     * Simple method to draw an image to the Client's overlay<br>
-     * For more options, use {@link Image}
-     *
-     * @param resourceDomain the resource domain
-     * @param resourceName the resource name
-     * @param x the x position
-     * @param y the y position
-     * @param scaleX the x scale
-     * @param scaleY the y scale
-     * @param textureX the texture x position
-     * @param textureY the texture y position
-     * @param textureWidth the texture width
-     * @param textureHeight the texture height
-     */
-    public void drawImage(String resourceDomain, String resourceName, float x, float y, float scaleX, float scaleY, int textureX, int  textureY, int textureWidth, int textureHeight) {
-        ResourceLocation rl = new ResourceLocation(resourceDomain, resourceName);
-
-        Client.getMinecraft().getTextureManager().bindTexture(rl);
-
-        GlStateManager.enableBlend();
+    public void drawImage(Image image, int size) {
+        GlStateManager.bindTexture(image.getTexture().getGlTextureId());
 
         GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.translate(x, y, 100);
-        GlStateManager.scale(scaleX, scaleY, 100);
+        GlStateManager.enableBlend();
 
-        float f = 0.00390625F;
+        int scale = image.transform(size);
+
+        float f = 256 * 0.00390625F;
+
+        float modX = image.getX() / scale, modY = image.getY() / scale;
+
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(0, textureHeight, 0).tex(textureX * f, (textureY + textureHeight) * f).endVertex();
-        worldrenderer.pos(textureWidth, textureHeight, 0).tex((textureX + textureWidth) * f, (textureY + textureHeight) * f).endVertex();
-        worldrenderer.pos(textureWidth, 0, 0).tex((textureX + textureWidth) * f, textureY * f).endVertex();
-        worldrenderer.pos(0, 0, 0).tex(textureX * f, textureY * f).endVertex();
+        worldrenderer.pos(modX, modY + 256, 0)
+                .tex(0, f)
+                .endVertex();
+        worldrenderer.pos(modX + 256, modY + 256, 0)
+                .tex(f, f)
+                .endVertex();
+        worldrenderer.pos(modX + 256, modY, 0)
+                .tex(f, 0)
+                .endVertex();
+        worldrenderer.pos(modX, modY, 0)
+                .tex(0, 0)
+                .endVertex();
         tessellator.draw();
-
-        GlStateManager.disableBlend();
 
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
-    }
-
-    /**
-     * Simple method to draw an image to the Client's overlay<br>
-     * for more options, use {@link Renderer#drawImage(String, String, float, float, float, float, int, int, int, int)}
-     * @param resourceName the resource name
-     * @param x the x position
-     * @param y the y position
-     */
-    public void drawImage(String resourceName, float x, float y) {
-        drawImage("ctjs.images", resourceName, x, y, 1, 1, 0, 0, 256, 256);
     }
 
     /**
@@ -443,19 +422,21 @@ public class Renderer {
     }
 
     /**
-     * Creates a new {@link Image} object.
+     * Creates a new {@link Image} object. If the file with the specified name is found,
+     * then it will be loaded, otherwise the file will be downloaded from the url and
+     * then saved to a file with said name to be loaded from in the future.
      * <p>
      *     <strong>This instances a new object and should be treated as such.</strong><br>
      *     This should not be used to instance and draw an image every frame, instead use
-     *     {@link Renderer#drawImage(String, float, float)} or {@link Renderer#drawImage(String, String, float, float, float, float, int, int, int, int)}
-     *     for simple images.
+     *     {@link Renderer#drawImage(Image, int)} or {@link Image#draw(int)}
      * </p>
      *
-     * @param resourceName the name of the resource (image-name.png)
+     * @param name the name of the file to save/load from
+     * @param url the url of the file to download
      * @return a new {@link Image} object
      */
-    public Image image(String resourceName) {
-        return new Image(resourceName);
+    public Image image(String name, String url) {
+        return Image.load(name, url);
     }
 
     /**
