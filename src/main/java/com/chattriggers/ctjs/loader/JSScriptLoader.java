@@ -42,7 +42,7 @@ public class JSScriptLoader extends ScriptLoader {
                 for (File file : dir.listFiles()) {
                     if (file.getName().endsWith(".jar")) {
                         File jar = new File(
-                                Config.getInstance().getModulesFolder()
+                                Config.getInstance().getModulesFolder().value
                                         + dir.getName()
                                         + "/" + file.getName()
                         );
