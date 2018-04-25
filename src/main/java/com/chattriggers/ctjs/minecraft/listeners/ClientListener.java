@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.listeners;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
+import com.chattriggers.ctjs.minecraft.objects.CPS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
@@ -97,7 +97,7 @@ public class ClientListener {
         TriggerType.STEP.triggerAll();
 
         handleMouseInput();
-        CTJS.getInstance().getCps().clickCalc();
+        CPS.getInstance().clickCalc();
     }
 
     private void handleOverlayTriggers(RenderGameOverlayEvent event) {
@@ -133,8 +133,8 @@ public class ClientListener {
         if (EventLib.getButton(event) == -1) return;
 
         // add to cps
-        if (EventLib.getButton(event) == 0 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addLeftClicks();
-        if (EventLib.getButton(event) == 1 && EventLib.getButtonState(event)) CTJS.getInstance().getCps().addRightClicks();
+        if (EventLib.getButton(event) == 0 && EventLib.getButtonState(event)) CPS.getInstance().addLeftClicks();
+        if (EventLib.getButton(event) == 1 && EventLib.getButtonState(event)) CPS.getInstance().addRightClicks();
     }
 
     @SubscribeEvent

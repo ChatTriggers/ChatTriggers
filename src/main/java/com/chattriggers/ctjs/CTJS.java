@@ -56,8 +56,6 @@ public class CTJS {
     @Getter
     private File assetsDir;
     @Getter
-    private CPS cps;
-    @Getter
     private Tessellator tessellator;
 
     private File configLocation;
@@ -69,7 +67,7 @@ public class CTJS {
         new CommandHandler();
         this.chatListener = new ChatListener();
         new ModuleManager();
-        this.cps = new CPS();
+        new CPS();
         this.tessellator = new Tessellator();
 
         new UpdateChecker();
@@ -155,7 +153,6 @@ public class CTJS {
         MinecraftForge.EVENT_BUS.register(new ClientListener());
 
         MinecraftForge.EVENT_BUS.register(this.chatListener);
-        MinecraftForge.EVENT_BUS.register(this.cps);
     }
 
     private void registerHooks() {
