@@ -6,6 +6,7 @@
     "MixinGuiChat",
     "MixinGuiScreen",
     "MixinScreenShotHelper",
-    "MixinMinecraft"
+    "MixinMinecraft",
+    "MixinGuiMainMenu"
   ]
 }

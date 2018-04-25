@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.loader;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
+import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
+import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import lombok.Getter;
 import net.minecraftforge.common.MinecraftForge;
@@ -58,7 +58,7 @@ public class ModuleManager {
 
         KeyBind.clearKeyBinds();
         TriggerType.clearAllTriggers();
-        CTJS.getInstance().getDisplayHandler().clearDisplays();
+        DisplayHandler.getInstance().clearDisplays();
     }
 
     public ArrayList<Module> getModules() {

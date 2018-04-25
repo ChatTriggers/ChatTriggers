@@ -46,11 +46,6 @@ public class UpdateChecker {
 
     @SubscribeEvent
     public void renderOverlay(RenderGameOverlayEvent event) {
-        printUpdateMessage();
-        //drawUpdateMessage();
-    }
-
-    private void printUpdateMessage() {
         if (!this.worldLoaded) return;
         this.worldLoaded = false;
 
@@ -75,6 +70,6 @@ public class UpdateChecker {
     public void drawUpdateMessage() {
         if (!this.updateAvailable) return;
 
-        Renderer.drawStringWithShadow("&cChatTrigger requires an update to work properly!", 0, 0);
+        Renderer.drawString("&cChatTrigger requires an update to work properly!", 2, 2);
     }
 }

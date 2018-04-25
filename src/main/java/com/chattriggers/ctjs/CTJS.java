@@ -23,7 +23,6 @@ import com.google.gson.GsonBuilder;
 import io.sentry.Sentry;
 import io.sentry.event.UserBuilder;
 import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,8 +49,6 @@ public class CTJS {
     @Mod.Instance
     private static CTJS instance;
 
-    @Getter @Setter
-    private DisplayHandler displayHandler;
     @Getter
     private GuiHandler guiHandler;
     @Getter
@@ -75,7 +72,7 @@ public class CTJS {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        this.displayHandler = new DisplayHandler();
+        new DisplayHandler();
         this.guiHandler = new GuiHandler();
         this.commandHandler = new CommandHandler();
         this.chatListener = new ChatListener();
@@ -165,7 +162,6 @@ public class CTJS {
         MinecraftForge.EVENT_BUS.register(new WorldListener());
         MinecraftForge.EVENT_BUS.register(new ClientListener());
 
-        MinecraftForge.EVENT_BUS.register(this.displayHandler);
         MinecraftForge.EVENT_BUS.register(this.guiHandler);
         MinecraftForge.EVENT_BUS.register(this.chatListener);
         MinecraftForge.EVENT_BUS.register(this.cps);

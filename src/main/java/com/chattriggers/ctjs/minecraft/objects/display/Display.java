@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.objects.display;
 
-import com.chattriggers.ctjs.CTJS;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -183,7 +182,7 @@ public class Display {
 
         setMinWidth(0);
 
-        CTJS.getInstance().getDisplayHandler().registerDisplay(this);
+        DisplayHandler.getInstance().registerDisplay(this);
     }
 
     /**
