@@ -55,8 +55,6 @@ public class CTJS {
     private ImagesPack imagesPack;
     @Getter
     private File assetsDir;
-    @Getter
-    private Tessellator tessellator;
 
     private File configLocation;
 
@@ -68,7 +66,7 @@ public class CTJS {
         this.chatListener = new ChatListener();
         new ModuleManager();
         new CPS();
-        this.tessellator = new Tessellator();
+        new Tessellator();
 
         new UpdateChecker();
 
