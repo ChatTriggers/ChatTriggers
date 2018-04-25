@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
+import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
@@ -222,7 +223,7 @@ public class ChatLib {
      */
     public static ArrayList<String> getChatLines() {
         ArrayList<String> out = new ArrayList<>();
-        ArrayList<String> in = CTJS.getInstance().getChatListener().getChatHistory();
+        ArrayList<String> in = ChatListener.getInstance().getChatHistory();
         for (int i = in.size() - 1; i >= 0; i--)
             out.add(in.get(i));
         return out;
