@@ -56,8 +56,6 @@ public class CTJS {
     @Getter
     private File assetsDir;
     @Getter
-    private Console console;
-    @Getter
     private CPS cps;
     @Getter
     private Tessellator tessellator;
@@ -86,7 +84,7 @@ public class CTJS {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
-        this.console = new Console();
+        new Console();
 
         Sentry.init(Reference.SENTRYDSN);
 

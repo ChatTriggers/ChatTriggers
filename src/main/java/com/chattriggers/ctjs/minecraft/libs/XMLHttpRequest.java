@@ -37,7 +37,7 @@ public class XMLHttpRequest {
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(method);
         } catch (Exception e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
     }
 
@@ -71,7 +71,7 @@ public class XMLHttpRequest {
                 sendPost(parameters);
             }
         } catch (Exception e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
     }
 
@@ -99,7 +99,7 @@ public class XMLHttpRequest {
 
             sendGet();
         } catch (Exception e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
     }
 
@@ -116,7 +116,7 @@ public class XMLHttpRequest {
                 sendGet();
             }
         } catch (Exception e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
     }
 
@@ -140,7 +140,7 @@ public class XMLHttpRequest {
 
             ModuleManager.getInstance().invokeFunction(this.methodCallback, this);
         } catch (Exception e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
     }
 

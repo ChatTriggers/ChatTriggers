@@ -22,7 +22,7 @@ public class Console {
     private ArrayList<Component> components;
 
     @Getter
-    private static Console console;
+    private static Console instance;
 
     public Console() {
         this.frame = new JFrame("ct.js Console");
@@ -86,7 +86,7 @@ public class Console {
         frame.setVisible(false);
         frame.setSize(800, 600);
 
-        console = this;
+        instance = this;
     }
 
     public void clearConsole() {

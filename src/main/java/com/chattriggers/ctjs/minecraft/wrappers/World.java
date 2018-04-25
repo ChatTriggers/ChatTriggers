@@ -305,7 +305,7 @@ public class World {
 
                 return new Particle(fx);
             } catch (Exception e) {
-                Console.getConsole().printStackTrace(e);
+                Console.getInstance().printStackTrace(e);
             }
 
             return null;

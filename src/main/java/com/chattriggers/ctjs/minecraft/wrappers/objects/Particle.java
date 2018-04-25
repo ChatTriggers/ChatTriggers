@@ -15,7 +15,7 @@ public class Particle {
 
     public void scale(float scale) {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 
@@ -24,7 +24,7 @@ public class Particle {
 
     public void multiplyVelocity(float multiplier) {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 
@@ -33,7 +33,7 @@ public class Particle {
 
     public void setColor(float r, float g, float b) {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 
@@ -42,7 +42,7 @@ public class Particle {
 
     public void setColor(float r, float g, float b, float a) {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 
@@ -52,7 +52,7 @@ public class Particle {
 
     public void setColor(int color) {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 
@@ -66,7 +66,7 @@ public class Particle {
 
     public void setAlpha(float a) {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 
@@ -80,7 +80,7 @@ public class Particle {
      */
     public void setMaxAge(int maxAge) {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 
@@ -88,16 +88,14 @@ public class Particle {
                 EntityFX.class,
                 this.underlyingEntity,
                 maxAge,
-                new String[]{
-                        "particleMaxAge",
-                        "field_70547_e"
-                }
+                "particleMaxAge",
+                "field_70547_e"
         );
     }
 
     public void remove() {
         if (underlyingEntity == null) {
-            Console.getConsole().out.println("Particle is null, returning!");
+            Console.getInstance().out.println("Particle is null, returning!");
             return;
         }
 

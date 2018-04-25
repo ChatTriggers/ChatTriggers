@@ -105,7 +105,7 @@ public class CTCommand extends CommandBase {
                         ModuleManager.getInstance().unload();
 
                         if (Config.getInstance().getClearConsoleOnLoad().value)
-                            CTJS.getInstance().getConsole().clearConsole();
+                            Console.getInstance().clearConsole();
 
                         CTJS.getInstance().setupConfig();
 
@@ -126,7 +126,7 @@ public class CTCommand extends CommandBase {
                         ModuleManager.getInstance().importModule(args[1]);
                     break;
                 case("console"):
-                    Console.getConsole().showConsole(true);
+                    Console.getInstance().showConsole(true);
                     break;
                 case("modules"):
                 case("module"):
@@ -211,7 +211,7 @@ public class CTCommand extends CommandBase {
         try {
             Desktop.getDesktop().open(new File("./config/ChatTriggers"));
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
             ChatLib.chat("&cCould not open file location");
         }
     }

@@ -92,8 +92,8 @@ public enum TriggerType {
                     triggersRemove.remove(trigger);
                     triggers.remove(trigger);
                 } catch (Exception e) {
-                    Console.getConsole().out.println("Failed to unregister broken function. Trying again later.");
-                    Console.getConsole().out.println(trigger.getMethod().toString());
+                    Console.getInstance().out.println("Failed to unregister broken function. Trying again later.");
+                    Console.getInstance().out.println(trigger.getMethod().toString());
                 }
                 return;
             }

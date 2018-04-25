@@ -74,7 +74,7 @@ class IconHandler {
                     Desktop.getDesktop().browse(new URL(this.url).toURI());
                     World.playSound("gui.button.press", 100, 1);
                 } catch (Exception exception) {
-                    Console.getConsole().printStackTrace(exception);
+                    Console.getInstance().printStackTrace(exception);
                 }
             }
         }

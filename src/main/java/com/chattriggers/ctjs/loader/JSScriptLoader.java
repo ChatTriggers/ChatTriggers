@@ -63,7 +63,7 @@ public class JSScriptLoader extends ScriptLoader {
             saveResource("/providedLibs.js", new File(modulesDir.getParentFile(), "chattriggers-provided-libs.js"), true);
             scriptEngine.eval(getProvidedLibsScript());
         } catch (ScriptException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
     }
 
@@ -119,7 +119,7 @@ public class JSScriptLoader extends ScriptLoader {
 
                     newMetadataFile.delete();
                 } catch (IOException e) {
-                    Console.getConsole().out.println("Can't update module " + metadata.getName());
+                    Console.getInstance().out.println("Can't update module " + metadata.getName());
                 }
             }
 
@@ -139,7 +139,7 @@ public class JSScriptLoader extends ScriptLoader {
             TriggerRegister.currentModule = null;
             return module;
         } catch (IOException | ScriptException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
 
         return null;
@@ -161,7 +161,7 @@ public class JSScriptLoader extends ScriptLoader {
                 FileUtils.copyURLToFile(new URL("http://167.99.3.229/downloads/metadata/" + name),
                         currentMetadata);
             } catch (IOException exception) {
-                Console.getConsole().printStackTrace(exception);
+                Console.getInstance().printStackTrace(exception);
                 ChatLib.chat("&cModule not found!");
                 currentMetadata.delete();
                 return false;
@@ -182,7 +182,7 @@ public class JSScriptLoader extends ScriptLoader {
 
             downloadZip.delete();
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
             return false;
         }
 
@@ -220,7 +220,7 @@ public class JSScriptLoader extends ScriptLoader {
         try {
             return compileScripts(new File(this.modulesDir.getParentFile(), "chattriggers-provided-libs.js"));
         } catch (IOException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
             return null;
         }
     }

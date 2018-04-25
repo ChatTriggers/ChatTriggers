@@ -28,7 +28,7 @@ public class ChatListener {
 
             // print to console
             if (Config.getInstance().getPrintChatToConsole().value) {
-                Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
+                Console.getInstance().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
             }
         }
     }

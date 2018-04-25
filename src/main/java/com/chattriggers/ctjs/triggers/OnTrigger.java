@@ -82,7 +82,7 @@ public abstract class OnTrigger {
 
             callActualMethod(args);
         } catch (Exception e) {
-            Console.getConsole().printStackTrace(e, this);
+            Console.getInstance().printStackTrace(e, this);
             this.type.removeTrigger(this);
         }
     }

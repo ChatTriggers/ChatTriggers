@@ -64,7 +64,7 @@ public class Command extends CommandBase {
         } catch (Exception exception) {
             ChatLib.chat("&cSomething went wrong while running that command");
             ChatLib.chat("&cCheck the ct console for more information");
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
         }
     }
 }

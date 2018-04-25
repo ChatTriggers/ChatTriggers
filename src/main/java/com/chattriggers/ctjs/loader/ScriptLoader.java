@@ -62,7 +62,7 @@ public abstract class ScriptLoader {
                 in.close();
             }
         } catch (IOException ex) {
-            Console.getConsole().printStackTrace(ex);
+            Console.getInstance().printStackTrace(ex);
         }
     }
 
@@ -100,7 +100,7 @@ public abstract class ScriptLoader {
                 try {
                     FileUtils.copyFileToDirectory(asset, toCopyDir);
                 } catch (IOException e) {
-                    Console.getConsole().printStackTrace(e);
+                    Console.getInstance().printStackTrace(e);
                 }
             }
         }

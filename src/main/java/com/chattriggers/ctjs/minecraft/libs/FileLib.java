@@ -33,7 +33,7 @@ public class FileLib {
         try {
             FileUtils.write(new File(fileLocation), toWrite);
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
         }
     }
 
@@ -70,7 +70,7 @@ public class FileLib {
             br.close();
             return FileUtils.readFileToString(file);
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
         }
 
         return "";
@@ -96,7 +96,7 @@ public class FileLib {
                 content.append(line).append("\n");
             }
         } catch (Exception exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
         }
 
         return content.toString();

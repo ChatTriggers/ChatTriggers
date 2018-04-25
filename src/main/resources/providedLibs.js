@@ -47,7 +47,7 @@ var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Block");
 var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
 
 // Misc
-var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
+var Console = Java.type("com.chattriggers.ctjs.utils.console.Console").getInstance();
 
 /*End Built in Vars */
 
@@ -55,7 +55,7 @@ var Console = Java.type("com.chattriggers.ctjs.utils.console.Console");
 
 // simplified methods
 function print(toPrint) {
-    Console.getConsole().out.println(toPrint);
+    Console.out.println(toPrint);
 }
 
 function cancel(event) {
