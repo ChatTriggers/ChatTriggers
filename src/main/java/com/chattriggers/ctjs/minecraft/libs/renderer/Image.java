@@ -20,6 +20,7 @@ import java.net.URL;
  */
 @Accessors(chain = true)
 public class Image {
+    @Getter
     private BufferedImage imageToLoad;
 
     @Getter
