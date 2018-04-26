@@ -1,11 +1,11 @@
 package com.chattriggers.ctjs.loader;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.modules.ModuleMetadata;
 import com.chattriggers.ctjs.triggers.TriggerRegister;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.console.Console;
 import com.google.gson.Gson;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
@@ -41,7 +41,7 @@ public class JSScriptLoader extends ScriptLoader {
                 for (File file : dir.listFiles()) {
                     if (file.getName().endsWith(".jar")) {
                         File jar = new File(
-                                CTJS.getInstance().getConfig().getModulesFolder()
+                                Config.getInstance().getModulesFolder().value
                                         + dir.getName()
                                         + "/" + file.getName()
                         );
@@ -63,7 +63,7 @@ public class JSScriptLoader extends ScriptLoader {
             saveResource("/providedLibs.js", new File(modulesDir.getParentFile(), "chattriggers-provided-libs.js"), true);
             scriptEngine.eval(getProvidedLibsScript());
         } catch (ScriptException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
     }
 
@@ -119,7 +119,7 @@ public class JSScriptLoader extends ScriptLoader {
 
                     newMetadataFile.delete();
                 } catch (IOException e) {
-                    Console.getConsole().out.println("Can't update module " + metadata.getName());
+                    Console.getInstance().out.println("Can't update module " + metadata.getName());
                 }
             }
 
@@ -139,7 +139,7 @@ public class JSScriptLoader extends ScriptLoader {
             TriggerRegister.currentModule = null;
             return module;
         } catch (IOException | ScriptException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
         }
 
         return null;
@@ -150,7 +150,7 @@ public class JSScriptLoader extends ScriptLoader {
 
         for (String require : metadata.getRequires()) {
             if (new File(modulesDir, require).exists()) continue;
-            CTJS.getInstance().getModuleManager().importModule(require);
+            ModuleManager.getInstance().importModule(require);
         }
     }
 
@@ -161,7 +161,7 @@ public class JSScriptLoader extends ScriptLoader {
                 FileUtils.copyURLToFile(new URL("http://167.99.3.229/downloads/metadata/" + name),
                         currentMetadata);
             } catch (IOException exception) {
-                Console.getConsole().printStackTrace(exception);
+                Console.getInstance().printStackTrace(exception);
                 ChatLib.chat("&cModule not found!");
                 currentMetadata.delete();
                 return false;
@@ -182,7 +182,7 @@ public class JSScriptLoader extends ScriptLoader {
 
             downloadZip.delete();
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
             return false;
         }
 
@@ -220,7 +220,7 @@ public class JSScriptLoader extends ScriptLoader {
         try {
             return compileScripts(new File(this.modulesDir.getParentFile(), "chattriggers-provided-libs.js"));
         } catch (IOException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
             return null;
         }
     }

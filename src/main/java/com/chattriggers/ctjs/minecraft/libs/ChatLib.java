@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.chattriggers.ctjs.utils.console.Console;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
@@ -271,7 +272,7 @@ public class ChatLib {
     // helper method to make sure player exists before putting something in chat
     public Boolean isPlayer(String out) {
         if (Player.getPlayer() == null) {
-            CTJS.getInstance().getConsole().out.println(out);
+            Console.getInstance().out.println(out);
             return false;
         }
 

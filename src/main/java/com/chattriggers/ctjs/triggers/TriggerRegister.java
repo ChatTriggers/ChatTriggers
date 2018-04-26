@@ -38,7 +38,7 @@ public class TriggerRegister {
                     Object.class
             );
         } catch (NoSuchMethodException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
             return null;
         }
 
@@ -46,7 +46,7 @@ public class TriggerRegister {
             Object returned = registerMethod.invoke(null, method);
             return (OnTrigger) returned;
         } catch (IllegalAccessException | InvocationTargetException e) {
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().printStackTrace(e);
             return null;
         }
     }

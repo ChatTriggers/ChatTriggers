@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.objects.gui;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
@@ -32,7 +31,7 @@ public class Gui extends GuiScreen {
      * Displays the gui object to Minecraft.
      */
     public void open() {
-        CTJS.getInstance().getGuiHandler().openGui(this);
+        GuiHandler.getInstance().openGui(this);
     }
 
     /**

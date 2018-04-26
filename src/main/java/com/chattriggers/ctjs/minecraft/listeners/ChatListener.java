@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.minecraft.listeners;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.EventLib;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -36,8 +36,8 @@ public class ChatListener {
             TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event);
 
             // print to console
-            if (CTJS.getInstance().getConfig().getPrintChatToConsole().value) {
-                Console.getConsole().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
+            if (Config.getInstance().getPrintChatToConsole().value) {
+                Console.getInstance().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
             }
         }
     }

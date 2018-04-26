@@ -10,11 +10,16 @@ import java.util.ArrayList;
 
 public class GuiConfig extends GuiScreen {
     @Getter
+    private static GuiConfig instance;
+
+    @Getter
     private ArrayList<ConfigOption> configOptions;
     private Boolean isOpen = false;
     private IconHandler iconHandler;
 
     public GuiConfig() {
+        instance = this;
+
         this.configOptions = new ArrayList<>();
         this.iconHandler = new IconHandler();
     }
@@ -33,7 +38,7 @@ public class GuiConfig extends GuiScreen {
                 configOption.init();
         }
 
-        CTJS.getInstance().getConfig().updateHidden();
+        Config.getInstance().updateHidden();
 
         drawBackground(0);
 

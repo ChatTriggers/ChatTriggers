@@ -1,18 +1,23 @@
 package com.chattriggers.ctjs.modules.gui;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.libs.MathLib;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text;
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.modules.Module;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ModuleGui extends GuiScreen {
     private Module module;
@@ -92,7 +97,7 @@ public class ModuleGui extends GuiScreen {
         description.setY(30 - this.scrolled).draw();
 
         // directory
-        Renderer.drawStringWithShadow(ChatFormatting.DARK_GRAY + CTJS.getInstance().getConfig().getModulesFolder().value + this.module.getName() + "/", 22, infoHeight - scrolled);
+        Renderer.drawStringWithShadow(ChatFormatting.DARK_GRAY + Config.getInstance().getModulesFolder().value + this.module.getName() + "/", 22, infoHeight - scrolled);
 
         // back
         drawBack();
@@ -179,7 +184,7 @@ public class ModuleGui extends GuiScreen {
 
         if (mouseButton == 0) {
             if (isHovered)
-                CTJS.getInstance().getGuiHandler().openGui(new ModulesGui(CTJS.getInstance().getModuleManager().getModules()));
+                GuiHandler.getInstance().openGui(new ModulesGui(ModuleManager.getInstance().getModules()));
 
             if (scrolled > infoHeight
                     && mouseX > width + 20

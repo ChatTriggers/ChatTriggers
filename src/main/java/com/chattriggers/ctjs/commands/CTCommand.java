@@ -1,12 +1,16 @@
 package com.chattriggers.ctjs.commands;
 
 import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.config.Config;
+import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -98,15 +102,15 @@ public class CTCommand extends CommandBase {
                     new Thread(() -> {
                         for (TriggerType type : TriggerType.values())
                             type.clearTriggers();
-                        CTJS.getInstance().getCommandHandler().getCommandList().clear();
-                        CTJS.getInstance().getModuleManager().unload();
+                        CommandHandler.getInstance().getCommandList().clear();
+                        ModuleManager.getInstance().unload();
 
-                        if (CTJS.getInstance().getConfig().getClearConsoleOnLoad().value)
-                            CTJS.getInstance().getConsole().clearConsole();
+                        if (Config.getInstance().getClearConsoleOnLoad().value)
+                            Console.getInstance().clearConsole();
 
                         CTJS.getInstance().setupConfig();
 
-                        CTJS.getInstance().getModuleManager().load();
+                        ModuleManager.getInstance().load();
                         ChatLib.chat("&aDone reloading scripts!");
                         TriggerType.WORLD_LOAD.triggerAll();
                         this.isLoaded = true;
@@ -120,23 +124,23 @@ public class CTCommand extends CommandBase {
                     if (args.length == 1)
                         ChatLib.chat("&c/ct import [module name]");
                     else
-                        CTJS.getInstance().getModuleManager().importModule(args[1]);
+                        ModuleManager.getInstance().importModule(args[1]);
                     break;
                 case("console"):
-                    Console.getConsole().showConsole(true);
+                    Console.getInstance().showConsole(true);
                     break;
                 case("modules"):
                 case("module"):
                 case("imports"):
-                    CTJS.getInstance().getGuiHandler().openGui(
-                            new ModulesGui(CTJS.getInstance().getModuleManager().getModules())
+                    GuiHandler.getInstance().openGui(
+                            new ModulesGui(ModuleManager.getInstance().getModules())
                     );
                     break;
                 case("config"):
                 case("settings"):
                 case("setting"):
-                    CTJS.getInstance().getGuiHandler().openGui(
-                            CTJS.getInstance().getGuiConfig()
+                    GuiHandler.getInstance().openGui(
+                            GuiConfig.getInstance()
                     );
                     break;
                 case("sim"):
@@ -208,7 +212,7 @@ public class CTCommand extends CommandBase {
         try {
             Desktop.getDesktop().open(new File("./config/ChatTriggers"));
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
             ChatLib.chat("&cCould not open file location");
         }
     }

@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.modules.Module;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.console.Console;
 import org.apache.commons.io.FileUtils;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ScriptLoader {
-    protected File modulesDir = new File(CTJS.getInstance().getConfig().getModulesFolder().value);
+    protected File modulesDir = new File(Config.getInstance().getModulesFolder().value);
 
     public void preLoad() {
         loadAssets();
@@ -61,7 +62,7 @@ public abstract class ScriptLoader {
                 in.close();
             }
         } catch (IOException ex) {
-            Console.getConsole().printStackTrace(ex);
+            Console.getInstance().printStackTrace(ex);
         }
     }
 
@@ -99,7 +100,7 @@ public abstract class ScriptLoader {
                 try {
                     FileUtils.copyFileToDirectory(asset, toCopyDir);
                 } catch (IOException e) {
-                    Console.getConsole().printStackTrace(e);
+                    Console.getInstance().printStackTrace(e);
                 }
             }
         }

@@ -95,7 +95,7 @@ public class Book {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                Console.getConsole().printStackTrace(e);
+                Console.getInstance().printStackTrace(e);
             }
             Client.getMinecraft().displayGuiScreen(bookScreen);
         }).start();

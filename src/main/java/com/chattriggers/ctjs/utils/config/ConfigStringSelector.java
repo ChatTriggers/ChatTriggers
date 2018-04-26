@@ -38,7 +38,7 @@ public class ConfigStringSelector extends ConfigOption {
             if (this.values.length > 0)
                 return this.values[0];
             else
-                Console.getConsole().printStackTrace(exception);
+                Console.getInstance().printStackTrace(exception);
         }
 
         return "";

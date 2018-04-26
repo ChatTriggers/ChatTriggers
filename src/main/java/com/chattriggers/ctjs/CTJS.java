@@ -13,6 +13,7 @@ import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import com.chattriggers.ctjs.utils.UpdateChecker;
 import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -21,13 +22,13 @@ import com.google.gson.GsonBuilder;
 import io.sentry.Sentry;
 import io.sentry.event.UserBuilder;
 import lombok.Getter;
-import lombok.Setter;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,45 +44,28 @@ public class CTJS {
     @Mod.Instance
     private static CTJS instance;
 
-    @Getter @Setter
-    private DisplayHandler displayHandler;
-    @Getter
-    private GuiHandler guiHandler;
-    @Getter
-    private CommandHandler commandHandler;
     @Getter
     private File assetsDir;
-    @Getter
-    private Console console;
-    @Getter
-    @Setter
-    private Config config;
-    @Getter
-    private GuiConfig guiConfig;
-    @Getter
-    private ModuleManager moduleManager;
-    @Getter
-    private CPS cps;
-    @Getter
-    private Tessellator tessellator;
 
     private File configLocation;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        this.displayHandler = new DisplayHandler();
-        this.guiHandler = new GuiHandler();
-        this.commandHandler = new CommandHandler();
         new ChatListener();
-        this.moduleManager = new ModuleManager();
-        this.cps = new CPS();
-        this.tessellator = new Tessellator();
+        new DisplayHandler();
+        new GuiHandler();
+        new CommandHandler();
+        new ModuleManager();
+        new CPS();
+        new Tessellator();
+
+        new UpdateChecker();
 
         registerListeners();
 
         registerHooks();
 
-        moduleManager.load(true);
+        ModuleManager.getInstance().load(true);
     }
 
     @EventHandler
@@ -89,7 +73,7 @@ public class CTJS {
         File pictures = new File(event.getModConfigurationDirectory(), "ChatTriggers/images/");
         pictures.mkdirs();
         assetsDir = pictures;
-        this.console = new Console();
+        new Console();
 
         Sentry.init(Reference.SENTRYDSN);
 
@@ -100,31 +84,35 @@ public class CTJS {
                         .build()
         );
 
+        String sha256uuid = DigestUtils.sha256Hex(Player.getUUID());
+        FileLib.getUrlContent("http://167.99.3.229/tracker/?uuid=" + sha256uuid);
+
+        this.injectResourcePack(event.getModConfigurationDirectory().toString());
         this.configLocation = event.getModConfigurationDirectory();
 
         setupConfig();
     }
 
     public void setupConfig() {
-        this.guiConfig = new GuiConfig();
-        this.config = new Config();
-        if (loadConfig()) this.config.init();
+        new GuiConfig();
+        new Config();
+        if (loadConfig()) Config.getInstance().init();
     }
 
     public void saveConfig() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String path = new File(this.configLocation, "ChatTriggers.json").getAbsolutePath();
-        FileLib.write(path, gson.toJson(this.config));
+        FileLib.write(path, gson.toJson(Config.getInstance()));
     }
 
     private boolean loadConfig() {
         try {
-            this.config = new Gson().fromJson(new FileReader(new File(this.configLocation, "ChatTriggers.json")), this.config.getClass());
+            Config.setInstance(new Gson().fromJson(new FileReader(new File(this.configLocation, "ChatTriggers.json")), Config.getInstance().getClass()));
             return true;
         } catch (FileNotFoundException exception) {
             try {
                 new File(this.configLocation, "ChatTriggers.json").createNewFile();
-                this.config.init();
+                Config.getInstance().init();
                 saveConfig();
             } catch (IOException ioexception) {
                 ioexception.printStackTrace();
@@ -136,11 +124,6 @@ public class CTJS {
     private void registerListeners() {
         MinecraftForge.EVENT_BUS.register(new WorldListener());
         MinecraftForge.EVENT_BUS.register(new ClientListener());
-
-        MinecraftForge.EVENT_BUS.register(this.displayHandler);
-        MinecraftForge.EVENT_BUS.register(this.guiHandler);
-        MinecraftForge.EVENT_BUS.register(this.config);
-        MinecraftForge.EVENT_BUS.register(this.cps);
     }
 
     private void registerHooks() {

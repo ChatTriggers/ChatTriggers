@@ -1,16 +1,23 @@
 package com.chattriggers.ctjs.utils.config;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 
 public class Config {
+    @Getter
+    @Setter
+    private static transient Config instance;
+
     @Getter
     private ConfigString modulesFolder;
     @Getter
     private ConfigBoolean printChatToConsole;
     @Getter
     private ConfigBoolean clearConsoleOnLoad;
+    @Getter
+    private ConfigBoolean showUpdatesInChat;
 
     @Getter
     private ConfigStringSelector consoleTheme;
@@ -22,12 +29,17 @@ public class Config {
     @Getter
     private ConfigColor consoleBackgroundColor;
 
+    public Config() {
+        instance = this;
+    }
+
     public void init() {
         this.modulesFolder = new ConfigString(this.modulesFolder,"Directory", "./config/ChatTriggers/modules/", -110, 10);
         this.modulesFolder.setDirectory(true);
 
         this.printChatToConsole = new ConfigBoolean(this.printChatToConsole,"Print Chat To Console", true, -110, 65);
         this.clearConsoleOnLoad = new ConfigBoolean(this.clearConsoleOnLoad, "Clear Console On Load", true, -110, 120);
+        this.showUpdatesInChat = new ConfigBoolean(this.showUpdatesInChat, "Show Update Messages In Chat", true, -110, 175);
 
         String[] themes = new String[]{"default.dark", "ashes.dark", "atelierforest.dark", "isotope.dark", "codeschool.dark", "gotham", "hybrid", "3024.light", "chalk.light", "blue", "slate", "red", "green", "aids"};
         this.consoleTheme = new ConfigStringSelector(this.consoleTheme, "Console Theme", 0, themes, 110, 65);

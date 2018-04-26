@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -10,6 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class Tessellator {
+    @Getter
+    private static Tessellator instance;
+
     private net.minecraft.client.renderer.Tessellator tessellator;
     private WorldRenderer worldRenderer;
     private boolean firstVertex;
@@ -17,6 +20,8 @@ public class Tessellator {
     private boolean colorized;
 
     public Tessellator() {
+        instance = this;
+
         this.tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
         this.worldRenderer = this.tessellator.getWorldRenderer();
         this.firstVertex = true;

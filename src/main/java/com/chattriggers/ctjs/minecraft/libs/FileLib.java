@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.console.Console;
 import org.apache.commons.io.FileUtils;
 
@@ -19,7 +19,7 @@ public class FileLib {
      * @param toWrite    string to write in file
      */
     public static void write(String importName, String fileName, String toWrite) {
-        write(CTJS.getInstance().getConfig().getModulesFolder().value + "/" + importName + "/" + fileName, toWrite);
+        write(Config.getInstance().getModulesFolder().value + "/" + importName + "/" + fileName, toWrite);
     }
 
     /**
@@ -33,7 +33,7 @@ public class FileLib {
         try {
             FileUtils.write(new File(fileLocation), toWrite);
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
         }
     }
 
@@ -46,7 +46,7 @@ public class FileLib {
      * @return the string in the file
      */
     public static String read(String importName, String fileName) {
-        return read(CTJS.getInstance().getConfig().getModulesFolder().value + "/" + importName + "/" + fileName);
+        return read(Config.getInstance().getModulesFolder().value + "/" + importName + "/" + fileName);
     }
 
     /**
@@ -70,7 +70,7 @@ public class FileLib {
             br.close();
             return FileUtils.readFileToString(file);
         } catch (IOException exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
         }
 
         return "";
@@ -96,7 +96,7 @@ public class FileLib {
                 content.append(line).append("\n");
             }
         } catch (Exception exception) {
-            Console.getConsole().printStackTrace(exception);
+            Console.getInstance().printStackTrace(exception);
         }
 
         return content.toString();

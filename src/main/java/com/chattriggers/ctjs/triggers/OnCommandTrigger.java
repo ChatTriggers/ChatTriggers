@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.commands.Command;
+import com.chattriggers.ctjs.commands.CommandHandler;
 import net.minecraftforge.client.ClientCommandHandler;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class OnCommandTrigger extends OnTrigger {
 
     // helper method to re instance the command
     private void reInstance() {
-        for (Command command : CTJS.getInstance().getCommandHandler().getCommandList()) {
+        for (Command command : CommandHandler.getInstance().getCommandList()) {
             if (command.getCommandName().equals(this.commandName)) {
                 command.getTriggers().add(this);
                 return;
@@ -85,6 +85,6 @@ public class OnCommandTrigger extends OnTrigger {
 
         this.command = new Command(this, this.commandName, "/" + this.commandName);
         ClientCommandHandler.instance.registerCommand(this.command);
-        CTJS.getInstance().getCommandHandler().getCommandList().add(this.command);
+        CommandHandler.getInstance().getCommandList().add(this.command);
     }
 }

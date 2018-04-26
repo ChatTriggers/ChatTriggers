@@ -1,7 +1,8 @@
 package com.chattriggers.ctjs.utils.console;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.triggers.OnTrigger;
+import com.chattriggers.ctjs.utils.config.Config;
 import io.sentry.Sentry;
 import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
@@ -21,7 +22,7 @@ public class Console {
     private ArrayList<Component> components;
 
     @Getter
-    private static Console console;
+    private static Console instance;
 
     public Console() {
         this.frame = new JFrame("ct.js Console");
@@ -60,7 +61,7 @@ public class Console {
                     inputField.setText("");
 
                     try {
-                        toPrint = CTJS.getInstance().getModuleManager().eval(command);
+                        toPrint = ModuleManager.getInstance().eval(command);
                     } catch (Exception error) {
                         if (!(error instanceof ThreadQuickExitException)) {
                             printStackTrace(error);
@@ -85,7 +86,7 @@ public class Console {
         frame.setVisible(false);
         frame.setSize(800, 600);
 
-        console = this;
+        instance = this;
     }
 
     public void clearConsole() {
@@ -131,11 +132,11 @@ public class Console {
         Color bg;
         Color fg;
 
-        if (CTJS.getInstance().getConfig().getCustomTheme().value) {
-            bg = CTJS.getInstance().getConfig().getConsoleBackgroundColor().value;
-            fg = CTJS.getInstance().getConfig().getConsoleForegroundColor().value;
+        if (Config.getInstance().getCustomTheme().value) {
+            bg = Config.getInstance().getConsoleBackgroundColor().value;
+            fg = Config.getInstance().getConsoleForegroundColor().value;
         } else {
-            switch (CTJS.getInstance().getConfig().getConsoleTheme().getValue()) {
+            switch (Config.getInstance().getConsoleTheme().getValue()) {
                 case "ashes.dark":
                     bg = new Color(28, 32, 35);
                     fg = new Color(199, 204, 209);

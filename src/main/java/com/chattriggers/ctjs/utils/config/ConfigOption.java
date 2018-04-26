@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.utils.config;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
@@ -16,12 +15,12 @@ public abstract class ConfigOption {
     protected int y;
     protected boolean hidden;
 
-    protected GuiButton resetButton;
+    transient GuiButton resetButton;
 
     ConfigOption(Type type) {
         this.type = type;
 
-        CTJS.getInstance().getGuiConfig().addConfigOption(this);
+        GuiConfig.getInstance().addConfigOption(this);
     }
 
     public void init() {

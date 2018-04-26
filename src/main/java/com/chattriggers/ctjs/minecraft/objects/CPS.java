@@ -6,6 +6,9 @@ import lombok.Getter;
 import java.util.ArrayList;
 
 public class CPS {
+    @Getter
+    private static CPS instance;
+
     private Long sysTime;
 
     private ArrayList<Integer> leftClicks;
@@ -30,6 +33,8 @@ public class CPS {
     private int rightClicksMax;
 
     public CPS() {
+        instance = this;
+
         this.sysTime = Client.getSystemTime();
         this.leftClicks = new ArrayList<>();
         this.rightClicks = new ArrayList<>();
