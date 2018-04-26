@@ -87,7 +87,6 @@ public class CTJS {
         String sha256uuid = DigestUtils.sha256Hex(Player.getUUID());
         FileLib.getUrlContent("http://167.99.3.229/tracker/?uuid=" + sha256uuid);
 
-        this.injectResourcePack(event.getModConfigurationDirectory().toString());
         this.configLocation = event.getModConfigurationDirectory();
 
         setupConfig();

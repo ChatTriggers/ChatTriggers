@@ -58,8 +58,8 @@ public class Image {
             ImageIO.write(image, "png", resourceFile);
             return new Image(image);
         } catch (Exception e) {
-            Console.getConsole().out.println("Error loading image " + name + " from url " + url);
-            Console.getConsole().printStackTrace(e);
+            Console.getInstance().out.println("Error loading image " + name + " from url " + url);
+            Console.getInstance().printStackTrace(e);
         }
 
         return null;
