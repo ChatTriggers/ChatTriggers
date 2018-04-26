@@ -45,7 +45,7 @@ register("renderCrosshair", function(event) {
 });
 ```
 
-You can learn the basics of scripting with CTjs from the [Slate tutorial](https://www.chattriggers.com/slate/) and once you get the basics, check out the [JavaDocs](https://www.chattriggers.com/javadocs/) for a more in depth look at all of the available methods. 
+You can learn the basics of scripting with CTjs from the [Slate tutorial](https://www.chattriggers.com/slate/) and once you get the basics, check out the [JavaDocs](https://www.chattriggers.com/javadocs/) for a more in depth look at all of the available methods. Please note that the Slate tutorial may not always be up-to-date, as the way CTjs works changes constantly.
 
 # Releases
 The [ChatTriggers website](https://www.chattriggers.com/) will always be kept up to date with the latest release. As of beta version 0.6.4, we have started to move the release changelog along with a .jar download (mirror of the website) to the [GitHub releases page](https://github.com/ChatTriggers/ct.js/releases).
