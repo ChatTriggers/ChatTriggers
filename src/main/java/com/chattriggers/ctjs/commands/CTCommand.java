@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.commands;
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
@@ -170,7 +171,7 @@ public class CTCommand extends CommandBase {
 
     private void dumpChat(int lines) {
         clearOldDump();
-        ArrayList<String> messages = CTJS.getInstance().getChatListener().getChatHistory();
+        ArrayList<String> messages = ChatListener.getInstance().getChatHistory();
 
         int amount = lines;
         if (amount > messages.size()) amount = messages.size();
