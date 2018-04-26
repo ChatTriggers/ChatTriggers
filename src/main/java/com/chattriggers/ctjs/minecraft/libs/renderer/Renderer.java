@@ -262,7 +262,6 @@ public class Renderer {
 
     public void drawImage(Image image, int x, int y, int size) {
         if (image.getTexture() == null) {
-            System.out.println("Returning");
             return;
         }
 

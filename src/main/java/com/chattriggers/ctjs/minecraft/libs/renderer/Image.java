@@ -34,7 +34,6 @@ public class Image {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void render(RenderGameOverlayEvent event) {
         if (imageToLoad != null) {
-            System.out.println("Loading imageToLoad!");
             texture = new DynamicTexture(imageToLoad);
             imageToLoad = null;
         }
