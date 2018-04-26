@@ -14,6 +14,9 @@
     <a href="https://www.codacy.com/app/FalseHonesty/ct.js?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ChatTriggers/ct.js&amp;utm_campaign=Badge_Grade">
       <img src="https://api.codacy.com/project/badge/Grade/f3bccfe6845d4f6b8733c3948314ea95" alt="Grade" />
     </a>
+    <a href="https://github.com/ChatTriggers/ct.js/releases">
+      <img src="https://img.shields.io/github/release/ChatTriggers/ct.js/all.svg" alt="Releases" />
+    </a>
   </p>
 </div>
 
