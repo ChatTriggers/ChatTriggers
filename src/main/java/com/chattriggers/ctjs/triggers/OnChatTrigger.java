@@ -15,7 +15,6 @@ public class OnChatTrigger extends OnTrigger {
     private String chatCriteria;
     private Pattern criteriaPattern;
     private List<Parameter> parameters;
-    private List<String> ignored;
     private Boolean triggerIfCanceled;
 
     public OnChatTrigger(Object method) {
@@ -23,7 +22,6 @@ public class OnChatTrigger extends OnTrigger {
 
         this.chatCriteria = "";
         this.parameters = new ArrayList<>();
-        this.ignored = new ArrayList<>();
         this.triggerIfCanceled = true;
     }
 
@@ -66,27 +64,6 @@ public class OnChatTrigger extends OnTrigger {
      */
     public OnChatTrigger setCriteria(String chatCriteria) {
         return setChatCriteria(chatCriteria);
-    }
-
-    /**
-     * Adds substrings to be ignored when deciding if a chat event triggers this.
-     * @param ignores substrings to ignore
-     * @return the trigger object for method chaining
-     */
-    public OnChatTrigger shouldIgnore(String... ignores) {
-        this.ignored.addAll(Arrays.asList(ignores));
-        
-        return this;
-    }
-
-    /**
-     * Clears the ignored substring list.
-     * @return the trigger object for method chaining
-     */
-    public OnChatTrigger clearIgnoreList() {
-        this.ignored.clear();
-        
-        return this;
     }
 
     /**
@@ -160,15 +137,9 @@ public class OnChatTrigger extends OnTrigger {
     }
 
     // helper method to get the proper chat message based on the presence of color codes
-    private String getChatMessage(ClientChatReceivedEvent chatEvent, String defaultChatMessage) {
-        String chatMessage;
-
-        chatMessage = defaultChatMessage;
+    private String getChatMessage(ClientChatReceivedEvent chatEvent, String chatMessage) {
         if (this.chatCriteria.contains("&"))
             chatMessage =  EventLib.getMessage(chatEvent).getFormattedText().replace("\u00a7", "&");
-
-        for (String ignore : this.ignored)
-            chatMessage = chatMessage.replace(ignore, "");
 
         return chatMessage;
     }
