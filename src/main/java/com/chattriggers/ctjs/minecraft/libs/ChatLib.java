@@ -102,24 +102,24 @@ public class ChatLib {
 
     /**
      * Get a message that will be perfectly one line of chat,
-     * the sepearator repeated as many times as necessary.
+     * the separator repeated as many times as necessary.
      *
-     * @param seperator the message to split chat with
+     * @param separator the message to split chat with
      * @return the message that would split chat
      */
-    public static String getChatBreak(String seperator) {
+    public static String getChatBreak(String separator) {
         StringBuilder stringBuilder = new StringBuilder();
         FontRenderer fRenderer = Renderer.getFontRenderer();
 
         while (fRenderer.getStringWidth(stringBuilder.toString()) < Client.getChatGUI().getChatWidth()) {
-            stringBuilder.append(seperator);
+            stringBuilder.append(separator);
         }
 
         return stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString();
     }
 
     /**
-     * Gets the width of minecraft's chat
+     * Gets the width of Minecraft's chat
      *
      * @return the width of chat
      */
@@ -139,7 +139,7 @@ public class ChatLib {
     }
 
     /**
-     * Replaces minecraft formatted text with normal formatted text
+     * Replaces Minecraft formatted text with normal formatted text
      *
      * @param toUnformat the formatted string
      * @return the unformatted string

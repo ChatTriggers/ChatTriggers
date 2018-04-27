@@ -222,7 +222,7 @@ public class Gui extends GuiScreen {
     }
 
     /**
-     * Add a base minecraft button to the gui
+     * Add a base Minecraft button to the gui
      *
      * @param buttonId   id for the button
      * @param x          X position of the button
@@ -234,7 +234,7 @@ public class Gui extends GuiScreen {
     }
 
     /**
-     * Add a base minecraft button to the gui
+     * Add a base Minecraft button to the gui
      *
      * @param buttonId   id for the button
      * @param x          X position of the button
