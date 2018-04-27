@@ -494,8 +494,8 @@ public class TriggerRegister {
      * @param method the name of the method to callback when the event is fired
      * @return the trigger for additional modification
      */
-    public static OnPlayerTrigger registerPlayerJoined(Object method) {
-        return new OnPlayerTrigger(method);
+    public static OnRegularTrigger registerPlayerJoined(Object method) {
+        return new OnRegularTrigger(method, TriggerType.PLAYER_JOIN);
     }
 
     /**
