@@ -57,7 +57,7 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the render status of the diplay (boolean)
+     * Gets the render status of the display (boolean)
      *
      * @return True if the display is set to render
      *
@@ -172,7 +172,7 @@ public class Display {
         setRenderX(0f);
         setRenderY(0f);
 
-        setShouldRender(false);
+        setShouldRender(true);
 
         setBackground(DisplayHandler.Background.NONE);
         setBackgroundColor(0x50000000);
