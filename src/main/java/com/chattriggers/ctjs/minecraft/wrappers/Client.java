@@ -59,7 +59,7 @@ public class Client {
     }
 
     /**
-     * Gets whether or not the minecraft window is active
+     * Gets whether or not the Minecraft window is active
      * and in the foreground of the user's screen.
      *
      * @return true if the game is active, false otherwise

@@ -19,10 +19,10 @@ public class Item {
 
     /* Constructors */
     /**
-     * Creates an Item object from a minecraft ItemStack input.<br>
+     * Creates an Item object from a Minecraft ItemStack input.<br>
      * This method is not meant for public use.
      *
-     * @param itemStack the minecraft ItemStack
+     * @param itemStack the Minecraft ItemStack
      */
     public Item(ItemStack itemStack) {
         ItemStack newItemStack = itemStack;
