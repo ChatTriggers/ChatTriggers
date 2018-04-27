@@ -52,6 +52,33 @@ public class Gui extends GuiScreen {
     }
 
     /**
+     * Get if the control key is being held down.
+     *
+     * @return true if the control key is held down
+     */
+    public boolean isControlDown() {
+        return isCtrlKeyDown();
+    }
+
+    /**
+     * Get if the shift key is being held down.
+     *
+     * @return true if the control key is held down
+     */
+    public boolean isShiftDown() {
+        return isShiftKeyDown();
+    }
+
+    /**
+     * Get if the alt key is being held down.
+     *
+     * @return true if the control key is held down
+     */
+    public boolean isAltDown() {
+        return isAltKeyDown();
+    }
+
+    /**
      * Registers a method to be ran while gui is open.<br>
      * Registered method runs on draw.<br>
      * Arguments passed through to method:<br>
