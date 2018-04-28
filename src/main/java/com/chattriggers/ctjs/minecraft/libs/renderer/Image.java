@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -59,6 +60,19 @@ public class Image {
             return new Image(image);
         } catch (Exception e) {
             Console.getInstance().out.println("Error loading image " + name + " from url " + url);
+            Console.getInstance().printStackTrace(e);
+        }
+
+        return null;
+    }
+
+    public static Image load(String path) {
+        File file = new File(path);
+
+        try {
+            return new Image(ImageIO.read(file));
+        } catch (IOException e) {
+            Console.getInstance().out.println("Error loading image with path " + path);
             Console.getInstance().printStackTrace(e);
         }
 
