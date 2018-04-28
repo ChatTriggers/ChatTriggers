@@ -16,7 +16,7 @@ class IconHandler {
     IconHandler() {
         this.icons = new ArrayList<>();
 
-        String imageUrl = "https://chattriggers.com/assets/images/";
+        String imageUrl = "http://167.99.3.229/assets/images/";
 
         this.icons.add(new Icon("CT_logo.png", imageUrl + "logo-icon.png", "https://chattriggers.com/"));
         this.icons.add(new Icon("CT_Patreon.png", imageUrl + "Patreon-dark.png", "https://www.patreon.com/ChatTriggers", 1));
