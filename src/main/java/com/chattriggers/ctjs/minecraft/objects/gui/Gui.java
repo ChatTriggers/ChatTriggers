@@ -63,7 +63,7 @@ public class Gui extends GuiScreen {
     /**
      * Get if the shift key is being held down.
      *
-     * @return true if the control key is held down
+     * @return true if the shift key is held down
      */
     public boolean isShiftDown() {
         return isShiftKeyDown();
@@ -72,7 +72,7 @@ public class Gui extends GuiScreen {
     /**
      * Get if the alt key is being held down.
      *
-     * @return true if the control key is held down
+     * @return true if the alt key is held down
      */
     public boolean isAltDown() {
         return isAltKeyDown();
