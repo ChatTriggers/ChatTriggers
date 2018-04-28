@@ -1,12 +1,12 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
+import com.chattriggers.ctjs.minecraft.libs.renderer.Image;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class Tessellator {
@@ -33,25 +33,12 @@ public class Tessellator {
      * Binds a texture to the client for the Tessellator to use.
      *
      * @param texture the texture to bind
-     * @param domain the domain of the texture
      * @return the Tessellator to allow for method chaining
      */
-    public Tessellator bindTexture(String texture, String domain) {
-        ResourceLocation rl = new ResourceLocation(domain, texture);
-        Client.getMinecraft().getTextureManager().bindTexture(rl);
+    public Tessellator bindTexture(Image texture) {
+        GlStateManager.bindTexture(texture.getTexture().getGlTextureId());
 
         return this;
-    }
-
-    /**
-     * Binds a texture to the client for the Tessellator to use
-     * with the default domain of "ctjs.images".
-     *
-     * @param texture the texture to bind
-     * @return the Tessellator to allow for method chaining
-     */
-    public Tessellator bindTexture(String texture) {
-        return bindTexture(texture, "ctjs.images");
     }
 
     /**
