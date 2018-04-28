@@ -41,6 +41,19 @@ public class World {
     }
 
     /**
+     * Play a record at location x, y, and z.<br>
+     * Use "null" as name in the same location to stop record.
+     *
+     * @param name  the name of the sound/record
+     * @param x     the x location
+     * @param y     the y location
+     * @param z     the z location
+     */
+    public static void playRecord(String name, float x, float y, float z) {
+        getWorld().playRecord(new BlockPos(x, y, z), name);
+    }
+
+    /**
      * Display a title.
      *
      * @param title    title text
