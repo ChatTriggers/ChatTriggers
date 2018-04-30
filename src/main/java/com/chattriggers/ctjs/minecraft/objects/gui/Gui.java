@@ -86,11 +86,11 @@ public class Gui extends GuiScreen {
      * int mouseY<br>
      * float partialTicks
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerDraw(Object methodName) {
-        onDraw = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public OnRegularTrigger registerDraw(Object method) {
+        onDraw = new OnRegularTrigger(method, TriggerType.OTHER);
         return onDraw;
     }
 
@@ -102,11 +102,11 @@ public class Gui extends GuiScreen {
      * int mouseY<br>
      * int button
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerClicked(Object methodName) {
-        onClick = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public OnRegularTrigger registerClicked(Object method) {
+        onClick = new OnRegularTrigger(method, TriggerType.OTHER);
         return onClick;
     }
 
@@ -117,11 +117,11 @@ public class Gui extends GuiScreen {
      * char typed character<br>
      * int key code
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerKeyTyped(Object methodName) {
-        onKeyTyped = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public OnRegularTrigger registerKeyTyped(Object method) {
+        onKeyTyped = new OnRegularTrigger(method, TriggerType.OTHER);
         return onKeyTyped;
     }
 
@@ -134,11 +134,11 @@ public class Gui extends GuiScreen {
      * clickedMouseButton<br>
      * timeSinceLastClick
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerMouseDragged(Object methodName) {
-        onMouseDragged = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public OnRegularTrigger registerMouseDragged(Object method) {
+        onMouseDragged = new OnRegularTrigger(method, TriggerType.OTHER);
         return onMouseDragged;
     }
 
@@ -150,11 +150,11 @@ public class Gui extends GuiScreen {
      * mouseY<br>
      * button
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerMouseReleased(Object methodName) {
-        onMouseReleased = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public OnRegularTrigger registerMouseReleased(Object method) {
+        onMouseReleased = new OnRegularTrigger(method, TriggerType.OTHER);
         return onMouseReleased;
     }
 
@@ -164,11 +164,11 @@ public class Gui extends GuiScreen {
      * Arguments passed through to method:<br>
      * the button that is clicked
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the trigger
      */
-    public OnRegularTrigger registerActionPerformed(Object methodName) {
-        onActionPerformed = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public OnRegularTrigger registerActionPerformed(Object method) {
+        onActionPerformed = new OnRegularTrigger(method, TriggerType.OTHER);
         return onActionPerformed;
     }
 
