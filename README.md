@@ -38,8 +38,8 @@ register("renderCrosshair", function(event) {
   cancel(event);
   Renderer.drawRect(
     0x50ffffff,
-    RenderLib.screen.getWidth() / 2 - 1,
-    RenderLib.screen.getHeight() / 2 - 1,
+    Renderer.screen.getWidth() / 2 - 1,
+    Renderer.screen.getHeight() / 2 - 1,
     2, 2
   );
 });
