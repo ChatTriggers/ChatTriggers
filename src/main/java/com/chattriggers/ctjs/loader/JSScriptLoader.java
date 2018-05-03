@@ -19,10 +19,13 @@ import javax.script.ScriptException;
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JSScriptLoader extends ScriptLoader {
     public static ClassLoader newLoader;
@@ -125,8 +128,8 @@ public class JSScriptLoader extends ScriptLoader {
 
             Module module = new Module(
                     dir.getName(),
-                    compileScripts(dir.listFiles()),
-                    getAllFiles(dir.listFiles()),
+                    compileScripts(dir),
+                    getAllFiles(dir),
                     metadata
             );
 
@@ -229,16 +232,20 @@ public class JSScriptLoader extends ScriptLoader {
      * Compiles all text from multiple files
      * into a singular string for loading.
      *
-     * @param files a list of files to be compiled
+     * @param dir the directory where the scripts to be compiled are
      * @return the string after compilation
      * @throws IOException thrown if a file doesn't exist
      */
-    public String compileScripts(File... files) throws IOException {
+    public String compileScripts(File dir) throws IOException {
+        List<File> files = Files.find(
+                dir.toPath(),
+                5,
+                (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
+        ).map(Path::toFile).collect(Collectors.toList());
+
         StringBuilder compiledScript = new StringBuilder();
 
         for (File file : files) {
-            if (!file.isFile() || !file.exists() || !file.getName().endsWith(".js")) continue;
-
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             String line;
 
@@ -256,12 +263,16 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
 
-    private HashMap<String, List<String>> getAllFiles(File... files) {
+    private HashMap<String, List<String>> getAllFiles(File dir) throws IOException {
+        List<File> files = Files.find(
+                dir.toPath(),
+                5,
+                (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
+        ).map(Path::toFile).collect(Collectors.toList());
+
         HashMap<String, List<String>> allFiles = new HashMap<>();
 
         for (File file : files) {
-            if (!file.getName().endsWith(".js")) continue;
-
             try {
                 allFiles.put(file.getName(), FileUtils.readLines(file));
             } catch (IOException e) {
