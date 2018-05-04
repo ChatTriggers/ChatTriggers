@@ -21,4 +21,11 @@ public class Module {
         this.files = files;
         this.metadata = metadata == null ? new ModuleMetadata() : metadata;
     }
+
+    @Override
+    public String toString() {
+        return "Module{"
+                + this.name
+                + "}";
+    }
 }

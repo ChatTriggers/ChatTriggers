@@ -37,6 +37,8 @@ public class JSScriptLoader extends ScriptLoader {
     public void preLoad() {
         super.preLoad();
 
+        cachedModules = new ArrayList<>();
+
         try {
             ArrayList<URL> files = new ArrayList<>();
 
@@ -72,25 +74,25 @@ public class JSScriptLoader extends ScriptLoader {
 
     @Override
     public ArrayList<Module> loadModules(Boolean updateCheck) {
-        if (cachedModules != null && !cachedModules.isEmpty()) {
-            return cachedModules;
-        }
-
-        ArrayList<Module> modules = new ArrayList<>();
+        cachedModules.clear();
 
         for (File dir : getFoldersInDirectory(modulesDir)) {
-            Module mod = loadModule(dir, updateCheck);
-
-            if (mod == null) continue;
-
-            modules.add(mod);
+            loadModule(dir, updateCheck);
         }
 
-        cachedModules = modules;
-        return modules;
+        return cachedModules;
     }
 
-    public Module loadModule(File dir, boolean updateCheck) {
+    private boolean isLoaded(File dir) {
+        for (Module module : cachedModules) {
+            if (module.getName().equals(dir.getName())) return true;
+        }
+        return false;
+    }
+
+    public void loadModule(File dir, boolean updateCheck) {
+        if (isLoaded(dir)) return;
+
         File metadataFile = new File(dir, "metadata.json");
         ModuleMetadata metadata = null;
 
@@ -140,19 +142,21 @@ public class JSScriptLoader extends ScriptLoader {
             getScriptEngine().eval(module.getCompiledScript());
 
             TriggerRegister.currentModule = null;
-            return module;
-        } catch (IOException | ScriptException e) {
-            Console.getInstance().printStackTrace(e);
-        }
 
-        return null;
+            cachedModules.add(module);
+        } catch (IOException | ScriptException exception) {
+            Console.getInstance().printStackTrace(exception);
+        }
     }
 
     private void getRequiredModules(ModuleMetadata metadata) {
         if (metadata == null || metadata.getRequires() == null) return;
 
         for (String require : metadata.getRequires()) {
-            if (new File(modulesDir, require).exists()) continue;
+            if (new File(modulesDir, require).exists()) {
+                loadModule(new File(modulesDir, require), false);
+                continue;
+            }
             ModuleManager.getInstance().importModule(require);
         }
     }
