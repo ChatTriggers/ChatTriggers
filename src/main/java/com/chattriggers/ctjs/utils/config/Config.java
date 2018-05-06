@@ -20,8 +20,9 @@ public class Config {
     private ConfigBoolean showUpdatesInChat;
 
     @Getter
+    private ConfigBoolean openConsoleOnError;
+    @Getter
     private ConfigStringSelector consoleTheme;
-
     @Getter
     private ConfigBoolean customTheme;
     @Getter
@@ -41,13 +42,15 @@ public class Config {
         this.clearConsoleOnLoad = new ConfigBoolean(this.clearConsoleOnLoad, "Clear Console On Load", true, -110, 120);
         this.showUpdatesInChat = new ConfigBoolean(this.showUpdatesInChat, "Show Update Messages In Chat", true, -110, 175);
 
+        this.openConsoleOnError = new ConfigBoolean(this.openConsoleOnError, "Auto Open Console On Error", false, 110, 10);
+
         String[] themes = new String[]{"default.dark", "ashes.dark", "atelierforest.dark", "isotope.dark", "codeschool.dark", "gotham", "hybrid", "3024.light", "chalk.light", "blue", "slate", "red", "green", "aids"};
-        this.consoleTheme = new ConfigStringSelector(this.consoleTheme, "Console Theme", 0, themes, 110, 65);
+        this.consoleTheme = new ConfigStringSelector(this.consoleTheme, "Console Theme", 0, themes, 110, 120);
 
-        this.customTheme = new ConfigBoolean(this.customTheme, "Custom Console Theme", false, 110, 10);
+        this.customTheme = new ConfigBoolean(this.customTheme, "Custom Console Theme", false, 110, 65);
 
-        this.consoleForegroundColor = new ConfigColor(this.consoleForegroundColor,"Console Foreground Color", new Color(208, 208, 208), 110, 65);
-        this.consoleBackgroundColor = new ConfigColor(this.consoleBackgroundColor,"Console Background Color", new Color(21, 21, 21), 110, 140);
+        this.consoleForegroundColor = new ConfigColor(this.consoleForegroundColor,"Console Foreground Color", new Color(208, 208, 208), 110, 120);
+        this.consoleBackgroundColor = new ConfigColor(this.consoleBackgroundColor,"Console Background Color", new Color(21, 21, 21), 110, 195);
     }
 
     public void updateHidden() {

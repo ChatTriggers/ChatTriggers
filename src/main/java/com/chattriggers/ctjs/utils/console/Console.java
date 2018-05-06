@@ -96,6 +96,11 @@ public class Console {
 
     public void printStackTrace(Throwable error) {
         Sentry.capture(error);
+
+        if (Config.getInstance().getOpenConsoleOnError().value) {
+            Console.getInstance().showConsole(true);
+        }
+
         error.printStackTrace(out);
     }
 
@@ -104,6 +109,10 @@ public class Console {
             "method",
             trigger.getMethod().toString()
         );
+
+        if (Config.getInstance().getOpenConsoleOnError().value) {
+            Console.getInstance().showConsole(true);
+        }
 
         if (trigger.getOwningModule() != null) {
             Sentry.getContext().addTag(
