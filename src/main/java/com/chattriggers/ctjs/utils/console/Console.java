@@ -97,7 +97,7 @@ public class Console {
                         String message = history.get(history.size() - historyOffset);
                         inputField.setText(message);
                     } catch (Exception exception) {
-                        historyOffset++;
+                        historyOffset = 0;
                         inputField.setText("");
                     }
                 }
