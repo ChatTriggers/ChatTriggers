@@ -19,10 +19,13 @@ import javax.script.ScriptException;
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JSScriptLoader extends ScriptLoader {
     public static ClassLoader newLoader;
@@ -33,6 +36,8 @@ public class JSScriptLoader extends ScriptLoader {
     @Override
     public void preLoad() {
         super.preLoad();
+
+        cachedModules = new ArrayList<>();
 
         try {
             ArrayList<URL> files = new ArrayList<>();
@@ -69,25 +74,25 @@ public class JSScriptLoader extends ScriptLoader {
 
     @Override
     public ArrayList<Module> loadModules(Boolean updateCheck) {
-        if (cachedModules != null && !cachedModules.isEmpty()) {
-            return cachedModules;
-        }
-
-        ArrayList<Module> modules = new ArrayList<>();
+        cachedModules.clear();
 
         for (File dir : getFoldersInDirectory(modulesDir)) {
-            Module mod = loadModule(dir, updateCheck);
-
-            if (mod == null) continue;
-
-            modules.add(mod);
+            loadModule(dir, updateCheck);
         }
 
-        cachedModules = modules;
-        return modules;
+        return cachedModules;
     }
 
-    public Module loadModule(File dir, boolean updateCheck) {
+    private boolean isLoaded(File dir) {
+        for (Module module : cachedModules) {
+            if (module.getName().equals(dir.getName())) return true;
+        }
+        return false;
+    }
+
+    public void loadModule(File dir, boolean updateCheck) {
+        if (isLoaded(dir)) return;
+
         File metadataFile = new File(dir, "metadata.json");
         ModuleMetadata metadata = null;
 
@@ -125,8 +130,8 @@ public class JSScriptLoader extends ScriptLoader {
 
             Module module = new Module(
                     dir.getName(),
-                    compileScripts(dir.listFiles()),
-                    getAllFiles(dir.listFiles()),
+                    compileScripts(dir),
+                    getAllFiles(dir),
                     metadata
             );
 
@@ -137,19 +142,21 @@ public class JSScriptLoader extends ScriptLoader {
             getScriptEngine().eval(module.getCompiledScript());
 
             TriggerRegister.currentModule = null;
-            return module;
-        } catch (IOException | ScriptException e) {
-            Console.getInstance().printStackTrace(e);
-        }
 
-        return null;
+            cachedModules.add(module);
+        } catch (IOException | ScriptException exception) {
+            Console.getInstance().printStackTrace(exception);
+        }
     }
 
     private void getRequiredModules(ModuleMetadata metadata) {
         if (metadata == null || metadata.getRequires() == null) return;
 
         for (String require : metadata.getRequires()) {
-            if (new File(modulesDir, require).exists()) continue;
+            if (new File(modulesDir, require).exists()) {
+                loadModule(new File(modulesDir, require), false);
+                continue;
+            }
             ModuleManager.getInstance().importModule(require);
         }
     }
@@ -229,16 +236,20 @@ public class JSScriptLoader extends ScriptLoader {
      * Compiles all text from multiple files
      * into a singular string for loading.
      *
-     * @param files a list of files to be compiled
+     * @param dir the directory where the scripts to be compiled are
      * @return the string after compilation
      * @throws IOException thrown if a file doesn't exist
      */
-    public String compileScripts(File... files) throws IOException {
+    public String compileScripts(File dir) throws IOException {
+        List<File> files = Files.find(
+                dir.toPath(),
+                5,
+                (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
+        ).map(Path::toFile).collect(Collectors.toList());
+
         StringBuilder compiledScript = new StringBuilder();
 
         for (File file : files) {
-            if (!file.isFile() || !file.exists() || !file.getName().endsWith(".js")) continue;
-
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             String line;
 
@@ -256,12 +267,16 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
 
-    private HashMap<String, List<String>> getAllFiles(File... files) {
+    private HashMap<String, List<String>> getAllFiles(File dir) throws IOException {
+        List<File> files = Files.find(
+                dir.toPath(),
+                5,
+                (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
+        ).map(Path::toFile).collect(Collectors.toList());
+
         HashMap<String, List<String>> allFiles = new HashMap<>();
 
         for (File file : files) {
-            if (!file.getName().endsWith(".js")) continue;
-
             try {
                 allFiles.put(file.getName(), FileUtils.readLines(file));
             } catch (IOException e) {

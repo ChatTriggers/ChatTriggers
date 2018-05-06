@@ -68,7 +68,7 @@ public abstract class ScriptLoader {
 
     /**
      * Helper method to get all the folders in a directory,
-     * used to get import folders.
+     * Used to get module folders ignoring `.disabled`.
      * @param directory directory to search through
      * @return a list of files in directory, or null if not a directory
      */
@@ -77,7 +77,7 @@ public abstract class ScriptLoader {
 
         List<File> filesToReturn = new ArrayList<>();
         for (File file : directory.listFiles()) {
-            if (file.isDirectory()) filesToReturn.add(file);
+            if (file.isDirectory() && !file.getName().equals(".disabled")) filesToReturn.add(file);
         }
 
         return filesToReturn;

@@ -191,11 +191,11 @@ public class DisplayLine {
      * int button<br>
      * int button state
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the DisplayLine to allow for method chaining
      */
-    public DisplayLine registerClicked(String methodName) {
-        onClicked = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public DisplayLine registerClicked(Object method) {
+        onClicked = new OnRegularTrigger(method, TriggerType.OTHER);
         return this;
     }
 
@@ -205,11 +205,11 @@ public class DisplayLine {
      * int mouseX<br>
      * int mouseY
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the DisplayLine to allow for method chaining
      */
-    public DisplayLine registerHovered(String methodName) {
-        onHovered = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public DisplayLine registerHovered(Object method) {
+        onHovered = new OnRegularTrigger(method, TriggerType.OTHER);
         return this;
     }
 
@@ -222,11 +222,11 @@ public class DisplayLine {
      * int mouseY<br>
      * int button
      *
-     * @param methodName the method to run
+     * @param method the method to run
      * @return the DisplayLine to allow for method chaining
      */
-    public DisplayLine registerDragged(String methodName) {
-        onDragged = new OnRegularTrigger(methodName, TriggerType.OTHER);
+    public DisplayLine registerDragged(Object method) {
+        onDragged = new OnRegularTrigger(method, TriggerType.OTHER);
         return this;
     }
 

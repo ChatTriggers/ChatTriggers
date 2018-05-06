@@ -12,6 +12,8 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
   - `./gradlew wrapper --gradle-version 3.5`
   - `./gradlew idea`
 ### 4. Set up IntelliJ Idea
+  - open the project within IDEA by clicking the recently created .ipr file<br>
+![open project](http://i65.tinypic.com/2irsoyc.png)
   - right click project > open module settings<br>
 ![open module settings](https://i.imgur.com/F7clio5.png)
   - project > project language level > SDK default (8)<br>
