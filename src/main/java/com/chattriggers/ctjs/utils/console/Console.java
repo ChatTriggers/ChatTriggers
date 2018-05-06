@@ -20,6 +20,8 @@ public class Console {
     public PrintStream out;
     private TextAreaOutputStream taos;
     private ArrayList<Component> components;
+    private ArrayList<String> history;
+    private int historyOffset = 0;
 
     @Getter
     private static Console instance;
@@ -27,6 +29,7 @@ public class Console {
     public Console() {
         this.frame = new JFrame("ct.js Console");
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.history = new ArrayList<>();
 
         JTextArea textArea = new JTextArea();
         this.taos = new TextAreaOutputStream(textArea, 1000);
@@ -59,6 +62,8 @@ public class Console {
 
                     String command = inputField.getText();
                     inputField.setText("");
+                    history.add(command);
+                    historyOffset = 0;
 
                     try {
                         toPrint = ModuleManager.getInstance().eval(command);
@@ -73,6 +78,27 @@ public class Console {
                         out.println(toPrint);
                     } else {
                         out.println(errorThrown ? "> " + command : command);
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    historyOffset++;
+
+                    try {
+                        String message = history.get(history.size() - historyOffset);
+                        inputField.setText(message);
+                    } catch (Exception exception) {
+                        historyOffset--;
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN)  {
+                    historyOffset--;
+
+                    if (historyOffset < 0) historyOffset = 0;
+
+                    try {
+                        String message = history.get(history.size() - historyOffset);
+                        inputField.setText(message);
+                    } catch (Exception exception) {
+                        historyOffset++;
+                        inputField.setText("");
                     }
                 }
             }

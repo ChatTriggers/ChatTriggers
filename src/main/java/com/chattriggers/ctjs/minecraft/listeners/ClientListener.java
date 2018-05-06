@@ -84,7 +84,7 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
-        TriggerType.RENDER_WORLD.triggerAll();
+        TriggerType.RENDER_WORLD.triggerAll(event.partialTicks);
     }
 
     @SubscribeEvent
