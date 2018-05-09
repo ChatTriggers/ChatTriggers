@@ -35,7 +35,9 @@ public class UpdateChecker {
 
     private void getUpdate() {
         String fileName = "ctjs-" + Reference.MODVERSION + ".jar";
-        String get = FileLib.getUrlContent("https://www.chattriggers.com/versions/latest/").trim();
+        String get = FileLib.getUrlContent("http://167.99.3.229/versions/latest/").trim();
+        if ("".equals(get)) return;
+
         this.updateAvailable = !fileName.equals(get);
     }
 
