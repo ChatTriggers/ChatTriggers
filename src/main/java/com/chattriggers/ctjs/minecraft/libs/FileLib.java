@@ -58,8 +58,18 @@ public class FileLib {
      * @return the string in the file
      */
     public static String read(String fileLocation) {
+        File file = new File(fileLocation);
+        return read(file);
+    }
+
+    /**
+     * Reads a file from anywhere on the system using java.io.File.<br>
+     *
+     * @param file the java.io.File to load
+     * @return the string in the file
+     */
+    public static String read(File file) {
         try {
-            File file = new File(fileLocation);
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
 
             if (!file.exists() || br.readLine() == null) {

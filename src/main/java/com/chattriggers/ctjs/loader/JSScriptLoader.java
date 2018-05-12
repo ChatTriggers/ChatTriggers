@@ -97,12 +97,8 @@ public class JSScriptLoader extends ScriptLoader {
         ModuleMetadata metadata = null;
 
         if (metadataFile.exists()) {
-            try {
-                metadata = new Gson().fromJson(new FileReader(metadataFile), ModuleMetadata.class);
-                metadata.setFileName(dir.getName());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            metadata = new Gson().fromJson(FileLib.read(metadataFile), ModuleMetadata.class);
+            metadata.setFileName(dir.getName());
         }
 
         try {
