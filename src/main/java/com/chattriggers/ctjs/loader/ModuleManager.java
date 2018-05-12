@@ -27,10 +27,6 @@ public class ModuleManager {
         this.scriptLoaders = new ArrayList<>();
     }
 
-    public void load() {
-        load(false);
-    }
-
     public void load(Boolean updateCheck) {
         this.isLoading = true;
         scriptLoaders.add(new JSScriptLoader());

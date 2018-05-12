@@ -99,6 +99,7 @@ public class JSScriptLoader extends ScriptLoader {
         if (metadataFile.exists()) {
             try {
                 metadata = new Gson().fromJson(new FileReader(metadataFile), ModuleMetadata.class);
+                metadata.setFileName(dir.getName());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -107,17 +108,19 @@ public class JSScriptLoader extends ScriptLoader {
         try {
             if (metadata != null && updateCheck) {
                 try {
+                    Console.getInstance().out.println("checking for update in " + metadata.getFileName());
+
                     File newMetadataFile = new File(modulesDir, "currMetadata.json");
-                    FileUtils.copyURLToFile(new URL("https://chattriggers.com/downloads/metadata/" + metadata.getName()),
+                    FileUtils.copyURLToFile(new URL("http://167.99.3.229/downloads/metadata/" + metadata.getFileName()),
                             newMetadataFile);
 
-                    float currVersion = Float.parseFloat(metadata.getVersion());
+                    String currVersion = metadata.getVersion();
 
                     ModuleMetadata newMetadata = new Gson().fromJson(new FileReader(newMetadataFile), ModuleMetadata.class);
-                    float newVersion = Float.parseFloat(newMetadata.getVersion());
+                    String newVersion = newMetadata.getVersion();
 
-                    if (newVersion > currVersion) {
-                        downloadModule(metadata.getName(), false);
+                    if (!newVersion.equals(currVersion)) {
+                        downloadModule(metadata.getFileName(), false);
 
                         ChatLib.chat("&6Updated " + metadata.getName());
                     }
@@ -135,7 +138,7 @@ public class JSScriptLoader extends ScriptLoader {
                     metadata
             );
 
-            getRequiredModules(metadata);
+            getRequiredModules(metadata, updateCheck);
 
             TriggerRegister.currentModule = module;
 
@@ -149,12 +152,12 @@ public class JSScriptLoader extends ScriptLoader {
         }
     }
 
-    private void getRequiredModules(ModuleMetadata metadata) {
+    private void getRequiredModules(ModuleMetadata metadata, boolean updateCheck) {
         if (metadata == null || metadata.getRequires() == null) return;
 
         for (String require : metadata.getRequires()) {
             if (new File(modulesDir, require).exists()) {
-                loadModule(new File(modulesDir, require), false);
+                loadModule(new File(modulesDir, require), updateCheck);
                 continue;
             }
             ModuleManager.getInstance().importModule(require);

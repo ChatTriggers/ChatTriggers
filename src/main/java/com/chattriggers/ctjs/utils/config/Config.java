@@ -15,10 +15,13 @@ public class Config {
     @Getter
     private ConfigBoolean printChatToConsole;
     @Getter
-    private ConfigBoolean clearConsoleOnLoad;
-    @Getter
     private ConfigBoolean showUpdatesInChat;
+    @Getter
+    private ConfigBoolean updateModulesOnBoot;
 
+
+    @Getter
+    private ConfigBoolean clearConsoleOnLoad;
     @Getter
     private ConfigBoolean openConsoleOnError;
     @Getter
@@ -37,20 +40,19 @@ public class Config {
     public void init() {
         this.modulesFolder = new ConfigString(this.modulesFolder,"Directory", "./config/ChatTriggers/modules/", -110, 10);
         this.modulesFolder.setDirectory(true);
-
         this.printChatToConsole = new ConfigBoolean(this.printChatToConsole,"Print Chat To Console", true, -110, 65);
-        this.clearConsoleOnLoad = new ConfigBoolean(this.clearConsoleOnLoad, "Clear Console On Load", true, -110, 120);
-        this.showUpdatesInChat = new ConfigBoolean(this.showUpdatesInChat, "Show Update Messages In Chat", true, -110, 175);
+        this.showUpdatesInChat = new ConfigBoolean(this.showUpdatesInChat, "Show Update Messages In Chat", true, -110, 120);
+        this.updateModulesOnBoot = new ConfigBoolean(this.updateModulesOnBoot, "Update Modules On Boot", true, -110, 175);
 
-        this.openConsoleOnError = new ConfigBoolean(this.openConsoleOnError, "Auto Open Console On Error", false, 110, 10);
+
+        this.clearConsoleOnLoad = new ConfigBoolean(this.clearConsoleOnLoad, "Clear Console On Load", true, 110, 10);
+        this.openConsoleOnError = new ConfigBoolean(this.openConsoleOnError, "Auto Open Console On Error", false, 110, 65);
+        this.customTheme = new ConfigBoolean(this.customTheme, "Custom Console Theme", false, 110, 120);
 
         String[] themes = new String[]{"default.dark", "ashes.dark", "atelierforest.dark", "isotope.dark", "codeschool.dark", "gotham", "hybrid", "3024.light", "chalk.light", "blue", "slate", "red", "green", "aids"};
-        this.consoleTheme = new ConfigStringSelector(this.consoleTheme, "Console Theme", 0, themes, 110, 120);
-
-        this.customTheme = new ConfigBoolean(this.customTheme, "Custom Console Theme", false, 110, 65);
-
-        this.consoleForegroundColor = new ConfigColor(this.consoleForegroundColor,"Console Foreground Color", new Color(208, 208, 208), 110, 120);
-        this.consoleBackgroundColor = new ConfigColor(this.consoleBackgroundColor,"Console Background Color", new Color(21, 21, 21), 110, 195);
+        this.consoleTheme = new ConfigStringSelector(this.consoleTheme, "Console Theme", 0, themes, 110, 175);
+        this.consoleForegroundColor = new ConfigColor(this.consoleForegroundColor,"Console Foreground Color", new Color(208, 208, 208), 110, 175);
+        this.consoleBackgroundColor = new ConfigColor(this.consoleBackgroundColor,"Console Background Color", new Color(21, 21, 21), 110, 250);
     }
 
     public void updateHidden() {

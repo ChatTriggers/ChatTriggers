@@ -91,30 +91,11 @@ public class CTCommand extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
-                case("reload"):
                 case("load"):
-                    if (!this.isLoaded) return;
-                    this.isLoaded = false;
-
-                    TriggerType.GAME_UNLOAD.triggerAll();
-                    TriggerType.WORLD_UNLOAD.triggerAll();
-                    ChatLib.chat("&cReloading ct.js scripts...");
-                    new Thread(() -> {
-                        for (TriggerType type : TriggerType.values())
-                            type.clearTriggers();
-                        CommandHandler.getInstance().getCommandList().clear();
-                        ModuleManager.getInstance().unload();
-
-                        if (Config.getInstance().getClearConsoleOnLoad().value)
-                            Console.getInstance().clearConsole();
-
-                        CTJS.getInstance().setupConfig();
-
-                        ModuleManager.getInstance().load();
-                        ChatLib.chat("&aDone reloading scripts!");
-                        TriggerType.WORLD_LOAD.triggerAll();
-                        this.isLoaded = true;
-                    }).start();
+                    load(false);
+                    break;
+                case("reload"):
+                    load(true);
                     break;
                 case("files"):
                 case("file"):
@@ -167,6 +148,31 @@ public class CTCommand extends CommandBase {
         } else {
             ChatLib.chat(getCommandUsage(sender));
         }
+    }
+
+    private void load(Boolean updateCheck) {
+        if (!this.isLoaded) return;
+        this.isLoaded = false;
+
+        TriggerType.GAME_UNLOAD.triggerAll();
+        TriggerType.WORLD_UNLOAD.triggerAll();
+        ChatLib.chat("&cReloading ct.js scripts...");
+        new Thread(() -> {
+            for (TriggerType type : TriggerType.values())
+                type.clearTriggers();
+            CommandHandler.getInstance().getCommandList().clear();
+            ModuleManager.getInstance().unload();
+
+            if (Config.getInstance().getClearConsoleOnLoad().value)
+                Console.getInstance().clearConsole();
+
+            CTJS.getInstance().setupConfig();
+
+            ModuleManager.getInstance().load(updateCheck);
+            ChatLib.chat("&aDone reloading scripts!");
+            TriggerType.WORLD_LOAD.triggerAll();
+            this.isLoaded = true;
+        }).start();
     }
 
     private void dumpChat(int lines) {

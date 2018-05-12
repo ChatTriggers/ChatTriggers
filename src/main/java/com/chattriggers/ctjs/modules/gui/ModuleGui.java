@@ -50,9 +50,9 @@ public class ModuleGui extends GuiScreen {
 
         isHovered = false;
 
-        name = ChatLib.addColor(this.module.getMetadata().getDisplayName()== null
-                ? this.module.getName()
-                : this.module.getMetadata().getDisplayName());
+        name = ChatLib.addColor(this.module.getMetadata().getName()== null
+                ? this.module.getMetadata().getFileName()
+                : this.module.getMetadata().getName());
         version = this.module.getMetadata().getVersion() == null
                 ? ""
                 : "v" + this.module.getMetadata().getVersion();

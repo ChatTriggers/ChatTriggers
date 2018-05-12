@@ -65,7 +65,7 @@ public class CTJS {
 
         registerHooks();
 
-        ModuleManager.getInstance().load(true);
+        ModuleManager.getInstance().load(Config.getInstance().getUpdateModulesOnBoot().value);
     }
 
     @EventHandler
