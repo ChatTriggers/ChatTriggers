@@ -66,6 +66,12 @@ public class Image {
         return null;
     }
 
+    /**
+     * Loads an image from a path. Use ./ for the .minecraft folder.
+     *
+     * @param path The path to load the image from
+     * @return The Image object to allow for method chaining
+     */
     public static Image load(String path) {
         File file = new File(path);
 
@@ -80,12 +86,23 @@ public class Image {
     }
 
     /**
-     * Draws the image on screen
+     * Draws the image on screen with scale
      *
      * @return The Image object to allow for method chaining
      */
     public Image draw(int x, int y, int size) {
         Renderer.drawImage(this, x, y, size);
+
+        return this;
+    }
+
+    /**
+     * Draws the image on screen
+     *
+     * @return the Image object to allow for method chaining
+     */
+    public Image draw(int x, int y) {
+        Renderer.drawImage(this, x, y, 256);
 
         return this;
     }
