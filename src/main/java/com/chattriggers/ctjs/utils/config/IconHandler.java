@@ -58,9 +58,9 @@ class IconHandler {
 
         private void draw() {
             if (this.main) {
-                this.image.draw(0, Renderer.screen.getHeight() - 65, 64);
+                this.image.draw(0, Renderer.screen.getHeight() - 65, 64, 64);
             } else {
-                this.image.draw(65, (int) (Renderer.screen.getHeight() - (this.y * 21.3f)), 64 / 3);
+                this.image.draw(65, (int) (Renderer.screen.getHeight() - (this.y * 21.3f)), 64 / 3, 64 / 3);
             }
         }
 

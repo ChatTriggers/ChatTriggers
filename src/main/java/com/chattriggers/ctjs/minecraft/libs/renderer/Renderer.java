@@ -263,8 +263,6 @@ public class Renderer {
     public void drawImage(Image image, double x, double y, double width, double height) {
         if (image.getTexture() == null) return;
 
-        float f = 256 * 0.00390625F;
-
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.enableBlend();
         GlStateManager.scale(1, 1, 50);
@@ -276,11 +274,11 @@ public class Renderer {
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 
         worldrenderer.pos(x,y + height,0)
-                .tex(0, f).endVertex();
+                .tex(0, 1).endVertex();
         worldrenderer.pos(x + width,y + height, 0)
-                .tex(f, f).endVertex();
+                .tex(1, 1).endVertex();
         worldrenderer.pos(x + width, y, 0)
-                .tex(f, 0).endVertex();
+                .tex(1, 0).endVertex();
         worldrenderer.pos(x, y, 0)
                 .tex(0, 0).endVertex();
         tessellator.draw();

@@ -21,11 +21,28 @@ import java.net.URL;
  */
 @Accessors(chain = true)
 public class Image {
-    @Getter
     private BufferedImage imageToLoad;
 
     @Getter
     private DynamicTexture texture;
+
+    /**
+     * -- GETTER --
+     * Gets the image's texture width.
+     *
+     * @return The image's texture width
+     */
+    @Getter
+    private int textureWidth;
+
+    /**
+     * -- GETTER --
+     * Gets the image's texture height.
+     *
+     * @return The image's texture height
+     */
+    @Getter
+    private int textureHeight;
 
     private Image(BufferedImage image) {
         MinecraftForge.EVENT_BUS.register(this);
@@ -37,6 +54,9 @@ public class Image {
     public void render(RenderGameOverlayEvent event) {
         if (imageToLoad != null) {
             texture = new DynamicTexture(imageToLoad);
+            this.textureWidth = imageToLoad.getWidth();
+            this.textureHeight = imageToLoad.getHeight();
+
             imageToLoad = null;
         }
     }
@@ -86,34 +106,20 @@ public class Image {
     }
 
     /**
-     * Draws the image on screen.
-     *
-     * @param x the x position
-     * @param y the y position
-     * @param size the size
-     * @return The Image object to allow for method chaining
-     */
-    public Image draw(double x, double y, double size) {
-        Renderer.drawImage(this, x, y, size, size);
-
-        return this;
-    }
-
-    /**
-     * Draws the image on screen.
+     * Draws the image on screen using the texture width and height.
      *
      * @param x the x position
      * @param y the y position
      * @return The Image object to allow for method chaining
      */
     public Image draw(double x, double y) {
-        Renderer.drawImage(this, x, y, 256, 256);
+        Renderer.drawImage(this, x, y, this.textureWidth, this.textureHeight);
 
         return this;
     }
 
     /**
-     * Draws the image on screen with width and height.
+     * Draws the image on screen with a custom width and height.
      *
      * @param x The x position
      * @param y The y position
