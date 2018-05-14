@@ -86,23 +86,43 @@ public class Image {
     }
 
     /**
-     * Draws the image on screen with scale
+     * Draws the image on screen.
      *
+     * @param x the x position
+     * @param y the y position
+     * @param size the size
      * @return The Image object to allow for method chaining
      */
-    public Image draw(int x, int y, int size) {
+    public Image draw(double x, double y, double size) {
         Renderer.drawImage(this, x, y, size);
 
         return this;
     }
 
     /**
-     * Draws the image on screen
+     * Draws the image on screen.
      *
+     * @param x the x position
+     * @param y the y position
+     * @return The Image object to allow for method chaining
+     */
+    public Image draw(double x, double y) {
+        Renderer.drawImage(this, x, y, 256);
+
+        return this;
+    }
+
+    /**
+     * Draws the image on screen with width and height.
+     *
+     * @param x The x position
+     * @param y The y position
+     * @param width The image width
+     * @param height The image height
      * @return the Image object to allow for method chaining
      */
-    public Image draw(int x, int y) {
-        Renderer.drawImage(this, x, y, 256);
+    public Image draw(double x, double y, double width, double height) {
+        Renderer.drawImage(this, x, y, width, height);
 
         return this;
     }
