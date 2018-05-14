@@ -94,7 +94,7 @@ public class Image {
      * @return The Image object to allow for method chaining
      */
     public Image draw(double x, double y, double size) {
-        Renderer.drawImage(this, x, y, size);
+        Renderer.drawImage(this, x, y, size, size);
 
         return this;
     }
@@ -107,7 +107,7 @@ public class Image {
      * @return The Image object to allow for method chaining
      */
     public Image draw(double x, double y) {
-        Renderer.drawImage(this, x, y, 256);
+        Renderer.drawImage(this, x, y, 256, 256);
 
         return this;
     }

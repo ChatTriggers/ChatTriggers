@@ -275,44 +275,14 @@ public class Renderer {
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 
-        worldrenderer.pos(      x,          y + height,  0).tex(0, f).endVertex();
-        worldrenderer.pos(   x + width,  y + height,  0).tex(0, f).endVertex();
-        worldrenderer.pos(   x + width,     y,           0).tex(0, f).endVertex();
-        worldrenderer.pos(      x,             y,           0).tex(0, f).endVertex();
-
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
-    }
-
-    public void drawImage(Image image, double x, double y, double size) {
-        if (image.getTexture() == null) return;
-
-        double scale = size / 256D;
-        float f = 256 * 0.00390625F;
-        double modX = x / scale;
-        double modY = y / scale;
-
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.enableBlend();
-        GlStateManager.scale(scale, scale, 50);
-        GlStateManager.bindTexture(image.getTexture().getGlTextureId());
-        GlStateManager.enableTexture2D();
-
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(modX, modY + 256, 0)
-                .tex(0, f)
-                .endVertex();
-        worldrenderer.pos(modX + 256, modY + 256, 0)
-                .tex(f, f)
-                .endVertex();
-        worldrenderer.pos(modX + 256, modY, 0)
-                .tex(f, 0)
-                .endVertex();
-        worldrenderer.pos(modX, modY, 0)
-                .tex(0, 0)
-                .endVertex();
+        worldrenderer.pos(x,y + height,0)
+                .tex(0, f).endVertex();
+        worldrenderer.pos(x + width,y + height, 0)
+                .tex(f, f).endVertex();
+        worldrenderer.pos(x + width, y, 0)
+                .tex(f, 0).endVertex();
+        worldrenderer.pos(x, y, 0)
+                .tex(0, 0).endVertex();
         tessellator.draw();
 
         GlStateManager.popMatrix();
@@ -454,7 +424,7 @@ public class Renderer {
      * <p>
      *     <strong>This instances a new object and should be treated as such.</strong><br>
      *     This should not be used to instance and draw an image every frame, instead use
-     *     {@link Renderer#drawImage(Image, double, double, double)} or {@link Image#draw(double, double)}
+     *     {@link Renderer#drawImage(Image, double, double, double, double)}
      * </p>
      *
      * @param name the name of the file to save/load from
