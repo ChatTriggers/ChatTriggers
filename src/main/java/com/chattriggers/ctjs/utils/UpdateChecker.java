@@ -72,6 +72,6 @@ public class UpdateChecker {
     public void drawUpdateMessage() {
         if (!this.updateAvailable) return;
 
-        Renderer.drawString("&cChatTrigger requires an update to work properly!", 2, 2);
+        Renderer.drawString("&cChatTriggers requires an update to work properly!", 2, 2);
     }
 }
