@@ -7,13 +7,13 @@ var ArrayList = Java.type("java.util.ArrayList");
 var HashMap = Java.type("java.util.HashMap");
 var Thread = Java.type("java.lang.Thread");
 var Keyboard = Java.type("org.lwjgl.input.Keyboard");
-var CallbackInfoReturnable = Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable");
-var CallbackInfo = Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfo");
 
 // Triggers
 var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
+var CallbackInfoReturnable = Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable");
+var CallbackInfo = Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfo");
 
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
@@ -49,6 +49,7 @@ var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity"
 
 // Misc
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console").getInstance();
+var ChatTriggers = Java.type("com.chattriggers.ctjs.Reference");
 
 /*End Built in Vars */
 
