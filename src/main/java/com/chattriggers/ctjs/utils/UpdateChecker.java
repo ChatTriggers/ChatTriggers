@@ -57,7 +57,7 @@ public class UpdateChecker {
         new Message(
                 "&c&m" + ChatLib.getChatBreak("-"),
                 "\n",
-                "&cChatTrigger requires an update to work properly!",
+                "&cChatTriggers requires an update to work properly!",
                 "\n",
                 new TextComponent("&a[Download]").setClick("open_url", "https://www.chattriggers.com/#download"),
                 " ",
