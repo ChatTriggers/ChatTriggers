@@ -12,8 +12,6 @@ var Keyboard = Java.type("org.lwjgl.input.Keyboard");
 var TriggerRegister = Java.type("com.chattriggers.ctjs.triggers.TriggerRegister");
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
-var CallbackInfoReturnable = Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable");
-var CallbackInfo = Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfo");
 
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
@@ -61,9 +59,11 @@ function print(toPrint) {
 }
 
 function cancel(event) {
-    if (event instanceof CallbackInfoReturnable && event.isCancellable()) {
+    if (event instanceof Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable")
+    && event.isCancellable()) {
         event.setReturnValue(null);
-    } else if (event instanceof CallbackInfo && event.isCancellable()) {
+    } else if (event instanceof Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfo")
+    && event.isCancellable()) {
         event.cancel();
     } else {
         event.setCanceled(true);
