@@ -112,6 +112,17 @@ public class FileLib {
         return content.toString();
     }
 
+    public static boolean deleteDirectory(File dir) {
+        if (dir.isDirectory()) {
+            File[] children = dir.listFiles();
+            for (File child : children) {
+                if (!deleteDirectory(child)) return false;
+            }
+        }
+
+        return dir.delete();
+    }
+
     /**
      * Extracts a zip file specified by the zipFilePath to a directory specified by
      * destDirectory (will be created if does not exists)
@@ -121,9 +132,8 @@ public class FileLib {
      */
     public static void unzip(String zipFilePath, String destDirectory) throws IOException {
         File destDir = new File(destDirectory);
-        if (!destDir.exists()) {
-            destDir.mkdir();
-        }
+        if (!destDir.exists()) destDir.mkdir();
+
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = zipIn.getNextEntry();
         // iterates over entries in the zip file

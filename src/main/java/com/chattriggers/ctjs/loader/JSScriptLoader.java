@@ -164,6 +164,7 @@ public class JSScriptLoader extends ScriptLoader {
         if (existCheck) {
             File currentMetadata = new File(modulesDir, "currMetadata.json");
             try {
+                FileLib.deleteDirectory(new File(modulesDir, name));
                 FileUtils.copyURLToFile(new URL("http://167.99.3.229/downloads/metadata/" + name),
                         currentMetadata);
             } catch (IOException exception) {
