@@ -25,7 +25,7 @@
 ChatTriggers is currently in beta. Although we try to follow standard version conventions and deprecate old methods before removing them, there may be times where we need to restructure something to the point where deprecation is impossible. Modules can and will break at any  time.
 
 # About
-ChatTriggers is a framework for Minecraft that allows for live scripting and client modification using JavaScript. We provide libraries, wrappers, objects and more to make your life as a modder as easy as possible. Even without the proper wrapper, you can still use exposed Minecraft methods and variables but you will need knowledge of FML mappings. The entire CTjs engine is built on Nashorn using Java 8 so you have access to any Nashorn methods and functions and up to ES5 support.
+ChatTriggers is a framework for Minecraft that allows for live scripting and client modification using JavaScript. We provide libraries, wrappers, objects and more to make your life as a modder as easy as possible. Even without the proper wrapper, you can still use exposed Minecraft methods and variables but you will need knowledge of FML mappings. The entire ChatTriggers engine is built on Nashorn using Java 8 so you have access to any Nashorn methods and functions and up to ES5 support.
 
 The basic premise of ChatTriggers is that everything is based around Triggers. From a modding standpoint, Triggers can be thought of as event listeners. These can range from a chat Trigger that runs on a specific chat event matching criteria to a render overlay Trigger that runs when the crosshair is being rendered. We are constantly adding more Triggers and Trigger types as the mod evolves for more integration with Minecraft.
 ```JavaScript
