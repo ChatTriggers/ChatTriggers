@@ -22,12 +22,12 @@
 
 ### *Beta*
 [![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)<br>
-CTjs is currently in early beta. Although we try to follow standard version conventions and deprecate old methods before removing them, there may be times where we need to restructure something to the point where deprecation is impossible. Modules can and will break at any  time.
+ChatTriggers is currently in beta. Although we try to follow standard version conventions and deprecate old methods before removing them, there may be times where we need to restructure something to the point where deprecation is impossible. Modules can and will break at any  time.
 
 # About
-CTjs is a framework for Minecraft that allows for live scripting and client modification using JavaScript. We provide libraries, wrappers, objects and more to make your life as a modder as easy as possible. Even without the proper wrapper, you can still use exposed Minecraft methods and variables but you will need knowledge of FML mappings. The entire CTjs engine is built on Nashorn using Java 8 so you have access to any Nashorn methods and functions and up to ES5 support.
+ChatTriggers is a framework for Minecraft that allows for live scripting and client modification using JavaScript. We provide libraries, wrappers, objects and more to make your life as a modder as easy as possible. Even without the proper wrapper, you can still use exposed Minecraft methods and variables but you will need knowledge of FML mappings. The entire ChatTriggers engine is built on Nashorn using Java 8 so you have access to any Nashorn methods and functions and up to ES5 support.
 
-The basic premise of CTjs is that everything is based around Triggers. From a modding standpoint, Triggers can be thought of as event listeners. These can range from a chat Trigger that runs on a specific chat event matching criteria to a render overlay Trigger that runs when the crosshair is being rendered. We are constantly adding more Triggers and Trigger types as the mod evolves for more integration with Minecraft.
+The basic premise of ChatTriggers is that everything is based around Triggers. From a modding standpoint, Triggers can be thought of as event listeners. These can range from a chat Trigger that runs on a specific chat event matching criteria to a render overlay Trigger that runs when the crosshair is being rendered. We are constantly adding more Triggers and Trigger types as the mod evolves for more integration with Minecraft.
 ```JavaScript
 register("chat", function(name, message, event) {
   cancel(event);
@@ -45,7 +45,7 @@ register("renderCrosshair", function(event) {
 });
 ```
 
-You can learn the basics of scripting with CTjs from the [Slate tutorial](https://www.chattriggers.com/slate/) and once you get the basics, check out the [JavaDocs](https://www.chattriggers.com/javadocs/) for a more in depth look at all of the available methods. 
+You can learn the basics of scripting with ChatTriggers from the [Slate tutorial](https://www.chattriggers.com/slate/) and once you get the basics, check out the [JavaDocs](https://www.chattriggers.com/javadocs/) for a more in depth look at all of the available methods. 
 
 # Releases
 The [ChatTriggers website](https://www.chattriggers.com/) will always be kept up to date with the latest release. As of beta version 0.6.4, we have started to move the release changelog along with a .jar download (mirror of the website) to the [GitHub releases page](https://github.com/ChatTriggers/ct.js/releases).
