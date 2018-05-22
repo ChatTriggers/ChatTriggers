@@ -27,6 +27,10 @@ public class GuiHandler {
         this.GUIs.put(gui, 1);
     }
 
+    public void clearGuis() {
+        this.GUIs.clear();
+    }
+
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         for (Map.Entry<GuiScreen, Integer> gui : this.GUIs.entrySet()) {

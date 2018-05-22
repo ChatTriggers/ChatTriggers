@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
+import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
@@ -158,6 +159,9 @@ public class CTCommand extends CommandBase {
         TriggerType.WORLD_UNLOAD.triggerAll();
         ChatLib.chat("&cReloading ct.js scripts...");
         new Thread(() -> {
+            DisplayHandler.getInstance().clearDisplays();
+            GuiHandler.getInstance().clearGuis();
+
             for (TriggerType type : TriggerType.values())
                 type.clearTriggers();
             CommandHandler.getInstance().getCommandList().clear();
