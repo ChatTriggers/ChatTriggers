@@ -208,6 +208,8 @@ public class TriggerRegister {
     /**
      * Registers a new trigger that runs in predictable intervals. (60 per second by default)<br>
      * <p>
+     *     Passes through 1 argument:<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;steps elapsed<br>
      *     Available modifications:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnStepTrigger#setFps(long)} Sets the fps<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnStepTrigger#setDelay(long)} Sets the delay in seconds<br>

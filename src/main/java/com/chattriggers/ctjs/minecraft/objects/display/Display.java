@@ -187,6 +187,11 @@ public class Display {
 
     /**
      * Sets a display's background type using string input.
+     * <p>
+     *     Input can be:<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"full"<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"per line"<br>
+     * </p>
      *
      * @param background the type of background
      * @return the display to allow for method chaining
@@ -199,6 +204,12 @@ public class Display {
 
     /**
      * Sets a display's text alignment using string input.
+     * <p>
+     *     Input can be:<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"right"<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"left"<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"center"
+     * </p>
      *
      * @param align the type of alignment
      * @return the display to allow for method chaining
@@ -211,6 +222,11 @@ public class Display {
 
     /**
      * Sets a display's line order using string input.
+     * <p>
+     *     Input can be:<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"up"<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"down"
+     * </p>
      *
      * @param order the order of lines
      * @return the display to allow method chaining

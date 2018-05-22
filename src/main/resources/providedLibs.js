@@ -24,7 +24,7 @@ var XMLHttpRequest = Java.type("com.chattriggers.ctjs.minecraft.libs.XMLHttpRequ
 // Objects
 var Display = Java.type("com.chattriggers.ctjs.minecraft.objects.display.Display");
 var DisplayLine = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayLine");
-var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler").getInstance();
+var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler")
 var Gui = Java.type("com.chattriggers.ctjs.minecraft.objects.gui.Gui");
 var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Message");
 var TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.TextComponent");

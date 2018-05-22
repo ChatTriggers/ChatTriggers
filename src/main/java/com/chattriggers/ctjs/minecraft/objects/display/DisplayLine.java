@@ -158,6 +158,12 @@ public class DisplayLine {
 
     /**
      * Sets the alignment of the line (based on max width of display)
+     * <p>
+     *     Input can be:<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"right"<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"left"<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"center"
+     * </p>
      *
      * @see DisplayHandler.Align
      * @param align The new alignment
@@ -172,6 +178,11 @@ public class DisplayLine {
     /**
      * Sets the lines background (NONE by default).
      * If set to NONE, the line will inherit the background from the display.
+     * <p>
+     *     Input can be:<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"full"<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"per line"<br>
+     * </p>
      *
      * @see DisplayHandler.Background
      * @param background the background type
