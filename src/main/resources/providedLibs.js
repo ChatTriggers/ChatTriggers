@@ -48,7 +48,7 @@ var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity"
 // Misc
 var Console = Java.type("com.chattriggers.ctjs.utils.console.Console").getInstance();
 var Config = Java.type("com.chattriggers.ctjs.utils.config.Config").getInstance();
-var ChatTriggers = Java.type("com.chattriggers.ctjs.Reference");
+var ChatTriggers = Java.type("com.chattriggers.ctjs.Reference").getInstance();
 
 /*End Built in Vars */
 

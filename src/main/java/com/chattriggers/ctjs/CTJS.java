@@ -70,6 +70,8 @@ public class CTJS {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        new Reference();
+
         File pictures = new File(event.getModConfigurationDirectory(), "ChatTriggers/images/");
         pictures.mkdirs();
         assetsDir = pictures;

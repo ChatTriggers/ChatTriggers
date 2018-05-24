@@ -1,16 +1,13 @@
 package com.chattriggers.ctjs.commands;
 
-import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.Reference;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
-import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.modules.gui.ModulesGui;
-import com.chattriggers.ctjs.triggers.TriggerType;
-import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.command.CommandBase;
@@ -31,8 +28,6 @@ import java.util.List;
 public class CTCommand extends CommandBase {
     private final int idFixed = 90123; // ID for dumped chat
     private Integer idFixedOffset = null; // ID offset (increments)
-
-    private Boolean isLoaded = true;
 
     public String getName() {
         return getCommandName();
@@ -93,10 +88,10 @@ public class CTCommand extends CommandBase {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
                 case("load"):
-                    load(false);
+                    Reference.getInstance().load();
                     break;
                 case("reload"):
-                    load(true);
+                    Reference.getInstance().reload();
                     break;
                 case("files"):
                 case("file"):
@@ -149,34 +144,6 @@ public class CTCommand extends CommandBase {
         } else {
             ChatLib.chat(getCommandUsage(sender));
         }
-    }
-
-    private void load(Boolean updateCheck) {
-        if (!this.isLoaded) return;
-        this.isLoaded = false;
-
-        TriggerType.GAME_UNLOAD.triggerAll();
-        TriggerType.WORLD_UNLOAD.triggerAll();
-        ChatLib.chat("&cReloading ct.js scripts...");
-        new Thread(() -> {
-            DisplayHandler.getInstance().clearDisplays();
-            GuiHandler.getInstance().clearGuis();
-
-            for (TriggerType type : TriggerType.values())
-                type.clearTriggers();
-            CommandHandler.getInstance().getCommandList().clear();
-            ModuleManager.getInstance().unload();
-
-            if (Config.getInstance().getClearConsoleOnLoad().value)
-                Console.getInstance().clearConsole();
-
-            CTJS.getInstance().setupConfig();
-
-            ModuleManager.getInstance().load(updateCheck);
-            ChatLib.chat("&aDone reloading scripts!");
-            TriggerType.WORLD_LOAD.triggerAll();
-            this.isLoaded = true;
-        }).start();
     }
 
     private void dumpChat(int lines) {
