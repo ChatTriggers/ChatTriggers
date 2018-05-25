@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
-import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
