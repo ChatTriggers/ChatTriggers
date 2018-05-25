@@ -10,6 +10,7 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +72,35 @@ public class Message {
     @Getter
     @Setter
     private boolean formatted;
+
+    /**
+     * Creates a new Message object from a chat event.
+     *
+     * @param event the chat event
+     */
+    public Message(ClientChatReceivedEvent event) {
+        this(event.message);
+    }
+
+    /**
+     * Creates a new Message object from an IChatComponent.
+     * 
+     * @param component the IChatComponent
+     */
+    public Message(IChatComponent component) {
+        this.chatLineId = -1;
+        this.recursive = false;
+        this.formatted = true;
+
+        this.messageParts = new ArrayList<>();
+        if (component.getSiblings().isEmpty()) {
+            this.messageParts.add(new TextComponent(component));
+        } else {
+            for (IChatComponent sibling : component.getSiblings()) {
+                this.messageParts.add(new TextComponent(sibling));
+            }
+        }
+    }
 
     public Message(Object... messages) {
         this.chatLineId = -1;
