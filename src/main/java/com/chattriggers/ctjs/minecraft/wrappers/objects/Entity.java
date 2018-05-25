@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
+import lombok.Getter;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
@@ -7,17 +8,12 @@ import net.minecraft.util.MathHelper;
 import java.util.UUID;
 
 public class Entity {
+    
+    @Getter
     private net.minecraft.entity.Entity entity;
 
     public Entity(net.minecraft.entity.Entity entity) {
         this.entity = entity;
-    }
-
-    /**
-     * @return The Minecraft Entity class.
-     */
-    public net.minecraft.entity.Entity getEntity() {
-        return this.entity;
     }
     
     /**
