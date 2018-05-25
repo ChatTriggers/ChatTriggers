@@ -16,7 +16,7 @@ public class Entity {
     /**
      * @return The Minecraft Entity class.
      */
-    public Entity getEntity() {
+    public net.minecraft.entity.Entity getEntity() {
         return this.entity;
     }
     
