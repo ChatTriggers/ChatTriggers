@@ -73,11 +73,13 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
     @Override
-    public ArrayList<Module> loadModules(Boolean updateCheck) {
-        cachedModules.clear();
+    public ArrayList<Module> loadModules(boolean updateCheck, boolean reload) {
+        if (reload) {
+            cachedModules.clear();
 
-        for (File dir : getFoldersInDirectory(modulesDir)) {
-            loadModule(dir, updateCheck);
+            for (File dir : getFoldersInDirectory(modulesDir)) {
+                loadModule(dir, updateCheck);
+            }
         }
 
         return cachedModules;

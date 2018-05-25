@@ -4,6 +4,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 
+import java.util.UUID;
+
 public class Entity {
     private net.minecraft.entity.Entity entity;
 
@@ -172,6 +174,16 @@ public class Entity {
      */
     public String getClassName() {
         return this.entity.getClass().getSimpleName();
+    }
+
+    /**
+     * Gets the Java UUID object of this entity.
+     * Use of {@link UUID#toString()} in conjunction is recommended.
+     *
+     * @return the entity's uuid
+     */
+    public UUID getUUID() {
+        return this.entity.getUniqueID();
     }
 
     @Override
