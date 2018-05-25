@@ -21,7 +21,7 @@ public abstract class ScriptLoader {
 
     public abstract void postLoad();
 
-    protected abstract ArrayList<Module> loadModules(Boolean updateCheck);
+    protected abstract ArrayList<Module> loadModules(boolean updateCheck, boolean reload);
     protected abstract ArrayList<String> getIllegalLines();
     public abstract ScriptEngine getScriptEngine();
     protected abstract Invocable getInvocableEngine();

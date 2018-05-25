@@ -25,7 +25,9 @@ public class Module {
     @Override
     public String toString() {
         return "Module{"
-                + this.name
+                + this.name + ","
+                + this.files.keySet().toString() + ","
+                + this.metadata.getVersion()
                 + "}";
     }
 }
