@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
+import com.chattriggers.ctjs.minecraft.mixins.MixinEntityPlayer;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class PlayerMP extends Entity {
     @Getter
@@ -88,12 +88,7 @@ public class PlayerMP extends Entity {
      * @param textComponent the new name to display
      */
     public void setNametagName(TextComponent textComponent) {
-        ReflectionHelper.setPrivateValue(
-                EntityPlayer.class,
-                player,
-                textComponent.getChatComponentText().getFormattedText(),
-                "displayname"
-        );
+        ((MixinEntityPlayer) player).setDisplayName(textComponent.getChatComponentText().getFormattedText());
     }
 
     private String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn)

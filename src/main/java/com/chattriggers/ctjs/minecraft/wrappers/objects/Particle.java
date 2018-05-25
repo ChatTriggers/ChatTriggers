@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
+import com.chattriggers.ctjs.minecraft.mixins.MixinEntityFX;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class Particle {
     @Getter
@@ -84,13 +84,7 @@ public class Particle {
             return;
         }
 
-        ReflectionHelper.setPrivateValue(
-                EntityFX.class,
-                this.underlyingEntity,
-                maxAge,
-                "particleMaxAge",
-                "field_70547_e"
-        );
+        ((MixinEntityFX) this.underlyingEntity).setParticleMaxAge(maxAge);
     }
 
     public void remove() {

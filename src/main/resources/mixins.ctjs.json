@@ -8,6 +8,8 @@
     "MixinScreenShotHelper",
     "MixinMinecraft",
     "MixinGuiMainMenu",
-    "MixinCrashReport"
+    "MixinCrashReport",
+    "MixinEntityFX",
+    "MixinEntityPlayer"
   ]
 }
