@@ -14,6 +14,13 @@ public class Entity {
     }
 
     /**
+     * @return The Minecraft Entity class.
+     */
+    public Entity getEntity() {
+        return this.entity;
+    }
+    
+    /**
      * @return the entity's x coordinate
      */
     public double getX() {
