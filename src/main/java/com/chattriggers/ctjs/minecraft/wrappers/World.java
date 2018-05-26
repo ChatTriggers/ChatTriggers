@@ -10,7 +10,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -19,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class World {
     /**
      * Gets the world object.
@@ -156,9 +156,7 @@ public class World {
 
         if (getWorld() != null) {
             for (EntityPlayer player : getWorld().playerEntities) {
-                if (player instanceof EntityPlayerMP) {
-                    players.add(new PlayerMP((EntityPlayerMP) player));
-                }
+                players.add(new PlayerMP(player));
             }
         }
 

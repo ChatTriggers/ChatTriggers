@@ -15,7 +15,7 @@ public class OnChatTrigger extends OnTrigger {
     private String chatCriteria;
     private Pattern criteriaPattern;
     private List<Parameter> parameters;
-    private Boolean triggerIfCanceled;
+    private boolean triggerIfCanceled;
 
     public OnChatTrigger(Object method) {
         super(method, TriggerType.CHAT);
@@ -31,7 +31,7 @@ public class OnChatTrigger extends OnTrigger {
      * @param bool Boolean to set
      * @return the trigger object for method chaining
      */
-    public OnChatTrigger triggerIfCanceled(Boolean bool) {
+    public OnChatTrigger triggerIfCanceled(boolean bool) {
         this.triggerIfCanceled = bool;
         return this;
     }

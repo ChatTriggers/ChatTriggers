@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import com.chattriggers.ctjs.minecraft.mixins.MixinEntityFX;
-import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import net.minecraft.client.particle.EntityFX;
 
@@ -10,52 +9,31 @@ public class Particle {
     private EntityFX underlyingEntity;
 
     public Particle(EntityFX entityFX) {
+        if (entityFX == null) {
+            throw new NullPointerException("EntityFX is null!");
+        }
+
         this.underlyingEntity = entityFX;
     }
 
     public void scale(float scale) {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         this.underlyingEntity.multipleParticleScaleBy(scale);
     }
 
     public void multiplyVelocity(float multiplier) {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         this.underlyingEntity.multiplyVelocity(multiplier);
     }
 
     public void setColor(float r, float g, float b) {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         this.underlyingEntity.setRBGColorF(r, g, b);
     }
 
     public void setColor(float r, float g, float b, float a) {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         setColor(r, g, b);
         setAlpha(a);
     }
 
     public void setColor(int color) {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         float red = (float) (color >> 16 & 255) / 255.0F;
         float blue = (float) (color >> 8 & 255) / 255.0F;
         float green = (float) (color & 255) / 255.0F;
@@ -65,11 +43,6 @@ public class Particle {
     }
 
     public void setAlpha(float a) {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         this.underlyingEntity.setAlphaF(a);
     }
 
@@ -79,20 +52,10 @@ public class Particle {
      * @param maxAge the particles max age (in ticks)
      */
     public void setMaxAge(int maxAge) {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         ((MixinEntityFX) this.underlyingEntity).setParticleMaxAge(maxAge);
     }
 
     public void remove() {
-        if (underlyingEntity == null) {
-            Console.getInstance().out.println("Particle is null, returning!");
-            return;
-        }
-
         this.underlyingEntity.setDead();
     }
 }

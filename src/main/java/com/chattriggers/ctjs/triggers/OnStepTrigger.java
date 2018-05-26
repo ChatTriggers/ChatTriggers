@@ -3,10 +3,10 @@ package com.chattriggers.ctjs.triggers;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 
 public class OnStepTrigger extends OnTrigger {
-    private Long fps = 60L;
-    private Long delay = null;
-    private Long systemTime;
-    private Long elapsed;
+    private long fps = 60L;
+    private long delay = -1;
+    private long systemTime;
+    private long elapsed;
 
     protected OnStepTrigger(Object method) {
         super(method, TriggerType.STEP);
@@ -50,7 +50,7 @@ public class OnStepTrigger extends OnTrigger {
 
     @Override
     public void trigger(Object... args) {
-        if (this.delay == null) {
+        if (this.delay >= 0) {
             // run trigger based on set fps value (60 per second by default)
             while (this.systemTime < Client.getSystemTime() + (1000 / this.fps)) {
                 this.elapsed++;

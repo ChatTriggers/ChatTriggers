@@ -11,16 +11,12 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 
 public class PlayerMP extends Entity {
     @Getter
-    private AbstractClientPlayer player;
+    private EntityPlayer player;
 
     public PlayerMP(EntityPlayer player) throws IllegalArgumentException {
         super(player);
 
-        if (player instanceof AbstractClientPlayer) {
-            this.player = ((AbstractClientPlayer) player);
-        } else {
-            throw new IllegalArgumentException("The player provided is not valid!");
-        }
+        this.player = player;
     }
 
     public PlayerMP(AbstractClientPlayer player) {

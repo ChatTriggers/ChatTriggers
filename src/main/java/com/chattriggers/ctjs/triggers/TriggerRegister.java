@@ -58,7 +58,7 @@ public class TriggerRegister {
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any number of chat criteria variables<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the chat event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnChatTrigger#setChatCriteria(String)} Sets the chat criteria<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnChatTrigger#setParameter(String)} Sets the chat parameter<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
@@ -254,7 +254,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -270,7 +270,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -286,7 +286,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -302,7 +302,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -318,7 +318,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -334,7 +334,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -350,7 +350,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -366,7 +366,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -382,7 +382,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired
@@ -398,7 +398,7 @@ public class TriggerRegister {
      *     Passes through 1 argument:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The render event<br>
      *     Available modifications:<br>
-     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(Boolean)} Sets if triggered if event is already cancelled<br>
+     *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
      * @param method the name of the method to callback when the event is fired

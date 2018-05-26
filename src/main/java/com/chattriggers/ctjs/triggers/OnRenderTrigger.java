@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 public class OnRenderTrigger extends OnTrigger {
-    private Boolean triggerIfCanceled;
+    private boolean triggerIfCanceled;
 
     public OnRenderTrigger(Object method, TriggerType triggerType) {
         super(method, triggerType);
@@ -17,7 +17,7 @@ public class OnRenderTrigger extends OnTrigger {
      * @param bool Boolean to set
      * @return the trigger object for method chaining
      */
-    public OnRenderTrigger triggerIfCanceled(Boolean bool) {
+    public OnRenderTrigger triggerIfCanceled(boolean bool) {
         this.triggerIfCanceled = bool;
         return this;
     }
