@@ -99,8 +99,12 @@ public class JSScriptLoader extends ScriptLoader {
         ModuleMetadata metadata = null;
 
         if (metadataFile.exists()) {
-            metadata = new Gson().fromJson(FileLib.read(metadataFile), ModuleMetadata.class);
-            metadata.setFileName(dir.getName());
+            try {
+                metadata = new Gson().fromJson(FileLib.read(metadataFile), ModuleMetadata.class);
+                metadata.setFileName(dir.getName());
+            } catch (Exception exception) {
+                Console.getInstance().printStackTrace(exception);
+            }
         }
 
         try {
@@ -114,13 +118,17 @@ public class JSScriptLoader extends ScriptLoader {
 
                     String currVersion = metadata.getVersion();
 
-                    ModuleMetadata newMetadata = new Gson().fromJson(new FileReader(newMetadataFile), ModuleMetadata.class);
-                    String newVersion = newMetadata.getVersion();
+                    try {
+                        ModuleMetadata newMetadata = new Gson().fromJson(new FileReader(newMetadataFile), ModuleMetadata.class);
+                        String newVersion = newMetadata.getVersion();
 
-                    if (!newVersion.equals(currVersion)) {
-                        downloadModule(metadata.getFileName(), false);
+                        if (!newVersion.equals(currVersion)) {
+                            downloadModule(metadata.getFileName(), false);
 
-                        ChatLib.chat("&6Updated " + metadata.getName());
+                            ChatLib.chat("&6Updated " + metadata.getName());
+                        }
+                    } catch (Exception exception) {
+                        Console.getInstance().printStackTrace(exception);
                     }
 
                     newMetadataFile.delete();
