@@ -137,9 +137,10 @@ public class JSScriptLoader extends ScriptLoader {
                 }
             }
 
+            String compiledScript = compileScripts(dir, metadata.getIgnored());
+
             Module module = new Module(
                     dir.getName(),
-                    compileScripts(dir, metadata.getIgnored()),
                     getAllFiles(dir, metadata.getIgnored()),
                     metadata
             );
@@ -148,7 +149,7 @@ public class JSScriptLoader extends ScriptLoader {
 
             TriggerRegister.currentModule = module;
 
-            getScriptEngine().eval(module.getCompiledScript());
+            getScriptEngine().eval(compiledScript);
 
             TriggerRegister.currentModule = null;
 

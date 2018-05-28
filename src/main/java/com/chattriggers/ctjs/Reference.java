@@ -3,6 +3,7 @@ package com.chattriggers.ctjs;
 import com.chattriggers.ctjs.commands.CommandHandler;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.mixinsimpl.IClientCommandHandler;
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -10,6 +11,7 @@ import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.console.Console;
 import lombok.Getter;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraftforge.client.ClientCommandHandler;
 
 public class Reference {
     @Getter
@@ -65,6 +67,7 @@ public class Reference {
             for (TriggerType type : TriggerType.values())
                 type.clearTriggers();
             CommandHandler.getInstance().getCommandList().clear();
+            ((IClientCommandHandler) ClientCommandHandler.instance).removeCTCommands();
             ModuleManager.getInstance().unload();
 
             if (Config.getInstance().getClearConsoleOnLoad().value)

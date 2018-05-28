@@ -58,6 +58,7 @@ public class Image {
             this.textureHeight = imageToLoad.getHeight();
 
             imageToLoad = null;
+            MinecraftForge.EVENT_BUS.unregister(this);
         }
     }
 
