@@ -139,8 +139,8 @@ public class JSScriptLoader extends ScriptLoader {
 
             Module module = new Module(
                     dir.getName(),
-                    compileScripts(dir),
-                    getAllFiles(dir),
+                    compileScripts(dir, metadata.getIgnored()),
+                    getAllFiles(dir, metadata.getIgnored()),
                     metadata
             );
 
@@ -235,7 +235,7 @@ public class JSScriptLoader extends ScriptLoader {
      */
     public String getProvidedLibsScript() {
         try {
-            return compileScripts(new File(this.modulesDir.getParentFile(), "chattriggers-provided-libs.js"));
+            return compileScripts(new File(this.modulesDir.getParentFile(), "chattriggers-provided-libs.js"), null);
         } catch (IOException e) {
             Console.getInstance().printStackTrace(e);
             return null;
@@ -250,12 +250,22 @@ public class JSScriptLoader extends ScriptLoader {
      * @return the string after compilation
      * @throws IOException thrown if a file doesn't exist
      */
-    public String compileScripts(File dir) throws IOException {
+    public String compileScripts(File dir, ArrayList<String> ignored) throws IOException {
         List<File> files = Files.find(
                 dir.toPath(),
                 5,
                 (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
-        ).map(Path::toFile).collect(Collectors.toList());
+        ).map(Path::toFile).filter(file -> {
+            if (ignored == null) return true;
+
+            for (String ignore : ignored) {
+                if (file.getPath().contains(ignore)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }).collect(Collectors.toList());
 
         StringBuilder compiledScript = new StringBuilder();
 
@@ -277,12 +287,22 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
 
-    private HashMap<String, List<String>> getAllFiles(File dir) throws IOException {
+    private HashMap<String, List<String>> getAllFiles(File dir, ArrayList<String> ignored) throws IOException {
         List<File> files = Files.find(
                 dir.toPath(),
                 5,
                 (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
-        ).map(Path::toFile).collect(Collectors.toList());
+        ).map(Path::toFile).filter(file -> {
+            if (ignored == null) return true;
+
+            for (String ignore : ignored) {
+                if (file.getPath().contains(ignore)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }).collect(Collectors.toList());
 
         HashMap<String, List<String>> allFiles = new HashMap<>();
 

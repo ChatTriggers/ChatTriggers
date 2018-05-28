@@ -20,6 +20,8 @@ public class ModuleMetadata {
     private String description = null;
     @Getter
     private ArrayList<String> requires = null;
+    @Getter
+    private ArrayList<String> ignored = null;
 
     @Getter
     @Setter
@@ -31,6 +33,6 @@ public class ModuleMetadata {
     public String toString() {
         return "{name=" + name + ",version=" + version
                 + ",tags=" + (tags == null ? "null" : tags.toString()) + ",pictureLink=" + pictureLink
-                + ",creator=" + creator + ",requires=" + requires + "}";
+                + ",creator=" + creator + ",requires=" + requires + ",ignored=" + ignored + "}";
     }
 }
