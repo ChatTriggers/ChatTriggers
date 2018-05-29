@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.triggers;
 
 import com.chattriggers.ctjs.loader.ModuleManager;
-import com.chattriggers.ctjs.utils.console.Console;
 import io.sentry.Sentry;
 import io.sentry.context.Context;
 import io.sentry.event.Breadcrumb;
@@ -40,8 +39,6 @@ public enum TriggerType {
 
     private PriorityQueue<OnTrigger> triggers = new PriorityQueue<>(triggerComparator);
 
-    private ArrayList<OnTrigger> triggersRemove = new ArrayList<>();
-
     public void clearTriggers() {
         triggers.clear();
     }
@@ -51,8 +48,7 @@ public enum TriggerType {
     }
 
     public void removeTrigger(OnTrigger trigger) {
-        // Add to removal list to avoid concurrent modification exceptions
-        triggersRemove.add(trigger);
+        triggers.removeIf(onTrigger -> onTrigger == trigger);
     }
 
     public PriorityQueue<OnTrigger> getTriggers() {
@@ -86,19 +82,6 @@ public enum TriggerType {
 
             triggersCopy.add(trigger);
 
-            // Check for removal of broken trigger before running
-            if (triggersRemove.contains(trigger)) {
-                try {
-                    triggersRemove.remove(trigger);
-                    triggers.remove(trigger);
-                } catch (Exception e) {
-                    Console.getInstance().out.println("Failed to unregister broken function. Trying again later.");
-                    Console.getInstance().out.println(trigger.getMethod().toString());
-                }
-                return;
-            }
-
-            //System.out.println("Triggering p1: " + Arrays.toString(args));
             // run the trigger
             trigger.trigger(args);
         }

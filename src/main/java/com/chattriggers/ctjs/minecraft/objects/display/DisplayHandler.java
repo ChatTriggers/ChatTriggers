@@ -35,9 +35,7 @@ public class DisplayHandler {
         GlStateManager.pushMatrix();
 
         if (EventLib.getType(event) == RenderGameOverlayEvent.ElementType.TEXT) {
-            for (Display display : displays) {
-                display.render();
-            }
+            displays.forEach(Display::render);
         }
 
         GlStateManager.popMatrix();
@@ -50,15 +48,7 @@ public class DisplayHandler {
         NONE, FULL, PER_LINE;
 
         public static Background getBackgroundByName(String background) {
-            switch(background.toUpperCase()) {
-                case("FULL"):
-                    return FULL;
-                case("PER LINE"):
-                case("PER_LINE"):
-                    return PER_LINE;
-                default:
-                    return NONE;
-            }
+            return Background.valueOf(background.toUpperCase().replace("_", ""));
         }
     }
 
@@ -69,16 +59,7 @@ public class DisplayHandler {
         NONE, LEFT, CENTER, RIGHT;
 
         public static Align getAlignByName(String align) {
-            switch (align.toUpperCase()) {
-                case("LEFT"):
-                    return LEFT;
-                case("RIGHT"):
-                    return RIGHT;
-                case("CENTER"):
-                    return CENTER;
-                default:
-                    return NONE;
-            }
+            return Align.valueOf(align.toUpperCase());
         }
     }
 
@@ -89,12 +70,7 @@ public class DisplayHandler {
         UP, DOWN;
 
         public static Order getOrderByName(String order) {
-            switch (order.toUpperCase()) {
-                case("UP"):
-                    return UP;
-                default:
-                    return DOWN;
-            }
+            return Order.valueOf(order.toUpperCase());
         }
     }
 }
