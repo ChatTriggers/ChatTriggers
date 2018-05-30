@@ -23,6 +23,14 @@ import java.util.Arrays;
 public class Message {
     @Getter
     private IChatComponent chatMessage;
+
+    /**
+     * -- GETTER --
+     * Gets the message parts as a list.
+     *
+     * @return the message parts
+     */
+    @Getter
     private ArrayList<Object> messageParts;
 
     /**
