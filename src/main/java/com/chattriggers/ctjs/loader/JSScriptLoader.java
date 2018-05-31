@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JSScriptLoader extends ScriptLoader {
-    public static ClassLoader newLoader;
-
     private ScriptEngine scriptEngine;
     private ArrayList<Module> cachedModules;
 
@@ -96,7 +94,7 @@ public class JSScriptLoader extends ScriptLoader {
         if (isLoaded(dir)) return;
 
         File metadataFile = new File(dir, "metadata.json");
-        ModuleMetadata metadata = null;
+        ModuleMetadata metadata = new ModuleMetadata();
 
         if (metadataFile.exists()) {
             try {
@@ -137,7 +135,10 @@ public class JSScriptLoader extends ScriptLoader {
                 }
             }
 
-            String compiledScript = compileScripts(dir, metadata.getIgnored());
+            String compiledScript = compileScripts(
+                    dir,
+                    metadata.getIgnored()
+            );
 
             Module module = new Module(
                     dir.getName(),
@@ -252,21 +253,7 @@ public class JSScriptLoader extends ScriptLoader {
      * @throws IOException thrown if a file doesn't exist
      */
     public String compileScripts(File dir, ArrayList<String> ignored) throws IOException {
-        List<File> files = Files.find(
-                dir.toPath(),
-                5,
-                (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
-        ).map(Path::toFile).filter(file -> {
-            if (ignored == null) return true;
-
-            for (String ignore : ignored) {
-                if (file.getPath().contains(ignore)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }).collect(Collectors.toList());
+        List<File> files = getScriptFiles(dir, ignored);
 
         StringBuilder compiledScript = new StringBuilder();
 
@@ -287,9 +274,8 @@ public class JSScriptLoader extends ScriptLoader {
         return compiledScript.toString();
     }
 
-
-    private HashMap<String, List<String>> getAllFiles(File dir, ArrayList<String> ignored) throws IOException {
-        List<File> files = Files.find(
+    private List<File> getScriptFiles(File dir, ArrayList<String> ignored) throws IOException {
+        return Files.find(
                 dir.toPath(),
                 5,
                 (path, basicFileAttributes) -> path.toString().toLowerCase().endsWith(".js")
@@ -304,10 +290,13 @@ public class JSScriptLoader extends ScriptLoader {
 
             return true;
         }).collect(Collectors.toList());
+    }
 
+
+    private HashMap<String, List<String>> getAllFiles(File dir, ArrayList<String> ignored) throws IOException {
         HashMap<String, List<String>> allFiles = new HashMap<>();
 
-        for (File file : files) {
+        for (File file : getScriptFiles(dir, ignored)) {
             try {
                 allFiles.put(file.getName(), FileUtils.readLines(file));
             } catch (IOException e) {

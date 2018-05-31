@@ -16,7 +16,7 @@ public class Module {
     public Module(String name, HashMap<String, List<String>> files, ModuleMetadata metadata) {
         this.name = name;
         this.files = files;
-        this.metadata = metadata == null ? new ModuleMetadata() : metadata;
+        this.metadata = metadata;
     }
 
     @Override

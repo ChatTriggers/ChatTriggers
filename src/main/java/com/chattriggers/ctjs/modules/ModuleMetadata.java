@@ -27,7 +27,9 @@ public class ModuleMetadata {
     @Setter
     private String fileName = null;
 
-    ModuleMetadata() {}
+    public boolean isDefault() {
+        return name == null;
+    }
 
     @Override
     public String toString() {
