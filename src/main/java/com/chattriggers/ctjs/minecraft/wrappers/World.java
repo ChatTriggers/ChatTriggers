@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -172,6 +173,10 @@ public class World {
      */
     public static PlayerMP getPlayerByName(String name) throws IllegalArgumentException {
         return new PlayerMP(getWorld().getPlayerEntityByName(name));
+    }
+
+    public static Chunk getChunk(int x, int y, int z) {
+        return new Chunk(getWorld().getChunkFromBlockCoords(new BlockPos(x, y, z)));
     }
 
     /**
