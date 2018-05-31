@@ -21,10 +21,7 @@ public class OnStepTrigger extends OnTrigger {
      * @return the trigger for method chaining
      */
     public OnStepTrigger setFps(long fps) {
-        if (fps < 1)
-            this.fps = 1L;
-        else
-            this.fps = fps;
+        this.fps = fps < 1 ? 1L : fps;
 
         this.systemTime = Client.getSystemTime() + (1000 / this.fps);
 
@@ -38,10 +35,7 @@ public class OnStepTrigger extends OnTrigger {
      * @return the trigger for method chaining
      */
     public OnStepTrigger setDelay(long delay) {
-        if (delay < 1)
-            this.delay = 1L;
-        else
-            this.delay = delay;
+        this.delay = delay < 1 ? 1L : delay;
 
         this.systemTime = Client.getSystemTime() - this.delay * 1000;
 
