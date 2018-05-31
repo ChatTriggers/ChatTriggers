@@ -24,6 +24,7 @@ public class ModulesGui extends GuiScreen {
     public ModulesGui(ArrayList<Module> modules) {
         int i = 0;
         for (Module module : modules) {
+            if (module.getMetadata().isDefault()) continue;
             this.modules.add(new GuiModule(module, i));
             i++;
         }
