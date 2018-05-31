@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
@@ -198,5 +199,13 @@ public class ClientListener {
                     motion
             );
         }
+    }
+
+    @SubscribeEvent
+    public void onItemTooltip(ItemTooltipEvent e) {
+        TriggerType.TOOLTIP.triggerAll(
+                e.toolTip,
+                new Item(e.itemStack)
+        );
     }
 }

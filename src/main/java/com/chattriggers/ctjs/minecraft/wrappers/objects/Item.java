@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Item {
@@ -167,7 +169,7 @@ public class Item {
      *
      * @return the json string of the lore
      */
-    public String getLore() {
+    public String getItemNBT() {
         return this.itemStack.serializeNBT().toString();
     }
 
@@ -244,8 +246,17 @@ public class Item {
      *
      * @return true if the item can take damage
      */
-    public Boolean isDamagable() {
+    public boolean isDamagable() {
         return this.itemStack.isItemStackDamageable();
+    }
+
+    /**
+     * Gets the item lore/tooltip information in a list.
+     *
+     * @return the item lore
+     */
+    public List<String> getLore() {
+        return this.itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips);
     }
 
     /**
