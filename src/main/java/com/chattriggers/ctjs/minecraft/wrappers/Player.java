@@ -361,9 +361,10 @@ public class Player {
         getPlayerInfo().setDisplayName(textComponent.getChatComponentText());
     }
 
-    private static String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn)
-    {
-        return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
+    private static String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn) {
+        return networkPlayerInfoIn.getDisplayName() != null
+                ? networkPlayerInfoIn.getDisplayName().getFormattedText()
+                : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
     }
 
     public static NetworkPlayerInfo getPlayerInfo() {
