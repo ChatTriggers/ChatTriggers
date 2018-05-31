@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(EntityPlayer.class)
 public interface MixinEntityPlayer {
-    @Accessor("displayname")
+    @Accessor(value = "displayname", remap = false)
     String getDisplayName();
 
-    @Accessor("displayname")
+    @Accessor(value = "displayname", remap = false)
     void setDisplayName(String displayname);
 }

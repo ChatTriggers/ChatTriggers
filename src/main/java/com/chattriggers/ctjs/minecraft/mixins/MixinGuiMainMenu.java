@@ -11,7 +11,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GuiMainMenu.class)
 public class MixinGuiMainMenu extends GuiScreen {
 
-    @Inject(method = "drawScreen", at = @At(value = "RETURN", target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;II)V"))
+    @Inject(
+            method = "drawScreen",
+            at = @At(
+                    value = "RETURN",
+                    target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;II)V"
+            ),
+            remap = false
+    )
     public void onRender(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
         UpdateChecker.getInstance().drawUpdateMessage();
     }
