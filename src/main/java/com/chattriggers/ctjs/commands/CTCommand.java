@@ -101,7 +101,7 @@ public class CTCommand extends CommandBase {
                     if (args.length == 1)
                         ChatLib.chat("&c/ct import [module name]");
                     else
-                        ModuleManager.getInstance().importModule(args[1]);
+                        ModuleManager.getInstance().importModule(args[1], false);
                     break;
                 case("console"):
                     Console.getInstance().showConsole(true);

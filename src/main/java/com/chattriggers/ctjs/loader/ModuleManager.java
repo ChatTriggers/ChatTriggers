@@ -83,14 +83,21 @@ public class ModuleManager {
         return scriptLoaders.get(0).getScriptEngine().eval(script);
     }
 
-    public void importModule(String name) {
+    public void importModule(String name, boolean required) {
         ChatLib.chat("&7Importing " + name);
-        new Thread(() -> {
-            JSScriptLoader scriptLoader = (JSScriptLoader) scriptLoaders.get(0);
-            if(scriptLoader.downloadModule(name,true)) {
-                scriptLoader.loadModule(new File(scriptLoader.modulesDir, name), false);
-                ChatLib.chat("&6Successfully imported " + name + "!");
-            }
-        }).start();
+
+        if (!required) {
+            new Thread(() -> doImport(name)).start();
+        } else {
+            doImport(name);
+        }
+    }
+
+    private void doImport(String name) {
+        JSScriptLoader scriptLoader = (JSScriptLoader) scriptLoaders.get(0);
+        if(scriptLoader.downloadModule(name,true)) {
+            scriptLoader.loadModule(new File(scriptLoader.modulesDir, name), false);
+            ChatLib.chat("&6Successfully imported " + name + "!");
+        }
     }
 }

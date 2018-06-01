@@ -1,10 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.*;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -18,6 +15,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class World {
@@ -175,8 +173,41 @@ public class World {
         return new PlayerMP(getWorld().getPlayerEntityByName(name));
     }
 
+    /**
+     * Gets the chunk that contains certain coordinates
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     * @return the chunk
+     */
     public static Chunk getChunk(int x, int y, int z) {
         return new Chunk(getWorld().getChunkFromBlockCoords(new BlockPos(x, y, z)));
+    }
+
+    /**
+     * Gets every entity loaded in the world
+     *
+     * @return the entity list
+     */
+    public static List<Entity> getAllEntities() {
+        return getWorld().loadedEntityList
+                .stream()
+                .map(Entity::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Gets every entity loaded in the world of a certain class
+     *
+     * @param clazz the class to filter for (Use {@code Java.type().class} to get this)
+     * @return the entity list
+     */
+    public static List<Entity> getAllEntitiesOfType(Class clazz) {
+        return getAllEntities()
+                .stream()
+                .filter(entity -> entity.getClass().equals(clazz))
+                .collect(Collectors.toList());
     }
 
     /**

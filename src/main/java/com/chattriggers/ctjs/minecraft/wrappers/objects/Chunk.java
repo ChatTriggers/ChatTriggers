@@ -15,6 +15,11 @@ public class Chunk {
         this.chunk = chunkIn;
     }
 
+    /**
+     * Gets every entity in this chunk
+     *
+     * @return the entity list
+     */
     public List<Entity> getAllEntities() {
         List<Entity> entities = new ArrayList<>();
 
@@ -27,6 +32,12 @@ public class Chunk {
         return entities;
     }
 
+    /**
+     * Gets every entity in this chunk of a certain class
+     *
+     * @param clazz the class to filter for (Use {@code Java.type().class} to get this)
+     * @return the entity list
+     */
     public List<Entity> getAllEntitiesOfType(Class clazz) {
         return getAllEntities()
                 .stream()

@@ -168,7 +168,7 @@ public class JSScriptLoader extends ScriptLoader {
                 loadModule(new File(modulesDir, require), updateCheck);
                 continue;
             }
-            ModuleManager.getInstance().importModule(require);
+            ModuleManager.getInstance().importModule(require, true);
         }
     }
 
