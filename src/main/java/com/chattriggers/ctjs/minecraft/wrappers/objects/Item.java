@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
@@ -21,8 +22,7 @@ public class Item {
 
     /* Constructors */
     /**
-     * Creates an Item object from a Minecraft ItemStack input.<br>
-     * This method is not meant for public use.
+     * Creates an Item object from a Minecraft ItemStack input.
      *
      * @param itemStack the Minecraft ItemStack
      */
@@ -63,6 +63,31 @@ public class Item {
     public Item(Block block) {
         this.item = net.minecraft.item.Item.getItemFromBlock(block.getBlock());
         this.itemStack = new ItemStack(this.item);
+    }
+
+    /**
+     * Creates an Item object from an EntityItem.
+     *
+     * @param entityItem the EntityItem.
+     */
+    public Item(EntityItem entityItem) {
+        this.item = entityItem.getEntityItem().getItem();
+        this.itemStack = entityItem.getEntityItem();
+    }
+
+    /**
+     * Created an Item object from an Entity.
+     * Has to be wrapping an EntityItem.
+     *
+     * @param entity the Entity
+     */
+    public Item(Entity entity) {
+        if (entity.getEntity() instanceof EntityItem) {
+            this.item = ((EntityItem) entity.getEntity()).getEntityItem().getItem();
+            this.itemStack = ((EntityItem) entity.getEntity()).getEntityItem();
+        } else {
+            throw new IllegalArgumentException("Entity is not of type EntityItem");
+        }
     }
     /* End of constructors */
 

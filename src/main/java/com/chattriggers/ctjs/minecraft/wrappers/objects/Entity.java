@@ -191,8 +191,9 @@ public class Entity {
 
     @Override
     public String toString() {
+        String name = EntityList.getEntityString(this.entity);
         return "Entity{"
-                + EntityList.getEntityString(this.entity)
+                + (name == null ? "Player" : name)
                 + ",x:" + getX()
                 + ",y:" + getY()
                 + ",z:" + getZ()

@@ -41,7 +41,7 @@ public class Chunk {
     public List<Entity> getAllEntitiesOfType(Class clazz) {
         return getAllEntities()
                 .stream()
-                .filter(entity -> entity.getClass().equals(clazz))
+                .filter(entity -> entity.getEntity().getClass().equals(clazz))
                 .collect(Collectors.toList());
     }
 }
