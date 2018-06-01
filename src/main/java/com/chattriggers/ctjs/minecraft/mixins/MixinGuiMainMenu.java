@@ -19,7 +19,7 @@ public class MixinGuiMainMenu extends GuiScreen {
             ),
             remap = false
     )
-    public void onRender(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
+    private void onRender(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
         UpdateChecker.getInstance().drawUpdateMessage();
     }
 }
