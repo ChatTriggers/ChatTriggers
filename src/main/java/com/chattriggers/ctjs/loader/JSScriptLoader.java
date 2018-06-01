@@ -106,7 +106,7 @@ public class JSScriptLoader extends ScriptLoader {
         }
 
         try {
-            if (metadata != null && updateCheck) {
+            if (!metadata.isDefault() && updateCheck) {
                 try {
                     Console.getInstance().out.println("checking for update in " + metadata.getFileName());
 
@@ -161,7 +161,7 @@ public class JSScriptLoader extends ScriptLoader {
     }
 
     private void getRequiredModules(ModuleMetadata metadata, boolean updateCheck) {
-        if (metadata == null || metadata.getRequires() == null) return;
+        if (metadata.isDefault() || metadata.getRequires() == null) return;
 
         for (String require : metadata.getRequires()) {
             if (new File(modulesDir, require).exists()) {
