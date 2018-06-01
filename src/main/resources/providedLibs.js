@@ -31,6 +31,7 @@ var TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.T
 var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
 var Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
+var Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
 
 // Wrappers
 var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");

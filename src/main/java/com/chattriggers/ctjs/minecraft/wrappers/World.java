@@ -1,12 +1,9 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.mixins.MixinSoundHandler;
-import com.chattriggers.ctjs.minecraft.mixins.MixinSoundManager;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.*;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -14,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import paulscode.sound.SoundSystem;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,22 +37,6 @@ public class World {
      */
     public static void playSound(String name, float volume, float pitch) {
         Player.getPlayer().playSound(name, volume, pitch);
-    }
-
-    public static void playCustomSound() {
-        SoundManager sndManager = ((MixinSoundHandler) Client.getMinecraft().getSoundHandler()).getSndManager();
-        SoundSystem sndSystem = ((MixinSoundManager) sndManager).getSndSystem();
-        sndSystem.newSource(
-                false,
-                "test",
-                "./config/ChatTriggers/images/White_noise.ogg",
-                false,
-                (float)Player.getX(),
-                (float)Player.getY(),
-                (float)Player.getZ(),
-                0,
-                16
-        );
     }
 
     /**
