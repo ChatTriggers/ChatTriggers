@@ -108,7 +108,7 @@ public class Sound {
      * Models are:
      * &emsp; NONE(0) - no fade
      * &emsp; ROLLOFF(1) - this is the default, meant to be somewhat realistic
-     * &emsp: LINEAR(2) - fades out linearly, as the name implies
+     * &emsp; LINEAR(2) - fades out linearly, as the name implies
      *
      * @param model the model
      */
