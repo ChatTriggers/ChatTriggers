@@ -48,7 +48,7 @@ public class DisplayHandler {
         NONE, FULL, PER_LINE;
 
         public static Background getBackgroundByName(String background) {
-            return Background.valueOf(background.toUpperCase().replace("_", ""));
+            return Background.valueOf(background.toUpperCase().replace(" ", "_"));
         }
     }
 
