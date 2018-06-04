@@ -12,6 +12,7 @@
     "MixinEntityFX",
     "MixinEntityPlayer",
     "MixinClientCommandHandler",
-    "MixinSoundHandler"
+    "MixinSoundHandler",
+    "MixinSoundSystem"
   ]
 }

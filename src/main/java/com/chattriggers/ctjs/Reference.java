@@ -53,12 +53,13 @@ public class Reference {
         load(false);
     }
 
-    private void load(boolean updateCheck) {
+    public void load(boolean updateCheck) {
         if (!this.isLoaded) return;
         this.isLoaded = false;
 
         TriggerType.GAME_UNLOAD.triggerAll();
         TriggerType.WORLD_UNLOAD.triggerAll();
+
         ChatLib.chat("&cReloading ct.js scripts...");
         new Thread(() -> {
             DisplayHandler.getInstance().clearDisplays();
@@ -76,7 +77,9 @@ public class Reference {
             CTJS.getInstance().setupConfig();
 
             ModuleManager.getInstance().load(updateCheck);
+
             ChatLib.chat("&aDone reloading scripts!");
+
             TriggerType.WORLD_LOAD.triggerAll();
             this.isLoaded = true;
         }).start();

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import paulscode.sound.SoundSystem;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class World {
+    private static SoundSystem sndSystem;
+
     /**
      * Gets the world object.
      *
@@ -27,6 +30,41 @@ public class World {
     public static WorldClient getWorld() {
         return Client.getMinecraft().theWorld;
     }
+
+    /**
+     * Returns true if the world is loaded
+     *
+     * @return whether the world is loaded or not
+     */
+    public static boolean isLoaded() {
+        return getWorld() != null;
+    }
+
+//    public static SoundSystem getSndSystem() {
+//        if (sndSystem == null) {
+//            loadSndSystem();
+//
+//            return sndSystem;
+//        }
+//
+//        if (((MixinSoundSystem) sndSystem).getCommandThread() == null) {
+//            loadSndSystem();
+//        }
+//
+//        return sndSystem;
+//    }
+//
+//    private static void loadSndSystem() {
+//        SoundManager sndManager = ((MixinSoundHandler) Client.getMinecraft().getSoundHandler()).getSndManager();
+//
+//        try {
+//            Field field = sndManager.getClass().getDeclaredField("sndSystem");
+//            field.setAccessible(true);
+//            sndSystem = (SoundSystem) field.get(sndManager);
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * Play a sound at the player location.

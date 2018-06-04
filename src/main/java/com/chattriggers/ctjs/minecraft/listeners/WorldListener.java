@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.minecraft.listeners;
 
+import com.chattriggers.ctjs.CTJS;
+import com.chattriggers.ctjs.minecraft.objects.Sound;
 import com.chattriggers.ctjs.minecraft.wrappers.Server;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
@@ -24,6 +26,7 @@ public class WorldListener {
     public void onWorldLoad(WorldEvent.Load event) {
         this.playerList = new ArrayList<>();
         this.shouldTriggerWorldLoad = true;
+
         Sentry.getStoredClient().setServerName(Server.getName());
     }
 
@@ -33,6 +36,14 @@ public class WorldListener {
         if (shouldTriggerWorldLoad) {
             TriggerType.WORLD_LOAD.triggerAll();
             shouldTriggerWorldLoad = false;
+
+            CTJS.getInstance()
+                    .getSounds()
+                    .stream()
+                    .filter(Sound::isListening)
+                    .forEach(Sound::onWorldLoad);
+
+            CTJS.getInstance().getSounds().clear();
         }
     }
 
