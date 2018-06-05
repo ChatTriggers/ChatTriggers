@@ -24,23 +24,32 @@ public class Sound {
     private boolean listening = false;
 
     /**
-     * Instances a new Sound with certain properties. These properties
-     * should be passed through as a normal JavaScript object.
+     * <p>
+     *     Instances a new Sound with certain properties. These properties
+     *     should be passed through as a normal JavaScript object.
+     * </p>
      *
-     * REQUIRED:
-     * &emsp;source (String) - filename, relative to ChatTriggers assets directory
+     * <p>
+     *     REQUIRED:<br>
+     *     &emsp;source (String) - filename, relative to ChatTriggers assets directory
+     * </p>
      *
-     * OPTIONAL:
-     * &emsp;priority (boolean) - whether or not this sound should be prioritized, defaults to false
-     * &emsp;loop (boolean) - whether or not to loop this sound over and over, defaults to false
-     * &emsp;stream (boolean) - whether or not to stream this sound rather than preload it (should be true for large files), defaults to false
+     * <p>
+     *     OPTIONAL:<br>
+     *     &emsp;priority (boolean) - whether or not this sound should be prioritized, defaults to false<br>
+     *     &emsp;loop (boolean) - whether or not to loop this sound over and over, defaults to false<br>
+     *     &emsp;stream (boolean) - whether or not to stream this sound rather than preload it (should be true for large files), defaults to false
+     * </p>
      *
-     * CONFIGURABLE (can be set in config object, or changed later, but MAKE SURE THE WORLD HAS LOADED)
-     * &emsp;category (String) - which category this sound should be a part of, see {@link #setCategory(String)}.
-     * &emsp;volume (float) - volume of the sound, see {@link #setVolume(float)}
-     * &emsp;pitch (float) - pitch of the sound, see {@link #setPitch(float)}
-     * &emsp;x, y, z (float) - location of the sound, see {@link #setPosition(float, float, float)}. Defaults to the players position.
-     * &emsp;attenuation (int) - fade out model of the sound, see {@link #setAttenuation(int)}
+     * <p>
+     *     CONFIGURABLE (can be set in config object, or changed later, but MAKE SURE THE WORLD HAS LOADED)<br>
+     *     &emsp;category (String) - which category this sound should be a part of, see {@link #setCategory(String)}.<br>
+     *     &emsp;volume (float) - volume of the sound, see {@link #setVolume(float)}<br>
+     *     &emsp;pitch (float) - pitch of the sound, see {@link #setPitch(float)}<br>
+     *     &emsp;x, y, z (float) - location of the sound, see {@link #setPosition(float, float, float)}. Defaults to the players position.<br>
+     *     &emsp;attenuation (int) - fade out model of the sound, see {@link #setAttenuation(int)}<br>
+     * </p>
+     *
      * @param config the JavaScript config object
      */
     public Sound(ScriptObjectMirror config) {
