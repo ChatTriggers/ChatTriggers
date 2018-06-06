@@ -12,9 +12,12 @@ import com.chattriggers.ctjs.minecraft.objects.CPS;
 import com.chattriggers.ctjs.minecraft.objects.Sound;
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.UpdateChecker;
+import com.chattriggers.ctjs.utils.capes.CapeHandler;
+import com.chattriggers.ctjs.utils.capes.LayerCape;
 import com.chattriggers.ctjs.utils.config.Config;
 import com.chattriggers.ctjs.utils.config.GuiConfig;
 import com.chattriggers.ctjs.utils.console.Console;
@@ -23,11 +26,13 @@ import com.google.gson.GsonBuilder;
 import io.sentry.Sentry;
 import io.sentry.event.UserBuilder;
 import lombok.Getter;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -54,25 +59,6 @@ public class CTJS {
     private List<Sound> sounds = new ArrayList<>();
 
     @EventHandler
-    public void init(FMLInitializationEvent event) {
-        new ChatListener();
-        new DisplayHandler();
-        new GuiHandler();
-        new CommandHandler();
-        new ModuleManager();
-        new CPS();
-        new Tessellator();
-
-        new UpdateChecker();
-
-        registerListeners();
-
-        registerHooks();
-
-        ModuleManager.getInstance().load(Config.getInstance().getUpdateModulesOnBoot().value);
-    }
-
-    @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         new Reference();
 
@@ -96,6 +82,34 @@ public class CTJS {
         this.configLocation = event.getModConfigurationDirectory();
 
         setupConfig();
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        new ChatListener();
+        new DisplayHandler();
+        new GuiHandler();
+        new CommandHandler();
+        new ModuleManager();
+        new CPS();
+        new Tessellator();
+
+        new UpdateChecker();
+
+        registerListeners();
+
+        registerHooks();
+
+        ModuleManager.getInstance().load(Config.getInstance().getUpdateModulesOnBoot().value);
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        new CapeHandler();
+
+        for (RenderPlayer render : Client.getMinecraft().getRenderManager().getSkinMap().values()) {
+            render.addLayer(new LayerCape(render));
+        }
     }
 
     public void setupConfig() {
