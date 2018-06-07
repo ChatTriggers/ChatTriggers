@@ -1,12 +1,12 @@
 package com.chattriggers.ctjs.minecraft.objects.display;
 
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.Tolerate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Accessors(chain = true)
 public class Display {
@@ -27,12 +27,12 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the x position of the display
+     * Gets the x position of the Display
      *
-     * @return The x position of the display
+     * @return The x position of the Display
      *
      * -- SETTER --
-     * Sets the x position of the display
+     * Sets the x position of the Display
      * @param renderX The new x location
      * @return The Display object to allow for method chaining
      */
@@ -42,9 +42,9 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the y position of the display
+     * Gets the y position of the Display
      *
-     * @return The y position of the display
+     * @return The y position of the Display
      *
      * -- SETTER --
      * Sets the y position of the display
@@ -59,10 +59,10 @@ public class Display {
      * -- GETTER --
      * Gets the render status of the display (boolean)
      *
-     * @return True if the display is set to render
+     * @return True if the Display is set to render
      *
      * -- SETTER --
-     * Sets whether or not the display should render
+     * Sets whether or not the Display should render
      * @param shouldRender True if the display should render
      * @return The Display object to allow for method chaining
      */
@@ -72,13 +72,13 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets a display's background type
+     * Gets a Display's background type
      *
-     * @return The display's background
+     * @return The Display's background
      *
      * -- SETTER --
-     * Sets a display's background type.
-     * @param background The new display background
+     * Sets a Display's background type.
+     * @param background The new Display background
      * @return The Display object to allow for method chaining
      * @see DisplayHandler.Background
      * @see DisplayHandler.Background
@@ -89,12 +89,12 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the display's background color
+     * Gets the Display's background color
      *
-     * @return The display's background color
+     * @return The Display's background color
      *
      * -- SETTER --
-     * Sets the display's background color
+     * Sets the Display's background color
      * @param backgroundColor The integer color of the background
      * @return The Display object to allow for method chaining
      */
@@ -104,12 +104,12 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the display's text color
+     * Gets the Display's text color
      *
-     * @return The display's text color
+     * @return The Display's text color
      *
      * -- SETTER --
-     * Sets the display's text color
+     * Sets the Display's text color
      * @param textColor The integer color of the text
      * @return The Display object to allow for method chaining
      */
@@ -119,13 +119,13 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the display's text alignment
+     * Gets the Display's text alignment
      *
-     * @return The display's text alignment
+     * @return The Display's text alignment
      *
      * -- SETTER --
-     * Sets the displays text alignment
-     * @param align The new display alignment
+     * Sets the Displays text alignment
+     * @param align The new Display alignment
      * @return The Display object to allow for method chaining
      * @see DisplayHandler.Align
      * @see DisplayHandler.Align
@@ -136,13 +136,13 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the display's line order
+     * Gets the Display's line order
      *
-     * @return The display's line order
+     * @return The Display's line order
      *
      * -- SETTER --
      * Sets the display's line order
-     * @param order The new display line order
+     * @param order The new Display line order
      * @return The Display object to allow for method chaining
      * @see DisplayHandler.Order
      * @see DisplayHandler.Order
@@ -153,13 +153,13 @@ public class Display {
 
     /**
      * -- GETTER --
-     * Gets the minimum width of the display
+     * Gets the minimum width of the Display
      *
-     * @return The minimum width of the display
+     * @return The minimum width of the Display
      *
      * -- SETTER --
-     * Sets the minimum width of the display
-     * @param minWidth The new minimum display width
+     * Sets the minimum width of the Display
+     * @param minWidth The new minimum Display width
      * @return The Display object to allow for method chaining
      */
     @Getter
@@ -167,26 +167,43 @@ public class Display {
     private int minWidth;
 
     public Display() {
-        setLines(new ArrayList<>());
+        this.lines = new ArrayList<>();
 
-        setRenderX(0f);
-        setRenderY(0f);
+        this.shouldRender = true;
+        this.renderX = 0f;
+        this.renderY = 0f;
 
-        setShouldRender(true);
+        this.background = DisplayHandler.Background.NONE;
+        this.backgroundColor = 0x50000000;
+        this.textColor = 0xffffffff;
+        this.align = DisplayHandler.Align.LEFT;
+        this.order = DisplayHandler.Order.DOWN;
 
-        setBackground(DisplayHandler.Background.NONE);
-        setBackgroundColor(0x50000000);
-        setTextColor(0xffffffff);
-        setAlign(DisplayHandler.Align.LEFT);
-        setOrder(DisplayHandler.Order.DOWN);
+        this.minWidth = 0;
 
-        setMinWidth(0);
+        DisplayHandler.getInstance().registerDisplay(this);
+    }
+
+    public Display(ScriptObjectMirror config) {
+        this.lines = new ArrayList<>();
+
+        this.shouldRender = (boolean) config.getOrDefault("shouldRender", true);
+        this.renderX = (int) config.getOrDefault("renderX", 0f);
+        this.renderY = (int) config.getOrDefault("renderY", 0f);
+
+        this.background = (DisplayHandler.Background) config.getOrDefault("background", DisplayHandler.Background.NONE);
+        this.backgroundColor = (int) config.getOrDefault("backgroundColor", 0x50000000);
+        this.textColor = (int) config.getOrDefault("textColor", 0xffffffff);
+        this.align = (DisplayHandler.Align) config.getOrDefault("align", DisplayHandler.Align.LEFT);
+        this.order = (DisplayHandler.Order) config.getOrDefault("order", DisplayHandler.Order.DOWN);
+
+        this.minWidth = (int) config.getOrDefault("minWidth", 0);
 
         DisplayHandler.getInstance().registerDisplay(this);
     }
 
     /**
-     * Sets a display's background type using string input.
+     * Sets a Display's background type using string input.
      * <p>
      *     Input can be:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"full"<br>
@@ -194,7 +211,7 @@ public class Display {
      * </p>
      *
      * @param background the type of background
-     * @return the display to allow for method chaining
+     * @return the Display to allow for method chaining
      */
     @Tolerate
     public Display setBackground(String background) {
@@ -203,7 +220,7 @@ public class Display {
     }
 
     /**
-     * Sets a display's text alignment using string input.
+     * Sets a Display's text alignment using string input.
      * <p>
      *     Input can be:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"right"<br>
@@ -212,7 +229,7 @@ public class Display {
      * </p>
      *
      * @param align the type of alignment
-     * @return the display to allow for method chaining
+     * @return the Display to allow for method chaining
      */
     @Tolerate
     public Display setAlign(String align) {
@@ -221,7 +238,7 @@ public class Display {
     }
 
     /**
-     * Sets a display's line order using string input.
+     * Sets a Display's line order using string input.
      * <p>
      *     Input can be:<br>
      *         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"up"<br>
@@ -239,22 +256,22 @@ public class Display {
 
 
     /**
-     * Sets a display line to a string.
+     * Sets a Display line to a string.
      *
      * @param lineNumber the line number to set (0 based)
      * @param line       the string to set the line to
-     * @return the display to allow for method chaining
+     * @return the Display to allow for method chaining
      */
     public Display setLine(int lineNumber, String line) {
         return setLine(lineNumber, new DisplayLine(line));
     }
 
     /**
-     * Sets a display line to a DisplayLine
+     * Sets a Display line to a DisplayLine
      *
      * @param lineNumber the line number to set (0 based)
      * @param line       the DisplayLine to set the line to
-     * @return the display to allow for method chaining
+     * @return the Display to allow for method chaining
      */
     public Display setLine(int lineNumber, DisplayLine line) {
         while (this.lines.size() - 1 < lineNumber)
@@ -269,7 +286,7 @@ public class Display {
      * Gets a DisplayLine from a line in a display.
      *
      * @param lineNumber the line number to get
-     * @return the string in line of display
+     * @return the DisplayLine in the line of Display
      */
     public DisplayLine getLine(int lineNumber) {
         try {
@@ -280,54 +297,39 @@ public class Display {
     }
 
     /**
-     * Adds as many lines as you specify onto the end of
-     * the display (appends them).
-     *
-     * @param lines a variable amount of strings to add
-     * @return the display to allow for method chaining
+     * Adds multiple lines to the end of a Display.<br>
+     * Arguments can be either a String or a DisplayLine.
+     *     
+     * @param lines the lines to add
+     * @return the Display to allow for method chaining
      */
-    public Display addLines(String... lines) {
-        for (String line : lines)
-            this.lines.add(new DisplayLine(line));
+    public Display addLines(Object... lines) {
+        for (Object line : lines) {
+            if (line instanceof String) {
+                this.lines.add(new DisplayLine((String) line));
+            } else if (line instanceof DisplayLine) {
+                this.lines.add((DisplayLine) line);
+            }
+        }
+        
         return this;
     }
 
     /**
-     * Adds as many DisplayLines as you specify onto the
-     * end of the display (appends them).
-     *
-     * @param lines a variable amount of DisplayLine to add
-     * @return the display to allow for method chaining
+     * Adds one line to a Display.<br>
+     * Arguments can be either a String or a DisplayLine.
+     * 
+     * @param line the line to add
+     * @return the Display to allow for method chaining
      */
-    public Display addLines(DisplayLine... lines) {
-        Collections.addAll(this.lines, lines);
-        return this;
-    }
-
-    /**
-     * Adds one line to a display.
-     *
-     * @param line the string to add
-     * @return the display to allow for method chaining
-     */
-    public Display addLine(String line) {
+    public Display addLine(Object line) {
         return addLines(line);
     }
 
     /**
-     * Adds one DisplayLine to a display.
+     * Clears all the lines in the Display.
      *
-     * @param line the DisplayLine to add
-     * @return the display to allow for method chaining
-     */
-    public Display addLine(DisplayLine line) {
-        return addLines(line);
-    }
-
-    /**
-     * Clears all the lines in the display.
-     *
-     * @return the display to allow for method chaining
+     * @return the Display to allow for method chaining
      */
     public Display clearLines() {
         lines.clear();
@@ -335,11 +337,11 @@ public class Display {
     }
 
     /**
-     * Set the X and Y render position of the display.
+     * Set the X and Y render position of the Display.
      *
      * @param renderX the x coordinate
      * @param renderY the y coordinate
-     * @return the display to allow for method chaining
+     * @return the Display to allow for method chaining
      */
     public Display setRenderLoc(float renderX, float renderY) {
         this.renderX = renderX;

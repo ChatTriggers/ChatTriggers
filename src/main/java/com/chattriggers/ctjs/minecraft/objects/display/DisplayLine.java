@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.triggers.OnRegularTrigger;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -103,17 +104,48 @@ public class DisplayLine {
     private HashMap<Integer, Boolean> mouseState;
     private HashMap<Integer, Float[]> draggedState;
 
+    /**
+     * Creates a new DisplayLine to be used in a {@link Display}
+     *
+     * @param text the text in the DisplayLine
+     */
     public DisplayLine(String text) {
         setText(text);
 
-        setTextColor(null);
-        setAlign(DisplayHandler.Align.NONE);
-        setShadow(true);
-        setBackground(DisplayHandler.Background.NONE);
-        setBackgroundColor(null);
+        this.textColor = null;
+        this.align = DisplayHandler.Align.NONE;
+        this.background = DisplayHandler.Background.NONE;
+        this.backgroundColor = null;
 
         this.onClicked = null;
         this.mouseState = new HashMap<>();
+
+        for (int i = 0; i < 5; i++)
+            this.mouseState.put(i, false);
+        this.draggedState = new HashMap<>();
+    }
+
+    /**
+     * Creates a new DisplayLine to be used in a {@link Display}
+     *
+     * @param text the text in the DisplayLine
+     * @param config the JavaScript config object
+     */
+    public DisplayLine(String text, ScriptObjectMirror config) {
+        setText(text);
+
+        Object textColor = config.getOrDefault("textColor", null);
+        this.textColor = (textColor == null) ? null : (int) textColor;
+
+        this.align = (DisplayHandler.Align) config.getOrDefault("align", DisplayHandler.Align.NONE);
+        this.background = (DisplayHandler.Background) config.getOrDefault("background", DisplayHandler.Background.NONE);
+
+        Object backgroundColor = config.getOrDefault("backgroundColor", null);
+        this.backgroundColor = (backgroundColor == null) ? null : (int) backgroundColor;
+
+        this.onClicked = null;
+        this.mouseState = new HashMap<>();
+
         for (int i = 0; i < 5; i++)
             this.mouseState.put(i, false);
         this.draggedState = new HashMap<>();
