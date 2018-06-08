@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
 @Accessors(chain = true)
@@ -85,11 +86,18 @@ public class TextComponent {
     public TextComponent(IChatComponent chatComponent) {
         this.chatComponentText = chatComponent;
 
-        this.clickAction = chatComponent.getChatStyle().getChatClickEvent().getAction().getCanonicalName();
-        this.clickValue = chatComponent.getChatStyle().getChatClickEvent().getValue();
+        ChatStyle chatStyle = chatComponent.getChatStyle();
+        if (chatStyle.getChatClickEvent() != null) {
+            ClickEvent clickEvent = chatStyle.getChatClickEvent();
+            this.clickAction = clickEvent.getAction().getCanonicalName();
+            this.clickValue = clickEvent.getValue();
+        }
 
-        this.hoverAction = chatComponent.getChatStyle().getChatHoverEvent().getAction().getCanonicalName();
-        this.hoverValue = chatComponent.getChatStyle().getChatHoverEvent().getValue().getFormattedText();
+        if (chatStyle.getChatHoverEvent() != null) {
+            HoverEvent hoverEvent = chatStyle.getChatHoverEvent();
+            this.hoverAction = hoverEvent.getAction().getCanonicalName();
+            this.hoverValue = hoverEvent.getValue().getFormattedText();
+        }
     }
 
     /**
