@@ -76,8 +76,20 @@ public class TextComponent {
         reInstance();
     }
 
+    /**
+     * Creates a new TextComponent from a IChatComponent.<br>
+     * Used primarily in the {@link Message} constructor.
+     *
+     * @param chatComponent the IChatComponent
+     */
     public TextComponent(IChatComponent chatComponent) {
         this.chatComponentText = chatComponent;
+
+        this.clickAction = chatComponent.getChatStyle().getChatClickEvent().getAction().getCanonicalName();
+        this.clickValue = chatComponent.getChatStyle().getChatClickEvent().getValue();
+
+        this.hoverAction = chatComponent.getChatStyle().getChatHoverEvent().getAction().getCanonicalName();
+        this.hoverValue = chatComponent.getChatStyle().getChatHoverEvent().getValue().getFormattedText();
     }
 
     /**
