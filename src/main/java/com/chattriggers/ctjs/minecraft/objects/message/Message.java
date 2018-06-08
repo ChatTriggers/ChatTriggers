@@ -43,7 +43,7 @@ public class Message {
      * Sets the chat line ID. Useful for deleting messages by ID.
      *
      * @param chatLineId the ID of the message
-     * @return the message for method chaining
+     * @return the Message for method chaining
      */
     @Getter
     @Setter
@@ -59,7 +59,7 @@ public class Message {
      * Sets if the message is recursive (can be overwritten).
      *
      * @param recursive if the message is recursive
-     * @return the message for method chaining
+     * @return the Message for method chaining
      */
     @Getter
     @Setter
@@ -75,7 +75,7 @@ public class Message {
      * Sets if the message is formatted.
      *
      * @param formatted if the message is formatted
-     * @return the message for method chaining
+     * @return the Message for method chaining
      */
     @Getter
     @Setter
@@ -110,32 +110,62 @@ public class Message {
         }
     }
 
-    public Message(Object... messages) {
+    /**
+     * Creates a new Message object in parts of TextComponents or Strings.
+     *
+     * @param components the TextComponents or String
+     */
+    public Message(Object... components) {
         this.chatLineId = -1;
         this.recursive = false;
         this.formatted = true;
 
         this.messageParts = new ArrayList<>();
-        this.messageParts.addAll(Arrays.asList(messages));
+        this.messageParts.addAll(Arrays.asList(components));
     }
 
     /**
-     * Sets a part of the message (defined by the splits made in the constructor)
+     * Sets the TextComponent or String in the Message at index.
      *
-     * @param part    the index of the part to change
-     * @param message the new message to replace with
-     * @return the message for method chaining
+     * @param index    the index of the TextComponent or String to change
+     * @param component the new TextComponent or String to replace with
+     * @return the Message for method chaining
      */
-    public Message setMessagePart(int part, Object message) {
-        this.messageParts.set(part, message);
+    public Message setTextComponent(int index, Object component) {
+        this.messageParts.set(index, component);
 
+        return this;
+    }
+
+    /**
+     * Adds a TextComponent or String to the end of the Message.
+     * 
+     * @param component the new TexComponent or String to add
+     * @return the Message for method chaining
+     */
+    public Message addTextComponent(Object component) {
+        this.messageParts.add(component);
+        
+        return this;
+    }
+
+    /**
+     * Adds a TextComponent or String at index of the Message.
+     *
+     * @param index the index to insert the new TextComponent or String
+     * @param component the new TextComponent or String to insert
+     * @return the Message for method chaining
+     */
+    public Message addTextComponent(int index, Object component) {
+        this.messageParts.add(index, component);
+        
         return this;
     }
 
     /**
      * Alias for {@link Message#clone()}
      *
-     * @return the copy of the message
+     * @return the copy of the Message
      */
     public Message copy() {
         if (this.chatLineId != -1) {
@@ -146,16 +176,16 @@ public class Message {
     }
 
     /**
-     * Gets an exact copy of the message.
+     * Gets an exact copy of the Message.
      *
-     * @return the copy of the message
+     * @return the copy of the Message
      */
     public Message clone() {
         return copy();
     }
 
     /**
-     * Outputs the message into the client's chat.
+     * Outputs the Message into the client's chat.
      */
     public void chat() {
         parseMessages();
