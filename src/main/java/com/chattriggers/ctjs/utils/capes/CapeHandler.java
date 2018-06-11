@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.utils.capes;
 
+import com.chattriggers.ctjs.minecraft.libs.FileLib;
+import com.google.gson.Gson;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -11,19 +13,26 @@ import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class CapeHandler {
     @Getter
     private static CapeHandler instance;
+    @Getter
+    private Special special;
 
     public CapeHandler() {
         instance = this;
+
+        this.special = new Gson().fromJson(
+                FileLib.getUrlContent("http://167.99.3.229/tracker/special.json"),
+                Special.class
+        );
 
         bindTexture("https://i.imgur.com/lzBi0WE.png", "capes/ct/supporter");
     }
 
     public ResourceLocation getCapeResource(AbstractClientPlayer player) {
-        // TODO add player checking
         return new ResourceLocation("capes/ct/supporter");
     }
 
@@ -60,5 +69,16 @@ public class CapeHandler {
         g.drawImage(img, 0, 0, null);
         g.dispose();
         return imgNew;
+    }
+
+    private class Special {
+        @Getter
+        private String[] supporters = null;
+        @Getter
+        private String[] developers = null;
+
+        public String toString() {
+            return "Special:{supporters:" + Arrays.toString(this.supporters) + ",developers:" + Arrays.toString(this.developers) + "}";
+        }
     }
 }
