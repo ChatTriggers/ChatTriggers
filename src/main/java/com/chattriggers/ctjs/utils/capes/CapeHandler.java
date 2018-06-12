@@ -13,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 public class CapeHandler {
     @Getter
@@ -87,9 +86,5 @@ public class CapeHandler {
         private String[] supporters = null;
         @Getter
         private String[] developers = null;
-
-        public String toString() {
-            return "Special:{supporters:" + Arrays.toString(this.supporters) + ",developers:" + Arrays.toString(this.developers) + "}";
-        }
     }
 }
