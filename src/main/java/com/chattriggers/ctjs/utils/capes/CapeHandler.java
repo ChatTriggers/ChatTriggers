@@ -29,8 +29,8 @@ public class CapeHandler {
                 Special.class
         );
 
-        bindTexture("https://i.imgur.com/lzBi0WE.png", "capes/ct/supporter");
-        bindTexture("https://i.imgur.com/lzBi0WE.png", "capes/ct/developer");
+        bindTexture("http://167.99.3.229/assets/images/supporter_cape.png", "capes/ct/supporter");
+        bindTexture("http://167.99.3.229/assets/images/developer_cape.png", "capes/ct/developer");
     }
 
     public ResourceLocation getCapeResource(AbstractClientPlayer player) {
