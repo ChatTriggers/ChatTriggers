@@ -30,10 +30,21 @@ public class CapeHandler {
         );
 
         bindTexture("https://i.imgur.com/lzBi0WE.png", "capes/ct/supporter");
+        bindTexture("https://i.imgur.com/lzBi0WE.png", "capes/ct/developer");
     }
 
     public ResourceLocation getCapeResource(AbstractClientPlayer player) {
-        return new ResourceLocation("capes/ct/supporter");
+        for (String supporter : this.special.supporters) {
+            if (!supporter.equals(player.getUniqueID().toString())) continue;
+            return new ResourceLocation("capes/ct/supporter");
+        }
+
+        for (String developer : this.special.developers) {
+            if (!developer.equals(player.getUniqueID().toString())) continue;
+            return new ResourceLocation("capes/ct/developer");
+        }
+
+        return null;
     }
 
     private void bindTexture(String url, String resource) {
