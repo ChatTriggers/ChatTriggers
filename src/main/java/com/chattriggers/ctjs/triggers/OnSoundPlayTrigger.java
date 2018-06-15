@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.minecraft.libs.EventLib;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import lombok.Setter;
 
 public class OnSoundPlayTrigger extends OnTrigger {
+    @Setter
     private String soundNameCriteria = "";
 
     public OnSoundPlayTrigger(Object method) {
@@ -11,11 +11,13 @@ public class OnSoundPlayTrigger extends OnTrigger {
     }
 
     /**
-     * Sets the sound name criteria.
+     * Sets the sound name criteria.<br>
+     * Short hand for {@link OnSoundPlayTrigger#setSoundNameCriteria(String)}.
+     *
      * @param soundNameCriteria the sound name
      * @return the trigger for method chaining
      */
-    public OnSoundPlayTrigger setSoundNameCriteria(String soundNameCriteria) {
+    public OnSoundPlayTrigger setCriteria(String soundNameCriteria) {
         this.soundNameCriteria = soundNameCriteria;
 
         return this;
@@ -23,16 +25,11 @@ public class OnSoundPlayTrigger extends OnTrigger {
 
     @Override
     public void trigger(Object... args) {
-        if (!(args[0] instanceof PlaySoundEvent)) {
-            throw new IllegalArgumentException("Argument 1 must be of type PlaySoundEvent");
-        }
-
-        PlaySoundEvent event = (PlaySoundEvent) args[0];
-
-        if (soundNameCriteria != null && !EventLib.getName(event).equalsIgnoreCase(soundNameCriteria)) {
+        if (args[2] instanceof String
+        && !soundNameCriteria.equals("")
+        && !((String) args[2]).equalsIgnoreCase(soundNameCriteria))
             return;
-        }
 
-        callMethod(event);
+        callMethod(args);
     }
 }

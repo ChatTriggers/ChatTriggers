@@ -8,7 +8,6 @@ public class OnRegularTrigger extends OnTrigger {
 
     @Override
     public void trigger(Object... args) {
-        //System.out.println("Triggering p2: " + Arrays.toString(args));
         callMethod(args);
     }
 }
