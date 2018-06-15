@@ -242,7 +242,6 @@ public class World {
      * @return the entity list
      */
     public static List<Entity> getAllEntitiesOfType(Class clazz) {
-        System.out.println(clazz);
         return getAllEntities()
                 .stream()
                 .filter(entity -> entity.getEntity().getClass().equals(clazz))

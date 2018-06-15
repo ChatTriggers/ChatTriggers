@@ -193,7 +193,7 @@ public class Entity {
     public String toString() {
         String name = EntityList.getEntityString(this.entity);
         return "Entity{"
-                + (name == null ? "Player" : name)
+                + (name == null ? this.entity.getClass().getSimpleName() : name)
                 + ",x:" + getX()
                 + ",y:" + getY()
                 + ",z:" + getZ()
