@@ -236,6 +236,14 @@ public class Item {
     public int getMaxDamage() {
         return this.itemStack.getMaxDamage();
     }
+    /**
+     * Gets the items durability
+     *
+     * @return the items durability
+     */
+    public int getDurability() {
+        return this.getMaxDamage() - this.getDamage();
+    }
 
     /**
      * Checks if the item can take damage.
