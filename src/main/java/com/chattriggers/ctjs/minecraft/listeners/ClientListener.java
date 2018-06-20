@@ -5,7 +5,7 @@ import com.chattriggers.ctjs.minecraft.objects.CPS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Item;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.entity.player.EntityPlayerMP;

@@ -1,5 +1,6 @@
-package com.chattriggers.ctjs.minecraft.wrappers.objects;
+package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory;
 
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action;
 import lombok.Getter;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -44,6 +45,23 @@ public class Inventory {
     }
 
     /**
+     * Returns the window identifier number of this Inventory.
+     * This Inventory must be backed by a Container {@link #isContainer()}
+     *
+     * @return the window id
+     */
+    public int getWindowId() {
+        return this.isContainer() ? this.container.windowId : -1;
+    }
+
+    public void doAction(Action action) {
+        action.complete();
+//        if (this.isContainer()) {
+//            this.container
+//        }
+    }
+
+    /**
      * Checks if an item can be shift clicked into a certain slot, i.e coal into the bottom of a furnace.
      *
      * @param slot the slot index
@@ -85,6 +103,16 @@ public class Inventory {
         }
 
         return -1;
+    }
+
+    /**
+     * Returns true if this Inventory wraps a Container object
+     * rather than an IInventory object
+     *
+     * @return if this is a container
+     */
+    public boolean isContainer() {
+        return this.container != null;
     }
 
     /**

@@ -1,7 +1,9 @@
-package com.chattriggers.ctjs.minecraft.wrappers.objects;
+package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -235,6 +237,15 @@ public class Item {
      */
     public Boolean canDestroy(Block block) {
         return this.itemStack.canDestroy(block.getBlock());
+    }
+
+    /**
+     * Gets the items durability, i.e. the number of uses left
+     *
+     * @return the items durability
+     */
+    public int getDurability() {
+        return this.getMaxDamage() - this.getDamage();
     }
 
     /**

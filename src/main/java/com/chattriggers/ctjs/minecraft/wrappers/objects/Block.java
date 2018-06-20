@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;

@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects;
 import com.chattriggers.ctjs.minecraft.mixins.MixinEntityPlayer;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import lombok.Getter;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;

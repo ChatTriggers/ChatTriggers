@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.triggers;
 
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import com.chattriggers.ctjs.modules.Module;
 import com.chattriggers.ctjs.utils.console.Console;
 
@@ -521,7 +522,7 @@ public class TriggerRegister {
      * Registers a new trigger that runs before an item is picked up.<br>
      * <p>
      *     Passes through 3 arguments:<br>
-     *         &emsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} that is picked up<br>
+     *         &emsp;the {@link Item} that is picked up<br>
      *         &emsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP} that picked up the item<br>
      *         &emsp;the item's position vector<br>
      *         &emsp;the item's motion vector<br>
@@ -539,7 +540,7 @@ public class TriggerRegister {
      * Registers a new trigger that runs before an item is dropped.<br>
      * <p>
      *     Passes through 3 arguments:<br>
-     *         &emsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} that is dropped up<br>
+     *         &emsp;the {@link Item} that is dropped up<br>
      *         &emsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP} that dropped the item<br>
      *         &emsp;the item's position vector<br>
      *         &emsp;the item's motion vector<br>
@@ -590,7 +591,7 @@ public class TriggerRegister {
      * <p>
      *     Passes through 2 arguments:<br>
      *         &emsp;the list of lore to modify<br>
-     *         &emsp;the {@link com.chattriggers.ctjs.minecraft.wrappers.objects.Item} that this lore is attached to.<br>
+     *         &emsp;the {@link Item} that this lore is attached to.<br>
      *     Available modifications:<br>
      *         &emsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
      * </p>
