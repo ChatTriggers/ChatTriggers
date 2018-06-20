@@ -11,7 +11,7 @@ public class ClickAction extends Action {
      *
      * @param clickType the new click type
      */
-    @Setter
+    @Setter @Getter
     private ClickType clickType;
 
     /**
@@ -19,7 +19,7 @@ public class ClickAction extends Action {
      *
      * @param holdingShift to hold shift or not
      */
-    @Setter
+    @Setter @Getter
     private boolean holdingShift = false;
 
     /**
@@ -27,7 +27,7 @@ public class ClickAction extends Action {
      *
      * @param itemInHand to be holding an item or not
      */
-    @Setter
+    @Setter @Getter
     private boolean itemInHand = false;
 
     /**

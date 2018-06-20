@@ -3,9 +3,13 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class Action {
+    @Getter @Setter
     protected int slot;
+    @Getter @Setter
     protected int windowId;
 
     public Action(int slot, int windowId) {

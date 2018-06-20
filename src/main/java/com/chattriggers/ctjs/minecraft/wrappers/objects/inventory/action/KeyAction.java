@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -11,7 +12,7 @@ public class KeyAction extends Action {
      *
      * @param key which key to "click"
      */
-    @Setter
+    @Setter @Getter
     private int key;
 
     public KeyAction(int slot, int windowId) {

@@ -11,7 +11,7 @@ public class DragAction extends Action {
      *
      * @param clickType the new click type
      */
-    @Setter
+    @Setter @Getter
     private ClickType clickType;
 
     /**
@@ -22,7 +22,7 @@ public class DragAction extends Action {
      *
      * @param stage the stage
      */
-    @Setter
+    @Setter @Getter
     private Stage stage;
 
     public DragAction(int slot, int windowId) {
