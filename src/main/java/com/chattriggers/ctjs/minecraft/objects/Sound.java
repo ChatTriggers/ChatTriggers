@@ -70,13 +70,11 @@ public class Sound {
         }
 
         CTJS.getInstance().getSounds().add(this);
-        Thread.dumpStack();
     }
 
     public void onWorldLoad() {
         listening = false;
 
-        Thread.dumpStack();
         System.out.println("Loading sound system");
         loadSndSystem();
         System.out.println("sound system loaded: " + sndSystem);
