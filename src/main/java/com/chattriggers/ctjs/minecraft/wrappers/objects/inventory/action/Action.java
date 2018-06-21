@@ -48,12 +48,14 @@ public abstract class Action {
             return new DragAction(slot, inventory.getWindowId());
         } else if (type == Type.KEY) {
             return new KeyAction(slot, inventory.getWindowId());
+        } else if (type == Type.DROP) {
+            return new DropAction(slot, inventory.getWindowId());
         }
 
         throw new UnsupportedOperationException("Action of type " + typeString + " is not supported yet!");
     }
 
     public enum Type {
-        CLICK, DRAG, KEY
+        CLICK, DRAG, KEY, DROP
     }
 }
