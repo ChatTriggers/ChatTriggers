@@ -20,9 +20,6 @@ public abstract class Action {
     public abstract void complete();
 
     protected void doClick(int button, int mode) {
-        System.out.println("Doing action with slot: " + slot + ", button: " +  button + ", mode: " + mode);
-        System.out.println("Action of type " + getClass().getSimpleName());
-
         Client.getMinecraft().playerController.windowClick(
                 this.windowId,
                 this.slot,
