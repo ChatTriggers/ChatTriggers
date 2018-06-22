@@ -55,7 +55,12 @@ public class DragAction extends Action {
 
     @Override
     public void complete() {
-        int button = clickType.getButton() & 3 | (stage.getStage() & 3) << 2;
+        int button = stage.getStage() & 3 | (clickType.getButton() & 3) << 2;
+
+        if (this.stage != Stage.SLOT) {
+            this.slot = -999;
+            System.out.println("Enforcing slot of -999");
+        }
 
         doClick(button, 5);
     }

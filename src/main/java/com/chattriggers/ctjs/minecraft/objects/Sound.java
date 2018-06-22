@@ -9,10 +9,10 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Getter;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import paulscode.sound.SoundSystem;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -91,13 +91,12 @@ public class Sound {
     private void loadSndSystem() {
         SoundManager sndManager = ((MixinSoundHandler) Client.getMinecraft().getSoundHandler()).getSndManager();
 
-        try {
-            Field field = sndManager.getClass().getDeclaredField("sndSystem");
-            field.setAccessible(true);
-            sndSystem = (SoundSystem) field.get(sndManager);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        sndSystem = ReflectionHelper.getPrivateValue(
+                SoundManager.class,
+                sndManager,
+                "sndSystem",
+                "field_148620_e"
+        );
     }
 
     private void bootstrap() throws MalformedURLException {
