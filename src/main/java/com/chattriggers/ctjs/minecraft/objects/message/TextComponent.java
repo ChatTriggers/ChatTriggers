@@ -85,6 +85,7 @@ public class TextComponent {
      */
     public TextComponent(IChatComponent chatComponent) {
         this.chatComponentText = chatComponent;
+        this.text = chatComponentText.getFormattedText();
 
         ChatStyle chatStyle = chatComponent.getChatStyle();
         if (chatStyle.getChatClickEvent() != null) {
@@ -247,5 +248,23 @@ public class TextComponent {
         chatComponentText.getChatStyle().setChatHoverEvent(new HoverEvent(
                 HoverEvent.Action.getValueByCanonicalName(this.hoverAction), new ChatComponentText(hoverValue)
         ));
+    }
+
+    @Override
+    public String toString() {
+        String textComponentString = "TextComponent{text=" + text
+                + ", formatted=" + formatted;
+
+        if (this.hoverAction != null && this.hoverValue != null) {
+            textComponentString += ", hover{action=" + this.hoverAction + ", value=" + this.hoverValue + "}";
+        }
+
+        if (this.clickAction != null && this.clickValue != null) {
+            textComponentString += ", click{action=" + this.clickAction + ", value=" + this.hoverValue + "}";
+        }
+
+        textComponentString += "}";
+
+        return textComponentString;
     }
 }
