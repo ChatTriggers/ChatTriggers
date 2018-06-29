@@ -14,7 +14,7 @@ public class MixinGuiMainMenu extends GuiScreen {
     @Inject(
             method = "drawScreen",
             at = @At(
-                    value = "RETURN",
+                    value = "INVOKE",
                     target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;II)V"
             ),
             remap = false
