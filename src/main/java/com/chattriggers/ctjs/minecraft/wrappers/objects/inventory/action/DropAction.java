@@ -9,7 +9,7 @@ public class DropAction extends Action {
     /**
      * Whether the click should act as if control is being held (defaults to false)
      *
-     * @param holdingShift to hold ctrl or not
+     * @param holdingCtrl to hold ctrl or not
      */
     @Setter @Getter
     private boolean holdingCtrl = false;

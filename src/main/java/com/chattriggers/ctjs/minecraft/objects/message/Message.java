@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * Used to create a Message object to be sent to the Client's chat.<br>
@@ -101,6 +102,18 @@ public class Message {
         this.formatted = true;
 
         this.messageParts = new ArrayList<>();
+
+        /*for (IChatComponent part : component) {
+            System.out.println(part);
+            this.messageParts.add(new TextComponent(part));
+            if (!part.getSiblings().isEmpty()) {
+                for (IChatComponent sibling : part.getSiblings()) {
+                    System.out.println(sibling);
+                    this.messageParts.add(new TextComponent(sibling));
+                }
+            }
+        }*/
+
         if (component.getSiblings().isEmpty()) {
             this.messageParts.add(new TextComponent(component));
         } else {
@@ -222,5 +235,38 @@ public class Message {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder messageString = new StringBuilder("Message{");
 
+        if (this.chatLineId != -1) {
+            messageString.append("chatLineId=").append(this.chatLineId).append(", ");
+        }
+
+        messageString.append("formatted=").append(this.formatted).append(", ");
+
+        messageString.append("recursive=").append(this.formatted).append(", ");
+
+        messageString.append("messageParts=[");
+        Iterator<Object> parts = this.messageParts.iterator();
+        while (parts.hasNext()) {
+            Object part = parts.next();
+
+            if (part instanceof String) {
+                messageString.append("String=").append(part);
+            } else if (part instanceof TextComponent) {
+                messageString.append("TextComponent=").append(part);
+            }
+
+
+            if (parts.hasNext()) {
+                messageString.append(", ");
+            }
+        }
+        messageString.append("]");
+
+        messageString.append("}");
+
+        return messageString.toString();
+    }
 }

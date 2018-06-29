@@ -60,12 +60,15 @@ public class CTJS {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        this.configLocation = event.getModConfigurationDirectory();
+        setupConfig();
+
         new Reference();
+        new Console();
 
         File pictures = new File(event.getModConfigurationDirectory(), "ChatTriggers/images/");
         pictures.mkdirs();
         assetsDir = pictures;
-        new Console();
 
         Sentry.init(Reference.SENTRYDSN);
 
@@ -78,10 +81,6 @@ public class CTJS {
 
         String sha256uuid = DigestUtils.sha256Hex(Player.getUUID());
         FileLib.getUrlContent("http://167.99.3.229/tracker/?uuid=" + sha256uuid);
-
-        this.configLocation = event.getModConfigurationDirectory();
-
-        setupConfig();
     }
 
     @EventHandler
