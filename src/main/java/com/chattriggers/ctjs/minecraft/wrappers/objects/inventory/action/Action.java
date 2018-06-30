@@ -5,7 +5,9 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(chain = true)
 public abstract class Action {
     @Getter @Setter
     protected int slot;

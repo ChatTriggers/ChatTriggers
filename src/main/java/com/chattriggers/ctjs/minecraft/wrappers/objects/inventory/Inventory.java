@@ -1,6 +1,9 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory;
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction;
 import lombok.Getter;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -113,6 +116,67 @@ public class Inventory {
      */
     public boolean isContainer() {
         return this.container != null;
+    }
+
+    /**
+     * Shorthand for {@link ClickAction}
+     *
+     * @param slot the slot to click on
+     * @param shift whether shift is being held
+     * @return this inventory for method chaining
+     */
+    public Inventory click(int slot, boolean shift) {
+        ClickAction action = new ClickAction(slot, this.getWindowId());
+
+        action.setClickString("LEFT")
+                .setHoldingShift(shift)
+                .complete();
+
+        return this;
+    }
+
+    /**
+     * Shorthand for {@link DropAction}
+     *
+     * @param slot the slot to drop
+     * @param ctrl whether control should be held (drops whole stack)
+     * @return this inventory for method chaining
+     */
+    public Inventory drop(int slot, boolean ctrl) {
+        DropAction action = new DropAction(slot, this.getWindowId());
+
+        action.setHoldingCtrl(ctrl)
+                .complete();
+
+        return this;
+    }
+
+    /**
+     * Shorthand for {@link DragAction}
+     *
+     * @param type what click type this should be: LEFT, MIDDLE, RIGHT
+     * @param slots all of the slots to drag onto
+     * @return this inventory for method chaining
+     */
+    public Inventory drag(String type, int... slots) {
+        DragAction action = new DragAction(-999, this.getWindowId());
+        DragAction.ClickType clickType = DragAction.ClickType.valueOf(type.toUpperCase());
+
+        action.setStage(DragAction.Stage.BEGIN)
+                .setClickType(clickType)
+                .complete();
+
+        action.setStage(DragAction.Stage.SLOT);
+        for (int slot : slots) {
+            action.setSlot(slot)
+                    .complete();
+        }
+
+        action.setStage(DragAction.Stage.END)
+                .setSlot(-999)
+                .complete();
+
+        return this;
     }
 
     /**

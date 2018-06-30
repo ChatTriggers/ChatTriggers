@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action;
 
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -23,12 +24,13 @@ public class ClickAction extends Action {
     private boolean holdingShift = false;
 
     /**
-     * Whether the click should act as if an item is being held (defaults to false)
+     * Whether the click should act as if an item is being held
+     * (defaults to whether there actually is an item in the hand)
      *
      * @param itemInHand to be holding an item or not
      */
     @Setter @Getter
-    private boolean itemInHand = false;
+    private boolean itemInHand = Player.getPlayer().inventory.getCurrentItem() == null;
 
     /**
      * The slot to click on (-999 if outside gui)
