@@ -59,6 +59,22 @@ public class KeyBind {
         return keyBinding.isPressed();
     }
 
+    /**
+     *
+     * @param pressed
+     */
+    public void setState(boolean pressed) {
+        KeyBinding.setKeyBindState(keyBinding.getKeyCode(), pressed);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getKeyCode() {
+        return keyBinding.getKeyCode();
+    }
+
     public static void clearKeyBinds() {
         for (KeyBind keyBind : keyBinds) {
             if (!keyBind.isCustom) continue;

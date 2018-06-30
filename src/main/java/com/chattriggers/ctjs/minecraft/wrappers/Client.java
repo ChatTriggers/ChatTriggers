@@ -12,6 +12,8 @@ import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
+import java.util.Arrays;
+
 public class Client {
     /**
      * Gets the Minecraft object.
@@ -70,7 +72,7 @@ public class Client {
 
     /**
      * Get the {@link KeyBind} from an already existing
-     * Minecraft KeyBinding.
+     * Minecraft KeyBinding, otherwise, returns null.
      *
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
      * @return the {@link KeyBind} from a Minecraft KeyBinding, or null if one doesn't exist
@@ -95,13 +97,26 @@ public class Client {
      * @see <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a>
      */
     public static KeyBind getKeyBindFromKey(int keyCode, String description) {
-        for (KeyBinding keyBinding : getMinecraft().gameSettings.keyBindings) {
-            if (keyBinding.getKeyCode() == keyCode) {
-                return new KeyBind(keyBinding);
-            }
-        }
+        return Arrays.stream(getMinecraft().gameSettings.keyBindings)
+                .filter(keyBinding -> keyBinding.getKeyCode() == keyCode)
+                .findAny()
+                .map(KeyBind::new)
+                .orElse(new KeyBind(description, keyCode));
+    }
 
-        return new KeyBind(description, keyCode);
+    /**
+     * Get the {@link KeyBind} from an already existing
+     * Minecraft KeyBinding, else, null.
+     *
+     * @param description the key binding's original description
+     * @return the key bind, or null if one doesn't exist
+     */
+    public static KeyBind getKeyBindFromDescription(String description) {
+        return Arrays.stream(getMinecraft().gameSettings.keyBindings)
+                .filter(keyBinding -> keyBinding.getKeyDescription().equals(description))
+                .findAny()
+                .map(KeyBind::new)
+                .orElse(null);
     }
 
     /**
