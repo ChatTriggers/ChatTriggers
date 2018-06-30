@@ -3,11 +3,11 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
@@ -288,16 +288,16 @@ public class Player {
      *
      * @return The player's active potion effects.
      */
-    public static String[] getActivePotionEffects() {
-        if (getPlayer() == null) return new String[]{};
+    public static ArrayList<PotionEffect> getActivePotionEffects() {
+        if (getPlayer() == null) return new ArrayList<>();
 
-        ArrayList<String> effects = new ArrayList<>();
+        ArrayList<PotionEffect> effects = new ArrayList<>();
 
-        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
-            effects.add(effect.toString());
+        for (net.minecraft.potion.PotionEffect effect : getPlayer().getActivePotionEffects()) {
+            effects.add(new PotionEffect(effect));
         }
 
-        return effects.toArray(new String[effects.size()]);
+        return effects;
     }
 
     /**
