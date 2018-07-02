@@ -104,6 +104,15 @@ public class Player {
     }
 
     /**
+     * Gets the player's yaw rotation without wrapping.
+     *
+     * @return the yaw
+     */
+    public static float getRawYaw() {
+        return getPlayer() == null ? 0 : getPlayer().rotationYaw;
+    }
+
+    /**
      * Gets the player's username.
      *
      * @return the player's username

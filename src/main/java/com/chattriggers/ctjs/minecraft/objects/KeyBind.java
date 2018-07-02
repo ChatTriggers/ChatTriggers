@@ -60,8 +60,9 @@ public class KeyBind {
     }
 
     /**
+     * Toggles whether the keybind should act as if it is pressed
      *
-     * @param pressed
+     * @param pressed to be pressed or not
      */
     public void setState(boolean pressed) {
         KeyBinding.setKeyBindState(keyBinding.getKeyCode(), pressed);
