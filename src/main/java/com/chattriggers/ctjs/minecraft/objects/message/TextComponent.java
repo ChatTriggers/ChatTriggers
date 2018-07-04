@@ -86,6 +86,7 @@ public class TextComponent {
     public TextComponent(IChatComponent chatComponent) {
         this.chatComponentText = chatComponent;
         this.text = chatComponentText.getFormattedText();
+        this.formatted = true;
 
         ChatStyle chatStyle = chatComponent.getChatStyle();
         if (chatStyle.getChatClickEvent() != null) {
@@ -260,7 +261,7 @@ public class TextComponent {
         }
 
         if (this.clickAction != null && this.clickValue != null) {
-            textComponentString += ", click{action=" + this.clickAction + ", value=" + this.hoverValue + "}";
+            textComponentString += ", click{action=" + this.clickAction + ", value=" + this.clickValue + "}";
         }
 
         textComponentString += "}";

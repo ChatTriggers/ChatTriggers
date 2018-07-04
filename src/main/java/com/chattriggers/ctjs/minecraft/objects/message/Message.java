@@ -103,22 +103,19 @@ public class Message {
 
         this.messageParts = new ArrayList<>();
 
-        /*for (IChatComponent part : component) {
-            System.out.println(part);
-            this.messageParts.add(new TextComponent(part));
-            if (!part.getSiblings().isEmpty()) {
-                for (IChatComponent sibling : part.getSiblings()) {
-                    System.out.println(sibling);
+        if (component instanceof ChatComponentText) {
+            ChatComponentText cct = (ChatComponentText) component;
+            this.messageParts.add(cct.getChatComponentText_TextValue());
+            for (IChatComponent sibling : cct.getSiblings()) {
+                this.messageParts.add(new TextComponent(sibling));
+            }
+        } else {
+            if (component.getSiblings().isEmpty()) {
+                this.messageParts.add(new TextComponent(component));
+            } else {
+                for (IChatComponent sibling : component.getSiblings()) {
                     this.messageParts.add(new TextComponent(sibling));
                 }
-            }
-        }*/
-
-        if (component.getSiblings().isEmpty()) {
-            this.messageParts.add(new TextComponent(component));
-        } else {
-            for (IChatComponent sibling : component.getSiblings()) {
-                this.messageParts.add(new TextComponent(sibling));
             }
         }
     }
