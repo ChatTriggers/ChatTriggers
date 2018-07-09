@@ -217,6 +217,13 @@ public class TextComponent {
         new Message(this).chat();
     }
 
+    /**
+     * Outputs the component into the client's action bar.
+     */
+    public void actionBar() {
+        new Message(this).actionBar();
+    }
+
     // helper method to re-instance the component
     private void reInstance() {
         String text = this.text;

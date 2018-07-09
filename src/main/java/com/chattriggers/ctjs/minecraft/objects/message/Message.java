@@ -214,6 +214,17 @@ public class Message {
         }
     }
 
+    /**
+     * Outputs the Message into the client's action bar.
+     */
+    public void actionBar() {
+        parseMessages();
+
+        if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.getFormattedText())) return;
+
+        Client.getConnection().handleChat(new S02PacketChat(this.chatMessage, (byte) 2));
+    }
+
     // helper method to parse chat component parts
     private void parseMessages() {
         this.chatMessage = new ChatComponentText("");
