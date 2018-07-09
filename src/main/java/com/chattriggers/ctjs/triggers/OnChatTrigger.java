@@ -17,8 +17,8 @@ public class OnChatTrigger extends OnTrigger {
     private List<Parameter> parameters;
     private boolean triggerIfCanceled;
 
-    public OnChatTrigger(Object method) {
-        super(method, TriggerType.CHAT);
+    public OnChatTrigger(Object method, TriggerType type) {
+        super(method, type);
 
         this.chatCriteria = "";
         this.parameters = new ArrayList<>();

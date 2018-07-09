@@ -68,7 +68,26 @@ public class TriggerRegister {
      * @return the trigger for additional modification
      */
     public static OnChatTrigger registerChat(Object method) {
-        return new OnChatTrigger(method);
+        return new OnChatTrigger(method, TriggerType.CHAT);
+    }
+
+    /**
+     * Registers a new trigger that runs before an action bar message is received.<br>
+     * <p>
+     *     Passes through multiple arguments:<br>
+     *         &emsp;any number of chat criteria variables<br>
+     *         &emsp;the chat event<br>
+     *     Available modifications:<br>
+     *         &emsp;{@link OnRenderTrigger#triggerIfCanceled(boolean)} Sets if triggered if event is already cancelled<br>
+     *         &emsp;{@link OnChatTrigger#setChatCriteria(String)} Sets the chat criteria<br>
+     *         &emsp;{@link OnChatTrigger#setParameter(String)} Sets the chat parameter<br>
+     *         &emsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority<br>
+     * </p>
+     * @param method the name of the method to callback when the event is fired
+     * @return the trigger for additional modification
+     */
+    public static OnChatTrigger registerActionBar(Object method) {
+        return new OnChatTrigger(method, TriggerType.ACTION_BAR);
     }
 
     /**
