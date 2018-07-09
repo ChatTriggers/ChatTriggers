@@ -103,6 +103,16 @@ public class Message {
 
         this.messageParts = new ArrayList<>();
 
+        // TODO remove for next release
+        if (component.getSiblings().isEmpty()) {
+            this.messageParts.add(new TextComponent(component));
+        } else {
+            for (IChatComponent sibling : component.getSiblings()) {
+                this.messageParts.add(new TextComponent(sibling));
+            }
+        }
+
+        /* TODO fix for next release
         if (component instanceof ChatComponentText) {
             ChatComponentText cct = (ChatComponentText) component;
             this.messageParts.add(cct.getChatComponentText_TextValue());
@@ -118,6 +128,7 @@ public class Message {
                 }
             }
         }
+        */
     }
 
     /**
