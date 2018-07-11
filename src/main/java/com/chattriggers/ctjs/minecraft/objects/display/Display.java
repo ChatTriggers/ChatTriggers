@@ -188,8 +188,8 @@ public class Display {
         this.lines = new ArrayList<>();
 
         this.shouldRender = (boolean) config.getOrDefault("shouldRender", true);
-        this.renderX = (int) config.getOrDefault("renderX", 0f);
-        this.renderY = (int) config.getOrDefault("renderY", 0f);
+        this.renderX = (int) config.getOrDefault("renderX", 0);
+        this.renderY = (int) config.getOrDefault("renderY", 0);
 
         this.background = (DisplayHandler.Background) config.getOrDefault("background", DisplayHandler.Background.NONE);
         this.backgroundColor = (int) config.getOrDefault("backgroundColor", 0x50000000);
