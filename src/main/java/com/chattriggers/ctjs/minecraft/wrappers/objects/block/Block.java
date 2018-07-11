@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.wrappers.objects;
+package com.chattriggers.ctjs.minecraft.wrappers.objects.block;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
@@ -7,12 +7,13 @@ import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 
-public class Block {
+public class  Block {
     @Getter
-    private net.minecraft.block.Block block;
+    net.minecraft.block.Block block;
     private BlockPos blockPos = new BlockPos(0, 0, 0);
 
     /* Constructors */
+    Block() {}
 
     /**
      * Creates a Block object from a minecraft block input.<br>
@@ -239,10 +240,10 @@ public class Block {
     @Override
     public String toString() {
         return "Block{"
-                + net.minecraft.block.Block.blockRegistry.getNameForObject(this.block)
-                + ",x:" + getX()
-                + ",y:" + getY()
-                + ",z:" + getZ()
+                + "name=" + this.block.getRegistryName()
+                + ", x=" + getX()
+                + ", y=" + getY()
+                + ", z=" + getZ()
                 + "}";
     }
 }

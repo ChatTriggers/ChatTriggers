@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
+import net.minecraft.block.BlockSign;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -317,7 +319,13 @@ public class Player {
 
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             BlockPos pos = mop.getBlockPos();
-            return new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
+            net.minecraft.block.Block block = World.getWorld().getBlockState(pos).getBlock();
+
+            if (block instanceof BlockSign) {
+                return new Sign((BlockSign) block, pos);
+            }
+
+            return new Block(block).setBlockPos(pos);
         } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             return new Entity(mop.entityHit);
         } else {
