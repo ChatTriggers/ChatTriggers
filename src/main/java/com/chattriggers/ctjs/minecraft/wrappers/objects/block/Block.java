@@ -10,6 +10,7 @@ import net.minecraft.util.BlockPos;
 public class  Block {
     @Getter
     net.minecraft.block.Block block;
+    @Getter
     private BlockPos blockPos = new BlockPos(0, 0, 0);
 
     /* Constructors */
@@ -121,7 +122,7 @@ public class  Block {
      * @return the block's block state
      */
     public IBlockState getState() {
-        return World.getWorld().getBlockState(this.blockPos);
+        return World.getWorld().getBlockState(this.getBlockPos());
     }
 
     /**
@@ -140,7 +141,7 @@ public class  Block {
      * @return the block's x position
      */
     public int getX() {
-        return this.blockPos.getX();
+        return this.getBlockPos().getX();
     }
 
     /**
@@ -150,7 +151,7 @@ public class  Block {
      * @return the block's y position
      */
     public int getY() {
-        return this.blockPos.getY();
+        return this.getBlockPos().getY();
     }
 
     /**
@@ -160,7 +161,7 @@ public class  Block {
      * @return the block's z position
      */
     public int getZ() {
-        return this.blockPos.getZ();
+        return this.getBlockPos().getZ();
     }
 
     /**

@@ -1,11 +1,10 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block;
 
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import lombok.Getter;
-import net.minecraft.block.BlockSign;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 
 import java.util.ArrayList;
@@ -13,14 +12,26 @@ import java.util.ArrayList;
 public class Sign extends Block{
     @Getter
     private TileEntitySign sign;
-    
-    public Sign(BlockSign sign, BlockPos pos) {
-        this.block = sign;
-        this.setBlockPos(pos);
 
-        this.sign = (TileEntitySign) World.getWorld().getTileEntity(pos);
+    /**
+     * Creates a new Sign object wrapper.<br>
+     * Returned with {@link Player#lookingAt()} when looking at a sign.<br>
+     * Extends {@link Block}.
+     *
+     * @param block the {@link Block} to convert to a Sign
+     */
+    public Sign(Block block) {
+        this.block = block.getBlock();
+        this.setBlockPos(block.getBlockPos());
+
+        this.sign = (TileEntitySign) World.getWorld().getTileEntity(this.getBlockPos());
     }
 
+    /**
+     * Gets the lines from the sign as a {@link Message} list.
+     *
+     * @return the {@link Message} list
+     */
     public ArrayList<Message> getLines() {
         ArrayList<Message> lines = new ArrayList<>();
         for (IChatComponent component : this.sign.signText) {
@@ -29,6 +40,11 @@ public class Sign extends Block{
         return lines;
     }
 
+    /**
+     * Gets the formatted lines from the sign as a String list.
+     *
+     * @return the String list
+     */
     public ArrayList<String> getFormattedLines() {
         ArrayList<String> lines = new ArrayList<>();
         for (IChatComponent component : this.sign.signText) {
@@ -37,27 +53,17 @@ public class Sign extends Block{
         return lines;
     }
 
+    /**
+     * Gets the unformatted lines from the sign as a String list.
+     *
+     * @return the String list
+     */
     public ArrayList<String> getUnformattedLines() {
         ArrayList<String> lines = new ArrayList<>();
         for (IChatComponent component: this.sign.signText) {
             lines.add(component.getUnformattedText());
         }
         return lines;
-    }
-
-    public Message getLine(int i) {
-        if (this.sign.signText[i] == null) return new Message();
-        return new Message(this.sign.signText[i]);
-    }
-
-    public String getFormattedLine(int i) {
-        if (this.sign.signText[i] == null) return "";
-        return this.sign.signText[i].getFormattedText();
-    }
-
-    public String getUnformattedLine(int i) {
-        if (this.sign.signText[i] == null) return "";
-        return this.sign.signText[i].getUnformattedText();
     }
 
     @Override

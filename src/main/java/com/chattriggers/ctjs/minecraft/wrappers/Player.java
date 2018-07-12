@@ -307,7 +307,7 @@ public class Player {
      * whether that be a block or an entity. Returns an air block when not looking
      * at anything.
      *
-     * @return the {@link Block} or {@link Entity} being looked at
+     * @return the {@link Block}, {@link Sign}, or {@link Entity} being looked at
      */
     public static Object lookingAt() {
         if (getPlayer() == null
@@ -319,13 +319,13 @@ public class Player {
 
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             BlockPos pos = mop.getBlockPos();
-            net.minecraft.block.Block block = World.getWorld().getBlockState(pos).getBlock();
+            Block block = new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
 
-            if (block instanceof BlockSign) {
-                return new Sign((BlockSign) block, pos);
+            if (block.getBlock() instanceof BlockSign) {
+                return new Sign(block);
             }
 
-            return new Block(block).setBlockPos(pos);
+            return block;
         } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             return new Entity(mop.entityHit);
         } else {
