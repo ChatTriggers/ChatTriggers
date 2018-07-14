@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
-import com.chattriggers.ctjs.loader.ModuleManager;
+import com.chattriggers.ctjs.triggers.OnRegularTrigger;
+import com.chattriggers.ctjs.triggers.OnTrigger;
+import com.chattriggers.ctjs.triggers.TriggerType;
 import com.chattriggers.ctjs.utils.console.Console;
 
 import java.io.BufferedReader;
@@ -18,7 +20,8 @@ public class XMLHttpRequest {
 
     private HttpURLConnection conn;
     private boolean async;
-    private String methodCallback;
+
+    private OnTrigger methodCallback;
 
     public int status;
     public String statusText;
@@ -50,10 +53,10 @@ public class XMLHttpRequest {
     /**
      * Sets the callback method, passes in the XMLHttpRequest object
      *
-     * @param methodName the method to be called back on completion of the request
+     * @param method the method to be called back on completion of the request
      */
-    public void setCallbackMethod(String methodName) {
-        this.methodCallback = methodName;
+    public void setCallbackMethod(Object method) {
+        this.methodCallback = new OnRegularTrigger(method, TriggerType.OTHER);
     }
 
     /**
@@ -138,7 +141,7 @@ public class XMLHttpRequest {
 
             this.responseText = response.toString();
 
-            ModuleManager.getInstance().invokeFunction(this.methodCallback, this);
+            this.methodCallback.trigger(this);
         } catch (Exception e) {
             Console.getInstance().printStackTrace(e);
         }
