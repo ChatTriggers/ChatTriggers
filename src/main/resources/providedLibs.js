@@ -74,7 +74,7 @@ function cancel(event) {
     && event.isCancellable()) {
         event.cancel();
     } else {
-        event.setCancelled(true);
+        event.setCanceled(true);
     }
 }
 
