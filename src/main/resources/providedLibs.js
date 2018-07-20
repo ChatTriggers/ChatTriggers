@@ -16,6 +16,7 @@ var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
+var EventLib = Java.type("com.chattriggers.ctjs.minecraft.libs.EventLib");
 var Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
 var Tessellator = Java.type("com.chattriggers.ctjs.minecraft.libs.Tessellator").getInstance();
 var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
@@ -67,15 +68,7 @@ function print(toPrint) {
 }
 
 function cancel(event) {
-    if (event instanceof Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable")
-    && event.isCancellable()) {
-        event.setReturnValue(null);
-    } else if (event instanceof Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfo")
-    && event.isCancellable()) {
-        event.cancel();
-    } else {
-        event.setCanceled(true);
-    }
+    EventLib.cancel(event);
 }
 
 function register(triggerType, methodName) {
