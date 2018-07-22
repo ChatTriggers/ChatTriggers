@@ -81,45 +81,24 @@ public class EventLib {
     }
 
     /**
-     * Cancels a mixin CallbackInfo event.<br>
-     * Used automatically with <code>cancel(event)</code>
+     * Cancel an event. Automatically used with <code>cancel(event)</code>.
      *
      * @param event the event to cancel
+     * @throws IllegalArgumentException if event can be cancelled "normally"
      */
-    public static void cancel(CallbackInfo event) {
-        if (!event.isCancellable()) return;
-        event.cancel();
-    }
-
-    /**
-     * Cancels a mixin CallbackInfoReturnable event.<br>
-     * Used automatically with <code>cancel(event)</code>
-     *
-     * @param event the event to cancel
-     */
-    public static void cancel(CallbackInfoReturnable event) {
-        if (!event.isCancellable()) return;
-        event.setReturnValue(null);
-    }
-
-    /**
-     * Cancels a ClientChatReceivedEvent.<br>
-     * Used automatically with <code>cancel(event)</code>
-     *
-     * @param event the event to cancel
-     */
-    public static void cancel(ClientChatReceivedEvent event) {
-        if (!event.isCancelable()) return;
-        event.setCanceled(true);
-    }
-
-    /**
-     * Cancels a PlaySoundEvent.<br>
-     * Used automatically with <code>cancel(event)</code>
-     *
-     * @param event the event to cancel
-     */
-    public static void cancel(PlaySoundEvent event) {
-        event.result = null;
+    public static void cancel(Object event) throws IllegalArgumentException {
+        if (event instanceof CallbackInfoReturnable) {
+            CallbackInfoReturnable cbir = (CallbackInfoReturnable) event;
+            if (!cbir.isCancellable()) return;
+            cbir.setReturnValue(null);
+        } else if (event instanceof CallbackInfo) {
+            CallbackInfo cbi = (CallbackInfo) event;
+            if (!cbi.isCancellable()) return;
+            cbi.cancel();
+        } else if (event instanceof PlaySoundEvent) {
+            ((PlaySoundEvent) event).result = null;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }

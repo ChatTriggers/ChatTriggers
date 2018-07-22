@@ -68,7 +68,12 @@ function print(toPrint) {
 }
 
 function cancel(event) {
-    EventLib.cancel(event);
+    try {
+        EventLib.cancel(event);
+    } catch(err) {
+        if (!event.isCancelable()) return;
+        event.setCanceled(true);
+    }
 }
 
 function register(triggerType, methodName) {
