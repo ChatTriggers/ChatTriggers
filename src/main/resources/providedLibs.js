@@ -16,6 +16,7 @@ var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
+var EventLib = Java.type("com.chattriggers.ctjs.minecraft.libs.EventLib");
 var Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
 var Tessellator = Java.type("com.chattriggers.ctjs.minecraft.libs.Tessellator").getInstance();
 var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
@@ -44,7 +45,8 @@ var TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
 var Scoreboard = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Scoreboard");
 var CPS = Java.type("com.chattriggers.ctjs.minecraft.objects.CPS").getInstance();
 var Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item");
-var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Block");
+var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block");
+var Sign = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign");
 var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
 var Action = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action");
 var ClickAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction");
@@ -66,13 +68,10 @@ function print(toPrint) {
 }
 
 function cancel(event) {
-    if (event instanceof Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable")
-    && event.isCancellable()) {
-        event.setReturnValue(null);
-    } else if (event instanceof Java.type("org.spongepowered.asm.mixin.injection.callback.CallbackInfo")
-    && event.isCancellable()) {
-        event.cancel();
-    } else {
+    try {
+        EventLib.cancel(event);
+    } catch(err) {
+        if (!event.isCancelable()) return;
         event.setCanceled(true);
     }
 }

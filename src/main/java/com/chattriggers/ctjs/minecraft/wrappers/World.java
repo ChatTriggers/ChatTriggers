@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.*;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;

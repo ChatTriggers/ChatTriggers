@@ -60,17 +60,18 @@ public class KeyBind {
     }
 
     /**
-     * Toggles whether the keybind should act as if it is pressed
+     * Sets the state of the key.
      *
-     * @param pressed to be pressed or not
+     * @param pressed True to press, False to release
      */
     public void setState(boolean pressed) {
         KeyBinding.setKeyBindState(keyBinding.getKeyCode(), pressed);
     }
 
     /**
+     * Gets the key code of the key.
      *
-     * @return
+     * @return the integer key code
      */
     public int getKeyCode() {
         return keyBinding.getKeyCode();

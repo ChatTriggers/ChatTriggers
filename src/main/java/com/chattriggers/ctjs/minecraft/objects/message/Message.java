@@ -103,17 +103,7 @@ public class Message {
 
         this.messageParts = new ArrayList<>();
 
-        /*for (IChatComponent part : component) {
-            System.out.println(part);
-            this.messageParts.add(new TextComponent(part));
-            if (!part.getSiblings().isEmpty()) {
-                for (IChatComponent sibling : part.getSiblings()) {
-                    System.out.println(sibling);
-                    this.messageParts.add(new TextComponent(sibling));
-                }
-            }
-        }*/
-
+        // TODO remove for next release
         if (component.getSiblings().isEmpty()) {
             this.messageParts.add(new TextComponent(component));
         } else {
@@ -121,6 +111,24 @@ public class Message {
                 this.messageParts.add(new TextComponent(sibling));
             }
         }
+
+        /* TODO fix for next release
+        if (component instanceof ChatComponentText) {
+            ChatComponentText cct = (ChatComponentText) component;
+            this.messageParts.add(cct.getChatComponentText_TextValue());
+            for (IChatComponent sibling : cct.getSiblings()) {
+                this.messageParts.add(new TextComponent(sibling));
+            }
+        } else {
+            if (component.getSiblings().isEmpty()) {
+                this.messageParts.add(new TextComponent(component));
+            } else {
+                for (IChatComponent sibling : component.getSiblings()) {
+                    this.messageParts.add(new TextComponent(sibling));
+                }
+            }
+        }
+        */
     }
 
     /**
@@ -215,6 +223,17 @@ public class Message {
         } else {
             Player.getPlayer().addChatMessage(this.chatMessage);
         }
+    }
+
+    /**
+     * Outputs the Message into the client's action bar.
+     */
+    public void actionBar() {
+        parseMessages();
+
+        if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.getFormattedText())) return;
+
+        Client.getConnection().handleChat(new S02PacketChat(this.chatMessage, (byte) 2));
     }
 
     // helper method to parse chat component parts

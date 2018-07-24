@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers;
 
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
+import net.minecraft.block.BlockSign;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -314,7 +316,7 @@ public class Player {
      * whether that be a block or an entity. Returns an air block when not looking
      * at anything.
      *
-     * @return the {@link Block} or {@link Entity} being looked at
+     * @return the {@link Block}, {@link Sign}, or {@link Entity} being looked at
      */
     public static Object lookingAt() {
         if (getPlayer() == null
@@ -326,7 +328,13 @@ public class Player {
 
         if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             BlockPos pos = mop.getBlockPos();
-            return new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
+            Block block = new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
+
+            if (block.getBlock() instanceof BlockSign) {
+                return new Sign(block);
+            }
+
+            return block;
         } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             return new Entity(mop.entityHit);
         } else {

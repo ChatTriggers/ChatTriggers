@@ -40,6 +40,10 @@ public class ChatListener {
                 Console.getInstance().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)));
             }
         }
+
+        if (EventLib.getType(event) == 2) {
+            TriggerType.ACTION_BAR.triggerAll(ChatLib.getChatMessage(event, false), event);
+        }
     }
 
     public void addMessageToChatHistory(String msg) {

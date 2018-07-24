@@ -82,6 +82,7 @@ public abstract class OnTrigger {
 
             callActualMethod(args);
         } catch (Exception e) {
+            Console.getInstance().out.println("Error on " + this.type + " trigger in module " + this.owningModule);
             Console.getInstance().printStackTrace(e, this);
             this.type.removeTrigger(this);
         }

@@ -6,6 +6,8 @@ import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class EventLib {
     /**
@@ -76,5 +78,27 @@ public class EventLib {
      */
     public static String getModId(ConfigChangedEvent.OnConfigChangedEvent event) {
         return event.modID;
+    }
+
+    /**
+     * Cancel an event. Automatically used with <code>cancel(event)</code>.
+     *
+     * @param event the event to cancel
+     * @throws IllegalArgumentException if event can be cancelled "normally"
+     */
+    public static void cancel(Object event) throws IllegalArgumentException {
+        if (event instanceof CallbackInfoReturnable) {
+            CallbackInfoReturnable cbir = (CallbackInfoReturnable) event;
+            if (!cbir.isCancellable()) return;
+            cbir.setReturnValue(null);
+        } else if (event instanceof CallbackInfo) {
+            CallbackInfo cbi = (CallbackInfo) event;
+            if (!cbi.isCancellable()) return;
+            cbi.cancel();
+        } else if (event instanceof PlaySoundEvent) {
+            ((PlaySoundEvent) event).result = null;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }

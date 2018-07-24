@@ -24,9 +24,9 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ChatLib {
     /**
-     * Adds a message to chat
+     * Prints text in the chat.
      *
-     * @param text the message to be printed
+     * @param text the text to be printed
      */
     public static void chat(String text) {
         new Message(text).chat();
@@ -35,7 +35,7 @@ public class ChatLib {
     /**
      * Print a {@link Message} in chat.
      *
-     * @param message the message to be printed
+     * @param message the {@link Message} to be printed
      */
     public static void chat(Message message) {
         message.chat();
@@ -44,10 +44,37 @@ public class ChatLib {
     /**
      * Prints a {@link TextComponent} in chat.
      * 
-     * @param component the component to be printed
+     * @param component the {@link TextComponent} to be printed
      */
     public static void chat(TextComponent component) {
-        new Message(component).chat();
+        component.chat();
+    }
+
+    /**
+     * Shows text in the action bar.
+     *
+     * @param text the text to show
+     */
+    public static void actionBar(String text) {
+        new Message(text).actionBar();
+    }
+
+    /**
+     * Shows a {@link Message} in the action bar.
+     *
+     * @param message the {@link Message} to show
+     */
+    public static void actionBar(Message message) {
+        message.actionBar();
+    }
+
+    /**
+     * Shows a {@link TextComponent} in the action bar.
+     *
+     * @param component the {@link TextComponent} to show
+     */
+    public static void actionBar(TextComponent component) {
+        component.actionBar();
     }
 
     /**

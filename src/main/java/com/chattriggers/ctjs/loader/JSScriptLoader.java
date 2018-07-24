@@ -156,6 +156,7 @@ public class JSScriptLoader extends ScriptLoader {
 
             cachedModules.add(module);
         } catch (IOException | ScriptException exception) {
+            Console.getInstance().out.println("Error loading module from " + dir);
             Console.getInstance().printStackTrace(exception);
         }
     }

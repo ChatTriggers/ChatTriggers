@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.wrappers.objects;
+package com.chattriggers.ctjs.minecraft.wrappers.objects.block;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
@@ -7,12 +7,14 @@ import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 
-public class Block {
+public class  Block {
     @Getter
-    private net.minecraft.block.Block block;
+    net.minecraft.block.Block block;
+    @Getter
     private BlockPos blockPos = new BlockPos(0, 0, 0);
 
     /* Constructors */
+    Block() {}
 
     /**
      * Creates a Block object from a minecraft block input.<br>
@@ -120,7 +122,7 @@ public class Block {
      * @return the block's block state
      */
     public IBlockState getState() {
-        return World.getWorld().getBlockState(this.blockPos);
+        return World.getWorld().getBlockState(this.getBlockPos());
     }
 
     /**
@@ -139,7 +141,7 @@ public class Block {
      * @return the block's x position
      */
     public int getX() {
-        return this.blockPos.getX();
+        return this.getBlockPos().getX();
     }
 
     /**
@@ -149,7 +151,7 @@ public class Block {
      * @return the block's y position
      */
     public int getY() {
-        return this.blockPos.getY();
+        return this.getBlockPos().getY();
     }
 
     /**
@@ -159,7 +161,7 @@ public class Block {
      * @return the block's z position
      */
     public int getZ() {
-        return this.blockPos.getZ();
+        return this.getBlockPos().getZ();
     }
 
     /**
@@ -239,10 +241,10 @@ public class Block {
     @Override
     public String toString() {
         return "Block{"
-                + net.minecraft.block.Block.blockRegistry.getNameForObject(this.block)
-                + ",x:" + getX()
-                + ",y:" + getY()
-                + ",z:" + getZ()
+                + "name=" + this.block.getRegistryName()
+                + ", x=" + getX()
+                + ", y=" + getY()
+                + ", z=" + getZ()
                 + "}";
     }
 }

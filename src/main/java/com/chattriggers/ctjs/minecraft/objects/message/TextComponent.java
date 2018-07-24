@@ -86,6 +86,7 @@ public class TextComponent {
     public TextComponent(IChatComponent chatComponent) {
         this.chatComponentText = chatComponent;
         this.text = chatComponentText.getFormattedText();
+        this.formatted = true;
 
         ChatStyle chatStyle = chatComponent.getChatStyle();
         if (chatStyle.getChatClickEvent() != null) {
@@ -216,6 +217,13 @@ public class TextComponent {
         new Message(this).chat();
     }
 
+    /**
+     * Outputs the component into the client's action bar.
+     */
+    public void actionBar() {
+        new Message(this).actionBar();
+    }
+
     // helper method to re-instance the component
     private void reInstance() {
         String text = this.text;
@@ -260,7 +268,7 @@ public class TextComponent {
         }
 
         if (this.clickAction != null && this.clickValue != null) {
-            textComponentString += ", click{action=" + this.clickAction + ", value=" + this.hoverValue + "}";
+            textComponentString += ", click{action=" + this.clickAction + ", value=" + this.clickValue + "}";
         }
 
         textComponentString += "}";

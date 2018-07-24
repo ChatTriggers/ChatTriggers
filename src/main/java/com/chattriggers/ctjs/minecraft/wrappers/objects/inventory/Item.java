@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory;
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Block;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;

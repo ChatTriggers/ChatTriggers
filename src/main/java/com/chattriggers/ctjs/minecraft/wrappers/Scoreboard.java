@@ -197,5 +197,10 @@ public class Scoreboard {
 
             return ScorePlayerTeam.formatPlayerName(team, score.getPlayerName());
         }
+
+        @Override
+        public String toString() {
+            return getName();
+        }
     }
 }
