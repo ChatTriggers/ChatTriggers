@@ -203,7 +203,8 @@ public class Shape {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(r, g, b, a);
+        if (!Renderer.colorized)
+            GlStateManager.color(r, g, b, a);
 
         worldrenderer.begin(this.drawMode, DefaultVertexFormats.POSITION);
 
@@ -215,8 +216,7 @@ public class Shape {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        Renderer.finishDraw();
 
         return this;
     }

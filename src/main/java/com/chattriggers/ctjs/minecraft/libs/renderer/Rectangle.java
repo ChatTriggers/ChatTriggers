@@ -244,8 +244,7 @@ public class Rectangle {
         outline();
         drawRect(this.color, this.x, this.y, this.width, this.height);
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        Renderer.finishDraw();
 
         return this;
     }
@@ -292,7 +291,8 @@ public class Rectangle {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(r, g, b, a);
+        if (!Renderer.colorized)
+            GlStateManager.color(r, g, b, a);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION);
         worldrenderer.pos(x, y2, 0.0D).endVertex();
         worldrenderer.pos(x2, y2, 0.0D).endVertex();

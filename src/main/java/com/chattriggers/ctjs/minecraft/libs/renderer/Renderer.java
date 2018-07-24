@@ -18,6 +18,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @UtilityClass
 @SideOnly(Side.CLIENT)
 public class Renderer {
+    public boolean colorized = false;
+
     public final int BLACK = color(0, 0, 0, 255);
     public final int DARK_BLUE = color(0, 0, 190, 255);
     public final int DARK_GREEN = color(0, 190, 0, 255);
@@ -214,7 +216,8 @@ public class Renderer {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(r, g, b, a);
+        if (!Renderer.colorized)
+            GlStateManager.color(r, g, b, a);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION);
         worldrenderer.pos(x, y2, 0.0D).endVertex();
         worldrenderer.pos(x2, y2, 0.0D).endVertex();
@@ -226,8 +229,7 @@ public class Renderer {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        finishDraw();
     }
 
     /**
@@ -241,8 +243,7 @@ public class Renderer {
     public void drawString(String text, float x, float y) {
         getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff, false);
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        finishDraw();
     }
 
     /**
@@ -256,14 +257,14 @@ public class Renderer {
     public void drawStringWithShadow(String text, float x, float y) {
         getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff, true);
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        finishDraw();
     }
 
     public void drawImage(Image image, double x, double y, double width, double height) {
         if (image.getTexture() == null) return;
 
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        if (!Renderer.colorized)
+            GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.enableBlend();
         GlStateManager.scale(1, 1, 50);
         GlStateManager.bindTexture(image.getTexture().getGlTextureId());
@@ -283,8 +284,7 @@ public class Renderer {
                 .tex(0, 0).endVertex();
         tessellator.draw();
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        finishDraw();
     }
 
     /**
@@ -344,8 +344,7 @@ public class Renderer {
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        finishDraw();
     }
 
     /**
@@ -395,6 +394,8 @@ public class Renderer {
      * @param alpha the alpha value
      */
     public void colorize(int red, int green, int blue, int alpha) {
+        colorized = true;
+
         GlStateManager.color(
                 MathLib.clamp(red, 0, 255),
                 MathLib.clamp(green, 0, 255),
@@ -413,6 +414,13 @@ public class Renderer {
      */
     public void colorize(int red, int green, int blue) {
         colorize(red, green, blue, 255);
+    }
+
+    public void finishDraw() {
+        colorized = false;
+
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
     }
 
     /**

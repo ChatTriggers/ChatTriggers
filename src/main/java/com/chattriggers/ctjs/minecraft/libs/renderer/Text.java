@@ -278,8 +278,7 @@ public class Text {
         }
         GlStateManager.disableBlend();
 
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        Renderer.finishDraw();
 
         return this;
     }
