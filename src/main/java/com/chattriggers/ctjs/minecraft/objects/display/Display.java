@@ -166,6 +166,15 @@ public class Display {
     @Setter
     private int minWidth;
 
+    /**
+     * -- GETTER --
+     * Gets the width of the Display
+     *
+     * @return The width of the Display
+     */
+    @Getter
+    private int width;
+
     public Display() {
         this.lines = new ArrayList<>();
 
@@ -359,6 +368,7 @@ public class Display {
             if (line.getTextWidth() > maxWidth)
                 maxWidth = (int) Math.ceil(line.getTextWidth());
         }
+        this.width = maxWidth;
 
         float i = 0;
 
