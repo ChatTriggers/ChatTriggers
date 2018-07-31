@@ -24,7 +24,7 @@ public class FileLib {
 
     /**
      * Writes a file to anywhere on the system.<br>
-     * Use "./" for the ".minecraft" folder.<br>
+     * Use "./" for the ".minecraft" folder.
      *
      * @param fileLocation the location and file name
      * @param toWrite      string to write in file
@@ -63,7 +63,7 @@ public class FileLib {
     }
 
     /**
-     * Reads a file from anywhere on the system using java.io.File.<br>
+     * Reads a file from anywhere on the system using java.io.File.
      *
      * @param file the java.io.File to load
      * @return the string in the file
@@ -87,17 +87,29 @@ public class FileLib {
     }
 
     /**
-     * Gets the contents of a url as a string
+     * Gets the contents of a url as a string.
      *
      * @param theUrl the url to get the data from
      * @return the string stored in the url content
      */
     public static String getUrlContent(String theUrl) {
+        return getUrlContent(theUrl, null);
+    }
+
+    /**
+     * Gets the contents of a url as a string.
+     *
+     * @param theUrl the url to get the data from
+     * @param userAgent the user agent to use in the connection
+     * @return the string stored in the url content
+     */
+    public static String getUrlContent(String theUrl, String userAgent) {
         StringBuilder content = new StringBuilder();
 
         try {
             URL url = new URL(theUrl);
             URLConnection urlConnection = url.openConnection();
+            if (userAgent != null) urlConnection.setRequestProperty("User-Agent", userAgent);
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 
@@ -125,7 +137,7 @@ public class FileLib {
 
     /**
      * Extracts a zip file specified by the zipFilePath to a directory specified by
-     * destDirectory (will be created if does not exists)
+     * destDirectory (will be created if does not exists).
      * @param zipFilePath the zip file path
      * @param destDirectory the destination directory
      * @throws IOException IOException
