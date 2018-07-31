@@ -173,7 +173,15 @@ public class Display {
      * @return The width of the Display
      */
     @Getter
-    private int width;
+    private float width;
+
+    /**
+     * -- GETTER --
+     *
+     * @return the height of the Display
+     */
+    @Getter
+    private float height;
 
     public Display() {
         this.lines = new ArrayList<>();
@@ -368,6 +376,7 @@ public class Display {
             if (line.getTextWidth() > maxWidth)
                 maxWidth = (int) Math.ceil(line.getTextWidth());
         }
+
         this.width = maxWidth;
 
         float i = 0;
@@ -380,6 +389,8 @@ public class Display {
             else if (order == DisplayHandler.Order.UP)
                 i -= line.getText().getScale();
         }
+
+        this.height = Math.abs(i);
     }
 
     // helper method to draw line with align
