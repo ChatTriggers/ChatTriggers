@@ -22,7 +22,6 @@ import java.util.Iterator;
  */
 @Accessors(chain = true)
 public class Message {
-    @Getter
     private IChatComponent chatMessage;
 
     /**
@@ -243,6 +242,13 @@ public class Message {
      */
     public void edit(Message... replacements) {
         ChatLib.editChat(this, replacements);
+    }
+
+    public IChatComponent getChatMessage() {
+        if (this.chatMessage == null)
+            parseMessages();
+
+        return this.chatMessage;
     }
 
     // helper method to parse chat component parts

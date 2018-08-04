@@ -210,10 +210,16 @@ public class ChatLib {
      * The regex object will be created by the {@code new RegExp()} constructor,
      * or the {@code //} regex literal. All flags will be respected.
      *
-     * @param regex the regex object to match to the message
+     * @param regexp the regex object to match to the message
      * @param replacements the new message(s) to be put in replace of the old one
      */
-    public static void editChat(ScriptObjectMirror regex, Message... replacements) {
+    public static void editChat(Object regexp, Message... replacements) {
+        if (!(regexp instanceof ScriptObjectMirror)) {
+            throw new IllegalArgumentException("Regex object not correct");
+        }
+
+        ScriptObjectMirror regex = ((ScriptObjectMirror) regexp);
+
         boolean global = (boolean) regex.get("global");
         boolean ignoreCase = (boolean) regex.get("ignoreCase");
         boolean multiline = (boolean) regex.get("multiline");
@@ -252,7 +258,11 @@ public class ChatLib {
      */
     public static void editChat(Message toReplace, Message... replacements) {
         editChat(
-                message -> toReplace.getChatMessage().equals(message.getChatMessage()),
+                message -> {
+                    System.out.println("tr: " + toReplace.getChatMessage().getFormattedText());
+                    System.out.println("m: " + message.getChatMessage().getFormattedText().replaceFirst("\\u00a7r", ""));
+                    return toReplace.getChatMessage().getFormattedText().equals(message.getChatMessage().getFormattedText().replaceFirst("\\u00a7r", ""));
+                },
                 replacements
         );
     }
@@ -295,7 +305,9 @@ public class ChatLib {
         while (chatLineIterator.hasNext()) {
             ChatLine chatLine = chatLineIterator.next();
 
-            boolean result = toReplace.apply(new Message(chatLine.getChatComponent()));
+            boolean result = toReplace.apply(
+                    new Message(chatLine.getChatComponent()).setChatLineId(chatLine.getChatLineID())
+            );
 
             if (!result) {
                 continue;
