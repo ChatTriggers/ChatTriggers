@@ -237,7 +237,7 @@ public class Message {
     }
 
     // helper method to parse chat component parts
-    private void parseMessages() {
+    public void parseMessages() {
         this.chatMessage = new ChatComponentText("");
 
         for (Object message : this.messageParts) {
