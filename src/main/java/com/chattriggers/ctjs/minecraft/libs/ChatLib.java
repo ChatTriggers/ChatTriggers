@@ -2,23 +2,26 @@ package com.chattriggers.ctjs.minecraft.libs;
 
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
+import com.chattriggers.ctjs.minecraft.mixins.MixinGuiNewChat;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.utils.console.Console;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @UtilityClass
 @SideOnly(Side.CLIENT)
@@ -160,8 +163,7 @@ public class ChatLib {
      * @return the unformatted string
      */
     public static String removeFormatting(String toRemove) {
-        return toRemove.replaceAll("\\u00a7[0-9a-fklmnor]", "")
-                .replaceAll("&[0-9a-fklmnor]", "");
+        return toRemove.replaceAll("[\\u00a7a][0-9a-fklmnor]", "");
     }
 
     /**
@@ -203,42 +205,109 @@ public class ChatLib {
     }
 
     /**
-     * Edits an already sent chat message
+     * Edits an already sent chat message by regex.
+     * If the JavaScript RegExp object passed in matches a message, it will be replaced.
+     * The regex object will be created by the {@code new RegExp()} constructor,
+     * or the {@code //} regex literal. All flags will be respected.
      *
-     * @param chatMessage the unformatted text of the message to be replaced
-     * @param toReplace   the new message to be put in replace of the old one
+     * @param regex the regex object to match to the message
+     * @param replacements the new message(s) to be put in replace of the old one
      */
-    public static void editChat(String chatMessage, String toReplace) {
-        editChat(chatMessage, toReplace, false);
+    public static void editChat(ScriptObjectMirror regex, Message... replacements) {
+        boolean global = (boolean) regex.get("global");
+        boolean ignoreCase = (boolean) regex.get("ignoreCase");
+        boolean multiline = (boolean) regex.get("multiline");
+
+        int flags = (ignoreCase ? Pattern.CASE_INSENSITIVE : 0)
+                    | (multiline ? Pattern.MULTILINE : 0);
+        Pattern pattern = Pattern.compile((String) regex.get("source"), flags);
+
+        editChat(
+                message -> {
+                    Matcher matcher = pattern.matcher(message.getChatMessage().getUnformattedText());
+                    return global ? matcher.find() : matcher.matches();
+                },
+                replacements
+        );
     }
 
     /**
-     * Edits an already sent chat message
+     * Edits an already sent chat message by the text of the chat
      *
-     * @param chatMessage the unformatted text of the message to be replaced
-     * @param toReplace   the new message to be put in replace of the old one
+     * @param toReplace the unformatted text of the message to be replaced
+     * @param replacements the new message(s) to be put in place of the old one
      */
-    public static void editChat(String chatMessage, String toReplace, boolean once) {
-        List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
-                "drawnChatLines", "field_146252_h");
-        List<ChatLine> chatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
-                "chatLines", "field_146252_h");
+    public static void editChat(String toReplace, Message... replacements) {
+        editChat(
+                message -> removeFormatting(message.getChatMessage().getUnformattedText()).equals(toReplace),
+                replacements
+        );
+    }
 
-        ChatComponentText cct = new ChatComponentText(addColor(toReplace));
+    /**
+     * Edits an already sent chat message by the {@link Message}
+     *
+     * @param toReplace the message to be replaced
+     * @param replacements the new message(s) to be put in place of the old one
+     */
+    public static void editChat(Message toReplace, Message... replacements) {
+        editChat(
+                message -> toReplace.getChatMessage().equals(message.getChatMessage()),
+                replacements
+        );
+    }
 
-        for (ChatLine chatLine : drawnChatLines) {
-            if (removeFormatting(chatLine.getChatComponent().getUnformattedText()).equals(chatMessage)) {
-                ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+    /**
+     * Edits an already sent chat message by its chat line id
+     *
+     * @param chatLineId the chat line id of the message to be replaced
+     * @param replacements the new message(s) to be put in place of the old one
+     */
+    public static void editChat(int chatLineId, Message... replacements) {
+        editChat(
+                message -> message.getChatLineId() == chatLineId,
+                replacements
+        );
+    }
 
-                if (once) break;
+    /**
+     * Edits an already sent chat message.
+     * Whether each specific message is edited or not is up to the first parameter, the "comparator" function.
+     * This function will be passed a {@link Message} object and has to return a boolean for whether or not
+     * that specific message should be edited. (true for yes, false for no). There are overrides of this function
+     * that already implement different versions of this method and those should be used in place of this one
+     * if there is already a suitable replacement. Otherwise, create one and use this method.
+     *
+     * @param toReplace the "comparator" function
+     * @param replacements the replacement messages
+     */
+    public static void editChat(Function<Message, Boolean> toReplace, Message... replacements) {
+        List<ChatLine> drawnChatLines = ((MixinGuiNewChat) Client.getChatGUI()).getDrawnChatLines();
+        List<ChatLine> chatLines = ((MixinGuiNewChat) Client.getChatGUI()).getChatLines();
+
+        editChatLineList(chatLines, toReplace, replacements);
+        editChatLineList(drawnChatLines, toReplace, replacements);
+    }
+
+    private static void editChatLineList(List<ChatLine> lineList, Function<Message, Boolean> toReplace, Message... replacements) {
+        ListIterator<ChatLine> chatLineIterator = lineList.listIterator();
+
+        while (chatLineIterator.hasNext()) {
+            ChatLine chatLine = chatLineIterator.next();
+
+            boolean result = toReplace.apply(new Message(chatLine.getChatComponent()));
+
+            if (!result) {
+                continue;
             }
-        }
 
-        for (ChatLine chatLine : chatLines) {
-            if (removeFormatting(chatLine.getChatComponent().getUnformattedText()).equals(chatMessage)) {
-                ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+            chatLineIterator.remove();
 
-                if (once) break;
+            for (Message message : replacements) {
+                int lineId = message.getChatLineId() == -1 ? 0 : message.getChatLineId();
+
+                ChatLine newChatLine = new ChatLine(chatLine.getUpdatedCounter(), message.getChatMessage(), lineId);
+                chatLineIterator.add(newChatLine);
             }
         }
     }
@@ -296,7 +365,7 @@ public class ChatLib {
     }
 
     // helper method to make sure player exists before putting something in chat
-    public Boolean isPlayer(String out) {
+    public boolean isPlayer(String out) {
         if (Player.getPlayer() == null) {
             Console.getInstance().out.println(out);
             return false;

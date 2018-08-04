@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.minecraft.mixinsimpl;
+package com.chattriggers.ctjs.minecraft.imixins;
 
 public interface IClientCommandHandler {
     void removeCTCommands();

@@ -236,6 +236,15 @@ public class Message {
         Client.getConnection().handleChat(new S02PacketChat(this.chatMessage, (byte) 2));
     }
 
+    /**
+     * Edits this message (once it is already sent)
+     *
+     * @param replacements the new message(s) to be put in place of the old one
+     */
+    public void edit(Message... replacements) {
+        ChatLib.editChat(this, replacements);
+    }
+
     // helper method to parse chat component parts
     private void parseMessages() {
         this.chatMessage = new ChatComponentText("");

@@ -13,6 +13,7 @@
     "MixinEntityPlayer",
     "MixinClientCommandHandler",
     "MixinSoundHandler",
-    "MixinSoundSystem"
+    "MixinSoundSystem",
+    "MixinGuiNewChat"
   ]
 }
