@@ -12,7 +12,7 @@ public class OnRenderTrigger extends OnTrigger {
     }
 
     /**
-     * Sets if the chat trigger should run if the chat event has already been canceled.
+     * Sets if the render trigger should run if the event has already been canceled.
      * True by default.
      * @param bool Boolean to set
      * @return the trigger object for method chaining
