@@ -23,10 +23,10 @@ buildscript {
 
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:" + (
-            mcVersion >= 11200 ? '2.3-SNAPSHOT' :
-            mcVersion >= 10904 ? '2.2-SNAPSHOT' :
-            mcVersion >= 10809 ? "2.1-SNAPSHOT" :
-                                 "invalid"
+                mcVersion >= 11200 ? '2.3-SNAPSHOT' :
+                mcVersion >= 10904 ? '2.2-SNAPSHOT' :
+                mcVersion >= 10809 ? "2.1-SNAPSHOT" :
+                                     "invalid"
         )
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         classpath "io.franzbecker:gradle-lombok:1.10"
@@ -223,24 +223,26 @@ setupDevWorkspace.dependsOn copySrg
 
 apply from: 'preprocessor.gradle'
 
-task convertSrc() {
-    def version
+task changeMcVersion() {
+    doLast {
+        def version
 
-    if (project.hasProperty("mcVersion")) {
-        version = project.mcVersion
-    } else {
-        version = 10809
-        println "Defaulting to 1.8.9..."
+        if (project.hasProperty("minecraftVersion")) {
+            version = project.minecraftVersion
+        } else {
+            version = 10809
+            println "Defaulting to version 1.8.9..."
+        }
+
+        project.ext.mcVersion = version
+        def f = file("gradle/mcversion.txt")
+        f.delete()
+        f.createNewFile()
+        f.write(version.toString())
+
+        println "MC target version is $version"
+        def vars = [MC: version as int]
+        project.convertTree(vars, 'src/main/java')
+        project.convertTree(vars, 'src/main/resources')
     }
-
-    project.ext.mcVersion = version
-    def f = file("gradle/mcversion.txt")
-    f.delete()
-    f.createNewFile()
-    f.write(version.toString())
-
-    println "MC target version is $version"
-    def vars = [MC: version as int]
-    project.convertTree(vars, 'src/main/java')
-    project.convertTree(vars, 'src/main/resources')
 }

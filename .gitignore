@@ -35,3 +35,4 @@ mcmod.info
 classes/production/
 .utility/node_modules/
 /mappings/mcp-srg.srg
+/gradle/mcversion.txt
