@@ -172,5 +172,5 @@ task userdocs(type: Javadoc) {
     exclude "com/chattriggers/ctjs/handlers/GuiHandler.java"
     exclude "com/chattriggers/ctjs/utils/*.java"
     exclude "com/chattriggers/ctjs/minecraft/mixins/*.java"
-    exclude "com/chattriggers/ctjs/minecraft/mixinsimpl/*.java"
+    exclude "com/chattriggers/ctjs/minecraft/imixins/*.java"
 }

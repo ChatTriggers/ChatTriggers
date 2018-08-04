@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.mixins;
 
 import com.chattriggers.ctjs.commands.Command;
-import com.chattriggers.ctjs.minecraft.mixinsimpl.IClientCommandHandler;
+import com.chattriggers.ctjs.minecraft.imixins.IClientCommandHandler;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import org.spongepowered.asm.mixin.Final;

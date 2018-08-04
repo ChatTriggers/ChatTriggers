@@ -3,7 +3,7 @@ package com.chattriggers.ctjs;
 import com.chattriggers.ctjs.commands.CommandHandler;
 import com.chattriggers.ctjs.loader.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
-import com.chattriggers.ctjs.minecraft.mixinsimpl.IClientCommandHandler;
+import com.chattriggers.ctjs.minecraft.imixins.IClientCommandHandler;
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler;
 import com.chattriggers.ctjs.triggers.TriggerType;
