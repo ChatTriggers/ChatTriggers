@@ -26,8 +26,10 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![enable annotation processing](http://i66.tinypic.com/676slz.png)
   - down that page > Annotation Processor options > green +
     - Option name: `reobfSrgFile`
-    - Value: `location-of-fork\mappings\stable_22\mcp-srg.srg`<br>
+    - Value: `location-of-fork\mappings\mcp-srg.srg`<br>
 ![set annotation processing option](https://i.imgur.com/PS2t8Yc.png)
+There won't be any file there currently, but as soon as you build, change versions, or run
+the `./gradlew copySrg` command, it will appear.
 ### 5. Debug client setup
   - run > edit configuration<br>
 ![edit configuration](http://i65.tinypic.com/t6yq7b.png)
@@ -36,5 +38,30 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
   - Program arguments
     - `--tweakClass com.chattriggers.ctjs.launch.CTJSTweaker`<br>
 ![edit program arguments](https://i.imgur.com/UcVOq71.png)
+### 6. Developing for different versions
+CT uses a preprocessor to develop the mod using one codebase for multiple versions. The preprocessor used 
+is the same as the one the [Replay Mod uses](https://github.com/ReplayMod/ReplayMod/blob/develop/README.md#the-preprocessor).
+You can read up more information on it there. One example of this code is:
+
+```java
+//#if MC>=11200
+// This is the block for MC >= 1.12.0
+category.addDetail(name, callable::call);
+//#else
+//$$ // This is the block for MC < 1.12.0
+//$$ category.setDetail(name, callable::call);
+//#endif
+```
+
+#### To switch versions
+  - Run `./gradlew changeMcVersion -PminecraftVersion=<version code>` <br>
+  The versions supported are listed in the `versions.txt` file, with 1.8.9 (code `10809`) being the default.
+  - Next, run `./gradlew copySrg setupDecompWorkspace` to generate the new mapping files, as well as decompile
+  Minecraft to the new version.
+  (Side Note: If the desired version is 1.8.9, you will need to run the gradle wrapper commands,
+   excluding the idea one, found in instruction #3)
+  - Finally, you will need to refresh the Gradle project in IntelliJ by pressing the spinning blue arrows in the
+  Gradle panel on the right hand side of your workspace.
+![refresh gradle](https://i.imgur.com/QoqEX4h.png)
 
 Everything should now be set up and ready to open pull requests.
