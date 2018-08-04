@@ -1,5 +1,6 @@
 /*
-
+    CREDIT TO THE REPLAY MOD FOR THIS PREPROCESSOR
+    https://github.com/ReplayMod/ReplayMod
 */
 
 static def evalVar(vars, String var) {
