@@ -14,7 +14,7 @@ public class KeyBind {
     private boolean isCustom;
 
     /**
-     * Create a new key bind, editable in the user's controls.
+     * Creates a new key bind, editable in the user's controls.
      *
      * @param description what the key bind does
      * @param keyCode     the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
