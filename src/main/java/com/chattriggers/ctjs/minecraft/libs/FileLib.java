@@ -12,7 +12,7 @@ import java.util.zip.ZipInputStream;
 
 public class FileLib {
     /**
-     * Writes a file to folder in Imports.
+     * Writes a file to folder in modules.
      *
      * @param importName name of the import
      * @param fileName   name of the file
@@ -38,7 +38,7 @@ public class FileLib {
     }
 
     /**
-     * Reads a file from folder in Imports.<br>
+     * Reads a file from folder in modules.<br>
      * Returns an empty string if file is not found.
      *
      * @param importName name of the import
