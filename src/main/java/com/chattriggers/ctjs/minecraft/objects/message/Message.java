@@ -161,7 +161,7 @@ public class Message {
     /**
      * Adds a TextComponent or String to the end of the Message.
      * 
-     * @param component the new TexComponent or String to add
+     * @param component the new TextComponent or String to add
      * @return the Message for method chaining
      */
     public Message addTextComponent(Object component) {
