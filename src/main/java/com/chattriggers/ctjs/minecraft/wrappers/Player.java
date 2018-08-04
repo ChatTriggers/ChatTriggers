@@ -27,7 +27,11 @@ public class Player {
      * @return the player object
      */
     public static EntityPlayerSP getPlayer() {
+        //#if MC<=10809
         return Client.getMinecraft().thePlayer;
+        //#else
+        //$$ return Client.getMinecraft().player;
+        //#endif
     }
 
     /**

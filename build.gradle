@@ -211,6 +211,16 @@ task userdocs(type: Javadoc) {
     exclude "com/chattriggers/ctjs/minecraft/imixins/*.java"
 }
 
+task copySrg(type: Copy, dependsOn: 'genSrgs') {
+    from {project.tasks.genSrgs.mcpToSrg}
+    into 'mappings'
+}
+
+compileJava.dependsOn copySrg
+
+setupDecompWorkspace.dependsOn copySrg
+setupDevWorkspace.dependsOn copySrg
+
 apply from: 'preprocessor.gradle'
 
 task convertSrc() {
