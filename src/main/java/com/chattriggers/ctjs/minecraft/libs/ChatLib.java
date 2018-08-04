@@ -325,6 +325,89 @@ public class ChatLib {
     }
 
     /**
+     * Edits an already sent chat message
+     *
+     * @param chatLineId    the ID of the chat message to replace
+     * @param toReplace     the content to replace the message with
+     */
+    public static void editChat(int chatLineId, String toReplace) {
+        editChat(chatLineId, toReplace, false);
+    }
+
+    /**
+     * Edits an already sent chat message
+     *
+     * @param chatLineId    the ID of the chat message to replace
+     * @param toReplace     the content to replace the message with
+     */
+    public static void editChat(int chatLineId, String toReplace, boolean once) {
+        List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
+                "drawnChatLines", "field_146252_h");
+        List<ChatLine> chatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
+                "chatLines", "field_146252_h");
+
+        ChatComponentText cct = new ChatComponentText(addColor(toReplace));
+
+        for (ChatLine chatLine : drawnChatLines) {
+            if (chatLine.getChatLineID() == chatLineId) {
+                ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+
+                if (once) break;
+            }
+        }
+
+        for (ChatLine chatLine : chatLines) {
+            if (chatLine.getChatLineID() == chatLineId) {
+                ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+
+                if (once) break;
+            }
+        }
+    }
+
+    /**
+     * Edits an already sent chat message
+     *
+     * @param chatLineId    the ID of the chat message to replace
+     * @param toReplace     the {@link Message} object to replace the message with
+     */
+    public static void editChat(int chatLineId, Message toReplace) {
+        editChat(chatLineId, toReplace, false);
+    }
+
+    /**
+     * Edits an already sent chat message
+     *
+     * @param chatLineId    the ID of the chat message to replace
+     * @param toReplace     the {@link Message} object to replace the message with
+     */
+    public static void editChat(int chatLineId, Message toReplace, boolean once) {
+        List<ChatLine> drawnChatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
+                "drawnChatLines", "field_146252_h");
+        List<ChatLine> chatLines = ReflectionHelper.getPrivateValue(GuiNewChat.class, Client.getChatGUI(),
+                "chatLines", "field_146252_h");
+
+        toReplace.parseMessages();
+        ChatComponentText cct = (ChatComponentText) toReplace.getChatMessage();
+
+        for (ChatLine chatLine : drawnChatLines) {
+            if (chatLine.getChatLineID() == chatLineId) {
+                ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+
+                if (once) break;
+            }
+        }
+
+        for (ChatLine chatLine : chatLines) {
+            if (chatLine.getChatLineID() == chatLineId) {
+                ReflectionHelper.setPrivateValue(ChatLine.class, chatLine, cct, "lineString", "field_74541_b");
+
+                if (once) break;
+            }
+        }
+    }
+
+    /**
      * Gets the previous 1000 lines of chat
      *
      * @return A list of the last 1000 chat lines
