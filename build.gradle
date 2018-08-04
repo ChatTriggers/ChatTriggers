@@ -1,6 +1,10 @@
 
 // For those who want the bleeding edge
 buildscript {
+    def f = file("gradle/mcversion.txt")
+
+    project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
+
     repositories {
         jcenter()
         mavenLocal()
@@ -18,7 +22,12 @@ buildscript {
     }
 
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
+        classpath "net.minecraftforge.gradle:ForgeGradle:" + (
+            mcVersion >= 11200 ? '2.3-SNAPSHOT' :
+            mcVersion >= 10904 ? '2.2-SNAPSHOT' :
+            mcVersion >= 10809 ? "2.1-SNAPSHOT" :
+                                 "invalid"
+        )
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         classpath "io.franzbecker:gradle-lombok:1.10"
     }
@@ -45,12 +54,39 @@ configurations {
 
 
 minecraft {
-    version = "1.8.9-11.15.1.1722"
+    version = [
+            11202: '1.12.2-14.23.0.2486',
+            11201: '1.12.1-14.22.0.2444',
+            11200: '1.12-14.21.1.2387',
+            11102: '1.11.2-13.20.0.2216',
+            11100: '1.11-13.19.1.2188',
+            11002: '1.10.2-12.18.2.2099',
+            10904: '1.9.4-12.17.0.1976',
+            10809: '1.8.9-11.15.1.1722'
+    ][mcVersion]
+    mappings = [
+            11202: "snapshot_20170615",
+            11201: "snapshot_20170615",
+            11200: "snapshot_20170615",
+            11102: "snapshot_20161220",
+            11100: "snapshot_20161111",
+            11002: "snapshot_20160518",
+            10904: "snapshot_20160518",
+            10809: "stable_22"
+    ][mcVersion]
+
     runDir = "run"
 
-    mappings = "stable_22"
     makeObfSourceJar = true
     clientJvmArgs = ["--tweakClass", "com.chattriggers.ctjs.launch.CTJSTweaker"]
+}
+
+afterEvaluate {
+    // Note cannot use minecraft.replace because that has already been forwarded to the task by FG by now
+    tasks.sourceMainJava.replace '@MOD_VERSION@', project.version
+    // Includes intentional whitespace to stop Forge from declaring the mod to be compatible with
+    // a newer srg-compatible MC version (that may be using a different protocol version)
+    tasks.sourceMainJava.replace '@MC_VERSION@', "[ ${project.minecraft.version} ]"
 }
 
 repositories {
@@ -173,4 +209,28 @@ task userdocs(type: Javadoc) {
     exclude "com/chattriggers/ctjs/utils/*.java"
     exclude "com/chattriggers/ctjs/minecraft/mixins/*.java"
     exclude "com/chattriggers/ctjs/minecraft/imixins/*.java"
+}
+
+apply from: 'preprocessor.gradle'
+
+task convertSrc() {
+    def version
+
+    if (project.hasProperty("mcVersion")) {
+        version = project.mcVersion
+    } else {
+        version = 10809
+        println "Defaulting to 1.8.9..."
+    }
+
+    project.ext.mcVersion = version
+    def f = file("gradle/mcversion.txt")
+    f.delete()
+    f.createNewFile()
+    f.write(version.toString())
+
+    println "MC target version is $version"
+    def vars = [MC: version as int]
+    project.convertTree(vars, 'src/main/java')
+    project.convertTree(vars, 'src/main/resources')
 }
