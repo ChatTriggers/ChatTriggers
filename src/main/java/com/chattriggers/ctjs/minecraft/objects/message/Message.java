@@ -184,7 +184,7 @@ public class Message {
     }
 
     /**
-     * Alias for {@link Message#clone()}
+     * Gets an exact copy of the Message.
      *
      * @return the copy of the Message
      */
@@ -197,7 +197,7 @@ public class Message {
     }
 
     /**
-     * Gets an exact copy of the Message.
+     * Alias for {@link Message#clone()}
      *
      * @return the copy of the Message
      */
