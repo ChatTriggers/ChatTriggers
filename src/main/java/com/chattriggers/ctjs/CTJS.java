@@ -3,6 +3,7 @@ package com.chattriggers.ctjs;
 import com.chattriggers.ctjs.commands.CTCommand;
 import com.chattriggers.ctjs.commands.CommandHandler;
 import com.chattriggers.ctjs.loader.ModuleManager;
+import com.chattriggers.ctjs.loader.UriScheme;
 import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.minecraft.libs.Tessellator;
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener;
@@ -69,6 +70,9 @@ public class CTJS {
         File pictures = new File(event.getModConfigurationDirectory(), "ChatTriggers/images/");
         pictures.mkdirs();
         assetsDir = pictures;
+
+        UriScheme.installUriScheme();
+        UriScheme.createSocketListener();
 
         Sentry.init(Reference.SENTRYDSN);
 

@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class GuiHandler {
@@ -33,10 +34,14 @@ public class GuiHandler {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        for (Map.Entry<GuiScreen, Integer> gui : this.GUIs.entrySet()) {
+        Iterator<Map.Entry<GuiScreen, Integer>> it = this.GUIs.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<GuiScreen, Integer> gui = it.next();
+
             if (gui.getValue() == 0) {
                 Minecraft.getMinecraft().displayGuiScreen(gui.getKey());
-                this.GUIs.remove(gui.getKey());
+                it.remove();
             } else {
                 this.GUIs.put(gui.getKey(), 0);
             }
