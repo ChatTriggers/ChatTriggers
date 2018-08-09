@@ -25,7 +25,7 @@ public class CPS {
     private int leftClicksMax;
 
     /**
-     * Gets the maximum right click.
+     * Gets the maximum right clicks.
      *
      * @return Maximum right clicks.
      */
@@ -56,7 +56,7 @@ public class CPS {
     /**
      * Gets the average left clicks per second.
      *
-     * @return Average left click per second.
+     * @return Average left clicks per second.
      */
     public int getLeftClicksAverage() {
         if (leftClicksAverage == null || leftClicksAverage.size() == 0) return 0;
@@ -69,7 +69,7 @@ public class CPS {
     /**
      * Gets the right clicks per second at any particular instant.
      *
-     * @return Right click per second.
+     * @return Right clicks per second.
      */
     public int getRightClicks() {
         return rightClicks == null ? 0 : rightClicks.size();

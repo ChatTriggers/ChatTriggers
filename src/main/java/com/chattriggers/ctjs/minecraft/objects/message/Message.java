@@ -160,7 +160,7 @@ public class Message {
     /**
      * Adds a TextComponent or String to the end of the Message.
      * 
-     * @param component the new TexComponent or String to add
+     * @param component the new TextComponent or String to add
      * @return the Message for method chaining
      */
     public Message addTextComponent(Object component) {
@@ -183,7 +183,7 @@ public class Message {
     }
 
     /**
-     * Alias for {@link Message#clone()}
+     * Gets an exact copy of the Message.
      *
      * @return the copy of the Message
      */
@@ -196,7 +196,7 @@ public class Message {
     }
 
     /**
-     * Gets an exact copy of the Message.
+     * Alias for {@link Message#clone()}
      *
      * @return the copy of the Message
      */
