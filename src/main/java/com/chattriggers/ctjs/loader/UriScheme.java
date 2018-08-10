@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class UriScheme {
@@ -19,14 +18,12 @@ public class UriScheme {
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("No URL found, aborting...");
-            new Scanner(System.in).nextLine();
             return;
         }
 
         if (!args[0].startsWith(PROTOCOL)) {
             System.out.println("URL found is not supported, aborting...");
             System.out.println(args[0]);
-            new Scanner(System.in).nextLine();
             return;
         }
 
@@ -41,8 +38,6 @@ public class UriScheme {
         } catch (Exception e) {
             copyModuleIn(module);
         }
-
-        new Scanner(System.in).nextLine();
     }
 
     public static void installUriScheme() {
@@ -62,13 +57,13 @@ public class UriScheme {
             ModContainer container = Loader.instance().getIndexedModList().get(Reference.MODID);
             String modJar = container.getSource().getAbsolutePath();
             String sep = File.separator;
-            String javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "java.exe";
+            String javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "javaw.exe";
 
             String value = ("\"" + javaProgram + "\" -cp \"" + modJar
                     + "\" com.chattriggers.ctjs.loader.UriScheme " + "\"%1\"").replace("\"", "\\\"");
 
             regAdd(
-                    "\\shell\\open\\command /f /ve /d "  +
+                    "\\shell\\open\\command /f /ve /d " +
                             "\"" + value + "\""
             );
         } catch (Exception e) {
@@ -129,7 +124,5 @@ public class UriScheme {
         } catch (Exception e) {
             System.out.println("Error writing to file.");
         }
-
-        new Scanner(System.in).nextLine();
     }
 }
