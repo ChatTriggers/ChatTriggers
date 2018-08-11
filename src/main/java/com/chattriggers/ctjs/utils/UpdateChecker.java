@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.utils.config.Config;
 import lombok.Getter;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
@@ -72,6 +73,17 @@ public class UpdateChecker {
     public void drawUpdateMessage() {
         if (!this.updateAvailable) return;
 
-        Renderer.drawString("&cChatTriggers requires an update to work properly!", 2, 2);
+        GlStateManager.pushMatrix();
+
+        Renderer.getFontRenderer()
+                .drawString(
+                        ChatLib.addColor("&cChatTriggers requires an update to work properly!"),
+                        2,
+                        2,
+                        0xffffffff,
+                        false
+                );
+
+        GlStateManager.popMatrix();
     }
 }

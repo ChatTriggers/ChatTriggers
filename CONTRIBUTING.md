@@ -64,4 +64,6 @@ category.addDetail(name, callable::call);
   Gradle panel on the right hand side of your workspace.
 ![refresh gradle](https://i.imgur.com/QoqEX4h.png)
 
+Make sure to change back to MC version 1.8.9 before pushing or making pull requests.
+
 Everything should now be set up and ready to open pull requests.
