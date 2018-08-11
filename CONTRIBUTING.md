@@ -53,6 +53,9 @@ category.addDetail(name, callable::call);
 //#endif
 ```
 
+Note: Code for the default target Minecraft version (1.8.9) shall be placed in the first branch of the if-else-construct.
+Additionally, all version specific imports shall be placed after all normal imports, but before any static or java.* imports.
+
 #### To switch versions
   - Run `./gradlew changeMcVersion -PminecraftVersion=<version code>` <br>
   The versions supported are listed in the `versions.txt` file, with 1.8.9 (code `10809`) being the default.

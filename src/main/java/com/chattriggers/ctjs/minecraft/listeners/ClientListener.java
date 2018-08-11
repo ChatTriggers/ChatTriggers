@@ -5,9 +5,10 @@ import com.chattriggers.ctjs.minecraft.objects.CPS;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -85,7 +86,11 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
+        //#if MC<=10809
         TriggerType.RENDER_WORLD.triggerAll(event.partialTicks);
+        //#else
+        //$$ TriggerType.RENDER_WORLD.triggerAll(event.getPartialTicks());
+        //#endif
     }
 
     @SubscribeEvent
@@ -145,67 +150,123 @@ public class ClientListener {
 
     @SubscribeEvent
     public void onBlockHighlight(DrawBlockHighlightEvent event) {
+        //#if MC<=10809
         if (event.target == null || event.target.getBlockPos() == null) return;
+        //#else
+        //$$ if (event.getTarget() == null || event.getTarget().getBlockPos() == null) return;
+        //#endif
 
         Vector3d position = new Vector3d(
+                //#if MC<=10809
                 event.target.getBlockPos().getX(),
                 event.target.getBlockPos().getY(),
                 event.target.getBlockPos().getZ()
+                //#else
+                //$$ event.getTarget().getBlockPos().getX(),
+                //$$ event.getTarget().getBlockPos().getY(),
+                //$$ event.getTarget().getBlockPos().getZ()
+                //#endif
         );
+
         TriggerType.BLOCK_HIGHLIGHT.triggerAll(event, position);
     }
 
     @SubscribeEvent
     public void onPickupItem(EntityItemPickupEvent event) {
-        if (event.entityPlayer instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
-            Vector3d position = new Vector3d(
-                    event.item.posX,
-                    event.item.posY,
-                    event.item.posZ
-            );
-            Vector3d motion = new Vector3d(
-                    event.item.motionX,
-                    event.item.motionY,
-                    event.item.motionZ
-            );
-            TriggerType.PICKUP_ITEM.triggerAll(
-                    new Item(event.item.getEntityItem()),
-                    new PlayerMP(player),
-                    position,
-                    motion
-            );
-        }
+        //#if MC<=10809
+        if (!(event.entityPlayer instanceof EntityPlayerMP)) return;
+        //#else
+        //$$ if (!(event.getEntityPlayer() instanceof EntityPlayerMP)) return;
+        //#endif
+
+        //#if MC<=10809
+        EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
+        //#else
+        //$$ EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+        //#endif
+
+        //#if MC<=10809
+        EntityItem item = event.item;
+        //#else
+        //$$ EntityItem item = event.getItem();
+        //#endif
+
+        Vector3d position = new Vector3d(
+                item.posX,
+                item.posY,
+                item.posZ
+        );
+        Vector3d motion = new Vector3d(
+                item.motionX,
+                item.motionY,
+                item.motionZ
+        );
+
+        TriggerType.PICKUP_ITEM.triggerAll(
+                //#if MC<=10809
+                new Item(item.getEntityItem()),
+                //#else
+                //$$ new Item(item.getItem()),
+                //#endif
+                new PlayerMP(player),
+                position,
+                motion
+        );
     }
 
     @SubscribeEvent
     public void onDropItem(ItemTossEvent event) {
-        if (event.player instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) event.player;
-            Vector3d position = new Vector3d(
-                    event.entityItem.posX,
-                    event.entityItem.posY,
-                    event.entityItem.posZ
-            );
-            Vector3d motion = new Vector3d(
-                    event.entityItem.motionX,
-                    event.entityItem.motionY,
-                    event.entityItem.motionZ
-            );
-            TriggerType.DROP_ITEM.triggerAll(
-                    new Item(event.entityItem.getEntityItem()),
-                    new PlayerMP(player),
-                    position,
-                    motion
-            );
-        }
+        //#if MC<=10809
+        if (!(event.player instanceof EntityPlayerMP)) return;
+        //#else
+        //$$ if (!(event.getPlayer() instanceof EntityPlayerMP)) return;
+        //#endif
+
+        //#if MC<=10809
+        EntityPlayerMP player = (EntityPlayerMP) event.player;
+        //#else
+        //$$ EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
+        //#endif
+
+        //#if MC<=10809
+        EntityItem entityItem = event.entityItem;
+        //#else
+        //$$ EntityItem item = event.getEntityItem();
+        //#endif
+
+        Vector3d position = new Vector3d(
+                entityItem.posX,
+                entityItem.posY,
+                entityItem.posZ
+        );
+        Vector3d motion = new Vector3d(
+                entityItem.motionX,
+                entityItem.motionY,
+                entityItem.motionZ
+        );
+
+        TriggerType.DROP_ITEM.triggerAll(
+                //#if MC<=10809
+                new Item(entityItem.getEntityItem()),
+                //#else
+                //$$ new Item(entityItem.getItem()),
+                //#endif
+                new PlayerMP(player),
+                position,
+                motion
+        );
     }
 
     @SubscribeEvent
     public void onItemTooltip(ItemTooltipEvent e) {
         TriggerType.TOOLTIP.triggerAll(
+                //#if MC<=10809
                 e.toolTip,
                 new Item(e.itemStack)
+                //#else
+                //$$ e.getToolTip(),
+                //$$ new Item(e.getItemStack())
+                //#endif
         );
     }
 }

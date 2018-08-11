@@ -14,7 +14,12 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+
+//#if MC<=10809
 import net.minecraft.util.BlockPos;
+//#else
+//$$ import net.minecraft.util.math.BlockPos;
+//#endif
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;

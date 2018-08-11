@@ -299,7 +299,11 @@ public class JSScriptLoader extends ScriptLoader {
 
         for (File file : getScriptFiles(dir, ignored)) {
             try {
+                //#if MC<=10809
                 allFiles.put(file.getName(), FileUtils.readLines(file));
+                //#else
+                //$$ allFiles.put(file.getName(), FileUtils.readLines(file, java.nio.charset.Charset.defaultCharset()));
+                //#endif
             } catch (IOException e) {
                 e.printStackTrace();
             }
