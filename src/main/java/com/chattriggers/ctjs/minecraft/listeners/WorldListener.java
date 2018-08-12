@@ -73,9 +73,15 @@ public class WorldListener {
         try {
             //#if MC<=10809
             vol = event.sound.getVolume();
-            pitch = event.sound.getPitch();
             //#else
             //$$ vol = event.getSound().getVolume();
+            //#endif
+        } catch (Exception ignored) {}
+
+        try {
+            //#if MC<=10809
+            pitch = event.sound.getPitch();
+            //#else
             //$$ pitch = event.getSound().getPitch();
             //#endif
         } catch (Exception ignored) {}
