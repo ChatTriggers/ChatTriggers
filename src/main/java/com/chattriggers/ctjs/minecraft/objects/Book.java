@@ -10,8 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+//#if MC<=10809
+import net.minecraft.util.IChatComponent;
+//#else
+//$$ import net.minecraft.util.text.ITextComponent;
+//#endif
 
 public class Book {
     private GuiScreenBook bookScreen;
@@ -19,7 +24,11 @@ public class Book {
     private NBTTagCompound bookData;
 
     public Book(String bookName) {
+        //#if MC<=10809
         book = new ItemStack(Items.written_book);
+        //#else
+        //$$ book = new ItemStack(Items.WRITTEN_BOOK);
+        //#endif
 
         bookData = new NBTTagCompound();
         bookData.setTag("author", new NBTTagString(Client.getMinecraft().getSession().getUsername()));
@@ -38,7 +47,13 @@ public class Book {
     public Book addPage(Message message) {
         NBTTagList pages = (NBTTagList) bookData.getTag("pages");
 
-        pages.appendTag(new NBTTagString(IChatComponent.Serializer.componentToJson(message.getChatMessage())));
+        pages.appendTag(new NBTTagString(
+                //#if MC<=10809
+                IChatComponent.Serializer.componentToJson(message.getChatMessage())
+                //#else
+                //$$ ITextComponent.Serializer.componentToJson(message.getChatMessage())
+                //#endif
+        ));
 
         updateBookScreen(pages);
 
@@ -67,7 +82,13 @@ public class Book {
     public Book setPage(int pageNumber, Message message) {
         NBTTagList pages = (NBTTagList) bookData.getTag("pages");
 
-        pages.set(pageNumber, new NBTTagString(IChatComponent.Serializer.componentToJson(message.getChatMessage())));
+        pages.set(pageNumber, new NBTTagString(
+                //#if MC<=10809
+                IChatComponent.Serializer.componentToJson(message.getChatMessage())
+                //#else
+                //$$ ITextComponent.Serializer.componentToJson(message.getChatMessage())
+                //#endif
+        ));
 
         updateBookScreen(pages);
 
