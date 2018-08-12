@@ -22,9 +22,9 @@ public class KeyAction extends Action {
     @Override
     public void complete() {
         //#if MC<=10809
-        doClick(key, 2);
+        //$$ doClick(key, 2);
         //#else
-        //$$ doClick(key, net.minecraft.inventory.ClickType.SWAP);
+        doClick(key, net.minecraft.inventory.ClickType.SWAP);
         //#endif
     }
 }

@@ -57,13 +57,13 @@ public class WorldListener {
     public void onSoundPlay(PlaySoundEvent event) {
         Vector3d position = new Vector3d(
                 //#if MC<=10809
-                event.sound.getXPosF(),
-                event.sound.getYPosF(),
-                event.sound.getZPosF()
+                //$$ event.sound.getXPosF(),
+                //$$ event.sound.getYPosF(),
+                //$$ event.sound.getZPosF()
                 //#else
-                //$$ event.getSound().getXPosF(),
-                //$$ event.getSound().getYPosF(),
-                //$$ event.getSound().getZPosF()
+                event.getSound().getXPosF(),
+                event.getSound().getYPosF(),
+                event.getSound().getZPosF()
                 //#endif
         );
 
@@ -72,17 +72,17 @@ public class WorldListener {
 
         try {
             //#if MC<=10809
-            vol = event.sound.getVolume();
+            //$$ vol = event.sound.getVolume();
             //#else
-            //$$ vol = event.getSound().getVolume();
+            vol = event.getSound().getVolume();
             //#endif
         } catch (Exception ignored) {}
 
         try {
             //#if MC<=10809
-            pitch = event.sound.getPitch();
+            //$$ pitch = event.sound.getPitch();
             //#else
-            //$$ pitch = event.getSound().getPitch();
+            pitch = event.getSound().getPitch();
             //#endif
         } catch (Exception ignored) {}
 
@@ -90,15 +90,15 @@ public class WorldListener {
                 event,
                 position,
                 //#if MC<=10809
-                event.name,
+                //$$ event.name,
+                //$$ vol,
+                //$$ pitch,
+                //$$ event.category == null ? null : event.category.getCategoryName()
+                //#else
+                event.getName(),
                 vol,
                 pitch,
-                event.category == null ? null : event.category.getCategoryName()
-                //#else
-                //$$ event.getName(),
-                //$$ vol,
-                //$$ event.getSound().getPitch(),
-                //$$ event.getSound().getCategory() == null ? null : event.getSound().getCategory().getName()
+                event.getSound().getCategory() == null ? null : event.getSound().getCategory().getName()
                 //#endif
         );
     }
@@ -107,9 +107,9 @@ public class WorldListener {
     public void noteBlockEventPlay(NoteBlockEvent.Play event) {
         Vector3d position = new Vector3d(
                 //#if MC<=10809
-                event.pos.getX(), event.pos.getY(), event.pos.getZ()
+                //$$ event.pos.getX(), event.pos.getY(), event.pos.getZ()
                 //#else
-                //$$ event.getPos().getX(), event.getPos().getY(), event.getPos().getZ()
+                event.getPos().getX(), event.getPos().getY(), event.getPos().getZ()
                 //#endif
         );
 
@@ -120,9 +120,9 @@ public class WorldListener {
     public void noteBlockEventChange(NoteBlockEvent.Change event) {
         Vector3d position = new Vector3d(
                 //#if MC<=10809
-                event.pos.getX(), event.pos.getY(), event.pos.getZ()
+                //$$ event.pos.getX(), event.pos.getY(), event.pos.getZ()
                 //#else
-                //$$ event.getPos().getX(), event.getPos().getY(), event.getPos().getZ()
+                event.getPos().getX(), event.getPos().getY(), event.getPos().getZ()
                 //#endif
         );
 

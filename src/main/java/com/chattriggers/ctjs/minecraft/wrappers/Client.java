@@ -31,9 +31,9 @@ public class Client {
      */
     public static NetHandlerPlayClient getConnection() {
         //#if MC<=10809
-        return getMinecraft().getNetHandler();
+        //$$ return getMinecraft().getNetHandler();
         //#else
-        //$$ return getMinecraft().getConnection();
+        return getMinecraft().getConnection();
         //#endif
     }
 

@@ -23,9 +23,9 @@ public class DropAction extends Action {
         doClick(
                 holdingCtrl ? 1 : 0,
                 //#if MC<=10809
-                4
+                //$$ 4
                 //#else
-                //$$ net.minecraft.inventory.ClickType.THROW
+                net.minecraft.inventory.ClickType.THROW
                 //#endif
         );
     }

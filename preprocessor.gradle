@@ -111,7 +111,7 @@ static def convertSource(Map<String, String> kws, Map<String, Integer> vars, Lis
         line
     }
     if (!ifStack.isEmpty()) {
-        throw new ParserException("Missing endif in $fileName")
+        throw new ParserException("Missing endif near line $n in $fileName")
     }
     return lines
 }

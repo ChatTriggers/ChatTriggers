@@ -8,14 +8,14 @@ import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 //#if MC<=10809
+//$$ import net.minecraft.client.renderer.WorldRenderer;
 //#else
-//$$ import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.BufferBuilder;
 //#endif
 
 public class Tessellator {
@@ -24,9 +24,9 @@ public class Tessellator {
 
     private net.minecraft.client.renderer.Tessellator tessellator;
     //#if MC<=10809
-    private WorldRenderer worldRenderer;
+    //$$ private WorldRenderer worldRenderer;
     //#else
-    //$$ private BufferBuilder worldRenderer;
+    private BufferBuilder worldRenderer;
     //#endif
     private boolean firstVertex;
     private boolean began;
@@ -37,9 +37,9 @@ public class Tessellator {
 
         this.tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
         //#if MC<=10809
-        this.worldRenderer = this.tessellator.getWorldRenderer();
+        //$$ this.worldRenderer = this.tessellator.getWorldRenderer();
         //#else
-        //$$ this.worldRenderer = this.tessellator.getBuffer();
+        this.worldRenderer = this.tessellator.getBuffer();
         //#endif
         this.firstVertex = true;
         this.began = false;

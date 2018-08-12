@@ -7,9 +7,9 @@ import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 
 //#if MC<=10809
-import net.minecraft.util.BlockPos;
+//$$ import net.minecraft.util.BlockPos;
 //#else
-//$$ import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos;
 //#endif
 
 public class  Block {
@@ -89,9 +89,9 @@ public class  Block {
      */
     public String getRegistryName() {
         //#if MC<=10809
-        return this.block.getRegistryName();
+        //$$ return this.block.getRegistryName();
         //#else
-        //$$ return this.block.getRegistryName().toString();
+        return this.block.getRegistryName().toString();
         //#endif
     }
 
@@ -123,13 +123,13 @@ public class  Block {
      */
     public int getLightValue() {
         //#if MC<=10809
-        return this.block.getLightValue();
+        //$$ return this.block.getLightValue();
         //#else
-        //$$ return this.block.getLightValue(
-        //$$         World.getWorld().getBlockState(this.blockPos),
-        //$$         World.getWorld(),
-        //$$         this.getBlockPos()
-        //$$ );
+        return this.block.getLightValue(
+                World.getWorld().getBlockState(this.blockPos),
+                World.getWorld(),
+                this.getBlockPos()
+        );
         //#endif
     }
 
@@ -206,11 +206,12 @@ public class  Block {
      */
     public boolean canProvidePower() {
         //#if MC<=10809
-        return this.block.canProvidePower();
+        //$$ return this.block.canProvidePower();
         //#else
-        //$$ return this.block.canProvidePower(
-        //$$         World.getWorld().getBlockState(this.blockPos)
-        //$$ );
+        return this.block.canProvidePower(
+                World.getWorld().getBlockState(this.blockPos)
+        );
+        //#endif
     }
 
     /**
@@ -258,11 +259,11 @@ public class  Block {
      */
     public boolean isTranslucent() {
         //#if MC<=10809
-        return this.block.isTranslucent();
+        //$$ return this.block.isTranslucent();
         //#else
-        //$$ return this.block.isTranslucent(
-        //$$         World.getWorld().getBlockState(this.blockPos)
-        //$$ );
+        return this.block.isTranslucent(
+                World.getWorld().getBlockState(this.blockPos)
+        );
         //#endif
     }
 

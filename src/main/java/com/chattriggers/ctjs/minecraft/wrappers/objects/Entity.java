@@ -5,11 +5,11 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 
 //#if MC<=10809
-import net.minecraft.util.MathHelper;
+//$$ import net.minecraft.util.MathHelper;
 //#else
-//$$ import net.minecraft.util.math.MathHelper;
-//$$ import java.util.List;
-//$$ import java.util.stream.Collectors;
+import net.minecraft.util.math.MathHelper;
+import java.util.List;
+import java.util.stream.Collectors;
 //#endif
 
 import java.util.UUID;
@@ -52,9 +52,9 @@ public class Entity {
      */
     public double getPitch() {
         //#if MC<=10809
-        return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch);
+        //$$ return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch);
         //#else
-        //$$ return MathHelper.wrapDegrees(this.entity.rotationPitch);
+        return MathHelper.wrapDegrees(this.entity.rotationPitch);
         //#endif
     }
 
@@ -66,9 +66,9 @@ public class Entity {
      */
     public double getYaw() {
         //#if MC<=10809
-        return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw);
+        //$$ return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw);
         //#else
-        //$$ return MathHelper.wrapDegrees(this.entity.rotationYaw);
+        return MathHelper.wrapDegrees(this.entity.rotationYaw);
         //#endif
     }
 
@@ -120,13 +120,13 @@ public class Entity {
      */
     public Entity getRiding() {
         //#if MC<=10809
-        return this.entity.ridingEntity == null
-                ? null
-                : new Entity(this.entity.ridingEntity);
-        //#else
         //$$ return this.entity.ridingEntity == null
         //$$         ? null
         //$$         : new Entity(this.entity.ridingEntity);
+        //#else
+        return this.entity.getRidingEntity() == null
+                ? null
+                : new Entity(this.entity.getRidingEntity());
         //#endif
     }
 
@@ -137,28 +137,28 @@ public class Entity {
      */
     public Entity getRider() {
         //#if MC<=10809
-        return this.entity.riddenByEntity == null
-                ? null
-                : new Entity(this.entity.riddenByEntity);
-        //#else
-        //$$ return getRiders().isEmpty()
+        //$$ return this.entity.riddenByEntity == null
         //$$         ? null
-        //$$         : getRiders().get(0);
+        //$$         : new Entity(this.entity.riddenByEntity);
+        //#else
+        return getRiders().isEmpty()
+                ? null
+                : getRiders().get(0);
         //#endif
     }
 
     //#if MC>10809
-    //$$ /**
-    //$$  * Gets the entities that are riding this entity.
-    //$$  *
-    //$$  * @return the riding entities, or an empty list if there aren't any.
-    //$$  */
-    //$$ public List<Entity> getRiders() {
-    //$$     return this.entity.getPassengers()
-    //$$             .stream()
-    //$$             .map(Entity::new)
-    //$$             .collect(Collectors.toList());
-    //$$ }
+    /**
+     * Gets the entities that are riding this entity.
+     *
+     * @return the riding entities, or an empty list if there aren't any.
+     */
+    public List<Entity> getRiders() {
+        return this.entity.getPassengers()
+                .stream()
+                .map(Entity::new)
+                .collect(Collectors.toList());
+    }
     //#endif
 
     /**

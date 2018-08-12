@@ -12,9 +12,9 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import paulscode.sound.SoundSystem;
 
 //#if MC<=10809
-import net.minecraft.client.audio.SoundCategory;
+//$$ import net.minecraft.client.audio.SoundCategory;
 //#else
-//$$ import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundCategory;
 //#endif
 
 import java.io.File;

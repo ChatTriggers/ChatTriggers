@@ -9,16 +9,16 @@ import lombok.experimental.Accessors;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 //#if MC<=10809
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.IChatComponent;
+//$$ import net.minecraft.network.play.server.S02PacketChat;
+//$$ import net.minecraft.util.ChatComponentText;
+//$$ import net.minecraft.util.ChatStyle;
+//$$ import net.minecraft.util.IChatComponent;
 //#else
-//$$ import net.minecraft.network.play.server.SPacketChat;
-//$$ import net.minecraft.util.text.ChatType;
-//$$ import net.minecraft.util.text.ITextComponent;
-//$$ import net.minecraft.util.text.Style;
-//$$ import net.minecraft.util.text.TextComponentString;
+import net.minecraft.network.play.server.SPacketChat;
+import net.minecraft.util.text.ChatType;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 //#endif
 
 import java.util.ArrayList;
@@ -32,9 +32,9 @@ import java.util.Iterator;
 @Accessors(chain = true)
 public class Message {
     //#if MC<=10809
-    private IChatComponent chatMessage;
+    //$$ private IChatComponent chatMessage;
     //#else
-    //$$ private ITextComponent chatMessage;
+    private ITextComponent chatMessage;
     //#endif
 
     /**
@@ -101,9 +101,9 @@ public class Message {
      */
     public Message(ClientChatReceivedEvent event) {
         //#if MC<=10809
-        this(event.message);
+        //$$ this(event.message);
         //#else
-        //$$ this(event.getMessage());
+        this(event.getMessage());
         //#endif
     }
 
@@ -113,10 +113,10 @@ public class Message {
      * @param component the IChatComponent
      */
     //#if MC<=10809
-    public Message(IChatComponent component) {
+    //$$ public Message(IChatComponent component) {
     //#else
-    //$$ public Message(ITextComponent component) {
-    //#else
+    public Message(ITextComponent component) {
+    //#endif
         this.chatLineId = -1;
         this.recursive = false;
         this.formatted = true;
@@ -128,13 +128,13 @@ public class Message {
             this.messageParts.add(new TextComponent(component));
         } else {
             //#if MC<=10809
-            for (IChatComponent sibling : component.getSiblings()) {
-                this.messageParts.add(new TextComponent(sibling));
-            }
-            //#else
             //$$ for (IChatComponent sibling : component.getSiblings()) {
             //$$     this.messageParts.add(new TextComponent(sibling));
             //$$ }
+            //#else
+            for (ITextComponent sibling : component.getSiblings()) {
+                this.messageParts.add(new TextComponent(sibling));
+            }
             //#endif
         }
 
@@ -245,17 +245,17 @@ public class Message {
         }
 
         //#if MC<=10809
-        if (this.recursive) {
-            Client.getConnection().handleChat(new S02PacketChat(this.chatMessage, (byte) 0));
-        } else {
-            Player.getPlayer().addChatMessage(this.chatMessage);
-        }
-        //#else
         //$$ if (this.recursive) {
-        //$$     Client.getConnection().handleChat(new SPacketChat(this.chatMessage, ChatType.CHAT));
+        //$$     Client.getConnection().handleChat(new S02PacketChat(this.chatMessage, (byte) 0));
         //$$ } else {
-        //$$     Player.getPlayer().sendMessage(this.chatMessage);
+        //$$     Player.getPlayer().addChatMessage(this.chatMessage);
         //$$ }
+        //#else
+        if (this.recursive) {
+            Client.getConnection().handleChat(new SPacketChat(this.chatMessage, ChatType.CHAT));
+        } else {
+            Player.getPlayer().sendMessage(this.chatMessage);
+        }
         //#endif
     }
 
@@ -268,9 +268,9 @@ public class Message {
         if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.getFormattedText())) return;
 
         //#if MC<=10809
-        Client.getConnection().handleChat(new S02PacketChat(this.chatMessage, (byte) 2));
+        //$$ Client.getConnection().handleChat(new S02PacketChat(this.chatMessage, (byte) 2));
         //#else
-        //$$ Client.getConnection().handleChat(new SPacketChat(this.chatMessage, ChatType.GAME_INFO));
+        Client.getConnection().handleChat(new SPacketChat(this.chatMessage, ChatType.GAME_INFO));
         //#endif
     }
 
@@ -284,9 +284,9 @@ public class Message {
     }
 
     //#if MC<=10809
-    public IChatComponent getChatMessage() {
+    //$$ public IChatComponent getChatMessage() {
     //#else
-    //$$ public ITextComponent getChatMessage() {
+    public ITextComponent getChatMessage() {
     //#endif
         if (this.chatMessage == null)
             parseMessages();
@@ -297,9 +297,9 @@ public class Message {
     // helper method to parse chat component parts
     private void parseMessages() {
         //#if MC<=10809
-        this.chatMessage = new ChatComponentText("");
+        //$$ this.chatMessage = new ChatComponentText("");
         //#else
-        //$$ this.chatMessage = new TextComponentString("");
+        this.chatMessage = new TextComponentString("");
         //#endif
 
         for (Object message : this.messageParts) {
@@ -307,11 +307,11 @@ public class Message {
                 String toAdd = ((String) message);
 
                 //#if MC<=10809
-                ChatComponentText cct = new ChatComponentText(this.formatted ? ChatLib.addColor(toAdd) : toAdd);
-                cct.setChatStyle(new ChatStyle().setParentStyle(null));
+                //$$ ChatComponentText cct = new ChatComponentText(this.formatted ? ChatLib.addColor(toAdd) : toAdd);
+                //$$ cct.setChatStyle(new ChatStyle().setParentStyle(null));
                 //#else
-                //$$ TextComponentString cct = new TextComponentString(this.formatted ? ChatLib.addColor(toAdd) : toAdd);
-                //$$ cct.setStyle(new Style().setParentStyle(null));
+                TextComponentString cct = new TextComponentString(this.formatted ? ChatLib.addColor(toAdd) : toAdd);
+                cct.setStyle(new Style().setParentStyle(null));
                 //#endif
 
                 this.chatMessage.appendSibling(cct);

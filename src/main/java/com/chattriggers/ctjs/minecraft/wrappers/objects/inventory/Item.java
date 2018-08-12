@@ -14,11 +14,11 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 //#if MC<=10809
-import net.minecraft.client.renderer.entity.RenderItem;
+//$$ import net.minecraft.client.renderer.entity.RenderItem;
 //#else
-//$$ import net.minecraft.client.renderer.RenderItem;
-//$$ import net.minecraft.client.util.ITooltipFlag;
-//$$ import com.chattriggers.ctjs.minecraft.wrappers.World;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.util.ITooltipFlag;
+import com.chattriggers.ctjs.minecraft.wrappers.World;
 //#endif
 
 import java.util.HashMap;
@@ -81,11 +81,11 @@ public class Item {
      */
     public Item(EntityItem entityItem) {
         //#if MC<=10809
-        this.item = entityItem.getEntityItem().getItem();
-        this.itemStack = entityItem.getEntityItem();
+        //$$ this.item = entityItem.getEntityItem().getItem();
+        //$$ this.itemStack = entityItem.getEntityItem();
         //#else
-        //$$ this.item = entityItem.getItem().getItem();
-        //$$ this.itemStack = entityItem.getItem();
+        this.item = entityItem.getItem().getItem();
+        this.itemStack = entityItem.getItem();
         //#endif
     }
 
@@ -98,11 +98,11 @@ public class Item {
     public Item(Entity entity) {
         if (entity.getEntity() instanceof EntityItem) {
             //#if MC<=10809
-            this.item = ((EntityItem) entity.getEntity()).getEntityItem().getItem();
-            this.itemStack = ((EntityItem) entity.getEntity()).getEntityItem();
+            //$$ this.item = ((EntityItem) entity.getEntity()).getEntityItem().getItem();
+            //$$ this.itemStack = ((EntityItem) entity.getEntity()).getEntityItem();
             //#else
-            //$$ this.item = ((EntityItem) entity.getEntity()).getItem().getItem();
-            //$$ this.itemStack = ((EntityItem) entity.getEntity()).getItem();
+            this.item = ((EntityItem) entity.getEntity()).getItem().getItem();
+            this.itemStack = ((EntityItem) entity.getEntity()).getItem();
             //#endif
         } else {
             throw new IllegalArgumentException("Entity is not of type EntityItem");
@@ -137,9 +137,9 @@ public class Item {
      */
     public int getStackSize() {
         //#if MC<=10809
-        return this.itemStack.stackSize;
+        //$$ return this.itemStack.stackSize;
         //#else
-        //$$ return this.itemStack.getCount();
+        return this.itemStack.getCount();
         //#endif
     }
 
@@ -161,9 +161,9 @@ public class Item {
      */
     public String getRegistryName() {
         //#if MC<=10809
-        return this.item.getRegistryName();
+        //$$ return this.item.getRegistryName();
         //#else
-        //$$ return this.item.getRegistryName().toString();
+        return this.item.getRegistryName().toString();
         //#endif
     }
 
@@ -191,9 +191,9 @@ public class Item {
             Map.Entry<Integer, Integer> rawEnchant = (Map.Entry<Integer, Integer>) enchantObj;
 
             //#if MC<=10809
-            Enchantment enchant = Enchantment.getEnchantmentById(rawEnchant.getKey());
+            //$$ Enchantment enchant = Enchantment.getEnchantmentById(rawEnchant.getKey());
             //#else
-            //$$ Enchantment enchant = Enchantment.getEnchantmentByID(rawEnchant.getKey());
+            Enchantment enchant = Enchantment.getEnchantmentByID(rawEnchant.getKey());
             //#endif
 
             mappedEnchants.put(enchant.getName().replace("enchantment.", ""), rawEnchant.getValue());
@@ -256,11 +256,11 @@ public class Item {
      */
     public Boolean canHarvest(Block block) {
         //#if MC<=10809
-        return this.itemStack.canHarvestBlock(block.getBlock());
+        //$$ return this.itemStack.canHarvestBlock(block.getBlock());
         //#else
-        //$$ return this.itemStack.canHarvestBlock(
-        //$$         World.getWorld().getBlockState(block.getBlockPos())
-        //$$ );
+        return this.itemStack.canHarvestBlock(
+                World.getWorld().getBlockState(block.getBlockPos())
+        );
         //#endif
     }
 
@@ -328,9 +328,9 @@ public class Item {
      */
     public List<String> getLore() {
         //#if MC<=10809
-        return this.itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips);
+        //$$ return this.itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips);
         //#else
-        //$$ return this.itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED);
+        return this.itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED);
         //#endif
     }
 

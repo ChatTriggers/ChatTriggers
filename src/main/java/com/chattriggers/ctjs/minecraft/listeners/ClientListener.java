@@ -87,9 +87,9 @@ public class ClientListener {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         //#if MC<=10809
-        TriggerType.RENDER_WORLD.triggerAll(event.partialTicks);
+        //$$ TriggerType.RENDER_WORLD.triggerAll(event.partialTicks);
         //#else
-        //$$ TriggerType.RENDER_WORLD.triggerAll(event.getPartialTicks());
+        TriggerType.RENDER_WORLD.triggerAll(event.getPartialTicks());
         //#endif
     }
 
@@ -151,20 +151,20 @@ public class ClientListener {
     @SubscribeEvent
     public void onBlockHighlight(DrawBlockHighlightEvent event) {
         //#if MC<=10809
-        if (event.target == null || event.target.getBlockPos() == null) return;
+        //$$ if (event.target == null || event.target.getBlockPos() == null) return;
         //#else
-        //$$ if (event.getTarget() == null || event.getTarget().getBlockPos() == null) return;
+        if (event.getTarget() == null || event.getTarget().getBlockPos() == null) return;
         //#endif
 
         Vector3d position = new Vector3d(
                 //#if MC<=10809
-                event.target.getBlockPos().getX(),
-                event.target.getBlockPos().getY(),
-                event.target.getBlockPos().getZ()
+                //$$ event.target.getBlockPos().getX(),
+                //$$ event.target.getBlockPos().getY(),
+                //$$ event.target.getBlockPos().getZ()
                 //#else
-                //$$ event.getTarget().getBlockPos().getX(),
-                //$$ event.getTarget().getBlockPos().getY(),
-                //$$ event.getTarget().getBlockPos().getZ()
+                event.getTarget().getBlockPos().getX(),
+                event.getTarget().getBlockPos().getY(),
+                event.getTarget().getBlockPos().getZ()
                 //#endif
         );
 
@@ -174,21 +174,21 @@ public class ClientListener {
     @SubscribeEvent
     public void onPickupItem(EntityItemPickupEvent event) {
         //#if MC<=10809
-        if (!(event.entityPlayer instanceof EntityPlayerMP)) return;
+        //$$ if (!(event.entityPlayer instanceof EntityPlayerMP)) return;
         //#else
-        //$$ if (!(event.getEntityPlayer() instanceof EntityPlayerMP)) return;
+        if (!(event.getEntityPlayer() instanceof EntityPlayerMP)) return;
         //#endif
 
         //#if MC<=10809
-        EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
+        //$$ EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
         //#else
-        //$$ EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+        EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
         //#endif
 
         //#if MC<=10809
-        EntityItem item = event.item;
+        //$$ EntityItem item = event.item;
         //#else
-        //$$ EntityItem item = event.getItem();
+        EntityItem item = event.getItem();
         //#endif
 
         Vector3d position = new Vector3d(
@@ -204,9 +204,9 @@ public class ClientListener {
 
         TriggerType.PICKUP_ITEM.triggerAll(
                 //#if MC<=10809
-                new Item(item.getEntityItem()),
+                //$$ new Item(item.getEntityItem()),
                 //#else
-                //$$ new Item(item.getItem()),
+                new Item(item.getItem()),
                 //#endif
                 new PlayerMP(player),
                 position,
@@ -217,21 +217,21 @@ public class ClientListener {
     @SubscribeEvent
     public void onDropItem(ItemTossEvent event) {
         //#if MC<=10809
-        if (!(event.player instanceof EntityPlayerMP)) return;
+        //$$ if (!(event.player instanceof EntityPlayerMP)) return;
         //#else
-        //$$ if (!(event.getPlayer() instanceof EntityPlayerMP)) return;
+        if (!(event.getPlayer() instanceof EntityPlayerMP)) return;
         //#endif
 
         //#if MC<=10809
-        EntityPlayerMP player = (EntityPlayerMP) event.player;
+        //$$ EntityPlayerMP player = (EntityPlayerMP) event.player;
         //#else
-        //$$ EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
+        EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
         //#endif
 
         //#if MC<=10809
-        EntityItem entityItem = event.entityItem;
+        //$$ EntityItem entityItem = event.entityItem;
         //#else
-        //$$ EntityItem item = event.getEntityItem();
+        EntityItem entityItem = event.getEntityItem();
         //#endif
 
         Vector3d position = new Vector3d(
@@ -247,9 +247,9 @@ public class ClientListener {
 
         TriggerType.DROP_ITEM.triggerAll(
                 //#if MC<=10809
-                new Item(entityItem.getEntityItem()),
+                //$$ new Item(entityItem.getEntityItem()),
                 //#else
-                //$$ new Item(entityItem.getItem()),
+                new Item(entityItem.getItem()),
                 //#endif
                 new PlayerMP(player),
                 position,
@@ -261,11 +261,11 @@ public class ClientListener {
     public void onItemTooltip(ItemTooltipEvent e) {
         TriggerType.TOOLTIP.triggerAll(
                 //#if MC<=10809
-                e.toolTip,
-                new Item(e.itemStack)
+                //$$ e.toolTip,
+                //$$ new Item(e.itemStack)
                 //#else
-                //$$ e.getToolTip(),
-                //$$ new Item(e.getItemStack())
+                e.getToolTip(),
+                new Item(e.getItemStack())
                 //#endif
         );
     }

@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //#if MC<=10809
-import net.minecraft.util.IChatComponent;
+//$$ import net.minecraft.util.IChatComponent;
 //#else
-//$$ import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextComponent;
 //#endif
 
 import java.io.File;
@@ -37,19 +37,19 @@ public abstract class MixinMinecraft {
                     value = "INVOKE",
                     shift = At.Shift.BEFORE,
                     //#if MC<=10809
-                    target = "Lnet/minecraft/client/gui/GuiNewChat;printChatMessage(Lnet/minecraft/util/IChatComponent;)V",
-                    ordinal = 1
+                    //$$ target = "Lnet/minecraft/client/gui/GuiNewChat;printChatMessage(Lnet/minecraft/util/IChatComponent;)V",
+                    //$$ ordinal = 1
                     //#else
-                    //$$ target = "Lnet/minecraft/client/gui/GuiNewChat;printChatMessage(Lnet/minecraft/util/text/ITextComponent;)V"
+                    target = "Lnet/minecraft/client/gui/GuiNewChat;printChatMessage(Lnet/minecraft/util/text/ITextComponent;)V"
                     //#endif
             ),
             cancellable = true
     )
     private void dispatchKeypresses(CallbackInfo ci) {
         //#if MC<=10809
-        IChatComponent chatComponent = ScreenShotHelper.saveScreenshot(this.mcDataDir, this.displayWidth, this.displayHeight, this.framebufferMc);
+        //$$ IChatComponent chatComponent = ScreenShotHelper.saveScreenshot(this.mcDataDir, this.displayWidth, this.displayHeight, this.framebufferMc);
         //#else
-        //$$ ITextComponent chatComponent = ScreenShotHelper.saveScreenshot(this.mcDataDir, this.displayWidth, this.displayHeight, this.framebufferMc);
+        ITextComponent chatComponent = ScreenShotHelper.saveScreenshot(this.mcDataDir, this.displayWidth, this.displayHeight, this.framebufferMc);
         //#endif
 
         if (chatComponent != null) {

@@ -13,9 +13,9 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 //#if MC<=10809
-import net.minecraft.util.IChatComponent;
+//$$ import net.minecraft.util.IChatComponent;
 //#else
-//$$ import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextComponent;
 //#endif
 
 public class Book {
@@ -25,9 +25,9 @@ public class Book {
 
     public Book(String bookName) {
         //#if MC<=10809
-        book = new ItemStack(Items.written_book);
+        //$$ book = new ItemStack(Items.written_book);
         //#else
-        //$$ book = new ItemStack(Items.WRITTEN_BOOK);
+        book = new ItemStack(Items.WRITTEN_BOOK);
         //#endif
 
         bookData = new NBTTagCompound();
@@ -49,9 +49,9 @@ public class Book {
 
         pages.appendTag(new NBTTagString(
                 //#if MC<=10809
-                IChatComponent.Serializer.componentToJson(message.getChatMessage())
+                //$$ IChatComponent.Serializer.componentToJson(message.getChatMessage())
                 //#else
-                //$$ ITextComponent.Serializer.componentToJson(message.getChatMessage())
+                ITextComponent.Serializer.componentToJson(message.getChatMessage())
                 //#endif
         ));
 
@@ -84,9 +84,9 @@ public class Book {
 
         pages.set(pageNumber, new NBTTagString(
                 //#if MC<=10809
-                IChatComponent.Serializer.componentToJson(message.getChatMessage())
+                //$$ IChatComponent.Serializer.componentToJson(message.getChatMessage())
                 //#else
-                //$$ ITextComponent.Serializer.componentToJson(message.getChatMessage())
+                ITextComponent.Serializer.componentToJson(message.getChatMessage())
                 //#endif
         ));
 

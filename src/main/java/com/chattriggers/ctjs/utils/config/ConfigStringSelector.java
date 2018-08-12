@@ -85,15 +85,17 @@ public class ConfigStringSelector extends ConfigOption {
         ).draw();
 
         //#if MC<=10809
-        this.leftArrowButton.xPosition = middle - 100 + this.x;
-        this.rightArrowButton.xPosition = middle + 70 + this.x;
+        //$$ this.leftArrowButton.xPosition = middle - 100 + this.x;
+        //$$ this.rightArrowButton.xPosition = middle + 70 + this.x;
+        //$$ this.leftArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
+        //$$ this.rightArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
         //#else
-        //$$ this.leftArrowButton.x = middle - 100 + this.x;
-        //$$ this.rightArrowButton.x = middle + 70 + this.x;
-        //#endif
+        this.leftArrowButton.x = middle - 100 + this.x;
+        this.rightArrowButton.x = middle + 70 + this.x;
 
-        this.leftArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
-        this.rightArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY);
+        this.leftArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY, partialTicks);
+        this.rightArrowButton.drawButton(Client.getMinecraft(), mouseX, mouseY, partialTicks);
+        //#endif
 
         super.draw(mouseX, mouseY, partialTicks);
     }

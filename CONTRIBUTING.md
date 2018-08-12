@@ -10,6 +10,7 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
   - `./gradlew wrapper --gradle-version 2.9`
   - `./gradlew setupDecompWorkspace`
   - `./gradlew wrapper --gradle-version 3.5`
+  - `./gradlew copySrg`
   - `./gradlew idea`
 ### 4. Set up IntelliJ Idea
   - open the project within IDEA by clicking the recently created .ipr file<br>

@@ -13,12 +13,12 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import paulscode.sound.SoundSystem;
 
 //#if MC<=10809
-import net.minecraft.util.BlockPos;
-import net.minecraft.client.particle.EntityFX;
+//$$ import net.minecraft.util.BlockPos;
+//$$ import net.minecraft.client.particle.EntityFX;
 //#else
-//$$ import net.minecraft.util.ResourceLocation;
-//$$ import net.minecraft.util.SoundEvent;
-//$$ import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 //#endif
 
 import java.lang.reflect.Method;
@@ -37,9 +37,9 @@ public class World {
      */
     public static WorldClient getWorld() {
         //#if MC<=10809
-        return Client.getMinecraft().theWorld;
-        //#else
         //$$ return Client.getMinecraft().theWorld;
+        //#else
+        return Client.getMinecraft().world;
         //#endif
     }
 
@@ -61,10 +61,10 @@ public class World {
      */
     public static void playSound(String name, float volume, float pitch) {
         //#if MC<=10809
-        Player.getPlayer().playSound(name, volume, pitch);
+        //$$ Player.getPlayer().playSound(name, volume, pitch);
         //#else
-        //$$ SoundEvent sound = SoundEvent.REGISTRY.getObject(new ResourceLocation("minecraft", name));
-        //$$ Player.getPlayer().playSound(sound, volume, pitch);
+        SoundEvent sound = SoundEvent.REGISTRY.getObject(new ResourceLocation("minecraft", name));
+        Player.getPlayer().playSound(sound, volume, pitch);
         //#endif
     }
 
@@ -79,10 +79,10 @@ public class World {
      */
     public static void playRecord(String name, float x, float y, float z) {
         //#if MC<=10809
-        getWorld().playRecord(new BlockPos(x, y, z), name);
+        //$$ getWorld().playRecord(new BlockPos(x, y, z), name);
         //#else
-        //$$ SoundEvent sound = SoundEvent.REGISTRY.getObject(new ResourceLocation("minecraft", name));
-        //$$ getWorld().playRecord(new BlockPos(x, y, z), sound);
+        SoundEvent sound = SoundEvent.REGISTRY.getObject(new ResourceLocation("minecraft", name));
+        getWorld().playRecord(new BlockPos(x, y, z), sound);
         //#endif
     }
 
@@ -162,9 +162,9 @@ public class World {
      */
     public static String getType() {
         //#if MC<=10809
-        return getWorld().getWorldType().getWorldTypeName();
+        //$$ return getWorld().getWorldType().getWorldTypeName();
         //#else
-        //$$ return getWorld().getWorldType().getName();
+        return getWorld().getWorldType().getName();
         //#endif
     }
 
@@ -367,14 +367,14 @@ public class World {
                 Method method = ReflectionHelper.findMethod(
                         RenderGlobal.class,
                         //#if MC<=10809
-                        Client.getMinecraft().renderGlobal,
-                        new String[]{
-                                "spawnEntityFX",
-                                "func_174974_b"
-                        },
+                        //$$ Client.getMinecraft().renderGlobal,
+                        //$$ new String[]{
+                        //$$         "spawnEntityFX",
+                        //$$         "func_174974_b"
+                        //$$ },
                         //#else
-                        //$$ "spawnEntityFX",
-                        //$$ "func_174974_b"
+                        "spawnEntityFX",
+                        "func_174974_b",
                         //#endif
                         int.class,
                         boolean.class,
@@ -388,9 +388,9 @@ public class World {
                 );
 
                 //#if MC<=10809
-                EntityFX fx = (EntityFX)
+                //$$ EntityFX fx = (EntityFX)
                 //#else
-                //$$ net.minecraft.client.particle.Particle fx = (net.minecraft.client.particle.Particle)
+                net.minecraft.client.particle.Particle fx = (net.minecraft.client.particle.Particle)
                 //#endif
                         method.invoke(Client.getMinecraft().renderGlobal,
                         particleType.getParticleID(),
@@ -406,7 +406,11 @@ public class World {
             return null;
         }
 
-        public static void spawnParticle(EntityFX particle) {
+        //#if MC<=10809
+        //$$ public static void spawnParticle(EntityFX particle) {
+        //#else
+        public static void spawnParticle(net.minecraft.client.particle.Particle particle) {
+        //#endif
             Client.getMinecraft().effectRenderer.addEffect(particle);
         }
     }
