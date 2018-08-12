@@ -29,7 +29,7 @@ public class MixinCrashReport {
         //#else
         //$$ this.systemDetailsCategory.addCrashSection(
         //$$      "ct.js modules",
-        //$$      ModuleManager.getInstance().getModules().toString()
+        //$$      ModuleManager.getInstance() == null ? "PRE-INIT, NONE LOADED" : ModuleManager.getInstance().getModules().toString()
         //$$ );
         //#endif
     }

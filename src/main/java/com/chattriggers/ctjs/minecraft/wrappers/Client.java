@@ -30,7 +30,11 @@ public class Client {
      * @return the connection object
      */
     public static NetHandlerPlayClient getConnection() {
+        //#if MC<=10809
         return getMinecraft().getNetHandler();
+        //#else
+        //$$ return getMinecraft().getConnection();
+        //#endif
     }
 
     /**

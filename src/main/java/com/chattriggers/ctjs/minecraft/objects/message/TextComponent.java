@@ -3,16 +3,29 @@ package com.chattriggers.ctjs.minecraft.objects.message;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+//#if MC<=10809
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
+//#else
+//$$ import net.minecraft.util.text.ITextComponent;
+//$$ import net.minecraft.util.text.Style;
+//$$ import net.minecraft.util.text.TextComponentString;
+//$$ import net.minecraft.util.text.ClickEvent;
+//$$ import net.minecraft.util.text.HoverEvent;
+//#endif
 
 @Accessors(chain = true)
 public class TextComponent {
     @Getter
+    //#if MC<=10809
     private IChatComponent chatComponentText;
+    //#else
+    //$$ private ITextComponent chatComponentText;
+    //#endif
 
     /**
      * -- GETTER --
@@ -83,20 +96,41 @@ public class TextComponent {
      *
      * @param chatComponent the IChatComponent
      */
+    //#if MC<=10809
     public TextComponent(IChatComponent chatComponent) {
+    //#else
+    //$$ public TextComponent(ITextComponent chatComponent) {
+    //#endif
         this.chatComponentText = chatComponent;
         this.text = chatComponentText.getFormattedText();
         this.formatted = true;
 
+        //#if MC<=10809
         ChatStyle chatStyle = chatComponent.getChatStyle();
+        //#else
+        //$$ Style chatStyle = chatComponent.getStyle();
+        //#endif
+
+        //#if MC<=10809
         if (chatStyle.getChatClickEvent() != null) {
             ClickEvent clickEvent = chatStyle.getChatClickEvent();
+        //#else
+        //$$ if (chatStyle.getClickEvent() != null) {
+        //$$     ClickEvent clickEvent = chatStyle.getClickEvent();
+        //#endif
+
             this.clickAction = clickEvent.getAction().getCanonicalName();
             this.clickValue = clickEvent.getValue();
         }
 
+
+        //#if MC<=10809
         if (chatStyle.getChatHoverEvent() != null) {
             HoverEvent hoverEvent = chatStyle.getChatHoverEvent();
+            //#else
+            //$$ if (chatStyle.getHoverEvent() != null) {
+            //$$     HoverEvent hoverEvent = chatStyle.getHoverEvent();
+            //#endif
             this.hoverAction = hoverEvent.getAction().getCanonicalName();
             this.hoverValue = hoverEvent.getValue().getFormattedText();
         }
@@ -228,7 +262,11 @@ public class TextComponent {
     private void reInstance() {
         String text = this.text;
         if (this.formatted) text = ChatLib.addColor(text);
+        //#if MC<=10809
         this.chatComponentText = new ChatComponentText(text);
+        //#else
+        //$$ this.chatComponentText = new TextComponentString(text);
+        //#endif
 
         reInstanceClick();
         reInstanceHover();
@@ -241,7 +279,11 @@ public class TextComponent {
         String clickValue = this.clickValue;
         if (this.formatted) clickValue = ChatLib.addColor(clickValue);
 
+        //#if MC<=10809
         chatComponentText.getChatStyle().setChatClickEvent(new ClickEvent(
+        //#else
+        //$$ chatComponentText.getStyle().setClickEvent(new ClickEvent(
+        //#endif
                 ClickEvent.Action.getValueByCanonicalName(this.clickAction), clickValue
         ));
     }
@@ -253,7 +295,11 @@ public class TextComponent {
         String hoverValue = this.hoverValue;
         if (this.formatted) hoverValue = ChatLib.addColor(hoverValue);
 
+        //#if MC<=10809
         chatComponentText.getChatStyle().setChatHoverEvent(new HoverEvent(
+        //#else
+        //$$ chatComponentText.getStyle().setHoverEvent(new HoverEvent(
+        //#endif
                 HoverEvent.Action.getValueByCanonicalName(this.hoverAction), new ChatComponentText(hoverValue)
         ));
     }

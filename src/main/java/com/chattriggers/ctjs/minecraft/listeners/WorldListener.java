@@ -67,17 +67,30 @@ public class WorldListener {
                 //#endif
         );
 
+        float vol = 0.0f;
+        float pitch = 1.0f;
+
+        try {
+            //#if MC<=10809
+            vol = event.sound.getVolume();
+            pitch = event.sound.getPitch();
+            //#else
+            //$$ vol = event.getSound().getVolume();
+            //$$ pitch = event.getSound().getPitch();
+            //#endif
+        } catch (Exception ignored) {}
+
         TriggerType.SOUND_PLAY.triggerAll(
                 event,
                 position,
                 //#if MC<=10809
                 event.name,
-                event.sound.getVolume(),
-                event.sound.getPitch(),
+                vol,
+                pitch,
                 event.category == null ? null : event.category.getCategoryName()
                 //#else
                 //$$ event.getName(),
-                //$$ event.getSound().getVolume(),
+                //$$ vol,
                 //$$ event.getSound().getPitch(),
                 //$$ event.getSound().getCategory() == null ? null : event.getSound().getCategory().getName()
                 //#endif

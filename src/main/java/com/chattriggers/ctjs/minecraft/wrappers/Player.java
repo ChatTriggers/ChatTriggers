@@ -11,11 +11,19 @@ import net.minecraft.block.BlockSign;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.world.chunk.Chunk;
+
+//#if MC<=10809
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
+//#else
+//$$ import net.minecraft.util.math.BlockPos;
+//$$ import net.minecraft.util.math.MathHelper;
+//$$ import net.minecraft.util.math.RayTraceResult;
+//$$ import net.minecraft.world.biome.Biome;
+//#endif
 
 import java.util.ArrayList;
 
@@ -97,7 +105,13 @@ public class Player {
      * @return the player's camera pitch
      */
     public static float getPitch() {
-        return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
+        return getPlayer() == null
+                ? 0
+                //#if MC<=10809
+                : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
+                //#else
+                //$$ : MathHelper.wrapDegrees(getPlayer().rotationPitch);
+                //#endif
     }
 
     /**
@@ -106,7 +120,13 @@ public class Player {
      * @return the player's camera yaw
      */
     public static float getYaw() {
-        return getPlayer() == null ? 0 : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
+        return getPlayer() == null
+                ? 0
+                //#if MC<=10809
+                : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
+                //#else
+                //$$ : MathHelper.wrapDegrees(getPlayer().rotationYaw);
+                //#endif
     }
 
     /**
@@ -212,10 +232,18 @@ public class Player {
             return "";
 
         Chunk chunk = World.getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
-        BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(),
-                World.getWorld().getWorldChunkManager());
 
+        //#if MC<=10809
+        BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(), World.getWorld().getWorldChunkManager());
+        //#else
+        //$$ Biome biome = chunk.getBiome(getPlayer().getPosition(), World.getWorld().getBiomeProvider());
+        //#endif
+
+        //#if MC<=10809
         return biome.biomeName;
+        //#else
+        //$$ return biome.getBiomeName();
+        //#endif
     }
 
     /**
@@ -328,9 +356,17 @@ public class Player {
                 || Client.getMinecraft().objectMouseOver == null)
             return new Block(0);
 
+        //#if MC<=10809
         MovingObjectPosition mop = Client.getMinecraft().objectMouseOver;
+        boolean isBlock = mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK;
+        boolean isEntity = mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY;
+        //#else
+        //$$ RayTraceResult mop = Client.getMinecraft().objectMouseOver;
+        //$$ boolean isBlock = mop.typeOfHit == RayTraceResult.Type.BLOCK;
+        //$$ boolean isEntity = mop.typeOfHit == RayTraceResult.Type.ENTITY;
+        //#endif
 
-        if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+        if (isBlock) {
             BlockPos pos = mop.getBlockPos();
             Block block = new Block(World.getWorld().getBlockState(pos).getBlock()).setBlockPos(pos);
 
@@ -339,7 +375,7 @@ public class Player {
             }
 
             return block;
-        } else if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+        } else if (isEntity) {
             return new Entity(mop.entityHit);
         } else {
             return new Block(0);
@@ -389,7 +425,11 @@ public class Player {
     }
 
     public static NetworkPlayerInfo getPlayerInfo() {
+        //#if MC<=10809
         return Client.getMinecraft().getNetHandler().getPlayerInfo(getPlayer().getUniqueID());
+        //#else
+        //$$ return Client.getConnection().getPlayerInfo(getPlayer().getUniqueID());
+        //#endif
     }
 
     /**
