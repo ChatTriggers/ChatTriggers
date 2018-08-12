@@ -51,7 +51,11 @@ public class Entity {
      * @return the entity's pitch
      */
     public double getPitch() {
+        //#if MC<=10809
         return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch);
+        //#else
+        //$$ return MathHelper.wrapDegrees(this.entity.rotationPitch);
+        //#endif
     }
 
     /**
@@ -61,7 +65,11 @@ public class Entity {
      * @return the entity's yaw
      */
     public double getYaw() {
+        //#if MC<=10809
         return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw);
+        //#else
+        //$$ return MathHelper.wrapDegrees(this.entity.rotationYaw);
+        //#endif
     }
 
     /**
@@ -111,9 +119,15 @@ public class Entity {
      * @return the entity being ridden, or null if there isn't one.
      */
     public Entity getRiding() {
+        //#if MC<=10809
         return this.entity.ridingEntity == null
                 ? null
                 : new Entity(this.entity.ridingEntity);
+        //#else
+        //$$ return this.entity.ridingEntity == null
+        //$$         ? null
+        //$$         : new Entity(this.entity.ridingEntity);
+        //#endif
     }
 
     /**
@@ -122,10 +136,30 @@ public class Entity {
      * @return the riding entity, or null if there isn't one.
      */
     public Entity getRider() {
+        //#if MC<=10809
         return this.entity.riddenByEntity == null
                 ? null
                 : new Entity(this.entity.riddenByEntity);
+        //#else
+        //$$ return getRiders().isEmpty()
+        //$$         ? null
+        //$$         : getRiders().get(0);
+        //#endif
     }
+
+    //#if MC>10809
+    //$$ /**
+    //$$  * Gets the entities that are riding this entity.
+    //$$  *
+    //$$  * @return the riding entities, or an empty list if there aren't any.
+    //$$  */
+    //$$ public List<Entity> getRiders() {
+    //$$     return this.entity.getPassengers()
+    //$$             .stream()
+    //$$             .map(Entity::new)
+    //$$             .collect(Collectors.toList());
+    //$$ }
+    //#endif
 
     /**
      * Checks whether or not the entity is dead.

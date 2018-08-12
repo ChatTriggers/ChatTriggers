@@ -7,12 +7,19 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
+
+//#if MC<=10809
+import net.minecraft.client.renderer.entity.RenderItem;
+//#else
+//$$ import net.minecraft.client.renderer.RenderItem;
+//$$ import net.minecraft.client.util.ITooltipFlag;
+//$$ import com.chattriggers.ctjs.minecraft.wrappers.World;
+//#endif
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,8 +80,13 @@ public class Item {
      * @param entityItem the EntityItem.
      */
     public Item(EntityItem entityItem) {
+        //#if MC<=10809
         this.item = entityItem.getEntityItem().getItem();
         this.itemStack = entityItem.getEntityItem();
+        //#else
+        //$$ this.item = entityItem.getItem().getItem();
+        //$$ this.itemStack = entityItem.getItem();
+        //#endif
     }
 
     /**
@@ -85,8 +97,13 @@ public class Item {
      */
     public Item(Entity entity) {
         if (entity.getEntity() instanceof EntityItem) {
+            //#if MC<=10809
             this.item = ((EntityItem) entity.getEntity()).getEntityItem().getItem();
             this.itemStack = ((EntityItem) entity.getEntity()).getEntityItem();
+            //#else
+            //$$ this.item = ((EntityItem) entity.getEntity()).getItem().getItem();
+            //$$ this.itemStack = ((EntityItem) entity.getEntity()).getItem();
+            //#endif
         } else {
             throw new IllegalArgumentException("Entity is not of type EntityItem");
         }
@@ -119,7 +136,11 @@ public class Item {
      * @return the stack size
      */
     public int getStackSize() {
+        //#if MC<=10809
         return this.itemStack.stackSize;
+        //#else
+        //$$ return this.itemStack.getCount();
+        //#endif
     }
 
     /**
@@ -139,7 +160,11 @@ public class Item {
      * @return the item's registry name
      */
     public String getRegistryName() {
+        //#if MC<=10809
         return this.item.getRegistryName();
+        //#else
+        //$$ return this.item.getRegistryName().toString();
+        //#endif
     }
 
     /**
@@ -165,7 +190,11 @@ public class Item {
         for (Object enchantObj : rawEnchants.entrySet()) {
             Map.Entry<Integer, Integer> rawEnchant = (Map.Entry<Integer, Integer>) enchantObj;
 
+            //#if MC<=10809
             Enchantment enchant = Enchantment.getEnchantmentById(rawEnchant.getKey());
+            //#else
+            //$$ Enchantment enchant = Enchantment.getEnchantmentByID(rawEnchant.getKey());
+            //#endif
 
             mappedEnchants.put(enchant.getName().replace("enchantment.", ""), rawEnchant.getValue());
         }
@@ -226,7 +255,13 @@ public class Item {
      * @return true if the item can harvest the {@link Block}
      */
     public Boolean canHarvest(Block block) {
+        //#if MC<=10809
         return this.itemStack.canHarvestBlock(block.getBlock());
+        //#else
+        //$$ return this.itemStack.canHarvestBlock(
+        //$$         World.getWorld().getBlockState(block.getBlockPos())
+        //$$ );
+        //#endif
     }
 
     /**
@@ -292,7 +327,11 @@ public class Item {
      * @return the item lore
      */
     public List<String> getLore() {
+        //#if MC<=10809
         return this.itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips);
+        //#else
+        //$$ return this.itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED);
+        //#endif
     }
 
     /**

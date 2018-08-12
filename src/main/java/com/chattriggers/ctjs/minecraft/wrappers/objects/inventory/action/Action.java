@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+//#if MC>10809
+//$$ import net.minecraft.inventory.ClickType;
+//#endif
+
 @Accessors(chain = true)
 public abstract class Action {
     @Getter @Setter
@@ -21,8 +25,11 @@ public abstract class Action {
 
     public abstract void complete();
 
+    //#if MC<=10809
     protected void doClick(int button, int mode) {
-        System.out.println("Clicking of type: " + mode + ", button: " + button + ", and slot: " + slot);
+    //#else
+    //$$ protected void doClick(int button, ClickType mode) {
+    //#endif
         Client.getMinecraft().playerController.windowClick(
                 this.windowId,
                 this.slot,

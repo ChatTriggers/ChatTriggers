@@ -5,9 +5,16 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import lombok.Getter;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.IChatComponent;
 
-import java.util.ArrayList;
+//#if MC<=10809
+import net.minecraft.util.IChatComponent;
+//#else
+//$$ import net.minecraft.util.text.ITextComponent;
+//#endif
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Sign extends Block{
     @Getter
@@ -32,12 +39,10 @@ public class Sign extends Block{
      *
      * @return the {@link Message} list
      */
-    public ArrayList<Message> getLines() {
-        ArrayList<Message> lines = new ArrayList<>();
-        for (IChatComponent component : this.sign.signText) {
-            lines.add(new Message(component));
-        }
-        return lines;
+    public List<Message> getLines() {
+        return Arrays.stream(this.sign.signText)
+                .map(Message::new)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -45,12 +50,14 @@ public class Sign extends Block{
      *
      * @return the String list
      */
-    public ArrayList<String> getFormattedLines() {
-        ArrayList<String> lines = new ArrayList<>();
-        for (IChatComponent component : this.sign.signText) {
-            lines.add(component.getFormattedText());
-        }
-        return lines;
+    public List<String> getFormattedLines() {
+        return Arrays.stream(this.sign.signText)
+                //#if MC<=10809
+                .map(IChatComponent::getFormattedText)
+                //#else
+                //$$ .map(ITextComponent::getFormattedText)
+                //#endif
+                .collect(Collectors.toList());
     }
 
     /**
@@ -58,18 +65,20 @@ public class Sign extends Block{
      *
      * @return the String list
      */
-    public ArrayList<String> getUnformattedLines() {
-        ArrayList<String> lines = new ArrayList<>();
-        for (IChatComponent component: this.sign.signText) {
-            lines.add(component.getUnformattedText());
-        }
-        return lines;
+    public List<String> getUnformattedLines() {
+        return Arrays.stream(this.sign.signText)
+                //#if MC<=10809
+                .map(IChatComponent::getUnformattedText)
+                //#else
+                //$$ .map(ITextComponent::getUnformattedText)
+                //#endif
+                .collect(Collectors.toList());
     }
 
     @Override
     public String toString() {
         return "Sign{"
-                + "lines="+getLines()
+                + "lines="+ getLines()
                 + ", name=" + this.block.getRegistryName()
                 + ", x=" + getX()
                 + ", y=" + getY()

@@ -6,9 +6,17 @@ import net.minecraft.client.particle.EntityFX;
 
 public class Particle {
     @Getter
+    //#if MC<=10809
     private EntityFX underlyingEntity;
+    //#else
+    //$$ private net.minecraft.client.particle.Particle underlyingEntity;
+    //#endif
 
+    //#if MC<=10809
     public Particle(EntityFX entityFX) {
+    //#else
+    //$$ public Particle(net.minecraft.client.particle.Particle entityFX) {
+    //#endif
         if (entityFX == null) {
             throw new NullPointerException("EntityFX is null!");
         }
@@ -56,6 +64,10 @@ public class Particle {
     }
 
     public void remove() {
+        //#if MC<=10809
         this.underlyingEntity.setDead();
+        //#else
+        //$$ this.underlyingEntity.setExpired();
+        //#endif
     }
 }

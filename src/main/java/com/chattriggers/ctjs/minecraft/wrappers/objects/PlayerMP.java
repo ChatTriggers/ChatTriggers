@@ -49,6 +49,7 @@ public class PlayerMP extends Entity {
         return getPlayerInfo().getResponseTime();
     }
 
+    //#if MC<=10809
     /**
      * Gets the item currently in the player's specified inventory slot.
      * 0 for main hand, 1-4 for armor.
@@ -59,6 +60,18 @@ public class PlayerMP extends Entity {
     public Item getItemInSlot(int slot) {
         return new Item(player.getEquipmentInSlot(slot));
     }
+    //#else
+    //$$ /**
+    //$$  * Gets the item currently in the player's specified inventory slot.
+    //$$  * 0 for main hand, 1-4 for armor.
+    //$$  *
+    //$$  * @param slot the slot to access
+    //$$  * @return the item in said slot
+    //$$  */
+    //$$ public Item getItemInSlot(int slot) {
+    //$$     return new Item(player.getEquipmentInSlot(slot));
+    //$$ }
+    //#endif
 
     /**
      * Gets the display name for this player,
@@ -94,7 +107,7 @@ public class PlayerMP extends Entity {
     }
 
     public NetworkPlayerInfo getPlayerInfo() {
-        return Client.getMinecraft().getNetHandler().getPlayerInfo(this.player.getUniqueID());
+        return Client.getConnection().getPlayerInfo(this.player.getUniqueID());
     }
 
     @Override
