@@ -3,7 +3,14 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects;
 import lombok.Getter;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+
+//#if MC<=10809
 import net.minecraft.util.MathHelper;
+//#else
+//$$ import net.minecraft.util.math.MathHelper;
+//$$ import java.util.List;
+//$$ import java.util.stream.Collectors;
+//#endif
 
 import java.util.UUID;
 

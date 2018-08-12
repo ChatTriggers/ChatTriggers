@@ -2,8 +2,6 @@ package com.chattriggers.ctjs.minecraft.wrappers;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import java.util.UUID;
-
 public class Server {
     /**
      * Gets the current server's IP.
@@ -56,10 +54,8 @@ public class Server {
             return 5L;
         }
 
-        if (Client.getConnection().getPlayerInfo(UUID.fromString(player.getGameProfile().getId().toString())) != null) {
-            return (long) Client.getConnection().getPlayerInfo(
-                    UUID.fromString(player.getGameProfile().getId().toString())
-            ).getResponseTime();
+        if (Client.getConnection().getPlayerInfo(player.getUniqueID()) != null) {
+            return (long) Client.getConnection().getPlayerInfo(player.getUniqueID()).getResponseTime();
         }
 
         return Client.getMinecraft().getCurrentServerData().pingToServer;

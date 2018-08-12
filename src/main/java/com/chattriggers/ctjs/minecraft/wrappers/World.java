@@ -6,13 +6,20 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block;
 import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import paulscode.sound.SoundSystem;
+
+//#if MC<=10809
+import net.minecraft.util.BlockPos;
+import net.minecraft.client.particle.EntityFX;
+//#else
+//$$ import net.minecraft.util.ResourceLocation;
+//$$ import net.minecraft.util.SoundEvent;
+//$$ import net.minecraft.util.math.BlockPos;
+//#endif
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -29,7 +36,11 @@ public class World {
      * @return the world object
      */
     public static WorldClient getWorld() {
+        //#if MC<=10809
         return Client.getMinecraft().theWorld;
+        //#else
+        //$$ return Client.getMinecraft().theWorld;
+        //#endif
     }
 
     /**
@@ -41,32 +52,6 @@ public class World {
         return getWorld() != null;
     }
 
-//    public static SoundSystem getSndSystem() {
-//        if (sndSystem == null) {
-//            loadSndSystem();
-//
-//            return sndSystem;
-//        }
-//
-//        if (((MixinSoundSystem) sndSystem).getCommandThread() == null) {
-//            loadSndSystem();
-//        }
-//
-//        return sndSystem;
-//    }
-//
-//    private static void loadSndSystem() {
-//        SoundManager sndManager = ((MixinSoundHandler) Client.getMinecraft().getSoundHandler()).getSndManager();
-//
-//        try {
-//            Field field = sndManager.getClass().getDeclaredField("sndSystem");
-//            field.setAccessible(true);
-//            sndSystem = (SoundSystem) field.get(sndManager);
-//        } catch (NoSuchFieldException | IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     /**
      * Play a sound at the player location.
      *
@@ -75,7 +60,12 @@ public class World {
      * @param pitch  the pitch of the sound
      */
     public static void playSound(String name, float volume, float pitch) {
+        //#if MC<=10809
         Player.getPlayer().playSound(name, volume, pitch);
+        //#else
+        //$$ SoundEvent sound = SoundEvent.REGISTRY.getObject(new ResourceLocation("minecraft", name));
+        //$$ Player.getPlayer().playSound(sound, volume, pitch);
+        //#endif
     }
 
     /**
@@ -88,7 +78,12 @@ public class World {
      * @param z     the z location
      */
     public static void playRecord(String name, float x, float y, float z) {
+        //#if MC<=10809
         getWorld().playRecord(new BlockPos(x, y, z), name);
+        //#else
+        //$$ SoundEvent sound = SoundEvent.REGISTRY.getObject(new ResourceLocation("minecraft", name));
+        //$$ getWorld().playRecord(new BlockPos(x, y, z), sound);
+        //#endif
     }
 
     /**
@@ -166,7 +161,11 @@ public class World {
      * @return the world type
      */
     public static String getType() {
+        //#if MC<=10809
         return getWorld().getWorldType().getWorldTypeName();
+        //#else
+        //$$ return getWorld().getWorldType().getName();
+        //#endif
     }
 
     /**
@@ -367,11 +366,16 @@ public class World {
             try {
                 Method method = ReflectionHelper.findMethod(
                         RenderGlobal.class,
+                        //#if MC<=10809
                         Client.getMinecraft().renderGlobal,
                         new String[]{
                                 "spawnEntityFX",
                                 "func_174974_b"
                         },
+                        //#else
+                        //$$ "spawnEntityFX",
+                        //$$ "func_174974_b"
+                        //#endif
                         int.class,
                         boolean.class,
                         double.class,
@@ -383,7 +387,12 @@ public class World {
                         int[].class
                 );
 
-                EntityFX fx = (EntityFX) method.invoke(Client.getMinecraft().renderGlobal,
+                //#if MC<=10809
+                EntityFX fx = (EntityFX)
+                //#else
+                //$$ net.minecraft.client.particle.Particle fx = (net.minecraft.client.particle.Particle)
+                //#endif
+                        method.invoke(Client.getMinecraft().renderGlobal,
                         particleType.getParticleID(),
                         particleType.getShouldIgnoreRange(),
                         x, y, z, xSpeed, ySpeed, zSpeed, new int[]{}
