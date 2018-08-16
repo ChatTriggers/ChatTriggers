@@ -10,6 +10,8 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 
+import java.util.ArrayList;
+
 //#if MC>10809
 //$$ import net.minecraft.inventory.EntityEquipmentSlot;
 //#endif
@@ -42,6 +44,23 @@ public class PlayerMP extends Entity {
      */
     public boolean isSpectator() {
         return this.player.isSpectator();
+    }
+
+    /**
+     * Gets the player's active potion effects.
+     *
+     * @return The player's active potion effects.
+     */
+    public ArrayList<PotionEffect> getActivePotionEffects() {
+        if (getPlayer() == null) return new ArrayList<>();
+
+        ArrayList<PotionEffect> effects = new ArrayList<>();
+
+        for (net.minecraft.potion.PotionEffect effect : getPlayer().getActivePotionEffects()) {
+            effects.add(new PotionEffect(effect));
+        }
+
+        return effects;
     }
 
     /**
@@ -112,7 +131,7 @@ public class PlayerMP extends Entity {
         return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
     }
 
-    public NetworkPlayerInfo getPlayerInfo() {
+    private NetworkPlayerInfo getPlayerInfo() {
         return Client.getConnection().getPlayerInfo(this.player.getUniqueID());
     }
 
