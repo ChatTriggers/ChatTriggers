@@ -167,7 +167,8 @@ public class ChatLib {
      * @return the unformatted string
      */
     public static String removeFormatting(String toRemove) {
-        return toRemove.replaceAll("[\\u00a7a][0-9a-fklmnor]", "");
+        return toRemove.replaceAll("\\u00a7[0-9a-fklmnor]", "")
+                .replaceAll("&[0-9a-fklmnor]", "");
     }
 
     /**
