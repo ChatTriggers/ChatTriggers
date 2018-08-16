@@ -32,9 +32,9 @@ public class FileLib {
     public static void write(String fileLocation, String toWrite) {
         try {
             //#if MC<=10809
-            //$$ FileUtils.write(new File(fileLocation), toWrite);
+            FileUtils.write(new File(fileLocation), toWrite);
             //#else
-            FileUtils.write(new File(fileLocation), toWrite, java.nio.charset.Charset.defaultCharset());
+            //$$ FileUtils.write(new File(fileLocation), toWrite, java.nio.charset.Charset.defaultCharset());
             //#endif
         } catch (IOException exception) {
             Console.getInstance().printStackTrace(exception);
@@ -83,9 +83,9 @@ public class FileLib {
 
             br.close();
             //#if MC<=10809
-            //$$ return FileUtils.readFileToString(file);
+            return FileUtils.readFileToString(file);
             //#else
-            return FileUtils.readFileToString(file, java.nio.charset.Charset.defaultCharset());
+            //$$ return FileUtils.readFileToString(file, java.nio.charset.Charset.defaultCharset());
             //#endif
         } catch (IOException exception) {
             Console.getInstance().printStackTrace(exception);

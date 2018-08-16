@@ -124,9 +124,9 @@ public class Scoreboard {
             }
 
             //#if MC<=10809
-            //$$ net.minecraft.scoreboard.Score theScore = scoreboard.getValueFromObjective(line, sidebarObjective);
+            net.minecraft.scoreboard.Score theScore = scoreboard.getValueFromObjective(line, sidebarObjective);
             //#else
-            net.minecraft.scoreboard.Score theScore = scoreboard.getOrCreateScore(line, sidebarObjective);
+            //$$ net.minecraft.scoreboard.Score theScore = scoreboard.getOrCreateScore(line, sidebarObjective);
             //#endif
 
             theScore.setScorePoints(score);

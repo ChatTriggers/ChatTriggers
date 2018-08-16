@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 
 //#if MC>10809
-import net.minecraft.inventory.EntityEquipmentSlot;
+//$$ import net.minecraft.inventory.EntityEquipmentSlot;
 //#endif
 
 public class PlayerMP extends Entity {
@@ -54,29 +54,29 @@ public class PlayerMP extends Entity {
     }
 
     //#if MC<=10809
-    //$$ /**
-    //$$  * Gets the item currently in the player's specified inventory slot.
-    //$$  * 0 for main hand, 1-4 for armor.
-    //$$  *
-    //$$  * @param slot the slot to access
-    //$$  * @return the item in said slot
-    //$$  */
-    //$$ public Item getItemInSlot(int slot) {
-    //$$     return new Item(player.getEquipmentInSlot(slot));
-    //$$ }
-    //#else
     /**
      * Gets the item currently in the player's specified inventory slot.
-     * MAINHAND, OFFHAND, FEET, LEGS, CHEST, HEAD.
+     * 0 for main hand, 1-4 for armor.
      *
      * @param slot the slot to access
      * @return the item in said slot
      */
-    public Item getItemInSlot(String slot) {
-        return new Item(player.getItemStackFromSlot(
-                EntityEquipmentSlot.valueOf(slot))
-        );
+    public Item getItemInSlot(int slot) {
+        return new Item(player.getEquipmentInSlot(slot));
     }
+    //#else
+    //$$ /**
+    //$$  * Gets the item currently in the player's specified inventory slot.
+    //$$  * MAINHAND, OFFHAND, FEET, LEGS, CHEST, HEAD.
+    //$$  *
+    //$$  * @param slot the slot to access
+    //$$  * @return the item in said slot
+    //$$  */
+    //$$ public Item getItemInSlot(String slot) {
+    //$$     return new Item(player.getItemStackFromSlot(
+    //$$             EntityEquipmentSlot.valueOf(slot))
+    //$$     );
+    //$$ }
     //#endif
 
     /**

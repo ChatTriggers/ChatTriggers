@@ -4,15 +4,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 //#if MC<=10809
-//$$ import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityFX;
 //#else
-import net.minecraft.client.particle.Particle;
+//$$ import net.minecraft.client.particle.Particle;
 //#endif
 
 //#if MC<=10809
-//$$ @Mixin(EntityFX.class)
+@Mixin(EntityFX.class)
 //#else
-@Mixin(Particle.class)
+//$$ @Mixin(Particle.class)
 //#endif
 public interface MixinEntityFX {
     @Accessor

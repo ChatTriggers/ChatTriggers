@@ -14,15 +14,15 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.world.chunk.Chunk;
 
 //#if MC<=10809
-//$$ import net.minecraft.util.BlockPos;
-//$$ import net.minecraft.util.MathHelper;
-//$$ import net.minecraft.util.MovingObjectPosition;
-//$$ import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.biome.BiomeGenBase;
 //#else
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.biome.Biome;
+//$$ import net.minecraft.util.math.BlockPos;
+//$$ import net.minecraft.util.math.MathHelper;
+//$$ import net.minecraft.util.math.RayTraceResult;
+//$$ import net.minecraft.world.biome.Biome;
 //#endif
 
 import java.util.ArrayList;
@@ -36,9 +36,9 @@ public class Player {
      */
     public static EntityPlayerSP getPlayer() {
         //#if MC<=10809
-        //$$ return Client.getMinecraft().thePlayer;
+        return Client.getMinecraft().thePlayer;
         //#else
-        return Client.getMinecraft().player;
+        //$$ return Client.getMinecraft().player;
         //#endif
     }
 
@@ -108,9 +108,9 @@ public class Player {
         return getPlayer() == null
                 ? 0
                 //#if MC<=10809
-                //$$ : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
+                : MathHelper.wrapAngleTo180_float(getPlayer().rotationPitch);
                 //#else
-                : MathHelper.wrapDegrees(getPlayer().rotationPitch);
+                //$$ : MathHelper.wrapDegrees(getPlayer().rotationPitch);
                 //#endif
     }
 
@@ -123,9 +123,9 @@ public class Player {
         return getPlayer() == null
                 ? 0
                 //#if MC<=10809
-                //$$ : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
+                : MathHelper.wrapAngleTo180_float(getPlayer().rotationYaw);
                 //#else
-                : MathHelper.wrapDegrees(getPlayer().rotationYaw);
+                //$$ : MathHelper.wrapDegrees(getPlayer().rotationYaw);
                 //#endif
     }
 
@@ -234,15 +234,15 @@ public class Player {
         Chunk chunk = World.getWorld().getChunkFromBlockCoords(getPlayer().getPosition());
 
         //#if MC<=10809
-        //$$ BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(), World.getWorld().getWorldChunkManager());
+        BiomeGenBase biome = chunk.getBiome(getPlayer().getPosition(), World.getWorld().getWorldChunkManager());
         //#else
-        Biome biome = chunk.getBiome(getPlayer().getPosition(), World.getWorld().getBiomeProvider());
+        //$$ Biome biome = chunk.getBiome(getPlayer().getPosition(), World.getWorld().getBiomeProvider());
         //#endif
 
         //#if MC<=10809
-        //$$ return biome.biomeName;
+        return biome.biomeName;
         //#else
-        return biome.getBiomeName();
+        //$$ return biome.getBiomeName();
         //#endif
     }
 
@@ -357,13 +357,13 @@ public class Player {
             return new Block(0);
 
         //#if MC<=10809
-        //$$ MovingObjectPosition mop = Client.getMinecraft().objectMouseOver;
-        //$$ boolean isBlock = mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK;
-        //$$ boolean isEntity = mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY;
+        MovingObjectPosition mop = Client.getMinecraft().objectMouseOver;
+        boolean isBlock = mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK;
+        boolean isEntity = mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY;
         //#else
-        RayTraceResult mop = Client.getMinecraft().objectMouseOver;
-        boolean isBlock = mop.typeOfHit == RayTraceResult.Type.BLOCK;
-        boolean isEntity = mop.typeOfHit == RayTraceResult.Type.ENTITY;
+        //$$ RayTraceResult mop = Client.getMinecraft().objectMouseOver;
+        //$$ boolean isBlock = mop.typeOfHit == RayTraceResult.Type.BLOCK;
+        //$$ boolean isEntity = mop.typeOfHit == RayTraceResult.Type.ENTITY;
         //#endif
 
         if (isBlock) {
@@ -426,9 +426,9 @@ public class Player {
 
     public static NetworkPlayerInfo getPlayerInfo() {
         //#if MC<=10809
-        //$$ return Client.getMinecraft().getNetHandler().getPlayerInfo(getPlayer().getUniqueID());
+        return Client.getMinecraft().getNetHandler().getPlayerInfo(getPlayer().getUniqueID());
         //#else
-        return Client.getConnection().getPlayerInfo(getPlayer().getUniqueID());
+        //$$ return Client.getConnection().getPlayerInfo(getPlayer().getUniqueID());
         //#endif
     }
 

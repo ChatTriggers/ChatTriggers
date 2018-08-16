@@ -79,9 +79,9 @@ public class ConfigString extends ConfigOption {
         Renderer.text(this.name, middle - 100 + this.x, this.y).draw();
 
         //#if MC<=10809
-        //$$ this.textField.xPosition = middle - 100 + this.x;
+        this.textField.xPosition = middle - 100 + this.x;
         //#else
-        this.textField.x = middle - 100 + this.x;
+        //$$ this.textField.x = middle - 100 + this.x;
         //#endif
 
         this.textField.drawTextBox();

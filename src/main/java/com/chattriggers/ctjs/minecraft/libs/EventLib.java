@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //#if MC<=10809
-//$$ import net.minecraft.util.IChatComponent;
+import net.minecraft.util.IChatComponent;
 //#else
-import net.minecraft.util.text.ITextComponent;
+//$$ import net.minecraft.util.text.ITextComponent;
 //#endif
 
 public class EventLib {
@@ -23,9 +23,9 @@ public class EventLib {
      */
     public static int getButton(MouseEvent event) {
         //#if MC<=10809
-        //$$ return event.button;
+        return event.button;
         //#else
-        return event.getButton();
+        //$$ return event.getButton();
         //#endif
     }
 
@@ -37,9 +37,9 @@ public class EventLib {
      */
     public static Boolean getButtonState(MouseEvent event) {
         //#if MC<=10809
-        //$$ return event.buttonstate;
+        return event.buttonstate;
         //#else
-        return event.isButtonstate();
+        //$$ return event.isButtonstate();
         //#endif
     }
 
@@ -51,9 +51,9 @@ public class EventLib {
      */
     public static RenderGameOverlayEvent.ElementType getType(RenderGameOverlayEvent event) {
         //#if MC<=10809
-        //$$ return event.type;
+        return event.type;
         //#else
-        return event.getType();
+        //$$ return event.getType();
         //#endif
     }
 
@@ -65,9 +65,9 @@ public class EventLib {
      */
     public static int getType(ClientChatReceivedEvent event) {
         //#if MC<=10809
-        //$$ return event.type;
+        return event.type;
         //#else
-        return event.getType().getId();
+        //$$ return event.getType().getId();
         //#endif
     }
 
@@ -78,13 +78,13 @@ public class EventLib {
      * @return the message from the event
      */
     //#if MC<=10809
-    //$$ public static IChatComponent getMessage(ClientChatReceivedEvent event) {
-    //$$     return event.message;
-    //$$ }
-    //#else
-    public static ITextComponent getMessage(ClientChatReceivedEvent event) {
-       return event.getMessage();
+    public static IChatComponent getMessage(ClientChatReceivedEvent event) {
+        return event.message;
     }
+    //#else
+    //$$ public static ITextComponent getMessage(ClientChatReceivedEvent event) {
+    //$$    return event.getMessage();
+    //$$ }
     //#endif
 
     /**
@@ -95,9 +95,9 @@ public class EventLib {
      */
     public static String getName(PlaySoundEvent event) {
         //#if MC<=10809
-        //$$ return event.name;
+        return event.name;
         //#else
-        return event.getName();
+        //$$ return event.getName();
         //#endif
     }
 
@@ -109,9 +109,9 @@ public class EventLib {
      */
     public static String getModId(ConfigChangedEvent.OnConfigChangedEvent event) {
         //#if MC<=10809
-        //$$ return event.modID;
+        return event.modID;
         //#else
-        return event.getModID();
+        //$$ return event.getModID();
         //#endif
     }
 
@@ -132,9 +132,9 @@ public class EventLib {
             cbi.cancel();
         } else if (event instanceof PlaySoundEvent) {
             //#if MC<=10809
-            //$$ ((PlaySoundEvent) event).result = null;
+            ((PlaySoundEvent) event).result = null;
             //#else
-            ((PlaySoundEvent) event).setResultSound(null);
+            //$$ ((PlaySoundEvent) event).setResultSound(null);
             //#endif
         } else {
             throw new IllegalArgumentException();

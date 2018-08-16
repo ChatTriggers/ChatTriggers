@@ -87,9 +87,9 @@ public class Renderer {
      */
     public FontRenderer getFontRenderer() {
         //#if MC<=10809
-        //$$ return Client.getMinecraft().fontRendererObj;
+        return Client.getMinecraft().fontRendererObj;
         //#else
-        return Client.getMinecraft().fontRenderer;
+        //$$ return Client.getMinecraft().fontRenderer;
         //#endif
     }
 
@@ -219,9 +219,9 @@ public class Renderer {
 
         Tessellator tessellator = Tessellator.getInstance();
         //#if MC<=10809
-        //$$ WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         //#else
-        BufferBuilder worldrenderer = tessellator.getBuffer();
+        //$$ BufferBuilder worldrenderer = tessellator.getBuffer();
         //#endif
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -281,9 +281,9 @@ public class Renderer {
 
         Tessellator tessellator = Tessellator.getInstance();
         //#if MC<=10809
-        //$$ WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         //#else
-        BufferBuilder worldrenderer = tessellator.getBuffer();
+        //$$ BufferBuilder worldrenderer = tessellator.getBuffer();
         //#endif
 
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -344,9 +344,9 @@ public class Renderer {
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
         //#if MC<=10809
-        //$$ rendermanager.renderEntityWithPosYaw(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        rendermanager.renderEntityWithPosYaw(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
         //#else
-        rendermanager.doRenderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+        //$$ rendermanager.doRenderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
         //#endif
         rendermanager.setRenderShadow(true);
 

@@ -116,9 +116,9 @@ public class ChatLib {
      */
     public static void clearChat() {
         //#if MC<=10809
-        //$$ Client.getChatGUI().clearChatMessages();
+        Client.getChatGUI().clearChatMessages();
         //#else
-        Client.getChatGUI().clearChatMessages(false);
+        //$$ Client.getChatGUI().clearChatMessages(false);
         //#endif
     }
 

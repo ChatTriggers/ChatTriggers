@@ -12,9 +12,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 //#if MC<=10809
-//$$ import net.minecraft.world.WorldSettings;
+import net.minecraft.world.WorldSettings;
 //#else
-import net.minecraft.world.GameType;
+//$$ import net.minecraft.world.GameType;
 //#endif
 
 import java.util.ArrayList;
@@ -57,9 +57,9 @@ public class TabList {
         if (Player.getPlayer() == null) return names;
 
         //#if MC<=10809
-        //$$ NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().sendQueue;
+        NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().sendQueue;
         //#else
-        NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().connection;
+        //$$ NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().connection;
         //#endif
 
         List<NetworkPlayerInfo> list = tab.sortedCopy(nethandlerplayclient.getPlayerInfoMap());
@@ -83,19 +83,19 @@ public class TabList {
                     .start()
                     .compareTrueFirst(
                             //#if MC<=10809
-                            //$$ playerOne.getGameType() != WorldSettings.GameType.SPECTATOR,
-                            //$$ playerTwo.getGameType() != WorldSettings.GameType.SPECTATOR
+                            playerOne.getGameType() != WorldSettings.GameType.SPECTATOR,
+                            playerTwo.getGameType() != WorldSettings.GameType.SPECTATOR
                             //#else
-                            playerOne.getGameType() != GameType.SPECTATOR,
-                            playerTwo.getGameType() != GameType.SPECTATOR
+                            //$$ playerOne.getGameType() != GameType.SPECTATOR,
+                            //$$ playerTwo.getGameType() != GameType.SPECTATOR
                             //#endif
                     ).compare(
                             //#if MC<=10809
-                            //$$ teamOne != null ? teamOne.getRegisteredName() : "",
-                            //$$ teamTwo != null ? teamTwo.getRegisteredName() : ""
+                            teamOne != null ? teamOne.getRegisteredName() : "",
+                            teamTwo != null ? teamTwo.getRegisteredName() : ""
                             //#else
-                            teamOne != null ? teamOne.getName() : "",
-                            teamTwo != null ? teamTwo.getName() : ""
+                            //$$ teamOne != null ? teamOne.getName() : "",
+                            //$$ teamTwo != null ? teamTwo.getName() : ""
                             //#endif
                     ).compare(
                             playerOne.getGameProfile().getName(),

@@ -8,9 +8,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 //#if MC<=10809
-//$$ import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.WorldRenderer;
 //#else
-import net.minecraft.client.renderer.BufferBuilder;
+//$$ import net.minecraft.client.renderer.BufferBuilder;
 //#endif
 
 import javax.vecmath.Vector2d;
@@ -205,9 +205,9 @@ public class Shape {
 
         Tessellator tessellator = Tessellator.getInstance();
         //#if MC<=10809
-        //$$ WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         //#else
-        BufferBuilder worldrenderer = tessellator.getBuffer();
+        //$$ BufferBuilder worldrenderer = tessellator.getBuffer();
         //#endif
 
         GlStateManager.enableBlend();

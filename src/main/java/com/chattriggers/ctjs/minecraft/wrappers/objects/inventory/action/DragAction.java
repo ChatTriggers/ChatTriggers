@@ -63,9 +63,9 @@ public class DragAction extends Action {
         }
 
         //#if MC<=10809
-        //$$ doClick(button, 5);
+        doClick(button, 5);
         //#else
-        doClick(button, net.minecraft.inventory.ClickType.QUICK_CRAFT);
+        //$$ doClick(button, net.minecraft.inventory.ClickType.QUICK_CRAFT);
         //#endif
     }
 

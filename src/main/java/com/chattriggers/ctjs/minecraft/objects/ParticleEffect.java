@@ -3,15 +3,15 @@ package com.chattriggers.ctjs.minecraft.objects;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 
 //#if MC<=10809
-//$$ import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityFX;
 //#else
-import net.minecraft.client.particle.Particle;
+//$$ import net.minecraft.client.particle.Particle;
 //#endif
 
 //#if MC<=10809
-//$$ public class ParticleEffect extends EntityFX {
+public class ParticleEffect extends EntityFX {
 //#else
-public class ParticleEffect extends Particle {
+//$$ public class ParticleEffect extends Particle {
 //#endif
 
     public ParticleEffect(double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
@@ -67,9 +67,9 @@ public class ParticleEffect extends Particle {
 
     public ParticleEffect remove() {
         //#if MC<=10809
-        //$$ super.setDead();
+        super.setDead();
         //#else
-        super.setExpired();
+        //$$ super.setExpired();
         //#endif
 
         return this;

@@ -11,9 +11,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 
 //#if MC<=10809
-//$$ import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockPos;
 //#else
-import net.minecraft.util.math.BlockPos;
+//$$ import net.minecraft.util.math.BlockPos;
 //#endif
 
 import java.util.ArrayList;

@@ -7,9 +7,9 @@ import lombok.Getter;
 import net.minecraft.tileentity.TileEntitySign;
 
 //#if MC<=10809
-//$$ import net.minecraft.util.IChatComponent;
+import net.minecraft.util.IChatComponent;
 //#else
-import net.minecraft.util.text.ITextComponent;
+//$$ import net.minecraft.util.text.ITextComponent;
 //#endif
 
 import java.util.Arrays;
@@ -53,9 +53,9 @@ public class Sign extends Block{
     public List<String> getFormattedLines() {
         return Arrays.stream(this.sign.signText)
                 //#if MC<=10809
-                //$$ .map(IChatComponent::getFormattedText)
+                .map(IChatComponent::getFormattedText)
                 //#else
-                .map(ITextComponent::getFormattedText)
+                //$$ .map(ITextComponent::getFormattedText)
                 //#endif
                 .collect(Collectors.toList());
     }
@@ -68,9 +68,9 @@ public class Sign extends Block{
     public List<String> getUnformattedLines() {
         return Arrays.stream(this.sign.signText)
                 //#if MC<=10809
-                //$$ .map(IChatComponent::getUnformattedText)
+                .map(IChatComponent::getUnformattedText)
                 //#else
-                .map(ITextComponent::getUnformattedText)
+                //$$ .map(ITextComponent::getUnformattedText)
                 //#endif
                 .collect(Collectors.toList());
     }
