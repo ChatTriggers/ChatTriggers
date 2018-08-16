@@ -3,7 +3,14 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects;
 import lombok.Getter;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.MathHelper;
+
+//#if MC<=10809
+//$$ import net.minecraft.util.MathHelper;
+//#else
+import net.minecraft.util.math.MathHelper;
+import java.util.List;
+import java.util.stream.Collectors;
+//#endif
 
 import java.util.UUID;
 
@@ -44,7 +51,11 @@ public class Entity {
      * @return the entity's pitch
      */
     public double getPitch() {
-        return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch);
+        //#if MC<=10809
+        //$$ return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch);
+        //#else
+        return MathHelper.wrapDegrees(this.entity.rotationPitch);
+        //#endif
     }
 
     /**
@@ -54,7 +65,11 @@ public class Entity {
      * @return the entity's yaw
      */
     public double getYaw() {
-        return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw);
+        //#if MC<=10809
+        //$$ return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw);
+        //#else
+        return MathHelper.wrapDegrees(this.entity.rotationYaw);
+        //#endif
     }
 
     /**
@@ -104,9 +119,15 @@ public class Entity {
      * @return the entity being ridden, or null if there isn't one.
      */
     public Entity getRiding() {
-        return this.entity.ridingEntity == null
+        //#if MC<=10809
+        //$$ return this.entity.ridingEntity == null
+        //$$         ? null
+        //$$         : new Entity(this.entity.ridingEntity);
+        //#else
+        return this.entity.getRidingEntity() == null
                 ? null
-                : new Entity(this.entity.ridingEntity);
+                : new Entity(this.entity.getRidingEntity());
+        //#endif
     }
 
     /**
@@ -115,10 +136,30 @@ public class Entity {
      * @return the riding entity, or null if there isn't one.
      */
     public Entity getRider() {
-        return this.entity.riddenByEntity == null
+        //#if MC<=10809
+        //$$ return this.entity.riddenByEntity == null
+        //$$         ? null
+        //$$         : new Entity(this.entity.riddenByEntity);
+        //#else
+        return getRiders().isEmpty()
                 ? null
-                : new Entity(this.entity.riddenByEntity);
+                : getRiders().get(0);
+        //#endif
     }
+
+    //#if MC>10809
+    /**
+     * Gets the entities that are riding this entity.
+     *
+     * @return the riding entities, or an empty list if there aren't any.
+     */
+    public List<Entity> getRiders() {
+        return this.entity.getPassengers()
+                .stream()
+                .map(Entity::new)
+                .collect(Collectors.toList());
+    }
+    //#endif
 
     /**
      * Checks whether or not the entity is dead.

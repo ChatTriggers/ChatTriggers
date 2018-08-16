@@ -32,6 +32,17 @@ public class ClickAction extends Action {
     @Setter @Getter
     private boolean itemInHand = Player.getPlayer().inventory.getCurrentItem() == null;
 
+    //#if MC>10809
+    /**
+     * Whether the click should try to pick up all items of said type in the inventory (essentially double clicking)
+     * (defaults to whether there actually is an item in the hand)
+     *
+     * @param pickupAll to pickup all items of the same type
+     */
+    @Setter @Getter
+    private boolean pickupAll = false;
+    //#endif
+
     /**
      * The slot to click on (-999 if outside gui)
      *
@@ -56,15 +67,30 @@ public class ClickAction extends Action {
 
     @Override
     public void complete() {
-        int mode = 0;
-
+        //#if MC<=10809
+        //$$ int mode = 0;
+        //$$
+        //$$ if (this.clickType == ClickType.MIDDLE) {
+        //$$     mode = 3;
+        //$$ } else if (slot == -999 && !this.itemInHand) {
+        //$$     mode = 4;
+        //$$ } else if (this.holdingShift) {
+        //$$     mode = 1;
+        //$$ }
+        //#else
+        net.minecraft.inventory.ClickType mode;
         if (this.clickType == ClickType.MIDDLE) {
-            mode = 3;
+            mode = net.minecraft.inventory.ClickType.CLONE;
         } else if (slot == -999 && !this.itemInHand) {
-            mode = 4;
+            mode = net.minecraft.inventory.ClickType.THROW;
         } else if (this.holdingShift) {
-            mode = 1;
+            mode = net.minecraft.inventory.ClickType.QUICK_MOVE;;
+        } else if (pickupAll) {
+            mode = net.minecraft.inventory.ClickType.PICKUP_ALL;
+        } else {
+            mode = net.minecraft.inventory.ClickType.PICKUP;
         }
+        //#endif
 
         doClick(this.clickType.getButton(), mode);
     }

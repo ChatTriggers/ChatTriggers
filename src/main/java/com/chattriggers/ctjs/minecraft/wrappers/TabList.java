@@ -8,9 +8,14 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.world.WorldSettings;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+//#if MC<=10809
+//$$ import net.minecraft.world.WorldSettings;
+//#else
+import net.minecraft.world.GameType;
+//#endif
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +55,13 @@ public class TabList {
 
         Ordering<NetworkPlayerInfo> tab = Ordering.from(new PlayerComparator());
         if (Player.getPlayer() == null) return names;
-        NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().sendQueue;
+
+        //#if MC<=10809
+        //$$ NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().sendQueue;
+        //#else
+        NetHandlerPlayClient nethandlerplayclient = Player.getPlayer().connection;
+        //#endif
+
         List<NetworkPlayerInfo> list = tab.sortedCopy(nethandlerplayclient.getPlayerInfoMap());
 
         for (NetworkPlayerInfo player : list) {
@@ -62,13 +73,34 @@ public class TabList {
 
     @SideOnly(Side.CLIENT)
     static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
-        private PlayerComparator() {
-        }
+        private PlayerComparator() { }
 
-        public int compare(NetworkPlayerInfo p_compare_1_, NetworkPlayerInfo p_compare_2_) {
-            ScorePlayerTeam scoreplayerteam = p_compare_1_.getPlayerTeam();
-            ScorePlayerTeam scoreplayerteam1 = p_compare_2_.getPlayerTeam();
-            return ComparisonChain.start().compareTrueFirst(p_compare_1_.getGameType() != WorldSettings.GameType.SPECTATOR, p_compare_2_.getGameType() != WorldSettings.GameType.SPECTATOR).compare(scoreplayerteam != null ? scoreplayerteam.getRegisteredName() : "", scoreplayerteam1 != null ? scoreplayerteam1.getRegisteredName() : "").compare(p_compare_1_.getGameProfile().getName(), p_compare_2_.getGameProfile().getName()).result();
+        public int compare(NetworkPlayerInfo playerOne, NetworkPlayerInfo playerTwo) {
+            ScorePlayerTeam teamOne = playerOne.getPlayerTeam();
+            ScorePlayerTeam teamTwo = playerTwo.getPlayerTeam();
+
+            return ComparisonChain
+                    .start()
+                    .compareTrueFirst(
+                            //#if MC<=10809
+                            //$$ playerOne.getGameType() != WorldSettings.GameType.SPECTATOR,
+                            //$$ playerTwo.getGameType() != WorldSettings.GameType.SPECTATOR
+                            //#else
+                            playerOne.getGameType() != GameType.SPECTATOR,
+                            playerTwo.getGameType() != GameType.SPECTATOR
+                            //#endif
+                    ).compare(
+                            //#if MC<=10809
+                            //$$ teamOne != null ? teamOne.getRegisteredName() : "",
+                            //$$ teamTwo != null ? teamTwo.getRegisteredName() : ""
+                            //#else
+                            teamOne != null ? teamOne.getName() : "",
+                            teamTwo != null ? teamTwo.getName() : ""
+                            //#endif
+                    ).compare(
+                            playerOne.getGameProfile().getName(),
+                            playerTwo.getGameProfile().getName()
+                    ).result();
         }
     }
 }

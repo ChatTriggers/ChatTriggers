@@ -13,13 +13,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(CrashReport.class)
 public class MixinCrashReport {
     @Final @Shadow
-    private CrashReportCategory theReportCategory;
+    //#if MC<=10809
+    //$$ private CrashReportCategory theReportCategory;
+    //#else
+    private CrashReportCategory systemDetailsCategory;
+    //#endif
 
     @Inject(method = "populateEnvironment", at = @At("HEAD"))
     private void injectCTModules(CallbackInfo ci) {
-        this.theReportCategory.addCrashSectionCallable(
-            "ct.js modules",
-                () -> ModuleManager.getInstance().getModules().toString()
+        //#if MC<=10809
+        //$$ this.theReportCategory.addCrashSectionCallable(
+        //$$         "ct.js modules",
+        //$$         () -> ModuleManager.getInstance().getModules().toString()
+        //$$ );
+        //#else
+        this.systemDetailsCategory.addCrashSection(
+             "ct.js modules",
+             ModuleManager.getInstance() == null ? "PRE-INIT, NONE LOADED" : ModuleManager.getInstance().getModules().toString()
         );
+        //#endif
     }
 }

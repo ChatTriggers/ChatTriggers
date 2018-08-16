@@ -1,9 +1,19 @@
 package com.chattriggers.ctjs.minecraft.objects;
 
 import com.chattriggers.ctjs.minecraft.wrappers.World;
-import net.minecraft.client.particle.EntityFX;
 
-public class ParticleEffect extends EntityFX {
+//#if MC<=10809
+//$$ import net.minecraft.client.particle.EntityFX;
+//#else
+import net.minecraft.client.particle.Particle;
+//#endif
+
+//#if MC<=10809
+//$$ public class ParticleEffect extends EntityFX {
+//#else
+public class ParticleEffect extends Particle {
+//#endif
+
     public ParticleEffect(double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
         super(World.getWorld(), x, y, z, xSpeed, ySpeed, zSpeed);
     }
@@ -11,10 +21,6 @@ public class ParticleEffect extends EntityFX {
     public ParticleEffect(double x, double y, double z) {
         this(x, y, z, 0, 0, 0);
     }
-
-//    public ParticleEffect setTexture(String textureName) {
-//        super.tex
-//    }
 
     public ParticleEffect scale(float scale) {
         super.multipleParticleScaleBy(scale);
@@ -60,7 +66,11 @@ public class ParticleEffect extends EntityFX {
     }
 
     public ParticleEffect remove() {
-        super.setDead();
+        //#if MC<=10809
+        //$$ super.setDead();
+        //#else
+        super.setExpired();
+        //#endif
 
         return this;
     }

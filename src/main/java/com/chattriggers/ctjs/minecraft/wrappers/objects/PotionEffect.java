@@ -1,5 +1,9 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects;
 
+//#if MC>10809
+import net.minecraft.potion.Potion;
+//#endif
+
 public class PotionEffect {
     private net.minecraft.potion.PotionEffect effect;
 
@@ -32,7 +36,11 @@ public class PotionEffect {
      * @return the ID of the potion effect
      */
     public int getID() {
-        return this.effect.getPotionID();
+        //#if MC<=10809
+        //$$ return this.effect.getPotionID();
+        //#else
+        return Potion.getIdFromPotion(this.effect.getPotion());
+        //#endif
     }
 
     /**
@@ -53,7 +61,11 @@ public class PotionEffect {
      * @return True if the potion effect is showing particles
      */
     public Boolean showsParticles() {
-        return this.effect.getIsShowParticles();
+        //#if MC<=10809
+        //$$ return this.effect.getIsShowParticles();
+        //#else
+        return this.effect.doesShowParticles();
+        //#endif
     }
 
     public String toString() {

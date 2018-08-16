@@ -5,8 +5,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
+//#if MC<=10809
+//$$ import net.minecraft.util.MathHelper;
+//#else
+import net.minecraft.util.math.MathHelper;
+//#endif
 
 public class LayerCape implements LayerRenderer<AbstractClientPlayer> {
     private final RenderPlayer playerRenderer;
@@ -41,7 +46,11 @@ public class LayerCape implements LayerRenderer<AbstractClientPlayer> {
         double d3 = MathHelper.sin(f * 0.01745329F);
         double d4 = -MathHelper.cos(f * 0.01745329F);
         float f1 = (float)d1 * 10.0F;
-        f1 = MathHelper.clamp_float(f1, 3.0F, 32.0F);
+        //#if MC<=10809
+        //$$ f1 = MathHelper.clamp_float(f1, 3.0F, 32.0F);
+        //#else
+        f1 = MathHelper.clamp(f1, 3.0F, 32.0F);
+        //#endif
         float f2 = (float)(d0 * d3 + d2 * d4) * 100.0F;
         float f3 = (float)(d0 * d4 - d2 * d3) * 100.0F;
         if (f2 < 0.0F) {

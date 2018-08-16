@@ -47,7 +47,7 @@ public class ConfigBoolean extends ConfigOption {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         if (this.hidden) return;
 
         int middle = Renderer.screen.getWidth() / 2;
@@ -58,10 +58,15 @@ public class ConfigBoolean extends ConfigOption {
 
         Renderer.text(this.name, middle - 100 + this.x, this.y).draw();
 
-        this.button.xPosition = middle - 100 + this.x;
-        this.button.drawButton(Client.getMinecraft(), mouseX, mouseY);
+        //#if MC<=10809
+        //$$ this.button.xPosition = middle - 100 + this.x;
+        //$$ this.button.drawButton(Client.getMinecraft(), mouseX, mouseY);
+        //#else
+        this.button.x = middle - 100 + this.x;
+        this.button.drawButton(Client.getMinecraft(), mouseX, mouseY, partialTicks);
+        //#endif
 
-        super.draw(mouseX, mouseY);
+        super.draw(mouseX, mouseY, partialTicks);
     }
 
     @Override

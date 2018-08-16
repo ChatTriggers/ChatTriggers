@@ -55,26 +55,77 @@ public class WorldListener {
 
     @SubscribeEvent
     public void onSoundPlay(PlaySoundEvent event) {
-        Vector3d position = new Vector3d(event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF());
+        Vector3d position = new Vector3d(
+                //#if MC<=10809
+                //$$ event.sound.getXPosF(),
+                //$$ event.sound.getYPosF(),
+                //$$ event.sound.getZPosF()
+                //#else
+                event.getSound().getXPosF(),
+                event.getSound().getYPosF(),
+                event.getSound().getZPosF()
+                //#endif
+        );
+
+        float vol = 0.0f;
+        float pitch = 1.0f;
+
+        try {
+            //#if MC<=10809
+            //$$ vol = event.sound.getVolume();
+            //#else
+            vol = event.getSound().getVolume();
+            //#endif
+        } catch (Exception ignored) {}
+
+        try {
+            //#if MC<=10809
+            //$$ pitch = event.sound.getPitch();
+            //#else
+            pitch = event.getSound().getPitch();
+            //#endif
+        } catch (Exception ignored) {}
+
         TriggerType.SOUND_PLAY.triggerAll(
                 event,
                 position,
-                event.name,
-                event.sound.getVolume(),
-                event.sound.getPitch(),
-                event.category == null ? null : event.category.getCategoryName()
+                //#if MC<=10809
+                //$$ event.name,
+                //$$ vol,
+                //$$ pitch,
+                //$$ event.category == null ? null : event.category.getCategoryName()
+                //#else
+                event.getName(),
+                vol,
+                pitch,
+                event.getSound().getCategory() == null ? null : event.getSound().getCategory().getName()
+                //#endif
         );
     }
 
     @SubscribeEvent
     public void noteBlockEventPlay(NoteBlockEvent.Play event) {
-        Vector3d position = new Vector3d(event.pos.getX(), event.pos.getY(), event.pos.getZ());
+        Vector3d position = new Vector3d(
+                //#if MC<=10809
+                //$$ event.pos.getX(), event.pos.getY(), event.pos.getZ()
+                //#else
+                event.getPos().getX(), event.getPos().getY(), event.getPos().getZ()
+                //#endif
+        );
+
         TriggerType.NOTE_BLOCK_PLAY.triggerAll(event, position, event.getNote().name(), event.getOctave());
     }
 
     @SubscribeEvent
     public void noteBlockEventChange(NoteBlockEvent.Change event) {
-        Vector3d position = new Vector3d(event.pos.getX(), event.pos.getY(), event.pos.getZ());
+        Vector3d position = new Vector3d(
+                //#if MC<=10809
+                //$$ event.pos.getX(), event.pos.getY(), event.pos.getZ()
+                //#else
+                event.getPos().getX(), event.getPos().getY(), event.getPos().getZ()
+                //#endif
+        );
+
         TriggerType.NOTE_BLOCK_CHANGE.triggerAll(event, position, event.getNote().name(), event.getOctave());
     }
 

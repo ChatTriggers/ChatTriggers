@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.libs;
 
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -8,6 +7,12 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+//#if MC<=10809
+//$$ import net.minecraft.util.IChatComponent;
+//#else
+import net.minecraft.util.text.ITextComponent;
+//#endif
 
 public class EventLib {
     /**
@@ -17,7 +22,11 @@ public class EventLib {
      * @return the button clicked (0 for left click, 1 for middle click, 2 for right click, etc.)
      */
     public static int getButton(MouseEvent event) {
-        return event.button;
+        //#if MC<=10809
+        //$$ return event.button;
+        //#else
+        return event.getButton();
+        //#endif
     }
 
     /**
@@ -27,7 +36,11 @@ public class EventLib {
      * @return the state of the button true for pressed, false for unpressed
      */
     public static Boolean getButtonState(MouseEvent event) {
-        return event.buttonstate;
+        //#if MC<=10809
+        //$$ return event.buttonstate;
+        //#else
+        return event.isButtonstate();
+        //#endif
     }
 
     /**
@@ -37,7 +50,11 @@ public class EventLib {
      * @return the type of the event
      */
     public static RenderGameOverlayEvent.ElementType getType(RenderGameOverlayEvent event) {
-        return event.type;
+        //#if MC<=10809
+        //$$ return event.type;
+        //#else
+        return event.getType();
+        //#endif
     }
 
     /**
@@ -47,7 +64,11 @@ public class EventLib {
      * @return the type of the event, 0 for standard chat message, 1 for system message displayed as standard text
      */
     public static int getType(ClientChatReceivedEvent event) {
-        return event.type;
+        //#if MC<=10809
+        //$$ return event.type;
+        //#else
+        return event.getType().getId();
+        //#endif
     }
 
     /**
@@ -56,9 +77,15 @@ public class EventLib {
      * @param event a chat event
      * @return the message from the event
      */
-    public static IChatComponent getMessage(ClientChatReceivedEvent event) {
-        return event.message;
+    //#if MC<=10809
+    //$$ public static IChatComponent getMessage(ClientChatReceivedEvent event) {
+    //$$     return event.message;
+    //$$ }
+    //#else
+    public static ITextComponent getMessage(ClientChatReceivedEvent event) {
+       return event.getMessage();
     }
+    //#endif
 
     /**
      * Gets the name of a sound that was played
@@ -67,7 +94,11 @@ public class EventLib {
      * @return the name of the sound that was played
      */
     public static String getName(PlaySoundEvent event) {
-        return event.name;
+        //#if MC<=10809
+        //$$ return event.name;
+        //#else
+        return event.getName();
+        //#endif
     }
 
     /**
@@ -77,7 +108,11 @@ public class EventLib {
      * @return the mod id
      */
     public static String getModId(ConfigChangedEvent.OnConfigChangedEvent event) {
-        return event.modID;
+        //#if MC<=10809
+        //$$ return event.modID;
+        //#else
+        return event.getModID();
+        //#endif
     }
 
     /**
@@ -96,7 +131,11 @@ public class EventLib {
             if (!cbi.isCancellable()) return;
             cbi.cancel();
         } else if (event instanceof PlaySoundEvent) {
-            ((PlaySoundEvent) event).result = null;
+            //#if MC<=10809
+            //$$ ((PlaySoundEvent) event).result = null;
+            //#else
+            ((PlaySoundEvent) event).setResultSound(null);
+            //#endif
         } else {
             throw new IllegalArgumentException();
         }

@@ -22,7 +22,11 @@ public class DropAction extends Action {
     public void complete() {
         doClick(
                 holdingCtrl ? 1 : 0,
-                4
+                //#if MC<=10809
+                //$$ 4
+                //#else
+                net.minecraft.inventory.ClickType.THROW
+                //#endif
         );
     }
 }

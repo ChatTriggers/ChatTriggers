@@ -5,7 +5,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+
+//#if MC<=10809
+//$$ import net.minecraft.util.BlockPos;
+//#else
+import net.minecraft.util.math.BlockPos;
+//#endif
 
 public class  Block {
     @Getter
@@ -83,7 +88,11 @@ public class  Block {
      * @return the block's registry name
      */
     public String getRegistryName() {
-        return this.block.getRegistryName();
+        //#if MC<=10809
+        //$$ return this.block.getRegistryName();
+        //#else
+        return this.block.getRegistryName().toString();
+        //#endif
     }
 
     /**
@@ -113,7 +122,15 @@ public class  Block {
      * @return the block's light value
      */
     public int getLightValue() {
-        return this.block.getLightValue();
+        //#if MC<=10809
+        //$$ return this.block.getLightValue();
+        //#else
+        return this.block.getLightValue(
+                World.getWorld().getBlockState(this.blockPos),
+                World.getWorld(),
+                this.getBlockPos()
+        );
+        //#endif
     }
 
     /**
@@ -188,7 +205,13 @@ public class  Block {
      * @return whether the block provides power
      */
     public boolean canProvidePower() {
-        return this.block.canProvidePower();
+        //#if MC<=10809
+        //$$ return this.block.canProvidePower();
+        //#else
+        return this.block.canProvidePower(
+                World.getWorld().getBlockState(this.blockPos)
+        );
+        //#endif
     }
 
     /**
@@ -235,7 +258,13 @@ public class  Block {
      * @return whether the block is translucent.
      */
     public boolean isTranslucent() {
-        return this.block.isTranslucent();
+        //#if MC<=10809
+        //$$ return this.block.isTranslucent();
+        //#else
+        return this.block.isTranslucent(
+                World.getWorld().getBlockState(this.blockPos)
+        );
+        //#endif
     }
 
     @Override

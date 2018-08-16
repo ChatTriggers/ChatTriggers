@@ -66,7 +66,7 @@ public class ConfigString extends ConfigOption {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         if (this.hidden) return;
 
         update();
@@ -78,10 +78,15 @@ public class ConfigString extends ConfigOption {
                 .draw();
         Renderer.text(this.name, middle - 100 + this.x, this.y).draw();
 
-        this.textField.xPosition = middle - 100 + this.x;
+        //#if MC<=10809
+        //$$ this.textField.xPosition = middle - 100 + this.x;
+        //#else
+        this.textField.x = middle - 100 + this.x;
+        //#endif
+
         this.textField.drawTextBox();
 
-        super.draw(mouseX, mouseY);
+        super.draw(mouseX, mouseY, partialTicks);
     }
 
     private void update() {

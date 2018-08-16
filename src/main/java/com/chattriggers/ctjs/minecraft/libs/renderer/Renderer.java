@@ -86,7 +86,11 @@ public class Renderer {
      * @return the font renderer object
      */
     public FontRenderer getFontRenderer() {
-        return Client.getMinecraft().fontRendererObj;
+        //#if MC<=10809
+        //$$ return Client.getMinecraft().fontRendererObj;
+        //#else
+        return Client.getMinecraft().fontRenderer;
+        //#endif
     }
 
     /**
@@ -214,7 +218,12 @@ public class Renderer {
         GlStateManager.disableTexture2D();
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#if MC<=10809
+        //$$ WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#else
+        BufferBuilder worldrenderer = tessellator.getBuffer();
+        //#endif
+
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         if (!Renderer.colorized)
             GlStateManager.color(r, g, b, a);
@@ -271,7 +280,12 @@ public class Renderer {
         GlStateManager.enableTexture2D();
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#if MC<=10809
+        //$$ WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#else
+        BufferBuilder worldrenderer = tessellator.getBuffer();
+        //#endif
+
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 
         worldrenderer.pos(x,y + height,0)
@@ -329,7 +343,11 @@ public class Renderer {
         RenderManager rendermanager = Client.getMinecraft().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
-        rendermanager.renderEntityWithPosYaw(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        //#if MC<=10809
+        //$$ rendermanager.renderEntityWithPosYaw(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        //#else
+        rendermanager.doRenderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+        //#endif
         rendermanager.setRenderShadow(true);
 
         ent.renderYawOffset = f;

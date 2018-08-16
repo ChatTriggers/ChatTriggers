@@ -5,8 +5,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+
+//#if MC<=10809
+//$$ import net.minecraft.client.renderer.WorldRenderer;
+//#else
+import net.minecraft.client.renderer.BufferBuilder;
+//#endif
 
 import javax.vecmath.Vector2d;
 import java.util.ArrayList;
@@ -199,7 +204,12 @@ public class Shape {
         float b = (float) (this.color & 255) / 255.0F;
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#if MC<=10809
+        //$$ WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#else
+        BufferBuilder worldrenderer = tessellator.getBuffer();
+        //#endif
+
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);

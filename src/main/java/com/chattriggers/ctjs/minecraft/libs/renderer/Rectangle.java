@@ -5,8 +5,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+
+//#if MC<=10809
+//$$ import net.minecraft.client.renderer.WorldRenderer;
+//#else
+import net.minecraft.client.renderer.BufferBuilder;
+//#endif
 
 /**
  * Used in {@link Renderer#rectangle(int, float, float, float, float)}
@@ -289,7 +294,12 @@ public class Rectangle {
         GlStateManager.disableTexture2D();
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#if MC<=10809
+        //$$ WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //#else
+        BufferBuilder worldrenderer = tessellator.getBuffer();
+        //#endif
+
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         if (!Renderer.colorized)
             GlStateManager.color(r, g, b, a);

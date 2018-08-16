@@ -43,7 +43,7 @@ public class GuiConfig extends GuiScreen {
         drawBackground(0);
 
         for (ConfigOption configOption : this.configOptions)
-            configOption.draw(mouseX, mouseY);
+            configOption.draw(mouseX, mouseY, partialTicks);
 
         iconHandler.drawIcons();
 
