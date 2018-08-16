@@ -37,7 +37,11 @@ public class Item {
      */
     public Item(ItemStack itemStack) {
         ItemStack newItemStack = itemStack;
+        //#if MC<=10809
         if (itemStack == null)
+        //#else
+        //$$ if (itemStack == null || itemStack == ItemStack.EMPTY)
+        //#endif
             newItemStack = new ItemStack(new Block(0).getBlock());
 
         this.item = newItemStack.getItem();

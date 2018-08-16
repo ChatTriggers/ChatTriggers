@@ -36,4 +36,7 @@ classes/production/
 .utility/node_modules/
 /mappings/mcp-srg.srg
 /gradle/mcversion.txt
+/gradle/wrapper/gradle-wrapper.jar
 /gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
