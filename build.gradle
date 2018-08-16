@@ -36,7 +36,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: "io.franzbecker.gradle-lombok"
 
-version = "0.16.4-SNAPSHOT"
+version = "0.16.5-SNAPSHOT"
 group = "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ctjs"
 

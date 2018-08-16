@@ -75,6 +75,20 @@ public class JSScriptLoader extends ScriptLoader {
         if (reload) {
             cachedModules.clear();
 
+            File toDownload = new File(modulesDir, ".to_download.txt");
+
+            if (toDownload.exists()) {
+                String content = FileLib.read(toDownload);
+
+                for (String module : content.split(",")) {
+                    if ("\n".equals(module) || "".equals(module)) continue;
+
+                    ModuleManager.getInstance().importModule(module, true);
+                }
+
+                toDownload.delete();
+            }
+
             for (File dir : getFoldersInDirectory(modulesDir)) {
                 loadModule(dir, updateCheck);
             }
