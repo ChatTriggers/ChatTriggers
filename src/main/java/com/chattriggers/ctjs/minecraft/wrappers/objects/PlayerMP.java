@@ -11,6 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //#if MC>10809
 //$$ import net.minecraft.inventory.EntityEquipmentSlot;
@@ -51,16 +53,12 @@ public class PlayerMP extends Entity {
      *
      * @return The player's active potion effects.
      */
-    public ArrayList<PotionEffect> getActivePotionEffects() {
+    public List<PotionEffect> getActivePotionEffects() {
         if (getPlayer() == null) return new ArrayList<>();
 
-        ArrayList<PotionEffect> effects = new ArrayList<>();
-
-        for (net.minecraft.potion.PotionEffect effect : getPlayer().getActivePotionEffects()) {
-            effects.add(new PotionEffect(effect));
-        }
-
-        return effects;
+        return getPlayer().getActivePotionEffects().stream()
+                .map(PotionEffect::new)
+                .collect(Collectors.toList());
     }
 
     /**
