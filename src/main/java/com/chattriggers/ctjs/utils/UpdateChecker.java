@@ -6,8 +6,10 @@ import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.objects.message.Message;
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
+import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.utils.config.Config;
+import com.google.gson.Gson;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -35,11 +37,12 @@ public class UpdateChecker {
     }
 
     private void getUpdate() {
-        String fileName = "ctjs-" + Reference.MODVERSION + ".jar";
-        String get = FileLib.getUrlContent("http://167.99.3.229/versions/latest/").trim();
-        if ("".equals(get)) return;
+        String fileName = Reference.MODVERSION;
+        String get = FileLib.getUrlContent("https://api.github.com/repos/ChatTriggers/ct.js/releases");
+        Release[] releases = new Gson().fromJson(get, Release[].class);
+        if (releases == null || releases.length == 0) return;
 
-        this.updateAvailable = !fileName.equals(get);
+        this.updateAvailable = !fileName.equals(releases[0].tag_name + "-" + Client.getVersion());
     }
 
     @SubscribeEvent
@@ -85,5 +88,9 @@ public class UpdateChecker {
                 );
 
         GlStateManager.popMatrix();
+    }
+
+    private class Release {
+        String tag_name;
     }
 }
