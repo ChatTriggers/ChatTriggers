@@ -3,6 +3,9 @@ jdk:
     - oraclejdk8
     - openjdk8
 before_install:
+    - mv gradlew.default gradlew
+    - mv gradle/wrapper/gradle-wrapper.jar.default gradle/wrapper/gradle-wrapper.jar
+    - mv gradle/wrapper/gradle-wrapper.properties.default gradle/wrapper/gradle-wrapper.properties
     - chmod +x gradlew
     - ". $HOME/.nvm/nvm.sh"
     - nvm install stable
