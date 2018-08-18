@@ -13,13 +13,16 @@ import net.minecraft.util.BlockPos;
 //#endif
 
 public class  Block {
-    @Getter
-    net.minecraft.block.Block block;
+    protected net.minecraft.block.Block block;
     @Getter
     private BlockPos blockPos = new BlockPos(0, 0, 0);
 
     /* Constructors */
     Block() {}
+
+    public net.minecraft.block.Block getBlock() {
+        return block;
+    }
 
     /**
      * Creates a Block object from a minecraft block input.<br>

@@ -20,12 +20,15 @@ import net.minecraft.util.IChatComponent;
 
 @Accessors(chain = true)
 public class TextComponent {
-    @Getter
     //#if MC<=10809
     private IChatComponent chatComponentText;
     //#else
     //$$ private ITextComponent chatComponentText;
     //#endif
+
+    public IChatComponent getChatComponentText() {
+        return chatComponentText;
+    }
 
     /**
      * -- GETTER --

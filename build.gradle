@@ -4,10 +4,12 @@ buildscript {
     def f = file("gradle/mcversion.txt")
 
     project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
+    ext.kotlin_version = "1.2.60"
 
     repositories {
         jcenter()
         mavenLocal()
+        mavenCentral()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -30,11 +32,13 @@ buildscript {
         )
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         classpath "io.franzbecker:gradle-lombok:1.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: "io.franzbecker.gradle-lombok"
+apply plugin: 'kotlin'
 
 version = "0.16.5-SNAPSHOT-" + (
     mcVersion.toString().substring(0, 1) + "."
@@ -115,6 +119,8 @@ dependencies {
     compile files("libs/nashorn.jar")
     provided files("libs/sentry.jar")
     provided group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.3"
+    provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -247,6 +253,7 @@ task changeMcVersion() {
         println "MC target version is $version"
         def vars = [MC: version as int]
         project.convertTree(vars, 'src/main/java')
+        project.convertTree(vars, 'src/main/kotlin')
         project.convertTree(vars, 'src/main/resources')
     }
 }
