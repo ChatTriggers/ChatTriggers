@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.utils
+package com.chattriggers.ctjs.utils.kotlin
 
 import net.minecraftforge.fml.common.FMLModContainer
 import net.minecraftforge.fml.common.ILanguageAdapter

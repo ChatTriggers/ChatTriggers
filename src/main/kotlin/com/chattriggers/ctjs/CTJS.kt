@@ -22,12 +22,14 @@ import com.chattriggers.ctjs.utils.capes.LayerCape
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.config.GuiConfig
 import com.chattriggers.ctjs.utils.console.Console
+import com.chattriggers.ctjs.utils.kotlin.AutomaticEventSubscriber
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.sentry.Sentry
 import io.sentry.event.UserBuilder
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
@@ -43,7 +45,7 @@ import java.io.IOException
     version = Reference.MODVERSION,
     clientSideOnly = true,
     modLanguage = "Kotlin",
-    modLanguageAdapter = "com.chattriggers.ctjs.utils.KotlinAdapter"
+    modLanguageAdapter = "com.chattriggers.ctjs.utils.kotlin.KotlinAdapter"
 )
 object CTJS {
     lateinit var assetsDir: File
@@ -62,6 +64,15 @@ object CTJS {
         Reference()
         Console()
 
+        Loader.instance().modList.forEach {
+            println("ID: ${it.modId}")
+            println("EQ: ${it.modId == Reference.MODID}")
+        }
+
+        Loader.instance().modList.filter { it.modId == Reference.MODID }.forEach {
+            println("Subscribing to ${it.modId}")
+            AutomaticEventSubscriber.subscribeAutomatic(it, event.asmData)
+        }
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
@@ -142,7 +153,6 @@ object CTJS {
     }
 
     private fun registerListeners() {
-        MinecraftForge.EVENT_BUS.register(WorldListener())
         MinecraftForge.EVENT_BUS.register(ClientListener())
     }
 

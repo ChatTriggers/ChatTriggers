@@ -25,8 +25,11 @@ public class Sound {
     private SoundSystem sndSystem;
     private ScriptObjectMirror config;
     private String source;
-    @Getter
     private boolean listening = false;
+
+    public boolean isListening() {
+        return listening;
+    }
 
     /**
      * <p>

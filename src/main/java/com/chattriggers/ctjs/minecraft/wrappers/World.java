@@ -212,6 +212,16 @@ public class World {
     }
 
     /**
+     * Checks whether the world contains a player with the given name
+     *
+     * @param name the player name to check for
+     * @return whether the world contains that player
+     */
+    public static boolean hasPlayer(String name) {
+        return getWorld().getPlayerEntityByName(name) != null;
+    }
+
+    /**
      * Gets the chunk that contains certain coordinates
      *
      * @param x the x coordinate
