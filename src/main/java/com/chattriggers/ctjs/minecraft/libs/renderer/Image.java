@@ -69,7 +69,7 @@ public class Image {
      * @return The Image object to allow for method chaining
      */
     public static Image load(String name, String url) {
-        File resourceFile = new File(CTJS.getInstance().getAssetsDir(), name);
+        File resourceFile = new File(CTJS.INSTANCE.getAssetsDir(), name);
 
         try {
             if (resourceFile.exists()) {

@@ -6,8 +6,14 @@ import lombok.Setter;
 import java.awt.*;
 
 public class Config {
-    @Getter
-    @Setter
+    public static Config getInstance() {
+        return instance;
+    }
+
+    public static void setInstance(Config instance) {
+        Config.instance = instance;
+    }
+
     private static transient Config instance;
 
     @Getter
@@ -16,9 +22,11 @@ public class Config {
     private ConfigBoolean printChatToConsole;
     @Getter
     private ConfigBoolean showUpdatesInChat;
-    @Getter
     private ConfigBoolean updateModulesOnBoot;
 
+    public ConfigBoolean getUpdateModulesOnBoot() {
+        return updateModulesOnBoot;
+    }
 
     @Getter
     private ConfigBoolean clearConsoleOnLoad;

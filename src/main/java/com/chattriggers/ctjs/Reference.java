@@ -74,7 +74,7 @@ public class Reference {
             if (Config.getInstance().getClearConsoleOnLoad().value)
                 Console.getInstance().clearConsole();
 
-            CTJS.getInstance().setupConfig();
+            CTJS.INSTANCE.setupConfig();
 
             ModuleManager.getInstance().load(updateCheck);
 

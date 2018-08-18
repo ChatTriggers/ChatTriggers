@@ -13,7 +13,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ModuleManager {
-    @Getter
+    public static ModuleManager getInstance() {
+        return instance;
+    }
+
     private static ModuleManager instance;
 
     @Getter

@@ -74,7 +74,7 @@ public class Sound {
             listening = true;
         }
 
-        CTJS.getInstance().getSounds().add(this);
+        CTJS.INSTANCE.getSounds().add(this);
     }
 
     public void onWorldLoad() {
@@ -110,7 +110,7 @@ public class Sound {
         boolean loop = (boolean) config.getOrDefault("loop", false);
         boolean stream = (boolean) config.getOrDefault("stream", false);
 
-        URL url = new File(CTJS.getInstance().getAssetsDir().getAbsolutePath() + "\\" + source).toURI().toURL();
+        URL url = new File(CTJS.INSTANCE.getAssetsDir().getAbsolutePath() + "\\" + source).toURI().toURL();
         float x = (float) config.getOrDefault("x", (float) Player.getX());
         float y = (float) config.getOrDefault("y", (float) Player.getY());
         float z = (float) config.getOrDefault("z", (float) Player.getZ());

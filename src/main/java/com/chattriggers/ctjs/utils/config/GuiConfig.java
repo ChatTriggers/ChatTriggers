@@ -53,7 +53,7 @@ public class GuiConfig extends GuiScreen {
     @Override
     public void onGuiClosed() {
         this.isOpen = false;
-        CTJS.getInstance().saveConfig();
+        CTJS.INSTANCE.saveConfig();
     }
 
     @Override

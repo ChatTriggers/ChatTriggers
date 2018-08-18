@@ -37,13 +37,13 @@ public class WorldListener {
             TriggerType.WORLD_LOAD.triggerAll();
             shouldTriggerWorldLoad = false;
 
-            CTJS.getInstance()
+            CTJS.INSTANCE
                     .getSounds()
                     .stream()
                     .filter(Sound::isListening)
                     .forEach(Sound::onWorldLoad);
 
-            CTJS.getInstance().getSounds().clear();
+            CTJS.INSTANCE.getSounds().clear();
         }
     }
 
