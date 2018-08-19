@@ -5,10 +5,16 @@ import lombok.Getter;
 import java.util.ArrayList;
 
 public class CommandHandler {
-    @Getter
+    public static CommandHandler getInstance() {
+        return instance;
+    }
+
     private static CommandHandler instance;
 
-    @Getter
+    public ArrayList<Command> getCommandList() {
+        return commandList;
+    }
+
     private ArrayList<Command> commandList = new ArrayList<>();
 
     public CommandHandler() {

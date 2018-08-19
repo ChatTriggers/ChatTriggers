@@ -93,10 +93,10 @@ public class CTCommand extends CommandBase {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
                 case("load"):
-                    Reference.getInstance().load();
+                    Reference.INSTANCE.load();
                     break;
                 case("reload"):
-                    Reference.getInstance().reload();
+                    Reference.INSTANCE.reload();
                     break;
                 case("files"):
                 case("file"):
@@ -153,7 +153,7 @@ public class CTCommand extends CommandBase {
 
     private void dumpChat(int lines) {
         clearOldDump();
-        ArrayList<String> messages = ChatListener.getInstance().getChatHistory();
+        List<String> messages = ChatListener.INSTANCE.getChatHistory();
 
         int amount = lines;
         if (amount > messages.size()) amount = messages.size();

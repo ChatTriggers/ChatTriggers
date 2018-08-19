@@ -18,23 +18,15 @@ object AutomaticEventSubscriber {
     fun subscribeAutomatic(mod: ModContainer, asm: ASMDataTable) {
         val modAnnotations = asm.getAnnotationsFor(mod) ?: return
 
-        println("annotation: $modAnnotations")
-
         val listeners = modAnnotations.get(KotlinListener::class.java.name)
-
-        println("listeners: $listeners")
 
         val loader = Loader.instance().modClassLoader
 
         for (listener in listeners) {
-            println("doing $listener")
-
             try {
                 val subscriberClass = Class.forName(listener.className, false, loader) ?: continue
                 val kotlinClass = subscriberClass.kotlin
                 val objectInstance = kotlinClass.objectInstance ?: kotlinClass.companionObjectInstance ?: continue
-
-                println("sc: $subscriberClass")
 
                 if (hasObjectEventHandlers(objectInstance) && objectInstance !in registered) {
                     MinecraftForge.EVENT_BUS.register(objectInstance)

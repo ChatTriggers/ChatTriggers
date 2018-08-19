@@ -10,8 +10,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 
 public class DisplayHandler {
-    @Getter
     private static DisplayHandler instance;
+
+    public static DisplayHandler getInstance() {
+        return instance;
+    }
 
     private ArrayList<Display> displays;
 

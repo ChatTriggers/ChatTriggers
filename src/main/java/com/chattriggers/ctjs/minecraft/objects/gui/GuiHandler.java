@@ -12,7 +12,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class GuiHandler {
-    @Getter
+    public static GuiHandler getInstance() {
+        return instance;
+    }
+
     private static GuiHandler instance;
 
     private HashMap<GuiScreen, Integer> GUIs;

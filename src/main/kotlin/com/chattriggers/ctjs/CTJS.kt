@@ -61,16 +61,9 @@ object CTJS {
 
         setupConfig()
 
-        Reference()
         Console()
 
-        Loader.instance().modList.forEach {
-            println("ID: ${it.modId}")
-            println("EQ: ${it.modId == Reference.MODID}")
-        }
-
         Loader.instance().modList.filter { it.modId == Reference.MODID }.forEach {
-            println("Subscribing to ${it.modId}")
             AutomaticEventSubscriber.subscribeAutomatic(it, event.asmData)
         }
 
@@ -90,7 +83,6 @@ object CTJS {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        ChatListener()
         DisplayHandler()
         GuiHandler()
         CommandHandler()
@@ -99,8 +91,6 @@ object CTJS {
         Tessellator()
 
         UpdateChecker()
-
-        registerListeners()
 
         registerHooks()
 
@@ -150,10 +140,6 @@ object CTJS {
         }
 
         return false
-    }
-
-    private fun registerListeners() {
-        MinecraftForge.EVENT_BUS.register(ClientListener())
     }
 
     private fun registerHooks() {

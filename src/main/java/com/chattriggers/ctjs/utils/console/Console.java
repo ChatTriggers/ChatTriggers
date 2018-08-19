@@ -23,7 +23,10 @@ public class Console {
     private ArrayList<String> history;
     private int historyOffset = 0;
 
-    @Getter
+    public static Console getInstance() {
+        return instance;
+    }
+
     private static Console instance;
 
     public Console() {

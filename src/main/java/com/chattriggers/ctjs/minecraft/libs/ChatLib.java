@@ -335,7 +335,7 @@ public class ChatLib {
      */
     public static ArrayList<String> getChatLines() {
         ArrayList<String> out = new ArrayList<>();
-        ArrayList<String> in = ChatListener.getInstance().getChatHistory();
+        List<String> in = ChatListener.INSTANCE.getChatHistory();
         for (int i = in.size() - 1; i >= 0; i--)
             out.add(in.get(i));
         return out;

@@ -6,7 +6,10 @@ import lombok.Getter;
 import java.util.ArrayList;
 
 public class CPS {
-    @Getter
+    public static CPS getInstance() {
+        return instance;
+    }
+
     private static CPS instance;
 
     private Long sysTime;

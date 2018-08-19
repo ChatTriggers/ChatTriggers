@@ -18,7 +18,11 @@ public class Config {
 
     @Getter
     private ConfigString modulesFolder;
-    @Getter
+
+    public ConfigBoolean getPrintChatToConsole() {
+        return printChatToConsole;
+    }
+
     private ConfigBoolean printChatToConsole;
     @Getter
     private ConfigBoolean showUpdatesInChat;
@@ -28,7 +32,10 @@ public class Config {
         return updateModulesOnBoot;
     }
 
-    @Getter
+    public ConfigBoolean getClearConsoleOnLoad() {
+        return clearConsoleOnLoad;
+    }
+
     private ConfigBoolean clearConsoleOnLoad;
     @Getter
     private ConfigBoolean openConsoleOnError;
