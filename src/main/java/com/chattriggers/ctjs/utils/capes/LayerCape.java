@@ -21,7 +21,7 @@ public class LayerCape implements LayerRenderer<AbstractClientPlayer> {
     }
 
     public void doRenderLayer(AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        ResourceLocation rl = CapeHandler.getInstance().getCapeResource(player);
+        ResourceLocation rl = CapeHandler.INSTANCE.getCapeResource(player);
 
         if (!player.hasPlayerInfo()) return;
         if (player.isInvisible()) return;
