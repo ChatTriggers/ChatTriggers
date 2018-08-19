@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @UtilityClass
 @SideOnly(Side.CLIENT)
 public class Renderer {
-    public boolean colorized = false;
+    public static boolean colorized = false;
 
     public final int BLACK = color(0, 0, 0, 255);
     public final int DARK_BLUE = color(0, 0, 190, 255);
