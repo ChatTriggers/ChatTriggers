@@ -381,7 +381,7 @@ public class ChatLib {
     }
 
     // helper method to make sure player exists before putting something in chat
-    public boolean isPlayer(String out) {
+    public static boolean isPlayer(String out) {
         if (Player.getPlayer() == null) {
             Console.getInstance().out.println(out);
             return false;
