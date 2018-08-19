@@ -99,7 +99,6 @@ object CTJS {
 
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {
-        CapeHandler()
 
         Client.getMinecraft().renderManager.skinMap.values.forEach {
             it.addLayer(LayerCape(it))
