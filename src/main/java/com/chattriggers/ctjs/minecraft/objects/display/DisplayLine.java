@@ -203,7 +203,7 @@ public class DisplayLine {
      */
     @Tolerate
     public DisplayLine setAlign(String align) {
-        this.align = DisplayHandler.Align.getAlignByName(align);
+        this.align = DisplayHandler.Align.valueOf(align.toUpperCase());
         return this;
     }
 
@@ -222,7 +222,7 @@ public class DisplayLine {
      */
     @Tolerate
     public DisplayLine setBackground(String background) {
-        this.background = DisplayHandler.Background.getBackgroundByName(background);
+        this.background = DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"));
         return this;
     }
 

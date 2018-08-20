@@ -38,7 +38,7 @@ object Reference {
 
         ChatLib.chat("&cReloading ct.js scripts...")
         Thread {
-            DisplayHandler.getInstance().clearDisplays()
+            DisplayHandler.clearDisplays()
             GuiHandler.getInstance().clearGuis()
 
             for (type in TriggerType.values())

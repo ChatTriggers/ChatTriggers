@@ -83,7 +83,6 @@ object CTJS {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        DisplayHandler()
         GuiHandler()
         CommandHandler()
         ModuleManager()

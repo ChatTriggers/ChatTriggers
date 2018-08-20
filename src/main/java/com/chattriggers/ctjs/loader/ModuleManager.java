@@ -62,7 +62,7 @@ public class ModuleManager {
 
         KeyBind.clearKeyBinds();
         TriggerType.clearAllTriggers();
-        DisplayHandler.getInstance().clearDisplays();
+        DisplayHandler.INSTANCE.clearDisplays();
     }
 
     public ArrayList<Module> getModules() {

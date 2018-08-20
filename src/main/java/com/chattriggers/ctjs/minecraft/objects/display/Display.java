@@ -198,7 +198,7 @@ public class Display {
 
         this.minWidth = 0;
 
-        DisplayHandler.getInstance().registerDisplay(this);
+        DisplayHandler.INSTANCE.registerDisplay(this);
     }
 
     public Display(ScriptObjectMirror config) {
@@ -216,7 +216,7 @@ public class Display {
 
         this.minWidth = (int) config.getOrDefault("minWidth", 0);
 
-        DisplayHandler.getInstance().registerDisplay(this);
+        DisplayHandler.INSTANCE.INSTANCE.registerDisplay(this);
     }
 
     /**
@@ -232,7 +232,7 @@ public class Display {
      */
     @Tolerate
     public Display setBackground(String background) {
-        this.background = DisplayHandler.Background.getBackgroundByName(background);
+        this.background = DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"));
         return this;
     }
 
@@ -250,7 +250,7 @@ public class Display {
      */
     @Tolerate
     public Display setAlign(String align) {
-        this.align = DisplayHandler.Align.getAlignByName(align);
+        this.align = DisplayHandler.Align.valueOf(align.toUpperCase());
         return this;
     }
 
@@ -267,7 +267,7 @@ public class Display {
      */
     @Tolerate
     public Display setOrder(String order) {
-        this.order = DisplayHandler.Order.getOrderByName(order);
+        this.order = DisplayHandler.Order.valueOf(order.toUpperCase());
         return this;
     }
 
