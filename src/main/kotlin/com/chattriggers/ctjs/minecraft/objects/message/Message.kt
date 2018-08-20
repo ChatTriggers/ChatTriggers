@@ -22,13 +22,10 @@ class Message {
     //$$ lateinit var chatMessage: ITextComponent
     //#endif
 
-    var _messageParts = mutableListOf<TextComponent>()
-
-    var _chatLineId = -1
-
-    var _recursive = false
-
-    var _formatted = true
+    private var _messageParts = mutableListOf<TextComponent>()
+    private var _chatLineId = -1
+    private var _recursive = false
+    private var _formatted = true
 
     /**
      * Creates a new Message object from a chat event.
