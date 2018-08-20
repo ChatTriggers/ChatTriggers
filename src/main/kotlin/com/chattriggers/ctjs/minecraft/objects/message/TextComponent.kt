@@ -133,7 +133,7 @@ class TextComponent {
                 //#if MC<=10809
                 ChatComponentText(
                 //#else
-                //$$ TextComponentString
+                //$$ TextComponentString(
                 //#endif
                         if (this._formatted) ChatLib.addColor(this._text)
                         else this._text
