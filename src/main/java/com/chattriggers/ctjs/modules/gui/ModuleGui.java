@@ -23,10 +23,10 @@ public class ModuleGui extends GuiScreen {
     private Module module;
 
     private int width;
-    private int infoHeight;
+    private float infoHeight;
 
-    private int scrolled;
-    private int maxScroll;
+    private float scrolled;
+    private float maxScroll;
 
     private String name;
     private String version;
@@ -151,7 +151,7 @@ public class ModuleGui extends GuiScreen {
     }
 
     private void drawScroll() {
-        int scrollHeight = Renderer.screen.getHeight() - this.maxScroll;
+        float scrollHeight = Renderer.screen.getHeight() - this.maxScroll;
         if (scrollHeight < 20) scrollHeight = 20;
         if (scrollHeight < Renderer.screen.getHeight()) {
             int scrollY = (int) MathLib.map(this.scrolled, 0, this.maxScroll, 10, Renderer.screen.getHeight() - scrollHeight - 10);

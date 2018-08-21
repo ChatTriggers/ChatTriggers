@@ -85,7 +85,7 @@ public class Renderer {
      *
      * @return the font renderer object
      */
-    public FontRenderer getFontRenderer() {
+    public static FontRenderer getFontRenderer() {
         //#if MC<=10809
         return Client.getMinecraft().fontRendererObj;
         //#else
@@ -100,7 +100,7 @@ public class Renderer {
      * @param removeFormatting if formatting should be removed
      * @return the width of the text
      */
-    public int getStringWidth(String text, boolean removeFormatting) {
+    public static int getStringWidth(String text, boolean removeFormatting) {
         if (removeFormatting) text = ChatLib.removeFormatting(text);
         return getFontRenderer().getStringWidth(text);
     }
@@ -111,7 +111,7 @@ public class Renderer {
      * @param text the text to get the width of
      * @return the width of the text
      */
-    public int getStringWidth(String text) {
+    public static int getStringWidth(String text) {
         return getStringWidth(text, true);
     }
 
@@ -124,7 +124,7 @@ public class Renderer {
      * @param alpha alpha value
      * @return integer color
      */
-    public int color(int red, int green, int blue, int alpha) {
+    public static int color(int red, int green, int blue, int alpha) {
         return (MathLib.clamp(alpha, 0, 255) * 0x1000000)
                 + (MathLib.clamp(red, 0, 255) * 0x10000)
                 + (MathLib.clamp(green, 0, 255) * 0x100)
@@ -194,7 +194,7 @@ public class Renderer {
      * @param width the width
      * @param height the height
      */
-    public void drawRect(int color, float x, float y, float width, float height) {
+    public static void drawRect(int color, float x, float y, float width, float height) {
         float x2 = x + width;
         float y2 = y + height;
 
@@ -434,7 +434,7 @@ public class Renderer {
         colorize(red, green, blue, 255);
     }
 
-    public void finishDraw() {
+    public static void finishDraw() {
         colorized = false;
 
         GlStateManager.popMatrix();
@@ -473,7 +473,7 @@ public class Renderer {
      * @param y    the y position
      * @return a new {@link Text} object
      */
-    public Text text(String text, float x, float y) {
+    public static Text text(String text, float x, float y) {
         return new Text(text, x, y);
     }
 

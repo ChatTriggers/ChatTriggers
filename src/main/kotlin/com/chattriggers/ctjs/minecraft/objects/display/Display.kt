@@ -157,8 +157,8 @@ class Display {
 
         var maxWidth = this.minWidth
         lines.forEach {
-            if (it.textWidth > maxWidth)
-                maxWidth = it.textWidth
+            if (it.getTextWidth() > maxWidth)
+                maxWidth = it.getTextWidth()
         }
 
         this.width = maxWidth
@@ -167,8 +167,8 @@ class Display {
         lines.forEach {
             drawLine(it, this.renderX, this.renderY + (i * 10), maxWidth)
             when (this.order) {
-                DisplayHandler.Order.DOWN -> i += it.text.scale
-                DisplayHandler.Order.UP -> i -= it.text.scale
+                DisplayHandler.Order.DOWN -> i += it.getText().getScale()
+                DisplayHandler.Order.UP -> i -= it.getText().getScale()
             }
         }
 
