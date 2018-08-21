@@ -45,14 +45,14 @@ class IconHandler {
         private Icon(String name, String image_url, String url) {
             this.y = 0;
             this.main = true;
-            this.image = Image.load(name, image_url);
+            this.image = Renderer.image(name, image_url);
             this.url = url;
         }
 
         private Icon(String name, String image_url, String url, int y) {
             this.y = y;
             this.main = false;
-            this.image = Image.load(name, image_url);
+            this.image = Renderer.image(name, image_url);
             this.url = url;
         }
 

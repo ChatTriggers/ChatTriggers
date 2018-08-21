@@ -42,6 +42,7 @@ object Renderer {
     val YELLOW = color(254, 254, 63, 255)
     val WHITE = color(255, 255, 255, 255)
 
+    @JvmStatic
     fun getColor(color: Int): Int {
         return when (color) {
             0 -> BLACK
@@ -63,6 +64,7 @@ object Renderer {
         }
     }
 
+    @JvmStatic
     fun getFontRenderer(): FontRenderer {
         //#if MC<=10809
         return Client.getMinecraft().fontRendererObj
@@ -71,23 +73,23 @@ object Renderer {
         //#endif
     }
 
-    fun getStringWidth(text: String) = getStringWidth(text, true)
-    fun getStringWidth(text: String, removeFormatting: Boolean): Int {
+    @JvmStatic @JvmOverloads
+    fun getStringWidth(text: String, removeFormatting: Boolean = true): Int {
         return if (removeFormatting)
             getFontRenderer().getStringWidth(ChatLib.removeFormatting(text))
             else getFontRenderer().getStringWidth(text)
     }
 
-    fun color(red: Int, green: Int, blue: Int) = color(red, green, blue, 255)
-    fun color(red: Int, green: Int, blue: Int, alpha: Int): Int {
+    @JvmStatic @JvmOverloads
+    fun color(red: Int, green: Int, blue: Int, alpha: Int = 255): Int {
         return (MathLib.clamp(alpha, 0, 255) * 0x1000000
                 + MathLib.clamp(red, 0, 255) * 0x10000
                 + MathLib.clamp(green, 0, 255) * 0x100
                 + MathLib.clamp(blue, 0, 255))
     }
 
-    fun getRainbow(step: Float) = getRainbow(step, 1f)
-    fun getRainbow(step: Float, speed: Float): Int {
+    @JvmStatic @JvmOverloads
+    fun getRainbow(step: Float, speed: Float = 1f): Int {
         val red = ((Math.sin((step / speed).toDouble()) + 0.75) * 170).toInt()
         val green = ((Math.sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
         val blue = ((Math.sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
@@ -97,29 +99,31 @@ object Renderer {
                 + MathLib.clamp(blue, 0, 255))
     }
 
-    fun getRainbowColors(step: Float) = getRainbow(step, 1f)
-    fun getRainbowColors(step: Float, speed: Float): IntArray {
+    @JvmStatic @JvmOverloads
+    fun getRainbowColors(step: Float, speed: Float = 1f): IntArray {
         val red = ((Math.sin((step / speed).toDouble()) + 0.75) * 170).toInt()
         val green = ((Math.sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
         val blue = ((Math.sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
         return intArrayOf(red, green, blue)
     }
 
+    @JvmStatic
     fun translate(x: Float, y: Float) {
         GlStateManager.translate(x.toDouble(), y.toDouble(), 0.toDouble())
     }
 
-    fun scale(scale: Float) = scale(scale, scale)
-    fun scale(scaleX: Float, scaleY: Float) {
+    @JvmStatic @JvmOverloads
+    fun scale(scaleX: Float, scaleY: Float = scaleX) {
         GlStateManager.scale(scaleX, scaleY, 1f)
     }
 
+    @JvmStatic
     fun rotate(angle: Float) {
         GlStateManager.rotate(angle, 0f, 0f, 1f)
     }
 
-    fun colorize(red: Int, green: Int, blue: Int) = colorize(red, green, blue, 255)
-    fun colorize(red: Int, green: Int, blue: Int, alpha: Int) {
+    @JvmStatic @JvmOverloads
+    fun colorize(red: Int, green: Int, blue: Int, alpha: Int = 255) {
         this.colorized = true
 
         GlStateManager.color(
@@ -130,10 +134,15 @@ object Renderer {
         )
     }
 
+    @JvmStatic
     fun image(name: String, url: String): Image? = loadImage(name, url)
+    @JvmStatic
     fun text(text: String, x: Float, y: Float) = Text(text, x, y)
+    @JvmStatic
     fun text(text: String) = Text(text)
+    @JvmStatic
     fun rectangle(color: Int, x: Float, y: Float, width: Float, height: Float) = Rectangle(color, x, y, width, height)
+    @JvmStatic
     fun shape(color: Int) = Shape(color)
 
     private fun loadImage(name: String, url: String): Image? {
@@ -168,6 +177,7 @@ object Renderer {
         return null
     }
 
+    @JvmStatic
     fun drawRect(color: Int, x: Float, y: Float, width: Float, height: Float) {
         val pos = mutableListOf(x, y, x + width, y + height)
         if (pos[0] > pos[2])
@@ -207,16 +217,19 @@ object Renderer {
         finishDraw()
     }
 
+    @JvmStatic
     fun drawString(text: String, x: Float, y: Float) {
         getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff.toInt(), false)
         finishDraw()
     }
 
+    @JvmStatic
     fun drawStringWithShadow(text: String, x: Float, y: Float) {
         getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff.toInt(), true)
         finishDraw()
     }
 
+    @JvmStatic
     fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) {
         if (image.getTexture() == null) return
 
@@ -245,6 +258,7 @@ object Renderer {
         finishDraw()
     }
 
+    @JvmStatic
     fun drawPlayer(player: Any, x: Int, y: Int, rotate: Boolean) {
         val mouseX = -30f
         val mouseY = 0f
@@ -301,6 +315,7 @@ object Renderer {
         finishDraw()
     }
 
+    @JvmStatic
     fun finishDraw() {
         this.colorized = false
         GlStateManager.popMatrix()
@@ -308,8 +323,11 @@ object Renderer {
     }
 
     object screen {
+        @JvmStatic
         fun getWidth() = ScaledResolution(Client.getMinecraft()).scaledWidth
+        @JvmStatic
         fun getHeight() = ScaledResolution(Client.getMinecraft()).scaledHeight
+        @JvmStatic
         fun getScale() = ScaledResolution(Client.getMinecraft()).scaleFactor
     }
 }

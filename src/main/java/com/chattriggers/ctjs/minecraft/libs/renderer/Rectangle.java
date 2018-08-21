@@ -301,7 +301,7 @@ public class Rectangle {
         //#endif
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        if (!Renderer.colorized)
+        if (!Renderer.INSTANCE.getColorized())
             GlStateManager.color(r, g, b, a);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION);
         worldrenderer.pos(x, y2, 0.0D).endVertex();

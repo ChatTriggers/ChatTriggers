@@ -4,15 +4,13 @@ import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraftforge.common.MinecraftForge
 import java.awt.image.BufferedImage
 
-class Image {
-    private var imageToLoad: BufferedImage
+class Image(image: BufferedImage) {
     private lateinit var texture: DynamicTexture
 
     private var textureWidth = 0
     private var textureHeight = 0
 
-    constructor(image: BufferedImage) {
-        this.imageToLoad = image
+    init {
         MinecraftForge.EVENT_BUS.register(this)
     }
 

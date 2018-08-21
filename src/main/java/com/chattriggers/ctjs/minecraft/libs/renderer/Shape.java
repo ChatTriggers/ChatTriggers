@@ -213,7 +213,7 @@ public class Shape {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        if (!Renderer.colorized)
+        if (!Renderer.INSTANCE.getColorized())
             GlStateManager.color(r, g, b, a);
 
         worldrenderer.begin(this.drawMode, DefaultVertexFormats.POSITION);

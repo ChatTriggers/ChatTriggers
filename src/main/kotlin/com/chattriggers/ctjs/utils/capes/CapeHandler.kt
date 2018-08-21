@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation
 import java.awt.image.BufferedImage
 
 object CapeHandler {
-    lateinit var special: Special
+    var special: Special
 
     init {
         this.special = Gson().fromJson(
