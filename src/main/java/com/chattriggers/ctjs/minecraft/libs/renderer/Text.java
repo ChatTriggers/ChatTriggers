@@ -123,8 +123,9 @@ public class Text {
      * @param scale The new text scale
      * @return The Text object for method chaining
      */
-    @Getter @Setter
+    @Setter
     private float scale;
+    public float getScale() {return this.scale;}
 
     /**
      * -- GETTER --

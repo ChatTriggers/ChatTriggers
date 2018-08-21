@@ -23,11 +23,11 @@ public class DisplayLine {
      *
      * @return The display line text
      */
-    @Getter
     private Text text;
+    public Text getText() {return this.text;}
 
-    @Getter
     private int textWidth;
+    public int getTextWidth() {return this.textWidth;}
 
     /**
      * -- GETTER --
