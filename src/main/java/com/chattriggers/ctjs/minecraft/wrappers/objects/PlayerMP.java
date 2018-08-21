@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 //#endif
 
 public class PlayerMP extends Entity {
-    @Getter
     private EntityPlayer player;
+    public EntityPlayer getPlayer() {
+        return player;
+    }
 
     public PlayerMP(EntityPlayer player) throws IllegalArgumentException {
         super(player);
