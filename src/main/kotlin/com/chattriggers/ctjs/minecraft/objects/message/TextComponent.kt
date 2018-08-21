@@ -23,16 +23,16 @@ class TextComponent {
             //$$ ITextComponent
             //#endif
 
-    private var _text: String
-    private var _formatted = true
+    private var text: String
+    private var formatted = true
 
-    private var _clickAction: String? = null
-    private var _clickValue: String? = null
-    private var _hoverAction: String? = "show_text"
-    private var _hoverValue: String? = null
+    private var clickAction: String? = null
+    private var clickValue: String? = null
+    private var hoverAction: String? = "show_text"
+    private var hoverValue: String? = null
 
     constructor(text: String) {
-        this._text = text
+        this.text = text
         reInstance()
     }
 
@@ -42,7 +42,7 @@ class TextComponent {
     //$$ constructor(chatComponent: ITextComponent) {
     //#endif
         this.chatComponentText = chatComponent
-        this._text = this.chatComponentText.formattedText
+        this.text = this.chatComponentText.formattedText
 
         val chatStyle =
                 //#if MC<=10809
@@ -57,8 +57,8 @@ class TextComponent {
                 //#else
                 //$$ clickEvent
                 //#endif
-        this._clickAction = clickEvent?.action?.canonicalName
-        this._clickValue = clickEvent?.value
+        this.clickAction = clickEvent?.action?.canonicalName
+        this.clickValue = clickEvent?.value
 
         val hoverEvent = chatStyle.
                 //#if MC<=10809
@@ -66,61 +66,61 @@ class TextComponent {
                 //#else
                 //$$ hoverEvent
                 //#endif
-        this._hoverAction = hoverEvent?.action?.canonicalName
-        this._hoverValue = hoverEvent?.value?.formattedText
+        this.hoverAction = hoverEvent?.action?.canonicalName
+        this.hoverValue = hoverEvent?.value?.formattedText
     }
 
-    fun getText() = this._text
+    fun getText() = this.text
     fun setText(text: String): TextComponent {
-        this._text = text
+        this.text = text
         reInstance()
         return this
     }
 
-    fun isFormatted() = this._formatted
+    fun isFormatted() = this.formatted
     fun setFormatted(formatted: Boolean): TextComponent {
-        this._formatted = formatted
+        this.formatted = formatted
         reInstance()
         return this
     }
 
     fun setClick(action: String, value: String): TextComponent {
-        this._clickAction = action
-        this._clickValue = value
+        this.clickAction = action
+        this.clickValue = value
         reInstanceClick()
         return this
     }
 
-    fun getClickAction() = this._clickAction
+    fun getClickAction() = this.clickAction
     fun setClickAction(action: String): TextComponent {
-        this._clickAction = action
+        this.clickAction = action
         reInstanceClick()
         return this
     }
 
-    fun getClickValue() = this._clickValue
+    fun getClickValue() = this.clickValue
     fun setClickValue(value: String): TextComponent {
-        this._clickValue = value
+        this.clickValue = value
         reInstanceClick()
         return this
     }
 
     fun setHover(action: String, value: String): TextComponent {
-        this._hoverAction = action
-        this._hoverValue = value
+        this.hoverAction = action
+        this.hoverValue = value
         return this
     }
 
-    fun getHoverAction() = this._hoverAction
+    fun getHoverAction() = this.hoverAction
     fun setHoverAction(action: String): TextComponent {
-        this._hoverAction = action
+        this.hoverAction = action
         reInstanceHover()
         return this
     }
 
-    fun getHoverValue() = this._hoverValue
+    fun getHoverValue() = this.hoverValue
     fun setHoverValue(value: String): TextComponent {
-        this._hoverValue = value
+        this.hoverValue = value
         reInstanceHover()
         return this
     }
@@ -135,8 +135,8 @@ class TextComponent {
                 //#else
                 //$$ TextComponentString(
                 //#endif
-                        if (this._formatted) ChatLib.addColor(this._text)
-                        else this._text
+                        if (this.formatted) ChatLib.addColor(this.text)
+                        else this.text
                 )
 
         reInstanceClick()
@@ -144,7 +144,7 @@ class TextComponent {
     }
 
     private fun reInstanceClick() {
-        if (this._clickAction == null || this._clickValue == null) return
+        if (this.clickAction == null || this.clickValue == null) return
 
         this.chatComponentText.
                 //#if MC<=10809
@@ -153,14 +153,14 @@ class TextComponent {
                 //$$ style.clickEvent =
                 //#endif
                 ClickEvent(
-                        ClickEvent.Action.getValueByCanonicalName(this._clickAction),
-                        if (this._formatted) ChatLib.addColor(this._clickValue)
-                        else this._clickValue
+                        ClickEvent.Action.getValueByCanonicalName(this.clickAction),
+                        if (this.formatted) ChatLib.addColor(this.clickValue)
+                        else this.clickValue
                 )
     }
 
     private fun reInstanceHover() {
-        if (this._hoverAction == null || this._hoverValue == null) return
+        if (this.hoverAction == null || this.hoverValue == null) return
 
         this.chatComponentText.
                 //#if MC<=10809
@@ -169,14 +169,14 @@ class TextComponent {
                 //$$ style.hoverEvent =
                 //#endif
                 HoverEvent(
-                        HoverEvent.Action.getValueByCanonicalName(this._hoverAction),
+                        HoverEvent.Action.getValueByCanonicalName(this.hoverAction),
                         //#if MC<=10809
                         ChatComponentText(
                         //#else
                         //$$ TextComponentString(
                         //#endif
-                                if (this._formatted) ChatLib.addColor(this._hoverValue)
-                                else this._hoverValue
+                                if (this.formatted) ChatLib.addColor(this.hoverValue)
+                                else this.hoverValue
                         )
                 )
     }

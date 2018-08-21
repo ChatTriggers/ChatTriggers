@@ -17,15 +17,15 @@ import net.minecraft.util.IChatComponent
 
 class Message {
     //#if MC<=10809
-    lateinit var _chatMessage: IChatComponent
+    private lateinit var chatMessage: IChatComponent
     //#else
     //$$ lateinit var chatMessage: ITextComponent
     //#endif
 
-    private var _messageParts = mutableListOf<TextComponent>()
-    private var _chatLineId = -1
-    private var _recursive = false
-    private var _formatted = true
+    private var messageParts = mutableListOf<TextComponent>()
+    private var chatLineId = -1
+    private var recursive = false
+    private var formatted = true
 
     /**
      * Creates a new Message object from a chat event.
@@ -50,9 +50,9 @@ class Message {
     //$$ constructor(component: ITextComponent) {
     //#endif
         if (component.siblings.isEmpty()) {
-            this._messageParts.add(TextComponent(component))
+            this.messageParts.add(TextComponent(component))
         } else {
-            this._messageParts.addAll(component.siblings.map { TextComponent(it) })
+            this.messageParts.addAll(component.siblings.map { TextComponent(it) })
         }
     }
 
@@ -62,7 +62,7 @@ class Message {
      * @param messageParts the list of TextComponents or Strings
      */
     constructor(messageParts: ArrayList<Any>) {
-        this._messageParts.addAll(messageParts.map{
+        this.messageParts.addAll(messageParts.map{
             when (it) {
                 is String -> TextComponent(it)
                 is TextComponent -> it
@@ -87,7 +87,7 @@ class Message {
             //$$ ITextComponent {
             //#endif
         parseMessage()
-        return this._chatMessage
+        return this.chatMessage
     }
 
     /**
@@ -95,23 +95,23 @@ class Message {
      *
      * @return the message parts
      */
-    fun getMessageParts() = this._messageParts
+    fun getMessageParts() = this.messageParts
 
-    fun getChatLineId() = this._chatLineId
+    fun getChatLineId() = this.chatLineId
     fun setChatLineId(id: Int): Message {
-        this._chatLineId = id
+        this.chatLineId = id
         return this
     }
 
-    fun isRecursive() = this._recursive
+    fun isRecursive() = this.recursive
     fun setRecursive(recursive: Boolean): Message {
-        this._recursive = recursive
+        this.recursive = recursive
         return this
     }
 
-    fun isFormatted() = this._formatted
+    fun isFormatted() = this.formatted
     fun setFormatted(formatted: Boolean): Message {
-        this._formatted = formatted
+        this.formatted = formatted
         return this
     }
 
@@ -124,8 +124,8 @@ class Message {
      */
     fun setTextComponent(index: Int, component: Any): Message {
         when (component) {
-            is String -> this._messageParts[index] = TextComponent(component)
-            is TextComponent -> this._messageParts[index] = component
+            is String -> this.messageParts[index] = TextComponent(component)
+            is TextComponent -> this.messageParts[index] = component
         }
 
         return this
@@ -139,8 +139,8 @@ class Message {
      */
     fun addTextComponent(component: Any): Message {
         when (component) {
-            is String -> this._messageParts.add(TextComponent(component))
-            is TextComponent -> this._messageParts.add(component)
+            is String -> this.messageParts.add(TextComponent(component))
+            is TextComponent -> this.messageParts.add(component)
         }
 
         return this
@@ -155,8 +155,8 @@ class Message {
      */
     fun addTextComponent(index: Int, component: Any): Message {
         when (component) {
-            is String -> this._messageParts.add(index, TextComponent(component))
-            is TextComponent -> this._messageParts.add(index, component)
+            is String -> this.messageParts.add(index, TextComponent(component))
+            is TextComponent -> this.messageParts.add(index, component)
         }
 
         return this
@@ -164,10 +164,10 @@ class Message {
 
     fun clone(): Message = copy()
     fun copy(): Message {
-        val copy = Message(this._messageParts)
-                .setChatLineId(this._chatLineId)
-        copy._recursive = this._recursive
-        copy._formatted = this._formatted
+        val copy = Message(this.messageParts)
+                .setChatLineId(this.chatLineId)
+        copy.recursive = this.recursive
+        copy.formatted = this.formatted
         return copy
     }
 
@@ -185,17 +185,17 @@ class Message {
      */
     fun chat() {
         parseMessage()
-        if (!ChatLib.isPlayer("[CHAT]: " + this._chatMessage.formattedText)) return
+        if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.formattedText)) return
 
-        if (this._chatLineId != 1) {
-            Client.getChatGUI().printChatMessageWithOptionalDeletion(this._chatMessage, this._chatLineId)
+        if (this.chatLineId != 1) {
+            Client.getChatGUI().printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId)
             return
         }
 
-        if (this._recursive) {
-            Client.getConnection().handleChat(S02PacketChat(this._chatMessage, 0))
+        if (this.recursive) {
+            Client.getConnection().handleChat(S02PacketChat(this.chatMessage, 0))
         } else {
-            Player.getPlayer()?.addChatMessage(this._chatMessage)
+            Player.getPlayer()?.addChatMessage(this.chatMessage)
         }
     }
 
@@ -204,20 +204,20 @@ class Message {
      */
     fun actionBar() {
         parseMessage()
-        if (!ChatLib.isPlayer("[ACTION BAR]: " + this._chatMessage.formattedText)) return
+        if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.formattedText)) return
 
-        Client.getConnection().handleChat(S02PacketChat(this._chatMessage, 2))
+        Client.getConnection().handleChat(S02PacketChat(this.chatMessage, 2))
     }
 
     private fun parseMessage() {
         //#if MC<=10809
-        this._chatMessage = ChatComponentText("")
+        this.chatMessage = ChatComponentText("")
         //#else
-        //$$ this._chatMessage = TextComponentString("")
+        //$$ this.chatMessage = TextComponentString("")
         //#endif
 
-        this._messageParts.map {
-            this._chatMessage.appendSibling(it.chatComponentText)
+        this.messageParts.map {
+            this.chatMessage.appendSibling(it.chatComponentText)
         }
     }
 }
