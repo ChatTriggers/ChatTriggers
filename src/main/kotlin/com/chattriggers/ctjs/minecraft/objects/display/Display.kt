@@ -32,9 +32,9 @@ class Display {
         this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toInt()
         this.textColor = config.getOption("textColor", 0xffffffff).toInt()
 
-        setBackground(config.getOption("background", DisplayHandler.Background.NONE))
-        setAlign(config.getOption("align", DisplayHandler.Align.RIGHT))
-        setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
+        this.setBackground(config.getOption("background", DisplayHandler.Background.NONE))
+        this.setAlign(config.getOption("align", DisplayHandler.Align.RIGHT))
+        this.setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
 
         this.minWidth = config.getOption("minWidth", 0).toInt()
 
@@ -103,7 +103,18 @@ class Display {
         return this
     }
 
-    fun addLine(line: Any) = addLines(line)
+    @JvmOverloads
+    fun addLine(index: Int = -1, line: Any) {
+        val toAdd = when (line) {
+            is String -> DisplayLine(line)
+            is DisplayLine -> line
+            else -> DisplayLine("")
+        }
+
+        if (index == -1) this.lines.add(toAdd)
+        else this.lines.add(index, toAdd)
+    }
+
     fun addLines(vararg lines: Any): Display {
         lines.forEach {
             this.lines.add(when (it) {

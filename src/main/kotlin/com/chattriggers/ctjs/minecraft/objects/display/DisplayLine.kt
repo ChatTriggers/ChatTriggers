@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
+import jdk.nashorn.api.scripting.ScriptObjectMirror
 import org.lwjgl.input.Mouse
 import javax.vecmath.Vector2d
 
@@ -17,7 +18,6 @@ class DisplayLine {
 
     private var background: DisplayHandler.Background? = null
     private var align: DisplayHandler.Align? = null
-    private var order: DisplayHandler.Order? = null
 
     private var onClicked: OnTrigger? = null
     private var onHovered: OnTrigger? = null
@@ -31,10 +31,21 @@ class DisplayLine {
         for (i in 0..5) this.mouseState[i] = false
     }
 
-    /*constructor(text: String, config: ScriptObjectMirror) {
+    constructor(text: String, config: ScriptObjectMirror) {
         setText(text)
         for (i in 0..5) this.mouseState[i] = false
-    }*/
+
+        this.textColor = config.getOption("textColor", null)?.toInt()
+        this.backgroundColor = config.getOption("backgroundColor", null)?.toInt()
+
+        this.setAlign(config.getOption("align", null))
+        this.setBackground(config.getOption("background", null))
+    }
+
+    private fun ScriptObjectMirror?.getOption(key: String, default: Any?): String? {
+        if (this == null) return default?.toString()
+        return this.getOrDefault(key, default).toString()
+    }
 
     fun getText() = this.text
     fun setText(text: String): DisplayLine {
@@ -57,7 +68,7 @@ class DisplayLine {
     }
 
     fun getAlign() = this.align
-    fun setAlign(align: Any): DisplayLine {
+    fun setAlign(align: Any?): DisplayLine {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
             is DisplayHandler.Align -> align
@@ -67,7 +78,7 @@ class DisplayLine {
     }
 
     fun getBackground() = this.background
-    fun setBackground(background: Any): DisplayLine {
+    fun setBackground(background: Any?): DisplayLine {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"))
             is DisplayHandler.Background -> background
