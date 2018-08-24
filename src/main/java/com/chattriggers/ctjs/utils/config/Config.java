@@ -26,6 +26,7 @@ public class Config {
     private ConfigBoolean printChatToConsole;
     @Getter
     private ConfigBoolean showUpdatesInChat;
+    public ConfigBoolean getShowUpdatesInChat() {return showUpdatesInChat;}
     private ConfigBoolean updateModulesOnBoot;
 
     public ConfigBoolean getUpdateModulesOnBoot() {

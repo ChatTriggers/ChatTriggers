@@ -25,6 +25,6 @@ public class MixinGuiMainMenu extends GuiScreen {
             remap = false
     )
     private void onRender(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
-        UpdateChecker.getInstance().drawUpdateMessage();
+        UpdateChecker.INSTANCE.drawUpdateMessage();
     }
 }
