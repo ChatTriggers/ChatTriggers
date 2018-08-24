@@ -89,8 +89,6 @@ object CTJS {
         CPS()
         Tessellator()
 
-        UpdateChecker()
-
         registerHooks()
 
         ModuleManager.getInstance().load(Config.getInstance().updateModulesOnBoot.value)
