@@ -98,21 +98,18 @@ class Message {
     fun getMessageParts() = this.messageParts
 
     fun getChatLineId() = this.chatLineId
-    fun setChatLineId(id: Int): Message {
+    fun setChatLineId(id: Int) = apply {
         this.chatLineId = id
-        return this
     }
 
     fun isRecursive() = this.recursive
-    fun setRecursive(recursive: Boolean): Message {
+    fun setRecursive(recursive: Boolean) = apply {
         this.recursive = recursive
-        return this
     }
 
     fun isFormatted() = this.formatted
-    fun setFormatted(formatted: Boolean): Message {
+    fun setFormatted(formatted: Boolean) = apply {
         this.formatted = formatted
-        return this
     }
 
     /**
@@ -122,13 +119,11 @@ class Message {
      * @param component the new TextComponent or String to replace with
      * @return the Message for method chaining
      */
-    fun setTextComponent(index: Int, component: Any): Message {
+    fun setTextComponent(index: Int, component: Any) = apply {
         when (component) {
             is String -> this.messageParts[index] = TextComponent(component)
             is TextComponent -> this.messageParts[index] = component
         }
-
-        return this
     }
 
     /**
@@ -137,13 +132,11 @@ class Message {
      * @param component the new TextComponent or String to add
      * @return the Message for method chaining
      */
-    fun addTextComponent(component: Any): Message {
+    fun addTextComponent(component: Any) = apply {
         when (component) {
             is String -> this.messageParts.add(TextComponent(component))
             is TextComponent -> this.messageParts.add(component)
         }
-
-        return this
     }
 
     /**
@@ -153,16 +146,14 @@ class Message {
      * @param component the new TextComponent or String to insert
      * @return the Message for method chaining
      */
-    fun addTextComponent(index: Int, component: Any): Message {
+    fun addTextComponent(index: Int, component: Any) = apply {
         when (component) {
             is String -> this.messageParts.add(index, TextComponent(component))
             is TextComponent -> this.messageParts.add(index, component)
         }
-
-        return this
     }
 
-    fun clone(): Message = copy()
+    fun clone() = copy()
     fun copy(): Message {
         val copy = Message(this.messageParts)
                 .setChatLineId(this.chatLineId)
