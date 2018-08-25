@@ -110,9 +110,9 @@ object WorldListener {
     @SubscribeEvent
     fun updatePlayerList(event: TickEvent.ClientTickEvent) {
         World.getAllPlayers().filter {
-            !playerList.contains(it.name)
+            !playerList.contains(it.getName())
         }.forEach {
-            playerList.add(it.name)
+            playerList.add(it.getName())
             TriggerType.PLAYER_JOIN.triggerAll(this)
             return@forEach
         }

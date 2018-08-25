@@ -1,5 +1,9 @@
 package com.chattriggers.ctjs.utils.kotlin
 
+internal typealias MCChunk = net.minecraft.world.chunk.Chunk
+internal typealias MCEntity = net.minecraft.entity.Entity
+internal typealias MCPotionEffect = net.minecraft.potion.PotionEffect
+
 //#if MC<=10809
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX
 internal typealias BlockPos = net.minecraft.util.BlockPos
@@ -13,6 +17,7 @@ internal typealias TextHoverEvent = net.minecraft.event.HoverEvent
 internal typealias ClickEventAction = net.minecraft.event.ClickEvent.Action
 internal typealias HoverEventAction = net.minecraft.event.HoverEvent.Action
 internal typealias TextStyle = net.minecraft.util.ChatStyle
+internal typealias GameType = net.minecraft.world.WorldSettings.GameType
 //#else
 //$$ internal typealias MCParticle = net.minecraft.client.particle.Particle
 //$$ internal typealias BlockPos = net.minecraft.util.math.BlockPos
@@ -26,4 +31,5 @@ internal typealias TextStyle = net.minecraft.util.ChatStyle
 //$$ internal typealias ClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
 //$$ internal typealias HoverEventAction = net.minecraft.util.text.event.HoverEvent.Action
 //$$ internal typealias TextStyle = net.minecraft.util.text.Style
+//$$ internal typealias GameType = net.minecraft.world.GameType
 //#endif
