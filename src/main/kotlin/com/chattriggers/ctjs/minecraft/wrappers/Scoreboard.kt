@@ -83,7 +83,7 @@ object Scoreboard {
     @JvmStatic
     fun setLine(score: Int, line: String, override: Boolean) {
         try {
-            val scoreboard = World.getWorld().scoreboard
+            val scoreboard = World.getWorld()?.scoreboard ?: return
 
             val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
 
@@ -130,7 +130,7 @@ object Scoreboard {
         scoreboardTitle = ""
 
         try {
-            val scoreboard = World.getWorld().scoreboard
+            val scoreboard = World.getWorld()?.scoreboard ?: return
             val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
             scoreboardTitle = sidebarObjective.displayName
 
@@ -161,7 +161,7 @@ object Scoreboard {
          * @return the display name
          */
         fun getName(): String = ScorePlayerTeam.formatPlayerName(
-                World.getWorld().scoreboard.getPlayersTeam(score.playerName),
+                World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
                 score.playerName
         )
 

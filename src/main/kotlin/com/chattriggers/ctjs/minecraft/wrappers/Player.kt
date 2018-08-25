@@ -304,8 +304,7 @@ object Player {
         return when {
             mop.typeOfHit == RayTraceType.BLOCK -> {
                 val pos = mop.blockPos
-                val block = Block(world.getBlockState(pos).block)
-                block.blockPos = pos
+                val block = Block(world.getBlockState(pos).block).setBlockPos(pos)
 
                 if (block.block is BlockSign) Sign(block) else block
             }

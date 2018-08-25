@@ -15,8 +15,10 @@ import net.minecraft.util.MathHelper;
 import java.util.UUID;
 
 public class Entity {
-    
-    @Getter
+    public net.minecraft.entity.Entity getEntity() {
+        return entity;
+    }
+
     private net.minecraft.entity.Entity entity;
 
     public Entity(net.minecraft.entity.Entity entity) {
