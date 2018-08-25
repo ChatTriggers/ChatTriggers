@@ -7,19 +7,13 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.utils.kotlin.MathHelper
+import com.chattriggers.ctjs.utils.kotlin.RayTraceType
 import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
 import java.util.stream.Collectors
-
-//#if MC<=10809
-import net.minecraft.util.MathHelper
-import net.minecraft.util.MovingObjectPosition
-//#else
-//$$ import net.minecraft.util.math.MathHelper
-//$$ import net.minecraft.util.math.RayTraceResult
-//#endif
 
 object Player {
     /**
@@ -204,13 +198,14 @@ object Player {
     @JvmStatic
     fun getBiome(): String {
         val player = getPlayer() ?: return ""
+        val world = World.getWorld() ?: return ""
 
-        val chunk = World.getWorld().getChunkFromBlockCoords(player.position)
+        val chunk = world.getChunkFromBlockCoords(player.position)
 
         //#if MC<=10809
-        val biome = chunk.getBiome(player.position, World.getWorld().worldChunkManager)
+        val biome = chunk.getBiome(player.position, world.worldChunkManager)
         //#else
-        //$$ val biome = chunk.getBiome(player.position, World.getWorld().biomeProvider)
+        //$$ val biome = chunk.getBiome(player.position, world.biomeProvider)
         //#endif
 
         return biome.biomeName
@@ -303,30 +298,19 @@ object Player {
      */
     @JvmStatic
     fun lookingAt(): Any {
-        if (World.getWorld() == null
-                || Client.getMinecraft().objectMouseOver == null)
-            return Block(0)
+        val mop = Client.getMinecraft().objectMouseOver ?: return Block(0)
+        val world = World.getWorld() ?: return Block(0)
 
-        val mop = Client.getMinecraft().objectMouseOver
+        return when {
+            mop.typeOfHit == RayTraceType.BLOCK -> {
+                val pos = mop.blockPos
+                val block = Block(world.getBlockState(pos).block)
+                block.blockPos = pos
 
-        //#if MC<=10809
-        val isBlock = mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
-        val isEntity = mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY
-        //#else
-        //$$ val isBlock = mop.typeOfHit == RayTraceResult.Type.BLOCK;
-        //$$ val isEntity = mop.typeOfHit == RayTraceResult.Type.ENTITY;
-        //#endif
-
-        return if (isBlock) {
-            val pos = mop.blockPos
-            val block = Block(World.getWorld().getBlockState(pos).block).setBlockPos(pos)
-
-            if (block.block is BlockSign) Sign(block)
-            else block
-        } else if (isEntity) {
-            Entity(mop.entityHit)
-        } else {
-            Block(0)
+                if (block.block is BlockSign) Sign(block) else block
+            }
+            mop.typeOfHit == RayTraceType.ENTITY -> Entity(mop.entityHit)
+            else -> Block(0)
         }
     }
 
@@ -336,7 +320,7 @@ object Player {
      * @return the item
      */
     @JvmStatic
-    fun getHeldItem() = Item(getPlayer()!!.inventory!!.getCurrentItem())
+    fun getHeldItem() = Item(getPlayer()?.inventory?.getCurrentItem())
 
     /**
      * Gets the inventory of the player, i.e. the inventory accessed by 'e'.

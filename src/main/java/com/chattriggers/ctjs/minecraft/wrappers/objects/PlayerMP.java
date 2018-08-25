@@ -24,7 +24,7 @@ public class PlayerMP extends Entity {
         return player;
     }
 
-    public PlayerMP(EntityPlayer player) throws IllegalArgumentException {
+    public PlayerMP(EntityPlayer player) {
         super(player);
 
         this.player = player;
