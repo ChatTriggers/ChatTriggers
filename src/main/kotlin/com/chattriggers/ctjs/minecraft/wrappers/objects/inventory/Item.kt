@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack
 import org.lwjgl.opengl.GL11
 import net.minecraft.item.Item as MCItem
 
+
 //#if MC>10809
 //$$ import net.minecraft.client.util.ITooltipFlag
 //$$ import com.chattriggers.ctjs.minecraft.wrappers.World
@@ -180,8 +181,9 @@ class Item {
         return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
             //#if MC<=10809
             Enchantment.getEnchantmentById(
-                //#else
-                //$$ Enchantment.getEnchantmentByID(
+            //#else
+            //$$ Enchantment.getEnchantmentByID(
+            //#endif
                 it.key
             ).name.replace("enchantment.", "")
         }
