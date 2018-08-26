@@ -197,7 +197,7 @@ object Renderer {
         //#if MC<=10809
         val worldRenderer = tessellator.worldRenderer
         //#else
-        //$$ BufferBuilder worldRenderer = tessellator.buffer
+        //$$ var worldRenderer = tessellator.buffer
         //#endif
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
@@ -244,7 +244,7 @@ object Renderer {
         //#if MC<=10809
         val worldRenderer = tessellator.worldRenderer
         //#else
-        //$$ BufferBuilder worldRenderer = tessellator.buffer
+        //$$ var worldRenderer = tessellator.buffer
         //#endif
 
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX)
