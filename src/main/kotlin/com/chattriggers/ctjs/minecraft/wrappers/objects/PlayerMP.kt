@@ -40,7 +40,6 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         return getPlayerInfo().responseTime
     }
 
-    //#if MC<=10809
     /**
      * Gets the item currently in the player's specified inventory slot.
      * 0 for main hand, 1-4 for armor
