@@ -99,6 +99,7 @@ class TextComponent {
         if (this.clickAction == null || this.clickValue == null) return
 
         this.chatComponentText.getStyling()
+                //#if MC<=10809
                 .chatClickEvent =
                 //#else
                 //$$ .clickEvent =
