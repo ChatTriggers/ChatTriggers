@@ -48,59 +48,41 @@ class DisplayLine {
     }
 
     fun getText() = this.text
-    fun setText(text: String): DisplayLine {
-        this.text = Renderer.text(text, 0f, 0f)
+    fun setText(text: String) = apply {
+        this.text = Renderer.text(text)
         this.textWidth = (Renderer.getStringWidth(text) * this.text.getScale()).toInt()
-        return this
     }
 
     fun getTextWidth() = this.textWidth
 
-    fun setShadow(shadow: Boolean): DisplayLine {
-        this.text.setShadow(shadow)
-        return this
-    }
+    fun setShadow(shadow: Boolean) = apply { this.text.setShadow(shadow) }
 
-    fun setScale(scale: Float): DisplayLine {
+    fun setScale(scale: Float) = apply {
         this.text.setScale(scale)
         this.textWidth = Math.ceil((Renderer.getStringWidth(text.getString()) * scale).toDouble()).toInt()
-        return this
     }
 
     fun getAlign() = this.align
-    fun setAlign(align: Any?): DisplayLine {
+    fun setAlign(align: Any?) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
             is DisplayHandler.Align -> align
             else -> null
         }
-        return this
     }
 
     fun getBackground() = this.background
-    fun setBackground(background: Any?): DisplayLine {
+    fun setBackground(background: Any?) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"))
             is DisplayHandler.Background -> background
             else -> null
         }
-        return this
     }
 
-    fun registerClicked(method: Any): DisplayLine {
-        this.onClicked = OnRegularTrigger(method, TriggerType.OTHER)
-        return this
-    }
-
-    fun registerHovered(method: Any): DisplayLine {
-        this.onHovered = OnRegularTrigger(method, TriggerType.OTHER)
-        return this
-    }
-
-    fun registerDragged(method: Any): DisplayLine {
-        this.onDragged = OnRegularTrigger(method, TriggerType.OTHER)
-        return this
-    }
+    fun registerClicked(method: Any) = apply { this.onClicked = OnRegularTrigger(method, TriggerType.OTHER) }
+    fun registerHovered(method: Any) = apply { this.onHovered = OnRegularTrigger(method, TriggerType.OTHER) }
+    fun registerDragged(method: Any) = apply { this.onDragged = OnRegularTrigger(method, TriggerType.OTHER) }
 
     private fun handleInput(x: Float, y: Float, width: Float, height: Float) {
         if (!Mouse.isCreated()) return

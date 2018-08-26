@@ -4,8 +4,7 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import net.minecraft.client.renderer.GlStateManager
 
-class Text {
-    private var string: String
+class Text(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
     private var lines = mutableListOf<String>()
 
     private var color = 0xffffffff.toInt()
@@ -13,98 +12,67 @@ class Text {
     private var shadow = false
     private var align = DisplayHandler.Align.LEFT
 
-    private var x: Float
-    private var y: Float
     private var width = 0
     private var maxLines = 0
     private var scale = 1f
 
-    constructor(text: String): this(text, 0f, 0f)
-    constructor(text: String, x: Float, y: Float) {x
-        this.string = text
+    init {
         this.lines.add(this.string)
         updateFormatting()
-
-        this.x = x
-        this.y = y
     }
 
     fun getString() = this.string
-    fun setString(string: String): Text {
-        this.string = string
-        return this
-    }
+    fun setString(string: String) = apply { this.string = string }
 
     fun getColor() = this.color
-    fun setColor(color: Int): Text {
-        this.color = color
-        return this
-    }
+    fun setColor(color: Int) = apply { this.color = color }
 
     fun getFormatted() = this.formatted
-    fun setFormatted(formatted: Boolean): Text {
+    fun setFormatted(formatted: Boolean) = apply {
         this.formatted = formatted
         updateFormatting()
-        return this
     }
 
     fun getShadow() = this.shadow
-    fun setShadow(shadow: Boolean): Text {
-        this.shadow = shadow
-        return this
-    }
+    fun setShadow(shadow: Boolean) = apply  { this.shadow = shadow }
 
     fun getAlign() = this.align
-    fun setAlign(align: Any): Text {
+    fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
             is DisplayHandler.Align -> align
             else -> DisplayHandler.Align.LEFT
         }
-        return this
     }
 
     fun getX() = this.x
-    fun setX(x: Float): Text {
-        this.x = x
-        return this
-    }
+    fun setX(x: Float) = apply { this.x = x }
 
     fun getY() = this.y
-    fun setY(y: Float): Text {
-        this.y = y
-        return this
-    }
+    fun setY(y: Float) = apply { this.y = y }
 
     fun getWidth() = this.width
-    fun setWidth(width: Int): Text {
+    fun setWidth(width: Int) = apply {
         this.width = width
         this.lines = Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)
-        return this
     }
 
     fun getMaxLines() = this.maxLines
-    fun setMaxLines(maxLines: Int): Text {
-        this.maxLines = maxLines
-        return this
-    }
+    fun setMaxLines(maxLines: Int) = apply { this.maxLines = maxLines }
 
     fun getScale() = this.scale
-    fun setScale(scale: Float): Text {
-        this.scale = scale
-        return this
-    }
+    fun setScale(scale: Float) = apply { this.scale = scale }
 
     fun getMaxWidth(): Int {
-        if (this.width == 0) {
-            return Renderer.getStringWidth(this.string)
+        return if (this.width == 0) {
+            Renderer.getStringWidth(this.string)
         } else {
             var maxWidth = 0
             this.lines.forEach {
                 if (Renderer.getStringWidth(it) > maxWidth)
                     maxWidth = Renderer.getStringWidth(it)
             }
-            return maxWidth
+            maxWidth
         }
     }
 
@@ -118,7 +86,7 @@ class Text {
         return this.width != 0 && this.lines.size > this.maxLines
     }
 
-    fun draw(): Text {
+    fun draw() = apply {
         GlStateManager.enableBlend()
         GlStateManager.scale(this.scale, this.scale, this.scale)
         if (this.width > 0) {
@@ -136,8 +104,6 @@ class Text {
         }
         GlStateManager.disableBlend()
         Renderer.finishDraw()
-
-        return this
     }
 
     private fun updateFormatting() {
