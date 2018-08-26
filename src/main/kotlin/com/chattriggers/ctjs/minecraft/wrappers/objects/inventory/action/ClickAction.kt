@@ -2,6 +2,10 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action
 
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 
+//#if MC>10809
+//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
+//#endif
+
 class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     private lateinit var clickType: ClickType
     private var holdingShift = false
@@ -81,17 +85,17 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
             mode = 1
         }
         //#else
-        //$$ net.minecraft.inventory.ClickType mode;
+        //$$ MCClickType mode;
         //$$ if (this.clickType == ClickType.MIDDLE) {
-        //$$     mode = net.minecraft.inventory.ClickType.CLONE
+        //$$     mode = MCClickType.CLONE
         //$$ } else if (slot == -999 && !this.itemInHand) {
-        //$$     mode = net.minecraft.inventory.ClickType.THROW
+        //$$     mode = MCClickType.THROW
         //$$ } else if (this.holdingShift) {
-        //$$     mode = net.minecraft.inventory.ClickType.QUICK_MOVE
+        //$$     mode = MCClickType.QUICK_MOVE
         //$$ } else if (pickupAll) {
-        //$$     mode = net.minecraft.inventory.ClickType.PICKUP_ALL
+        //$$     mode = MCClickType.PICKUP_ALL
         //$$ } else {
-        //$$     mode = net.minecraft.inventory.ClickType.PICKUP
+        //$$     mode = MCClickType.PICKUP
         //$$ }
         //#endif
 
