@@ -1,7 +1,5 @@
 package com.chattriggers.ctjs.utils.kotlin
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib
-import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import net.minecraft.client.renderer.Tessellator
 
 fun ITextComponent.getStyling() = this.chatStyle!!

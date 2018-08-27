@@ -18,13 +18,10 @@ class Image(image: BufferedImage) {
     fun getTextureHeight() = this.textureHeight
     fun getTexture(): DynamicTexture = this.texture
 
-    fun draw(x: Double, y: Double): Image {
-        Renderer.drawImage(this, x, y, this.textureWidth.toDouble(), this.textureHeight.toDouble())
-        return this
-    }
-
-    fun draw(x: Double, y: Double, width: Double, height: Double): Image {
+    @JvmOverloads
+    fun draw(x: Double, y: Double,
+             width: Double = this.textureWidth.toDouble(),
+             height: Double = this.textureHeight.toDouble()) = apply {
         Renderer.drawImage(this, x, y, width, height)
-        return this
     }
 }

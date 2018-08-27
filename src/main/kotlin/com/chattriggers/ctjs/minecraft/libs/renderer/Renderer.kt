@@ -7,15 +7,15 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.utils.console.Console
+import com.chattriggers.ctjs.utils.kotlin.MCTessellator
+import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
-import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
-import java.awt.Color.green
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -25,22 +25,22 @@ import javax.imageio.ImageIO
 object Renderer {
     var colorized = false
 
-    val BLACK = color(0, 0, 0, 255)
-    val DARK_BLUE = color(0, 0, 190, 255)
-    val DARK_GREEN = color(0, 190, 0, 255)
-    val DARK_AQUA = color(0, 190, 190, 255)
-    val DARK_RED = color(190, 0, 0, 255)
-    val DARK_PURPLE = color(190, 0, 190, 255)
-    val GOLD = color(217, 163, 52, 255)
-    val GRAY = color(190, 190, 190, 255)
-    val DARK_GRAY = color(63, 63, 63, 255)
-    val BLUE = color(63, 63, 254, 255)
-    val GREEN = color(63, 254, 63, 255)
-    val AQUA = color(63, 254, 254, 255)
-    val RED = color(254, 63, 63, 255)
-    val LIGHT_PURPLE = color(254, 63, 254, 255)
-    val YELLOW = color(254, 254, 63, 255)
-    val WHITE = color(255, 255, 255, 255)
+    @JvmStatic val BLACK = color(0, 0, 0, 255)
+    @JvmStatic val DARK_BLUE = color(0, 0, 190, 255)
+    @JvmStatic val DARK_GREEN = color(0, 190, 0, 255)
+    @JvmStatic val DARK_AQUA = color(0, 190, 190, 255)
+    @JvmStatic val DARK_RED = color(190, 0, 0, 255)
+    @JvmStatic val DARK_PURPLE = color(190, 0, 190, 255)
+    @JvmStatic val GOLD = color(217, 163, 52, 255)
+    @JvmStatic val GRAY = color(190, 190, 190, 255)
+    @JvmStatic val DARK_GRAY = color(63, 63, 63, 255)
+    @JvmStatic val BLUE = color(63, 63, 254, 255)
+    @JvmStatic val GREEN = color(63, 254, 63, 255)
+    @JvmStatic val AQUA = color(63, 254, 254, 255)
+    @JvmStatic val RED = color(254, 63, 63, 255)
+    @JvmStatic val LIGHT_PURPLE = color(254, 63, 254, 255)
+    @JvmStatic val YELLOW = color(254, 254, 63, 255)
+    @JvmStatic val WHITE = color(255, 255, 255, 255)
 
     @JvmStatic
     fun getColor(color: Int): Int {
@@ -193,12 +193,8 @@ object Renderer {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
 
-        val tessellator = Tessellator.getInstance()
-        //#if MC<=10809
-        val worldRenderer = tessellator.worldRenderer
-        //#else
-        //$$ var worldRenderer = tessellator.buffer
-        //#endif
+        val tessellator = MCTessellator.getInstance()
+        val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         if (!Renderer.colorized)
@@ -240,12 +236,8 @@ object Renderer {
         GlStateManager.bindTexture(image.getTexture().glTextureId)
         GlStateManager.enableTexture2D()
 
-        val tessellator = Tessellator.getInstance()
-        //#if MC<=10809
-        val worldRenderer = tessellator.worldRenderer
-        //#else
-        //$$ var worldRenderer = tessellator.buffer
-        //#endif
+        val tessellator = MCTessellator.getInstance()
+        val worldRenderer = tessellator.getRenderer()
 
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX)
 
