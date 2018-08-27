@@ -32,4 +32,5 @@ internal typealias GameType = net.minecraft.world.WorldSettings.GameType
 //$$ internal typealias HoverEventAction = net.minecraft.util.text.event.HoverEvent.Action
 //$$ internal typealias TextStyle = net.minecraft.util.text.Style
 //$$ internal typealias GameType = net.minecraft.world.GameType
+//$$ internal typealias MCClickType = net.minecraft.inventory.ClickType
 //#endif
