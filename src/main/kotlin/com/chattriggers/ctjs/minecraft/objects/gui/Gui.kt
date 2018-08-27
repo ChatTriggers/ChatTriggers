@@ -8,7 +8,6 @@ import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.input.Mouse
-import java.io.IOException
 
 class Gui : GuiScreen() {
     private var onDraw: OnRegularTrigger? = null
@@ -23,47 +22,15 @@ class Gui : GuiScreen() {
 
     var doesPauseGame = true
 
-    /**
-     * Displays the gui object to Minecraft.
-     */
-    fun open() {
-        GuiHandler.openGui(this)
-    }
-
-    /**
-     * Closes this gui screen, returning Minecraft to ingame.
-     */
+    fun open() = GuiHandler.openGui(this)
     fun close() {
-        if (isOpen())
-            Player.getPlayer()?.closeScreen()
+        if (isOpen()) Player.getPlayer()?.closeScreen()
     }
 
-    /**
-     * Get if the gui object is open.
-     *
-     * @return true if this gui is open
-     */
     fun isOpen() = Client.getMinecraft().currentScreen === this
 
-    /**
-     * Get if the control key is being held down.
-     *
-     * @return true if the control key is held down
-     */
     fun isControlDown() = GuiScreen.isCtrlKeyDown()
-
-    /**
-     * Get if the shift key is being held down.
-     *
-     * @return true if the shift key is held down
-     */
     fun isShiftDown() = GuiScreen.isShiftKeyDown()
-
-    /**
-     * Get if the alt key is being held down.
-     *
-     * @return true if the alt key is held down
-     */
     fun isAltDown() = GuiScreen.isAltKeyDown()
 
     /**
@@ -142,46 +109,55 @@ class Gui : GuiScreen() {
      */
     fun registerActionPerformed(method: Any) = OnRegularTrigger(method, TriggerType.OTHER)
 
-    public override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
+    override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
         super.mouseClicked(mouseX, mouseY, button)
-
-        runOnClick(mouseX, mouseY, button)
+        this.onClick?.trigger(mouseX, mouseY, button)
     }
 
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun mouseReleased(mouseX: Int, mouseY: Int, button: Int) {
         super.mouseReleased(mouseX, mouseY, button)
-
-        onMouseReleased?.trigger(mouseX, mouseY, button)
+        this.onMouseReleased?.trigger(mouseX, mouseY, button)
     }
 
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun actionPerformed(button: GuiButton) {
         super.actionPerformed(button)
-
-        onActionPerformed?.trigger(button.id)
+        this.onActionPerformed?.trigger(button.id)
     }
 
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
-
-        onMouseDragged?.trigger(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
+        this.onMouseDragged?.trigger(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
     }
 
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun handleMouseInput() {
         super.handleMouseInput()
 
         val i = Mouse.getEventDWheel()
 
         when {
-            i > 0 -> runOnClick(mouseX, mouseY, -1)
-            i < 0 -> runOnClick(mouseX, mouseY, -2)
+            i > 0 -> this.onClick?.trigger(this.mouseX, this.mouseY, -1)
+            i < 0 -> this.onClick?.trigger(this.mouseX, this.mouseY, -2)
         }
     }
 
-    // helper method for running onClick
-    private fun runOnClick(mouseX: Int, mouseY: Int, button: Int) {
-        onClick?.trigger(mouseX, mouseY, button)
-    }
-
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         super.drawScreen(mouseX, mouseY, partialTicks)
 
@@ -190,18 +166,25 @@ class Gui : GuiScreen() {
         this.mouseX = mouseX
         this.mouseY = mouseY
 
-        onDraw?.trigger(mouseX, mouseY, partialTicks)
+        this.onDraw?.trigger(mouseX, mouseY, partialTicks)
 
         GlStateManager.popMatrix()
     }
 
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun keyTyped(typedChar: Char, keyCode: Int) {
         super.keyTyped(typedChar, keyCode)
 
-        onKeyTyped?.trigger(typedChar, keyCode)
+        this.onKeyTyped?.trigger(typedChar, keyCode)
     }
 
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun doesGuiPauseGame() = this.doesPauseGame
+    fun setDoesPauseGame(doesPauseGame: Boolean) = apply { this.doesPauseGame = doesPauseGame }
 
     /**
      * Add a base Minecraft button to the gui
