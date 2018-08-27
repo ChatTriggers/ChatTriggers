@@ -107,21 +107,11 @@ object Scoreboard {
         } catch (ignored: Exception) { }
     }
 
-    /**
-     * Sets whether the scoreboard should be rendered
-     *
-     * @param shouldRender whether the scoreboard should be rendered
-     */
     @JvmStatic
     fun setShouldRender(shouldRender: Boolean) {
         GuiIngameForge.renderObjective = shouldRender
     }
 
-    /**
-     * Gets if the scoreboard should be rendered
-     *
-     * @return whether the scoreboard whether the scoreboard should be rendered
-     */
     @JvmStatic
     fun getShouldRender() = GuiIngameForge.renderObjective
 

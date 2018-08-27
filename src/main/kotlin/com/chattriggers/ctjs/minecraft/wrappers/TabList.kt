@@ -10,7 +10,7 @@ import java.util.Comparator
 
 object TabList {
     /**
-     * Gets names set in scoreboard objectives (useful for newer games)
+     * Gets names set in scoreboard objectives
      *
      * @return The formatted names
      */

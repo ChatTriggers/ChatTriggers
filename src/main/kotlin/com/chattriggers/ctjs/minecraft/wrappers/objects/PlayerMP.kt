@@ -13,29 +13,14 @@ import net.minecraft.scoreboard.ScorePlayerTeam
 //#endif
 
 class PlayerMP(val player: EntityPlayer) : Entity(player) {
-    /**
-     * Returns whether the player is currently a spectator or not
-     *
-     * @return whether the player is a spectator
-     */
     fun isSpectator() = this.player.isSpectator
 
-    /**
-     * Gets the player's active potion effects.
-     *
-     * @return The player's active potion effects.
-     */
     fun getActivePotionEffects(): List<PotionEffect> {
         return player.activePotionEffects.map {
             PotionEffect(it)
         }
     }
 
-    /**
-     * Gets the player's current ping
-     *
-     * @return the ping
-     */
     fun getPing(): Int {
         return getPlayerInfo().responseTime
     }
@@ -68,11 +53,6 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         return TextComponent(getPlayerName(getPlayerInfo()))
     }
 
-    /**
-     * Sets the name for this player shown in tab list
-     *
-     * @param textComponent the new name to display
-     */
     fun setTabDisplayName(textComponent: TextComponent) {
         getPlayerInfo().displayName = textComponent.chatComponentText
     }

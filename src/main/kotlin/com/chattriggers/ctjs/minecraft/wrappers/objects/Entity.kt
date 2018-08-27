@@ -6,19 +6,10 @@ import net.minecraft.entity.EntityLivingBase
 import java.util.*
 
 open class Entity(val entity: MCEntity) {
-    /**
-     * @return the entity's x coordinate
-     */
     fun getX() = entity.posX
 
-    /**
-     * @return the entity's y coordinate
-     */
     fun getY() = entity.posY
 
-    /**
-     * @return the entity's z coordinate
-     */
     fun getZ() = entity.posZ
 
     /**
@@ -79,11 +70,6 @@ open class Entity(val entity: MCEntity) {
     fun getHP() = if (this.entity is EntityLivingBase) this.entity.health
                   else -1f
 
-    /**
-     * Gets the entity that this entity is riding.
-     *
-     * @return the entity being ridden, or null if there isn't one.
-     */
     fun getRiding(): Entity? {
         return if (this.entity.ridingEntity == null)
             null
@@ -91,11 +77,6 @@ open class Entity(val entity: MCEntity) {
             Entity(this.entity.ridingEntity)
     }
 
-    /**
-     * Gets the entity that is riding this entity.
-     *
-     * @return the riding entity, or null if there isn't one.
-     */
     fun getRider(): Entity? {
         //#if MC<=10809
         return if (this.entity.riddenByEntity == null)
@@ -110,11 +91,6 @@ open class Entity(val entity: MCEntity) {
         //#endif
     }
 
-    /**
-     * Gets the entities that are riding this entity.
-     *
-     * @return the riding entities, or an empty list if there aren't any.
-     */
     fun getRiders(): List<Entity> {
         //#if MC<=10809
         return listOf()

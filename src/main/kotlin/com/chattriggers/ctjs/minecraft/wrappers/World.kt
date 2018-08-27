@@ -20,11 +20,6 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 //#endif
 
 object World {
-    /**
-     * Gets the world object.
-     *
-     * @return the world object
-     */
     @JvmStatic
     fun getWorld(): WorldClient? {
         //#if MC<=10809
@@ -34,11 +29,6 @@ object World {
         //#endif
     }
 
-    /**
-     * Returns true if the world is loaded
-     *
-     * @return whether the world is loaded or not
-     */
     @JvmStatic
     fun isLoaded() = getWorld() != null
 
@@ -95,59 +85,24 @@ object World {
         gui.displayTitle(null, null, fadeIn, time, fadeOut)
     }
 
-    /**
-     * Returns true if world is currently raining.
-     *
-     * @return true if world is raining, false otherwise
-     */
     @JvmStatic
     fun isRaining() = getWorld()?.worldInfo?.isRaining ?: false
 
-    /**
-     * Gets the raining strength.
-     *
-     * @return the raining strength
-     */
     @JvmStatic
     fun getRainingStrength() = getWorld()?.rainingStrength ?: false
 
-    /**
-     * Gets the world time.
-     *
-     * @return the world time
-     */
     @JvmStatic
     fun getTime() = getWorld()?.worldTime ?: -1L
 
-    /**
-     * Gets the world difficulty.
-     *
-     * @return the world difficulty
-     */
     @JvmStatic
     fun getDifficulty() = getWorld()?.difficulty.toString()
 
-    /**
-     * Gets the moon phase.
-     *
-     * @return the moon phase
-     */
     @JvmStatic
     fun getMoonPhase() = getWorld()?.moonPhase ?: -1
 
-    /**
-     * Gets the world seed.
-     *
-     * @return the world seed
-     */
     @JvmStatic
     fun getSeed() = getWorld()?.seed ?: -1L
 
-    /**
-     * Gets the world type.
-     *
-     * @return the world type
-     */
     @JvmStatic
     fun getType(): String {
         //#if MC<=10809
@@ -199,23 +154,9 @@ object World {
         )
     }
 
-    /**
-     * Checks whether the world contains a player with the given name
-     *
-     * @param name the player name to check for
-     * @return whether the world contains that player
-     */
     @JvmStatic
     fun hasPlayer(name: String) = getWorld()?.getPlayerEntityByName(name) != null
 
-    /**
-     * Gets the chunk that contains certain coordinates
-     *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
-     * @return the chunk
-     */
     @JvmStatic
     fun getChunk(x: Int, y: Int, z: Int): Chunk {
         return Chunk(
@@ -225,11 +166,6 @@ object World {
         )
     }
 
-    /**
-     * Gets every entity loaded in the world
-     *
-     * @return the entity list
-     */
     @JvmStatic
     fun getAllEntities(): List<Entity> {
         return getWorld()?.loadedEntityList?.map {
