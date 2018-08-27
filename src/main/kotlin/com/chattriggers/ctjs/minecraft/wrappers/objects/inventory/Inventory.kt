@@ -8,8 +8,8 @@ import net.minecraft.inventory.Container
 import net.minecraft.inventory.IInventory
 
 class Inventory {
-    private val inventory: IInventory?
-    private val container: Container?
+    val inventory: IInventory?
+    val container: Container?
 
     constructor(inventory: IInventory) {
         this.inventory = inventory
@@ -20,9 +20,6 @@ class Inventory {
         this.container = container
         this.inventory = null
     }
-
-    fun getInventory() = inventory
-    fun getContainer() = container
 
     /**
      * Gets the total size of the Inventory.
@@ -60,7 +57,7 @@ class Inventory {
      * @param item the item for checking
      * @return whether or not it can be shift clicked in
      */
-    fun isItemValidForSlot(slot: Int, item: Item) = inventory == null || inventory.isItemValidForSlot(slot, item.getItemStack())
+    fun isItemValidForSlot(slot: Int, item: Item) = inventory == null || inventory.isItemValidForSlot(slot, item.itemStack)
 
     /**
      * Checks whether the inventory contains the given item.

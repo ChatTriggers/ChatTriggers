@@ -20,8 +20,8 @@ import net.minecraft.item.Item as MCItem
 //#endif
 
 class Item {
-    private val item: MCItem
-    private var itemStack: ItemStack
+    val item: MCItem
+    var itemStack: ItemStack
 
     /* Constructors */
     /**
@@ -107,9 +107,6 @@ class Item {
         }
     }
     /* End of constructors */
-
-    fun getItem() = item
-    fun getItemStack() = itemStack
 
     /**
      * Gets the ID of the item.
