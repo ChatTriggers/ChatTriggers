@@ -12,7 +12,6 @@ import com.chattriggers.ctjs.utils.kotlin.times
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraft.client.gui.ChatLine
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import java.util.ArrayList
 import java.util.regex.Pattern
 
 object ChatLib {
