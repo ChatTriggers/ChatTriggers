@@ -11,9 +11,19 @@ import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 
 object Client {
+    /**
+     * Get the Forge Minecraft object
+     *
+     * @return The Forge Minecraft object
+     */
     @JvmStatic
     fun getMinecraft() = Minecraft.getMinecraft()!!
 
+    /**
+     * Gets the Forge NetHandlerPlayClient object
+     *
+     * @return The Forge NetHandlerPlayClient object
+     */
     @JvmStatic
     fun getConnection(): NetHandlerPlayClient =
         //#if MC<=10809
@@ -22,6 +32,11 @@ object Client {
         //$$ getMinecraft().connection;
         //#endif
 
+    /**
+     * Gets the GuiNewChat object for the chat gui
+     *
+     * @return The GuiNewChat object for the chat gui
+     */
     @JvmStatic
     fun getChatGUI() = getMinecraft().ingameGUI.chatGUI!!
 
@@ -159,7 +174,6 @@ object Client {
     }
 
     object gui {
-
         /**
          * Gets the Java class name of the currently open gui, for example, "GuiChest"
          *

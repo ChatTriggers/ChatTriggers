@@ -16,6 +16,11 @@ import net.minecraft.scoreboard.ScorePlayerTeam
 import java.util.stream.Collectors
 
 object Player {
+    /**
+     * Gets the Forge EntityPlayerSP object representing the user
+     *
+     * @return The Forge EntityPlayerSP object representing the user
+     */
     @JvmStatic
     fun getPlayer(): EntityPlayerSP? {
         //#if MC<=10809

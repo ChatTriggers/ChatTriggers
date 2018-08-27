@@ -20,6 +20,11 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 //#endif
 
 object World {
+    /**
+     * Gets the Forge WorldClient object
+     *
+     * @return The Forge WorldClient object
+     */
     @JvmStatic
     fun getWorld(): WorldClient? {
         //#if MC<=10809
