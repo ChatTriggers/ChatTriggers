@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.utils.kotlin
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import net.minecraft.client.renderer.Tessellator
 
 fun ITextComponent.getStyling() = this.chatStyle!!
 fun TextStyle.getClick(): TextClickEvent? =
@@ -16,6 +17,13 @@ fun TextStyle.getHover(): TextHoverEvent? =
         chatHoverEvent
         //#else
         //$$ hoverEvent
+        //#endif
+
+fun Tessellator.getRenderer(): WorldRenderer =
+        //#if MC<=10809
+        worldRenderer
+        //#else
+        //$$ buffer
         //#endif
 
 operator fun String.times(times: Number): String {

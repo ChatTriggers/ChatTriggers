@@ -22,7 +22,7 @@ object Client {
     /**
      * Gets Minecraft's NetHandlerPlayClient object
      *
-     * @return The Forge NetHandlerPlayClient object
+     * @return The NetHandlerPlayClient object
      */
     @JvmStatic
     fun getConnection(): NetHandlerPlayClient =
@@ -149,12 +149,10 @@ object Client {
      */
     @JvmStatic
     fun getCurrentChatMessage(): String {
-        if (!isInChat()) {
-            return ""
-        }
-
-        val chatGui = getMinecraft().currentScreen as MixinGuiChat
-        return chatGui.inputField.text
+        return if (isInChat()) {
+            val chatGui = getMinecraft().currentScreen as MixinGuiChat
+            chatGui.inputField.text
+        } else ""
     }
 
     /**
@@ -164,13 +162,10 @@ object Client {
      */
     @JvmStatic
     fun setCurrentChatMessage(message: String) {
-        if (!isInChat()) {
-            Client.getMinecraft().displayGuiScreen(GuiChat(message))
-            return
-        }
-
-        val chatGui = getMinecraft().currentScreen as MixinGuiChat
-        chatGui.inputField.text = message
+        if (isInChat()) {
+            val chatGui = getMinecraft().currentScreen as MixinGuiChat
+            chatGui.inputField.text = message
+        } else Client.getMinecraft().displayGuiScreen(GuiChat(message))
     }
 
     object gui {
