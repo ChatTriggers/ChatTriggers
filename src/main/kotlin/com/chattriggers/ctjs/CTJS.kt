@@ -87,7 +87,6 @@ object CTJS {
         CommandHandler()
         ModuleManager()
         CPS()
-        Tessellator()
 
         registerHooks()
 

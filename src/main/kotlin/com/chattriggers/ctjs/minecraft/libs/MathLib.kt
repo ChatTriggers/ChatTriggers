@@ -11,6 +11,7 @@ object MathLib {
      * @param out_max the final range max
      * @return the re-mapped number
      */
+    @JvmStatic
     fun map(number: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) =
         (number - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
@@ -22,6 +23,7 @@ object MathLib {
      * @param max    the maximum
      * @return the clamped number
      */
+    @JvmStatic
     fun clampFloat(number: Float, min: Float, max: Float) =
             if (number < min) min else if (number > max) max else number
 
@@ -33,6 +35,7 @@ object MathLib {
      * @param max    the maximum
      * @return the clamped number
      */
+    @JvmStatic
     fun clamp(number: Int, min: Int, max: Int) =
         if (number < min) min else if (number > max) max else number
 }
