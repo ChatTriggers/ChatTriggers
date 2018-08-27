@@ -20,6 +20,7 @@ internal typealias HoverEventAction = net.minecraft.event.HoverEvent.Action
 internal typealias TextStyle = net.minecraft.util.ChatStyle
 internal typealias GameType = net.minecraft.world.WorldSettings.GameType
 internal typealias WorldRenderer = net.minecraft.client.renderer.WorldRenderer
+internal typealias TextComponentSerializer = net.minecraft.util.IChatComponent.Serializer
 //#else
 //$$ internal typealias MCParticle = net.minecraft.client.particle.Particle
 //$$ internal typealias BlockPos = net.minecraft.util.math.BlockPos
@@ -36,4 +37,5 @@ internal typealias WorldRenderer = net.minecraft.client.renderer.WorldRenderer
 //$$ internal typealias GameType = net.minecraft.world.GameType
 //$$ internal typealias MCClickType = net.minecraft.inventory.ClickType
 //$$ internal typealias WorldRenderer = net.minecraft.client.renderer.BufferBuilder
+//$$ internal typealias TextComponentSerializer = net.minecraft.util.text.ITextComponent.Serializer
 //#endif

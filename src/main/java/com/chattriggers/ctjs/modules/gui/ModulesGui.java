@@ -127,7 +127,7 @@ public class ModulesGui extends GuiScreen {
 
         private void click() {
             if (isHovered) {
-                GuiHandler.getInstance().openGui(new ModuleGui(module));
+                GuiHandler.INSTANCE.openGui(new ModuleGui(module));
             }
         }
 

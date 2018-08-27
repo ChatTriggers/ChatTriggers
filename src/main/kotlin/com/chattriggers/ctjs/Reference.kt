@@ -22,7 +22,7 @@ object Reference {
             + "&stacktrace.app.packages=com.chattriggers,jdk.nashorn"
             + "&uncaught.handler.enabled=false")
 
-    private var isLoaded = false
+    private var isLoaded = true
 
     fun reload() {
         load(true)
@@ -39,7 +39,7 @@ object Reference {
         ChatLib.chat("&cReloading ct.js scripts...")
         Thread {
             DisplayHandler.clearDisplays()
-            GuiHandler.getInstance().clearGuis()
+            GuiHandler.clearGuis()
 
             for (type in TriggerType.values())
                 type.clearTriggers()

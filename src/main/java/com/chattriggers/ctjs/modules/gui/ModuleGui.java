@@ -184,7 +184,7 @@ public class ModuleGui extends GuiScreen {
 
         if (mouseButton == 0) {
             if (isHovered)
-                GuiHandler.getInstance().openGui(new ModulesGui(ModuleManager.getInstance().getModules()));
+                GuiHandler.INSTANCE.openGui(new ModulesGui(ModuleManager.getInstance().getModules()));
 
             if (scrolled > infoHeight
                     && mouseX > width + 20

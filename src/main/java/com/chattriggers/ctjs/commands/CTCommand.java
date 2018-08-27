@@ -114,14 +114,14 @@ public class CTCommand extends CommandBase {
                 case("modules"):
                 case("module"):
                 case("imports"):
-                    GuiHandler.getInstance().openGui(
+                    GuiHandler.INSTANCE.openGui(
                             new ModulesGui(ModuleManager.getInstance().getModules())
                     );
                     break;
                 case("config"):
                 case("settings"):
                 case("setting"):
-                    GuiHandler.getInstance().openGui(
+                    GuiHandler.INSTANCE.openGui(
                             GuiConfig.getInstance()
                     );
                     break;
