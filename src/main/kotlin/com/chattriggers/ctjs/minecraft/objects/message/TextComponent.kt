@@ -68,6 +68,7 @@ class TextComponent {
     fun setHover(action: String, value: String) = apply {
         this.hoverAction = action
         this.hoverValue = value
+        reInstanceHover()
     }
 
     fun getHoverAction() = this.hoverAction

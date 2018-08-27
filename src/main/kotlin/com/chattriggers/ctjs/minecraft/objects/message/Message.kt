@@ -73,19 +73,13 @@ class Message {
     fun getMessageParts() = this.messageParts
 
     fun getChatLineId() = this.chatLineId
-    fun setChatLineId(id: Int) = apply {
-        this.chatLineId = id
-    }
+    fun setChatLineId(id: Int) = apply { this.chatLineId = id }
 
     fun isRecursive() = this.recursive
-    fun setRecursive(recursive: Boolean) = apply {
-        this.recursive = recursive
-    }
+    fun setRecursive(recursive: Boolean) = apply { this.recursive = recursive }
 
     fun isFormatted() = this.formatted
-    fun setFormatted(formatted: Boolean) = apply {
-        this.formatted = formatted
-    }
+    fun setFormatted(formatted: Boolean) = apply { this.formatted = formatted }
 
     /**
      * Sets the TextComponent or String in the Message at index.
@@ -153,7 +147,7 @@ class Message {
         parseMessage()
         if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.formattedText)) return
 
-        if (this.chatLineId != 1) {
+        if (this.chatLineId != -1) {
             Client.getChatGUI().printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId)
             return
         }
