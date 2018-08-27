@@ -12,15 +12,15 @@ import org.lwjgl.opengl.Display
 
 object Client {
     /**
-     * Get the Forge Minecraft object
+     * Gets Minecraft's Minecraft object
      *
-     * @return The Forge Minecraft object
+     * @return The Minecraft object
      */
     @JvmStatic
     fun getMinecraft() = Minecraft.getMinecraft()!!
 
     /**
-     * Gets the Forge NetHandlerPlayClient object
+     * Gets Minecraft's NetHandlerPlayClient object
      *
      * @return The Forge NetHandlerPlayClient object
      */
@@ -33,7 +33,7 @@ object Client {
         //#endif
 
     /**
-     * Gets the GuiNewChat object for the chat gui
+     * Gets the Minecraft GuiNewChat object for the chat gui
      *
      * @return The GuiNewChat object for the chat gui
      */

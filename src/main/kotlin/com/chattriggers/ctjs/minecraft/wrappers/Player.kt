@@ -17,9 +17,9 @@ import java.util.stream.Collectors
 
 object Player {
     /**
-     * Gets the Forge EntityPlayerSP object representing the user
+     * Gets Minecraft's EntityPlayerSP object representing the user
      *
-     * @return The Forge EntityPlayerSP object representing the user
+     * @return The Minecraft EntityPlayerSP object representing the user
      */
     @JvmStatic
     fun getPlayer(): EntityPlayerSP? {

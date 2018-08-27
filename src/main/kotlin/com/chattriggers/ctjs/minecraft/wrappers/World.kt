@@ -21,9 +21,9 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 object World {
     /**
-     * Gets the Forge WorldClient object
+     * Gets Minecraft's WorldClient object
      *
-     * @return The Forge WorldClient object
+     * @return The Minecraft WorldClient object
      */
     @JvmStatic
     fun getWorld(): WorldClient? {
