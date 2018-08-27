@@ -16,8 +16,8 @@ public class Config {
 
     private static transient Config instance;
 
-    @Getter
     private ConfigString modulesFolder;
+    public ConfigString getModulesFolder() { return this.modulesFolder; }
 
     public ConfigBoolean getPrintChatToConsole() {
         return printChatToConsole;
