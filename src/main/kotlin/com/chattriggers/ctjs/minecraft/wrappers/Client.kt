@@ -12,17 +12,17 @@ import org.lwjgl.opengl.Display
 
 object Client {
     /**
-     * Gets the Minecraft object.
+     * Gets Minecraft's Minecraft object
      *
-     * @return the Minecraft object
+     * @return The Minecraft object
      */
     @JvmStatic
     fun getMinecraft() = Minecraft.getMinecraft()!!
 
     /**
-     * Gets the connection object.
+     * Gets Minecraft's NetHandlerPlayClient object
      *
-     * @return the connection object
+     * @return The Forge NetHandlerPlayClient object
      */
     @JvmStatic
     fun getConnection(): NetHandlerPlayClient =
@@ -33,26 +33,16 @@ object Client {
         //#endif
 
     /**
-     * Gets the chat gui object.
+     * Gets the Minecraft GuiNewChat object for the chat gui
      *
-     * @return the chat gui object
+     * @return The GuiNewChat object for the chat gui
      */
     @JvmStatic
     fun getChatGUI() = getMinecraft().ingameGUI.chatGUI!!
 
-    /**
-     * Returns true if the player has the chat open.
-     *
-     * @return true if the player has the chat open, false otherwise
-     */
     @JvmStatic
     fun isInChat() = getMinecraft().currentScreen is GuiChat
 
-    /**
-     * Returns true if the player has the tab list open.
-     *
-     * @return true if the player has the tab list open, false otherwise
-     */
     @JvmStatic
     fun isInTab() =  getMinecraft().gameSettings.keyBindPlayerList.isKeyDown
 
@@ -110,69 +100,29 @@ object Client {
                 ?.let { KeyBind(it) }
     }
 
-    /**
-     * Gets the game's FPS count.
-     *
-     * @return The game's FPS count.
-     */
     @JvmStatic
     fun getFPS() = Minecraft.getDebugFPS()
 
-    /**
-     * Gets the client minecraft version.
-     *
-     * @return The client minecraft version.
-     */
     @JvmStatic
     fun getVersion() = getMinecraft().version
 
-    /**
-     * Gets the client's max memory.
-     *
-     * @return The client's max memory.
-     */
     @JvmStatic
     fun getMaxMemory() = Runtime.getRuntime().maxMemory()
 
-    /**
-     * Gets the client's total memory.
-     *
-     * @return The client's total memory.
-     */
     @JvmStatic
     fun getTotalMemory() = Runtime.getRuntime().totalMemory()
 
-    /**
-     * Gets the client's free memory.
-     *
-     * @return The client's free memory.
-     */
     @JvmStatic
     fun getFreeMemory() = Runtime.getRuntime().freeMemory()
 
-    /**
-     * Gets the player's memory usage.
-     *
-     * @return The player's memory usage.
-     */
     @JvmStatic
     fun getMemoryUsage() = Math.round(
             (getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()
     )
 
-    /**
-     * Gets the system time.
-     *
-     * @return the system time
-     */
     @JvmStatic
     fun getSystemTime() = Minecraft.getSystemTime()
 
-    /**
-     * Gets the mouse x location.
-     *
-     * @return the mouse x location
-     */
     @JvmStatic
     fun getMouseX(): Float {
         val mx = Mouse.getX().toFloat()
@@ -181,11 +131,6 @@ object Client {
         return mx * rw / dw
     }
 
-    /**
-     * Gets the mouse y location.
-     *
-     * @return the mouse y location
-     */
     @JvmStatic
     fun getMouseY(): Float {
         val my = Mouse.getY().toFloat()
@@ -229,7 +174,6 @@ object Client {
     }
 
     object gui {
-
         /**
          * Gets the Java class name of the currently open gui, for example, "GuiChest"
          *
@@ -256,26 +200,14 @@ object Client {
     }
 
     object camera {
-        /**
-         * Gets the camera's x position
-         * @return the camera's x position
-         */
         @JvmStatic
         val x: Double
             get() = Client.getMinecraft().renderManager.viewerPosX
 
-        /**
-         * Gets the camera's y position
-         * @return the camera's y position
-         */
         @JvmStatic
         val y: Double
             get() = Client.getMinecraft().renderManager.viewerPosY
 
-        /**
-         * Gets the camera's z position
-         * @return the camera's z position
-         */
         @JvmStatic
         val z: Double
             get() = Client.getMinecraft().renderManager.viewerPosZ

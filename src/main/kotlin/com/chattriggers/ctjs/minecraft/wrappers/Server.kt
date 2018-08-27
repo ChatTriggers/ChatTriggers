@@ -2,10 +2,10 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 object Server {
     /**
-     * Gets the current server's IP.
+     * Gets the current server's IP, or "localhost" if the player
+     * is in a single-player world.
      *
-     * @return The IP of the current server, or "localhost" if the player
-     * is in a single player world.
+     * @return The IP of the current server
      */
     @JvmStatic
     fun getIP(): String {
@@ -15,10 +15,10 @@ object Server {
     }
 
     /**
-     * Gets the current server's name.
+     * Gets the current server's name, or "SinglePlayer" if the player
+     * is in a single-player world.
      *
-     * @return The name of the current server, or "SinglePlayer" if the player
-     * is in a single player world.
+     * @return The name of the current server
      */
     fun getName(): String {
         if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
@@ -27,10 +27,10 @@ object Server {
     }
 
     /**
-     * Gets the current server's MOTD.
+     * Gets the current server's MOTD, or "SinglePlayer" if the player
+     * is in a single-player world.
      *
-     * @return The MOTD of the current server, or "SinglePlayer" if the player
-     * is in a single player world.
+     * @return The MOTD of the current server
      */
     fun getMOTD(): String {
         if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
@@ -39,10 +39,10 @@ object Server {
     }
 
     /**
-     * Gets the ping to the current server.
+     * Gets the ping to the current server, or 5 if the player
+     * is in a single-player world.
      *
-     * @return The ping to the current server, or 5 if the player
-     * is in a single player world.
+     * @return The ping to the current server
      */
     fun getPing(): Long {
         val player = Player.getPlayer()

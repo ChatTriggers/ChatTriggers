@@ -24,11 +24,6 @@ class Item {
     var itemStack: ItemStack
 
     /* Constructors */
-    /**
-     * Creates an Item object from a Minecraft ItemStack input.
-     *
-     * @param itemStack the Minecraft ItemStack
-     */
     constructor(itemStack: ItemStack?) {
         var newItemStack = itemStack
         //#if MC<=10809
@@ -42,41 +37,21 @@ class Item {
         this.itemStack = newItemStack
     }
 
-    /**
-     * Creates an Item object from a string name input.
-     *
-     * @param itemName the name of the item
-     */
     constructor(itemName: String) {
         item = MCItem.getByNameOrId(itemName)
         itemStack = ItemStack(item)
     }
 
-    /**
-     * Creates an Item object from an integer ID input, 0 for air.
-     *
-     * @param itemID the ID of the item
-     */
     constructor(itemID: Int) {
         item = MCItem.getItemById(itemID)
         itemStack = ItemStack(item)
     }
 
-    /**
-     * Creates an Item object from a {@link Block} object input.
-     *
-     * @param block the {@link Block}
-     */
     constructor(block: Block) {
         item = MCItem.getItemFromBlock(block.block)
         itemStack = ItemStack(item)
     }
 
-    /**
-     * Creates an Item object from an EntityItem.
-     *
-     * @param entityItem the EntityItem.
-     */
     constructor(entityItem: EntityItem) {
         //#if MC<=10809
         this.item = entityItem.entityItem.item
@@ -108,28 +83,12 @@ class Item {
     }
     /* End of constructors */
 
-    /**
-     * Gets the ID of the item.
-     *
-     * @return the ID
-     */
     fun getID() = MCItem.getIdFromItem(item)
 
-    /**
-     * Sets the stack size of the item.
-     *
-     * @param stackSize the stack size
-     * @return the Item
-     */
     fun setStackSize(stackSize: Int) = apply {
         itemStack = ItemStack(item, stackSize)
     }
 
-    /**
-     * Gets the stack size of the item.
-     *
-     * @return the stack size
-     */
     fun getStackSize(): Int {
         //#if MC<=10809
         return this.itemStack.stackSize
@@ -168,12 +127,6 @@ class Item {
      */
     fun getName(): String = if (getID() == 0) "air" else itemStack.displayName
 
-    /**
-     * Returns a map of the enchantment name to level for all
-     * the enchantments on an item.
-     *
-     * @return the map of enchantments
-     */
     fun getEnchantments(): Map<String, Int> {
         return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
             //#if MC<=10809
@@ -186,48 +139,16 @@ class Item {
         }
     }
 
-    /**
-     * Gets if the item can be enchanted.
-     *
-     * @return true if the item can be enchanted
-     */
     fun isEnchantable() = itemStack.isItemEnchantable
 
-    /**
-     * Gets if the item is enchanted.
-     *
-     * @return true if the item is enchanted
-     */
     fun isEnchanted() = itemStack.isItemEnchanted
 
-    /**
-     * Gets the json string of the item's lore.
-     *
-     * @return the json string of the lore
-     */
     fun getItemNBT() = itemStack.serializeNBT().toString()
 
-    /**
-     * Gets the metadata of the item.
-     *
-     * @return the metadata
-     */
     fun getMetadata() = itemStack.metadata
 
-    /**
-     * Gets if the item can be placed on a {@link Block}.
-     *
-     * @param block the {@link Block} to place the item on
-     * @return true if the item can be placed on the {@link Block}
-     */
     fun canPlaceOn(block: Block) = itemStack.canPlaceOn(block.block)
 
-    /**
-     * Gets if the item can harvest a {@link Block}.
-     *
-     * @param block the {@link Block} for the item to harvest
-     * @return true if the item can harvest the {@link Block}
-     */
     fun canHarvest(block: Block): Boolean {
         //#if MC<=10809
         return this.itemStack.canHarvestBlock(block.block)
@@ -238,12 +159,6 @@ class Item {
         //#endif
     }
 
-    /**
-     * Gets if the item can destroy a {@link Block}.
-     *
-     * @param block the {@link Block} for the item to destroy
-     * @return true if the item can destroy the {@link Block}
-     */
     fun canDestroy(block: Block) = itemStack.canDestroy(block.block)
 
     /**
@@ -253,41 +168,16 @@ class Item {
      */
     fun getDurability() = getMaxDamage() - getDamage()
 
-    /**
-     * Gets the item's damage.
-     *
-     * @return the damage value
-     */
     fun getDamage() = itemStack.itemDamage
 
-    /**
-     * Sets the item's damage.
-     *
-     * @param damage the damage value
-     */
     fun setDamage(damage: Int) = apply {
         itemStack.itemDamage = damage
     }
 
-    /**
-     * Gets the items max damage.
-     *
-     * @return the items max damage
-     */
     fun getMaxDamage() = itemStack.maxDamage
 
-    /**
-     * Checks if the item can take damage.
-     *
-     * @return true if the item can take damage
-     */
     fun isDamagable() = itemStack.isItemStackDamageable
 
-    /**
-     * Gets the item lore/tooltip information in a list.
-     *
-     * @return the item lore
-     */
     fun getLore(): List<String> {
         //#if MC<=10809
         return itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips)

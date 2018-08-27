@@ -17,9 +17,9 @@ import java.util.stream.Collectors
 
 object Player {
     /**
-     * Gets the player object.
+     * Gets Minecraft's EntityPlayerSP object representing the user
      *
-     * @return the player object
+     * @return The Minecraft EntityPlayerSP object representing the user
      */
     @JvmStatic
     fun getPlayer(): EntityPlayerSP? {
@@ -30,27 +30,12 @@ object Player {
         //#endif
     }
 
-    /**
-     * Gets the player's x position.
-     *
-     * @return the player's x position
-     */
     @JvmStatic
     fun getX() = getPlayer()?.posX ?: 0
 
-    /**
-     * Gets the player's y position.
-     *
-     * @return the player's y position
-     */
     @JvmStatic
     fun getY() = getPlayer()?.posY ?: 0
 
-    /**
-     * Gets the player's z position.
-     *
-     * @return the player's z position
-     */
     @JvmStatic
     fun getZ() = getPlayer()?.posZ ?: 0
 
@@ -123,48 +108,24 @@ object Player {
     @JvmStatic
     fun getName(): String = Client.getMinecraft().session.username
 
-    /**
-     * Gets the player's uuid.
-     *
-     * @return the player's uuid
-     */
     @JvmStatic
     fun getUUID(): String = Client.getMinecraft().session.profile.id.toString()
 
-    /**
-     * Gets the player's hp.
-     *
-     * @return the player's hp
-     */
     @JvmStatic
     fun getHP() = getPlayer()?.health ?: 0
 
-    /**
-     * Gets the player's hunger.
-     *
-     * @return the player's hunger
-     */
     @JvmStatic
     fun getHunger() = getPlayer()?.foodStats?.foodLevel ?: 0
 
-    /**
-     * Gets the player's saturation.
-     *
-     * @return the player's saturation
-     */
     @JvmStatic
     fun getSaturation() = getPlayer()?.foodStats?.foodLevel ?: 0
 
-    /**
-     * Gets the player's armor points.
-     *
-     * @return the player's armor points
-     */
     @JvmStatic
     fun getArmorPoints() = getPlayer()?.totalArmorValue ?: 0
 
     /**
      * Gets the player's air level.<br></br>
+     *
      * The returned value will be an integer. If the player is not taking damage, it
      * will be between 300 (not in water) and 0. If the player is taking damage, it
      * will be between -20 and 0, getting reset to 0 every time the player takes damage.
@@ -174,27 +135,12 @@ object Player {
     @JvmStatic
     fun getAirLevel() = getPlayer()?.air ?: 0
 
-    /**
-     * Gets the player's xp level.
-     *
-     * @return the player's xp level
-     */
     @JvmStatic
     fun getXPLevel() = getPlayer()?.experienceLevel ?: 0
 
-    /**
-     * Gets the player's xp progress.
-     *
-     * @return the player's xp progress
-     */
     @JvmStatic
     fun getXPProgress() = getPlayer()?.experience ?: 0
 
-    /**
-     * Gets the biome the player is currently in.
-     *
-     * @return the biome name
-     */
     @JvmStatic
     fun getBiome(): String {
         val player = getPlayer() ?: return ""
@@ -219,19 +165,9 @@ object Player {
     @JvmStatic
     fun getLightLevel() = World.getWorld()?.getLight(getPlayer()?.position) ?: 0
 
-    /**
-     * Checks if if the player is sneaking.
-     *
-     * @return true if the player is sneaking, false otherwise
-     */
     @JvmStatic
     fun isSneaking() = getPlayer()?.isSneaking ?: false
 
-    /**
-     * Checks if the player is sprinting.
-     *
-     * @return true if the player is sprinting, false otherwise
-     */
     @JvmStatic
     fun isSprinting() = getPlayer()?.isSprinting ?: false
 
@@ -243,16 +179,12 @@ object Player {
     @JvmStatic
     fun isFlying() = !(getPlayer()?.isPushedByWater ?: true)
 
-    /**
-     * Checks if player is sleeping.
-     *
-     * @return true if the player is sleeping, false otherwise
-     */
     @JvmStatic
     fun isSleeping() = getPlayer()?.isPlayerSleeping ?: false
 
     /**
      * Gets the direction the player is facing.
+     * Example: "South West"
      *
      * @return The direction the player is facing, one of the four cardinal directions
      */
@@ -275,11 +207,6 @@ object Player {
         }
     }
 
-    /**
-     * Gets the player's active potion effects.
-     *
-     * @return The player's active potion effects.
-     */
     @JvmStatic
     fun getActivePotionEffects(): List<PotionEffect> {
         return getPlayer()?.activePotionEffects
@@ -313,11 +240,6 @@ object Player {
         }
     }
 
-    /**
-     * Gets the player's currently held item.
-     *
-     * @return the item
-     */
     @JvmStatic
     fun getHeldItem() = Item(getPlayer()?.inventory?.getCurrentItem())
 
