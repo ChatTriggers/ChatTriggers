@@ -74,7 +74,6 @@ object CTJS {
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
         ModuleManager()
-        CPS()
 
         registerHooks()
 
