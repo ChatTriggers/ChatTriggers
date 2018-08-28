@@ -50,33 +50,9 @@ public class OnCommandTrigger extends OnTrigger {
         return setCommandName(commandName);
     }
 
-    /**
-     * Sets the tab complete options
-     * 
-     * @param options the options to for tab complete
-     * @return the trigger for additional modification
-     */
-    public OnCommandTrigger setTabCompleteOptions(String... options) {
-        this.command.setTabComplete(new ArrayList<>(Arrays.asList(options)));
-
-        return this;
-    }
-
-    /**
-     * Adds a tab complete option
-     *
-     * @param option the option to add
-     * @return the trigger for additional modification
-     */
-    public OnCommandTrigger addTabCompleteOption(String option) {
-        this.command.addTabComplete(option);
-
-        return this;
-    }
-
     // helper method to re instance the command
     private void reInstance() {
-        for (Command command : CommandHandler.getInstance().getCommandList()) {
+        for (Command command : CommandHandler.getCommandList()) {
             if (command.getCommandName().equals(this.commandName)) {
                 command.getTriggers().add(this);
                 return;
@@ -85,6 +61,6 @@ public class OnCommandTrigger extends OnTrigger {
 
         this.command = new Command(this, this.commandName, "/" + this.commandName);
         ClientCommandHandler.instance.registerCommand(this.command);
-        CommandHandler.getInstance().getCommandList().add(this.command);
+        CommandHandler.getCommandList().add(this.command);
     }
 }

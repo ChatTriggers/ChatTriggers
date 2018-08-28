@@ -44,7 +44,7 @@ object Reference {
             for (type in TriggerType.values())
                 type.clearTriggers()
 
-            CommandHandler.getInstance().commandList.clear()
+            CommandHandler.getCommandList().clear()
             (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
             ModuleManager.getInstance().unload()
 
