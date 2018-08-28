@@ -125,7 +125,7 @@ public class JSScriptLoader extends ScriptLoader {
                     Console.getInstance().out.println("checking for update in " + metadata.getFileName());
 
                     File newMetadataFile = new File(modulesDir, "currMetadata.json");
-                    FileUtils.copyURLToFile(new URL("http://167.99.3.229/downloads/metadata/" + metadata.getFileName()),
+                    FileUtils.copyURLToFile(new URL("http://chattriggers.com/downloads/metadata/" + metadata.getFileName()),
                             newMetadataFile);
 
                     String currVersion = metadata.getVersion();
@@ -192,7 +192,7 @@ public class JSScriptLoader extends ScriptLoader {
             File currentMetadata = new File(modulesDir, "currMetadata.json");
             try {
                 FileLib.deleteDirectory(new File(modulesDir, name));
-                FileUtils.copyURLToFile(new URL("http://167.99.3.229/downloads/metadata/" + name),
+                FileUtils.copyURLToFile(new URL("http://chattriggers.com/downloads/metadata/" + name),
                         currentMetadata);
             } catch (IOException exception) {
                 Console.getInstance().printStackTrace(exception);
@@ -208,7 +208,7 @@ public class JSScriptLoader extends ScriptLoader {
             File downloadZip = new File(modulesDir, "currDownload.zip");
 
             FileUtils.copyURLToFile(
-                    new URL("http://167.99.3.229/downloads/scripts/" + name),
+                    new URL("http://chattriggers.com/downloads/scripts/" + name),
                     downloadZip
             );
 

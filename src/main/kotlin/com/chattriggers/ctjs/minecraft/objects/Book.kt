@@ -4,8 +4,6 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
-import com.chattriggers.ctjs.utils.console.Console
-import com.chattriggers.ctjs.utils.kotlin.ITextComponent
 import com.chattriggers.ctjs.utils.kotlin.TextComponentSerializer
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
@@ -14,23 +12,19 @@ import net.minecraft.nbt.NBTBase
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.nbt.NBTTagString
-import net.minecraft.util.IChatComponent
 import net.minecraftforge.fml.relauncher.ReflectionHelper
-import kotlin.reflect.full.memberProperties
 
 class Book(bookName: String) {
-    var bookScreen: GuiScreenBook? = null
-    val book: ItemStack
-    val bookData: NBTTagCompound
+    private var bookScreen: GuiScreenBook? = null
+    private val book:
+            //#if MC<=10809
+            ItemStack = ItemStack(Items.written_book)
+            //#else
+            //$$ book = ItemStack(Items.WRITTEN_BOOK)
+            //#endif
+    private val bookData: NBTTagCompound = NBTTagCompound()
 
     init {
-        //#if MC<=10809
-        book = ItemStack(Items.written_book)
-        //#else
-        //$$ book = ItemStack(Items.WRITTEN_BOOK);
-        //#endif
-
-        bookData = NBTTagCompound()
         bookData["author"] = NBTTagString(Player.getName())
         bookData["title"] = NBTTagString("CT-$bookName")
         bookData["pages"] = NBTTagList()

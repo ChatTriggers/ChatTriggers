@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GuiConfig extends GuiScreen {
-    @Getter
     private static GuiConfig instance;
+    public static GuiConfig getInstance() { return instance; }
 
     @Getter
     private ArrayList<ConfigOption> configOptions;

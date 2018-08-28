@@ -80,9 +80,9 @@ object ChatLib {
     @JvmStatic
     fun clearChat() {
         //#if MC<=10809
-        Client.getChatGUI().clearChatMessages()
+        Client.getChatGUI()?.clearChatMessages()
         //#else
-        //$$ Client.getChatGUI().clearChatMessages(false);
+        //$$ Client.getChatGUI()?.clearChatMessages(false);
         //#endif
     }
 
@@ -94,7 +94,7 @@ object ChatLib {
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
         for (chatLineID in chatLineIDs)
-            Client.getChatGUI().deleteChatLine(chatLineID)
+            Client.getChatGUI()?.deleteChatLine(chatLineID)
     }
 
     /**
@@ -107,7 +107,6 @@ object ChatLib {
      */
     @JvmOverloads
     @JvmStatic
-    //TODO: TEST THIS
     fun getChatBreak(separator: String = "-"): String {
         val len = Renderer.getStringWidth(separator)
         val times = (getChatWidth() / len) - 1
@@ -121,7 +120,13 @@ object ChatLib {
      * @return the width of chat
      */
     @JvmStatic
-    fun getChatWidth() = Client.getChatGUI().chatWidth
+    fun getChatWidth(): Int {
+        return if (Client.getChatGUI() != null) {
+            Client.getChatGUI()!!.chatWidth
+        } else {
+            0
+        }
+    }
 
     /**
      * Remove all formatting

@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.mixins.MixinGuiChat
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
+import net.minecraft.client.gui.GuiNewChat
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.network.NetHandlerPlayClient
 import org.lwjgl.input.Mouse
@@ -38,7 +39,7 @@ object Client {
      * @return The GuiNewChat object for the chat gui
      */
     @JvmStatic
-    fun getChatGUI() = getMinecraft().ingameGUI.chatGUI!!
+    fun getChatGUI(): GuiNewChat? = getMinecraft().ingameGUI?.chatGUI
 
     @JvmStatic
     fun isInChat() = getMinecraft().currentScreen is GuiChat

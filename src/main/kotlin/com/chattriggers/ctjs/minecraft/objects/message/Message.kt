@@ -148,7 +148,7 @@ class Message {
         if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.formattedText)) return
 
         if (this.chatLineId != -1) {
-            Client.getChatGUI().printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId)
+            Client.getChatGUI()?.printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId)
             return
         }
 

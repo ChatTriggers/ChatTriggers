@@ -1,23 +1,14 @@
 package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
-import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.loader.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.FileLib
-import com.chattriggers.ctjs.minecraft.libs.Tessellator
-import com.chattriggers.ctjs.minecraft.listeners.ChatListener
-import com.chattriggers.ctjs.minecraft.listeners.ClientListener
-import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.CPS
 import com.chattriggers.ctjs.minecraft.objects.Sound
-import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
-import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.UpdateChecker
-import com.chattriggers.ctjs.utils.capes.CapeHandler
 import com.chattriggers.ctjs.utils.capes.LayerCape
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.config.GuiConfig
@@ -28,7 +19,6 @@ import com.google.gson.GsonBuilder
 import io.sentry.Sentry
 import io.sentry.event.UserBuilder
 import net.minecraftforge.client.ClientCommandHandler
-import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -136,7 +126,7 @@ object CTJS {
     }
 
     private fun registerHooks() {
-        ClientCommandHandler.instance.registerCommand(CTCommand())
+        ClientCommandHandler.instance.registerCommand(CTCommand)
 
         Runtime.getRuntime().addShutdownHook(
                 Thread { TriggerType.GAME_UNLOAD::triggerAll }
