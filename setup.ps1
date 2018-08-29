@@ -6,6 +6,4 @@ Copy-Item -Path .\gradle\wrapper\gradle-wrapper.properties.default -Destination 
 .\gradlew wrapper --gradle-version 2.9
 .\gradlew setupDecompWorkspace
 .\gradlew wrapper --gradle-version 3.5
-.\gradlew copySrg
-.\gradlew idea
-.\gradlew genIntellijRuns
+.\gradlew copySrg idea genIntellijRuns
