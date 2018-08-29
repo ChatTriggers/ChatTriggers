@@ -8,15 +8,10 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
   as well as the `/gradle/wrapper/` directory copying any files ending in `.default`
   and pasting them in place, but without the `.default` extension. (Ex. Copy `gradlew.default`,
   paste it, and rename it so you now have `gradlew.default` and `gradlew`)
-### 2. Open PowerShell/command prompt
-  - shift + right click > open PowerShell
-### 3. Run gradle setup commands (*note: don't use the "./" in command prompt*)
-  - `./gradlew wrapper --gradle-version 2.9`
-  - `./gradlew setupDecompWorkspace`
-  - `./gradlew wrapper --gradle-version 3.5`
-  - `./gradlew copySrg`
-  - `./gradlew idea`
-### 4. Set up IntelliJ Idea
+### 2. Run the setup script
+  - Windows: `setup.ps1`
+  - Unix: `setup.sh` 
+### 3. Set up IntelliJ Idea
   - open the project within IDEA by clicking the recently created .ipr file<br>
 ![open project](http://i65.tinypic.com/2irsoyc.png)
   - right click project > open module settings<br>
@@ -35,7 +30,7 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![set annotation processing option](https://i.imgur.com/PS2t8Yc.png)
 There won't be any file there currently, but as soon as you build, change versions, or run
 the `./gradlew copySrg` command, it will appear.
-### 5. Debug client setup
+### 4. Debug client setup
   - run > edit configuration<br>
 ![edit configuration](http://i65.tinypic.com/t6yq7b.png)
   - Use classpath for module > select the main ct.js (it might be named differently depending on your fork)<br>
@@ -43,7 +38,7 @@ the `./gradlew copySrg` command, it will appear.
   - Program arguments
     - `--tweakClass com.chattriggers.ctjs.launch.CTJSTweaker`<br>
 ![edit program arguments](https://i.imgur.com/UcVOq71.png)
-### 6. Developing for different versions
+### 5. Developing for different versions
 CT uses a preprocessor to develop the mod using one codebase for multiple versions. The preprocessor used 
 is the same as the one the [Replay Mod uses](https://github.com/ReplayMod/ReplayMod/blob/develop/README.md#the-preprocessor).
 You can read up more information on it there. One example of this code is:
