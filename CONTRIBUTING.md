@@ -27,7 +27,7 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ![open idea settings](http://i65.tinypic.com/35bco0h.png)
   - plugins > browse all repositories > search "lombok" > install<br>
 ![install lombok](http://i67.tinypic.com/t8sv2p.png)
-  - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing<br>
+  - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing (in newer versions of IntelliJ settings > Build, Execution, Deployment > Compiler > Annotation Processors > Enable Annotation Processing)<br>
 ![enable annotation processing](http://i66.tinypic.com/676slz.png)
   - down that page > Annotation Processor options > green +
     - Option name: `reobfSrgFile`
