@@ -162,11 +162,11 @@ public class JSScriptLoader extends ScriptLoader {
 
             getRequiredModules(metadata, updateCheck);
 
-            TriggerRegister.currentModule = module;
+            TriggerRegister.setCurrentModule(module);
 
             getScriptEngine().eval(compiledScript);
 
-            TriggerRegister.currentModule = null;
+            TriggerRegister.setCurrentModule(null);
 
             cachedModules.add(module);
         } catch (IOException | ScriptException exception) {

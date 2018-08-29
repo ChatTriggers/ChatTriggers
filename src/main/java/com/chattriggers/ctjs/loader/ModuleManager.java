@@ -19,15 +19,21 @@ public class ModuleManager {
 
     private static ModuleManager instance;
 
-    @Getter
     private ArrayList<ScriptLoader> scriptLoaders;
-    @Getter
     private boolean isLoading;
 
     public ModuleManager() {
         instance = this;
 
         this.scriptLoaders = new ArrayList<>();
+    }
+
+    public ArrayList<ScriptLoader> getScriptLoaders() {
+        return scriptLoaders;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
     }
 
     public void load(Boolean updateCheck) {
