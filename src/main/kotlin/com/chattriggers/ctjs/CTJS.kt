@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.loader.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.FileLib
-import com.chattriggers.ctjs.minecraft.objects.CPS
 import com.chattriggers.ctjs.minecraft.objects.Sound
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player

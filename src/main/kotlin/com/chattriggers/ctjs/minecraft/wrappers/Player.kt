@@ -31,13 +31,13 @@ object Player {
     }
 
     @JvmStatic
-    fun getX() = getPlayer()?.posX ?: 0
+    fun getX() = getPlayer()?.posX ?: 0f
 
     @JvmStatic
-    fun getY() = getPlayer()?.posY ?: 0
+    fun getY() = getPlayer()?.posY ?: 0f
 
     @JvmStatic
-    fun getZ() = getPlayer()?.posZ ?: 0
+    fun getZ() = getPlayer()?.posZ ?: 0f
 
     /**
      * Gets the player's x motion.
@@ -46,7 +46,7 @@ object Player {
      * @return the player's x motion
      */
     @JvmStatic
-    fun getMotionX() = getPlayer()?.motionX ?: 0
+    fun getMotionX() = getPlayer()?.motionX ?: 0f
 
     /**
      * Gets the player's y motion.
@@ -55,7 +55,7 @@ object Player {
      * @return the player's y motion
      */
     @JvmStatic
-    fun getMotionY() = getPlayer()?.motionY ?: 0
+    fun getMotionY() = getPlayer()?.motionY ?: 0f
 
     /**
      * Gets the player's z motion.
@@ -64,7 +64,7 @@ object Player {
      * @return the player's z motion
      */
     @JvmStatic
-    fun getMotionZ() = getPlayer()?.motionZ ?: 0
+    fun getMotionZ() = getPlayer()?.motionZ ?: 0f
 
     /**
      * Gets the player's camera pitch.
