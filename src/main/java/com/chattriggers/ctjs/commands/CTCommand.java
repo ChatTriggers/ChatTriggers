@@ -108,6 +108,16 @@ public class CTCommand extends CommandBase {
                     else
                         ModuleManager.getInstance().importModule(args[1], false);
                     break;
+                case("delete"):
+                    if (args.length == 1)
+                        ChatLib.chat("&c/ct delete [module name]");
+                    else {
+                        if (ModuleManager.getInstance().deleteModule(args[1]))
+                            ChatLib.chat("&aDeleted " + args[1]);
+                        else
+                            ChatLib.chat("&cFailed to delete " + args[1]);
+                    }
+                    break;
                 case("console"):
                     Console.getInstance().showConsole(true);
                     break;

@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.loader;
 
+import com.chattriggers.ctjs.Reference;
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
+import com.chattriggers.ctjs.minecraft.libs.FileLib;
 import com.chattriggers.ctjs.minecraft.objects.KeyBind;
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.modules.Module;
@@ -91,6 +93,16 @@ public class ModuleManager {
         } else {
             doImport(name);
         }
+    }
+
+    public Boolean deleteModule(String name) {
+        JSScriptLoader scriptLoader = (JSScriptLoader) scriptLoaders.get(0);
+        if (FileLib.deleteDirectory(new File(scriptLoader.modulesDir, name))) {
+            Reference.getInstance().load();
+            return true;
+        }
+
+        return false;
     }
 
     private void doImport(String name) {
