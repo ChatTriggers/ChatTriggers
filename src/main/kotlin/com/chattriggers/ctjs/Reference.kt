@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CommandHandler
-import com.chattriggers.ctjs.loader.ModuleManager
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.imixins.IClientCommandHandler
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
@@ -41,19 +41,16 @@ object Reference {
             DisplayHandler.clearDisplays()
             GuiHandler.clearGuis()
 
-            for (type in TriggerType.values())
-                type.clearTriggers()
-
             CommandHandler.getCommandList().clear()
             (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
-            ModuleManager.getInstance().unload()
+            ModuleManager.unload()
 
             if (Config.getInstance().clearConsoleOnLoad.value)
                 Console.getInstance().clearConsole()
 
             CTJS.setupConfig()
 
-            ModuleManager.getInstance().load(updateCheck)
+            ModuleManager.load(updateCheck)
 
             ChatLib.chat("&aDone reloading scripts!")
 

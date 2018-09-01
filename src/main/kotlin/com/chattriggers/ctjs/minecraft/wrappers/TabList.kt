@@ -14,6 +14,7 @@ object TabList {
      *
      * @return The formatted names
      */
+    @JvmStatic
     fun getNamesByObjectives(): List<String> {
         return try {
             val scoreboard = World.getWorld()!!.scoreboard
@@ -34,6 +35,7 @@ object TabList {
      *
      * @return the unformatted names
      */
+    @JvmStatic
     fun getNames(): List<String> {
         if (Player.getPlayer() == null) return listOf()
 

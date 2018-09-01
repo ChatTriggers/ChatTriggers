@@ -20,6 +20,7 @@ object Server {
      *
      * @return The name of the current server
      */
+    @JvmStatic
     fun getName(): String {
         if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
 
@@ -32,6 +33,7 @@ object Server {
      *
      * @return The MOTD of the current server
      */
+    @JvmStatic
     fun getMOTD(): String {
         if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
 
@@ -44,6 +46,7 @@ object Server {
      *
      * @return The ping to the current server
      */
+    @JvmStatic
     fun getPing(): Long {
         val player = Player.getPlayer()
 

@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
+import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -10,7 +11,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror
 import org.lwjgl.input.Mouse
 import javax.vecmath.Vector2d
 
-class DisplayLine {
+abstract class DisplayLine {
     private lateinit var text: Text
     private var textWidth = 0
     private var textColor: Int? = null
@@ -80,9 +81,18 @@ class DisplayLine {
         }
     }
 
-    fun registerClicked(method: Any) = apply { this.onClicked = OnRegularTrigger(method, TriggerType.OTHER) }
-    fun registerHovered(method: Any) = apply { this.onHovered = OnRegularTrigger(method, TriggerType.OTHER) }
-    fun registerDragged(method: Any) = apply { this.onDragged = OnRegularTrigger(method, TriggerType.OTHER) }
+    fun registerClicked(method: Any) = run {
+        this.onClicked = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onClicked
+    }
+    fun registerHovered(method: Any) = run {
+        this.onHovered = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onHovered
+    }
+    fun registerDragged(method: Any) = run {
+        this.onDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onDragged
+    }
 
     private fun handleInput(x: Float, y: Float, width: Float, height: Float) {
         if (!Mouse.isCreated()) return
@@ -229,4 +239,6 @@ class DisplayLine {
 
         handleInput(xOff - 1, y - 1, (this.textWidth + 2).toFloat(), 10 * this.text.getScale())
     }
+
+    internal abstract fun getLoader(): ILoader
 }

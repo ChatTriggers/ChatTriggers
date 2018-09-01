@@ -122,7 +122,7 @@ open class Block {
      */
     fun getZ() = blockPos.z
 
-    fun getMetaData() = block.getMetaFromState(getState())
+    fun getMetadata() = block.getMetaFromState(getState())
 
     fun getDefaultMetadata() = block.getMetaFromState(getDefaultState())
 

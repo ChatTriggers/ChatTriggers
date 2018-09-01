@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
+import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -12,8 +13,8 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 
-object XMLHttpRequest {
-    private const val USER_AGENT = "Mozilla/5.0"
+abstract class XMLHttpRequest {
+    private val USER_AGENT = "Mozilla/5.0"
 
     private var conn: HttpURLConnection? = null
     private var async = true
@@ -23,7 +24,7 @@ object XMLHttpRequest {
     var status: Int? = null
     var statusText: String? = null
     var responseText: String? = null
-    var extras= HashMap<String, Any>()
+    var extras = HashMap<String, Any>()
 
     fun open(method: String, urlStr: String, async: Boolean) {
         try {
@@ -43,7 +44,7 @@ object XMLHttpRequest {
 
     @Throws(IllegalArgumentException::class)
     fun addRequestHeader(key: String, value: String) {
-        if (conn == null) throw IllegalStateException("Connection must be opened first!")
+        if (conn == null) throw IllegalArgumentException("Connection must be opened first!")
         conn?.addRequestProperty(key, value)
     }
 
@@ -53,7 +54,7 @@ object XMLHttpRequest {
      * @param method the method to be called back on completion of the request
      */
     fun setCallbackMethod(method: Any) {
-        this.methodCallback = OnRegularTrigger(method, TriggerType.OTHER)
+        this.methodCallback = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
     }
 
     /**
@@ -160,4 +161,5 @@ object XMLHttpRequest {
 
     }
 
+    internal abstract fun getLoader(): ILoader
 }

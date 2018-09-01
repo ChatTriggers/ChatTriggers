@@ -22,9 +22,9 @@ object CPS {
 
     init { MinecraftForge.EVENT_BUS.register(this) }
     @SubscribeEvent
-    private fun update(event: RenderGameOverlayEvent) = clickCalc()
+    fun update(event: RenderGameOverlayEvent) = clickCalc()
     @SubscribeEvent
-    private fun click(event: MouseEvent) {
+    fun click(event: MouseEvent) {
         if (EventLib.getButtonState(event)) {
             when (EventLib.getButton(event)) {
                 0 -> CPS.addLeftClicks()
@@ -57,8 +57,7 @@ object CPS {
         return Math.round(clicks / this.rightClicksAverage.size).toInt()
     }
 
-    private
-    fun clickCalc() {
+    private fun clickCalc() {
         while (Client.getSystemTime() > sysTime + 50L) {
             sysTime += 50L
 
@@ -105,9 +104,15 @@ object CPS {
 
     private fun decreaseClicks(clicks: MutableList<Int>) {
         if (clicks.isNotEmpty()) {
-            for (i in clicks) {
+            val toRemove = mutableListOf<Int>()
+
+            for (i in clicks.indices) {
                 clicks[i] = clicks[i] - 1
-                if (clicks[i] == 0) clicks.removeAt(i)
+                if (clicks[i] == 0) toRemove.add(i)
+            }
+
+            toRemove.sortedDescending().forEach {
+                clicks.removeAt(it)
             }
         }
     }

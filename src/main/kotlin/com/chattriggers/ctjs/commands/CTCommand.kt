@@ -1,13 +1,12 @@
 package com.chattriggers.ctjs.commands
 
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.loader.ModuleManager
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
-import com.chattriggers.ctjs.modules.gui.ModulesGui
 import com.chattriggers.ctjs.utils.config.GuiConfig
 import com.chattriggers.ctjs.utils.console.Console
 import net.minecraft.command.CommandBase
@@ -63,10 +62,10 @@ object CTCommand : CommandBase() {
             "files", "file" -> openFileLocation()
             "import" ->
                 if (args.size == 1) ChatLib.chat("&c/ct import [module name]")
-                else ModuleManager.getInstance().importModule(args[1], false)
+                else ModuleManager.importModule(args[1])
             "console" -> Console.getInstance().showConsole(true)
-            "modules", "module", "imports" ->
-                GuiHandler.openGui(ModulesGui(ModuleManager.getInstance().modules))
+//            "modules", "module", "imports" ->
+//                GuiHandler.openGui(ModulesGui(ModuleManager.getInstance().modules))
             "config", "settings", "setting" ->
                 GuiHandler.openGui(GuiConfig.getInstance())
             "sim", "simulate" ->

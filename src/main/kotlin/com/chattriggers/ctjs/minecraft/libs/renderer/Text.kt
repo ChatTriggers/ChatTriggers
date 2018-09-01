@@ -25,7 +25,7 @@ class Text(private var string: String, private var x: Float = 0f, private var y:
     fun setString(string: String) = apply { this.string = string }
 
     fun getColor() = this.color
-    fun setColor(color: Int) = apply { this.color = color }
+    fun setColor(color: Int) = apply { this.color = fixAlpha(color) }
 
     fun getFormatted() = this.formatted
     fun setFormatted(formatted: Boolean) = apply {
@@ -115,7 +115,7 @@ class Text(private var string: String, private var x: Float = 0f, private var y:
     private fun fixAlpha(color: Int): Int {
         val alpha = color shr 24 and 255
         return if (alpha < 10)
-            Renderer.color(color shr 16 and 255, color shr 8 and 255, color and 255, 10)
+            (color and 0xFF_FF_FF) or 0xA_FF_FF_FF
             else color
     }
 

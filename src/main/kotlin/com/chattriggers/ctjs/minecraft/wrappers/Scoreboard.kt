@@ -132,6 +132,7 @@ object Scoreboard {
         } catch (ignored: Exception) { }
     }
 
+    @JvmStatic
     fun resetCache() {
         needsUpdate = true
     }

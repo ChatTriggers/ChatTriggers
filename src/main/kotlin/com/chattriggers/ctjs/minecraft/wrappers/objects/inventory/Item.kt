@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import org.lwjgl.opengl.GL11
 import net.minecraft.item.Item as MCItem
@@ -25,16 +26,17 @@ class Item {
 
     /* Constructors */
     constructor(itemStack: ItemStack?) {
-        var newItemStack = itemStack
         //#if MC<=10809
-        if (itemStack == null)
+        if (itemStack == null) {
         //#else
-        //$$ if (itemStack == null || itemStack == ItemStack.EMPTY)
+        //$$ if (itemStack == null || itemStack == ItemStack.EMPTY) {
         //#endif
-            newItemStack = ItemStack(Block(0).block)
-
-        this.item = newItemStack!!.item
-        this.itemStack = newItemStack
+            this.item = ItemBlock(Block(0).block)
+            this.itemStack = ItemStack(item)
+        } else {
+            this.item = itemStack.item
+            this.itemStack = itemStack
+        }
     }
 
     constructor(itemName: String) {
@@ -113,9 +115,9 @@ class Item {
      */
     fun getRegistryName(): String {
         //#if MC<=10809
-        return this.item.registryName
+        return this.item.registryName.toString()
         //#else
-        //$$ return this.item.registryName.toString();
+        //$$ return this.item.registryName.toString()
         //#endif
     }
 
@@ -193,6 +195,7 @@ class Item {
      * @param y the y location
      * @param scale the scale
      */
+    @JvmOverloads
     fun draw(x: Float, y: Float, scale: Float = 1f) {
         val itemRenderer = Client.getMinecraft().renderItem
 

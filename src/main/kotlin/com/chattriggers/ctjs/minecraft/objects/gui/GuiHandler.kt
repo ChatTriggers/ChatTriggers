@@ -23,13 +23,14 @@ object GuiHandler {
         this.GUIs.forEach {
             if (it.value == 0) {
                 Minecraft.getMinecraft().displayGuiScreen(it.key)
+                this.GUIs[it.key] = -1
             } else {
                 this.GUIs[it.key] = 0
             }
         }
 
         this.GUIs.entries.removeIf {
-            it.value == 0
+            it.value == -1
         }
     }
 }

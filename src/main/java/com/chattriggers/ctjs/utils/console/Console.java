@@ -1,10 +1,9 @@
 package com.chattriggers.ctjs.utils.console;
 
-import com.chattriggers.ctjs.loader.ModuleManager;
+import com.chattriggers.ctjs.engine.langs.js.JSLoader;
 import com.chattriggers.ctjs.triggers.OnTrigger;
 import com.chattriggers.ctjs.utils.config.Config;
 import io.sentry.Sentry;
-import lombok.Getter;
 import net.minecraft.network.ThreadQuickExitException;
 
 import javax.swing.*;
@@ -69,7 +68,7 @@ public class Console {
                     historyOffset = 0;
 
                     try {
-                        toPrint = ModuleManager.getInstance().eval(command);
+                        toPrint = JSLoader.INSTANCE.getScriptEngine().eval(command);
                     } catch (Exception error) {
                         if (!(error instanceof ThreadQuickExitException)) {
                             printStackTrace(error);

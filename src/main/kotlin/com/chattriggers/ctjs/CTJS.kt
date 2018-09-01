@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
-import com.chattriggers.ctjs.loader.ModuleManager
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.objects.Sound
@@ -72,11 +72,8 @@ object CTJS {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        ModuleManager()
-
+        ModuleManager.load(true)
         registerHooks()
-
-        ModuleManager.getInstance().load(Config.getInstance().updateModulesOnBoot.value)
     }
 
     @Mod.EventHandler

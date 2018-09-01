@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.objects.display
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 
-class Display {
+abstract class Display {
     private var lines = mutableListOf<DisplayLine>()
 
     private var renderX = 0f
@@ -87,11 +87,11 @@ class Display {
 
 
     fun setLine(index: Int, line: Any): Display {
-        while (this.lines.size -1 < index) this.lines.add(DisplayLine(""))
+        while (this.lines.size -1 < index) this.lines.add(createDisplayLine(""))
         this.lines[index] = when (line) {
-            is String -> DisplayLine(line)
+            is String -> createDisplayLine(line)
             is DisplayLine -> line
-            else -> DisplayLine("")
+            else -> createDisplayLine("")
         }
         return this
     }
@@ -106,9 +106,9 @@ class Display {
     @JvmOverloads
     fun addLine(index: Int = -1, line: Any) {
         val toAdd = when (line) {
-            is String -> DisplayLine(line)
+            is String -> createDisplayLine(line)
             is DisplayLine -> line
-            else -> DisplayLine("")
+            else -> createDisplayLine("")
         }
 
         if (index == -1) this.lines.add(toAdd)
@@ -118,9 +118,9 @@ class Display {
     fun addLines(vararg lines: Any): Display {
         lines.forEach {
             this.lines.add(when (it) {
-                is String -> DisplayLine(it)
+                is String -> createDisplayLine(it)
                 is DisplayLine -> it
-                else -> DisplayLine("")
+                else -> createDisplayLine("")
             })
         }
         return this
@@ -194,4 +194,6 @@ class Display {
             else -> return
         }
     }
+
+    internal abstract fun createDisplayLine(text: String): DisplayLine
 }

@@ -1,9 +1,10 @@
 package com.chattriggers.ctjs.triggers
 
+import com.chattriggers.ctjs.engine.ILoader
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 
-class OnRenderTrigger(method: Any, triggerType: TriggerType) : OnTrigger(method, triggerType) {
+class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : OnTrigger(method, triggerType, loader) {
     private var triggerIfCanceled: Boolean = true
 
     /**

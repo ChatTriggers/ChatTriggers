@@ -1,37 +1,43 @@
 package com.chattriggers.ctjs.triggers;
 
-import com.chattriggers.ctjs.loader.ModuleManager;
-import com.chattriggers.ctjs.modules.Module;
-import com.chattriggers.ctjs.utils.console.Console;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import com.chattriggers.ctjs.engine.ILoader;
+import com.chattriggers.ctjs.engine.module.Module;
 import jdk.nashorn.internal.objects.Global;
-import lombok.Getter;
-import lombok.Setter;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-
-import javax.script.ScriptException;
 
 public abstract class OnTrigger {
-    @Getter
     protected Object method;
-    @Getter
     protected Priority priority;
-    @Getter
     protected TriggerType type;
-    @Getter @Setter
     protected Module owningModule;
+    protected ILoader loader;
+
+    public Module getOwningModule() {
+        return owningModule;
+    }
+
+    public void setOwningModule(Module owningModule) {
+        this.owningModule = owningModule;
+    }
+
+    public Object getMethod() {
+        return method;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public TriggerType getType() {
+        return type;
+    }
 
     private Global global;
 
-    protected OnTrigger(Object method, TriggerType type) {
+    protected OnTrigger(Object method, TriggerType type, ILoader loader) {
         this.method = method;
         this.priority = Priority.NORMAL;
         this.type = type;
-
-        if (TriggerRegister.currentModule != null) {
-            setOwningModule(TriggerRegister.currentModule);
-        }
+        this.loader = loader;
 
         this.register();
     }
@@ -53,7 +59,7 @@ public abstract class OnTrigger {
      * @return the trigger for method chaining
      */
     public OnTrigger register() {
-        this.type.addTrigger(this);
+        this.loader.addTrigger(this);
         return this;
     }
 
@@ -62,7 +68,7 @@ public abstract class OnTrigger {
      * @return the trigger for method chaining
      */
     public OnTrigger unregister() {
-        this.type.removeTrigger(this);
+        this.loader.removeTrigger(this);
         return this;
     }
 
@@ -70,53 +76,11 @@ public abstract class OnTrigger {
      * @return boolean of if trigger is registered
      */
     public boolean isRegistered() {
-        return this.type.containsTrigger(this);
+        return true;
     }
 
     protected void callMethod(Object... args) {
-        try {
-            if (this.method instanceof String) {
-                callNamedMethod(args);
-                return;
-            }
-
-            callActualMethod(args);
-        } catch (Exception e) {
-            Console.getInstance().out.println("Error on " + this.type + " trigger in module " + this.owningModule);
-            Console.getInstance().printStackTrace(e, this);
-            this.type.removeTrigger(this);
-        }
-    }
-
-    protected void callActualMethod(Object... args) {
-
-        ScriptObjectMirror som;
-
-        if (this.method instanceof ScriptObjectMirror) {
-            som = ((ScriptObjectMirror) this.method);
-        } else {
-
-            if (global == null) {
-                global = ReflectionHelper.getPrivateValue(
-                        NashornScriptEngine.class,
-                        ((NashornScriptEngine) ModuleManager.getInstance().getScriptLoaders().get(0).getScriptEngine()),
-                        "global"
-                );
-            }
-
-            Object obj = ScriptObjectMirror.wrap(this.method, global);
-
-            som = ((ScriptObjectMirror) obj);
-        }
-
-        som.call(som, args);
-    }
-
-    protected void callNamedMethod(Object... args) throws ScriptException, NoSuchMethodException {
-        ModuleManager.getInstance().invokeFunction(
-                ((String) method),
-                args
-        );
+        this.loader.trigger(this, this.method, args);
     }
 
     public abstract void trigger(Object... args);

@@ -2,9 +2,10 @@ package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.commands.CommandHandler
+import com.chattriggers.ctjs.engine.ILoader
 import net.minecraftforge.client.ClientCommandHandler
 
-class OnCommandTrigger(method: Any) : OnTrigger(method, TriggerType.COMMAND) {
+class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.COMMAND, loader) {
     private var commandName: String? = null
     private var command: Command? = null
 
@@ -12,7 +13,6 @@ class OnCommandTrigger(method: Any) : OnTrigger(method, TriggerType.COMMAND) {
         if (args::javaClass == Array<String>::javaClass) throw IllegalArgumentException("Arguments must be string array")
 
         callMethod(*args)
-
     }
 
     /**

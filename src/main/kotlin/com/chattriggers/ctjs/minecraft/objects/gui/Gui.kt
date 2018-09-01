@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
+import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
@@ -9,7 +10,7 @@ import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.input.Mouse
 
-class Gui : GuiScreen() {
+abstract class Gui : GuiScreen() {
     private var onDraw: OnRegularTrigger? = null
     private var onClick: OnRegularTrigger? = null
     private var onKeyTyped: OnRegularTrigger? = null
@@ -20,7 +21,7 @@ class Gui : GuiScreen() {
     private var mouseX = 0
     private var mouseY = 0
 
-    var doesPauseGame = true
+    var doesPauseGame = false
 
     fun open() = GuiHandler.openGui(this)
     fun close() {
@@ -44,7 +45,10 @@ class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerDraw(method: Any) = OnRegularTrigger(method, TriggerType.OTHER)
+    fun registerDraw(method: Any): OnRegularTrigger? {
+        onDraw = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        return onDraw
+    }
 
     /**
      * Registers a method to be ran while gui is open.<br></br>
@@ -57,7 +61,10 @@ class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerClicked(method: Any) = OnRegularTrigger(method, TriggerType.OTHER)
+    fun registerClicked(method: Any): OnRegularTrigger? {
+        onClick = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        return onClick
+    }
 
     /**
      * Registers a method to be ran while gui is open.<br></br>
@@ -69,7 +76,10 @@ class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerKeyTyped(method: Any) = OnRegularTrigger(method, TriggerType.OTHER)
+    fun registerKeyTyped(method: Any): OnRegularTrigger? {
+        onKeyTyped = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        return onKeyTyped
+    }
 
     /**
      * Registers a method to be ran while gui is open.<br></br>
@@ -83,7 +93,10 @@ class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerMouseDragged(method: Any) = OnRegularTrigger(method, TriggerType.OTHER)
+    fun registerMouseDragged(method: Any): OnRegularTrigger? {
+        onMouseDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        return onMouseDragged
+    }
 
     /**
      * Registers a method to be ran while gui is open.<br></br>
@@ -96,7 +109,10 @@ class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerMouseReleased(method: Any) = OnRegularTrigger(method, TriggerType.OTHER)
+    fun registerMouseReleased(method: Any): OnRegularTrigger? {
+        onMouseReleased = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        return onMouseReleased
+    }
 
     /**
      * Registers a method to be ran while gui is open.<br></br>
@@ -107,7 +123,10 @@ class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerActionPerformed(method: Any) = OnRegularTrigger(method, TriggerType.OTHER)
+    fun registerActionPerformed(method: Any): OnRegularTrigger? {
+        onActionPerformed = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        return onActionPerformed
+    }
 
     /**
      * Internal method to run trigger. Not meant for public use
@@ -217,4 +236,6 @@ class Gui : GuiScreen() {
             it.id == buttonId
         }?.visible = visible
     }
+
+    internal abstract fun getLoader(): ILoader
 }
