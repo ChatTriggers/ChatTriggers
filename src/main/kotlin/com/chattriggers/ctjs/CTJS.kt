@@ -12,7 +12,7 @@ import com.chattriggers.ctjs.utils.capes.LayerCape
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.config.GuiConfig
 import com.chattriggers.ctjs.utils.console.Console
-import com.chattriggers.ctjs.utils.kotlin.AutomaticEventSubscriber
+import com.chattriggers.ctjs.utils.kotlin.AnnotationHandler
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.sentry.Sentry
@@ -53,7 +53,7 @@ object CTJS {
         Console()
 
         Loader.instance().modList.filter { it.modId == Reference.MODID }.forEach {
-            AutomaticEventSubscriber.subscribeAutomatic(it, event.asmData)
+            AnnotationHandler.subscribeAutomatic(it, event.asmData)
         }
 
         UriScheme.installUriScheme()
