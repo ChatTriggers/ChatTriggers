@@ -20,9 +20,8 @@ abstract class OnTrigger protected constructor(var method: Any, var type: Trigge
      * @param priority the priority of the trigger
      * @return the trigger for method chaining
      */
-    fun setPriority(priority: Priority): OnTrigger {
+    fun setPriority(priority: Priority) = apply {
         this.priority = priority
-        return this
     }
 
     /**
@@ -30,18 +29,16 @@ abstract class OnTrigger protected constructor(var method: Any, var type: Trigge
      * This is done automatically with TriggerRegister.
      * @return the trigger for method chaining
      */
-    fun register(): OnTrigger {
+    fun register() = apply {
         this.loader.addTrigger(this)
-        return this
     }
 
     /**
      * Unregisters a trigger.
      * @return the trigger for method chaining
      */
-    fun unregister(): OnTrigger {
+    fun unregister() = apply {
         this.loader.removeTrigger(this)
-        return this
     }
 
     protected fun callMethod(vararg args: Any) {
@@ -56,7 +53,6 @@ abstract class OnTrigger protected constructor(var method: Any, var type: Trigge
 
     enum class Priority {
         //LOWEST IS RAN LAST
-        LOWEST,
-        LOW, NORMAL, HIGH, HIGHEST
+        LOWEST, LOW, NORMAL, HIGH, HIGHEST
     }
 }
