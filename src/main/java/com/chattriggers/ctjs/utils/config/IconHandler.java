@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.utils.config;
 
+import com.chattriggers.ctjs.engine.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
-import com.chattriggers.ctjs.utils.console.Console;
 
 import java.awt.*;
 import java.net.URL;
@@ -82,7 +82,7 @@ class IconHandler {
                     Desktop.getDesktop().browse(new URL(this.url).toURI());
                     World.playSound("gui.button.press", 100, 1);
                 } catch (Exception exception) {
-                    Console.getInstance().printStackTrace(exception);
+                    ModuleManager.INSTANCE.getGeneralConsole().printStackTrace(exception);
                 }
             }
         }

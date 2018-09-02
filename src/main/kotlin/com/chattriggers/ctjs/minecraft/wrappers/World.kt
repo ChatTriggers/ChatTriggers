@@ -6,13 +6,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
-import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.renderer.RenderGlobal
 import net.minecraft.util.EnumParticleTypes
-import net.minecraftforge.fml.relauncher.ReflectionHelper
+import kotlin.reflect.full.declaredMemberFunctions
 
 //#if MC>=11202
 //$$ import net.minecraft.util.ResourceLocation
@@ -294,39 +293,42 @@ object World {
         fun spawnParticle(particle: String, x: Double, y: Double, z: Double, xSpeed: Double, ySpeed: Double, zSpeed: Double): Particle? {
             val particleType = EnumParticleTypes.valueOf(particle)
 
-            try {
-                val method = ReflectionHelper.findMethod(
-                        RenderGlobal::class.java,
-                        //#if MC<=10809
-                        Client.getMinecraft().renderGlobal,
-                        arrayOf("spawnEntityFX", "func_174974_b"),
-                        //#else
-                        //$$ "spawnEntityFX",
-                        //$$ "func_174974_b",
-                        //#endif
-                        Int::class.javaPrimitiveType,
-                        Boolean::class.javaPrimitiveType,
-                        Double::class.javaPrimitiveType,
-                        Double::class.javaPrimitiveType,
-                        Double::class.javaPrimitiveType,
-                        Double::class.javaPrimitiveType,
-                        Double::class.javaPrimitiveType,
-                        Double::class.javaPrimitiveType,
-                        IntArray::class.java
-                )
+            val fx = RenderGlobal::class.declaredMemberFunctions.firstOrNull {
+                it.name == "spawnEntityFX" || it.name == "func_174974_b"
+            }?.call(
+                    Client.getMinecraft().renderGlobal,
+                    particleType.particleID,
+                    particleType.shouldIgnoreRange,
+                    x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
+            ) as MCParticle
 
-                val fx = method.invoke(Client.getMinecraft().renderGlobal,
-                        particleType.particleID,
-                        particleType.shouldIgnoreRange,
-                        x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
-                ) as MCParticle
+            /*val method = ReflectionHelper.findMethod(
+                    RenderGlobal::class.java,
+                    //#if MC<=10809
+                    Client.getMinecraft().renderGlobal,
+                    arrayOf("spawnEntityFX", "func_174974_b"),
+                    //#else
+                    //$$ "spawnEntityFX",
+                    //$$ "func_174974_b",
+                    //#endif
+                    Int::class.javaPrimitiveType,
+                    Boolean::class.javaPrimitiveType,
+                    Double::class.javaPrimitiveType,
+                    Double::class.javaPrimitiveType,
+                    Double::class.javaPrimitiveType,
+                    Double::class.javaPrimitiveType,
+                    Double::class.javaPrimitiveType,
+                    Double::class.javaPrimitiveType,
+                    IntArray::class.java
+            )
 
-                return Particle(fx)
-            } catch (e: Exception) {
-                Console.getInstance().printStackTrace(e)
-            }
+            val fx = method.invoke(Client.getMinecraft().renderGlobal,
+                    particleType.particleID,
+                    particleType.shouldIgnoreRange,
+                    x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
+            ) as MCParticle*/
 
-            return null
+            return Particle(fx)
         }
 
         @JvmStatic

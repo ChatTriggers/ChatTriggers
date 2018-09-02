@@ -5,6 +5,7 @@ import jdk.nashorn.internal.objects.Global
 
 abstract class OnTrigger protected constructor(var method: Any, var type: TriggerType, protected var loader: ILoader) {
     var priority: Priority
+        private set
     private var global: Global?
 
     init {
@@ -20,8 +21,9 @@ abstract class OnTrigger protected constructor(var method: Any, var type: Trigge
      * @param priority the priority of the trigger
      * @return the trigger for method chaining
      */
-    fun setPriority(priority: Priority) = apply {
+    fun setPriority(priority: Priority): OnTrigger {
         this.priority = priority
+        return this
     }
 
     /**

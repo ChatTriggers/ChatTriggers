@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.console.Console
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -38,7 +37,7 @@ abstract class XMLHttpRequest {
             this.conn = url.openConnection() as HttpURLConnection
             this.conn?.requestMethod = method
         } catch (e: Exception) {
-            Console.getInstance().printStackTrace(e)
+            getLoader().getConsole().printStackTrace(e)
         }
     }
 
@@ -72,7 +71,7 @@ abstract class XMLHttpRequest {
                 sendPost(*parameters)
             }
         } catch (e: Exception) {
-            Console.getInstance().printStackTrace(e)
+            getLoader().getConsole().printStackTrace(e)
         }
     }
 
@@ -89,7 +88,7 @@ abstract class XMLHttpRequest {
                 sendGet()
             }
         } catch (e: Exception) {
-            Console.getInstance().printStackTrace(e)
+            getLoader().getConsole().printStackTrace(e)
         }
     }
 
@@ -131,7 +130,7 @@ abstract class XMLHttpRequest {
 
             sendGet()
         } catch (e: Exception) {
-            Console.getInstance().printStackTrace(e)
+            getLoader().getConsole().printStackTrace(e)
         }
     }
 
@@ -156,7 +155,7 @@ abstract class XMLHttpRequest {
 
             this.methodCallback.trigger(this)
         } catch (e: Exception) {
-            Console.getInstance().printStackTrace(e)
+            getLoader().getConsole().printStackTrace(e)
         }
 
     }

@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.utils.console.Console
 
 object ModuleManager {
     val loaders = mutableListOf<ILoader>()
+    val generalConsole = Console(null)
     var cachedModules = listOf<Module>()
 
     fun importModule(moduleName: String) {
@@ -39,13 +40,9 @@ object ModuleManager {
         }
     }
 
-    fun getConsole(language: String): Console? {
-        loaders.firstOrNull {
+    fun getConsole(language: String): Console {
+        return loaders.firstOrNull {
             it.getLanguageName() == language
-        }?.let {
-            //TODO: RETURN THIS LANGUAGE'S CONSOLE
-        }
-
-        return null
+        }?.getConsole() ?: generalConsole
     }
 }

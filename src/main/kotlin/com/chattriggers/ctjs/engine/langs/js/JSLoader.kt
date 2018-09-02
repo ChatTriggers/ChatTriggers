@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.engine.langs.js
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.ILoader.Companion.modulesFolder
-import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -24,8 +23,9 @@ import kotlin.reflect.jvm.isAccessible
 object JSLoader : ILoader {
     private val triggers = mutableListOf<OnTrigger>()
     private var global: Global? = null
-    var scriptEngine: NashornScriptEngine
     private val cachedModules = mutableListOf<Module>()
+    private var scriptEngine: NashornScriptEngine
+    private val console = Console(this)
 
     init {
         scriptEngine = instanceScriptEngine(listOf())
@@ -50,7 +50,11 @@ object JSLoader : ILoader {
                 true
         )
 
-        scriptEngine.eval(script)
+        try {
+            scriptEngine.eval(script)
+        } catch (e: Exception) {
+            console.printStackTrace(e)
+        }
 
         cachedModules.clear()
 
@@ -60,7 +64,11 @@ object JSLoader : ILoader {
             FileUtils.readFileToString(it)
         }
 
-        scriptEngine.eval(combinedScript)
+        try {
+            scriptEngine.eval(combinedScript)
+        } catch (e: Exception) {
+            console.printStackTrace(e)
+        }
     }
 
     override fun load(module: Module) {
@@ -75,8 +83,8 @@ object JSLoader : ILoader {
         try {
             scriptEngine.eval(script)
         } catch (e: Exception) {
-            Console.getInstance().out.println("Error loading module ${module.name}")
-            Console.getInstance().printStackTrace(e)
+            console.out.println("Error loading module ${module.name}")
+            console.printStackTrace(e)
         }
     }
 
@@ -116,9 +124,7 @@ object JSLoader : ILoader {
                 callActualMethod(method, *args)
             }
         } catch (e: Exception) {
-            ModuleManager.getConsole("js")
-            //TODO("PRINT ERROR")
-            Console.getInstance().printStackTrace(e)
+            console.printStackTrace(e)
             removeTrigger(trigger)
         }
     }
@@ -129,6 +135,10 @@ object JSLoader : ILoader {
 
     override fun getModules(): List<Module> {
         return cachedModules
+    }
+
+    override fun getConsole(): Console {
+        return console
     }
 
     private fun callActualMethod(method: Any, vararg args: Any) {

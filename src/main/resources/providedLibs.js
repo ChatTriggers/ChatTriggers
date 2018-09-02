@@ -54,7 +54,7 @@ var DragAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inv
 var KeyAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.KeyAction");
 
 // Misc
-var Console = Java.type("com.chattriggers.ctjs.utils.console.Console").getInstance();
+var Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
 var Config = Java.type("com.chattriggers.ctjs.utils.config.Config").getInstance();
 var ChatTriggers = Java.type("com.chattriggers.ctjs.Reference").INSTANCE;
 

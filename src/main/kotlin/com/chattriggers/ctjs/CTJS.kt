@@ -11,7 +11,6 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.capes.LayerCape
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.config.GuiConfig
-import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.kotlin.AnnotationHandler
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -49,8 +48,6 @@ object CTJS {
         assetsDir = pictures
 
         setupConfig()
-
-        Console()
 
         Loader.instance().modList.filter { it.modId == Reference.MODID }.forEach {
             AnnotationHandler.subscribeAutomatic(it, event.asmData)

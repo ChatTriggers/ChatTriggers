@@ -8,7 +8,6 @@ import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
-import com.chattriggers.ctjs.utils.console.Console
 import net.minecraft.launchwrapper.Launch
 import net.minecraftforge.client.ClientCommandHandler
 
@@ -45,8 +44,11 @@ object Reference {
             (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
             ModuleManager.unload()
 
-            if (Config.getInstance().clearConsoleOnLoad.value)
-                Console.getInstance().clearConsole()
+            if (Config.getInstance().clearConsoleOnLoad.value) {
+                ModuleManager.loaders.forEach {
+                    it.getConsole().clearConsole()
+                }
+            }
 
             CTJS.setupConfig()
 

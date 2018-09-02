@@ -8,7 +8,6 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.config.GuiConfig
-import com.chattriggers.ctjs.utils.console.Console
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -63,9 +62,9 @@ object CTCommand : CommandBase() {
             "import" ->
                 if (args.size == 1) ChatLib.chat("&c/ct import [module name]")
                 else ModuleManager.importModule(args[1])
-            "console" -> Console.getInstance().showConsole(true)
-//            "modules", "module", "imports" ->
-//                GuiHandler.openGui(ModulesGui(ModuleManager.getInstance().modules))
+            "console" ->
+                if (args.size == 1) ModuleManager.generalConsole.showConsole()
+                else ModuleManager.getConsole(args[1]).showConsole()
             "config", "settings", "setting" ->
                 GuiHandler.openGui(GuiConfig.getInstance())
             "sim", "simulate" ->
@@ -93,7 +92,7 @@ object CTCommand : CommandBase() {
         try {
             Desktop.getDesktop().open(File("./config/ChatTriggers"))
         } catch (exception: IOException) {
-            Console.getInstance().printStackTrace(exception)
+            ModuleManager.generalConsole.printStackTrace(exception)
             ChatLib.chat("&cCould not open file location")
         }
     }

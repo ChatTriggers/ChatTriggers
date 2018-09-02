@@ -6,7 +6,6 @@ import com.chattriggers.ctjs.minecraft.libs.MathLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
-import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.gui.FontRenderer
@@ -17,7 +16,6 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
 import java.io.File
-import java.io.IOException
 import java.net.URL
 import java.util.*
 import javax.imageio.ImageIO
@@ -148,33 +146,19 @@ object Renderer {
     private fun loadImage(name: String, url: String): Image? {
         val resourceFile = File(CTJS.assetsDir, name)
 
-        try {
-            if (resourceFile.exists()) {
-                return Image(ImageIO.read(resourceFile))
-            }
-
-            val image = ImageIO.read(URL(url))
-            ImageIO.write(image, "png", resourceFile)
-            return Image(image)
-        } catch (e: Exception) {
-            Console.getInstance().out.println("Error loading image $name from url $url")
-            Console.getInstance().printStackTrace(e)
+        if (resourceFile.exists()) {
+            return Image(ImageIO.read(resourceFile))
         }
 
-        return null
+        val image = ImageIO.read(URL(url))
+        ImageIO.write(image, "png", resourceFile)
+        return Image(image)
     }
 
     private fun loadImage(path: String): Image? {
         val file = File(path)
 
-        try {
-            return Image(ImageIO.read(file))
-        } catch (e: IOException) {
-            Console.getInstance().out.println("Error loading image with path $path")
-            Console.getInstance().printStackTrace(e)
-        }
-
-        return null
+        return Image(ImageIO.read(file))
     }
 
     @JvmStatic

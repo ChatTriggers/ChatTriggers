@@ -10,7 +10,6 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 import java.util.*
 import java.util.regex.Pattern
 
-//TODO: SIMPLY MAKE THIS ACCEPT ANY ILOADER
 class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger(method, type, loader) {
     private var chatCriteria: String = ""
     private var criteriaPattern: Pattern? = null

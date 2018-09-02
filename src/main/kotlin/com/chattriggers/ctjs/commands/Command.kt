@@ -1,8 +1,6 @@
 package com.chattriggers.ctjs.commands
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.triggers.OnTrigger
-import com.chattriggers.ctjs.utils.console.Console
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -38,13 +36,7 @@ class Command(trigger: OnTrigger, private val name: String, private val usage: S
     //#endif
 
     private fun trigger(args: Array<String>) {
-        try {
-            for (trigger in this.triggers)
-                trigger.trigger(*args)
-        } catch (exception: Exception) {
-            ChatLib.chat("&cSomething went wrong while running that command")
-            ChatLib.chat("&cCheck the ct console for more information")
-            Console.getInstance().printStackTrace(exception)
-        }
+        for (trigger in this.triggers)
+            trigger.trigger(*args)
     }
 }

@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.utils.config.Config
-import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.*
 import java.net.URL
@@ -30,11 +29,7 @@ object FileLib {
      */
     @JvmStatic
     fun write(fileLocation: String, toWrite: String) {
-        try {
-            FileUtils.write(File(fileLocation), toWrite, Charset.defaultCharset())
-        } catch (exception: IOException) {
-            Console.getInstance().printStackTrace(exception)
-        }
+        FileUtils.write(File(fileLocation), toWrite, Charset.defaultCharset())
     }
 
     /**
@@ -71,20 +66,7 @@ object FileLib {
      */
     @JvmStatic
     fun read(file: File): String {
-        try {
-            val br = BufferedReader(InputStreamReader(FileInputStream(file), "UTF8"))
-
-            if (!file.exists() || br.readLine() == null) {
-                br.close()
-                return ""
-            }
-
-            br.close()
-            return FileUtils.readFileToString(file, Charset.defaultCharset())
-        } catch (exception: IOException) {
-            Console.getInstance().printStackTrace(exception)
-            return ""
-        }
+        return FileUtils.readFileToString(file, Charset.defaultCharset())
     }
 
     /**
@@ -96,24 +78,7 @@ object FileLib {
      */
     @JvmStatic @JvmOverloads
     fun getUrlContent(theUrl: String, userAgent: String? = null): String {
-        val content = StringBuilder()
-
-        try {
-            val urlConnection = URL(theUrl).openConnection()
-            if (userAgent != null) urlConnection.setRequestProperty("User-Agent", userAgent)
-
-            val bufferedReader = BufferedReader(InputStreamReader(urlConnection.getInputStream()))
-
-            var line = bufferedReader.readLine()
-            while (line != null) {
-                content.append(line).append("\n")
-                line = bufferedReader.readLine()
-            }
-        } catch (exception: Exception) {
-            Console.getInstance().printStackTrace(exception)
-        }
-
-        return content.toString()
+        return URL(theUrl).readText()
     }
 
     @JvmStatic

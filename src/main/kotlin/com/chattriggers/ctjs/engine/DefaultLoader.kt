@@ -7,7 +7,6 @@ import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
-import com.chattriggers.ctjs.utils.console.Console
 import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -115,14 +114,14 @@ object DefaultLoader {
                 metadata = Gson().fromJson<ModuleMetadata>(FileLib.read(metadataFile), ModuleMetadata::class.java)
                 metadata.fileName = dir.name
             } catch (exception: Exception) {
-                Console.getInstance().printStackTrace(exception)
+                ModuleManager.generalConsole.printStackTrace(exception)
             }
         }
 
         try {
             try {
                 if (!metadata.isDefault && updateCheck) {
-                    Console.getInstance().out.println("checking for update in " + metadata.fileName)
+                    ModuleManager.generalConsole.out.println("checking for update in " + metadata.fileName)
 
                     val newMetadataFile = File(dir, "updateMeta.json")
 
@@ -146,15 +145,15 @@ object DefaultLoader {
                     newMetadataFile.delete()
                 }
             } catch (e: Exception) {
-                Console.getInstance().out.println("Can't find page for ${dir.name}")
+                ModuleManager.generalConsole.out.println("Can't find page for ${dir.name}")
             }
 
             modules.addAll(
                     getRequiredModules(metadata, updateCheck)
             )
         } catch (exception: Exception) {
-            Console.getInstance().out.println("Error loading module from $dir")
-            Console.getInstance().printStackTrace(exception)
+            ModuleManager.generalConsole.out.println("Error loading module from $dir")
+            ModuleManager.generalConsole.printStackTrace(exception)
         }
 
         modules.add(Module(
@@ -187,7 +186,7 @@ object DefaultLoader {
 
             downloadZip.delete()
         } catch (exception: IOException) {
-            Console.getInstance().printStackTrace(exception)
+            ModuleManager.generalConsole.printStackTrace(exception)
             return false
         }
 

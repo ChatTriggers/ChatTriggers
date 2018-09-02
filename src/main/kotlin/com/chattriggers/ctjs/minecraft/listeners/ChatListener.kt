@@ -1,10 +1,10 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
-import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -28,7 +28,7 @@ object ChatListener {
 
                 // print to console
                 if (Config.getInstance().printChatToConsole.value) {
-                    Console.getInstance().out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)))
+                    ModuleManager.generalConsole.out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)))
                 }
             }
             2 -> TriggerType.ACTION_BAR.triggerAll(ChatLib.getChatMessage(event, false), event)

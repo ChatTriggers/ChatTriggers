@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
+import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.File
 
@@ -18,6 +19,7 @@ interface ILoader {
     fun trigger(trigger: OnTrigger, method: Any, vararg args: Any)
     fun removeTrigger(trigger: OnTrigger)
     fun getModules(): List<Module>
+    fun getConsole(): Console
 
     /**
      * Save a resource to the OS's filesystem from inside the jar

@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.utils.config;
 
+import com.chattriggers.ctjs.engine.ModuleManager;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
-import com.chattriggers.ctjs.utils.console.Console;
 import net.minecraft.client.gui.GuiButton;
 
 import javax.annotation.Nullable;
@@ -38,7 +38,7 @@ public class ConfigStringSelector extends ConfigOption {
             if (this.values.length > 0)
                 return this.values[0];
             else
-                Console.getInstance().printStackTrace(exception);
+                ModuleManager.INSTANCE.getGeneralConsole().printStackTrace(exception);
         }
 
         return "";
