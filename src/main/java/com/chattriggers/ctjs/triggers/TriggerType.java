@@ -1,39 +1,41 @@
-package com.chattriggers.ctjs.triggers;
-
-import com.chattriggers.ctjs.engine.ModuleManager;
-
-public enum TriggerType {
-    // client
-    CHAT, ACTION_BAR,
-    TICK, STEP,
-    GAME_UNLOAD, GAME_LOAD,
-    CLICKED, DRAGGED,
-    GUI_OPENED, SCREENSHOT_TAKEN,
-    PICKUP_ITEM, DROP_ITEM,
-    MESSAGE_SENT, TOOLTIP,
-
-    // rendering
-    RENDER_WORLD, BLOCK_HIGHLIGHT,
-    RENDER_OVERLAY, RENDER_PLAYER_LIST, RENDER_BOSS_HEALTH, RENDER_DEBUG,
-    RENDER_CROSSHAIR, RENDER_HOTBAR, RENDER_EXPERIENCE,
-    RENDER_HEALTH, RENDER_FOOD, RENDER_MOUNT_HEALTH, RENDER_AIR,
-
-    // world
-    PLAYER_JOIN, PLAYER_LEAVE,
-    SOUND_PLAY, NOTE_BLOCK_PLAY, NOTE_BLOCK_CHANGE,
-    WORLD_LOAD, WORLD_UNLOAD,
-
-    // misc
-    COMMAND, OTHER;
-
-    public void trigger(Object... args) {
-        ModuleManager.INSTANCE.trigger(this, args);
-    }
-
-    public void triggerAll(Object... args) {
-        trigger(args);
-    }
-
+//package com.chattriggers.ctjs.triggers;
+//
+//import com.chattriggers.ctjs.engine.ModuleManager;
+//
+//import java.util.Comparator;
+//
+//public enum TriggerType {
+//    // client
+//    CHAT, ACTION_BAR,
+//    TICK, STEP,
+//    GAME_UNLOAD, GAME_LOAD,
+//    CLICKED, DRAGGED,
+//    GUI_OPENED, SCREENSHOT_TAKEN,
+//    PICKUP_ITEM, DROP_ITEM,
+//    MESSAGE_SENT, TOOLTIP,
+//
+//    // rendering
+//    RENDER_WORLD, BLOCK_HIGHLIGHT,
+//    RENDER_OVERLAY, RENDER_PLAYER_LIST, RENDER_BOSS_HEALTH, RENDER_DEBUG,
+//    RENDER_CROSSHAIR, RENDER_HOTBAR, RENDER_EXPERIENCE,
+//    RENDER_HEALTH, RENDER_FOOD, RENDER_MOUNT_HEALTH, RENDER_AIR,
+//
+//    // world
+//    PLAYER_JOIN, PLAYER_LEAVE,
+//    SOUND_PLAY, NOTE_BLOCK_PLAY, NOTE_BLOCK_CHANGE,
+//    WORLD_LOAD, WORLD_UNLOAD,
+//
+//    // misc
+//    COMMAND, OTHER;
+//
+//    public void trigger(Object... args) {
+//        ModuleManager.INSTANCE.trigger(this, args);
+//    }
+//
+//    public void triggerAll(Object... args) {
+//        trigger(args);
+//    }
+//
 //    private Comparator<OnTrigger> triggerComparator = (o1, o2)
 //            -> Integer.compare(o2.priority.ordinal(), o1.priority.ordinal());
 //
@@ -99,4 +101,4 @@ public enum TriggerType {
 //            triggerType.clearTriggers();
 //        }
 //    }
-}
+//}

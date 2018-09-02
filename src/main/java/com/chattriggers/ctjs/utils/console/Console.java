@@ -142,20 +142,6 @@ public class Console {
             Console.getInstance().showConsole(true);
         }
 
-        if (trigger.getOwningModule() != null) {
-            Sentry.getContext().addTag(
-                "moduleName",
-                trigger.getOwningModule().getName()
-            );
-
-            if (trigger.getOwningModule().getMetadata() != null) {
-                Sentry.getContext().addExtra(
-                    "moduleMetadata",
-                    trigger.getOwningModule().getMetadata().toString()
-                );
-            }
-        }
-
         printStackTrace(error);
     }
 
