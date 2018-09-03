@@ -10,10 +10,8 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.capes.LayerCape
 import com.chattriggers.ctjs.utils.config.Config
-import com.chattriggers.ctjs.utils.config.GuiConfig
 import com.chattriggers.ctjs.utils.kotlin.AnnotationHandler
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import io.sentry.Sentry
 import io.sentry.event.UserBuilder
 import net.minecraftforge.client.ClientCommandHandler
@@ -24,9 +22,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileReader
-import java.io.IOException
 
 @Mod(modid = Reference.MODID,
     name = Reference.MODNAME,
@@ -82,36 +78,31 @@ object CTJS {
     }
 
     fun setupConfig() {
-        GuiConfig()
-        Config()
-        if (loadConfig()) Config.getInstance().init()
+        loadConfig()
     }
 
     fun saveConfig() {
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val path = File(this.configLocation, "ChatTriggers.json").absolutePath
-        FileLib.write(path, gson.toJson(Config.getInstance()))
+        val file = File(this.configLocation, "ChatTriggers.json")
+        Config.save(file)
     }
 
     private fun loadConfig(): Boolean {
         try {
-            Config.setInstance(
-                    Gson().fromJson(
-                            FileReader(
-                                    File(this.configLocation, "ChatTriggers.json")
-                            ),
-                            Config.getInstance().javaClass
+            val parser = JsonParser()
+            val obj = parser.parse(
+                    FileReader(
+                            File(this.configLocation, "ChatTriggers.json")
                     )
-            )
+            ).asJsonObject
+
+            Config.load(obj)
+
             return true
-        } catch (exception: FileNotFoundException) {
-            try {
-                File(this.configLocation, "ChatTriggers.json").createNewFile()
-                Config.getInstance().init()
-                saveConfig()
-            } catch (ioexception: IOException) {
-                ioexception.printStackTrace()
-            }
+        } catch (exception: Exception) {
+            val place = File(this.configLocation, "ChatTriggers.json")
+            place.delete()
+            place.createNewFile()
+            saveConfig()
         }
 
         return false

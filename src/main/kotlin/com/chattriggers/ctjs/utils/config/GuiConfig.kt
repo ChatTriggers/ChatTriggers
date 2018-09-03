@@ -4,15 +4,31 @@ import com.chattriggers.ctjs.CTJS
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import java.io.IOException
-import java.util.ArrayList
+import java.util.*
+import kotlin.reflect.full.declaredMemberProperties
 
-object GuiConfig : GuiScreen() {
-
+class GuiConfig : GuiScreen() {
     private val configOptions: ArrayList<ConfigOption> = ArrayList()
     private var isOpen = false
     private val iconHandler = IconHandler
 
-    fun addConfigOption(configOption: ConfigOption) = this.configOptions.add(configOption)
+    init {
+        Config::class.declaredMemberProperties.forEach { prop ->
+            prop.annotations.firstOrNull { ann ->
+                ann.annotationClass == ConfigOpt::class
+            }?.let { ann ->
+                val opt = ann as ConfigOpt
+                configOptions.add(
+                        opt.type.constructors.first().call(
+                                prop,
+                                opt.name,
+                                opt.x,
+                                opt.y
+                        ) as ConfigOption
+                )
+            }
+        }
+    }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         GlStateManager.pushMatrix()
@@ -22,8 +38,6 @@ object GuiConfig : GuiScreen() {
             for (configOption in this.configOptions)
                 configOption.init()
         }
-
-        Config.updateHidden()
 
         drawBackground(0)
 

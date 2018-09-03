@@ -5,39 +5,47 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import net.minecraft.client.gui.GuiButton
 import java.awt.Color
+import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty
 
-class ConfigColor internal constructor(previous: ConfigColor? = null, name: String = "", private val defaultValue: Color = Color(0), x: Int = 0, y: Int = 0) : ConfigOption(ConfigOption.Type.COLOR) {
-    var value: Color = previous?.value ?: this.defaultValue
-    @Transient
-    private var redButton = GuiButton(0,
-            MathLib.map(this.value.red.toFloat(), 0f, 255f, (Renderer.screen.getWidth() / 2 - 100 + this.x).toFloat(), (Renderer.screen.getWidth() / 2 + 52 + this.x).toFloat()).toInt(), this.y + 15,
-            5, 10, "")
+open class ConfigColor
+(private val prop: KMutableProperty<Color>, name: String = "", x: Int = 0, y: Int = 0)
+    : ConfigOption() {
 
-    @Transient
-    private var greenButton = GuiButton(0,
-            MathLib.map(this.value.green.toFloat(), 0f, 255f, (Renderer.screen.getWidth() / 2 - 100 + this.x).toFloat(), (Renderer.screen.getWidth() / 2 + 52 + this.x).toFloat()).toInt(), this.y + 30,
-            5, 10, "")
-
-    @Transient
-    private var blueButton = GuiButton(0,
-            MathLib.map(this.value.blue.toFloat(), 0f, 255f, (Renderer.screen.getWidth() / 2 - 100 + this.x).toFloat(), (Renderer.screen.getWidth() / 2 + 52 + this.x).toFloat()).toInt(), this.y + 45,
-            5, 10, "")
-
-    @Transient private var redHeld: Boolean = false
-    @Transient private var blueHeld: Boolean = false
-    @Transient private var greenHeld: Boolean = false
+    private var value: Color by Delegates.observable(prop.getter.call(Config)) { _, _, new ->
+        prop.setter.call(Config, new)
+    }
+    private val initial = value
 
     init {
         this.name = name
 
-        if (previous == null)
-            this.value = this.defaultValue
-        else
-            this.value = previous.value
-
         this.x = x
         this.y = y
     }
+
+
+    private var redButton = GuiButton(
+            0,
+            MathLib.map(this.value.red.toFloat(), 0f, 255f,
+                    (Renderer.screen.getWidth() / 2 - 100 + this.x).toFloat(),
+                    (Renderer.screen.getWidth() / 2 + 52 + this.x).toFloat()).toInt(),
+            this.y + 15,
+            5, 10, "")
+
+
+    private var greenButton = GuiButton(0,
+            MathLib.map(this.value.green.toFloat(), 0f, 255f, (Renderer.screen.getWidth() / 2 - 100 + this.x).toFloat(), (Renderer.screen.getWidth() / 2 + 52 + this.x).toFloat()).toInt(), this.y + 30,
+            5, 10, "")
+
+
+    private var blueButton = GuiButton(0,
+            MathLib.map(this.value.blue.toFloat(), 0f, 255f, (Renderer.screen.getWidth() / 2 - 100 + this.x).toFloat(), (Renderer.screen.getWidth() / 2 + 52 + this.x).toFloat()).toInt(), this.y + 45,
+            5, 10, "")
+
+    private var redHeld: Boolean = false
+    private var blueHeld: Boolean = false
+    private var greenHeld: Boolean = false
 
     override fun draw(mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (this.hidden) return
@@ -194,7 +202,7 @@ class ConfigColor internal constructor(previous: ConfigColor? = null, name: Stri
         }
 
         if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
-            this.value = this.defaultValue
+            this.value = this.initial
             val middle = Renderer.screen.getWidth() / 2
             //#if MC<=10809
             this.redButton.xPosition = MathLib.map(this.value.red.toFloat(), 0f, 255f, (middle - 100 + this.x).toFloat(), (middle + 52 + this.x).toFloat()).toInt()
@@ -213,5 +221,15 @@ class ConfigColor internal constructor(previous: ConfigColor? = null, name: Stri
         this.redHeld = false
         this.blueHeld = false
         this.greenHeld = false
+    }
+}
+
+class SpecialConfigColor
+(prop: KMutableProperty<Color>, name: String = "", x: Int = 0, y: Int = 0)
+    : ConfigColor(prop, name, x, y) {
+    override fun draw(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        hidden = !Config.customTheme
+
+        super.draw(mouseX, mouseY, partialTicks)
     }
 }

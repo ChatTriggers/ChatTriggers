@@ -1,26 +1,31 @@
 package com.chattriggers.ctjs.utils.config
 
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.utils.console.Console
 import net.minecraft.client.gui.GuiButton
+import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty
 
-class ConfigStringSelector(previous: ConfigStringSelector? = null, name: String = "", private val defaultValue: Int = 0, private val values: Array<String> = emptyArray(), x: Int = 0, y: Int = 0) : ConfigOption(ConfigOption.Type.STRING_SELECTOR) {
-    var value: Int = 0
+open class ConfigStringSelector
+(private val prop: KMutableProperty<String>, name: String = "", private val values: Array<String> = emptyArray(), x: Int = 0, y: Int = 0)
+    : ConfigOption() {
 
-    @Transient
+
+    private var value: Int by Delegates.observable(
+            values.indexOf(prop.getter.call(Config))
+    ) { _, _, new ->
+        prop.setter.call(Config, values[new])
+    }
+    private val initial = value
+
+
     private var leftArrowButton: GuiButton? = null
     @Transient
     private var rightArrowButton: GuiButton? = null
 
     init {
-
         this.name = name
-
-        if (previous == null)
-            this.value = this.defaultValue
-        else
-            this.value = previous.value
 
         this.x = x
         this.y = y
@@ -28,12 +33,12 @@ class ConfigStringSelector(previous: ConfigStringSelector? = null, name: String 
 
     fun getValue(): String {
         try {
-            return this.values[this.value!!]
+            return this.values[this.value]
         } catch (exception: IndexOutOfBoundsException) {
             if (this.values.isNotEmpty())
                 return this.values[0]
             else
-                Console.getInstance().printStackTrace(exception)
+                ModuleManager.generalConsole.printStackTrace(exception)
         }
 
         return ""
@@ -97,22 +102,32 @@ class ConfigStringSelector(previous: ConfigStringSelector? = null, name: String 
         if (this.hidden) return
 
         if (this.leftArrowButton!!.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
-            this.value--
-
-            if (this.value < 0) this.value = this.values.size - 1
+            if (this.value - 1 < 0) this.value = this.values.size - 1
+            else this.value--
 
             this.leftArrowButton!!.playPressSound(Client.getMinecraft().soundHandler)
         } else if (this.rightArrowButton!!.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
-            this.value++
-
-            if (this.value >= this.values.size) this.value = 0
+            if (this.value + 1 >= this.values.size) this.value = 0
+            else this.value++
 
             this.rightArrowButton!!.playPressSound(Client.getMinecraft().soundHandler)
         }
 
         if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
-            this.value = this.defaultValue
+            this.value = this.initial
             this.resetButton.playPressSound(Client.getMinecraft().soundHandler)
         }
+    }
+}
+
+class ConsoleThemeSelector
+(prop: KMutableProperty<String>, name: String = "", x: Int = 0, y: Int = 0)
+    : ConfigStringSelector(prop, name,
+        arrayOf("default.dark", "ashes.dark", "atelierforest.dark", "isotope.dark", "codeschool.dark", "gotham", "hybrid", "3024.light", "chalk.light", "blue", "slate", "red", "green", "aids"),
+        x, y) {
+    override fun draw(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        hidden = Config.customTheme
+
+        super.draw(mouseX, mouseY, partialTicks)
     }
 }

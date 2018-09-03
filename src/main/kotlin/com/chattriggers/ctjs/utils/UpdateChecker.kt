@@ -22,7 +22,7 @@ object UpdateChecker {
 
     init {
         getUpdate()
-        warned = !Config.getInstance().showUpdatesInChat.value
+        warned = !Config.showUpdatesInChat
     }
 
     private fun getUpdate() {

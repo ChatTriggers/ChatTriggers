@@ -4,17 +4,17 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import net.minecraft.client.gui.GuiButton
+import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty
 
-class ConfigBoolean internal constructor(previous: ConfigBoolean? = null, name: String = "", private val defaultValue: Boolean = false, x: Int = 0, y: Int = 0) : ConfigOption(ConfigOption.Type.BOOLEAN) {
-    var value: Boolean = previous?.value ?: this.defaultValue
+class ConfigBoolean
+(private val prop: KMutableProperty<Boolean>, name: String = "", x: Int = 0, y: Int = 0)
+    : ConfigOption() {
 
-    @Transient
-    private var button: GuiButton = GuiButton(0,
-            Renderer.screen.getWidth() / 2 - 100 + this.x, this.y + 15,
-            stringValue)
-
-    private val stringValue: String
-        get() = if (this.value) ChatLib.addColor("&aTrue") else ChatLib.addColor("&cFalse")
+    private var value: Boolean by Delegates.observable(prop.getter.call(Config)) { _, _, new ->
+        prop.setter.call(Config, new)
+    }
+    private val initial: Boolean = value
 
     init {
         this.name = name
@@ -22,6 +22,16 @@ class ConfigBoolean internal constructor(previous: ConfigBoolean? = null, name: 
         this.x = x
         this.y = y
     }
+
+    private var button: GuiButton = GuiButton(
+            0,
+            Renderer.screen.getWidth() / 2 - 100 + this.x,
+            this.y + 15,
+            stringValue
+    )
+
+    private val stringValue: String
+        get() = if (this.value) ChatLib.addColor("&aTrue") else ChatLib.addColor("&cFalse")
 
     override fun draw(mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (this.hidden) return
@@ -54,7 +64,7 @@ class ConfigBoolean internal constructor(previous: ConfigBoolean? = null, name: 
         }
 
         if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
-            this.value = this.defaultValue
+            this.value = this.initial
             this.resetButton.playPressSound(Client.getMinecraft().soundHandler)
         }
 

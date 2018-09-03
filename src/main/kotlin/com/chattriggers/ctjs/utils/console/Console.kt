@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.utils.console
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.triggers.OnTrigger
+import com.chattriggers.ctjs.utils.config.Config
 import io.sentry.Sentry
 import net.minecraft.network.ThreadQuickExitException
 import java.awt.*
@@ -132,11 +133,11 @@ class Console(val loader: ILoader?) {
         val bg: Color
         val fg: Color
 
-        /*if (Config.getInstance().customTheme.value) {
-            bg = Config.getInstance().consoleBackgroundColor.value
-            fg = Config.getInstance().consoleForegroundColor.value
+        if (Config.customTheme) {
+            bg = Config.consoleBackgroundColor
+            fg = Config.consoleForegroundColor
         } else {
-            when (Config.getInstance().consoleTheme.getValue()) {
+            when (Config.consoleTheme) {
                 "ashes.dark" -> {
                     bg = Color(28, 32, 35)
                     fg = Color(199, 204, 209)
@@ -203,7 +204,7 @@ class Console(val loader: ILoader?) {
         for (comp in this.components) {
             comp.background = bg
             comp.foreground = fg
-        }*/
+        }
 
         this.frame.toFront()
         this.frame.repaint()

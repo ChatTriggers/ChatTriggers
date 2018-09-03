@@ -66,7 +66,7 @@ object CTCommand : CommandBase() {
                 if (args.size == 1) ModuleManager.generalConsole.showConsole()
                 else ModuleManager.getConsole(args[1]).showConsole()
             "config", "settings", "setting" ->
-                GuiHandler.openGui(GuiConfig.getInstance())
+                GuiHandler.openGui(GuiConfig())
             "sim", "simulate" ->
                 ChatLib.simulateChat(Arrays.copyOfRange(args, 1, args.size).joinToString(" "))
             "dump" -> dumpChat(args)

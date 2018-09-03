@@ -4,21 +4,19 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import net.minecraft.client.gui.GuiButton
 
-abstract class ConfigOption(@Transient var type: Type) {
+abstract class ConfigOption {
     var name: String? = null
 
     protected var x: Int = 0
     protected var y: Int = 0
     var hidden: Boolean = false
 
-    @Transient
-    internal var resetButton = GuiButton(0,
-            Renderer.screen.getWidth() / 2 - 100 + this.x + 185, this.y - 2,
-            14, 12, "")
-
-    init {
-        GuiConfig.addConfigOption(this)
-    }
+    internal var resetButton = GuiButton(
+            0,
+            Renderer.screen.getWidth() / 2 - 100 + this.x + 185,
+            this.y - 2,
+            14, 12, ""
+    )
 
     open fun init() {
         this.resetButton = GuiButton(0,

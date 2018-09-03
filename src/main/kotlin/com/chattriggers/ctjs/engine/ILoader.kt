@@ -42,7 +42,7 @@ interface ILoader {
     }
 
     companion object {
-        internal val modulesFolder = File(Config.getInstance().modulesFolder.value)
+        internal val modulesFolder = File(Config.modulesFolder)
 
         internal fun getFoldersInDir(dir: File): List<File> {
             if (!dir.isDirectory) return emptyList()

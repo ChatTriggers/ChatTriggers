@@ -5,12 +5,20 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import net.minecraft.client.gui.GuiTextField
 import java.io.File
+import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty
 
-class ConfigString(previous: ConfigString? = null, name: String = "", private val defaultValue: String = "", x: Int = 0, y: Int = 0) : ConfigOption(ConfigOption.Type.STRING) {
-    var value: String
+class ConfigString
+(private val prop: KMutableProperty<String>, name: String = "", x: Int = 0, y: Int = 0)
+    : ConfigOption() {
 
-    @Transient private var textField: GuiTextField? = null
-    @Transient private var systemTime: Long = 0
+    private var value: String by Delegates.observable(prop.getter.call(Config)) { _, _, new ->
+        prop.setter.call(Config, new)
+    }
+    private val initial = value
+
+    private var textField: GuiTextField? = null
+    private var systemTime: Long = 0
     private var isValid: Boolean = false
     var isDirectory: Boolean
 
@@ -20,9 +28,6 @@ class ConfigString(previous: ConfigString? = null, name: String = "", private va
     init {
         this.name = name
 
-        if (previous == null) this.value = this.defaultValue
-        else this.value = previous.value
-
         this.x = x
         this.y = y
         this.systemTime = Client.getSystemTime()
@@ -30,8 +35,8 @@ class ConfigString(previous: ConfigString? = null, name: String = "", private va
         this.isDirectory = false
     }
 
-    private fun updateValidDirectory(directory: String?) {
-        this.isValid = !this.isDirectory || File(directory!!).isDirectory
+    private fun updateValidDirectory(directory: String) {
+        this.isValid = !this.isDirectory || File(directory).isDirectory
     }
 
     override fun init() {
@@ -41,8 +46,8 @@ class ConfigString(previous: ConfigString? = null, name: String = "", private va
         this.textField = GuiTextField(0, Renderer.getFontRenderer(),
                 Renderer.screen.getWidth() / 2 - 100 + this.x, this.y + 15,
                 200, 20)
-        this.textField!!.maxStringLength = 100
-        this.textField!!.text = isValidColor + this.value!!
+        this.textField?.maxStringLength = 100
+        this.textField?.text = isValidColor + this.value
     }
 
     override fun draw(mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -81,8 +86,8 @@ class ConfigString(previous: ConfigString? = null, name: String = "", private va
         this.textField!!.mouseClicked(mouseX, mouseY, 0)
 
         if (this.resetButton.mousePressed(Client.getMinecraft(), mouseX, mouseY)) {
-            this.value = this.defaultValue
-            this.textField!!.text = isValidColor + this.value!!
+            this.value = this.initial
+            this.textField!!.text = isValidColor + this.value
             this.resetButton.playPressSound(Client.getMinecraft().soundHandler)
         }
     }

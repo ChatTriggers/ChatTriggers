@@ -44,7 +44,7 @@ object Reference {
             (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
             ModuleManager.unload()
 
-            if (Config.getInstance().clearConsoleOnLoad.value) {
+            if (Config.clearConsoleOnLoad) {
                 ModuleManager.loaders.forEach {
                     it.getConsole().clearConsole()
                 }

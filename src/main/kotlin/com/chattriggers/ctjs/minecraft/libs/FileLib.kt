@@ -18,7 +18,7 @@ object FileLib {
      */
     @JvmStatic
     fun write(importName: String, fileName: String, toWrite: String) =
-        write(Config.getInstance().modulesFolder.value + "/" + importName + "/" + fileName, toWrite)
+        write(Config.modulesFolder + "/" + importName + "/" + fileName, toWrite)
 
     /**
      * Writes a file to anywhere on the system.<br></br>
@@ -42,7 +42,7 @@ object FileLib {
      */
     @JvmStatic
     fun read(importName: String, fileName: String) =
-        read(Config.getInstance().modulesFolder.value + "/" + importName + "/" + fileName)
+        read(Config.modulesFolder + "/" + importName + "/" + fileName)
 
     /**
      * Reads a file from anywhere on the system.<br></br>
