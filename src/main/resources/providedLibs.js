@@ -55,7 +55,7 @@ var KeyAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inve
 
 // Misc
 var Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
-var Config = Java.type("com.chattriggers.ctjs.utils.config.Config").getInstance();
+var Config = Java.type("com.chattriggers.ctjs.utils.config.Config").INSTANCE;
 var ChatTriggers = Java.type("com.chattriggers.ctjs.Reference").INSTANCE;
 
 /*End Built in Vars */

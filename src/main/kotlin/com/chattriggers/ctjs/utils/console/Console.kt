@@ -13,7 +13,7 @@ import java.io.PrintStream
 import javax.swing.*
 
 class Console(val loader: ILoader?) {
-    private val frame: JFrame = JFrame("ct.js Console")
+    private val frame: JFrame = JFrame("ct.js ${loader?.getLanguageName() ?: "Default"} Console")
     private val taos: TextAreaOutputStream
     private val components = mutableListOf<Component>()
     private val history = mutableListOf<String>()
@@ -25,7 +25,7 @@ class Console(val loader: ILoader?) {
         this.frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 
         val textArea = JTextArea()
-        this.taos = TextAreaOutputStream(textArea, 1000)
+        this.taos = TextAreaOutputStream(textArea, loader?.getLanguageName() ?: "default")
         textArea.isEditable = false
         textArea.font = Font("DejaVu Sans Mono", Font.PLAIN, 15)
         val inputField = JTextField(1)
@@ -37,7 +37,7 @@ class Console(val loader: ILoader?) {
         components.add(textArea)
         components.add(inputField)
 
-        out = PrintStream(taos)
+        out = taos.printStream
 
         inputField.addKeyListener(object : KeyListener {
             override fun keyTyped(e: KeyEvent) {}
@@ -61,7 +61,7 @@ class Console(val loader: ILoader?) {
                             toPrint = "> $command"
                         }
 
-                        out.println(toPrint ?: command)
+                        taos.println(toPrint ?: command)
                     }
 
                     KeyEvent.VK_UP -> {
@@ -100,16 +100,15 @@ class Console(val loader: ILoader?) {
     }
 
     fun clearConsole() {
-        this.taos.clearLog()
         this.taos.clear()
     }
 
     fun printStackTrace(error: Throwable) {
         Sentry.capture(error)
 
-        /*if (Config.getInstance().openConsoleOnError.value) {
-            showConsole(true)
-        }*/
+        if (Config.openConsoleOnError) {
+            showConsole()
+        }
 
         error.printStackTrace(out)
     }
