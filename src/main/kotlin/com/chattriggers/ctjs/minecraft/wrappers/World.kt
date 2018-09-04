@@ -12,10 +12,13 @@ import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.renderer.RenderGlobal
 import net.minecraft.util.EnumParticleTypes
 import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.jvm.isAccessible
 
 //#if MC>=11202
 //$$ import net.minecraft.util.ResourceLocation
 //$$ import net.minecraft.util.SoundEvent
+//$$ import kotlin.reflect.jvm.isAccessible
+//$$
 //#endif
 
 object World {
@@ -67,8 +70,8 @@ object World {
         //#if MC<=10809
         getWorld()?.playRecord(BlockPos(x, y, z), name)
         //#else
-        //$$ val sound = SoundEvent.REGISTRY.getObject(new ResourceLocation("minecraft", name));
-        //$$ getWorld()?.playRecord(BlockPos(x, y, z), sound);
+        //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
+        //$$ getWorld()?.playRecord(BlockPos(x, y, z), sound)
         //#endif
     }
 
@@ -295,12 +298,15 @@ object World {
 
             val fx = RenderGlobal::class.declaredMemberFunctions.firstOrNull {
                 it.name == "spawnEntityFX" || it.name == "func_174974_b"
-            }?.call(
-                    Client.getMinecraft().renderGlobal,
-                    particleType.particleID,
-                    particleType.shouldIgnoreRange,
-                    x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
-            ) as MCParticle
+            }?.let {
+                it.isAccessible = true
+                it.call(
+                        Client.getMinecraft().renderGlobal,
+                        particleType.particleID,
+                        particleType.shouldIgnoreRange,
+                        x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
+                ) as MCParticle
+            }!!
 
             /*val method = ReflectionHelper.findMethod(
                     RenderGlobal::class.java,

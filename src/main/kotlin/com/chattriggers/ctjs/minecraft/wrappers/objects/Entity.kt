@@ -71,10 +71,12 @@ open class Entity(val entity: MCEntity) {
                   else -1f
 
     fun getRiding(): Entity? {
-        return if (this.entity.ridingEntity == null)
+        val riding = this.entity.ridingEntity
+
+        return if (riding == null)
             null
         else
-            Entity(this.entity.ridingEntity)
+            Entity(riding)
     }
 
     fun getRider(): Entity? {

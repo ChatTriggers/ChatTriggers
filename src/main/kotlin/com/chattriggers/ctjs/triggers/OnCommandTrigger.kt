@@ -40,7 +40,11 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
     // helper method to re instance the command
     private fun reInstance() {
         for (command in CommandHandler.getCommandList()) {
+            //#if MC<=10809
             if (command.commandName == this.commandName) {
+            //#else
+            //$$ if (command.name == this.commandName) {
+            //#endif
                 command.getTriggers().add(this)
                 return
             }

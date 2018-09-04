@@ -57,6 +57,6 @@ object Server {
         }
 
         return Client.getConnection().getPlayerInfo(player.uniqueID)?.responseTime?.toLong()
-                ?: Client.getMinecraft().currentServerData.pingToServer
+                ?: Client.getMinecraft().currentServerData!!.pingToServer
     }
 }

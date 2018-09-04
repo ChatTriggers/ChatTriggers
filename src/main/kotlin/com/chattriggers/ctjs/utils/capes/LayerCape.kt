@@ -1,11 +1,11 @@
 package com.chattriggers.ctjs.utils.capes
 
+import com.chattriggers.ctjs.utils.kotlin.MathHelper
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.entity.RenderPlayer
 import net.minecraft.client.renderer.entity.layers.LayerRenderer
 import net.minecraft.entity.player.EnumPlayerModelParts
-import net.minecraft.util.MathHelper
 
 class LayerCape(private val playerRenderer: RenderPlayer) : LayerRenderer<AbstractClientPlayer> {
     override fun shouldCombineTextures() = false
@@ -51,7 +51,7 @@ class LayerCape(private val playerRenderer: RenderPlayer) : LayerRenderer<Abstra
         GlStateManager.rotate(f3 / 2.0f, 0.0f, 0.0f, 1.0f)
         GlStateManager.rotate(-f3 / 2.0f, 0.0f, 1.0f, 0.0f)
         GlStateManager.rotate(180.0f, 0.0f, 1.0f, 0.0f)
-        this.playerRenderer.getMainModel().renderCape(0.0625f)
+        this.playerRenderer.mainModel.renderCape(0.0625f)
         GlStateManager.popMatrix()
     }
 }

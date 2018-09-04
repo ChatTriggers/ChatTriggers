@@ -2,7 +2,12 @@ package com.chattriggers.ctjs.utils.kotlin
 
 import net.minecraft.client.renderer.Tessellator
 
-fun ITextComponent.getStyling() = this.chatStyle!!
+fun ITextComponent.getStyling(): TextStyle =
+        //#if MC<=10809
+        this.chatStyle!!
+        //#else
+        //$$ this.style
+        //#endif
 fun TextStyle.getClick(): TextClickEvent? =
         //#if MC<=10809
         chatClickEvent

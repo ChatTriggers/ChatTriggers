@@ -37,7 +37,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         //#if MC<=10809
         return Item(player.getEquipmentInSlot(slot))
         //#elseif
-        //$$ return new Item(player.getItemStackFromSlot(
+        //$$ return Item(player.getItemStackFromSlot(
         //$$        EntityEquipmentSlot.values()[slot]
         //$$     )
         //$$ );

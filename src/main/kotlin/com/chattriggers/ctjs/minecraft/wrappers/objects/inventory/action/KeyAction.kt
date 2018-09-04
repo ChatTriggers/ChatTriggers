@@ -23,7 +23,7 @@ class KeyAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         //#if MC<=10809
         doClick(key, 2)
         //#else
-        //$$ doCLick(key, MCClickType.SWAP)
+        //$$ doClick(key, MCClickType.SWAP)
         //#endif
     }
 }

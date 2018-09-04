@@ -2,6 +2,10 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
 
+//#if MC>=11202
+//$$ import net.minecraft.potion.Potion
+//#endif
+
 class PotionEffect(private val effect: MCPotionEffect) {
     fun getName(): String = this.effect.effectName
 
@@ -13,7 +17,7 @@ class PotionEffect(private val effect: MCPotionEffect) {
         //#if MC<=10809
         return this.effect.potionID
         //#else
-        //$$ return Potion.getIdFromPotion(this.effect.potion);
+        //$$ return Potion.getIdFromPotion(this.effect.potion)
         //#endif
     }
 

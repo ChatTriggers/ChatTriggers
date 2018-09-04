@@ -122,7 +122,7 @@ object Scoreboard {
         try {
             val scoreboard = World.getWorld()?.scoreboard ?: return
             val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
-            scoreboardTitle = sidebarObjective.displayName
+            scoreboardTitle = sidebarObjective!!.displayName
 
             val scores = scoreboard.getSortedScores(sidebarObjective)
 

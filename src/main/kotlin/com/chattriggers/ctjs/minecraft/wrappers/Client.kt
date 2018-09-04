@@ -30,7 +30,7 @@ object Client {
         //#if MC<=10809
         getMinecraft().netHandler
         //#else
-        //$$ getMinecraft().connection;
+        //$$ getMinecraft().connection!!
         //#endif
 
     /**

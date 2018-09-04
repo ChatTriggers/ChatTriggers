@@ -8,6 +8,10 @@ import com.chattriggers.ctjs.utils.kotlin.ChatPacket
 import com.chattriggers.ctjs.utils.kotlin.ITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 
+//#if MC>=11202
+//$$ import net.minecraft.util.text.ChatType
+//#endif
+
 class Message {
     private lateinit var chatMessage: ITextComponent
 
@@ -152,11 +156,19 @@ class Message {
             return
         }
 
+        //#if MC<=10809
         if (this.recursive) {
-            Client.getConnection().handleChat(ChatPacket(this.chatMessage, 0))
+           Client.getConnection().handleChat(ChatPacket(this.chatMessage, 0))
         } else {
-            Player.getPlayer()?.addChatMessage(this.chatMessage)
+           Player.getPlayer()?.addChatMessage(this.chatMessage)
         }
+        //#else
+        //$$ if (this.recursive) {
+        //$$    Client.getConnection().handleChat(ChatPacket(this.chatMessage, ChatType.CHAT))
+        //$$ } else {
+        //$$    Player.getPlayer()?.sendMessage(this.chatMessage)
+        //$$ }
+        //#endif
     }
 
     /**
@@ -166,7 +178,16 @@ class Message {
         parseMessage()
         if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.formattedText)) return
 
-        Client.getConnection().handleChat(ChatPacket(this.chatMessage, 2))
+        Client.getConnection().handleChat(
+                ChatPacket(
+                        this.chatMessage,
+                        //#if MC<=10809
+                        2
+                        //#else
+                        //$$ ChatType.GAME_INFO
+                        //#endif
+                )
+        )
     }
 
     private fun parseMessage() {

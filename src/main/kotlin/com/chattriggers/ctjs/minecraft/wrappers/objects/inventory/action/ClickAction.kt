@@ -85,17 +85,16 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
             mode = 1
         }
         //#else
-        //$$ MCClickType mode;
-        //$$ if (this.clickType == ClickType.MIDDLE) {
-        //$$     mode = MCClickType.CLONE
+        //$$ val mode: MCClickType = if (this.clickType == ClickType.MIDDLE) {
+        //$$     MCClickType.CLONE
         //$$ } else if (slot == -999 && !this.itemInHand) {
-        //$$     mode = MCClickType.THROW
+        //$$     MCClickType.THROW
         //$$ } else if (this.holdingShift) {
-        //$$     mode = MCClickType.QUICK_MOVE
+        //$$     MCClickType.QUICK_MOVE
         //$$ } else if (pickupAll) {
-        //$$     mode = MCClickType.PICKUP_ALL
+        //$$     MCClickType.PICKUP_ALL
         //$$ } else {
-        //$$     mode = MCClickType.PICKUP
+        //$$     MCClickType.PICKUP
         //$$ }
         //#endif
 

@@ -16,11 +16,11 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 class Book(bookName: String) {
     private var bookScreen: GuiScreenBook? = null
-    private val book:
+    private val book: ItemStack
             //#if MC<=10809
-            ItemStack = ItemStack(Items.written_book)
+            = ItemStack(Items.written_book)
             //#else
-            //$$ book = ItemStack(Items.WRITTEN_BOOK)
+            //$$ = ItemStack(Items.WRITTEN_BOOK)
             //#endif
     private val bookData: NBTTagCompound = NBTTagCompound()
 

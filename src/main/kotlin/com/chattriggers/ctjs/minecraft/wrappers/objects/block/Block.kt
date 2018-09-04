@@ -26,7 +26,7 @@ open class Block {
     }
 
     constructor(blockName: String) {
-        block = MCBlock.getBlockFromName(blockName)
+        block = MCBlock.getBlockFromName(blockName)!!
     }
 
     constructor(blockID: Int) {

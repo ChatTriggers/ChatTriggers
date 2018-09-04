@@ -10,7 +10,7 @@ class ParticleEffect constructor(x: Double, y: Double, z: Double, xSpeed: Double
 
     fun setColor(r: Float, g: Float, b: Float, a: Float? = null) = apply {
         super.setRBGColorF(r, g, b)
-        if (a != null) alpha = a
+        if (a != null) setAlpha(a)
     }
 
     fun setColor(color: Int) = apply {

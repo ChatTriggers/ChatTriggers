@@ -22,7 +22,7 @@ abstract class Action(var slot: Int, var windowId: Int) {
     //#if MC<=10809
     protected fun doClick(button: Int, mode: Int) {
     //#else
-    //$$ protected void doClick(button: Int, mode: MCClickType) {
+    //$$ protected fun doClick(button: Int, mode: MCClickType) {
     //#endif
         Client.getMinecraft().playerController.windowClick(
             windowId,

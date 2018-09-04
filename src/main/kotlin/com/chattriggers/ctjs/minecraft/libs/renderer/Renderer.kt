@@ -272,7 +272,7 @@ object Renderer {
         //#if MC<=10809
         renderManager.renderEntityWithPosYaw(ent, 0.0, 0.0, 0.0, 0.0f, 1.0f)
         //#else
-        //$$ renderManager.doRenderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false)
+        //$$ renderManager.doRenderEntity(ent, 0.0, 0.0, 0.0, 0.0F, 1.0F, false)
         //#endif
         renderManager.isRenderShadow = true
 

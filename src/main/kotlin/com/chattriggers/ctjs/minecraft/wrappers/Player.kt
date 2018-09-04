@@ -272,7 +272,7 @@ object Player {
     @JvmStatic
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
         return if (networkPlayerInfoIn.displayName != null)
-            networkPlayerInfoIn.displayName.formattedText
+            networkPlayerInfoIn.displayName?.formattedText.toString()
         else
             ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.playerTeam, networkPlayerInfoIn.gameProfile.name)
     }

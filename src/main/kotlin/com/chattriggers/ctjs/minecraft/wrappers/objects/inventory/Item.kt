@@ -40,7 +40,7 @@ class Item {
     }
 
     constructor(itemName: String) {
-        item = MCItem.getByNameOrId(itemName)
+        item = MCItem.getByNameOrId(itemName)!!
         itemStack = ItemStack(item)
     }
 
@@ -133,11 +133,12 @@ class Item {
         return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
             //#if MC<=10809
             Enchantment.getEnchantmentById(
+               it.key
+            )
             //#else
-            //$$ Enchantment.getEnchantmentByID(
+            //$$ it.key
             //#endif
-                it.key
-            ).name.replace("enchantment.", "")
+                    .name.replace("enchantment.", "")
         }
     }
 
@@ -156,8 +157,8 @@ class Item {
         return this.itemStack.canHarvestBlock(block.block)
         //#else
         //$$ return this.itemStack.canHarvestBlock(
-        //$$         World.getWorld()!!.getBlockState(block.getBlockPos())
-        //$$ );
+        //$$         World.getWorld()!!.getBlockState(block.blockPos)
+        //$$ )
         //#endif
     }
 
