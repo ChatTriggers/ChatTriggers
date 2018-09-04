@@ -86,21 +86,21 @@ class Text(private var string: String, private var x: Float = 0f, private var y:
         return this.width != 0 && this.lines.size > this.maxLines
     }
 
-    fun draw() = apply {
+    fun draw(x: Float? = null, y: Float? = null) = apply {
         GlStateManager.enableBlend()
         GlStateManager.scale(this.scale, this.scale, this.scale)
         if (this.width > 0) {
             var maxLinesHolder = this.maxLines
-            var yHolder = this.y
+            var yHolder = y ?: this.y
             this.lines.forEach {
-                Renderer.getFontRenderer().drawString(it, getXAlign(it), yHolder / this.scale, this.color, this.shadow)
+                Renderer.getFontRenderer().drawString(it, getXAlign(it, x ?: this.x), yHolder / this.scale, this.color, this.shadow)
                 yHolder += this.scale * 9
                 maxLinesHolder--
                 if (maxLinesHolder == 0)
                     return@forEach
             }
         } else {
-            Renderer.getFontRenderer().drawString(this.string, getXAlign(this.string), this.y / this.scale, this.color, this.shadow)
+            Renderer.getFontRenderer().drawString(this.string, getXAlign(this.string, x ?: this.x), (y ?: this.y) / this.scale, this.color, this.shadow)
         }
         GlStateManager.disableBlend()
         Renderer.finishDraw()
@@ -119,12 +119,12 @@ class Text(private var string: String, private var x: Float = 0f, private var y:
             else color
     }
 
-    private fun getXAlign(string: String): Float {
-        val x = this.x / this.scale
+    private fun getXAlign(string: String, x: Float): Float {
+        val newX = x / this.scale
         return when (this.align) {
-            DisplayHandler.Align.CENTER -> x - Renderer.getStringWidth(string) / 2
-            DisplayHandler.Align.RIGHT -> x - Renderer.getStringWidth(string)
-            else -> x
+            DisplayHandler.Align.CENTER -> newX - Renderer.getStringWidth(string) / 2
+            DisplayHandler.Align.RIGHT -> newX - Renderer.getStringWidth(string)
+            else -> newX
         }
     }
 }

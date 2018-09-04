@@ -16,4 +16,23 @@ data class ModuleMetadata(
 ) {
     val isDefault: Boolean
         get() = name == null
+
+    override fun toString(): String {
+        return if (isDefault) {
+            "null"
+        } else {
+            "ModuleMetadata{" +
+                    "name=$name," +
+                    "version=$version," +
+                    "tags=$tags," +
+                    "pictureLink=$pictureLink," +
+                    "creator=$creator," +
+                    "description=$description," +
+                    "requires=$requires," +
+                    "ignored=$ignored," +
+                    "fileName=$fileName," +
+                    "isRequired=$isRequired" +
+                    "}"
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.commands
 
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ModuleManager
+import com.chattriggers.ctjs.engine.module.ModulesGui
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
@@ -62,6 +63,7 @@ object CTCommand : CommandBase() {
             "import" ->
                 if (args.size == 1) ChatLib.chat("&c/ct import [module name]")
                 else ModuleManager.importModule(args[1])
+            "modules" -> GuiHandler.openGui(ModulesGui)
             "console" ->
                 if (args.size == 1) ModuleManager.generalConsole.showConsole()
                 else ModuleManager.getConsole(args[1]).showConsole()
