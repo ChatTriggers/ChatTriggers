@@ -8,7 +8,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import net.minecraft.client.gui.GuiScreen
 
 object ModulesGui : GuiScreen() {
-    private object Title  {
+    private val title = object {
         var text = Text("Modules").setScale(2f).setShadow(true)
         var exit = Text(ChatLib.addColor("&cx")).setScale(2f)
     }
@@ -22,8 +22,8 @@ object ModulesGui : GuiScreen() {
         Renderer.drawRect(0x50000000, middle - 255, 95f, 510f, Renderer.screen.getHeight() - 195f)
 
         Renderer.drawRect(0x75000000, middle - 255, 95f, 510f, 25f)
-        Title.text.draw(middle - 250f, 100f)
-        Title.exit.setString(ChatLib.addColor("&cx")).draw(middle + 238, 99f)
+        title.text.draw(middle - 250f, 100f)
+        title.exit.setString(ChatLib.addColor("&cx")).draw(middle + 238, 99f)
 
         var i = 125f
         ModuleManager.cachedModules.forEach {
