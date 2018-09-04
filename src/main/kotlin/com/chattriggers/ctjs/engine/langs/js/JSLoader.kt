@@ -32,6 +32,8 @@ object JSLoader : ILoader {
     }
 
     override fun load(modules: List<Module>) {
+        cachedModules.clear()
+
         val jars = modules.map {
             it.folder.listFiles().toList()
         }.flatten().filter {
@@ -56,8 +58,6 @@ object JSLoader : ILoader {
             console.printStackTrace(e)
         }
 
-        cachedModules.clear()
-
         val combinedScript = modules.map {
             it.getFilesWithExtension(".js")
         }.flatten().joinToString(separator = "\n") {
@@ -69,6 +69,8 @@ object JSLoader : ILoader {
         } catch (e: Exception) {
             console.printStackTrace(e)
         }
+
+        cachedModules.addAll(modules)
     }
 
     override fun load(module: Module) {
