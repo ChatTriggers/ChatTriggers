@@ -6,9 +6,11 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import java.io.File
 
 class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
-    var collapsed = true
-    var x = 0f
-    var y = 0f
+    private val gui = object {
+        var collapsed = true
+        var x = 0f
+        var y = 0f
+    }
 
     fun getFilesWithExtension(type: String): List<File> {
         return this.folder.walkTopDown().filter {
@@ -27,8 +29,8 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
     }
 
     fun draw(x: Float, y: Float): Float {
-        this.x = x
-        this.y = y
+        gui.x = x
+        gui.y = y
 
         Renderer.drawRect(
                 0x75000000,
@@ -37,7 +39,7 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
                 metadata.name ?: name,
                 x + 3, y + 3)
 
-        return if (collapsed) {
+        return if (gui.collapsed) {
             Renderer.translate(x + 495, y + 8)
             Renderer.rotate(180f)
             Renderer.drawString("^", 0f, 0f)
@@ -62,9 +64,9 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
     }
 
     fun click(x: Int, y: Int) {
-        if (x > this.x && x < this.x + 500
-        && y > this.y && y < this.y + 13) {
-            this.collapsed = !this.collapsed
+        if (x > gui.x && x < gui.x + 500
+        && y > gui.y && y < gui.y + 13) {
+            gui.collapsed = !gui.collapsed
         }
     }
 
