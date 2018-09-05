@@ -2,10 +2,8 @@ package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
-import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
-import com.chattriggers.ctjs.utils.config.Config
 import java.io.File
 
 class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
