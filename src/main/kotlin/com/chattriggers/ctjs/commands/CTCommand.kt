@@ -63,6 +63,9 @@ object CTCommand : CommandBase() {
             "import" ->
                 if (args.size == 1) ChatLib.chat("&c/ct import [module name]")
                 else ModuleManager.importModule(args[1])
+            "delete" ->
+                if (args.size == 1) ChatLib.chat("&c/ct delete [module name]")
+                else ChatLib.chat((if (ModuleManager.deleteModule(args[1])) "&aDeleted " else "&cFailed to delete ") + args[1])
             "modules" -> GuiHandler.openGui(ModulesGui)
             "console" ->
                 if (args.size == 1) ModuleManager.generalConsole.showConsole()

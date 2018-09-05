@@ -1,8 +1,11 @@
 package com.chattriggers.ctjs.engine.module
 
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
+import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
+import com.chattriggers.ctjs.utils.config.Config
 import java.io.File
 
 class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
@@ -10,6 +13,7 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
         var collapsed = true
         var x = 0f
         var y = 0f
+        var description = Text(metadata.description ?: "No description provided in the metadata")
     }
 
     fun getFilesWithExtension(type: String): List<File> {
@@ -28,45 +32,58 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
         }.toList()
     }
 
-    fun draw(x: Float, y: Float): Float {
+    fun draw(x: Float, y: Float, width: Float): Float {
         gui.x = x
         gui.y = y
 
         Renderer.drawRect(
-                0x75000000,
-                x, y, 500f, 13f)
+                0xaa000000.toInt(),
+                x, y, width, 13f)
         Renderer.drawStringWithShadow(
                 metadata.name ?: name,
                 x + 3, y + 3)
 
         return if (gui.collapsed) {
-            Renderer.translate(x + 495, y + 8)
+            Renderer.translate(x + width - 5, y + 8)
             Renderer.rotate(180f)
             Renderer.drawString("^", 0f, 0f)
 
             15f
         } else {
-            val description = Text(metadata.description ?: "No description provided in the metadata").setWidth(500)
+            gui.description.setWidth(width.toInt() - 5)
 
-            Renderer.drawRect(0x50000000, x, y + 13, 500f, description.getHeight() + 12)
-            Renderer.drawString("^", x + 490, y + 5)
+            Renderer.drawRect(0x50000000, x, y + 13, width, gui.description.getHeight() + 12)
+            Renderer.drawString("^", x + width - 10, y + 5)
 
-            description.draw(x + 3, y + 15)
+            gui.description.draw(x + 3, y + 15)
 
             if (metadata.version != null) {
                 Renderer.drawStringWithShadow(
                         ChatLib.addColor("&8v" + (metadata.version)),
-                        x + 500f - Renderer.getStringWidth(ChatLib.addColor("&8v" + metadata.version)), y + description.getHeight() + 15)
+                        x + width - Renderer.getStringWidth(ChatLib.addColor("&8v" + metadata.version)), y + gui.description.getHeight() + 15)
             }
 
-            description.getHeight() + 27
+            Renderer.drawStringWithShadow(
+                    ChatLib.addColor(if (metadata.isRequired) "&8required" else "&4[delete]"),
+                    x + 3, y + gui.description.getHeight() + 15
+            )
+
+            gui.description.getHeight() + 27
         }
     }
 
-    fun click(x: Int, y: Int) {
-        if (x > gui.x && x < gui.x + 500
+    fun click(x: Int, y: Int, width: Float) {
+        if (x > gui.x && x < gui.x + width
         && y > gui.y && y < gui.y + 13) {
             gui.collapsed = !gui.collapsed
+            return
+        }
+
+        if (gui.collapsed) return
+
+        if (x > gui.x && x < gui.x + 45
+        && y > gui.y + gui.description.getHeight() + 15 && y < gui.y + gui.description.getHeight() + 25) {
+            ModuleManager.deleteModule(name)
         }
     }
 

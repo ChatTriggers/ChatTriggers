@@ -37,10 +37,11 @@ object DefaultLoader {
     fun importModule(name: String, extra: Boolean, isRequired: Boolean = false): List<Module>? {
         if (extra) {
             Thread {
+                ChatLib.chat("&7Importing $name...")
                 val res = doImport(name)
 
                 if (!res) {
-                    ChatLib.chat("Can't find module with name $name")
+                    ChatLib.chat("&cCan't find module with name $name")
                     return@Thread
                 }
 
@@ -58,13 +59,13 @@ object DefaultLoader {
                     }
                 }
 
-                ChatLib.chat("Successfully imported $name")
+                ChatLib.chat("&aSuccessfully imported $name")
             }.start()
         } else {
             val res = doImport(name)
 
             if (!res) {
-                ChatLib.chat("Can't find module with name $name")
+                ChatLib.chat("&cCan't find module with name $name")
                 return null
             }
 
