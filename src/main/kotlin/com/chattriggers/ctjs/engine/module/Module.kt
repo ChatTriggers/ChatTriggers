@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.engine.module
 
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
@@ -82,8 +83,7 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
 
         if (x > gui.x && x < gui.x + 45
         && y > gui.y + gui.description.getHeight() + 15 && y < gui.y + gui.description.getHeight() + 25) {
-            System.out.println("test")
-            FileLib.deleteDirectory(File(Config.modulesFolder, name))
+            ModuleManager.deleteModule(name)
         }
     }
 

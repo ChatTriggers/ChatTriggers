@@ -13,6 +13,8 @@ object ModulesGui : GuiScreen() {
         var exit = Text(ChatLib.addColor("&cx")).setScale(2f)
     }
 
+    override fun doesGuiPauseGame() = false
+
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         super.drawScreen(mouseX, mouseY, partialTicks)
 

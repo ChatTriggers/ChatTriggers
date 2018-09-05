@@ -19,6 +19,9 @@ object ModuleManager {
 
     fun deleteModule(name: String): Boolean {
         if (FileLib.deleteDirectory(File(Config.modulesFolder, name))) {
+            cachedModules.filter {
+                return@filter it.name == name
+            }
             Reference.load()
             return true
         }
