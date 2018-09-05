@@ -78,6 +78,8 @@ object JSLoader : ILoader {
             it.name
         }.contains(module.name)) return
 
+        cachedModules.add(module)
+
         val script = module.getFilesWithExtension(".js").joinToString(separator = "\n") {
             FileUtils.readFileToString(it)
         }

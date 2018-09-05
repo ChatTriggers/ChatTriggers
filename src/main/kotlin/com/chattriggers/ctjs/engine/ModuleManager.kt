@@ -23,6 +23,11 @@ object ModuleManager {
     }
 
     fun load(module: Module) {
+        val list = mutableListOf<Module>()
+        list.addAll(cachedModules)
+        list.add(module)
+        cachedModules = list
+
         loaders.forEach {
             it.load(module)
         }
