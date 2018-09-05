@@ -91,10 +91,7 @@ object Renderer {
         val red = ((Math.sin((step / speed).toDouble()) + 0.75) * 170).toInt()
         val green = ((Math.sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
         val blue = ((Math.sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
-        return (0xff00000
-                + MathLib.clamp(red, 0, 255) * 0x10000
-                + MathLib.clamp(green, 0, 255) * 0x100
-                + MathLib.clamp(blue, 0, 255))
+        return color(red, green, blue, 255)
     }
 
     @JvmStatic @JvmOverloads
