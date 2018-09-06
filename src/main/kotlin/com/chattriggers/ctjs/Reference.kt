@@ -23,9 +23,7 @@ object Reference {
 
     private var isLoaded = true
 
-    fun reload() {
-        load(true)
-    }
+    fun reload() = load(true)
 
     @JvmOverloads
     fun load(updateCheck: Boolean = false) {
@@ -50,7 +48,7 @@ object Reference {
                 }
             }
 
-            CTJS.setupConfig()
+            CTJS.loadConfig()
 
             ModuleManager.load(updateCheck)
 

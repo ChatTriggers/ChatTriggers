@@ -33,7 +33,7 @@ import java.io.FileReader
 )
 object CTJS {
     lateinit var assetsDir: File
-    lateinit var configLocation: File
+    private lateinit var configLocation: File
     val sounds = mutableListOf<Sound>()
 
     @Mod.EventHandler
@@ -43,7 +43,7 @@ object CTJS {
         pictures.mkdirs()
         assetsDir = pictures
 
-        setupConfig()
+        loadConfig()
 
         Loader.instance().modList.filter { it.modId == Reference.MODID }.forEach {
             AnnotationHandler.subscribeAutomatic(it, event.asmData)
@@ -77,16 +77,9 @@ object CTJS {
         }
     }
 
-    fun setupConfig() {
-        loadConfig()
-    }
+    fun saveConfig() = Config.save(File(this.configLocation, "ChatTriggers.json"))
 
-    fun saveConfig() {
-        val file = File(this.configLocation, "ChatTriggers.json")
-        Config.save(file)
-    }
-
-    private fun loadConfig(): Boolean {
+    fun loadConfig(): Boolean {
         try {
             val parser = JsonParser()
             val obj = parser.parse(
