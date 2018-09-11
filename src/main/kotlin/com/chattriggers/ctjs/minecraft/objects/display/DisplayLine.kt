@@ -13,7 +13,7 @@ import javax.vecmath.Vector2d
 
 abstract class DisplayLine {
     private lateinit var text: Text
-    private var textWidth = 0
+    private var textWidth = 0f
     private var textColor: Int? = null
     private var backgroundColor: Int? = null
 
@@ -51,7 +51,7 @@ abstract class DisplayLine {
     fun getText() = this.text
     fun setText(text: String) = apply {
         this.text = Renderer.text(text)
-        this.textWidth = (Renderer.getStringWidth(text) * this.text.getScale()).toInt()
+        this.textWidth = Renderer.getStringWidth(text) * this.text.getScale()
     }
 
     fun getTextColor() = this.textColor
@@ -65,7 +65,7 @@ abstract class DisplayLine {
 
     fun setScale(scale: Float) = apply {
         this.text.setScale(scale)
-        this.textWidth = Math.ceil((Renderer.getStringWidth(text.getString()) * scale).toDouble()).toInt()
+        this.textWidth = Renderer.getStringWidth(text.getString()) * scale
     }
 
     fun getAlign() = this.align
@@ -251,4 +251,10 @@ abstract class DisplayLine {
     }
 
     internal abstract fun getLoader(): ILoader
+
+    override fun toString() =
+            "DisplayLine{" +
+                    "text=$text, textColor=$textColor, align=$align, " +
+                    "background=$background, backgroundColor=$backgroundColor, " +
+                    "}"
 }

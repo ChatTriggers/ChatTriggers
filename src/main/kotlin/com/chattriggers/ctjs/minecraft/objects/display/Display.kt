@@ -16,8 +16,8 @@ abstract class Display {
     private var align = DisplayHandler.Align.LEFT
     private var order = DisplayHandler.Order.DOWN
 
-    private var minWidth = 0
-    private var width = 0
+    private var minWidth = 0f
+    private var width = 0f
     private var height = 0f
 
     constructor() {
@@ -33,10 +33,10 @@ abstract class Display {
         this.textColor = config.getOption("textColor", 0xffffffff.toInt()).toInt()
 
         this.setBackground(config.getOption("background", DisplayHandler.Background.NONE))
-        this.setAlign(config.getOption("align", DisplayHandler.Align.RIGHT))
+        this.setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
         this.setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
 
-        this.minWidth = config.getOption("minWidth", 0).toInt()
+        this.minWidth = config.getOption("minWidth", 0f).toFloat()
 
         DisplayHandler.registerDisplay(this)
     }
@@ -147,7 +147,7 @@ abstract class Display {
     fun getWidth() = this.width
     fun getHeight() = this.height
     fun getMinWidth() = this.minWidth
-    fun setMinWidth(minWidth: Int) = apply {
+    fun setMinWidth(minWidth: Float) = apply {
         this.minWidth = minWidth
     }
 
@@ -174,14 +174,25 @@ abstract class Display {
         this.height = i
     }
 
-    private fun drawLine(line: DisplayLine, x: Float, y: Float, maxWidth: Int) {
+    private fun drawLine(line: DisplayLine, x: Float, y: Float, maxWidth: Float) {
         when (this.align) {
-            DisplayHandler.Align.LEFT -> line.drawLeft(x, y, maxWidth.toFloat(), this.background, this.backgroundColor, this.textColor)
-            DisplayHandler.Align.RIGHT -> line.drawRight(x, y, maxWidth.toFloat(), this.background, this.backgroundColor, this.textColor)
-            DisplayHandler.Align.CENTER -> line.drawCenter(x, y, maxWidth.toFloat(), this.background, this.backgroundColor, this.textColor)
+            DisplayHandler.Align.LEFT -> line.drawLeft(x, y, maxWidth, this.background, this.backgroundColor, this.textColor)
+            DisplayHandler.Align.RIGHT -> line.drawRight(x, y, maxWidth, this.background, this.backgroundColor, this.textColor)
+            DisplayHandler.Align.CENTER -> line.drawCenter(x, y, maxWidth, this.background, this.backgroundColor, this.textColor)
             else -> return
         }
     }
 
     internal abstract fun createDisplayLine(text: String): DisplayLine
+
+    override fun toString() =
+            "Display{" +
+                    "shouldRender=$shouldRender, " +
+                    "renderX=$renderX, renderY=$renderY, " +
+                    "background=$background, backgroundColor=$backgroundColor, " +
+                    "textColor=$textColor, align=$align, order=$order, " +
+                    "minWidth=$minWidth, width=$width, height=$height, " +
+                    "lines=$lines" +
+                    "}"
+
 }

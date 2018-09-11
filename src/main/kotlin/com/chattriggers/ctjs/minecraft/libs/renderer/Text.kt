@@ -130,4 +130,12 @@ class Text(private var string: String, private var x: Float = 0f, private var y:
             else -> newX
         }
     }
+
+    override fun toString() =
+            "Text{" +
+                    "string=$string, x=$x, y=$y, " +
+                    "lines=$lines, color=$color, scale=$scale" +
+                    "formatted=$formatted, shadow=$shadow, align=$align, " +
+                    "width=$width, maxLines=$maxLines" +
+                    "}"
 }
