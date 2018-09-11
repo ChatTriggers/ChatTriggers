@@ -30,7 +30,7 @@ abstract class Display {
         this.renderY = config.getOption("renderY", 0).toFloat()
 
         this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toInt()
-        this.textColor = config.getOption("textColor", 0xffffffff).toInt()
+        this.textColor = config.getOption("textColor", 0xffffffff.toInt()).toInt()
 
         this.setBackground(config.getOption("background", DisplayHandler.Background.NONE))
         this.setAlign(config.getOption("align", DisplayHandler.Align.RIGHT))
@@ -47,60 +47,55 @@ abstract class Display {
     }
 
     fun getBackgroundColor() = this.backgroundColor
-    fun setBackgroundColor(backgroundColor: Int): Display {
+    fun setBackgroundColor(backgroundColor: Int) = apply {
         this.backgroundColor = backgroundColor
-        return this
     }
 
     fun getTextColor() = this.textColor
-    fun setTextColor(textColor: Int): Display {
+    fun setTextColor(textColor: Int) = apply {
         this.textColor = textColor
-        return this
     }
 
-    fun setBackground(background: Any): Display {
+    fun getBackground() = this.background
+    fun setBackground(background: Any) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"))
             is DisplayHandler.Background -> background
             else -> DisplayHandler.Background.NONE
         }
-        return this
     }
 
-    fun setAlign(align: Any): Display {
+    fun getAlign() = this.align
+    fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
             is DisplayHandler.Align -> align
             else -> DisplayHandler.Align.LEFT
         }
-        return this
     }
 
-    fun setOrder(order: Any): Display {
+    fun getOrder() = this.order
+    fun setOrder(order: Any) = apply {
         this.order = when (order) {
             is String -> DisplayHandler.Order.valueOf(order.toUpperCase())
             is DisplayHandler.Order -> order
             else -> DisplayHandler.Order.DOWN
         }
-        return this
     }
 
-
-    fun setLine(index: Int, line: Any): Display {
+    fun setLine(index: Int, line: Any) = apply {
         while (this.lines.size -1 < index) this.lines.add(createDisplayLine(""))
         this.lines[index] = when (line) {
             is String -> createDisplayLine(line)
             is DisplayLine -> line
             else -> createDisplayLine("")
         }
-        return this
     }
 
     fun getLine(index: Int) = this.lines[index]
     fun getLines() = this.lines
-    fun setLines(lines: MutableList<DisplayLine>): Display {
+    fun setLines(lines: MutableList<DisplayLine>) = apply {
         this.lines = lines
-        return this
     }
 
     @JvmOverloads
@@ -115,7 +110,7 @@ abstract class Display {
         else this.lines.add(index, toAdd)
     }
 
-    fun addLines(vararg lines: Any): Display {
+    fun addLines(vararg lines: Any) = apply{
         lines.forEach {
             this.lines.add(when (it) {
                 is String -> createDisplayLine(it)
@@ -123,44 +118,37 @@ abstract class Display {
                 else -> createDisplayLine("")
             })
         }
-        return this
     }
 
-    fun clearLines(): Display {
+    fun clearLines() = apply {
         this.lines.clear()
-        return this
     }
 
     fun getRenderX() = this.renderX
-    fun setRenderX(renderX: Float): Display {
+    fun setRenderX(renderX: Float) = apply {
         this.renderX
-        return this
     }
 
     fun getRenderY() = this.renderY
-    fun setRenderY(renderY: Float): Display {
+    fun setRenderY(renderY: Float) = apply {
         this.renderY = renderY
-        return this
     }
 
-    fun setRenderLoc(renderX: Float, renderY: Float): Display {
+    fun setRenderLoc(renderX: Float, renderY: Float) = apply {
         this.renderX = renderX
         this.renderY = renderY
-        return this
     }
 
     fun getShouldRender() = this.shouldRender
-    fun setShouldRender(shouldRender: Boolean): Display {
+    fun setShouldRender(shouldRender: Boolean) = apply {
         this.shouldRender = shouldRender
-        return this
     }
 
     fun getWidth() = this.width
     fun getHeight() = this.height
     fun getMinWidth() = this.minWidth
-    fun setMinWidth(minWidth: Int): Display {
+    fun setMinWidth(minWidth: Int) = apply {
         this.minWidth = minWidth
-        return this
     }
 
     fun render() {

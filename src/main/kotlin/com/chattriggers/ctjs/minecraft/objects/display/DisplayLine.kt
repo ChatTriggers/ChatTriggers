@@ -54,6 +54,11 @@ abstract class DisplayLine {
         this.textWidth = (Renderer.getStringWidth(text) * this.text.getScale()).toInt()
     }
 
+    fun getTextColor() = this.textColor
+    fun setTextColor(color: Int) = apply {
+        this.textColor = color
+    }
+
     fun getTextWidth() = this.textWidth
 
     fun setShadow(shadow: Boolean) = apply { this.text.setShadow(shadow) }
@@ -79,6 +84,11 @@ abstract class DisplayLine {
             is DisplayHandler.Background -> background
             else -> null
         }
+    }
+
+    fun getBackgroundColor() = this.backgroundColor
+    fun setBackgroundColor(color: Int) = apply {
+        this.backgroundColor = color
     }
 
     fun registerClicked(method: Any) = run {

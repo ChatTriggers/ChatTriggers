@@ -1,9 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import net.minecraft.scoreboard.Score
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.client.GuiIngameForge
-import java.util.stream.Collectors
 
 object Scoreboard {
     private var needsUpdate = true
@@ -40,15 +38,15 @@ object Scoreboard {
      *
      * @return the list of lines
      */
-    @JvmStatic
-    fun getLines(): List<Score> {
+    @JvmStatic @JvmOverloads
+    fun getLines(descending: Boolean = true): List<Score> {
         // the array will only be updated upon request
         if (needsUpdate) {
             updateNames()
             needsUpdate = false
         }
 
-        return scoreboardNames
+        return if (descending) scoreboardNames else scoreboardNames.asReversed()
     }
 
     /**
