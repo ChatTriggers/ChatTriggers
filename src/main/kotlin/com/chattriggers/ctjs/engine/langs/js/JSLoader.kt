@@ -91,7 +91,7 @@ object JSLoader : ILoader {
         }
     }
 
-    override fun exec(type: TriggerType, vararg args: Any) {
+    override fun exec(type: TriggerType, vararg args: Any?) {
         triggers.filter {
             it.type == type
         }.forEach {
@@ -119,7 +119,7 @@ object JSLoader : ILoader {
         return "js"
     }
 
-    override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any) {
+    override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
         try {
             if (method is String) {
                 callNamedMethod(method, *args)
@@ -144,7 +144,7 @@ object JSLoader : ILoader {
         return console
     }
 
-    private fun callActualMethod(method: Any, vararg args: Any) {
+    private fun callActualMethod(method: Any, vararg args: Any?) {
         val som: ScriptObjectMirror = if (method is ScriptObjectMirror) {
             method
         } else {
@@ -165,7 +165,7 @@ object JSLoader : ILoader {
         som.call(som, *args)
     }
 
-    private fun callNamedMethod(method: String, vararg args: Any) {
+    private fun callNamedMethod(method: String, vararg args: Any?) {
         scriptEngine.invokeFunction(method, *args)
     }
 

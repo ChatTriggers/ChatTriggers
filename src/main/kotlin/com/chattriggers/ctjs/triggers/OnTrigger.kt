@@ -43,11 +43,11 @@ abstract class OnTrigger protected constructor(var method: Any, var type: Trigge
         this.loader.removeTrigger(this)
     }
 
-    protected fun callMethod(vararg args: Any) {
+    protected fun callMethod(vararg args: Any?) {
         this.loader.trigger(this, this.method, *args)
     }
 
-    abstract fun trigger(vararg args: Any)
+    abstract fun trigger(vararg args: Any?)
 
     enum class TriggerResult {
         CANCEL

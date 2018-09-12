@@ -68,7 +68,7 @@ object WorldListener {
                 vol,
                 pitch,
                 //#if MC<=10809
-                event.category ?: event.category.categoryName
+                event.category ?: event.category?.categoryName
                 //#else
                 //$$ event.sound.category ?: event.sound.category.name
                 //#endif
