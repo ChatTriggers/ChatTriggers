@@ -12,7 +12,6 @@ import jdk.nashorn.api.scripting.NashornScriptEngineFactory
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import jdk.nashorn.internal.objects.Global
 import net.minecraft.client.Minecraft
-import org.apache.commons.io.FileUtils
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
@@ -61,7 +60,7 @@ object JSLoader : ILoader {
         val combinedScript = modules.map {
             it.getFilesWithExtension(".js")
         }.flatten().joinToString(separator = "\n") {
-            FileUtils.readFileToString(it)
+            it.readText()
         }
 
         try {
@@ -81,7 +80,7 @@ object JSLoader : ILoader {
         cachedModules.add(module)
 
         val script = module.getFilesWithExtension(".js").joinToString(separator = "\n") {
-            FileUtils.readFileToString(it)
+            it.readText()
         }
 
         try {
