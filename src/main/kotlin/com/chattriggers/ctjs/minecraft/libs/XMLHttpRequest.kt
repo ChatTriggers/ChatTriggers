@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.External
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -12,6 +13,7 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 
+@External
 abstract class XMLHttpRequest {
     private val USER_AGENT = "Mozilla/5.0"
 

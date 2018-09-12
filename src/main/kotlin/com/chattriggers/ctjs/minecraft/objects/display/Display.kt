@@ -1,7 +1,9 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
+import com.chattriggers.ctjs.utils.kotlin.External
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 
+@External
 abstract class Display {
     private var lines = mutableListOf<DisplayLine>()
 

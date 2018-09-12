@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.wrappers
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.mixins.MixinGuiChat
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiNewChat
@@ -11,6 +12,7 @@ import net.minecraft.client.network.NetHandlerPlayClient
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 
+@External
 object Client {
     /**
      * Gets Minecraft's Minecraft object

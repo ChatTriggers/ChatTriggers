@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.enchantment.Enchantment
@@ -20,6 +21,7 @@ import net.minecraft.item.Item as MCItem
 //$$ import com.chattriggers.ctjs.minecraft.wrappers.World
 //#endif
 
+@External
 class Item {
     val item: MCItem
     var itemStack: ItemStack

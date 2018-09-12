@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.Minecraft
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 
+@External
 object Tessellator {
     private var tessellator = MCTessellator.getInstance()
     private var worldRenderer = this.tessellator.getRenderer()

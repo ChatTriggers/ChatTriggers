@@ -7,10 +7,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.External
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import org.lwjgl.input.Mouse
 import javax.vecmath.Vector2d
 
+@External
 abstract class DisplayLine {
     private lateinit var text: Text
     private var textWidth = 0f

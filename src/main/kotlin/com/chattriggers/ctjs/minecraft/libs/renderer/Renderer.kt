@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.libs.MathLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.gui.FontRenderer
@@ -20,6 +21,7 @@ import java.net.URL
 import java.util.*
 import javax.imageio.ImageIO
 
+@External
 object Renderer {
     var colorized = false
 

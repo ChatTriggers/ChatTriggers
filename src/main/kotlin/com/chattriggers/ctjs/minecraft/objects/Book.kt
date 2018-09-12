@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.TextComponentSerializer
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
@@ -14,6 +15,7 @@ import net.minecraft.nbt.NBTTagList
 import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.fml.relauncher.ReflectionHelper
 
+@External
 class Book(bookName: String) {
     private var bookScreen: GuiScreenBook? = null
     private val book: ItemStack

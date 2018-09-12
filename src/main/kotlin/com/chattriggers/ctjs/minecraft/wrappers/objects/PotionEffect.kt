@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
 
 //#if MC>=11202
 //$$ import net.minecraft.potion.Potion
 //#endif
 
+@External
 class PotionEffect(private val effect: MCPotionEffect) {
     fun getName(): String = this.effect.effectName
 

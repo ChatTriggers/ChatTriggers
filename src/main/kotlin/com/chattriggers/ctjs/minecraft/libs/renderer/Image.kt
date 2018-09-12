@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.awt.image.BufferedImage
 
+@External
 class Image(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
     private var textureWidth = image?.width ?: 0

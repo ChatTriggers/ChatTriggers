@@ -2,8 +2,10 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.GlStateManager
 
+@External
 class Text(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
     private var lines = mutableListOf<String>()
 

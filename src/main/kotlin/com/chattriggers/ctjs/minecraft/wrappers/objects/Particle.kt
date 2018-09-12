@@ -1,8 +1,10 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.minecraft.mixins.MixinEntityFX
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 
+@External
 class Particle(val underlyingEntity: MCParticle) {
     fun scale(scale: Float) {
         this.underlyingEntity.multipleParticleScaleBy(scale)

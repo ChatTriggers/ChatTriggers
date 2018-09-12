@@ -21,6 +21,10 @@ annotation class KotlinListener
 @Target(AnnotationTarget.CLASS)
 annotation class ModuleLoader
 
+@Retention(AnnotationRetention.SOURCE)
+@Target(AnnotationTarget.CLASS)
+annotation class External
+
 object AnnotationHandler {
     private val LOGGER = LogManager.getLogger(AnnotationHandler::class.java)
 

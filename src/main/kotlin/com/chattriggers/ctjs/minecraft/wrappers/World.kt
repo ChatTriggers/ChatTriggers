@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.renderer.RenderGlobal
@@ -21,6 +22,7 @@ import kotlin.reflect.jvm.isAccessible
 //$$
 //#endif
 
+@External
 object World {
     /**
      * Gets Minecraft's WorldClient object

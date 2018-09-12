@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MathHelper
 import com.chattriggers.ctjs.utils.kotlin.RayTraceType
 import net.minecraft.block.BlockSign
@@ -15,6 +16,7 @@ import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
 import java.util.stream.Collectors
 
+@External
 object Player {
     /**
      * Gets Minecraft's EntityPlayerSP object representing the user

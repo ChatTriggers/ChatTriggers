@@ -8,12 +8,14 @@ import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraft.client.gui.ChatLine
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import java.util.regex.Pattern
 
+@External
 object ChatLib {
     /**
      * Prints text in the chat.

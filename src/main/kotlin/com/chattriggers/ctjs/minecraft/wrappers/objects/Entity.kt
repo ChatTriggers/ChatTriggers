@@ -1,10 +1,12 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MathHelper
 import net.minecraft.entity.EntityLivingBase
 import java.util.*
 
+@External
 open class Entity(val entity: MCEntity) {
     fun getX() = entity.posX
 

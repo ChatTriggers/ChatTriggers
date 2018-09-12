@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -7,6 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 
 @KotlinListener
+@External
 object GuiHandler {
     private val GUIs: MutableMap<GuiScreen, Int> = mutableMapOf()
 

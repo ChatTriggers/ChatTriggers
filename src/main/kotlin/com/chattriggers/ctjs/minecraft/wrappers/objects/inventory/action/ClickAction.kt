@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action
 
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.utils.kotlin.External
 
 //#if MC>10809
 //$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
 //#endif
 
+@External
 class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     private lateinit var clickType: ClickType
     private var holdingShift = false

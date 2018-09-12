@@ -4,9 +4,11 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.inventory.Container
 import net.minecraft.inventory.IInventory
 
+@External
 class Inventory {
     val inventory: IInventory?
     val container: Container?

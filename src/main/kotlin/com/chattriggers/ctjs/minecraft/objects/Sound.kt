@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.mixins.MixinSoundHandler
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.SoundCategory
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraft.client.audio.SoundManager
@@ -43,6 +44,7 @@ import java.net.MalformedURLException
  *
  * @param config the JavaScript config object
  */
+@External
 class Sound(private val config: ScriptObjectMirror) {
     private var sndSystem: SoundSystem? = null
     private val source: String = config["source"] as String

@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
@@ -15,6 +16,7 @@ import net.minecraft.util.IChatComponent
 //#endif
 
 //TODO: figure out what is not needed anymore after the kotlin conversion and remove
+@External
 object EventLib {
     @JvmStatic
     fun getButton(event: MouseEvent): Int {

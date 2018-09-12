@@ -1,12 +1,14 @@
 package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
 import org.apache.commons.lang3.ArrayUtils
 
 import java.util.ArrayList
 
+@External
 class KeyBind {
     private var keyBinding: KeyBinding
     private var isCustom: Boolean = false

@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.util.vector.Vector2f
 
+@External
 class Shape(private var color: Int) {
     private var vertexes = mutableListOf<Vector2f>()
     private var drawMode = 9
