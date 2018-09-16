@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.tileentity.TileEntitySign
 
 /**
@@ -11,6 +12,7 @@ import net.minecraft.tileentity.TileEntitySign
  *
  * @param block the {@link Block} to convert to a Sign
  */
+@External
 class Sign(block: Block) : Block(block) {
     private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(blockPos) as TileEntitySign
 

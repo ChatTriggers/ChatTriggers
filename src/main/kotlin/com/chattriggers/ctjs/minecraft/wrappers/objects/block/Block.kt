@@ -7,7 +7,9 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.init.Blocks
 import net.minecraft.block.Block as MCBlock
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
+import com.chattriggers.ctjs.utils.kotlin.External
 
+@External
 open class Block {
     var block: MCBlock
     var blockPos: BlockPos = BlockPos(0, 0, 0)
