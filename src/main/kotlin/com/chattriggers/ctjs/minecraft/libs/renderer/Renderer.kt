@@ -299,10 +299,10 @@ object Renderer {
 
     object screen {
         @JvmStatic
-        fun getWidth() = ScaledResolution(Client.getMinecraft()).scaledWidth
+        fun getWidth(): Int = ScaledResolution(Client.getMinecraft()).scaledWidth
         @JvmStatic
-        fun getHeight() = ScaledResolution(Client.getMinecraft()).scaledHeight
+        fun getHeight(): Int = ScaledResolution(Client.getMinecraft()).scaledHeight
         @JvmStatic
-        fun getScale() = ScaledResolution(Client.getMinecraft()).scaleFactor
+        fun getScale(): Int = ScaledResolution(Client.getMinecraft()).scaleFactor
     }
 }

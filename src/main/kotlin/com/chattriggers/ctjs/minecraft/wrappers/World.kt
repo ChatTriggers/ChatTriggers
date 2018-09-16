@@ -39,7 +39,7 @@ object World {
     }
 
     @JvmStatic
-    fun isLoaded() = getWorld() != null
+    fun isLoaded(): Boolean = getWorld() != null
 
     /**
      * Play a sound at the player location.
@@ -95,22 +95,22 @@ object World {
     }
 
     @JvmStatic
-    fun isRaining() = getWorld()?.worldInfo?.isRaining ?: false
+    fun isRaining(): Boolean = getWorld()?.worldInfo?.isRaining ?: false
 
     @JvmStatic
-    fun getRainingStrength() = getWorld()?.rainingStrength ?: false
+    fun getRainingStrength(): Float = getWorld()?.rainingStrength ?: -1f
 
     @JvmStatic
-    fun getTime() = getWorld()?.worldTime ?: -1L
+    fun getTime(): Long = getWorld()?.worldTime ?: -1L
 
     @JvmStatic
-    fun getDifficulty() = getWorld()?.difficulty.toString()
+    fun getDifficulty(): String = getWorld()?.difficulty.toString()
 
     @JvmStatic
-    fun getMoonPhase() = getWorld()?.moonPhase ?: -1
+    fun getMoonPhase(): Int = getWorld()?.moonPhase ?: -1
 
     @JvmStatic
-    fun getSeed() = getWorld()?.seed ?: -1L
+    fun getSeed(): Long = getWorld()?.seed ?: -1L
 
     @JvmStatic
     fun getType(): String {
@@ -143,7 +143,7 @@ object World {
      * @return the players
      */
     @JvmStatic
-    fun getAllPlayers() = getWorld()?.playerEntities?.map {
+    fun getAllPlayers(): List<PlayerMP> = getWorld()?.playerEntities?.map {
         PlayerMP(it)
     } ?: listOf()
 
@@ -164,7 +164,7 @@ object World {
     }
 
     @JvmStatic
-    fun hasPlayer(name: String) = getWorld()?.getPlayerEntityByName(name) != null
+    fun hasPlayer(name: String): Boolean = getWorld()?.getPlayerEntityByName(name) != null
 
     @JvmStatic
     fun getChunk(x: Int, y: Int, z: Int): Chunk {
@@ -205,7 +205,7 @@ object World {
          * @return the border center x location
          */
         @JvmStatic
-        fun getCenterX() = getWorld()!!.worldBorder.centerX
+        fun getCenterX(): Double = getWorld()!!.worldBorder.centerX
 
         /**
          * Gets the border center z location.
@@ -213,7 +213,7 @@ object World {
          * @return the border center z location
          */
         @JvmStatic
-        fun getCenterZ() = getWorld()!!.worldBorder.centerZ
+        fun getCenterZ(): Double = getWorld()!!.worldBorder.centerZ
 
         /**
          * Gets the border size.
@@ -221,7 +221,7 @@ object World {
          * @return the border size
          */
         @JvmStatic
-        fun getSize() = getWorld()!!.worldBorder.size
+        fun getSize(): Int = getWorld()!!.worldBorder.size
 
         /**
          * Gets the border target size.
@@ -229,7 +229,7 @@ object World {
          * @return the border target size
          */
         @JvmStatic
-        fun getTargetSize() = getWorld()!!.worldBorder.targetSize
+        fun getTargetSize(): Double = getWorld()!!.worldBorder.targetSize
 
         /**
          * Gets the border time until the target size is met.
@@ -237,7 +237,7 @@ object World {
          * @return the border time until target
          */
         @JvmStatic
-        fun getTimeUntilTarget() = getWorld()!!.worldBorder.timeUntilTarget
+        fun getTimeUntilTarget(): Long = getWorld()!!.worldBorder.timeUntilTarget
     }
 
     /**
@@ -250,7 +250,7 @@ object World {
          * @return the spawn x location.
          */
         @JvmStatic
-        fun getX() = getWorld()!!.spawnPoint.x
+        fun getX(): Int = getWorld()!!.spawnPoint.x
 
         /**
          * Gets the spawn y location.
@@ -258,7 +258,7 @@ object World {
          * @return the spawn y location.
          */
         @JvmStatic
-        fun getY() = getWorld()!!.spawnPoint.y
+        fun getY(): Int = getWorld()!!.spawnPoint.y
 
         /**
          * Gets the spawn z location.
@@ -266,7 +266,7 @@ object World {
          * @return the spawn z location.
          */
         @JvmStatic
-        fun getZ() = getWorld()!!.spawnPoint.z
+        fun getZ(): Int = getWorld()!!.spawnPoint.z
     }
 
     object particle {
@@ -277,7 +277,7 @@ object World {
          * @return the array of name strings
          */
         @JvmStatic
-        fun getParticleNames() = EnumParticleTypes.values().map {
+        fun getParticleNames(): List<String> = EnumParticleTypes.values().map {
             it.name
         }.toList()
 

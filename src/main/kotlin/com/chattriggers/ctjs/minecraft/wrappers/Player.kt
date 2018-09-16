@@ -294,28 +294,24 @@ object Player {
          * @return the item in the player's helmet slot
          */
         @JvmStatic
-        val helmet: Item
-            get() = getInventory().getStackInSlot(39)
+        fun getHelmet(): Item = getInventory().getStackInSlot(39)
 
         /**
          * @return the item in the player's chestplate slot
          */
         @JvmStatic
-        val chestplate: Item
-            get() = getInventory().getStackInSlot(38)
+        fun getChestplate(): Item = getInventory().getStackInSlot(38)
 
         /**
          * @return the item in the player's leggings slot
          */
         @JvmStatic
-        val leggings: Item
-            get() = getInventory().getStackInSlot(37)
+        fun getLeggings(): Item = getInventory().getStackInSlot(37)
 
         /**
          * @return the item in the player's boots slot
          */
         @JvmStatic
-        val boots: Item
-            get() = getInventory().getStackInSlot(36)
+        fun getBoots(): Item = getInventory().getStackInSlot(36)
     }
 }
