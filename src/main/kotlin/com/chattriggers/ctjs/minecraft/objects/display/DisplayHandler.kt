@@ -20,7 +20,7 @@ object DisplayHandler {
 
     @SubscribeEvent
     fun renderDisplays(event: RenderGameOverlayEvent) {
-        if (EventLib.getType(event) != RenderGameOverlayEvent.ElementType.TEXT) return
+        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return
 
         GlStateManager.pushMatrix()
         this.displays.forEach(Display::render)

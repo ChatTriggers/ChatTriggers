@@ -100,7 +100,7 @@ object ClientListener {
     fun onRenderGameOverlay(event: RenderGameOverlayEvent) {
         handleOverlayTriggers(event)
 
-        if (EventLib.getType(event) != RenderGameOverlayEvent.ElementType.TEXT)
+        if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
             return
 
         TriggerType.STEP.triggerAll()
@@ -109,7 +109,7 @@ object ClientListener {
     }
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent) {
-        val element = EventLib.getType(event)
+        val element = event.type
 
         when (element) {
             RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RENDER_PLAYER_LIST.triggerAll(event)

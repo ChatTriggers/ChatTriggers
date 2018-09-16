@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.utils.kotlin.External
+import com.chattriggers.ctjs.utils.kotlin.ITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
@@ -19,22 +20,12 @@ import net.minecraft.util.IChatComponent
 @External
 object EventLib {
     @JvmStatic
-    fun getButton(event: MouseEvent): Int {
-        return event.button
-    }
-
-    @JvmStatic
     fun getButtonState(event: MouseEvent): Boolean {
         //#if MC<=10809
         return event.buttonstate
         //#else
         //$$ return event.isButtonstate()
         //#endif
-    }
-
-    @JvmStatic
-    fun getType(event: RenderGameOverlayEvent): RenderGameOverlayEvent.ElementType {
-        return event.type
     }
 
     @JvmStatic
@@ -47,12 +38,7 @@ object EventLib {
     }
 
     @JvmStatic
-    fun getMessage(event: ClientChatReceivedEvent):
-            //#if MC<=10809
-            IChatComponent {
-            //#else
-            //$$ ITextComponent {
-            //#endif
+    fun getMessage(event: ClientChatReceivedEvent): ITextComponent {
         return event.message
     }
 

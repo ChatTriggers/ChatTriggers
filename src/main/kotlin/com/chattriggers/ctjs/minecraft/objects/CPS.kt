@@ -28,7 +28,7 @@ object CPS {
     @SubscribeEvent
     fun click(event: MouseEvent) {
         if (EventLib.getButtonState(event)) {
-            when (EventLib.getButton(event)) {
+            when (event.button) {
                 0 -> CPS.addLeftClicks()
                 1 -> CPS.addRightClicks()
             }
