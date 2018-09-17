@@ -16,7 +16,7 @@ object Scoreboard {
      * @return the scoreboard title
      */
     @JvmStatic
-    fun getScoreboardTitle() = getTitle()
+    fun getScoreboardTitle(): String = getTitle()
 
     /**
      * Gets the top-most string which is displayed on the scoreboard. (doesn't have a score on the side).<br></br>
@@ -59,7 +59,7 @@ object Scoreboard {
      * @return the score object at the index
      */
     @JvmStatic
-    fun getLineByIndex(index: Int) = getLines()[index]
+    fun getLineByIndex(index: Int): Score = getLines()[index]
 
     /**
      * Gets a list of lines that have a certain score,
@@ -69,7 +69,7 @@ object Scoreboard {
      * @return a list of actual score objects
      */
     @JvmStatic
-    fun getLinesByScore(score: Int) = getLines().filter {
+    fun getLinesByScore(score: Int): List<Score> = getLines().filter {
         it.getPoints() == score
     }
 
@@ -144,7 +144,7 @@ object Scoreboard {
          *
          * @return the actual point value
          */
-        fun getPoints() = score.scorePoints
+        fun getPoints(): Int = score.scorePoints
 
         /**
          * Gets the display string of this score
@@ -156,6 +156,6 @@ object Scoreboard {
                 score.playerName
         )
 
-        override fun toString() = getName()
+        override fun toString(): String = getName()
     }
 }
