@@ -137,7 +137,9 @@ object ChatLib {
      * @return the unformatted string
      */
     @JvmStatic
-    fun removeFormatting(text: String) = text.replace("[\\u00a7&][0-9a-fklmnor]".toRegex(), "")
+    fun removeFormatting(text: String): String {
+        return text.replace("[\\u00a7&][0-9a-fklmnor]".toRegex(), "")
+    }
 
     /**
      * Replaces Minecraft formatted text with normal formatted text
@@ -146,7 +148,9 @@ object ChatLib {
      * @return the unformatted string
      */
     @JvmStatic
-    fun replaceFormatting(text: String) = text.replace("\\u00a7(?![^0-9a-fklmnor]|$)".toRegex(), "&")
+    fun replaceFormatting(text: String): String {
+        return text.replace("\\u00a7(?![^0-9a-fklmnor]|$)".toRegex(), "&")
+    }
 
     /**
      * Get a message that will be perfectly centered in chat.

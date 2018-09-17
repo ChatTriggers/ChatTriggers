@@ -17,8 +17,9 @@ object FileLib {
      * @param toWrite    string to write in file
      */
     @JvmStatic
-    fun write(importName: String, fileName: String, toWrite: String) =
-            write(Config.modulesFolder + "/" + importName + "/" + fileName, toWrite)
+    fun write(importName: String, fileName: String, toWrite: String) {
+        write(Config.modulesFolder + "/" + importName + "/" + fileName, toWrite)
+    }
 
     /**
      * Writes a file to anywhere on the system.<br></br>
@@ -41,8 +42,9 @@ object FileLib {
      * @return the string in the file
      */
     @JvmStatic
-    fun read(importName: String, fileName: String) =
-            read(Config.modulesFolder + "/" + importName + "/" + fileName)
+    fun read(importName: String, fileName: String): String? {
+        return read(Config.modulesFolder + "/" + importName + "/" + fileName)
+    }
 
     /**
      * Reads a file from anywhere on the system.<br></br>
@@ -53,7 +55,9 @@ object FileLib {
      * @return the string in the file
      */
     @JvmStatic
-    fun read(fileLocation: String) = read(File(fileLocation))
+    fun read(fileLocation: String): String? {
+        return read(File(fileLocation))
+    }
 
     /**
      * Reads a file from anywhere on the system using java.io.File.
