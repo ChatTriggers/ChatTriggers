@@ -45,21 +45,21 @@ class KeyBind {
      *
      * @return whether or not the key is pressed
      */
-    fun isKeyDown() = keyBinding.isKeyDown
+    fun isKeyDown(): Boolean = keyBinding.isKeyDown
 
     /**
      * Returns true on the initial key press. For continuous querying use [.isKeyDown].
      *
      * @return whether or not the key has just been pressed
      */
-    fun isPressed() = keyBinding.isPressed
+    fun isPressed(): Boolean = keyBinding.isPressed
 
     /**
      * Gets the key code of the key.
      *
      * @return the integer key code
      */
-    fun getKeyCode() = keyBinding.keyCode
+    fun getKeyCode(): Int = keyBinding.keyCode
 
     /**
      * Sets the state of the key.

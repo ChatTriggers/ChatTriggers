@@ -35,11 +35,11 @@ object CPS {
         }
     }
 
-    @JvmStatic fun getLeftClicksMax() = this.leftClicksMax
-    @JvmStatic fun getRightClicksMax() = this.rightClicksMax
+    @JvmStatic fun getLeftClicksMax(): Int = this.leftClicksMax
+    @JvmStatic fun getRightClicksMax(): Int = this.rightClicksMax
 
-    @JvmStatic fun getLeftClicks() = this.leftClicks.size
-    @JvmStatic fun getRightClicks() = this.rightClicks.size
+    @JvmStatic fun getLeftClicks(): Int = this.leftClicks.size
+    @JvmStatic fun getRightClicks(): Int = this.rightClicks.size
 
     @JvmStatic
     fun getLeftClicksAverage(): Int {
