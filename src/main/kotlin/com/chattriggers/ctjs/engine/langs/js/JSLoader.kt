@@ -25,6 +25,7 @@ object JSLoader : ILoader {
     private val cachedModules = mutableListOf<Module>()
     private var scriptEngine: NashornScriptEngine
     private val console = Console(this)
+    private val toRemove = mutableListOf<OnTrigger>()
 
     init {
         scriptEngine = instanceScriptEngine(listOf())
@@ -41,7 +42,7 @@ object JSLoader : ILoader {
             it.toURI().toURL()
         }
 
-        instanceScriptEngine(jars)
+        scriptEngine = instanceScriptEngine(jars)
 
         val script = saveResource(
                 "/providedLibs.js",
@@ -92,6 +93,9 @@ object JSLoader : ILoader {
     }
 
     override fun exec(type: TriggerType, vararg args: Any?) {
+        triggers.removeAll(toRemove)
+        toRemove.clear()
+
         triggers.filter {
             it.type == type
         }.forEach {
@@ -133,7 +137,7 @@ object JSLoader : ILoader {
     }
 
     override fun removeTrigger(trigger: OnTrigger) {
-        triggers.remove(trigger)
+        toRemove.add(trigger)
     }
 
     override fun getModules(): List<Module> {

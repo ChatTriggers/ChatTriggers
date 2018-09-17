@@ -53,6 +53,15 @@ var ClickAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.in
 var DragAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction");
 var KeyAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.KeyAction");
 
+// Triggers
+var OnChatTrigger = Java.type("com.chattriggers.ctjs.triggers.OnChatTrigger");
+var OnCommandTrigger = Java.type("com.chattriggers.ctjs.triggers.OnCommandTrigger");
+var OnRegularTrigger = Java.type("com.chattriggers.ctjs.triggers.OnRegularTrigger");
+var OnRenderTrigger = Java.type("com.chattriggers.ctjs.triggers.OnRenderTrigger");
+var OnSoundPlayTrigger = Java.type("com.chattriggers.ctjs.triggers.OnSoundPlayTrigger");
+var OnStepTrigger = Java.type("com.chattriggers.ctjs.triggers.OnStepTrigger");
+var OnTrigger = Java.type("com.chattriggers.ctjs.triggers.OnTrigger");
+
 // Misc
 var Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
 var Config = Java.type("com.chattriggers.ctjs.utils.config.Config").INSTANCE;
