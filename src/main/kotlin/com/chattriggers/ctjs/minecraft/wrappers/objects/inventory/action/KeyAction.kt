@@ -10,7 +10,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 class KeyAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     private var key: Int = -1
 
-    fun getKey() = key
+    fun getKey(): Int = key
 
     /**
      * Which key to act as if has been clicked (REQUIRED).

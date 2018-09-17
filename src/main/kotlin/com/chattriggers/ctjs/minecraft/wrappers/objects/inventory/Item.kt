@@ -87,7 +87,7 @@ class Item {
     }
     /* End of constructors */
 
-    fun getID() = MCItem.getIdFromItem(item)
+    fun getID(): Int = MCItem.getIdFromItem(item)
 
     fun setStackSize(stackSize: Int) = apply {
         itemStack = ItemStack(item, stackSize)
@@ -107,7 +107,7 @@ class Item {
      *
      * @return the item's unlocalized name
      */
-    fun getUnlocalizedName() = item.unlocalizedName
+    fun getUnlocalizedName(): String = item.unlocalizedName
 
     /**
      * Gets the item's registry name.<br>
@@ -144,15 +144,15 @@ class Item {
         }
     }
 
-    fun isEnchantable() = itemStack.isItemEnchantable
+    fun isEnchantable(): Boolean = itemStack.isItemEnchantable
 
-    fun isEnchanted() = itemStack.isItemEnchanted
+    fun isEnchanted(): Boolean = itemStack.isItemEnchanted
 
-    fun getItemNBT() = itemStack.serializeNBT().toString()
+    fun getItemNBT(): String = itemStack.serializeNBT().toString()
 
-    fun getMetadata() = itemStack.metadata
+    fun getMetadata(): Int = itemStack.metadata
 
-    fun canPlaceOn(block: Block) = itemStack.canPlaceOn(block.block)
+    fun canPlaceOn(block: Block): Boolean = itemStack.canPlaceOn(block.block)
 
     fun canHarvest(block: Block): Boolean {
         //#if MC<=10809
@@ -164,24 +164,24 @@ class Item {
         //#endif
     }
 
-    fun canDestroy(block: Block) = itemStack.canDestroy(block.block)
+    fun canDestroy(block: Block): Boolean = itemStack.canDestroy(block.block)
 
     /**
      * Gets the items durability, i.e. the number of uses left
      *
      * @return the items durability
      */
-    fun getDurability() = getMaxDamage() - getDamage()
+    fun getDurability(): Int = getMaxDamage() - getDamage()
 
-    fun getDamage() = itemStack.itemDamage
+    fun getDamage(): Int = itemStack.itemDamage
 
     fun setDamage(damage: Int) = apply {
         itemStack.itemDamage = damage
     }
 
-    fun getMaxDamage() = itemStack.maxDamage
+    fun getMaxDamage(): Int = itemStack.maxDamage
 
-    fun isDamagable() = itemStack.isItemStackDamageable
+    fun isDamagable(): Boolean = itemStack.isItemStackDamageable
 
     fun getLore(): List<String> {
         //#if MC<=10809
@@ -237,5 +237,5 @@ class Item {
         return result
     }
 
-    override fun toString() = itemStack.toString()
+    override fun toString(): String = itemStack.toString()
 }

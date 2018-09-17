@@ -16,7 +16,7 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     //$$ private var pickupAll = false
     //#endif
 
-    fun getClickType() = clickType
+    fun getClickType(): ClickType = clickType
 
     /**
      * The type of click (REQUIRED)
@@ -27,7 +27,7 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         this.clickType = clickType
     }
 
-    fun getHoldingShift() = holdingShift
+    fun getHoldingShift(): Boolean = holdingShift
 
     /**
      * Whether the click should act as if shift is being held (defaults to false)
@@ -38,7 +38,7 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         this.holdingShift = holdingShift
     }
 
-    fun getItemInHand() = itemInHand
+    fun getItemInHand(): Boolean = itemInHand
 
     /**
      * Whether the click should act as if an item is being held
