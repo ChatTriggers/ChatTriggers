@@ -48,17 +48,17 @@ abstract class Display {
         return this.getOrDefault(key, default).toString()
     }
 
-    fun getBackgroundColor() = this.backgroundColor
+    fun getBackgroundColor(): Int = this.backgroundColor
     fun setBackgroundColor(backgroundColor: Int) = apply {
         this.backgroundColor = backgroundColor
     }
 
-    fun getTextColor() = this.textColor
+    fun getTextColor(): Int = this.textColor
     fun setTextColor(textColor: Int) = apply {
         this.textColor = textColor
     }
 
-    fun getBackground() = this.background
+    fun getBackground(): DisplayHandler.Background = this.background
     fun setBackground(background: Any) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"))
@@ -67,7 +67,7 @@ abstract class Display {
         }
     }
 
-    fun getAlign() = this.align
+    fun getAlign(): DisplayHandler.Align= this.align
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
@@ -76,7 +76,7 @@ abstract class Display {
         }
     }
 
-    fun getOrder() = this.order
+    fun getOrder(): DisplayHandler.Order = this.order
     fun setOrder(order: Any) = apply {
         this.order = when (order) {
             is String -> DisplayHandler.Order.valueOf(order.toUpperCase())
@@ -94,8 +94,8 @@ abstract class Display {
         }
     }
 
-    fun getLine(index: Int) = this.lines[index]
-    fun getLines() = this.lines
+    fun getLine(index: Int): DisplayLine = this.lines[index]
+    fun getLines(): List<DisplayLine> = this.lines
     fun setLines(lines: MutableList<DisplayLine>) = apply {
         this.lines = lines
     }
@@ -126,12 +126,12 @@ abstract class Display {
         this.lines.clear()
     }
 
-    fun getRenderX() = this.renderX
+    fun getRenderX(): Float = this.renderX
     fun setRenderX(renderX: Float) = apply {
         this.renderX
     }
 
-    fun getRenderY() = this.renderY
+    fun getRenderY(): Float = this.renderY
     fun setRenderY(renderY: Float) = apply {
         this.renderY = renderY
     }
@@ -141,14 +141,14 @@ abstract class Display {
         this.renderY = renderY
     }
 
-    fun getShouldRender() = this.shouldRender
+    fun getShouldRender(): Boolean = this.shouldRender
     fun setShouldRender(shouldRender: Boolean) = apply {
         this.shouldRender = shouldRender
     }
 
-    fun getWidth() = this.width
-    fun getHeight() = this.height
-    fun getMinWidth() = this.minWidth
+    fun getWidth(): Float = this.width
+    fun getHeight(): Float = this.height
+    fun getMinWidth(): Float = this.minWidth
     fun setMinWidth(minWidth: Float) = apply {
         this.minWidth = minWidth
     }

@@ -50,18 +50,18 @@ abstract class DisplayLine {
         return this.getOrDefault(key, default).toString()
     }
 
-    fun getText() = this.text
+    fun getText(): Text = this.text
     fun setText(text: String) = apply {
         this.text = Renderer.text(text)
         this.textWidth = Renderer.getStringWidth(text) * this.text.getScale()
     }
 
-    fun getTextColor() = this.textColor
+    fun getTextColor(): Int? = this.textColor
     fun setTextColor(color: Int) = apply {
         this.textColor = color
     }
 
-    fun getTextWidth() = this.textWidth
+    fun getTextWidth(): Float = this.textWidth
 
     fun setShadow(shadow: Boolean) = apply { this.text.setShadow(shadow) }
 
@@ -70,7 +70,7 @@ abstract class DisplayLine {
         this.textWidth = Renderer.getStringWidth(text.getString()) * scale
     }
 
-    fun getAlign() = this.align
+    fun getAlign(): DisplayHandler.Align? = this.align
     fun setAlign(align: Any?) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
@@ -79,7 +79,7 @@ abstract class DisplayLine {
         }
     }
 
-    fun getBackground() = this.background
+    fun getBackground(): DisplayHandler.Background? = this.background
     fun setBackground(background: Any?) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"))
@@ -88,7 +88,7 @@ abstract class DisplayLine {
         }
     }
 
-    fun getBackgroundColor() = this.backgroundColor
+    fun getBackgroundColor(): Int? = this.backgroundColor
     fun setBackgroundColor(color: Int) = apply {
         this.backgroundColor = color
     }
