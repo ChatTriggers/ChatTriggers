@@ -11,8 +11,10 @@ class Chunk(val chunk: MCChunk) {
      *
      * @return the entity list
      */
-    fun getAllEntities() = this.chunk.entityLists.toList().flatten().map {
-        Entity(it)
+    fun getAllEntities(): List<Entity> {
+        return this.chunk.entityLists.toList().flatten().map {
+            Entity(it)
+        }
     }
 
     /**
@@ -21,7 +23,9 @@ class Chunk(val chunk: MCChunk) {
      * @param clazz the class to filter for (Use `Java.type().class` to get this)
      * @return the entity list
      */
-    fun getAllEntitiesOfType(clazz: Class<*>) = getAllEntities().filter {
-        it.entity.javaClass == clazz
+    fun getAllEntitiesOfType(clazz: Class<*>): List<Entity> {
+        return getAllEntities().filter {
+            it.entity.javaClass == clazz
+        }
     }
 }

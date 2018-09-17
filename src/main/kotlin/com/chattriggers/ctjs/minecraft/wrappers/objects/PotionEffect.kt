@@ -11,9 +11,9 @@ import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
 class PotionEffect(private val effect: MCPotionEffect) {
     fun getName(): String = this.effect.effectName
 
-    fun getAmplifier() = this.effect.amplifier
+    fun getAmplifier(): Int = this.effect.amplifier
 
-    fun getDuration() = this.effect.duration
+    fun getDuration(): Int = this.effect.duration
 
     fun getID(): Int {
         //#if MC<=10809
@@ -23,9 +23,9 @@ class PotionEffect(private val effect: MCPotionEffect) {
         //#endif
     }
 
-    fun isAmbient() = this.effect.isAmbient
+    fun isAmbient(): Boolean = this.effect.isAmbient
 
-    fun isDurationMax() = this.effect.isPotionDurationMax
+    fun isDurationMax(): Boolean = this.effect.isPotionDurationMax
 
     fun showsParticles(): Boolean {
         //#if MC<=10809
@@ -35,5 +35,5 @@ class PotionEffect(private val effect: MCPotionEffect) {
         //#endif
     }
 
-    override fun toString() = this.effect.toString()
+    override fun toString(): String = this.effect.toString()
 }

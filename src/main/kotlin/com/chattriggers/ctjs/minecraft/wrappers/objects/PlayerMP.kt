@@ -77,7 +77,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
             )
     }
 
-    private fun getPlayerInfo() = Client.getConnection().getPlayerInfo(this.player.uniqueID)
+    private fun getPlayerInfo(): NetworkPlayerInfo = Client.getConnection().getPlayerInfo(this.player.uniqueID)
 
     override fun toString(): String {
         return "PlayerMP{name:" + getName() +
