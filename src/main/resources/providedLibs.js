@@ -17,7 +17,12 @@ var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
 var EventLib = Java.type("com.chattriggers.ctjs.minecraft.libs.EventLib");
+
 var Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
+var Shape = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Shape");
+var Rectangle = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle");
+var Text = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Text");
+
 var Tessellator = Java.type("com.chattriggers.ctjs.minecraft.libs.Tessellator").INSTANCE;
 var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
 var MathLib = Java.type("com.chattriggers.ctjs.minecraft.libs.MathLib");
