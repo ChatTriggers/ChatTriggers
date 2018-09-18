@@ -30,11 +30,11 @@ abstract class Gui : GuiScreen() {
         if (isOpen()) Player.getPlayer()?.closeScreen()
     }
 
-    fun isOpen() = Client.getMinecraft().currentScreen === this
+    fun isOpen(): Boolean = Client.getMinecraft().currentScreen === this
 
-    fun isControlDown() = GuiScreen.isCtrlKeyDown()
-    fun isShiftDown() = GuiScreen.isShiftKeyDown()
-    fun isAltDown() = GuiScreen.isAltKeyDown()
+    fun isControlDown(): Boolean = GuiScreen.isCtrlKeyDown()
+    fun isShiftDown(): Boolean = GuiScreen.isShiftKeyDown()
+    fun isAltDown(): Boolean = GuiScreen.isAltKeyDown()
 
     /**
      * Registers a method to be ran while gui is open.<br></br>
