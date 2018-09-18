@@ -25,6 +25,10 @@ annotation class ModuleLoader
 @Target(AnnotationTarget.CLASS)
 annotation class External
 
+@Retention(AnnotationRetention.SOURCE)
+@Target(AnnotationTarget.CLASS)
+annotation class NotAbstract
+
 object AnnotationHandler {
     private val LOGGER = LogManager.getLogger(AnnotationHandler::class.java)
 
