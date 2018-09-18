@@ -25,7 +25,10 @@ abstract class Gui : GuiScreen() {
 
     var doesPauseGame = false
 
-    fun open() = GuiHandler.openGui(this)
+    fun open() {
+        GuiHandler.openGui(this)
+    }
+
     fun close() {
         if (isOpen()) Player.getPlayer()?.closeScreen()
     }
