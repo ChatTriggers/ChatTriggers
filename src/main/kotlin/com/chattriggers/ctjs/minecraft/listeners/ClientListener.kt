@@ -19,6 +19,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Mouse
+import org.lwjgl.opengl.GL11
 import javax.vecmath.Vector3d
 
 @KotlinListener
@@ -98,7 +99,9 @@ object ClientListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent) {
+        GL11.glPushMatrix()
         handleOverlayTriggers(event)
+        GL11.glPopMatrix()
 
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
             return

@@ -1,11 +1,10 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
-import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import org.lwjgl.opengl.GL11
 
 @External
 object DisplayHandler {
@@ -22,9 +21,9 @@ object DisplayHandler {
     fun renderDisplays(event: RenderGameOverlayEvent) {
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return
 
-        GlStateManager.pushMatrix()
+        GL11.glPushMatrix()
         this.displays.forEach(Display::render)
-        GlStateManager.popMatrix()
+        GL11.glPopMatrix()
     }
 
     enum class Background {

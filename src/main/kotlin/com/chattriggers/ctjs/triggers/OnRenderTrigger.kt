@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 
 @External
@@ -24,8 +23,6 @@ class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : 
         val event = args[0] as RenderGameOverlayEvent
         if (!triggerIfCanceled && event.isCanceled) return
 
-        GlStateManager.pushMatrix()
         callMethod(*args)
-        GlStateManager.popMatrix()
     }
 }

@@ -70,7 +70,6 @@ class Rectangle(
         this.shadow.draw()
         this.outline.draw()
         Renderer.drawRect(this.color, this.x, this.y, this.width, this.height)
-        Renderer.finishDraw()
     }
 
     private class Shadow(

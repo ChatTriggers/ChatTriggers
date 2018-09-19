@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
+import org.lwjgl.opengl.GL11
 import java.io.File
 import java.net.URL
 import java.util.*
@@ -106,17 +107,17 @@ object Renderer {
 
     @JvmStatic
     fun translate(x: Float, y: Float) {
-        GlStateManager.translate(x.toDouble(), y.toDouble(), 0.toDouble())
+        GL11.glTranslated(x.toDouble(), y.toDouble(), 0.0)
     }
 
     @JvmStatic @JvmOverloads
     fun scale(scaleX: Float, scaleY: Float = scaleX) {
-        GlStateManager.scale(scaleX, scaleY, 1f)
+        GL11.glScalef(scaleX, scaleY, 1f)
     }
 
     @JvmStatic
     fun rotate(angle: Float) {
-        GlStateManager.rotate(angle, 0f, 0f, 1f)
+        GL11.glRotatef(angle, 0f, 0f, 1f)
     }
 
     @JvmStatic @JvmOverloads
@@ -325,8 +326,8 @@ object Renderer {
     @JvmStatic
     fun finishDraw() {
         this.colorized = false
-        GlStateManager.popMatrix()
-        GlStateManager.pushMatrix()
+        GL11.glPopMatrix()
+        GL11.glPushMatrix()
     }
 
     object screen {

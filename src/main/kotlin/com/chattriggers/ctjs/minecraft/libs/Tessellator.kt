@@ -44,7 +44,7 @@ object Tessellator {
     @JvmStatic
     @JvmOverloads
     fun begin(drawMode: Int = GL11.GL_QUADS, textured: Boolean = true) = apply {
-        GlStateManager.pushMatrix()
+        GL11.glPushMatrix()
 
         GlStateManager.enableBlend()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
@@ -85,7 +85,7 @@ object Tessellator {
      */
     @JvmStatic
     fun rotate(angle: Float, x: Float, y: Float, z: Float) = apply {
-        GlStateManager.rotate(angle, x, y, z)
+        GL11.glRotatef(angle, x, y, z)
     }
 
     /**
@@ -99,7 +99,7 @@ object Tessellator {
      */
     @JvmStatic
     fun translate(x: Float, y: Float, z: Float) = apply {
-        GlStateManager.translate(x, y, z)
+        GL11.glTranslatef(x, y, z)
     }
 
     /**
@@ -114,7 +114,7 @@ object Tessellator {
     @JvmStatic
     @JvmOverloads
     fun scale(x: Float, y: Float = x, z: Float = x) = apply {
-        GlStateManager.scale(x, y, z)
+        GL11.glScalef(x, y, z)
     }
 
     /**
@@ -166,7 +166,7 @@ object Tessellator {
 
         GlStateManager.disableBlend()
 
-        GlStateManager.popMatrix()
+        GL11.glPopMatrix()
     }
 
     /**
