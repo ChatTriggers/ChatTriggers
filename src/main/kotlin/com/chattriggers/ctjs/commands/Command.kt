@@ -32,7 +32,7 @@ class Command(trigger: OnTrigger, private val name: String, private val usage: S
     //#if MC<=10809
     override fun processCommand(sender: ICommandSender, args: Array<String>) = trigger(args)
     //#else
-    //$$ override fun execute(server: net.minecraft.server.MinecraftServer, sender: ICommandSender, args: Array<String>) = trigger(args)
+    //$$ override fun execute(server: net.minecraft.server.MinecraftServer?, sender: ICommandSender, args: Array<String>) = trigger(args)
     //#endif
 
     private fun trigger(args: Array<String>) {

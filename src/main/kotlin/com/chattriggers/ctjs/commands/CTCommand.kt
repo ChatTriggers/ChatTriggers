@@ -47,7 +47,7 @@ object CTCommand : CommandBase() {
     //#if MC<=10809
     override fun processCommand(sender: ICommandSender?, args: Array<String>) = run(args)
     //#else
-    //$$ override fun execute(server: net.minecraft.server.MinecraftServer, sender: ICommandSender, args: Array<String>) = run(args)
+    //$$ override fun execute(server: net.minecraft.server.MinecraftServer?, sender: ICommandSender, args: Array<String>) = run(args)
     //#endif
 
     private fun run(args: Array<String>) {
