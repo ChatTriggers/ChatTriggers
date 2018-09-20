@@ -201,11 +201,6 @@ object Renderer {
         if (pos[1] > pos[3])
             Collections.swap(pos, 1, 3)
 
-        val a = (color shr 24 and 255).toFloat() / 255.0f
-        val r = (color shr 16 and 255).toFloat() / 255.0f
-        val g = (color shr 8 and 255).toFloat() / 255.0f
-        val b = (color and 255).toFloat() / 255.0f
-
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
 
@@ -213,8 +208,13 @@ object Renderer {
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (!Renderer.colorized)
+        if (!Renderer.colorized) {
+            val a = (color shr 24 and 255).toFloat() / 255.0f
+            val r = (color shr 16 and 255).toFloat() / 255.0f
+            val g = (color shr 8 and 255).toFloat() / 255.0f
+            val b = (color and 255).toFloat() / 255.0f
             GlStateManager.color(r, g, b, a)
+        }
         worldRenderer.begin(7, DefaultVertexFormats.POSITION)
         worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
@@ -223,6 +223,121 @@ object Renderer {
         tessellator.draw()
         GlStateManager.color(1f, 1f, 1f, 1f)
 
+        GlStateManager.enableTexture2D()
+        GlStateManager.disableBlend()
+
+        finishDraw()
+    }
+
+    @JvmStatic @JvmOverloads
+    fun drawShape(color: Int, vararg vertexes: List<Float>, drawMode: Int = 7) {
+        GlStateManager.enableBlend()
+        GlStateManager.disableTexture2D()
+
+        val tessellator = MCTessellator.getInstance()
+        val worldRenderer = tessellator.getRenderer()
+
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        if (!Renderer.colorized) {
+            val a = (color shr 24 and 255).toFloat() / 255.0f
+            val r = (color shr 16 and 255).toFloat() / 255.0f
+            val g = (color shr 8 and 255).toFloat() / 255.0f
+            val b = (color and 255).toFloat() / 255.0f
+            GlStateManager.color(r, g, b, a)
+        }
+
+        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
+
+        vertexes.forEach {
+            if (it.size == 2) {
+                worldRenderer.pos(it[0].toDouble(), it[1].toDouble(), 0.0).endVertex()
+            }
+        }
+
+        tessellator.draw()
+
+        GlStateManager.color(1f, 1f, 1f, 1f)
+        GlStateManager.enableTexture2D()
+        GlStateManager.disableBlend()
+
+        finishDraw()
+    }
+
+    @JvmStatic @JvmOverloads
+    fun drawLine(color: Int, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 9) {
+        val theta = -Math.atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
+        val i = Math.sin(theta).toFloat() * (thickness / 2)
+        val j = Math.cos(theta).toFloat() * (thickness / 2)
+
+        GlStateManager.enableBlend()
+        GlStateManager.disableTexture2D()
+
+        val tessellator = MCTessellator.getInstance()
+        val worldRenderer = tessellator.getRenderer()
+
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        if (!Renderer.colorized) {
+            val a = (color shr 24 and 255).toFloat() / 255.0f
+            val r = (color shr 16 and 255).toFloat() / 255.0f
+            val g = (color shr 8 and 255).toFloat() / 255.0f
+            val b = (color and 255).toFloat() / 255.0f
+            GlStateManager.color(r, g, b, a)
+        }
+
+        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
+
+        worldRenderer.pos((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).endVertex()
+        worldRenderer.pos((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).endVertex()
+        worldRenderer.pos((x2 - i).toDouble(), (y2 - j).toDouble(), 0.0).endVertex()
+        worldRenderer.pos((x1 - i).toDouble(), (y1 - j).toDouble(), 0.0).endVertex()
+
+        tessellator.draw()
+
+        GlStateManager.color(1f, 1f, 1f, 1f)
+        GlStateManager.enableTexture2D()
+        GlStateManager.disableBlend()
+
+        finishDraw()
+    }
+
+    @JvmStatic @JvmOverloads
+    fun drawCircle(color: Int, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
+        val theta = 2 * Math.PI / steps
+        val cos = Math.cos(theta).toFloat()
+        val sin = Math.sin(theta).toFloat()
+
+        var xHolder: Float
+        var circleX = 1f
+        var circleY = 0f
+
+        val tessellator = MCTessellator.getInstance()
+        val worldRenderer = tessellator.getRenderer()
+
+        GlStateManager.enableBlend()
+        GlStateManager.disableTexture2D()
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        if (!Renderer.colorized) {
+            val a = (color shr 24 and 255).toFloat() / 255.0f
+            val r = (color shr 16 and 255).toFloat() / 255.0f
+            val g = (color shr 8 and 255).toFloat() / 255.0f
+            val b = (color and 255).toFloat() / 255.0f
+            GlStateManager.color(r, g, b, a)
+        }
+
+        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
+
+        for (i in 0 .. steps) {
+            worldRenderer.pos(x.toDouble(), y.toDouble(), 0.0).endVertex()
+            worldRenderer.pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+            xHolder = circleX
+            circleX = cos * circleX - sin * circleY
+            circleY = sin * xHolder + cos * circleY
+            worldRenderer.pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+        }
+
+        tessellator.draw()
+
+        GlStateManager.color(1f, 1f, 1f, 1f)
         GlStateManager.enableTexture2D()
         GlStateManager.disableBlend()
 

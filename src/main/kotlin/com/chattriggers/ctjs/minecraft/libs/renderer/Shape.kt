@@ -54,20 +54,10 @@ class Shape(private var color: Int) {
         val i = Math.sin(theta).toFloat() * (thickness / 2)
         val j = Math.cos(theta).toFloat() * (thickness / 2)
 
-        val ax = x1 + i
-        val ay = y1 + j
-        val dx = x1 - i
-        val dy = y1 - j
-
-        val bx = x2 + i
-        val by = y2 + j
-        val cx = x2 - i
-        val cy = y2 - j
-
-        this.vertexes.add(Vector2f(ax, ay))
-        this.vertexes.add(Vector2f(bx, by))
-        this.vertexes.add(Vector2f(cx, cy))
-        this.vertexes.add(Vector2f(dx, dy))
+        this.vertexes.add(Vector2f(x1 + i, y1 + j))
+        this.vertexes.add(Vector2f(x2 + i, y2 + j))
+        this.vertexes.add(Vector2f(x2 - i, y2 - j))
+        this.vertexes.add(Vector2f(x1 - i, y1 - j))
 
         this.drawMode = 9
     }
