@@ -5,7 +5,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAc
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.init.Items.map
 import net.minecraft.inventory.Container
 import net.minecraft.inventory.IInventory
 

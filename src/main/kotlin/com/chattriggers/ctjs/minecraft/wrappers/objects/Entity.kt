@@ -24,7 +24,7 @@ open class Entity(val entity: MCEntity) {
         //#if MC<=10809
         return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch).toDouble()
         //#else
-        //$$ return MathHelper.wrapDegrees(this.entity.rotationPitch);
+        //$$ return MathHelper.wrapDegrees(this.entity.rotationPitch).toDouble()
         //#endif
     }
 
@@ -38,7 +38,7 @@ open class Entity(val entity: MCEntity) {
         //#if MC<=10809
         return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw).toDouble()
         //#else
-        //$$ return MathHelper.wrapDegrees(this.entity.rotationYaw);
+        //$$ return MathHelper.wrapDegrees(this.entity.rotationYaw).toDouble()
         //#endif
     }
 
