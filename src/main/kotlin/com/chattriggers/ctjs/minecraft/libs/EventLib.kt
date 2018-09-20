@@ -1,18 +1,13 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.utils.kotlin.External
+import com.chattriggers.ctjs.utils.kotlin.ITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
-
-//#if MC<=10809
-import net.minecraft.util.IChatComponent
-//#else
-//$$ import net.minecraft.util.text.ITextComponent
-//#endif
 
 //TODO: figure out what is not needed anymore after the kotlin conversion and remove
 @External
