@@ -4,10 +4,6 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ### 0. Set up JDK 8 and set your JAVA_HOME path variable (use google)
 ### 1. Clone the repository to your computer<br>
 ![clone repo](http://i66.tinypic.com/9jdlp5.png)
-  - Open the ct.js folder that you cloned, and go through the top level directory,
-  as well as the `/gradle/wrapper/` directory copying any files ending in `.default`
-  and pasting them in place, but without the `.default` extension. (Ex. Copy `gradlew.default`,
-  paste it, and rename it so you now have `gradlew.default` and `gradlew`)
 ### 2. Run the setup script
   - Windows: `setup.ps1`
   - Unix: `setup.sh` 
