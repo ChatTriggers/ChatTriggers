@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
-import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.MathLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -17,10 +16,7 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
 import org.lwjgl.opengl.GL11
-import java.io.File
-import java.net.URL
 import java.util.*
-import javax.imageio.ImageIO
 
 @External
 object Renderer {
@@ -132,8 +128,15 @@ object Renderer {
         )
     }
 
+    @Deprecated(
+            message="Replaced with Image object",
+            replaceWith = ReplaceWith(
+                    expression = "Image(name[, url])",
+                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Image"]
+            )
+    )
     @JvmStatic
-    fun image(name: String, url: String): Image? = loadImage(name, url)
+    fun image(name: String, url: String): Image = Image(name, url)
 
     @JvmStatic
     @Deprecated(
@@ -174,24 +177,6 @@ object Renderer {
             )
     )
     fun shape(color: Int): Shape = Shape(color)
-
-    private fun loadImage(name: String, url: String): Image? {
-        val resourceFile = File(CTJS.assetsDir, name)
-
-        if (resourceFile.exists()) {
-            return Image(ImageIO.read(resourceFile))
-        }
-
-        val image = ImageIO.read(URL(url))
-        ImageIO.write(image, "png", resourceFile)
-        return Image(image)
-    }
-
-    private fun loadImage(path: String): Image? {
-        val file = File(path)
-
-        return Image(ImageIO.read(file))
-    }
 
     @JvmStatic
     fun drawRect(color: Int, x: Float, y: Float, width: Float, height: Float) {
