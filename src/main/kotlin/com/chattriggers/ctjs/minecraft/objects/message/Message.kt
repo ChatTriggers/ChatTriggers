@@ -8,7 +8,6 @@ import com.chattriggers.ctjs.utils.kotlin.ChatPacket
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.ITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import javax.xml.soap.Text
 
 //#if MC>=11202
 //$$ import net.minecraft.util.text.ChatType
