@@ -117,14 +117,14 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun colorize(red: Int, green: Int, blue: Int, alpha: Int = 255) {
+    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) {
         this.colorized = true
 
         GlStateManager.color(
-                MathLib.clamp(red, 0, 255).toFloat(),
-                MathLib.clamp(green, 0, 255).toFloat(),
-                MathLib.clamp(blue, 0, 255).toFloat(),
-                MathLib.clamp(alpha, 0, 255).toFloat()
+                MathLib.clampFloat(red, 0f, 255f),
+                MathLib.clampFloat(green, 0f, 255f),
+                MathLib.clampFloat(blue, 0f, 255f),
+                MathLib.clampFloat(alpha, 0f, 255f)
         )
     }
 
