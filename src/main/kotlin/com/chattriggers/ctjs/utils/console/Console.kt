@@ -25,7 +25,7 @@ class Console(val loader: ILoader?) {
         this.frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 
         val textArea = JTextArea()
-        this.taos = TextAreaOutputStream(textArea, loader?.getLanguageName() ?: "default")
+        this.taos = TextAreaOutputStream(textArea, loader?.getLanguageName()?.firstOrNull() ?: "default")
         textArea.isEditable = false
         textArea.font = Font("DejaVu Sans Mono", Font.PLAIN, 15)
         val inputField = JTextField(1)
