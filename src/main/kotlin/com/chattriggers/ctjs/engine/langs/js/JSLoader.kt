@@ -20,12 +20,12 @@ import kotlin.reflect.jvm.isAccessible
 
 @ModuleLoader
 object JSLoader : ILoader {
-    private val triggers = mutableListOf<OnTrigger>()
+    override var triggers = mutableListOf<OnTrigger>()
     private var global: Global? = null
     private val cachedModules = mutableListOf<Module>()
     private var scriptEngine: NashornScriptEngine
     private val console = Console(this)
-    private val toRemove = mutableListOf<OnTrigger>()
+    override val toRemove = mutableListOf<OnTrigger>()
 
     init {
         scriptEngine = instanceScriptEngine(listOf())
@@ -73,7 +73,7 @@ object JSLoader : ILoader {
         cachedModules.addAll(modules)
     }
 
-    override fun load(module: Module) {
+    override fun loadExtra(module: Module) {
         if (cachedModules.map {
             it.name
         }.contains(module.name)) return
@@ -92,35 +92,11 @@ object JSLoader : ILoader {
         }
     }
 
-    override fun exec(type: TriggerType, vararg args: Any?) {
-        triggers.removeAll(toRemove)
-        toRemove.clear()
-
-        triggers.filter {
-            it.type == type
-        }.forEach {
-            it.trigger(*args)
-        }
-    }
-
     override fun eval(code: String): Any? {
         return scriptEngine.eval(code)
     }
-
-    override fun addTrigger(trigger: OnTrigger) {
-        triggers.add(trigger)
-
-        triggers.sortBy {
-            it.priority.ordinal
-        }
-    }
-
-    override fun clearTriggers() {
-        triggers.clear()
-    }
-
-    override fun getLanguageName(): String {
-        return "js"
+    override fun getLanguageName(): List<String> {
+        return listOf("js")
     }
 
     override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
@@ -134,10 +110,6 @@ object JSLoader : ILoader {
             console.printStackTrace(e)
             removeTrigger(trigger)
         }
-    }
-
-    override fun removeTrigger(trigger: OnTrigger) {
-        toRemove.add(trigger)
     }
 
     override fun getModules(): List<Module> {

@@ -30,7 +30,7 @@ object WorldListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent) {
-        // world load trigger
+        // world loadExtra trigger
         if (!shouldTriggerWorldLoad) return
 
         TriggerType.WORLD_LOAD.triggerAll()

@@ -103,7 +103,7 @@
 //
 //        registerHooks();
 //
-//        ModuleManager.getInstance().load(Config.getInstance().getUpdateModulesOnBoot().value);
+//        ModuleManager.getInstance().loadExtra(Config.getInstance().getUpdateModulesOnBoot().value);
 //    }
 //
 //    @EventHandler

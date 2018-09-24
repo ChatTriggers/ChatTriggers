@@ -55,7 +55,7 @@ object AnnotationHandler {
                 }
 
             } catch (e: Throwable) {
-                LOGGER.error("An error occurred trying to load an @KotlinListener object {} for modid {}", mod.modId, e)
+                LOGGER.error("An error occurred trying to loadExtra an @KotlinListener object {} for modid {}", mod.modId, e)
                 throw LoaderException(e)
             }
         }
@@ -65,12 +65,11 @@ object AnnotationHandler {
                 val loaderClass = Class.forName(loader.className, false, classLoader) ?: continue
                 val kotlinClass = loaderClass.kotlin
                 val objectInstance = kotlinClass.objectInstance ?: kotlinClass.companionObjectInstance ?: continue
-                val loaderInstance: ILoader = objectInstance as? ILoader
-                        ?: continue
+                val loaderInstance: ILoader = objectInstance as? ILoader ?: continue
 
                 ModuleManager.loaders.add(loaderInstance)
             } catch (e: Throwable) {
-                LOGGER.error("An error occurred trying to load an @KotlinListener object {} for modid {}", mod.modId, e)
+                LOGGER.error("An error occurred trying to loadExtra an @KotlinListener object {} for modid {}", mod.modId, e)
                 throw LoaderException(e)
             }
         }

@@ -62,7 +62,7 @@ object FileLib {
     /**
      * Reads a file from anywhere on the system using java.io.File.
      *
-     * @param file the java.io.File to load
+     * @param file the java.io.File to loadExtra
      * @return the string in the file
      */
     @JvmStatic

@@ -30,7 +30,7 @@
 //        this.scriptLoaders = new ArrayList<>();
 //    }
 //
-//    public void load(Boolean updateCheck) {
+//    public void loadExtra(Boolean updateCheck) {
 //        this.isLoading = true;
 //        scriptLoaders.add(new JSScriptLoader());
 //

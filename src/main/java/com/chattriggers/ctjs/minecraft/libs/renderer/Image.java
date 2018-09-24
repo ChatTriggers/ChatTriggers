@@ -70,7 +70,7 @@
 //     * @param url          The url to download the image from
 //     * @return The Image object to allow for method chaining
 //     */
-//    public static Image load(String name, String url) {
+//    public static Image loadExtra(String name, String url) {
 //        File resourceFile = new File(CTJS.INSTANCE.getAssetsDir(), name);
 //
 //        try {
@@ -92,10 +92,10 @@
 //    /**
 //     * Loads an image from a path. Use ./ for the .minecraft folder.
 //     *
-//     * @param path The path to load the image from
+//     * @param path The path to loadExtra the image from
 //     * @return The Image object to allow for method chaining
 //     */
-//    public static Image load(String path) {
+//    public static Image loadExtra(String path) {
 //        File file = new File(path);
 //
 //        try {

@@ -32,7 +32,7 @@
 //
 //    @SubscribeEvent
 //    public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-//        // world load trigger
+//        // world loadExtra trigger
 //        if (shouldTriggerWorldLoad) {
 //            TriggerType.WORLD_LOAD.triggerAll();
 //            shouldTriggerWorldLoad = false;

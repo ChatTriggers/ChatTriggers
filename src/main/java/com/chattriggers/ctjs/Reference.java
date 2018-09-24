@@ -45,14 +45,14 @@
 //    }
 //
 //    public void reload() {
-//        load(true);
+//        loadExtra(true);
 //    }
 //
-//    public void load() {
-//        load(false);
+//    public void loadExtra() {
+//        loadExtra(false);
 //    }
 //
-//    public void load(boolean updateCheck) {
+//    public void loadExtra(boolean updateCheck) {
 //        if (!this.isLoaded) return;
 //        this.isLoaded = false;
 //
@@ -75,7 +75,7 @@
 //
 //            CTJS.INSTANCE.setupConfig();
 //
-//            ModuleManager.getInstance().load(updateCheck);
+//            ModuleManager.getInstance().loadExtra(updateCheck);
 //
 //            ChatLib.chat("&aDone reloading scripts!");
 //

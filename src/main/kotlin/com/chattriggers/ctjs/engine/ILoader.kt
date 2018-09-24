@@ -9,16 +9,90 @@ import org.apache.commons.io.FileUtils
 import java.io.File
 
 interface ILoader {
+    var triggers: MutableList<OnTrigger>
+    val toRemove: MutableList<OnTrigger>
+
+    /**
+     * Loads a list of modules into the loader. This is meant to be called on
+     * a full load, which is different from [loadExtra], as this method
+     * should clear old modules.
+     */
     fun load(modules: List<Module>)
-    fun load(module: Module)
-    fun exec(type: TriggerType, vararg args: Any?)
+
+    /**
+     * Loads a single Module into the loader. This differs from [load] in that
+     * it is meant to be called only when importing modules as it differs
+     * semantically in that it shouldn't clear out old modules.
+     */
+    fun loadExtra(module: Module)
+
+    /**
+     * Tells the loader that it should activate all triggers
+     * of a certain type with the specified arguments.
+     */
+    fun exec(type: TriggerType, vararg args: Any?) {
+        val newTriggers = triggers.toMutableList()
+        newTriggers.removeAll(toRemove)
+        toRemove.clear()
+
+        newTriggers.filter {
+            it.type == type
+        }.forEach {
+            it.trigger(*args)
+        }
+
+        triggers = newTriggers
+    }
+
+    /**
+     * Gets the result from evaluating a certain line of code in this loader
+     */
     fun eval(code: String): Any?
-    fun addTrigger(trigger: OnTrigger)
-    fun clearTriggers()
-    fun getLanguageName(): String
+
+    /**
+     * Adds a trigger to this loader to be activated during the game
+     */
+    fun addTrigger(trigger: OnTrigger) {
+        triggers.add(trigger)
+
+        triggers.sortBy {
+            it.priority.ordinal
+        }
+    }
+
+    /**
+     * Removes all triggers
+     */
+    fun clearTriggers() {
+        triggers.clear()
+    }
+
+    /**
+     * Returns the names of this specific loader's implemented languages
+     */
+    fun getLanguageName(): List<String>
+
+    /**
+     * Actually calls the method for this trigger in this loader
+     */
     fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?)
-    fun removeTrigger(trigger: OnTrigger)
+
+    /**
+     * Removes a trigger from the current pool
+     */
+    fun removeTrigger(trigger: OnTrigger) {
+        toRemove.add(trigger)
+    }
+
+    /**
+     * Gets a list of all currently loaded modules
+     */
     fun getModules(): List<Module>
+
+    /**
+     * Gets the console for this language that will show errors and
+     * be able to (optionally) evaluate code.
+     */
     fun getConsole(): Console
 
     /**

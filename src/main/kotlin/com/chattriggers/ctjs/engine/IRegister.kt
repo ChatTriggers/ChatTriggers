@@ -444,7 +444,7 @@ interface IRegister {
 
     /**
      * Registers a new trigger that runs after the game loads.<br></br>
-     * This runs after the initial loading of the game directly after scripts are loaded and after "/ct load" happens.<br></br>
+     * This runs after the initial loading of the game directly after scripts are loaded and after "/ct loadExtra" happens.<br></br>
      *
      *
      * Available modifications:<br></br>
@@ -459,7 +459,7 @@ interface IRegister {
 
     /**
      * Registers a new trigger that runs before the game unloads.<br></br>
-     * This runs before shutdown of the JVM and before "/ct load" happens.<br></br>
+     * This runs before shutdown of the JVM and before "/ct loadExtra" happens.<br></br>
      *
      *
      * Available modifications:<br></br>

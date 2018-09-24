@@ -57,7 +57,7 @@ object CTCommand : CommandBase() {
         }
 
         when (args[0].toLowerCase()) {
-            "load" -> Reference.load()
+            "loadExtra" -> Reference.load()
             "reload" -> Reference.reload()
             "files", "file" -> openFileLocation()
             "import" ->
@@ -82,7 +82,7 @@ object CTCommand : CommandBase() {
 
     private fun getUsage()  =
             "&b&m${ChatLib.getChatBreak()}\n" +
-            "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
+            "&c/ct <loadExtra/reload> &7- &oReloads all of the ct modules.\n" +
             "&c/ct import [module] &7- &oImports a module.\n" +
             "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
             "&c/ct modules &7- &oOpens the modules gui\n" +

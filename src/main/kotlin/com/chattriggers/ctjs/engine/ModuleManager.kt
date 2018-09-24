@@ -44,7 +44,7 @@ object ModuleManager {
         cachedModules = list
 
         loaders.forEach {
-            it.load(module)
+            it.loadExtra(module)
         }
     }
 

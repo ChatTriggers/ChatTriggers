@@ -451,12 +451,12 @@
 //     *     {@link Renderer#drawImage(Image, double, double, double, double)}
 //     * </p>
 //     *
-//     * @param name the name of the file to save/load from
+//     * @param name the name of the file to save/loadExtra from
 //     * @param url the url of the file to download
 //     * @return a new {@link Image} object
 //     */
 //    public Image image(String name, String url) {
-//        return Image.load(name, url);
+//        return Image.loadExtra(name, url);
 //    }
 //
 //    /**

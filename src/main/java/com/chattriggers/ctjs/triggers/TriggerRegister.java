@@ -443,7 +443,7 @@
 //
 //    /**
 //     * Registers a new trigger that runs after the game loads.<br>
-//     * This runs after the initial loading of the game directly after scripts are loaded and after "/ct load" happens.<br>
+//     * This runs after the initial loading of the game directly after scripts are loaded and after "/ct loadExtra" happens.<br>
 //     * <p>
 //     *     Available modifications:<br>
 //     *         &emsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority
@@ -457,7 +457,7 @@
 //
 //    /**
 //     * Registers a new trigger that runs before the game unloads.<br>
-//     * This runs before shutdown of the JVM and before "/ct load" happens.<br>
+//     * This runs before shutdown of the JVM and before "/ct loadExtra" happens.<br>
 //     * <p>
 //     *     Available modifications:<br>
 //     *         &emsp;{@link OnTrigger#setPriority(OnTrigger.Priority)} Sets the priority

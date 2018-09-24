@@ -49,7 +49,7 @@
 //        List<String> tabOptions = new ArrayList<>();
 //
 //        tabOptions.add("help");
-//        tabOptions.add("load");
+//        tabOptions.add("loadExtra");
 //        tabOptions.add("settings");
 //        tabOptions.add("import");
 //        tabOptions.add("modules");
@@ -67,7 +67,7 @@
 //    }
 //    public String getCommandUsage(ICommandSender sender) {
 //        return "&b&m" + ChatLib.getChatBreak("-") + "\n" +
-//                "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
+//                "&c/ct <loadExtra/reload> &7- &oReloads all of the ct modules.\n" +
 //                "&c/ct import [module] &7- &oImports a module.\n" +
 //                "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
 //                "&c/ct modules &7- &oOpens the modules gui\n" +
@@ -92,8 +92,8 @@
 //    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 //        if (args.length > 0) {
 //            switch (args[0].toLowerCase()) {
-//                case("load"):
-//                    Reference.INSTANCE.load();
+//                case("loadExtra"):
+//                    Reference.INSTANCE.loadExtra();
 //                    break;
 //                case("reload"):
 //                    Reference.INSTANCE.reload();
