@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.mixins;
 
-import com.chattriggers.ctjs.loader.ModuleManager;
+import com.chattriggers.ctjs.engine.ModuleManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import org.spongepowered.asm.mixin.Final;
@@ -24,12 +24,12 @@ public class MixinCrashReport {
         //#if MC<=10809
         this.theReportCategory.addCrashSectionCallable(
                 "ct.js modules",
-                () -> ModuleManager.getInstance().getModules().toString()
+                () -> ModuleManager.INSTANCE.getCachedModules().toString()
         );
         //#else
         //$$ this.systemDetailsCategory.addCrashSection(
         //$$      "ct.js modules",
-        //$$      ModuleManager.getInstance() == null ? "PRE-INIT, NONE LOADED" : ModuleManager.getInstance().getModules().toString()
+        //$$      ModuleManager.INSTANCE.getCachedModules().toString()
         //$$ );
         //#endif
     }

@@ -4,10 +4,12 @@ buildscript {
     def f = file("gradle/mcversion.txt")
 
     project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
+    ext.kotlin_version = "1.2.60"
 
     repositories {
         jcenter()
         mavenLocal()
+        mavenCentral()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -29,14 +31,18 @@ buildscript {
                                      "invalid"
         )
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-        classpath "io.franzbecker:gradle-lombok:1.10"
+//        classpath "io.franzbecker:gradle-lombok:1.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: "io.franzbecker.gradle-lombok"
+//apply plugin: "io.franzbecker.gradle-lombok"
+apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.dokka'
 
-version = "0.16.6-SNAPSHOT-" + (
+version = "0.17_pre3-SNAPSHOT-" + (
     mcVersion.toString().substring(0, 1) + "."
     + mcVersion.toString().substring(1, 3).replace("0", "") + "."
     + mcVersion.toString().substring(3, 5).replace("0", "")
@@ -55,7 +61,6 @@ configurations {
     // Make compile extend from our provided configuration so that things added to bundled end up on the compile classpath
     compile.extendsFrom(provided)
 }
-
 
 minecraft {
     version = [
@@ -112,9 +117,10 @@ dependencies {
 
     // You should fork the repo, apply your modifications
     // and either use jitpack (simplest) or create your own maven repo for it
-    compile files("libs/nashorn.jar")
     provided files("libs/sentry.jar")
     provided group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.3"
+    provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -182,37 +188,38 @@ processResources {
 // * Userdocs
 // */
 //
-import io.franzbecker.gradle.lombok.task.DelombokTask
+//import io.franzbecker.gradle.lombok.task.DelombokTask
+//
+//task delombok(type: DelombokTask, dependsOn: compileJava) {
+//    description = "Delomboks source code in order to compile javadocs"
+//    group = "Documentation"
+//
+//    ext.outputDir = file("$buildDir/src-delomboked")
+//    sourceSets.main.java.srcDirs.each {
+//        args(it, "-f", "pretty", "-d", outputDir)
+//    }
+//}
 
-task delombok(type: DelombokTask, dependsOn: compileJava) {
-    description = "Delomboks source code in order to compile javadocs"
-    group = "Documentation"
-
-    ext.outputDir = file("$buildDir/src-delomboked")
-    sourceSets.main.java.srcDirs.each {
-        args(it, "-f", "pretty", "-d", outputDir)
-    }
-}
-
-task userdocs(type: Javadoc) {
+task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
     description = "Generate the docs to be used by scripters, excludes internal classes"
     group = "documentation"
 
-    setDependsOn(["delombok"])
-    options.links("https://docs.oracle.com/javase/8/docs/api/")
-    source = "$buildDir/src-delomboked"
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+    jdkVersion = 8
+
     classpath += configurations.compile
-    exclude "com/chattriggers/ctjs/commands/**.java"
-    exclude "com/chattriggers/ctjs/listeners/**.java"
-    exclude "com/chattriggers/ctjs/utils/*/**.java"
-    exclude "com/chattriggers/ctjs/*.java"
-    exclude "com/chattriggers/ctjs/triggers/TriggerType.java"
-    exclude "com/chattriggers/ctjs/modules/**.java"
-    exclude "com/chattriggers/ctjs/loader/**.java"
-    exclude "com/chattriggers/ctjs/handlers/GuiHandler.java"
-    exclude "com/chattriggers/ctjs/utils/*.java"
-    exclude "com/chattriggers/ctjs/minecraft/mixins/*.java"
-    exclude "com/chattriggers/ctjs/minecraft/imixins/*.java"
+//    exclude "com/chattriggers/ctjs/commands/**.java"
+//    exclude "com/chattriggers/ctjs/listeners/**.java"
+//    exclude "com/chattriggers/ctjs/utils/*/**.java"
+//    exclude "com/chattriggers/ctjs/*.java"
+//    exclude "com/chattriggers/ctjs/triggers/TriggerType.java"
+//    exclude "com/chattriggers/ctjs/modules/**.java"
+//    exclude "com/chattriggers/ctjs/loader/**.java"
+//    exclude "com/chattriggers/ctjs/handlers/GuiHandler.java"
+//    exclude "com/chattriggers/ctjs/utils/*.java"
+//    exclude "com/chattriggers/ctjs/minecraft/mixins/*.java"
+//    exclude "com/chattriggers/ctjs/minecraft/imixins/*.java"
 }
 
 task copySrg(type: Copy, dependsOn: 'genSrgs') {
@@ -247,6 +254,7 @@ task changeMcVersion() {
         println "MC target version is $version"
         def vars = [MC: version as int]
         project.convertTree(vars, 'src/main/java')
+        project.convertTree(vars, 'src/main/kotlin')
         project.convertTree(vars, 'src/main/resources')
     }
 }

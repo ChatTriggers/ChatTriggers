@@ -4,7 +4,7 @@
     "name": "ChatTriggers",
     "description": "CTjs is a framework that allows for live scripting and client modification using JavaScript.",
     "version": "$version",
-    "mcversion": "$mcversion",
+    "mcversion": "1.8.9",
     "url": "https://www.chattriggers.com",
     "updateUrl": "",
     "authorList": ["kerbybit", "FalseHonesty"],
