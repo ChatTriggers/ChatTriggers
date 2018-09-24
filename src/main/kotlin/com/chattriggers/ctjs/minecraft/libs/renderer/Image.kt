@@ -49,11 +49,6 @@ class Image(var image: BufferedImage?) {
 }
 
 private fun getBufferedImage(name: String, url: String? = null): BufferedImage? {
-    if (url == null) {
-        val file = File(name)
-        return ImageIO.read(file)
-    }
-
     val resourceFile = File(CTJS.assetsDir, name)
 
     if (resourceFile.exists()) {
