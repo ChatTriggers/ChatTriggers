@@ -60,7 +60,7 @@ object CTJS {
                 .build()
 
         val sha256uuid = DigestUtils.sha256Hex(Player.getUUID())
-        FileLib.getUrlContent("http://167.99.3.229/tracker/?uuid=$sha256uuid")
+        FileLib.getUrlContent("https://www.chattriggers.com/tracker/?uuid=$sha256uuid")
     }
 
     @Mod.EventHandler
