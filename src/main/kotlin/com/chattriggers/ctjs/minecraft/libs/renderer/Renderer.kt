@@ -20,7 +20,7 @@ import java.util.*
 
 @External
 object Renderer {
-    var colorized = false
+    var colorized: Int? = null
 
     @JvmStatic val BLACK = color(0, 0, 0, 255)
     @JvmStatic val DARK_BLUE = color(0, 0, 190, 255)
@@ -118,7 +118,7 @@ object Renderer {
 
     @JvmStatic @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) {
-        this.colorized = true
+        colorized = fixAlpha(color(red.toInt(), green.toInt(), blue.toInt(), alpha.toInt()))
 
         GlStateManager.color(
                 MathLib.clampFloat(red, 0f, 255f),
@@ -126,6 +126,14 @@ object Renderer {
                 MathLib.clampFloat(blue, 0f, 255f),
                 MathLib.clampFloat(alpha, 0f, 255f)
         )
+    }
+
+    @JvmStatic
+    fun fixAlpha(color: Int): Int {
+        val alpha = color shr 24 and 255
+        return if (alpha < 10)
+            (color and 0xFF_FF_FF) or 0xA_FF_FF_FF
+        else color
     }
 
     @Deprecated(
@@ -193,7 +201,7 @@ object Renderer {
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (!Renderer.colorized) {
+        if (colorized == null) {
             val a = (color shr 24 and 255).toFloat() / 255.0f
             val r = (color shr 16 and 255).toFloat() / 255.0f
             val g = (color shr 8 and 255).toFloat() / 255.0f
@@ -223,7 +231,7 @@ object Renderer {
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (!Renderer.colorized) {
+        if (colorized == null) {
             val a = (color shr 24 and 255).toFloat() / 255.0f
             val r = (color shr 16 and 255).toFloat() / 255.0f
             val g = (color shr 8 and 255).toFloat() / 255.0f
@@ -261,7 +269,7 @@ object Renderer {
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (!Renderer.colorized) {
+        if (colorized == null) {
             val a = (color shr 24 and 255).toFloat() / 255.0f
             val r = (color shr 16 and 255).toFloat() / 255.0f
             val g = (color shr 8 and 255).toFloat() / 255.0f
@@ -301,7 +309,7 @@ object Renderer {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (!Renderer.colorized) {
+        if (colorized == null) {
             val a = (color shr 24 and 255).toFloat() / 255.0f
             val r = (color shr 16 and 255).toFloat() / 255.0f
             val g = (color shr 8 and 255).toFloat() / 255.0f
@@ -331,21 +339,19 @@ object Renderer {
 
     @JvmStatic
     fun drawString(text: String, x: Float, y: Float) {
-        getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff.toInt(), false)
+        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized ?: 0xffffffff.toInt(), false)
         finishDraw()
     }
 
     @JvmStatic
     fun drawStringWithShadow(text: String, x: Float, y: Float) {
-        getFontRenderer().drawString(ChatLib.addColor(text), x, y, 0xffffffff.toInt(), true)
+        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized ?: 0xffffffff.toInt(), true)
         finishDraw()
     }
 
     @JvmStatic
     fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) {
-        if (image.getTexture() == null) return
-
-        if (!Renderer.colorized)
+        if (colorized == null)
             GlStateManager.color(1f, 1f, 1f, 1f)
         GlStateManager.enableBlend()
         GlStateManager.scale(1f, 1f, 50f)
@@ -425,7 +431,7 @@ object Renderer {
 
     @JvmStatic
     fun finishDraw() {
-        this.colorized = false
+        colorized = null
         GL11.glPopMatrix()
         GL11.glPushMatrix()
     }

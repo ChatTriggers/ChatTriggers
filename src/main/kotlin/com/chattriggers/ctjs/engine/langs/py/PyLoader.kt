@@ -19,46 +19,50 @@ object PyLoader : ILoader {
 
         //TODO: JAR LOADING!
 
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun loadExtra(module: Module) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun exec(type: TriggerType, vararg args: Any?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun eval(code: String): Any? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return null
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun addTrigger(trigger: OnTrigger) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun clearTriggers() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getLanguageName(): List<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mutableListOf()
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun removeTrigger(trigger: OnTrigger) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getModules(): List<Module> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mutableListOf()
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getConsole(): Console {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Console(this)
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
