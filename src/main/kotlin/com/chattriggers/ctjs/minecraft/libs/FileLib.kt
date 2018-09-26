@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.External
 import java.io.*
 import java.net.URL
+import java.nio.charset.Charset
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -87,8 +88,8 @@ object FileLib {
         conn.setRequestProperty("User-Agent", userAgent)
 
         return conn.getInputStream().use {
-            it.readBytes().toString()
-        }
+            it.readBytes()
+        }.toString(Charset.defaultCharset())
     }
 
     @JvmStatic
