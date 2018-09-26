@@ -169,9 +169,7 @@ object DefaultLoader {
     private fun downloadModule(name: String, existCheck: Boolean): Boolean {
         if (existCheck) {
             try {
-                val connection = URL("https://www.chattriggers.com/downloads/metadata/$name").openConnection()
-                connection.setRequestProperty("User-Agent", "Mozilla/5.0")
-                connection.getInputStream()
+                FileLib.getUrlContent("https://www.chattriggers.com/downloads/metadata/$name")
             } catch (e: Exception) {
                 ModuleManager.generalConsole.printStackTrace(e)
                 return false
@@ -181,7 +179,7 @@ object DefaultLoader {
         try {
             val downloadZip = File(modulesFolder, "currDownload.zip")
 
-            val connection = URL("https://www.chattriggers.com/downloads/metadata/$name").openConnection()
+            val connection = URL("https://www.chattriggers.com/downloads/scripts/$name").openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
 
