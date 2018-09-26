@@ -11,6 +11,7 @@ import java.io.File
 interface ILoader {
     var triggers: MutableList<OnTrigger>
     val toRemove: MutableList<OnTrigger>
+    val console: Console
 
     /**
      * Loads a list of modules into the loader. This is meant to be called on
@@ -88,12 +89,6 @@ interface ILoader {
      * Gets a list of all currently loaded modules
      */
     fun getModules(): List<Module>
-
-    /**
-     * Gets the console for this language that will show errors and
-     * be able to (optionally) evaluate code.
-     */
-    fun getConsole(): Console
 
     /**
      * Save a resource to the OS's filesystem from inside the jar

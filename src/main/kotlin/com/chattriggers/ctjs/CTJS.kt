@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.io.FileReader
+import kotlin.concurrent.thread
 
 @Mod(modid = Reference.MODID,
     name = Reference.MODNAME,
@@ -43,7 +44,9 @@ object CTJS {
         pictures.mkdirs()
         assetsDir = pictures
 
-        loadConfig()
+        thread(start = true) {
+            loadConfig()
+        }
 
         Loader.instance().modList.filter { it.modId == Reference.MODID }.forEach {
             AnnotationHandler.subscribeAutomatic(it, event.asmData)
@@ -65,7 +68,10 @@ object CTJS {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        ModuleManager.load(true)
+        thread(start = true) {
+            ModuleManager.load(true)
+        }
+
         registerHooks()
     }
 
