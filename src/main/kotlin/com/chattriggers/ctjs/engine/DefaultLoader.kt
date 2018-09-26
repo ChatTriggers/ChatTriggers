@@ -125,10 +125,9 @@ object DefaultLoader {
 
                     val newMetadataFile = File(dir, "updateMeta.json")
 
-                    FileUtils.copyURLToFile(
-                            URL("https://www.chattriggers.com/downloads/metadata/${metadata.fileName}"),
-                            newMetadataFile
-                    )
+                    val connection = URL("https://www.chattriggers.com/downloads/metadata/${metadata.fileName}").openConnection()
+                    connection.setRequestProperty("User-Agent", "Mozilla/5.0")
+                    FileUtils.copyInputStreamToFile(connection.getInputStream(), newMetadataFile)
 
                     val currVersion = metadata.version
 
