@@ -44,7 +44,7 @@ object Reference {
 
             if (Config.clearConsoleOnLoad) {
                 ModuleManager.loaders.forEach {
-                    it.getConsole().clearConsole()
+                    it.console.clearConsole()
                 }
             }
 

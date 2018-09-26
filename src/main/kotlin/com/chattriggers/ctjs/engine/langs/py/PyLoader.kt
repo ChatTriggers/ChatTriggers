@@ -1,3 +1,4 @@
+/*
 package com.chattriggers.ctjs.engine.langs.py
 
 import com.chattriggers.ctjs.engine.ILoader
@@ -11,6 +12,7 @@ import com.chattriggers.ctjs.utils.kotlin.ModuleLoader
 object PyLoader : ILoader {
     override val toRemove = mutableListOf<OnTrigger>()
     override var triggers = mutableListOf<OnTrigger>()
+
 
     private val cachedModules = mutableListOf<Module>()
 
@@ -62,4 +64,4 @@ object PyLoader : ILoader {
     override fun getConsole(): Console {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-}
+}*/
