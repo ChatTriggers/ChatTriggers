@@ -60,7 +60,7 @@ Additionally, all version specific imports shall be placed after all normal impo
   (Side Note: If the desired version is 1.8.9, you will need to run the gradle wrapper commands,
    excluding the idea one, found in instruction #3)
   - Finally, you will need to refresh the Gradle project in IntelliJ by pressing the spinning blue arrows in the
-  Gradle panel on the right hand side of your workspace.
+  Gradle panel on the right hand side of your workspace.<br>
 ![refresh gradle](https://i.imgur.com/QoqEX4h.png)
 
 Make sure to change back to MC version 1.8.9 before pushing or making pull requests.
