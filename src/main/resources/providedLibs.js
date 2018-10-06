@@ -107,3 +107,10 @@ function easeOut(start, finish, speed, jump) {
         return finish;
     }
 }
+
+function setTimeout(func, delay) {
+    new Thread(function() {
+        Thread.sleep(delay);
+        func();
+    }).start();
+}
