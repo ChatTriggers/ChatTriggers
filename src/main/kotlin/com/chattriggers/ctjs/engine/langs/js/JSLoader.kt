@@ -71,9 +71,9 @@ object JSLoader : ILoader {
     }
 
     override fun loadExtra(module: Module) {
-        if (cachedModules.map {
-            it.name
-        }.contains(module.name)) return
+        if (cachedModules.any {
+            it.name == module.name
+        }) return
 
         cachedModules.add(module)
 

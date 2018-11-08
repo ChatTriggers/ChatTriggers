@@ -20,11 +20,9 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
         }.filter {
             if (this.metadata.ignored == null) return@filter true
 
-            for (ignore: String in this.metadata.ignored) {
-                if (ignore in it.name) return@filter false
+            return@filter this.metadata.ignored.any { ignore ->
+                ignore in it.path
             }
-
-            return@filter true
         }.filter {
             it.isFile
         }.toList()
