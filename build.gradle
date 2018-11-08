@@ -148,6 +148,7 @@ dependencies {
 jar {
     // Include all of the jars from the bundled configuration in our jar
     from configurations.provided.asFileTree.files.collect {
+        exclude 'META-INF/LICENSE'
         zipTree(it)
     }
 
