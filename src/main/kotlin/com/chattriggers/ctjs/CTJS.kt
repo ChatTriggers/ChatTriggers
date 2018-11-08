@@ -5,10 +5,8 @@ import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.objects.Sound
-import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.capes.LayerCape
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.AnnotationHandler
 import com.google.gson.JsonParser
@@ -78,9 +76,9 @@ object CTJS {
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {
 
-        Client.getMinecraft().renderManager.skinMap.values.forEach {
-            it.addLayer(LayerCape(it))
-        }
+//        Client.getMinecraft().renderManager.skinMap.values.forEach {
+//            it.addLayer(LayerCape(it))
+//        }
     }
 
     fun saveConfig() = Config.save(File(this.configLocation, "ChatTriggers.json"))

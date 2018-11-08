@@ -65,6 +65,7 @@ interface ILoader {
      * Removes all triggers
      */
     fun clearTriggers() {
+        triggers.forEach { it.unregister() }
         triggers.clear()
     }
 
