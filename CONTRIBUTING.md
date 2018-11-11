@@ -3,23 +3,23 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 
 ### 0. Set up JDK 8 and set your JAVA_HOME path variable (use google)
 ### 1. Clone the repository to your computer<br>
-![clone repo](http://i66.tinypic.com/9jdlp5.png)
+![clone repo](https://i66.tinypic.com/9jdlp5.png)
 ### 2. Run the setup script
   - Windows: `setup.ps1`
   - Unix: `setup.sh` 
 ### 3. Set up IntelliJ Idea
   - open the project within IDEA by clicking the recently created .ipr file<br>
-![open project](http://i65.tinypic.com/2irsoyc.png)
+![open project](https://i65.tinypic.com/2irsoyc.png)
   - right click project > open module settings<br>
 ![open module settings](https://i.imgur.com/F7clio5.png)
   - project > project language level > SDK default (8)<br>
-![set language level](http://i66.tinypic.com/2rormrn.png)
+![set language level](https://i66.tinypic.com/2rormrn.png)
   - file > settings<br>
-![open idea settings](http://i65.tinypic.com/35bco0h.png)
+![open idea settings](https://i65.tinypic.com/35bco0h.png)
   - plugins > browse all repositories > search "lombok" > install<br>
-![install lombok](http://i67.tinypic.com/t8sv2p.png)
+![install lombok](https://i67.tinypic.com/t8sv2p.png)
   - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing (in newer versions of IntelliJ settings > Build, Execution, Deployment > Compiler > Annotation Processors > Enable Annotation Processing)<br>
-![enable annotation processing](http://i66.tinypic.com/676slz.png)
+![enable annotation processing](https://i66.tinypic.com/676slz.png)
   - down that page > Annotation Processor options > green +
     - Option name: `reobfSrgFile`
     - Value: `location-of-fork\mappings\mcp-srg.srg`<br>
@@ -30,7 +30,7 @@ the `./gradlew copySrg` command, it will appear.
   - run > edit configuration<br>
 ![edit configuration](http://i65.tinypic.com/t6yq7b.png)
   - Use classpath for module > select the main ct.js (it might be named differently depending on your fork)<br>
-![classpath](http://i67.tinypic.com/15z34fd.png)
+![classpath](https://i67.tinypic.com/15z34fd.png)
   - Program arguments
     - `--tweakClass com.chattriggers.ctjs.launch.CTJSTweaker`<br>
 ![edit program arguments](https://i.imgur.com/UcVOq71.png)
