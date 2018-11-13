@@ -64,3 +64,11 @@ Any issue can be opened using the normal [GitHub issue page](https://github.com/
 - Specifics on what is being requested (e.g. what class you want it in or what it should do) is highly recommended
 
 Duplicate issues will be merged to avoid too much clutter. If an issue is moved to "next" we will usually comment on it to explain how we expect to implement or fix that issue.
+
+
+## Special Thanks To
+
+<a href="https://www.ej-technologies.com/products/jprofiler/overview.html">
+  <img src="https://www.ej-technologies.com/images/product_banners/jprofiler_large.png" alt="jProfiler" />
+  The Java Profiler jProfiler
+</a>
