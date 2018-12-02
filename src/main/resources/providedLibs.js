@@ -97,14 +97,22 @@ function register(triggerType, methodName) {
 
 // animation
 function easeOut(start, finish, speed, jump) {
-    if (!jump) {
-        jump = 1;
-    }
+    if (!jump) jump = 1;
 
     if (Math.floor(Math.abs(finish - start) / jump) > 0) {
         return start + (finish - start) / speed;
     } else {
         return finish;
+    }
+}
+
+Number.prototype.easeOut = function(to, speed, jump) {
+    if (!jump) jump = 1;
+
+    if (Math.floor(Math.abs(to - this) / jump) > 0) {
+        this = this + (to - this) / speed;
+    } else {
+        this = to
     }
 }
 
