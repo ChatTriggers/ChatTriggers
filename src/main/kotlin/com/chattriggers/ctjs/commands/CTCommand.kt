@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.listeners.ChatListener
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.config.GuiConfig
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
@@ -97,7 +98,7 @@ object CTCommand : CommandBase() {
         try {
             Desktop.getDesktop().open(File("./config/ChatTriggers"))
         } catch (exception: IOException) {
-            ModuleManager.generalConsole.printStackTrace(exception)
+            exception.print()
             ChatLib.chat("&cCould not open file location")
         }
     }

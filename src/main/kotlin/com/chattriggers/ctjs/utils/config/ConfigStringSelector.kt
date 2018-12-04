@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.print
 import net.minecraft.client.gui.GuiButton
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty
@@ -40,7 +41,7 @@ open class ConfigStringSelector
             if (this.values.isNotEmpty())
                 return this.values[0]
             else
-                ModuleManager.generalConsole.printStackTrace(exception)
+                exception.print()
         }
 
         return ""

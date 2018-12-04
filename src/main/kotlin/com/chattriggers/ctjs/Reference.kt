@@ -59,3 +59,19 @@ object Reference {
         }.start()
     }
 }
+
+fun Exception.print() {
+    try {
+        ModuleManager.generalConsole.printStackTrace(this)
+    } catch (exception: Exception) {
+        this.printStackTrace()
+    }
+}
+
+fun String.print() {
+    try {
+        ModuleManager.generalConsole.out.println(this)
+    } catch (exception: Exception) {
+        System.out.println(this)
+    }
+}

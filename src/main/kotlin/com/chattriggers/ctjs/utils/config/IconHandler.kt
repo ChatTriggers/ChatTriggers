@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.print
 import java.awt.Desktop
 import java.net.URL
 
@@ -46,7 +47,7 @@ object IconHandler {
                     Desktop.getDesktop().browse(URL(this.url).toURI())
                     World.playSound("gui.button.press", 100f, 1f)
                 } catch (exception: Exception) {
-                    ModuleManager.generalConsole.printStackTrace(exception)
+                    exception.print()
                 }
             }
         }

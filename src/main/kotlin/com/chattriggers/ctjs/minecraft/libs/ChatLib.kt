@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import jdk.nashorn.api.scripting.ScriptObjectMirror
@@ -348,7 +349,7 @@ object ChatLib {
     // helper method to make sure player exists before putting something in chat
     fun isPlayer(out: String): Boolean {
         if (Player.getPlayer() == null) {
-            ModuleManager.generalConsole.out.println(out)
+            out.print()
             return false
         }
 

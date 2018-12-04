@@ -1,12 +1,14 @@
 package com.chattriggers.ctjs.utils
 
 import com.chattriggers.ctjs.Reference
+import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraft.client.renderer.GlStateManager
@@ -21,13 +23,14 @@ object UpdateChecker {
     private var warned = false
 
     init {
-        getUpdate()
+        try { getUpdate() }
+        catch (exception: Exception) { exception.print() }
         warned = !Config.showUpdatesInChat
     }
 
     private fun getUpdate() {
         val fileName = "ctjs-" + Reference.MODVERSION + ".jar"
-        val get = FileLib.getUrlContent("http://167.99.3.229/versions/latest/").trim { it <= ' ' }
+        val get = FileLib.getUrlContent("https://www.chattriggers.com/versions/latest/").trim { it <= ' ' }
         if ("" == get) return
 
         this.updateAvailable = fileName != get

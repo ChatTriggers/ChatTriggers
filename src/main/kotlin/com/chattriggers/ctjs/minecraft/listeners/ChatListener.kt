@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.listeners
 import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
+import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
@@ -28,7 +29,7 @@ object ChatListener {
 
                 // print to console
                 if (Config.printChatToConsole) {
-                    ModuleManager.generalConsole.out.println("[CHAT] " + ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true)))
+                    "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".print()
                 }
             }
             2 -> TriggerType.ACTION_BAR.triggerAll(ChatLib.getChatMessage(event, false), event)

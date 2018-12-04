@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
+import com.chattriggers.ctjs.print
 import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -114,14 +115,14 @@ object DefaultLoader {
                 metadata = Gson().fromJson<ModuleMetadata>(FileLib.read(metadataFile), ModuleMetadata::class.java)
                 metadata.fileName = dir.name
             } catch (exception: Exception) {
-                ModuleManager.generalConsole.printStackTrace(exception)
+                exception.print()
             }
         }
 
         try {
             try {
                 if (!metadata.isDefault && updateCheck) {
-                    ModuleManager.generalConsole.out.println("checking for update in " + metadata.fileName)
+                    "checking for update in ${metadata.fileName}".print()
 
                     val newMetadataFile = File(dir, "updateMeta.json")
 
@@ -143,17 +144,17 @@ object DefaultLoader {
 
                     newMetadataFile.delete()
                 }
-            } catch (e: Exception) {
-                ModuleManager.generalConsole.printStackTrace(e)
-                ModuleManager.generalConsole.out.println("Can't find page for ${dir.name}")
+            } catch (exception: Exception) {
+                exception.print()
+                "Can't find page for ${dir.name}".print()
             }
 
             modules.addAll(
                     getRequiredModules(metadata, updateCheck)
             )
         } catch (exception: Exception) {
-            ModuleManager.generalConsole.out.println("Error loading module from $dir")
-            ModuleManager.generalConsole.printStackTrace(exception)
+            "Error loading module from $dir".print()
+            exception.print()
         }
 
         modules.add(Module(
@@ -169,8 +170,8 @@ object DefaultLoader {
         if (existCheck) {
             try {
                 FileLib.getUrlContent("https://www.chattriggers.com/downloads/metadata/$name")
-            } catch (e: Exception) {
-                ModuleManager.generalConsole.printStackTrace(e)
+            } catch (exception: Exception) {
+                exception.print()
                 return false
             }
         }
@@ -185,8 +186,8 @@ object DefaultLoader {
             FileLib.unzip(downloadZip.absolutePath, modulesFolder.absolutePath)
 
             downloadZip.delete()
-        } catch (e: Exception) {
-            ModuleManager.generalConsole.printStackTrace(e)
+        } catch (exception: Exception) {
+            exception.print()
             return false
         }
 
