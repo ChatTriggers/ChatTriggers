@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.imixins.IClientCommandHandler
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
+import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
 import net.minecraft.launchwrapper.Launch
@@ -54,7 +55,10 @@ object Reference {
 
             ChatLib.chat("&aDone reloading scripts!")
 
-            TriggerType.WORLD_LOAD.triggerAll()
+            TriggerType.GAME_LOAD.triggerAll()
+            if (World.isLoaded())
+                TriggerType.WORLD_LOAD.triggerAll()
+
             this.isLoaded = true
         }.start()
     }
