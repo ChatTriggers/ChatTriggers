@@ -26,28 +26,34 @@ object Reference {
 
     fun reload() = load(true)
 
+    fun unload(asCommand: Boolean = true) {
+        TriggerType.WORLD_UNLOAD.triggerAll()
+        TriggerType.GAME_UNLOAD.triggerAll()
+
+        DisplayHandler.clearDisplays()
+        GuiHandler.clearGuis()
+        CommandHandler.getCommandList().clear()
+        ModuleManager.unload()
+
+        if (Config.clearConsoleOnLoad)
+            ModuleManager.loaders.forEach { it.console.clearConsole() }
+
+        if (asCommand) {
+            ChatLib.chat("&7Unloaded all of ChatTriggers")
+            this.isLoaded = true
+        }
+    }
+
     @JvmOverloads
     fun load(updateCheck: Boolean = false) {
         if (!this.isLoaded) return
         this.isLoaded = false
 
-        TriggerType.GAME_UNLOAD.triggerAll()
-        TriggerType.WORLD_UNLOAD.triggerAll()
+        unload(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
         Thread {
-            DisplayHandler.clearDisplays()
-            GuiHandler.clearGuis()
-
-            CommandHandler.getCommandList().clear()
             (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
-            ModuleManager.unload()
-
-            if (Config.clearConsoleOnLoad) {
-                ModuleManager.loaders.forEach {
-                    it.console.clearConsole()
-                }
-            }
 
             CTJS.loadConfig()
 
