@@ -104,9 +104,9 @@ class Sound(private val config: ScriptObjectMirror) {
         val stream = configMap.getOrDefault("stream", false) as Boolean
 
         val url = File("${CTJS.assetsDir.absolutePath}\\$source").toURI().toURL()
-        val x = configMap.getOrDefault("x", Player.getX()) as Float
-        val y = configMap.getOrDefault("y", Player.getY()) as Float
-        val z = configMap.getOrDefault("z", Player.getZ()) as Float
+        val x = (configMap.getOrDefault("x", Player.getX()) as Double).toFloat()
+        val y = (configMap.getOrDefault("y", Player.getY()) as Double).toFloat()
+        val z = (configMap.getOrDefault("z", Player.getZ()) as Double).toFloat()
         val attModel = configMap.getOrDefault("attenuation", 1) as Int
         val distOrRoll = 16
 
