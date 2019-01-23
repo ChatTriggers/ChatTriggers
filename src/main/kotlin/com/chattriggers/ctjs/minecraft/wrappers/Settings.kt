@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.SoundCategory
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.world.EnumDifficulty
 
@@ -79,7 +80,7 @@ object Settings {
         @JvmStatic fun getRenderDistance() = getSettings().renderDistanceChunks
         @JvmStatic fun setRenderDistance(distance: Int) { getSettings().renderDistanceChunks = distance }
 
-        // smooth lighting
+        // TODO: smooth lighting
 
         @JvmStatic fun getMaxFrameRate() = getSettings().limitFramerate
         @JvmStatic fun setMaxFrameRate(frameRate: Int) { getSettings().limitFramerate = frameRate }
@@ -119,5 +120,43 @@ object Settings {
 
         @JvmStatic fun getEntityShadows() = getSettings().entityShadows
         @JvmStatic fun setEntityShadows(toggled: Boolean) { getSettings().entityShadows = toggled }
+    }
+
+    object chat {
+        // show chat
+        @JvmStatic fun getVisibility() = getSettings().chatVisibility
+        @JvmStatic fun setVisibility(visibility: String) {
+            when (visibility.toLowerCase()) {
+                "hidden" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN
+                "commands", "system" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.SYSTEM
+                else -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.FULL
+            }
+        }
+
+        // colors
+        @JvmStatic fun getColors() = getSettings().chatColours
+        @JvmStatic fun setColors(toggled: Boolean) { getSettings().chatColours = toggled }
+
+        // web links
+        @JvmStatic fun getWebLinks() = getSettings().chatLinks
+        @JvmStatic fun setWebLinks(toggled: Boolean) { getSettings().chatLinks = toggled }
+
+        // opacity
+        @JvmStatic fun getOpacity() = getSettings().chatOpacity
+        @JvmStatic fun setOpacity(opacity: Float) { getSettings().chatOpacity = opacity }
+
+        // prompt on links
+        @JvmStatic fun getPromptOnWebLinks() = getSettings().chatLinksPrompt
+        @JvmStatic fun setPromptOnWebLinks(toggled: Boolean) { getSettings().chatLinksPrompt = toggled }
+
+        // scale
+
+        // focused height
+
+        // unfocused height
+
+        // width
+
+        // reduced debug info
     }
 }

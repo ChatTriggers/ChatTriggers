@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
-import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World

@@ -43,6 +43,7 @@ var Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
 
 // Wrappers
 var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
+var Settings = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Settings");
 var Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
 var World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
 var Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");
