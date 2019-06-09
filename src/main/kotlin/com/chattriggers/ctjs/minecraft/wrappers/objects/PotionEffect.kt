@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
+import net.minecraft.client.resources.I18n
 
 //#if MC>=11202
 //$$ import net.minecraft.potion.Potion
@@ -9,7 +10,18 @@ import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
 
 @External
 class PotionEffect(private val effect: MCPotionEffect) {
+    /**
+     * Returns the translation key of the potion.
+     * Ex: "potion.poison"
+     */
     fun getName(): String = this.effect.effectName
+
+    /**
+     * Returns the localized name of the potion that
+     * is displayed in the player's inventory.
+     * Ex: "Poison"
+     */
+    fun getLocalizedName(): String = I18n.format(getName(), "%s")
 
     fun getAmplifier(): Int = this.effect.amplifier
 
