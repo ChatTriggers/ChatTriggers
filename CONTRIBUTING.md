@@ -7,6 +7,7 @@ Setup is a little bit more involved than just a normal Forge dev workspace setup
 ### 2. Run the setup script
   - Windows: `setup.ps1`
   - Unix: `setup.sh` 
+    - _Note: You may need to run `sudo chmod a+x ./setup.sh` before running the script._
 ### 3. Set up IntelliJ Idea
   - open the project within IDEA by clicking the recently created .ipr file<br>
 ![open project](http://i65.tinypic.com/2irsoyc.png)
