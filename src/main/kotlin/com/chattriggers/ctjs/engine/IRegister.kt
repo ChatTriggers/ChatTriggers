@@ -630,5 +630,13 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.TOOLTIP, getImplementationLoader())
     }
 
+    fun registerPlayerInteract(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.PLAYER_INTERACT, getImplementationLoader())
+    }
+
+    fun registerBlockBreak(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.BLOCK_BREAK, getImplementationLoader())
+    }
+
     fun getImplementationLoader(): ILoader
 }

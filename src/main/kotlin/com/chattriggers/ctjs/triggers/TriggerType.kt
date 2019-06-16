@@ -12,6 +12,7 @@ enum class TriggerType {
     GUI_OPENED, SCREENSHOT_TAKEN,
     PICKUP_ITEM, DROP_ITEM,
     MESSAGE_SENT, TOOLTIP,
+    PLAYER_INTERACT,
 
     // rendering
     RENDER_WORLD,
@@ -25,6 +26,7 @@ enum class TriggerType {
     PLAYER_LEAVE,
     SOUND_PLAY, NOTE_BLOCK_PLAY, NOTE_BLOCK_CHANGE,
     WORLD_LOAD, WORLD_UNLOAD,
+    BLOCK_BREAK,
 
     // misc
     COMMAND,
