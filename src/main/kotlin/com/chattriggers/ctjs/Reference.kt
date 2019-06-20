@@ -24,9 +24,9 @@ object Reference {
 
     private var isLoaded = true
 
-    fun reload() = load(true)
+    fun reloadCT() = loadCT(true)
 
-    fun unload(asCommand: Boolean = true) {
+    fun unloadCT(asCommand: Boolean = true) {
         TriggerType.WORLD_UNLOAD.triggerAll()
         TriggerType.GAME_UNLOAD.triggerAll()
 
@@ -45,11 +45,11 @@ object Reference {
     }
 
     @JvmOverloads
-    fun load(updateCheck: Boolean = false) {
+    fun loadCT(updateCheck: Boolean = false) {
         if (!this.isLoaded) return
         this.isLoaded = false
 
-        unload(false)
+        unloadCT(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
         Thread {

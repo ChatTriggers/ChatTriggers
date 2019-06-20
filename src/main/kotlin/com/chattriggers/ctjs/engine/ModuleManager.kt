@@ -22,7 +22,7 @@ object ModuleManager {
             cachedModules.filter {
                 return@filter it.name == name
             }
-            Reference.load()
+            Reference.loadCT()
             return true
         }
         return false
