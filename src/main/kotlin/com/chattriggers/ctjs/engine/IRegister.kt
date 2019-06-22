@@ -638,5 +638,41 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.BLOCK_BREAK, getImplementationLoader())
     }
 
+    /**
+     * Passes in mouseX, mouseY, and the open gui instance
+     */
+    fun registerGuiRender(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.GUI_RENDER, getImplementationLoader())
+    }
+
+    /**
+     * Passes in the character typed, the keycode typed (see [org.lwjgl.input.Keyboard], the open gui instance,
+     * and the event (which can be cancelled).
+     */
+    fun registerGuiKey(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.GUI_KEY, getImplementationLoader())
+    }
+
+    /**
+     * Passes in the mouseX, mouseY, mouseButton, the open gui instance, and the event (which can be cancelled).
+     */
+    fun registerGuiMouseClick(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.GUI_MOUSE_CLICK, getImplementationLoader())
+    }
+
+    /**
+     * Passes in the mouseX, mouseY, mouseButton, the open gui instance, and the event (which can be cancelled).
+     */
+    fun registerGuiMouseRelease(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.GUI_MOUSE_RELEASE, getImplementationLoader())
+    }
+
+    /**
+     * Passes in the mouseX, mouseY, mouseButton, the open gui instance, and the event (which can be cancelled).
+     */
+    fun registerGuiMouseDrag(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.GUI_MOUSE_DRAG, getImplementationLoader())
+    }
+
     fun getImplementationLoader(): ILoader
 }

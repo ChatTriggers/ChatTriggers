@@ -11,6 +11,7 @@ import java.awt.event.KeyListener
 import java.awt.event.WindowEvent
 import java.io.PrintStream
 import javax.swing.*
+import javax.swing.text.DefaultCaret
 
 class Console(val loader: ILoader?) {
     private val frame: JFrame = JFrame("ct.js ${loader?.getLanguageName() ?: "Default"} Console")
@@ -30,6 +31,9 @@ class Console(val loader: ILoader?) {
         textArea.font = Font("DejaVu Sans Mono", Font.PLAIN, 15)
         val inputField = JTextField(1)
         inputField.isFocusable = true
+        textArea.autoscrolls = true
+        val caret = textArea.caret as DefaultCaret
+        caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
 
         inputField.margin = Insets(5, 5, 5, 5)
         textArea.margin = Insets(5, 5, 5, 5)
