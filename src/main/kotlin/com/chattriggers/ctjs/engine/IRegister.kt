@@ -15,10 +15,10 @@ interface IRegister {
      * @return the trigger for additional modification
      */
     fun register(triggerType: String, method: Any): OnTrigger {
-        val capitalizedName = triggerType.substring(0, 1).toUpperCase() + triggerType.substring(1)
+        val name = triggerType.toLowerCase()
 
         val func = this::class.memberFunctions.firstOrNull {
-            it.name == "register$capitalizedName"
+            it.name.toLowerCase() == "register$name"
         }
 
         //println("params for func ${func?.name}: ${func?.parameters?.toString()}")
