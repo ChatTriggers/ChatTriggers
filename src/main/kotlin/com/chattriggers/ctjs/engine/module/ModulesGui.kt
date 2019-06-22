@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import net.minecraft.client.gui.GuiScreen
+import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.input.Mouse
 
 object ModulesGui : GuiScreen() {
@@ -20,6 +21,8 @@ object ModulesGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         super.drawScreen(mouseX, mouseY, partialTicks)
+
+        GlStateManager.pushMatrix()
 
         val middle = Renderer.screen.getWidth() / 2f
         var width = Renderer.screen.getWidth() - 100f
@@ -46,6 +49,8 @@ object ModulesGui : GuiScreen() {
         ModuleManager.cachedModules.forEach {
             window.height += it.draw(middle - width / 2f, window.scroll + window.height, width)
         }
+
+        GlStateManager.popMatrix()
     }
 
     override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
