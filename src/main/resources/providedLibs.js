@@ -13,6 +13,7 @@ var ReflectionHelper = Java.type("net.minecraftforge.fml.relauncher.ReflectionHe
 var TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
+var InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent.Action");
 
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
@@ -40,10 +41,10 @@ var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
 var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
 var Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
 var Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
+var PlayerMP = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP");
 
 // Wrappers
 var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
-var Settings = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Settings");
 var Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
 var World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
 var Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");

@@ -245,6 +245,14 @@ object Player {
     @JvmStatic
     fun getHeldItem(): Item = Item(getPlayer()?.inventory?.getCurrentItem())
 
+    @JvmStatic
+    fun setHeldItemIndex(index: Int) {
+        getPlayer()?.inventory?.currentItem = index
+    }
+
+    @JvmStatic
+    fun getHeldItemIndex(): Int = getPlayer()?.inventory?.currentItem ?: -1
+
     /**
      * Gets the inventory of the player, i.e. the inventory accessed by 'e'.
      *

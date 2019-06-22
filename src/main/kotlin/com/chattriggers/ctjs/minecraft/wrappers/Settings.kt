@@ -8,7 +8,7 @@ import net.minecraft.world.EnumDifficulty
 
 @External
 object Settings {
-    @JvmStatic fun getSettings()= Client.getMinecraft().gameSettings
+    @JvmStatic fun getSettings() = Client.getMinecraft().gameSettings
 
     @JvmStatic fun getFOV() = getSettings().fovSetting
     @JvmStatic fun setFOV(fov: Float) { getSettings().fovSetting = fov }

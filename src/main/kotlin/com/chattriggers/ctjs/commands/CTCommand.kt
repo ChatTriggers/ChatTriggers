@@ -58,9 +58,9 @@ object CTCommand : CommandBase() {
         }
 
         when (args[0].toLowerCase()) {
-            "load" -> Reference.load()
-            "reload" -> Reference.reload()
-            "unload" -> Reference.unload()
+            "load" -> Reference.loadCT()
+            "reload" -> Reference.reloadCT()
+            "unload" -> Reference.unloadCT()
             "files", "file" -> openFileLocation()
             "import" ->
                 if (args.size == 1) ChatLib.chat("&c/ct import [module name]")

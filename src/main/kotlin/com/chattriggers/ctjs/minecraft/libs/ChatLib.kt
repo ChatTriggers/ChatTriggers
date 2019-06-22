@@ -30,6 +30,7 @@ object ChatLib {
             is String -> Message(text).chat()
             is Message -> text.chat()
             is TextComponent -> text.chat()
+            else -> Message(text.toString()).chat()
         }
     }
 

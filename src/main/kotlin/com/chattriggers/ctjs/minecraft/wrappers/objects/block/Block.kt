@@ -130,6 +130,8 @@ open class Block {
 
     fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(this)
 
+    fun getHarvestLevel(): Int = block.getHarvestLevel(getDefaultState())
+
     fun isTranslucent(): Boolean {
         //#if MC<=10809
         return this.block.isTranslucent

@@ -8,13 +8,11 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraftforge.client.event.DrawBlockHighlightEvent
-import net.minecraftforge.client.event.GuiOpenEvent
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.client.event.RenderWorldLastEvent
+import net.minecraftforge.client.event.*
 import net.minecraftforge.event.entity.item.ItemTossEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
+import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Mouse
@@ -212,6 +210,24 @@ object ClientListener {
         TriggerType.TOOLTIP.triggerAll(
                 e.toolTip,
                 Item(e.itemStack)
+        )
+    }
+
+    @SubscribeEvent
+    fun onLeftClick(e: PlayerInteractEvent) {
+        TriggerType.PLAYER_INTERACT.triggerAll(
+            e.action,
+            World.getBlockAt(e.pos?.x ?: 0, e.pos?.y ?: 0, e.pos?.z ?: 0),
+            e
+        )
+    }
+
+    @SubscribeEvent
+    fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
+        TriggerType.GUI_RENDER.triggerAll(
+            e.mouseX,
+            e.mouseY,
+            e.gui
         )
     }
 }

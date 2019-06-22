@@ -1,13 +1,17 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.Server
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import io.sentry.Sentry
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
+import net.minecraftforge.event.world.BlockEvent
 import net.minecraftforge.event.world.NoteBlockEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -130,5 +134,14 @@ object WorldListener {
                 break
             }
         }
+    }
+
+    @SubscribeEvent
+    fun blockBreak(event: BlockEvent.BreakEvent) {
+        TriggerType.BLOCK_BREAK.triggerAll(
+            World.getBlockAt(event.pos.x, event.pos.y, event.pos.z),
+            PlayerMP(event.player),
+            event
+        )
     }
 }
