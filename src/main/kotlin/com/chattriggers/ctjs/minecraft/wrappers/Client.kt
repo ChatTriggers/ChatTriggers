@@ -9,6 +9,8 @@ import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiNewChat
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.network.NetHandlerPlayClient
+import net.minecraft.network.INetHandler
+import net.minecraft.network.Packet
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 
@@ -171,6 +173,11 @@ object Client {
             val chatGui = getMinecraft().currentScreen as MixinGuiChat
             chatGui.inputField.text = message
         } else Client.getMinecraft().displayGuiScreen(GuiChat(message))
+    }
+
+    @JvmStatic
+    fun <T : INetHandler> sendPacket(packet: Packet<T>) {
+        getMinecraft().netHandler.networkManager.sendPacket(packet)
     }
 
     object gui {

@@ -674,5 +674,12 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.GUI_MOUSE_DRAG, getImplementationLoader())
     }
 
+    /**
+     * Passes in the packet (which can be cancelled).
+     */
+    fun registerPacketSent(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.PACKET_SENT, getImplementationLoader())
+    }
+
     fun getImplementationLoader(): ILoader
 }
