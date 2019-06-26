@@ -116,7 +116,25 @@ Number.prototype.easeOut = function(to, speed, jump) {
     } else {
         this = to
     }
+};
+
+function easeColor(start, finish, speed, jump) {
+    return Renderer.color(
+        easeOut((start >> 16) & 0xFF, (finish >> 16) & 0xFF, speed, jump),
+        easeOut((start >> 8) & 0xFF, (finish >> 8) & 0xFF, speed, jump),
+        easeOut(start & 0xFF, finish & 0xFF, speed, jump),
+        easeOut((start >> 24) & 0xFF, (finish >> 24) & 0xFF, speed, jump)
+    );
 }
+
+Number.prototype.easeColor = function(start, finish, speed, jump) {
+    this = Renderer.color(
+        easeOut((start >> 16) & 0xFF, (finish >> 16) & 0xFF, speed, jump),
+        easeOut((start >> 8) & 0xFF, (finish >> 8) & 0xFF, speed, jump),
+        easeOut(start & 0xFF, finish & 0xFF, speed, jump),
+        easeOut((start >> 24) & 0xFF, (finish >> 24) & 0xFF, speed, jump)
+    );
+};
 
 function setTimeout(func, delay) {
     new Thread(function() {
