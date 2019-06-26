@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.client.event.*
 import net.minecraftforge.event.entity.item.ItemTossEvent
@@ -224,10 +225,14 @@ object ClientListener {
 
     @SubscribeEvent
     fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
+        GlStateManager.pushMatrix()
+
         TriggerType.GUI_RENDER.triggerAll(
             e.mouseX,
             e.mouseY,
             e.gui
         )
+
+        GlStateManager.popMatrix()
     }
 }

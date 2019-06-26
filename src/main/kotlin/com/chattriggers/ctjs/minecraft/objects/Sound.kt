@@ -98,12 +98,12 @@ class Sound(private val config: ScriptObjectMirror) {
     private fun bootstrap() {
         val configMap = config as? Map<String, *> ?: return
 
-        val source = config["source"]?.toString()
+        val source = config["source"]?.toString() ?: throw IllegalArgumentException("Sound source is null.")
         val priority = configMap.getOrDefault("priority", false) as Boolean
         val loop = configMap.getOrDefault("loop", false) as Boolean
         val stream = configMap.getOrDefault("stream", false) as Boolean
 
-        val url = File("${CTJS.assetsDir.absolutePath}\\$source").toURI().toURL()
+        val url = File(CTJS.assetsDir, source).toURI().toURL()
         val x = (configMap.getOrDefault("x", Player.getX()) as Double).toFloat()
         val y = (configMap.getOrDefault("y", Player.getY()) as Double).toFloat()
         val z = (configMap.getOrDefault("z", Player.getZ()) as Double).toFloat()
