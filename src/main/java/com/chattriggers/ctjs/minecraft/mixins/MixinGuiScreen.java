@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.IChatComponent;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,6 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+//#if MC<=10809
+import net.minecraft.util.IChatComponent;
+//#else
+//$$ import net.minecraft.util.text.ITextComponent;
+//#endif
 
 @Mixin(GuiScreen.class)
 public abstract class MixinGuiScreen {
@@ -90,11 +95,22 @@ public abstract class MixinGuiScreen {
     }
 
     @Inject(
-            method = "handleComponentClick(Lnet/minecraft/util/IChatComponent;)Z",
+            method =
+                    //#if MC<=10809
+                    "handleComponentClick(Lnet/minecraft/util/IChatComponent;)Z",
+                    //#else
+                    //$$ "handleComponentClick(Lnet/minecraft/util/text/ITextComponent;)Z",
+                    //#endif
             at = @At("HEAD"),
             cancellable = true
     )
-    private void onHandleComponentClick(IChatComponent component, CallbackInfoReturnable ci) {
+    private void onHandleComponentClick(
+            //#if MC<=10809
+            IChatComponent component,
+            //#else
+            //$$ ITextComponent component,
+            //#endif
+            CallbackInfoReturnable ci) {
         TriggerType.CHAT_COMPONENT_CLICKED.trigger(
                 component == null ? null : new TextComponent(component),
                 ci
@@ -102,11 +118,22 @@ public abstract class MixinGuiScreen {
     }
 
     @Inject(
-            method = "handleComponentHover(Lnet/minecraft/util/IChatComponent;II)V",
+            method =
+                    //#if MC<=10809
+                    "handleComponentHover(Lnet/minecraft/util/IChatComponent;II)V",
+                    //#else
+                    //$$ "handleComponentHover(Lnet/minecraft/util/text/ITextComponent;II)V",
+                    //#endif
             at = @At("HEAD"),
             cancellable = true
     )
-    private void onHandleComponentHover(IChatComponent component, int x, int y, CallbackInfo ci) {
+    private void onHandleComponentHover(
+            //#if MC<=10809
+            IChatComponent component,
+            //#else
+            //$$ ITextComponent component,
+            //#endif
+            int x, int y, CallbackInfo ci) {
         TriggerType.CHAT_COMPONENT_HOVERED.trigger(
                 component == null ? null : new TextComponent(component),
                 x,
