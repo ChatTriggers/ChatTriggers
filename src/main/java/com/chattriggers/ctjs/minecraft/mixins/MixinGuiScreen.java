@@ -1,8 +1,10 @@
 package com.chattriggers.ctjs.minecraft.mixins;
 
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.IChatComponent;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -83,6 +85,32 @@ public abstract class MixinGuiScreen {
                 mouseY,
                 mouseButton,
                 this,
+                ci
+        );
+    }
+
+    @Inject(
+            method = "handleComponentClick(Lnet/minecraft/util/IChatComponent;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void onHandleComponentClick(IChatComponent component, CallbackInfoReturnable ci) {
+        TriggerType.CHAT_COMPONENT_CLICKED.trigger(
+                component == null ? null : new TextComponent(component),
+                ci
+        );
+    }
+
+    @Inject(
+            method = "handleComponentHover(Lnet/minecraft/util/IChatComponent;II)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void onHandleComponentHover(IChatComponent component, int x, int y, CallbackInfo ci) {
+        TriggerType.CHAT_COMPONENT_HOVERED.trigger(
+                component == null ? null : new TextComponent(component),
+                x,
+                y,
                 ci
         );
     }

@@ -675,10 +675,25 @@ interface IRegister {
     }
 
     /**
-     * Passes in the packet (which can be cancelled).
+     * Passes in the packet and the event (which can be cancelled).
      */
     fun registerPacketSent(method: Any): OnRegularTrigger {
         return OnRegularTrigger(method, TriggerType.PACKET_SENT, getImplementationLoader())
+    }
+
+    /**
+     * Passes in the chat component and the event (which can be cancelled).
+     */
+    fun registerChatComponentClicked(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.CHAT_COMPONENT_CLICKED, getImplementationLoader())
+    }
+
+    /**
+     * Passes in the chat component, the x and y coordinates, and the
+     * event (which can be cancelled).
+     */
+    fun registerChatComponentHovered(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.CHAT_COMPONENT_HOVERED, getImplementationLoader())
     }
 
     fun getImplementationLoader(): ILoader
