@@ -215,15 +215,6 @@ object ClientListener {
     }
 
     @SubscribeEvent
-    fun onLeftClick(e: PlayerInteractEvent) {
-        TriggerType.PLAYER_INTERACT.triggerAll(
-            e.action,
-            World.getBlockAt(e.pos?.x ?: 0, e.pos?.y ?: 0, e.pos?.z ?: 0),
-            e
-        )
-    }
-
-    @SubscribeEvent
     fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
         GlStateManager.pushMatrix()
 
@@ -234,5 +225,55 @@ object ClientListener {
         )
 
         GlStateManager.popMatrix()
+    }
+
+    //#if MC<=10809
+    @SubscribeEvent
+    fun onLeftClick(e: PlayerInteractEvent) {
+        val action = when (e.action) {
+            PlayerInteractEvent.Action.LEFT_CLICK_BLOCK -> PlayerInteractAction.LEFT_CLICK_BLOCK
+            PlayerInteractEvent.Action.RIGHT_CLICK_AIR -> PlayerInteractAction.RIGHT_CLICK_EMPTY
+            PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK -> PlayerInteractAction.RIGHT_CLICK_BLOCK
+            null -> PlayerInteractAction.UNKNOWN
+        }
+
+        TriggerType.PLAYER_INTERACT.triggerAll(
+                action,
+                World.getBlockAt(e.pos?.x ?: 0, e.pos?.y ?: 0, e.pos?.z ?: 0),
+                e
+        )
+    }
+    //#else
+    //$$@SubscribeEvent
+    //$$fun onLeftClick(e: PlayerInteractEvent) {
+    //$$    val action = when (e) {
+    //$$        is PlayerInteractEvent.EntityInteract, is PlayerInteractEvent.EntityInteractSpecific ->
+    //$$            PlayerInteractAction.RIGHT_CLICK_ENTITY
+    //$$        is PlayerInteractEvent.RightClickBlock -> PlayerInteractAction.RIGHT_CLICK_BLOCK
+    //$$        is PlayerInteractEvent.RightClickItem -> PlayerInteractAction.RIGHT_CLICK_ITEM
+    //$$        is PlayerInteractEvent.RightClickEmpty -> PlayerInteractAction.RIGHT_CLICK_EMPTY
+    //$$        is PlayerInteractEvent.LeftClickBlock -> PlayerInteractAction.LEFT_CLICK_BLOCK
+    //$$        is PlayerInteractEvent.LeftClickEmpty -> PlayerInteractAction.LEFT_CLICK_EMPTY
+    //$$        else -> PlayerInteractAction.UNKNOWN
+    //$$    }
+    //$$
+    //$$    TriggerType.PLAYER_INTERACT.triggerAll(
+    //$$            action,
+    //$$            World.getBlockAt(e.pos.x, e.pos.y, e.pos.z),
+    //$$            e
+    //$$    )
+    //$$}
+    //#endif
+
+    enum class PlayerInteractAction {
+        RIGHT_CLICK_BLOCK,
+        RIGHT_CLICK_EMPTY,
+        LEFT_CLICK_BLOCK,
+        //#if MC>10809
+        //$$RIGHT_CLICK_ENTITY,
+        //$$RIGHT_CLICK_ITEM,
+        //$$LEFT_CLICK_EMPTY,
+        //#endif
+        UNKNOWN
     }
 }
