@@ -16,6 +16,7 @@ import org.lwjgl.opengl.Display
 
 @External
 object Client {
+    @JvmStatic
     val settings = Settings
 
     /**

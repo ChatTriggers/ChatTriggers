@@ -88,7 +88,8 @@ object Settings {
         @JvmStatic fun getRenderDistance() = getSettings().renderDistanceChunks
         @JvmStatic fun setRenderDistance(distance: Int) { getSettings().renderDistanceChunks = distance }
 
-        // TODO: smooth lighting
+        @JvmStatic fun getSmoothLighting() = getSettings().ambientOcclusion
+        @JvmStatic fun setSmoothLighting(level: Int) { getSettings().ambientOcclusion = level }
 
         @JvmStatic fun getMaxFrameRate() = getSettings().limitFramerate
         @JvmStatic fun setMaxFrameRate(frameRate: Int) { getSettings().limitFramerate = frameRate }
