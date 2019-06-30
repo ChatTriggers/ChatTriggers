@@ -177,7 +177,11 @@ object Client {
 
     @JvmStatic
     fun <T : INetHandler> sendPacket(packet: Packet<T>) {
+        //#if MC<=10809
         getMinecraft().netHandler.networkManager.sendPacket(packet)
+        //#else
+        //$$getMinecraft().connection?.networkManager?.sendPacket(packet)
+        //#endif
     }
 
     object gui {
