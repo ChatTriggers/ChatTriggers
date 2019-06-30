@@ -34,10 +34,9 @@ public abstract class MixinScreenShotHelper {
     }
     //#else
     //$$ @Inject(
-    //$$         method = "Lnet/minecraft/util/ScreenShotHelper;saveScreenshot(Ljava/io/File;IILnet/minecraft/client/shader/Framebuffer;)Lnet/minecraft/util/text/ITextComponent;",
-    //$$         at = @At("HEAD"),
-    //$$         cancellable = true,
-    //$$         remap = false
+    //$$        method = "Lnet/minecraft/util/ScreenShotHelper;saveScreenshot(Ljava/io/File;IILnet/minecraft/client/shader/Framebuffer;)Lnet/minecraft/util/text/ITextComponent;",
+    //$$        at = @At("HEAD"),
+    //$$        cancellable = true
     //$$ )
     //$$ private static void saveScreenshot(File gameDirectory, int width, int height, Framebuffer buffer, CallbackInfoReturnable<ITextComponent> ci) {
     //$$     File file = getTimestampedPNGFileForDirectory(new File(gameDirectory, "screenshots"));
