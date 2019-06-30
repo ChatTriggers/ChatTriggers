@@ -60,11 +60,19 @@ object Settings {
         @JvmStatic fun getBlocks() = getSettings().getSoundLevel(SoundCategory.BLOCKS)
         @JvmStatic fun setBlocks(level: Float) = getSettings().setSoundLevel(SoundCategory.BLOCKS, level)
 
+        //#if MC<=10809
         @JvmStatic fun getHostileCreatures() = getSettings().getSoundLevel(SoundCategory.MOBS)
         @JvmStatic fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.MOBS, level)
 
         @JvmStatic fun getFriendlyCreatures() = getSettings().getSoundLevel(SoundCategory.ANIMALS)
         @JvmStatic fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.ANIMALS, level)
+        //#else
+        //$$ @JvmStatic fun getHostileCreatures() = getSettings().getSoundLevel(SoundCategory.HOSTILE)
+        //$$ @JvmStatic fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.HOSTILE, level)
+        //$$
+        //$$ @JvmStatic fun getFriendlyCreatures() = getSettings().getSoundLevel(SoundCategory.NEUTRAL)
+        //$$ @JvmStatic fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.NEUTRAL, level)
+        //#endif
 
         @JvmStatic fun getPlayers() = getSettings().getSoundLevel(SoundCategory.PLAYERS)
         @JvmStatic fun setPlayers(level: Float) = getSettings().setSoundLevel(SoundCategory.PLAYERS, level)
@@ -112,8 +120,13 @@ object Settings {
         @JvmStatic fun getMipmapLevels() = getSettings().mipmapLevels
         @JvmStatic fun setMipmapLevels(mipmapLevels: Int) { getSettings().mipmapLevels = mipmapLevels }
 
+        //#if MC<=10809
         @JvmStatic fun getAlternateBlocks() = getSettings().allowBlockAlternatives
         @JvmStatic fun setAlternateBlocks(toggled: Boolean) { getSettings().allowBlockAlternatives = toggled }
+        //#else
+        //$$ @JvmStatic fun getAlternateBlocks() = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
+        //$$ @JvmStatic fun setAlternateBlocks(toggled: Boolean) = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
+        //#endif
 
         @JvmStatic fun getVBOs() = getSettings().useVbo
         @JvmStatic fun setVBOs(toggled: Boolean) { getSettings().useVbo = toggled }
