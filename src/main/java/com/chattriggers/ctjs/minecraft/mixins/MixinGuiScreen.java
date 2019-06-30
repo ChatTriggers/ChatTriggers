@@ -100,6 +100,7 @@ public abstract class MixinGuiScreen {
                     "handleComponentClick(Lnet/minecraft/util/IChatComponent;)Z",
                     //#else
                     //$$ "handleComponentClick(Lnet/minecraft/util/text/ITextComponent;)Z",
+                    //$$ remap = false,
                     //#endif
             at = @At("HEAD"),
             cancellable = true
@@ -123,6 +124,7 @@ public abstract class MixinGuiScreen {
                     "handleComponentHover(Lnet/minecraft/util/IChatComponent;II)V",
                     //#else
                     //$$ "handleComponentHover(Lnet/minecraft/util/text/ITextComponent;II)V",
+                    //$$ remap = false,
                     //#endif
             at = @At("HEAD"),
             cancellable = true
