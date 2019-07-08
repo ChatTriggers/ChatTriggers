@@ -1,12 +1,14 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.mixins.MixinGuiTabList
+import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.GameType
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
-import java.util.ArrayList
+import net.minecraft.util.IChatComponent
 import java.util.Comparator
 
 @External
@@ -47,6 +49,30 @@ object TabList {
 
         return list.map {
             it.gameProfile.name
+        }
+    }
+
+    @JvmStatic
+    fun getHeader() = (Client.getTabGui() as MixinGuiTabList).header
+
+    @JvmStatic
+    fun setHeader(header: Any) {
+        when(header) {
+            is String -> Client.getTabGui()?.setHeader(Message(header).getChatMessage())
+            is Message -> Client.getTabGui()?.setHeader(header.getChatMessage())
+            is IChatComponent -> Client.getTabGui()?.setHeader(header)
+        }
+    }
+
+    @JvmStatic
+    fun getFooter() = (Client.getTabGui() as MixinGuiTabList).footer
+
+    @JvmStatic
+    fun setFooter(footer: Any) {
+        when(footer) {
+            is String -> Client.getTabGui()?.setHeader(Message(footer).getChatMessage())
+            is Message -> Client.getTabGui()?.setHeader(footer.getChatMessage())
+            is IChatComponent -> Client.getTabGui()?.setHeader(footer)
         }
     }
 

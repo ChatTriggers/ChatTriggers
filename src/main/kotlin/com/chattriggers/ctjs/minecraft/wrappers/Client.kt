@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiNewChat
+import net.minecraft.client.gui.GuiPlayerTabOverlay
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
@@ -49,6 +50,9 @@ object Client {
 
     @JvmStatic
     fun isInChat(): Boolean = getMinecraft().currentScreen is GuiChat
+
+    @JvmStatic
+    fun getTabGui(): GuiPlayerTabOverlay? = getMinecraft().ingameGUI?.tabList
 
     @JvmStatic
     fun isInTab(): Boolean =  getMinecraft().gameSettings.keyBindPlayerList.isKeyDown

@@ -5,6 +5,7 @@
   "mixins": [
     "MixinGuiChat",
     "MixinGuiScreen",
+    "MixinGuiTabList",
     "MixinScreenShotHelper",
     "MixinMinecraft",
     "MixinGuiMainMenu",
