@@ -53,7 +53,10 @@ object TabList {
     }
 
     @JvmStatic
-    fun getHeader() = (Client.getTabGui() as MixinGuiTabList).header
+    fun getHeaderMessage() = Message((Client.getTabGui() as MixinGuiTabList).header)
+
+    @JvmStatic
+    fun getHeader() = (Client.getTabGui() as MixinGuiTabList).header.formattedText
 
     @JvmStatic
     fun setHeader(header: Any) {
@@ -65,7 +68,10 @@ object TabList {
     }
 
     @JvmStatic
-    fun getFooter() = (Client.getTabGui() as MixinGuiTabList).footer
+    fun getFooterMessage() = Message((Client.getTabGui() as MixinGuiTabList).footer)
+
+    @JvmStatic
+    fun getFooter() = (Client.getTabGui() as MixinGuiTabList).footer.formattedText
 
     @JvmStatic
     fun setFooter(footer: Any) {
