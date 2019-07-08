@@ -184,7 +184,7 @@ object Tessellator {
      */
     @JvmStatic
     fun drawString(text: String, x: Float, y: Float, z: Float, renderBlackBox: Boolean, partialTicks: Float, scale: Float, color: Int, increase: Boolean) {
-        var scale = scale
+        var lScale = scale
         val mc = Minecraft.getMinecraft()
 
         val renderManager = mc.renderManager
@@ -201,7 +201,7 @@ object Tessellator {
         if (increase) {
             val distance = Math.sqrt((dx * dx + dy * dy + dz * dz).toDouble()).toFloat()
             val multiplier = distance / 120f //mobs only render ~120 blocks away
-            scale *= 0.45f * multiplier
+            lScale *= 0.45f * multiplier
         }
 
         GL11.glColor4f(1f, 1f, 1f, 0.5f)
@@ -209,7 +209,7 @@ object Tessellator {
         GL11.glTranslatef(dx, dy, dz)
         GL11.glRotatef(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         GL11.glRotatef(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
-        GL11.glScalef(-scale, -scale, scale)
+        GL11.glScalef(-lScale, -lScale, lScale)
         GL11.glDisable(GL11.GL_LIGHTING)
         GL11.glDepthMask(false)
         GL11.glDisable(GL11.GL_DEPTH_TEST)

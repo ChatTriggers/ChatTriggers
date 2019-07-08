@@ -13,7 +13,11 @@ var ReflectionHelper = Java.type("net.minecraftforge.fml.relauncher.ReflectionHe
 var TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
 var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
 var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
+//#if MC<=10809
 var InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent.Action");
+//#else
+//$$ var InteractAction = Java.type("com.chattriggers.ctjs.minecraft.listeners.ClientListener").INSTANCE.PlayerInteractAction;
+//#endif
 
 // Libraries
 var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
@@ -116,7 +120,25 @@ Number.prototype.easeOut = function(to, speed, jump) {
     } else {
         this = to
     }
+};
+
+function easeColor(start, finish, speed, jump) {
+    return Renderer.color(
+        easeOut((start >> 16) & 0xFF, (finish >> 16) & 0xFF, speed, jump),
+        easeOut((start >> 8) & 0xFF, (finish >> 8) & 0xFF, speed, jump),
+        easeOut(start & 0xFF, finish & 0xFF, speed, jump),
+        easeOut((start >> 24) & 0xFF, (finish >> 24) & 0xFF, speed, jump)
+    );
 }
+
+Number.prototype.easeColor = function(start, finish, speed, jump) {
+    this = Renderer.color(
+        easeOut((start >> 16) & 0xFF, (finish >> 16) & 0xFF, speed, jump),
+        easeOut((start >> 8) & 0xFF, (finish >> 8) & 0xFF, speed, jump),
+        easeOut(start & 0xFF, finish & 0xFF, speed, jump),
+        easeOut((start >> 24) & 0xFF, (finish >> 24) & 0xFF, speed, jump)
+    );
+};
 
 function setTimeout(func, delay) {
     new Thread(function() {

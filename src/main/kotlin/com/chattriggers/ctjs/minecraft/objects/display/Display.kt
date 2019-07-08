@@ -130,7 +130,7 @@ abstract class Display {
 
     fun getRenderX(): Float = this.renderX
     fun setRenderX(renderX: Float) = apply {
-        this.renderX
+        this.renderX = renderX
     }
 
     fun getRenderY(): Float = this.renderY
