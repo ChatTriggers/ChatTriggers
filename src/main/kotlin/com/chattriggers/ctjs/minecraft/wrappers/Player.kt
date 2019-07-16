@@ -202,9 +202,9 @@ object Player {
             yaw in 67.5..112.5 -> "West"
             yaw in 112.5..157.5 -> "North West"
             yaw < -157.5 || yaw > 157.5 -> "North"
-            yaw in -112.5..-157.5 -> "North East"
-            yaw in -67.5..-112.5 -> "East"
-            yaw in -22.5..-67.5 -> "South East"
+            yaw in -157.5..-112.5 -> "North East"
+            yaw in -112.5..-67.5 -> "East"
+            yaw in -67.5..-22.5 -> "South East"
             else -> ""
         }
     }
