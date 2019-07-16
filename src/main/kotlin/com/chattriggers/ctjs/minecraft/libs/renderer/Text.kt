@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.GlStateManager
 
 @External
-class Text(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
+class Text @JvmOverloads constructor(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
     private var lines = mutableListOf<String>()
 
     private var color = 0xffffffff.toInt()
