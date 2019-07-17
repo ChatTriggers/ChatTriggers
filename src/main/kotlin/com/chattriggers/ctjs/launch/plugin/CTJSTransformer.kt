@@ -18,7 +18,7 @@ class CTJSTransformer : BaseClassTransformer() {
         className = "net/minecraft/client/renderer/RenderGlobal"
         at = At(
                 value = InjectionPoint.INVOKE(
-                        Descriptor("net/minecraft/client/renderer/chunk/RenderChunk", "getPosition", "Lnet/minecraft/util/BlockPos")
+                        Descriptor("net/minecraft/client/renderer/chunk/RenderChunk", "getPosition", "()Lnet/minecraft/util/BlockPos;")
                 ),
                 before = false
         )
