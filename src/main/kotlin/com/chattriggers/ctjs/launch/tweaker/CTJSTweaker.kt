@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.launch
+package com.chattriggers.ctjs.launch.tweaker
 
 import net.minecraft.launchwrapper.ITweaker
 import net.minecraft.launchwrapper.LaunchClassLoader
