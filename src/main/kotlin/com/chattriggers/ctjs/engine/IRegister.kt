@@ -704,5 +704,13 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.RENDER_ENTITY, getImplementationLoader())
     }
 
+    /**
+     * Passes in the block, its BlockPos, and the event (which
+     * can be cancelled).
+     */
+    fun registerRenderBlock(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RENDER_BLOCK, getImplementationLoader())
+    }
+
     fun getImplementationLoader(): ILoader
 }

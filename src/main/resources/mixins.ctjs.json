@@ -17,6 +17,7 @@
     "MixinSoundSystem",
     "MixinGuiNewChat",
     "MixinNetHandlerPlayClient",
-    "MixinRenderManager"
+    "MixinRenderManager",
+    "MixinBlockModelRenderer"
   ]
 }
