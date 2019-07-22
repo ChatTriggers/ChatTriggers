@@ -16,6 +16,7 @@
     "MixinSoundHandler",
     "MixinSoundSystem",
     "MixinGuiNewChat",
-    "MixinNetHandlerPlayClient"
+    "MixinNetHandlerPlayClient",
+    "MixinRenderManager"
   ]
 }

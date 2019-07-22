@@ -696,5 +696,21 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.CHAT_COMPONENT_HOVERED, getImplementationLoader())
     }
 
+    /**
+     * Passes in the entity, the entity location as a Vector3d, the
+     * partialTicks, and the event (which can be cancelled).
+     */
+    fun registerRenderEntity(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RENDER_ENTITY, getImplementationLoader())
+    }
+
+    /**
+     * Passes in the block, its BlockPos, and the event (which
+     * can be cancelled).
+     */
+    fun registerRenderBlock(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RENDER_BLOCK, getImplementationLoader())
+    }
+
     fun getImplementationLoader(): ILoader
 }
