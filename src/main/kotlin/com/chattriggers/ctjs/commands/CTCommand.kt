@@ -76,7 +76,7 @@ object CTCommand : CommandBase() {
                 GuiHandler.openGui(GuiConfig())
             "sim", "simulate" ->
                 ChatLib.simulateChat(Arrays.copyOfRange(args, 1, args.size).joinToString(" "))
-            "dump" -> dumpChat(args)
+            "dump" -> dump(args)
             "copy" -> copyArgsToClipboard(args)
             else -> ChatLib.chat(getUsage())
         }
@@ -104,13 +104,30 @@ object CTCommand : CommandBase() {
         }
     }
 
-    private fun dumpChat(args: Array<String>) {
-        var toDump = if (args.size > 1) args[1].toInt() else 100
+    private fun dump(args: Array<String>) {
+        if (args.size == 1) {
+            dumpChat()
+            return
+        }
+        when (args[1].toLowerCase()) {
+            "chat" -> {
+                if (args.size == 2) dumpChat()
+                else dumpChat(args[2].toInt())
+            }
+            "actionbar" -> {
+                if (args.size == 2) dumpActionBar()
+                else dumpActionBar(args[2].toInt())
+            }
+        }
+    }
 
+    private fun dumpChat(lines: Int = 100) = dumpList(ChatListener.chatHistory, lines)
+    private fun dumpActionBar(lines: Int = 100) = dumpList(ChatListener.actionBarHistory, lines)
+    private fun dumpList(messages: List<String>, lines: Int) {
         clearOldDump()
-        val messages = ChatListener.chatHistory
+        
+        var toDump = lines
         if (toDump > messages.size) toDump = messages.size
-
         Message("&6&m${ChatLib.getChatBreak()}").setChatLineId(this.idFixed).chat()
         var msg: String
         for (i in 0 until toDump) {
@@ -121,9 +138,9 @@ object CTCommand : CommandBase() {
                     .setFormatted(false)
             ).setFormatted(false).setChatLineId(this.idFixed + i + 1).chat()
         }
-        Message("&6&m${ChatLib.getChatBreak()}").setChatLineId(this.idFixed + toDump + 1).chat()
+        Message("&6&m${ChatLib.getChatBreak()}").setChatLineId(this.idFixed + lines + 1).chat()
 
-        this.idFixedOffset = this.idFixed + toDump + 1
+        this.idFixedOffset = this.idFixed + lines + 1
     }
 
     private fun clearOldDump() {
