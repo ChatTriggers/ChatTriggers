@@ -192,6 +192,14 @@ class Message {
         )
     }
 
+    override fun toString() =
+            "Message{" +
+                    "formatted=$this.formatted, " +
+                    "recursive=$recursive, " +
+                    "chatLineId=$chatLineId, " +
+                    "messageParts=$messageParts" +
+                    "}"
+
     private fun parseMessage() {
         this.chatMessage = BaseTextComponent("")
 
