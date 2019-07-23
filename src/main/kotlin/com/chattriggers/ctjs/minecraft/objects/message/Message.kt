@@ -194,7 +194,7 @@ class Message {
 
     override fun toString() =
             "Message{" +
-                    "formatted=$this.formatted, " +
+                    "formatted=$formatted, " +
                     "recursive=$recursive, " +
                     "chatLineId=$chatLineId, " +
                     "messageParts=$messageParts" +
