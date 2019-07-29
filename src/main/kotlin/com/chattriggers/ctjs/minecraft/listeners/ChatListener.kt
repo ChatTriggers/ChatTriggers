@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
-import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.print
@@ -13,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 @KotlinListener
 object ChatListener {
     val chatHistory = mutableListOf<String>()
+    val actionBarHistory = mutableListOf<String>()
 
     @SubscribeEvent
     fun onReceiveChat(event: ClientChatReceivedEvent) {
@@ -32,7 +32,14 @@ object ChatListener {
                     "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".print()
                 }
             }
-            2 -> TriggerType.ACTION_BAR.triggerAll(ChatLib.getChatMessage(event, false), event)
+            2 -> {
+                // save to actionbar history
+                actionBarHistory += ChatLib.getChatMessage(event, true)
+                if (actionBarHistory.size > 1000) actionBarHistory.removeAt(0)
+
+                // action bar
+                TriggerType.ACTION_BAR.triggerAll(ChatLib.getChatMessage(event, false), event)
+            }
         }
     }
 }

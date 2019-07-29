@@ -87,6 +87,16 @@ class TextComponent {
     fun chat() = Message(this).chat()
     fun actionBar() = Message(this).actionBar()
 
+    override fun toString() =
+            "TextComponent{" +
+                    "text:$text, " +
+                    "formatted:$formatted, " +
+                    "hoverAction:$hoverAction, " +
+                    "hoverValue:$hoverValue, " +
+                    "clickAction:$clickAction, " +
+                    "clickValue:$clickValue, " +
+                    "}"
+
     private fun reInstance() {
         this.chatComponentText = BaseTextComponent(
                         if (this.formatted) ChatLib.addColor(this.text)
