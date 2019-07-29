@@ -1,9 +1,11 @@
 package com.chattriggers.ctjs.engine.module.import
 
 import com.chattriggers.ctjs.minecraft.libs.FileLib
+import com.chattriggers.ctjs.print
 import com.google.gson.*
 import net.minecraft.client.gui.GuiScreen
 import org.jsoup.nodes.Document
+import java.net.UnknownHostException
 
 object ImportGui : GuiScreen() {
     val gson: Gson = GsonBuilder().apply {
@@ -18,10 +20,12 @@ object ImportGui : GuiScreen() {
         updateModulesList()
     }
 
-    private fun updateModulesList() {
+    private fun updateModulesList() = try {
         modules = gson.fromJson(
                 FileLib.getUrlContent("https://www.chattriggers.com/api/modules"),
                 Array<ForeignModule>::class.java
         ).toList()
+    } catch (e: UnknownHostException) {
+        e.print()
     }
 }

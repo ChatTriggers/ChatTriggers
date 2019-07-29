@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.io.FileReader
+import java.net.UnknownHostException
 import kotlin.concurrent.thread
 
 @Mod(modid = Reference.MODID,
@@ -61,7 +62,12 @@ object CTJS {
                 .build()
 
         val sha256uuid = DigestUtils.sha256Hex(Player.getUUID())
-        FileLib.getUrlContent("https://www.chattriggers.com/tracker/?uuid=$sha256uuid")
+
+        try {
+            FileLib.getUrlContent("https://www.chattriggers.com/tracker/?uuid=$sha256uuid")
+        } catch (e: UnknownHostException) {
+            e.print()
+        }
     }
 
     @Mod.EventHandler
@@ -75,7 +81,6 @@ object CTJS {
 
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {
-
 //        Client.getMinecraft().renderManager.skinMap.values.forEach {
 //            it.addLayer(LayerCape(it))
 //        }

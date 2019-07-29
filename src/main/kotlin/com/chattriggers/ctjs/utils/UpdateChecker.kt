@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import java.net.UnknownHostException
 
 @KotlinListener
 object UpdateChecker {

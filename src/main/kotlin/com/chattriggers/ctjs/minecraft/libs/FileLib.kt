@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.External
 import java.io.*
 import java.net.URL
+import java.net.UnknownHostException
 import java.nio.charset.Charset
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
@@ -82,6 +83,7 @@ object FileLib {
      * @param userAgent the user agent to use in the connection
      * @return the string stored in the url content
      */
+    @Throws(UnknownHostException::class)
     @JvmStatic @JvmOverloads
     fun getUrlContent(theUrl: String, userAgent: String? = "Mozilla/5.0"): String {
         val conn = URL(theUrl).openConnection()
