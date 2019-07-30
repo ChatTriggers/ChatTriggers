@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.chunk.RenderChunk
 
 class CTJSTransformer : BaseClassTransformer() {
     override fun makeTransformers() {
-        injectBlockRender()
+        // injectBlockRender()
     }
 
     private fun injectBlockRender() = inject {
