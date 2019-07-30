@@ -6,15 +6,17 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import io.sentry.Sentry
 import io.sentry.event.Breadcrumb
 import io.sentry.event.BreadcrumbBuilder
+import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 
 import java.util.*
-import java.util.regex.Pattern
 
 @External
 class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger(method, type, loader) {
-    private var chatCriteria: String = ""
-    private var criteriaPattern: Pattern? = null
+    private var chatCriteria: Any? = null
+    private var formatted: Boolean = false
+    private var caseInsensitive: Boolean = false
+    private var criteriaPattern: Regex? = null
     private var parameters = mutableListOf<Parameter?>()
     private var triggerIfCanceled: Boolean = true
 
@@ -34,14 +36,42 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
      * @param chatCriteria the chat criteria to set
      * @return the trigger object for method chaining
      */
-    fun setChatCriteria(chatCriteria: String) = apply {
+    fun setChatCriteria(chatCriteria: Any) = apply {
         this.chatCriteria = chatCriteria
+        val flags = mutableSetOf<RegexOption>()
+        var source = ".+"
 
-        val replacedCriteria = chatCriteria.replace("\n", "->newLine<-").let(Pattern::quote)
-            .replace("\\$\\{[^*]+?}".toRegex(), "\\\\E(.+)\\\\Q")
-            .replace("\\$\\{\\*?}".toRegex(), "\\\\E(?:.+)\\\\Q")
+        when (chatCriteria) {
+            is String -> {
+                this.formatted = "&" in chatCriteria
 
-        this.criteriaPattern = Pattern.compile(if ("" == chatCriteria) ".+" else replacedCriteria)
+                val replacedCriteria = Regex.escape(chatCriteria.replace("\n", "->newLine<-"))
+                        .replace(Regex("\\\$\\{[^*]+?}"), "\\\\E(.+)\\\\Q")
+                        .replace(Regex("\\$\\{\\*?}"), "\\\\E(?:.+)\\\\Q")
+
+                if (caseInsensitive)
+                    flags.add(RegexOption.IGNORE_CASE)
+
+                if ("" != chatCriteria)
+                    source = replacedCriteria
+            }
+            is ScriptObjectMirror -> {
+                if (chatCriteria["ignoreCase"] as Boolean || caseInsensitive)
+                    flags.add(RegexOption.IGNORE_CASE)
+
+                if (chatCriteria["multiline"] as Boolean)
+                    flags.add(RegexOption.MULTILINE)
+
+                source = (chatCriteria["source"] as String).let {
+                    if ("" == it) ".+" else it
+                }
+
+                formatted = "&" in source
+            }
+            else -> throw IllegalArgumentException("Expected String or Regexp Object")
+        }
+
+        this.criteriaPattern = Regex(source, flags)
     }
 
     /**
@@ -49,7 +79,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
      * @param chatCriteria the chat criteria to set
      * @return the trigger object for method chaining
      */
-    fun setCriteria(chatCriteria: String) = setChatCriteria(chatCriteria)
+    fun setCriteria(chatCriteria: Any) = setChatCriteria(chatCriteria)
 
     /**
      * Sets the chat parameter for [Parameter].
@@ -91,6 +121,42 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     }
 
     /**
+     * Adds the "start" parameter
+     * @return the trigger object for method chaining
+     */
+    fun setStart() = apply {
+        setParameter("start")
+    }
+
+    /**
+     * Adds the "contains" parameter
+     * @return the trigger object for method chaining
+     */
+    fun setContains() = apply {
+        setParameter("contains")
+    }
+
+    /**
+     * Adds the "end" parameter
+     * @return the trigger object for method chaining
+     */
+    fun setEnd() = apply {
+        setParameter("end")
+    }
+
+    /**
+     * Makes the chat criteria case insensitive
+     * @return the trigger object for method chaining
+     */
+    fun setCaseInsensitive() = apply {
+        caseInsensitive = true
+
+        // Reparse criteria if setCriteria has already been called
+        if (chatCriteria != null)
+            setCriteria(chatCriteria!!)
+    }
+
+    /**
      * Argument 1 (String) The chat message received
      * Argument 2 (ClientChatReceivedEvent) the chat event fired
      * @param args list of arguments as described
@@ -115,24 +181,26 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
 
     // helper method to get the proper chat message based on the presence of color codes
     private fun getChatMessage(chatEvent: ClientChatReceivedEvent, chatMessage: String) =
-        if (this.chatCriteria.contains("&"))
-            EventLib.getMessage(chatEvent).formattedText.replace("\u00a7", "&")
-        else chatMessage
+            if (formatted)
+                EventLib.getMessage(chatEvent).formattedText.replace("\u00a7", "&")
+            else chatMessage
 
     // helper method to get the variables to pass through
     private fun getVariables(chatMessage: String) =
-        if ("" != this.chatCriteria) matchesChatCriteria(chatMessage.replace("\n", "->newLine<-")) else ArrayList()
+            if (criteriaPattern != null)
+                matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"))
+            else ArrayList()
 
     // helper method to record a breadcrumb for sentry
     private fun recordBreadcrumb(chatMessage: String) {
         Sentry.getContext().recordBreadcrumb(
-            BreadcrumbBuilder()
-                .setCategory("generic")
-                .setLevel(Breadcrumb.Level.INFO)
-                .setTimestamp(Date())
-                .setType(Breadcrumb.Type.DEFAULT)
-                .setMessage("Chat message: $chatMessage")
-                .build()
+                BreadcrumbBuilder()
+                        .setCategory("generic")
+                        .setLevel(Breadcrumb.Level.INFO)
+                        .setTimestamp(Date())
+                        .setType(Breadcrumb.Type.DEFAULT)
+                        .setMessage("Chat message: $chatMessage")
+                        .build()
         )
     }
 
@@ -144,33 +212,26 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
      * @return a list of the variables, in order or null if it doesn't match
      */
     private fun matchesChatCriteria(chat: String): MutableList<Any>? {
-        val matcher = criteriaPattern!!.matcher(chat)
+        val regex = criteriaPattern!!
 
         if (parameters.isEmpty()) {
-            if (!matcher.matches()) return null
+            if (!(regex matches chat)) return null
         } else {
-            for (parameter in this.parameters) {
-                when {
-                    parameter == Parameter.CONTAINS -> if (!matcher.find()) return null
-                    parameter == Parameter.START -> if (!matcher.find() || matcher.start() != 0) return null
-                    parameter == Parameter.END -> {
-                        var endMatch = -1
-                        while (matcher.find())
-                            endMatch = matcher.end()
-                        if (endMatch != chat.length) return null
-                    }
-                    parameter == null && !matcher.matches() -> return null
+            this.parameters.forEach { parameter ->
+                val first = regex.find(chat)?.groups?.get(1)
+
+                when (parameter) {
+                    Parameter.CONTAINS -> if (first == null) return null
+                    Parameter.START -> if (first == null || first.range.first != 0) return null
+                    Parameter.END -> if (first?.range?.last != chat.length) return null
+                    null -> if (!(regex matches chat)) return null
                 }
             }
         }
 
-        val variables = ArrayList<Any>()
-
-        for (i in 1..matcher.groupCount()) {
-            variables.add(matcher.group(i))
-        }
-
-        return variables
+        return regex.find(chat)?.groupValues
+                ?.filterIndexed { index, _ -> index != 0 }
+                ?.toMutableList()
     }
 
     /**
@@ -185,18 +246,13 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
         START("<s>", "<start>", "s", "start"),
         END("<e>", "<end>", "e", "end");
 
-        var names: List<String> = Arrays.asList(*names)
+        var names: List<String> = listOf(*names)
 
         companion object {
-            fun getParameterByName(name: String): Parameter? {
-                for (parameter in Parameter.values()) {
-                    for (paramName in parameter.names) {
-                        if (paramName.equals(name, ignoreCase = true)) return parameter
+            fun getParameterByName(name: String) =
+                    values().find { param ->
+                        param.names.any { it.toLowerCase() == name }
                     }
-                }
-
-                return null
-            }
         }
     }
 }
