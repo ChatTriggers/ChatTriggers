@@ -8,6 +8,7 @@ import io.sentry.event.Breadcrumb
 import io.sentry.event.BreadcrumbBuilder
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraftforge.client.event.ClientChatReceivedEvent
+import java.lang.IndexOutOfBoundsException
 
 import java.util.*
 
@@ -145,6 +146,14 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     }
 
     /**
+     * Makes the trigger match the entire chat message
+     * @return the trigger object for method chaining
+     */
+    fun setExact() = apply {
+        parameters.clear()
+    }
+
+    /**
      * Makes the chat criteria case insensitive
      * @return the trigger object for method chaining
      */
@@ -218,8 +227,12 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
             if (!(regex matches chat)) return null
         } else {
             this.parameters.forEach { parameter ->
-                val first = regex.find(chat)?.groups?.get(1)
-
+                val first = try {
+                    regex.find(chat)?.groups?.get(0)
+                } catch (e: IndexOutOfBoundsException) {
+                    return null
+                }
+                
                 when (parameter) {
                     Parameter.CONTAINS -> if (first == null) return null
                     Parameter.START -> if (first == null || first.range.first != 0) return null
@@ -229,9 +242,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
             }
         }
 
-        return regex.find(chat)?.groupValues
-                ?.filterIndexed { index, _ -> index != 0 }
-                ?.toMutableList()
+        return regex.find(chat)?.groupValues?.drop(1)?.toMutableList()
     }
 
     /**
