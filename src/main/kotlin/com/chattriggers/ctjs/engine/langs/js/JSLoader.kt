@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.ILoader.Companion.modulesFolder
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
-import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.kotlin.ModuleLoader
 import jdk.nashorn.api.scripting.NashornScriptEngine
@@ -32,7 +31,7 @@ object JSLoader : ILoader {
         cachedModules.clear()
 
         val jars = modules.map {
-            it.folder.listFiles().toList()
+            it.folder.listFiles()?.toList() ?: listOf()
         }.flatten().filter {
             it.name.endsWith(".jar")
         }.map {
@@ -41,7 +40,7 @@ object JSLoader : ILoader {
 
         scriptEngine = instanceScriptEngine(jars)
 
-        val script = saveResource(
+        val providedLibs = saveResource(
                 "/providedLibs.js",
                 File(modulesFolder.parentFile,
                         "chattriggers-provided-libs.js"
@@ -50,21 +49,21 @@ object JSLoader : ILoader {
         )
 
         try {
-            scriptEngine.eval(script)
+            scriptEngine.eval(providedLibs)
         } catch (e: Exception) {
             console.printStackTrace(e)
         }
 
-        val combinedScript = modules.map {
-            it.getFilesWithExtension(".js")
-        }.flatten().joinToString(separator = "\n") {
-            it.readText()
-        }
+        for (module in modules) {
+            val script = module.getFilesWithExtension(".js")
+                    .joinToString(separator = "\n") { it.readText() }
 
-        try {
-            scriptEngine.eval(combinedScript)
-        } catch (e: Exception) {
-            console.printStackTrace(e)
+            try {
+                scriptEngine.eval(script)
+            } catch (e: Exception) {
+                console.out.println("Error loading module ${module.name}")
+                console.printStackTrace(e)
+            }
         }
 
         cachedModules.addAll(modules)
