@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
 import io.sentry.Sentry
@@ -13,7 +14,7 @@ import java.lang.IndexOutOfBoundsException
 import java.util.*
 
 @External
-class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger(method, type, loader) {
+class OnChatTrigger(method: Any, type: TriggerType, owningModule: Module?, loader: ILoader) : OnTrigger(method, type, owningModule, loader) {
     private var chatCriteria: Any? = null
     private var formatted: Boolean = false
     private var caseInsensitive: Boolean = false

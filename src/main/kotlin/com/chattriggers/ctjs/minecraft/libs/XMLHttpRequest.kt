@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.IRegister
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -57,7 +58,7 @@ abstract class XMLHttpRequest {
      * @param method the method to be called back on completion of the request
      */
     fun setCallbackMethod(method: Any) {
-        this.methodCallback = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.methodCallback = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
     }
 
     /**

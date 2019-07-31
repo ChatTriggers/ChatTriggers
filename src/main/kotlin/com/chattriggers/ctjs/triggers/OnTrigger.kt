@@ -1,19 +1,23 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
 import jdk.nashorn.internal.objects.Global
+import javax.script.ScriptException
 
 @External
-abstract class OnTrigger protected constructor(var method: Any, var type: TriggerType, protected var loader: ILoader) {
-    var priority: Priority
+abstract class OnTrigger protected constructor(
+        var method: Any,
+        var type: TriggerType,
+        var owningModule: Module?,
+        protected var loader: ILoader
+) {
+    var priority: Priority = Priority.NORMAL
         private set
-    private var global: Global?
+
 
     init {
-        priority = Priority.NORMAL
-        global = null
-
         register()
     }
 

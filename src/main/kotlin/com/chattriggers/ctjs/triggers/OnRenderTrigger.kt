@@ -1,11 +1,12 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 
 @External
-class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : OnTrigger(method, triggerType, loader) {
+class OnRenderTrigger(method: Any, triggerType: TriggerType, owningModule: Module?, loader: ILoader) : OnTrigger(method, triggerType, owningModule, loader) {
     private var triggerIfCanceled: Boolean = true
 
     /**

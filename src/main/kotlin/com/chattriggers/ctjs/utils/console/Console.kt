@@ -14,7 +14,7 @@ import javax.swing.*
 import javax.swing.text.DefaultCaret
 
 class Console(val loader: ILoader?) {
-    private val frame: JFrame = JFrame("ct.js ${loader?.getLanguageName() ?: "Default"} Console")
+    private val frame: JFrame = JFrame("ct.js ${loader?.getLanguage()?.langName ?: "Default"} Console")
     private val taos: TextAreaOutputStream
     private val components = mutableListOf<Component>()
     private val history = mutableListOf<String>()
@@ -26,7 +26,7 @@ class Console(val loader: ILoader?) {
         this.frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 
         val textArea = JTextArea()
-        this.taos = TextAreaOutputStream(textArea, loader?.getLanguageName()?.firstOrNull() ?: "default")
+        this.taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
         textArea.isEditable = false
         textArea.font = Font("DejaVu Sans Mono", Font.PLAIN, 15)
         val inputField = JTextField(1)

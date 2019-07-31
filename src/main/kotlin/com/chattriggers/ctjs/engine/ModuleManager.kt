@@ -62,7 +62,7 @@ object ModuleManager {
 
     fun getConsole(language: String): Console {
         return loaders.firstOrNull {
-            it.getLanguageName().contains(language)
+            it.getLanguage().langName == language
         }?.console ?: generalConsole
     }
 }

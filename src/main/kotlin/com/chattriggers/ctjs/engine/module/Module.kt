@@ -1,10 +1,15 @@
 package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.engine.ModuleManager
+import com.chattriggers.ctjs.engine.langs.Lang
+import com.chattriggers.ctjs.engine.langs.js.JSLoader.console
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
+import com.chattriggers.ctjs.triggers.OnTrigger
+import jdk.nashorn.internal.runtime.ECMAException
 import java.io.File
+import javax.script.ScriptException
 
 class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
     private val gui = object {
@@ -12,6 +17,26 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
         var x = 0f
         var y = 0f
         var description = Text(metadata.description ?: "No description provided in the metadata")
+    }
+
+    fun reportError(lang: Lang, exception: ECMAException, trigger: OnTrigger) {
+        val files = getFilesWithExtension(lang.extension)
+        var line = exception.lineNumber
+        var fileName = ""
+
+        for (file in files) {
+            val fileLines = file.readLines().size
+
+            if (line <= fileLines) {
+                fileName = file.name
+                break
+            } else {
+                line -= fileLines
+            }
+        }
+
+        console.out.println("Error loading module $name in $fileName:$line")
+        console.printStackTrace(exception, trigger)
     }
 
     fun getFilesWithExtension(type: String): List<File> {

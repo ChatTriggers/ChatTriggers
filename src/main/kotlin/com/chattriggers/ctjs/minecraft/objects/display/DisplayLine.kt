@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.IRegister
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -96,15 +97,15 @@ abstract class DisplayLine {
     }
 
     fun registerClicked(method: Any) = run {
-        this.onClicked = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onClicked = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
         this.onClicked
     }
     fun registerHovered(method: Any) = run {
-        this.onHovered = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onHovered = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
         this.onHovered
     }
     fun registerDragged(method: Any) = run {
-        this.onDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onDragged = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
         this.onDragged
     }
 

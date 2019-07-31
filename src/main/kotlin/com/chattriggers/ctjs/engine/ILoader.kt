@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.engine
 
+import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -72,7 +73,7 @@ interface ILoader {
     /**
      * Returns the names of this specific loader's implemented languages
      */
-    fun getLanguageName(): List<String>
+    fun getLanguage(): Lang
 
     /**
      * Actually calls the method for this trigger in this loader
@@ -117,9 +118,9 @@ interface ILoader {
         internal fun getFoldersInDir(dir: File): List<File> {
             if (!dir.isDirectory) return emptyList()
 
-            return dir.listFiles().filter {
+            return dir.listFiles()?.filter {
                 it.isDirectory
-            }
+            } ?: listOf()
         }
     }
 }

@@ -3,11 +3,12 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.ClientCommandHandler
 
 @External
-class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.COMMAND, loader) {
+class OnCommandTrigger(method: Any, owningModule: Module?, loader: ILoader) : OnTrigger(method, TriggerType.COMMAND, owningModule, loader) {
     private var commandName: String? = null
     private var command: Command? = null
 

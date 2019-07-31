@@ -112,7 +112,7 @@ object DefaultLoader {
 
         if (metadataFile.exists()) {
             try {
-                metadata = Gson().fromJson<ModuleMetadata>(FileLib.read(metadataFile), ModuleMetadata::class.java)
+                metadata = Gson().fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
                 metadata.fileName = dir.name
             } catch (exception: Exception) {
                 exception.print()
@@ -132,7 +132,7 @@ object DefaultLoader {
 
                     val currVersion = metadata.version
 
-                    val newMetadata = Gson().fromJson<ModuleMetadata>(newMetadataFile.readText(), ModuleMetadata::class.java)
+                    val newMetadata = Gson().fromJson(newMetadataFile.readText(), ModuleMetadata::class.java)
                     val newVersion = newMetadata.version
                     val name = metadata.fileName
 

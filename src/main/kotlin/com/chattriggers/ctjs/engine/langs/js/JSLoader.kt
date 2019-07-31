@@ -2,6 +2,8 @@ package com.chattriggers.ctjs.engine.langs.js
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.ILoader.Companion.modulesFolder
+import com.chattriggers.ctjs.engine.IRegister
+import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
@@ -10,6 +12,7 @@ import jdk.nashorn.api.scripting.NashornScriptEngine
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import jdk.nashorn.internal.objects.Global
+import jdk.nashorn.internal.runtime.ECMAException
 import net.minecraft.client.Minecraft
 import java.io.File
 import java.net.URL
@@ -70,6 +73,8 @@ object JSLoader : ILoader {
     }
 
     private fun evalModule(module: Module) {
+        IRegister.currentModule = module
+
         val files = module.getFilesWithExtension(".js")
         val text = files.joinToString("\n") {
             it.readText()
@@ -95,14 +100,15 @@ object JSLoader : ILoader {
             console.out.println("Error loading module ${module.name} in $fileName:$line")
             console.printStackTrace(e)
         }
+
+        IRegister.currentModule = null
     }
 
     override fun eval(code: String): Any? {
         return scriptEngine.eval(code)
     }
-    override fun getLanguageName(): List<String> {
-        return listOf("js")
-    }
+
+    override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
         try {
@@ -111,8 +117,8 @@ object JSLoader : ILoader {
             } else {
                 callActualMethod(method, *args)
             }
-        } catch (e: Exception) {
-            console.printStackTrace(e)
+        } catch (e: ECMAException) {
+            trigger.owningModule?.reportError(getLanguage(), e, trigger)
             removeTrigger(trigger)
         }
     }
