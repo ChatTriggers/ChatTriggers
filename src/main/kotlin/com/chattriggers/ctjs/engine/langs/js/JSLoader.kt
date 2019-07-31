@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
+import javax.script.ScriptException
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -54,17 +55,7 @@ object JSLoader : ILoader {
             console.printStackTrace(e)
         }
 
-        for (module in modules) {
-            val script = module.getFilesWithExtension(".js")
-                    .joinToString(separator = "\n") { it.readText() }
-
-            try {
-                scriptEngine.eval(script)
-            } catch (e: Exception) {
-                console.out.println("Error loading module ${module.name}")
-                console.printStackTrace(e)
-            }
-        }
+        modules.forEach(::evalModule)
 
         cachedModules.addAll(modules)
     }
@@ -75,15 +66,33 @@ object JSLoader : ILoader {
         }) return
 
         cachedModules.add(module)
+        evalModule(module)
+    }
 
-        val script = module.getFilesWithExtension(".js").joinToString(separator = "\n") {
+    private fun evalModule(module: Module) {
+        val files = module.getFilesWithExtension(".js")
+        val text = files.joinToString("\n") {
             it.readText()
         }
 
         try {
-            scriptEngine.eval(script)
-        } catch (e: Exception) {
-            console.out.println("Error loading module ${module.name}")
+            eval(text)
+        } catch (e: ScriptException) {
+            var line = e.lineNumber
+            var fileName = ""
+
+            for (file in files) {
+                val fileLines = file.readLines().size
+
+                if (line <= fileLines) {
+                    fileName = file.name
+                    break
+                } else {
+                    line -= fileLines
+                }
+            }
+
+            console.out.println("Error loading module ${module.name} in $fileName:$line")
             console.printStackTrace(e)
         }
     }
