@@ -151,56 +151,6 @@ object Renderer {
         else color
     }
 
-    @Deprecated(
-            message="Replaced with Image object",
-            replaceWith = ReplaceWith(
-                    expression = "Image(name[, url])",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Image"]
-            )
-    )
-    @JvmStatic
-    fun image(name: String, url: String): Image = Image(name, url)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Text object",
-            replaceWith = ReplaceWith(
-                    expression = "Text(text, x, y)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Text"]
-            )
-    )
-    fun text(text: String, x: Float, y: Float): Text = Text(text, x, y)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Text object",
-            replaceWith = ReplaceWith(
-                    expression = "Text(text)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Text"]
-            )
-    )
-    fun text(text: String): Text = Text(text)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Rectangle object",
-            replaceWith = ReplaceWith(
-                    expression = "Rectangle(color, x, y, width, height)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle"]
-            )
-    )
-    fun rectangle(color: Int, x: Float, y: Float, width: Float, height: Float): Rectangle = Rectangle(color, x, y, width, height)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Shape object",
-            replaceWith = ReplaceWith(
-                    expression = "Shape(color)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Shape"]
-            )
-    )
-    fun shape(color: Int): Shape = Shape(color)
-
     @JvmStatic
     fun drawRect(color: Int, x: Float, y: Float, width: Float, height: Float) {
         val pos = mutableListOf(x, y, x + width, y + height)
