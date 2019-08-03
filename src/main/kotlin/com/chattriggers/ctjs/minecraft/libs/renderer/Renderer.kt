@@ -21,7 +21,8 @@ import java.util.*
 @External
 object Renderer {
     var colorized: Int? = null
-    var retainTransforms = false
+    private var retainTransforms = false
+    private var drawMode: Int? = null
 
     @JvmStatic val BLACK = color(0, 0, 0, 255)
     @JvmStatic val DARK_BLUE = color(0, 0, 190, 255)
@@ -136,62 +137,19 @@ object Renderer {
     }
 
     @JvmStatic
+    fun setDrawMode(drawMode: Int) = apply {
+        this.drawMode = drawMode
+    }
+    @JvmStatic
+    fun getDrawMode() = this.drawMode
+
+    @JvmStatic
     fun fixAlpha(color: Int): Int {
         val alpha = color shr 24 and 255
         return if (alpha < 10)
             (color and 0xFF_FF_FF) or 0xA_FF_FF_FF
         else color
     }
-
-    @Deprecated(
-            message="Replaced with Image object",
-            replaceWith = ReplaceWith(
-                    expression = "Image(name[, url])",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Image"]
-            )
-    )
-    @JvmStatic
-    fun image(name: String, url: String): Image = Image(name, url)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Text object",
-            replaceWith = ReplaceWith(
-                    expression = "Text(text, x, y)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Text"]
-            )
-    )
-    fun text(text: String, x: Float, y: Float): Text = Text(text, x, y)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Text object",
-            replaceWith = ReplaceWith(
-                    expression = "Text(text)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Text"]
-            )
-    )
-    fun text(text: String): Text = Text(text)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Rectangle object",
-            replaceWith = ReplaceWith(
-                    expression = "Rectangle(color, x, y, width, height)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle"]
-            )
-    )
-    fun rectangle(color: Int, x: Float, y: Float, width: Float, height: Float): Rectangle = Rectangle(color, x, y, width, height)
-
-    @JvmStatic
-    @Deprecated(
-            message="Replaced with Shape object",
-            replaceWith = ReplaceWith(
-                    expression = "Shape(color)",
-                    imports = ["com.chattriggers.ctjs.minecraft.libs.renderer.Shape"]
-            )
-    )
-    fun shape(color: Int): Shape = Shape(color)
 
     @JvmStatic
     fun drawRect(color: Int, x: Float, y: Float, width: Float, height: Float) {
@@ -215,7 +173,7 @@ object Renderer {
             val b = (color and 255).toFloat() / 255.0f
             GlStateManager.color(r, g, b, a)
         }
-        worldRenderer.begin(7, DefaultVertexFormats.POSITION)
+        worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION)
         worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[1].toDouble(), 0.0).endVertex()
@@ -246,7 +204,7 @@ object Renderer {
             GlStateManager.color(r, g, b, a)
         }
 
-        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
+        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
         vertexes.forEach {
             if (it.size == 2) {
@@ -284,7 +242,7 @@ object Renderer {
             GlStateManager.color(r, g, b, a)
         }
 
-        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
+        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
         worldRenderer.pos((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).endVertex()
         worldRenderer.pos((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).endVertex()
@@ -324,7 +282,7 @@ object Renderer {
             GlStateManager.color(r, g, b, a)
         }
 
-        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
+        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
         for (i in 0 .. steps) {
             worldRenderer.pos(x.toDouble(), y.toDouble(), 0.0).endVertex()
@@ -384,7 +342,7 @@ object Renderer {
         val tessellator = MCTessellator.getInstance()
         val worldRenderer = tessellator.getRenderer()
 
-        worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX)
+        worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
 
         worldRenderer.pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
         worldRenderer.pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
@@ -454,8 +412,9 @@ object Renderer {
 
     @JvmStatic
     fun finishDraw() {
-        if (!retainTransforms) {
-            colorized = null
+        if (!this.retainTransforms) {
+            this.colorized = null
+            this.drawMode = null
             GL11.glPopMatrix()
             GL11.glPushMatrix()
         }
