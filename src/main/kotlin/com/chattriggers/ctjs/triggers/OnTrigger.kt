@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.IRegister
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
 import jdk.nashorn.internal.objects.Global
@@ -10,9 +11,9 @@ import javax.script.ScriptException
 abstract class OnTrigger protected constructor(
         var method: Any,
         var type: TriggerType,
-        var owningModule: Module?,
         protected var loader: ILoader
 ) {
+    var owningModule = IRegister.currentModule
     var priority: Priority = Priority.NORMAL
         private set
 

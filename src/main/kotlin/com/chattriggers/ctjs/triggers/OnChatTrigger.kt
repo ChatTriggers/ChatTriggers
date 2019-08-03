@@ -14,7 +14,7 @@ import java.lang.IndexOutOfBoundsException
 import java.util.*
 
 @External
-class OnChatTrigger(method: Any, type: TriggerType, owningModule: Module?, loader: ILoader) : OnTrigger(method, type, owningModule, loader) {
+class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger(method, type, loader) {
     private var chatCriteria: Any? = null
     private var formatted: Boolean = false
     private var caseInsensitive: Boolean = false

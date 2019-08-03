@@ -54,7 +54,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerDraw(method: Any): OnRegularTrigger? {
-        onDraw = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
+        onDraw = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
         return onDraw
     }
 
@@ -70,7 +70,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerClicked(method: Any): OnRegularTrigger? {
-        onClick = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
+        onClick = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
         return onClick
     }
 
@@ -85,7 +85,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerKeyTyped(method: Any): OnRegularTrigger? {
-        onKeyTyped = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
+        onKeyTyped = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
         return onKeyTyped
     }
 
@@ -102,7 +102,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerMouseDragged(method: Any): OnRegularTrigger? {
-        onMouseDragged = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
+        onMouseDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
         return onMouseDragged
     }
 
@@ -118,7 +118,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerMouseReleased(method: Any): OnRegularTrigger? {
-        onMouseReleased = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
+        onMouseReleased = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
         return onMouseReleased
     }
 
@@ -132,7 +132,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerActionPerformed(method: Any): OnRegularTrigger? {
-        onActionPerformed = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
+        onActionPerformed = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
         return onActionPerformed
     }
 

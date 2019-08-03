@@ -5,7 +5,7 @@ import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
 
 @External
-class OnSoundPlayTrigger(method: Any, owningModule: Module?, loader: ILoader) : OnTrigger(method, TriggerType.SOUND_PLAY, owningModule, loader) {
+class OnSoundPlayTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.SOUND_PLAY, loader) {
     var soundNameCriteria = ""
 
     /**

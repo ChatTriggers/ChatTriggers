@@ -58,7 +58,7 @@ abstract class XMLHttpRequest {
      * @param method the method to be called back on completion of the request
      */
     fun setCallbackMethod(method: Any) {
-        this.methodCallback = OnRegularTrigger(method, TriggerType.OTHER, IRegister.currentModule, getLoader())
+        this.methodCallback = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
     }
 
     /**
