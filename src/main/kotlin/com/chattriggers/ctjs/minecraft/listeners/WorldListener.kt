@@ -66,16 +66,16 @@ object WorldListener {
         val pitch = try { event.sound.volume } catch (ignored: Exception) { 1 }
 
         TriggerType.SOUND_PLAY.triggerAll(
-                event,
                 position,
                 event.name,
                 vol,
                 pitch,
                 //#if MC<=10809
-                event.category ?: event.category?.categoryName
+                event.category ?: event.category?.categoryName,
                 //#else
                 //$$ event.sound.category ?: event.sound.category.name
                 //#endif
+                event
         )
     }
 
@@ -88,10 +88,10 @@ object WorldListener {
         )
 
         TriggerType.NOTE_BLOCK_PLAY.triggerAll(
-                event,
                 position,
                 event.note.name,
-                event.octave
+                event.octave,
+                event
         )
     }
 
@@ -104,10 +104,10 @@ object WorldListener {
         )
 
         TriggerType.NOTE_BLOCK_CHANGE.triggerAll(
-                event,
                 position,
                 event.note.name,
-                event.octave
+                event.octave,
+                event
         )
     }
 

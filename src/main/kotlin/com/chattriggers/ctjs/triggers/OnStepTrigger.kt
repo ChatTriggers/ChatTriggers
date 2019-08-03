@@ -14,7 +14,7 @@ class OnStepTrigger(method: Any, owningModule: Module?, loader: ILoader) : OnTri
 
     /**
      * Sets the frames per second that the trigger activates.
-     * This is limited to 1 step per second.
+     * This has a maximum one step per second.
      * @param fps the frames per second to set
      * @return the trigger for method chaining
      */
@@ -25,7 +25,7 @@ class OnStepTrigger(method: Any, owningModule: Module?, loader: ILoader) : OnTri
 
     /**
      * Sets the delay in seconds between the trigger activation.
-     * This is limited to one step every second. This will override [.setFps].
+     * This has a minimum of one step every second. This will override [.setFps].
      * @param delay The delay in seconds
      * @return the trigger for method chaining
      */

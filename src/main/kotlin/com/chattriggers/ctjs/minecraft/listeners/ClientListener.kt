@@ -142,7 +142,7 @@ object ClientListener {
                 event.target.blockPos.z.toDouble()
         )
 
-        TriggerType.BLOCK_HIGHLIGHT.triggerAll(event, position)
+        TriggerType.BLOCK_HIGHLIGHT.triggerAll(position, event)
     }
 
     @SubscribeEvent
@@ -172,7 +172,8 @@ object ClientListener {
                 //#endif
                 PlayerMP(player),
                 position,
-                motion
+                motion,
+                event
         )
     }
 
@@ -202,7 +203,8 @@ object ClientListener {
                 //#endif
                 PlayerMP(player),
                 position,
-                motion
+                motion,
+                event
         )
     }
 
@@ -237,9 +239,11 @@ object ClientListener {
             null -> PlayerInteractAction.UNKNOWN
         }
 
+
+
         TriggerType.PLAYER_INTERACT.triggerAll(
                 action,
-                World.getBlockAt(e.pos?.x ?: 0, e.pos?.y ?: 0, e.pos?.z ?: 0),
+                Vector3d((e.pos?.x ?: 0).toDouble(), (e.pos?.y ?: 0).toDouble(), (e.pos?.z ?: 0).toDouble()),
                 e
         )
     }

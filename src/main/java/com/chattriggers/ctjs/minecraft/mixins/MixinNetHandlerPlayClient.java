@@ -15,6 +15,6 @@ public class MixinNetHandlerPlayClient {
             cancellable = true
     )
     private void interceptPacket(Packet packet, CallbackInfo ci) {
-        TriggerType.PACKET_SENT.triggerAll(packet, ci );
+        TriggerType.PACKET_SENT.triggerAll(packet, ci);
     }
 }
