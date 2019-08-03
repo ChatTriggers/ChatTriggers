@@ -3,85 +3,101 @@
 */
 
 // Extra libs
-var ArrayList = Java.type("java.util.ArrayList");
-var HashMap = Java.type("java.util.HashMap");
-var Thread = Java.type("java.lang.Thread");
-var Keyboard = Java.type("org.lwjgl.input.Keyboard");
-var ReflectionHelper = Java.type("net.minecraftforge.fml.relauncher.ReflectionHelper");
+var ArrayList = Java.type('java.util.ArrayList');
+var HashMap = Java.type('java.util.HashMap');
+var Keyboard = Java.type('org.lwjgl.input.Keyboard');
+var ReflectionHelper = Java.type('net.minecraftforge.fml.relauncher.ReflectionHelper');
 
 // Triggers
-var TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
-var TriggerResult = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult");
-var Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
+var TriggerRegister = Java.type('com.chattriggers.ctjs.engine.langs.js.JSRegister').INSTANCE;
+var TriggerResult = Java.type('com.chattriggers.ctjs.triggers.OnTrigger.TriggerResult');
+var Priority = Java.type('com.chattriggers.ctjs.triggers.OnTrigger.Priority');
 //#if MC<=10809
-var InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent.Action");
+var InteractAction = Java.type('net.minecraftforge.event.entity.player.PlayerInteractEvent.Action');
 //#else
-//$$ var InteractAction = Java.type("com.chattriggers.ctjs.minecraft.listeners.ClientListener").INSTANCE.PlayerInteractAction;
+//$$ var InteractAction = Java.type('com.chattriggers.ctjs.minecraft.listeners.ClientListener').INSTANCE.PlayerInteractAction;
 //#endif
 
 // Libraries
-var ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
-var EventLib = Java.type("com.chattriggers.ctjs.minecraft.libs.EventLib");
+var ChatLib = Java.type('com.chattriggers.ctjs.minecraft.libs.ChatLib');
+var EventLib = Java.type('com.chattriggers.ctjs.minecraft.libs.EventLib');
 
-var Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
-var Shape = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Shape");
-var Rectangle = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle");
-var Text = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Text");
-var Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
+var Renderer = Java.type('com.chattriggers.ctjs.minecraft.libs.renderer.Renderer');
+var Shape = Java.type('com.chattriggers.ctjs.minecraft.libs.renderer.Shape');
+var Rectangle = Java.type('com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle');
+var Text = Java.type('com.chattriggers.ctjs.minecraft.libs.renderer.Text');
+var Image = Java.type('com.chattriggers.ctjs.minecraft.libs.renderer.Image');
 
-var Tessellator = Java.type("com.chattriggers.ctjs.minecraft.libs.Tessellator");
-var FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
-var MathLib = Java.type("com.chattriggers.ctjs.minecraft.libs.MathLib");
-var XMLHttpRequest = Java.type("com.chattriggers.ctjs.engine.langs.js.JSXMLHttpRequest");
+var Tessellator = Java.type('com.chattriggers.ctjs.minecraft.libs.Tessellator');
+var FileLib = Java.type('com.chattriggers.ctjs.minecraft.libs.FileLib');
+var MathLib = Java.type('com.chattriggers.ctjs.minecraft.libs.MathLib');
+var XMLHttpRequest = Java.type('com.chattriggers.ctjs.engine.langs.js.JSXMLHttpRequest');
 
 // Objects
-var Display = Java.type("com.chattriggers.ctjs.engine.langs.js.JSDisplay");
-var DisplayLine = Java.type("com.chattriggers.ctjs.engine.langs.js.JSDisplayLine");
-var DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler");
-var Gui = Java.type("com.chattriggers.ctjs.engine.langs.js.JSGui");
-var Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Message");
-var TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.TextComponent");
-var Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
-var KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
-var Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
-var Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
-var PlayerMP = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP");
+var Display = Java.type('com.chattriggers.ctjs.engine.langs.js.JSDisplay');
+var DisplayLine = Java.type('com.chattriggers.ctjs.engine.langs.js.JSDisplayLine');
+var DisplayHandler = Java.type('com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler');
+var Gui = Java.type('com.chattriggers.ctjs.engine.langs.js.JSGui');
+var Message = Java.type('com.chattriggers.ctjs.minecraft.objects.message.Message');
+var TextComponent = Java.type('com.chattriggers.ctjs.minecraft.objects.message.TextComponent');
+var Book = Java.type('com.chattriggers.ctjs.minecraft.objects.Book');
+var KeyBind = Java.type('com.chattriggers.ctjs.minecraft.objects.KeyBind');
+var Image = Java.type('com.chattriggers.ctjs.minecraft.libs.renderer.Image');
+var Sound = Java.type('com.chattriggers.ctjs.minecraft.objects.Sound');
+var PlayerMP = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP');
 
 // Wrappers
-var Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
-var Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
-var World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
-var Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");
-var Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory");
-var TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
-var Scoreboard = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Scoreboard");
-var CPS = Java.type("com.chattriggers.ctjs.minecraft.wrappers.CPS");
-var Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item");
-var Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block");
-var Sign = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign");
-var Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
-var Action = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action");
-var ClickAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction");
-var DragAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction");
-var KeyAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.KeyAction");
+var Client = Java.type('com.chattriggers.ctjs.minecraft.wrappers.Client');
+var Player = Java.type('com.chattriggers.ctjs.minecraft.wrappers.Player');
+var World = Java.type('com.chattriggers.ctjs.minecraft.wrappers.World');
+var Server = Java.type('com.chattriggers.ctjs.minecraft.wrappers.Server');
+var Inventory = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory');
+var TabList = Java.type('com.chattriggers.ctjs.minecraft.wrappers.TabList');
+var Scoreboard = Java.type('com.chattriggers.ctjs.minecraft.wrappers.Scoreboard');
+var CPS = Java.type('com.chattriggers.ctjs.minecraft.wrappers.CPS');
+var Item = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item');
+var Block = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block');
+var Sign = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign');
+var Entity = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.Entity');
+var Action = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action');
+var ClickAction = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction');
+var DragAction = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction');
+var KeyAction = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.KeyAction');
 
 // Triggers
-var OnChatTrigger = Java.type("com.chattriggers.ctjs.triggers.OnChatTrigger");
-var OnCommandTrigger = Java.type("com.chattriggers.ctjs.triggers.OnCommandTrigger");
-var OnRegularTrigger = Java.type("com.chattriggers.ctjs.triggers.OnRegularTrigger");
-var OnRenderTrigger = Java.type("com.chattriggers.ctjs.triggers.OnRenderTrigger");
-var OnSoundPlayTrigger = Java.type("com.chattriggers.ctjs.triggers.OnSoundPlayTrigger");
-var OnStepTrigger = Java.type("com.chattriggers.ctjs.triggers.OnStepTrigger");
-var OnTrigger = Java.type("com.chattriggers.ctjs.triggers.OnTrigger");
+var OnChatTrigger = Java.type('com.chattriggers.ctjs.triggers.OnChatTrigger');
+var OnCommandTrigger = Java.type('com.chattriggers.ctjs.triggers.OnCommandTrigger');
+var OnRegularTrigger = Java.type('com.chattriggers.ctjs.triggers.OnRegularTrigger');
+var OnRenderTrigger = Java.type('com.chattriggers.ctjs.triggers.OnRenderTrigger');
+var OnSoundPlayTrigger = Java.type('com.chattriggers.ctjs.triggers.OnSoundPlayTrigger');
+var OnStepTrigger = Java.type('com.chattriggers.ctjs.triggers.OnStepTrigger');
+var OnTrigger = Java.type('com.chattriggers.ctjs.triggers.OnTrigger');
 
 // Misc
-var Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
-var Config = Java.type("com.chattriggers.ctjs.utils.config.Config").INSTANCE;
-var ChatTriggers = Java.type("com.chattriggers.ctjs.Reference").INSTANCE;
-
+var Console = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.getConsole();
+var Config = Java.type('com.chattriggers.ctjs.utils.config.Config').INSTANCE;
+var ChatTriggers = Java.type('com.chattriggers.ctjs.Reference').INSTANCE;
 /*End Built in Vars */
 
+// Thread
+var JThread = Java.type('java.lang.Thread');
+function Thread(f) {
+    this.func = f;
 
+    this.thread = new JThread(function() {
+        try {
+            this.func();
+        } catch (e) {
+            Console.out.println('Error executing thread');
+            Console.out.println(e);
+        }
+    }.bind(this));
+
+    this.start = function() {
+        this.thread.start();
+    }.bind(this);
+}
+Thread.sleep = JThread.sleep;
 
 // simplified methods
 function print(toPrint) {
