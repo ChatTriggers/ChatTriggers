@@ -73,7 +73,7 @@ object WorldListener {
                 //#if MC<=10809
                 event.category ?: event.category?.categoryName,
                 //#else
-                //$$ event.sound.category ?: event.sound.category.name
+                //$$ event.sound.category ?: event.sound.category.name,
                 //#endif
                 event
         )
