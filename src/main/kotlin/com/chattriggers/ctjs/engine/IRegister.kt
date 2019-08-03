@@ -709,13 +709,13 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.RENDER_ENTITY, currentModule, getImplementationLoader())
     }
 
-    /**
-     * Passes in the block, its BlockPos, and the event (which
-     * can be cancelled).
-     */
-    fun registerRenderBlock(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RENDER_BLOCK, currentModule, getImplementationLoader())
-    }
+    // /**
+    //  * Passes in the block, its BlockPos, and the event (which
+    //  * can be cancelled).
+    //  */
+    // fun registerRenderBlock(method: Any): OnRegularTrigger {
+    //     return OnRegularTrigger(method, TriggerType.RENDER_BLOCK, currentModule, getImplementationLoader())
+    // }
 
     fun getImplementationLoader(): ILoader
 }
