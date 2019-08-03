@@ -868,5 +868,23 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.RENDER_ENTITY, currentModule, getImplementationLoader())
     }
 
+    /**
+     * Registers a new trigger that runs whenever a particle is spawned
+     *
+     * Passes through three arguments:
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.Particle]
+     * - The [net.minecraft.util.EnumParticleTypes]
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The name of the method to callback when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerSpawnParticle(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.SPAWN_PARTICLE, currentModule, getImplementationLoader())
+    }
+
     fun getImplementationLoader(): ILoader
 }

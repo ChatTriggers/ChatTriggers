@@ -6,7 +6,6 @@ class CTJSLoadingPlugin : IFMLLoadingPlugin {
     override fun getModContainerClass() = null
 
     override fun getASMTransformerClass(): Array<String> {
-        println("get transformer class")
         return arrayOf("com.chattriggers.ctjs.launch.plugin.CTJSTransformer")
     }
 

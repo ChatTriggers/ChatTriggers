@@ -32,6 +32,7 @@ enum class TriggerType {
     SOUND_PLAY, NOTE_BLOCK_PLAY, NOTE_BLOCK_CHANGE,
     WORLD_LOAD, WORLD_UNLOAD,
     BLOCK_BREAK,
+    SPAWN_PARTICLE,
 
     // misc
     COMMAND,

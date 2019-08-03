@@ -63,6 +63,7 @@ var Action = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.invento
 var ClickAction = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction');
 var DragAction = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction');
 var KeyAction = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.KeyAction');
+var Particle = Java.type('com.chattriggers.ctjs.minecraft.wrappers.objects.Particle');
 
 // Triggers
 var OnChatTrigger = Java.type('com.chattriggers.ctjs.triggers.OnChatTrigger');
