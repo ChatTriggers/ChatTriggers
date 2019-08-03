@@ -117,7 +117,7 @@ object WorldListener {
             !playerList.contains(it.getName())
         }.forEach {
             playerList.add(it.getName())
-            TriggerType.PLAYER_JOIN.triggerAll(this)
+            TriggerType.PLAYER_JOIN.triggerAll(it)
             return@forEach
         }
 
