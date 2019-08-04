@@ -24,7 +24,10 @@ public class MixinEffectRenderer {
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void onSpawnEffectParticle(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int parameters[], CallbackInfoReturnable<EntityFX> cir, IParticleFactory iparticlefactory, EntityFX entityfx) {
-        System.out.println("PARTICLE ID: " + particleId);
-        TriggerType.SPAWN_PARTICLE.triggerAll(new Particle(entityfx), EnumParticleTypes.getParticleFromId(particleId), cir);
+        TriggerType.SPAWN_PARTICLE.triggerAll(
+                new Particle(entityfx),
+                EnumParticleTypes.getParticleFromId(particleId),
+                cir
+        );
     }
 }
