@@ -19,5 +19,8 @@
     "MixinNetHandlerPlayClient",
     "MixinRenderManager",
     "MixinEffectRenderer"
+    //#if MC>10809
+    //$$,"MixinParticle"
+    //#endif
   ]
 }

@@ -4,13 +4,25 @@ import com.chattriggers.ctjs.minecraft.mixins.MixinEntityFX
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 
+//#if MC>10809
+//$$import com.chattriggers.ctjs.minecraft.mixins.MixinParticle
+//#endif
+
 @External
 class Particle(val underlyingEntity: MCParticle) {
+    //#if MC<=10809
     fun getX() = underlyingEntity.posX
 
     fun getY() = underlyingEntity.posY
 
     fun getZ() = underlyingEntity.posZ
+    //#else
+    //$$fun getX() = (underlyingEntity as MixinParticle).posX
+    //$$
+    //$$fun getY() = (underlyingEntity as MixinParticle).posY
+    //$$
+    //$$fun getZ() = (underlyingEntity as MixinParticle).posZ
+    //#endif
 
     fun setX(x: Double) = apply {
         underlyingEntity.setPosition(x, getY(), getZ())
@@ -23,8 +35,6 @@ class Particle(val underlyingEntity: MCParticle) {
     fun setZ(z: Double) = apply {
         underlyingEntity.setPosition(getX(), getY(), z)
     }
-
-    fun getID() = underlyingEntity.entityId
 
     fun scale(scale: Float) = apply {
         this.underlyingEntity.multipleParticleScaleBy(scale)
