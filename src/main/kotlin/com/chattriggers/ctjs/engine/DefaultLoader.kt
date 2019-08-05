@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.engine
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader.Companion.getFoldersInDir
 import com.chattriggers.ctjs.engine.ILoader.Companion.modulesFolder
 import com.chattriggers.ctjs.engine.module.Module
@@ -36,13 +37,13 @@ object DefaultLoader {
 
     fun importModule(name: String, extra: Boolean, isRequired: Boolean = false): List<Module>? {
         if (extra) {
-            Thread {
+            Reference.conditionalThread ct@ {
                 ChatLib.chat("&7Importing $name...")
                 val res = doImport(name)
 
                 if (!res) {
                     ChatLib.chat("&cCan't find module with name $name")
-                    return@Thread
+                    return@ct
                 }
 
                 val moduleFolder = getFoldersInDir(modulesFolder).firstOrNull {
@@ -60,7 +61,7 @@ object DefaultLoader {
                 }
 
                 ChatLib.chat("&aSuccessfully imported $name")
-            }.start()
+            }
         } else {
             val res = doImport(name)
 

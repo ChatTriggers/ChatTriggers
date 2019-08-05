@@ -40,6 +40,9 @@ object Config {
     @ConfigOpt(name = "Console Background Color", x = 110, y = 250, type = SpecialConfigColor::class)
     var consoleBackgroundColor: Color = Color(21, 21, 21)
 
+    @ConfigOpt(name = "Threaded Loading", x = -110, y = 250, type = ConfigBoolean::class)
+    var threadedLoading = false
+
     fun load(jsonObject: JsonObject) {
         val gson = Gson()
 

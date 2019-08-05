@@ -11,6 +11,7 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
 import net.minecraft.launchwrapper.Launch
 import net.minecraftforge.client.ClientCommandHandler
+import kotlin.concurrent.thread
 
 object Reference {
     const val MODID = "ct.js"
@@ -52,7 +53,7 @@ object Reference {
         unloadCT(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
-        Thread {
+        conditionalThread {
             (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
 
             CTJS.loadConfig()
@@ -66,7 +67,15 @@ object Reference {
                 TriggerType.WORLD_LOAD.triggerAll()
 
             this.isLoaded = true
-        }.start()
+        }
+    }
+
+    fun conditionalThread(block: () -> Unit) {
+        if (Config.threadedLoading) {
+            thread { block() }
+        } else {
+            block()
+        }
     }
 }
 

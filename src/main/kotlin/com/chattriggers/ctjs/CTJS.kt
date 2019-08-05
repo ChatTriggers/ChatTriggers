@@ -72,7 +72,7 @@ object CTJS {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        thread(start = true) {
+        Reference.conditionalThread {
             ModuleManager.load(true)
         }
 
