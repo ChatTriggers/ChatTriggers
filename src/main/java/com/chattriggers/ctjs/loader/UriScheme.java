@@ -68,7 +68,7 @@ public class UriScheme {
                             "\"" + value + "\""
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Unable to install chattriggers URI scheme, disregard if OS is not Windows");
         }
     }
 
