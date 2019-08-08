@@ -163,8 +163,3 @@ function setTimeout(func, delay) {
         func();
     }).start();
 }
-
-// Searge Helpers
-Object.prototype.__noSuchProperty__ = function(propertyName) {
-
-}
