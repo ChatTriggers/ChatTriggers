@@ -90,7 +90,7 @@ function Thread(f) {
             this.func();
         } catch (e) {
             Console.out.println('Error executing thread');
-            Console.out.println(e);
+            Console.printStackTrace(e.nashornException);
         }
     }.bind(this));
 
@@ -162,4 +162,9 @@ function setTimeout(func, delay) {
         Thread.sleep(delay);
         func();
     }).start();
+}
+
+// Searge Helpers
+Object.prototype.__noSuchProperty__ = function(propertyName) {
+
 }

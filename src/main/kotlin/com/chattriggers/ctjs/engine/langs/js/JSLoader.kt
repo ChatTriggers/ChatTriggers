@@ -76,35 +76,22 @@ object JSLoader : ILoader {
         IRegister.currentModule = module
 
         val files = module.getFilesWithExtension(".js")
-        val text = files.joinToString("\n") {
-            it.readText()
-        }
 
-        try {
-            eval(text)
-        } catch (e: ScriptException) {
-            var line = e.lineNumber
-            var fileName = ""
+        files.forEach {
+            try {
+                scriptEngine.context.setAttribute("javax.script.filename", it.absolutePath.substringAfter(ILoader.modulesFolder.absolutePath), 100)
+                scriptEngine.eval(it.readText())
+            } catch (e: ScriptException) {
 
-            for (file in files) {
-                val fileLines = file.readLines().size
-
-                if (line <= fileLines) {
-                    fileName = file.name
-                    break
-                } else {
-                    line -= fileLines
-                }
+                console.printStackTrace(e)
             }
-
-            console.out.println("Error loading module ${module.name} in $fileName:$line")
-            console.printStackTrace(e)
         }
 
         IRegister.currentModule = null
     }
 
     override fun eval(code: String): Any? {
+        scriptEngine.context.setAttribute("javax.script.filename", null, 100)
         return scriptEngine.eval(code)
     }
 
@@ -118,7 +105,7 @@ object JSLoader : ILoader {
                 callActualMethod(method, *args)
             }
         } catch (e: ECMAException) {
-            trigger.owningModule?.reportError(getLanguage(), e, trigger)
+            // trigger.owningModule?.reportError(getLanguage(), e, trigger)
             removeTrigger(trigger)
         }
     }
