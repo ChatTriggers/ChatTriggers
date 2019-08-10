@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
+import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.ITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -69,6 +70,7 @@ object EventLib {
                 //#else
                 //$$ event.resultSound =null
                 //#endif
+            is CancellableEvent -> event.setCanceled(true)
             else -> throw IllegalArgumentException()
         }
     }

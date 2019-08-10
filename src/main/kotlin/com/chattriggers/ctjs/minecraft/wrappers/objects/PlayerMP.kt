@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.minecraft.imixins.IMixinEntityPlayer
 import com.chattriggers.ctjs.minecraft.mixins.MixinEntityPlayer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -66,7 +67,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
      * @param textComponent the new name to display
      */
     fun setNametagName(textComponent: TextComponent) {
-        (player as MixinEntityPlayer).displayName = textComponent.chatComponentText.formattedText
+        (player as IMixinEntityPlayer).setDisplayName(textComponent.chatComponentText.formattedText)
     }
 
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {

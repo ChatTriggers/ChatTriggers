@@ -8,7 +8,9 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.item.ItemStack
 import net.minecraftforge.client.event.*
 import net.minecraftforge.event.entity.item.ItemTossEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
@@ -177,35 +179,18 @@ object ClientListener {
         )
     }
 
-    @SubscribeEvent
-    fun onDropItem(event: ItemTossEvent) {
-        if (event.player !is EntityPlayerMP) return
+    fun onDropItem(player: EntityPlayer, item: ItemStack?): Boolean {
+        if (player !is EntityPlayerMP) return false
 
-        val player = event.player as EntityPlayerMP
-        val entityItem = event.entityItem
-
-        val position = Vector3d(
-                entityItem.posX,
-                entityItem.posY,
-                entityItem.posZ
-        )
-        val motion = Vector3d(
-                entityItem.motionX,
-                entityItem.motionY,
-                entityItem.motionZ
-        )
+        val event = CancellableEvent()
 
         TriggerType.DROP_ITEM.triggerAll(
-                //#if MC<=10809
-                Item(entityItem.entityItem),
-                //#else
-                //$$ Item(entityItem.item),
-                //#endif
+                Item(item),
                 PlayerMP(player),
-                position,
-                motion,
                 event
         )
+
+        return event.isCancelled()
     }
 
     @SubscribeEvent
