@@ -194,14 +194,6 @@ object ClientListener {
     }
 
     @SubscribeEvent
-    fun onItemTooltip(e: ItemTooltipEvent) {
-        TriggerType.TOOLTIP.triggerAll(
-                e.toolTip,
-                Item(e.itemStack)
-        )
-    }
-
-    @SubscribeEvent
     fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
         GlStateManager.pushMatrix()
 

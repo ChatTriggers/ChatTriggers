@@ -1,9 +1,12 @@
 package com.chattriggers.ctjs.minecraft.mixins;
 
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 //#if MC<=10809
 import net.minecraft.util.IChatComponent;
+
+import java.util.List;
 //#else
 //$$ import net.minecraft.util.text.ITextComponent;
 //#endif
@@ -138,6 +143,25 @@ public abstract class MixinGuiScreen {
                 component == null ? null : new TextComponent(component),
                 x,
                 y,
+                ci
+        );
+    }
+
+    @Inject(
+            method = "renderToolTip",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/Item;getFontRenderer(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/gui/FontRenderer;",
+                    shift = At.Shift.BY,
+                    by = 2
+            ),
+            cancellable = true,
+            locals = LocalCapture.CAPTURE_FAILSOFT
+    )
+    private void onRenderTooltip(ItemStack stack, int x, int y, CallbackInfo ci, List<String> toolTip, FontRenderer font) {
+        TriggerType.TOOLTIP.triggerAll(
+                toolTip,
+                new Item(stack),
                 ci
         );
     }

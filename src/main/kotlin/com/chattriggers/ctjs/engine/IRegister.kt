@@ -631,11 +631,14 @@ interface IRegister {
     }
 
     /**
-     * Registers a new trigger that runs before a message is sent in chat.
+     * Registers a new trigger that runs when a tooltip is being rendered.
+     * This allows for the user to modify what text is in the tooltip, and even the
+     * ability to cancel rendering completely.
      *
-     * Passes through two arguments:
-     * - The list of lore to modify
+     * Passes through three arguments:
+     * - The list of lore to modify.
      * - The [Item] that this lore is attached to.
+     * - The cancellable event.
      *
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
