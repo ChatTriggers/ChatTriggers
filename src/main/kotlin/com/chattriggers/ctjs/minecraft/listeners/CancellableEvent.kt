@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
-class CancellableEvent() {
+class CancellableEvent {
     private var cancelled = false
 
     @JvmOverloads
@@ -12,6 +12,9 @@ class CancellableEvent() {
     fun setCancelled(newVal: Boolean = true) {
         cancelled = newVal
     }
+
+    fun isCancelable() = true
+    fun isCancellable() = true
 
     fun isCancelled() = cancelled
     fun isCanceled() = cancelled

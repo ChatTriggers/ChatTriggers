@@ -160,7 +160,9 @@ jar {
     manifest.attributes(
             'MixinConfigs': 'mixins.ctjs.json',
             'TweakOrder': '0',
-            'TweakClass': 'com.chattriggers.ctjs.launch.tweaker.CTJSTweaker'
+            'TweakClass': 'com.chattriggers.ctjs.launch.tweaker.CTJSTweaker',
+            "FMLCorePlugin": "com.chattriggers.ctjs.launch.plugin.CTJSLoadingPlugin",
+            "FMLCorePluginContainsFMLMod": "true"
     )
 
 }

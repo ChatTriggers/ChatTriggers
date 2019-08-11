@@ -14,8 +14,8 @@ import javax.imageio.ImageIO
 @External
 class Image(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
-    private var textureWidth = image?.width ?: 0
-    private var textureHeight = image?.height ?: 0
+    private val textureWidth = image?.width ?: 0
+    private val textureHeight = image?.height ?: 0
 
     init {
         MinecraftForge.EVENT_BUS.register(this)
@@ -26,7 +26,25 @@ class Image(var image: BufferedImage?) {
 
     fun getTextureWidth(): Int = this.textureWidth
     fun getTextureHeight(): Int = this.textureHeight
-    fun getTexture(): DynamicTexture = this.texture
+    fun getTexture(): DynamicTexture {
+        if (!this::texture.isInitialized) {
+            // We're trying to access the texture before initialization. Presumably, the game overlay render event
+            // hasn't fired yet so we haven't loaded the texture. Let's hope this is a rendering context!
+            try {
+                texture = DynamicTexture(image)
+                image = null
+
+                MinecraftForge.EVENT_BUS.unregister(this)
+            } catch (e: Exception) {
+                // Unlucky. This probably wasn't a rendering context.
+                println("Trying to bake texture in a non-rendering context.")
+
+                throw e
+            }
+        }
+
+        return this.texture
+    }
 
     @SubscribeEvent
     fun onRender(event: RenderGameOverlayEvent) {

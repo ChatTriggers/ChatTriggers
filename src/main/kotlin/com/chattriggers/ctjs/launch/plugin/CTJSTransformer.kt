@@ -12,5 +12,6 @@ class CTJSTransformer : BaseClassTransformer() {
 
     override fun makeTransformers() {
         makePlayerTransformers()
+        makeGuiTransformers()
     }
 }

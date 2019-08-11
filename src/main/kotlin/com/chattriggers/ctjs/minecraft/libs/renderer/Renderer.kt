@@ -110,8 +110,9 @@ object Renderer {
     }
 
     @JvmStatic
-    fun translate(x: Float, y: Float) {
-        GL11.glTranslated(x.toDouble(), y.toDouble(), 0.0)
+    @JvmOverloads
+    fun translate(x: Float, y: Float, z: Float = 0.0F) {
+        GL11.glTranslated(x.toDouble(), y.toDouble(), z.toDouble())
     }
 
     @JvmStatic @JvmOverloads
