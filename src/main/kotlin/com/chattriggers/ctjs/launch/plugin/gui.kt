@@ -11,7 +11,7 @@ import me.falsehonesty.asmhelper.dsl.writers.asm
 import net.minecraft.item.ItemStack
 
 fun makeGuiTransformers() {
-    injectTooltipTrigger()
+//    injectTooltipTrigger()
 }
 
 private fun injectTooltipTrigger() = inject {
