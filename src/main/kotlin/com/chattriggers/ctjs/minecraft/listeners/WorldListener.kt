@@ -1,13 +1,10 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.CTJS
-import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.Server
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import io.sentry.Sentry
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
@@ -19,7 +16,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import javax.vecmath.Vector3d
 import javax.vecmath.Vector3f
 
-@KotlinListener
 object WorldListener {
     private var shouldTriggerWorldLoad: Boolean = false
     private var playerList: MutableList<String> = mutableListOf()

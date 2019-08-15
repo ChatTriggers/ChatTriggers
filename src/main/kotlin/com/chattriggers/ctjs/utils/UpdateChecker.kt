@@ -10,14 +10,12 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.config.Config
-import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.net.UnknownHostException
 
-@KotlinListener
 object UpdateChecker {
     private var worldLoaded = false
     private var updateAvailable = false

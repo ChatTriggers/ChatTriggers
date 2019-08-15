@@ -7,7 +7,6 @@ import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
-import com.chattriggers.ctjs.utils.kotlin.ModuleLoader
 import jdk.nashorn.api.scripting.NashornScriptEngine
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory
 import jdk.nashorn.api.scripting.ScriptObjectMirror
@@ -21,7 +20,6 @@ import javax.script.ScriptException
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-@ModuleLoader
 object JSLoader : ILoader {
     override var triggers = mutableListOf<OnTrigger>()
     override val toRemove = mutableListOf<OnTrigger>()

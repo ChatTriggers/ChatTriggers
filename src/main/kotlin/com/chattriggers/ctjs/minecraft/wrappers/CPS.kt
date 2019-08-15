@@ -2,13 +2,11 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
-@KotlinListener
 @External
 object CPS {
     private var sysTime = Client.getSystemTime()

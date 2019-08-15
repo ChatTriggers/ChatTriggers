@@ -2,18 +2,24 @@ package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.ModuleManager
+import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.FileLib
+import com.chattriggers.ctjs.minecraft.listeners.ChatListener
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
+import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
+import com.chattriggers.ctjs.minecraft.wrappers.CPS
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.UpdateChecker
 import com.chattriggers.ctjs.utils.config.Config
-import com.chattriggers.ctjs.utils.kotlin.AnnotationHandler
 import com.google.gson.JsonParser
 import io.sentry.Sentry
 import io.sentry.event.UserBuilder
 import net.minecraftforge.client.ClientCommandHandler
-import net.minecraftforge.fml.common.Loader
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
@@ -47,8 +53,12 @@ object CTJS {
             loadConfig()
         }
 
-        Loader.instance().modList.filter { it.modId == Reference.MODID }.forEach {
-            AnnotationHandler.subscribeAutomatic(it, event.asmData)
+        listOf(ChatListener, WorldListener, CPS, GuiHandler, ClientListener, UpdateChecker).forEach {
+            MinecraftForge.EVENT_BUS.register(it)
+        }
+
+        listOf(JSLoader).forEach {
+            ModuleManager.loaders.add(it)
         }
 
         UriScheme.installUriScheme()

@@ -5,11 +5,9 @@ import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
-import com.chattriggers.ctjs.utils.kotlin.KotlinListener
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
-@KotlinListener
 object ChatListener {
     val chatHistory = mutableListOf<String>()
     val actionBarHistory = mutableListOf<String>()
