@@ -1,10 +1,11 @@
 package com.chattriggers.ctjs.engine.module
 
-import java.util.ArrayList
+import java.util.*
 
 data class ModuleMetadata(
         val name: String? = null,
         val version: String? = null,
+        val entry: String? = null,
         val tags: ArrayList<String>? = null,
         val pictureLink: String? = null,
         val creator: String? = null,

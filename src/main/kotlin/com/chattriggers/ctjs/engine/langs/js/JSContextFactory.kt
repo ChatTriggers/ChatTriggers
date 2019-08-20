@@ -20,8 +20,7 @@ object JSContextFactory : ContextFactory() {
         cx.applicationClassLoader = classLoader
         cx.optimizationLevel = if (optimize) 9 else 0
         cx.languageVersion = Context.VERSION_ES6
-        cx.errorReporter = ToolErrorReporter(true)
-
+        cx.errorReporter = ToolErrorReporter(true, JSLoader.console.out)
     }
 
     override fun hasFeature(cx: Context?, featureIndex: Int): Boolean {

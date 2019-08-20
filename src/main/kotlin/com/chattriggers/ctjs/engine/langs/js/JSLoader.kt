@@ -10,8 +10,16 @@ import com.chattriggers.ctjs.utils.console.Console
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.Scriptable
+import org.mozilla.javascript.commonjs.module.ModuleScriptProvider
+import org.mozilla.javascript.commonjs.module.Require
+import org.mozilla.javascript.commonjs.module.provider.StrongCachingModuleScriptProvider
+import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider
 import java.io.File
+import java.lang.invoke.MethodHandles
+import java.net.URI
 import java.net.URL
+import kotlin.reflect.full.declaredFunctions
+import kotlin.reflect.jvm.javaMethod
 
 object JSLoader : ILoader {
     override var triggers = mutableListOf<OnTrigger>()
@@ -22,6 +30,7 @@ object JSLoader : ILoader {
     private lateinit var moduleContext: Context
     private lateinit var evalContext: Context
     private lateinit var scope: Scriptable
+    private lateinit var require: CTRequire
 
     override fun load(modules: List<Module>) {
         cachedModules.clear()
@@ -80,19 +89,18 @@ object JSLoader : ILoader {
     private fun evalModule(module: Module) {
         IRegister.currentModule = module
 
-        val files = module.getFilesWithExtension(".js")
+        var entry = module.metadata.entry ?: return
+        entry = entry.replace('/', File.separatorChar).replace('\\', File.separatorChar)
 
-        files.forEach {
-            try {
-                moduleContext.evaluateString(
-                    scope,
-                    it.readText(),
-                    it.absolutePath.substringAfter(ILoader.modulesFolder.absolutePath),
-                    1, null
-                )
-            } catch (e: Exception) {
-                console.printStackTrace(e)
-            }
+        val entryFile = File(module.folder, entry).toURI()
+
+        try {
+            require.loadCTModule(module.name, entry, entryFile)
+        } catch (e: Exception) {
+            println("Error loading module ${module.name}")
+            e.printStackTrace()
+            console.out.println("Error loading module ${module.name}")
+            console.printStackTrace(e)
         }
 
         IRegister.currentModule = null
@@ -129,11 +137,37 @@ object JSLoader : ILoader {
 
         moduleContext = JSContextFactory.enterContext()
         scope = moduleContext.initStandardObjects()
+
+        val sourceProvider = UrlModuleSourceProvider(listOf(ILoader.modulesFolder.toURI()), listOf())
+        val moduleProvider = StrongCachingModuleScriptProvider(sourceProvider)
+        require = CTRequire(moduleProvider)
+        require.install(scope)
+
         Context.exit()
 
         JSContextFactory.optimize = false
         evalContext = JSContextFactory.enterContext()
         Context.exit()
         JSContextFactory.optimize = true
+    }
+
+    class CTRequire(moduleProvider: ModuleScriptProvider) : Require(moduleContext, scope, moduleProvider, null, null, false) {
+        fun loadCTModule(name: String, entry: String, uri: URI) {
+            getExportedModuleInterface.invokeWithArguments(
+                this,
+                moduleContext,
+                name + File.separator + entry,
+                uri, null, false
+            )
+        }
+
+        companion object {
+            @JvmStatic
+            val getExportedModuleInterface = MethodHandles.lookup()
+                .unreflect(Require::class.declaredFunctions
+                    .find { it.name == "getExportedModuleInterface" }
+                    ?.javaMethod!!.apply { isAccessible = true }
+                )
+        }
     }
 }
