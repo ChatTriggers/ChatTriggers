@@ -7,30 +7,28 @@ import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
-import jdk.nashorn.api.scripting.NashornScriptEngine
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory
-import jdk.nashorn.api.scripting.ScriptObjectMirror
-import jdk.nashorn.internal.objects.Global
-import jdk.nashorn.internal.runtime.ECMAException
-import net.minecraft.client.Minecraft
+import org.mozilla.javascript.Context
+import org.mozilla.javascript.Function
+import org.mozilla.javascript.Scriptable
 import java.io.File
 import java.net.URL
-import java.net.URLClassLoader
-import javax.script.ScriptException
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
 
 object JSLoader : ILoader {
     override var triggers = mutableListOf<OnTrigger>()
     override val toRemove = mutableListOf<OnTrigger>()
     override val console by lazy { Console(this) }
 
-    private var global: Global? = null
     private val cachedModules = mutableListOf<Module>()
-    private lateinit var scriptEngine: NashornScriptEngine
+    private lateinit var moduleContext: Context
+    private lateinit var evalContext: Context
+    private lateinit var scope: Scriptable
 
     override fun load(modules: List<Module>) {
         cachedModules.clear()
+
+        if (::moduleContext.isInitialized) {
+            Context.exit()
+        }
 
         val jars = modules.map {
             it.folder.listFiles()?.toList() ?: listOf()
@@ -40,7 +38,7 @@ object JSLoader : ILoader {
             it.toURI().toURL()
         }
 
-        scriptEngine = instanceScriptEngine(jars)
+        instanceContexts(jars)
 
         val providedLibs = saveResource(
                 "/providedLibs.js",
@@ -50,10 +48,19 @@ object JSLoader : ILoader {
                 true
         )
 
+        JSContextFactory.enterContext(moduleContext)
+
         try {
-            scriptEngine.eval(providedLibs)
+            moduleContext.evaluateString(
+                scope,
+                providedLibs,
+                "provided",
+                1, null
+            )
         } catch (e: Exception) {
+            e.printStackTrace()
             console.printStackTrace(e)
+            return
         }
 
         modules.forEach(::evalModule)
@@ -77,10 +84,13 @@ object JSLoader : ILoader {
 
         files.forEach {
             try {
-                scriptEngine.context.setAttribute("javax.script.filename", it.absolutePath.substringAfter(ILoader.modulesFolder.absolutePath), 100)
-                scriptEngine.eval(it.readText())
-            } catch (e: ScriptException) {
-
+                moduleContext.evaluateString(
+                    scope,
+                    it.readText(),
+                    it.absolutePath.substringAfter(ILoader.modulesFolder.absolutePath),
+                    1, null
+                )
+            } catch (e: Exception) {
                 console.printStackTrace(e)
             }
         }
@@ -88,22 +98,24 @@ object JSLoader : ILoader {
         IRegister.currentModule = null
     }
 
-    override fun eval(code: String): Any? {
-        scriptEngine.context.setAttribute("javax.script.filename", null, 100)
-        return scriptEngine.eval(code)
+    override fun eval(code: String): String? {
+        JSContextFactory.enterContext(evalContext)
+        try {
+            return Context.toString(evalContext.evaluateString(scope, code, "<eval>", 1, null))
+        } finally {
+            Context.exit()
+        }
     }
 
     override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
         try {
-            if (method is String) {
-                callNamedMethod(method, *args)
-            } else {
-                callActualMethod(method, *args)
-            }
-        } catch (e: ECMAException) {
-            // trigger.owningModule?.reportError(getLanguage(), e, trigger)
+            if (method !is Function) throw ClassCastException("Need to pass actual function to the register function, not the name!")
+
+            method.call(moduleContext, scope, scope, args)
+        } catch (e: Exception) {
+            console.printStackTrace(e)
             removeTrigger(trigger)
         }
     }
@@ -112,34 +124,16 @@ object JSLoader : ILoader {
         return cachedModules
     }
 
-    private fun callActualMethod(method: Any, vararg args: Any?) {
-        val som: ScriptObjectMirror = if (method is ScriptObjectMirror) {
-            method
-        } else {
-            if (global == null) {
-                val prop = NashornScriptEngine::class.memberProperties.firstOrNull {
-                    it.name == "global"
-                }!!
+    private fun instanceContexts(files: List<URL>) {
+        JSContextFactory.addAllURLs(files)
 
-                prop.isAccessible = true
-                global = prop.get(scriptEngine) as Global
-            }
+        moduleContext = JSContextFactory.enterContext()
+        scope = moduleContext.initStandardObjects()
+        Context.exit()
 
-            val obj = ScriptObjectMirror.wrap(method, global)
-
-            obj as ScriptObjectMirror
-        }
-
-        som.call(som, *args)
-    }
-
-    private fun callNamedMethod(method: String, vararg args: Any?) {
-        scriptEngine.invokeFunction(method, *args)
-    }
-
-    private fun instanceScriptEngine(files: List<URL>): NashornScriptEngine {
-        val ucl = URLClassLoader(files.toTypedArray(), Minecraft::class.java.classLoader)
-
-        return NashornScriptEngineFactory().getScriptEngine(ucl) as NashornScriptEngine
+        JSContextFactory.optimize = false
+        evalContext = JSContextFactory.enterContext()
+        Context.exit()
+        JSContextFactory.optimize = true
     }
 }

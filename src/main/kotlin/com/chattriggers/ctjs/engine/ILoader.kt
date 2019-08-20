@@ -49,7 +49,7 @@ interface ILoader {
     /**
      * Gets the result from evaluating a certain line of code in this loader
      */
-    fun eval(code: String): Any?
+    fun eval(code: String): String?
 
     /**
      * Adds a trigger to this loader to be activated during the game

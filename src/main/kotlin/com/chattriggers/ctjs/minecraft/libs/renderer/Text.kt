@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.GlStateManager
 class Text @JvmOverloads constructor(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
     private var lines = mutableListOf<String>()
 
-    private var color = 0xffffffff.toInt()
+    private var color = 0xffffffff
     private var formatted = true
     private var shadow = false
     private var align = DisplayHandler.Align.LEFT
@@ -26,8 +26,8 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     fun getString(): String = this.string
     fun setString(string: String) = apply { this.string = string }
 
-    fun getColor(): Int = this.color
-    fun setColor(color: Int) = apply { this.color = Renderer.fixAlpha(color) }
+    fun getColor(): Long = this.color
+    fun setColor(color: Long) = apply { this.color = Renderer.fixAlpha(color) }
 
     fun getFormatted(): Boolean = this.formatted
     fun setFormatted(formatted: Boolean) = apply {
@@ -98,14 +98,14 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
             var maxLinesHolder = this.maxLines
             var yHolder = y ?: this.y
             this.lines.forEach {
-                Renderer.getFontRenderer().drawString(it, getXAlign(it, x ?: this.x), yHolder / this.scale, this.color, this.shadow)
+                Renderer.getFontRenderer().drawString(it, getXAlign(it, x ?: this.x), yHolder / this.scale, this.color.toInt(), this.shadow)
                 yHolder += this.scale * 9
                 maxLinesHolder--
                 if (maxLinesHolder == 0)
                     return@forEach
             }
         } else {
-            Renderer.getFontRenderer().drawString(this.string, getXAlign(this.string, x ?: this.x), (y ?: this.y) / this.scale, this.color, this.shadow)
+            Renderer.getFontRenderer().drawString(this.string, getXAlign(this.string, x ?: this.x), (y ?: this.y) / this.scale, this.color.toInt(), this.shadow)
         }
         GlStateManager.disableBlend()
         Renderer.finishDraw()

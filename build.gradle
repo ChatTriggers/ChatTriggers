@@ -127,6 +127,7 @@ dependencies {
     provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     provided 'com.github.sk1erllc:asmhelper:code-block-SNAPSHOT'
+    provided group: 'org.mozilla', name: 'rhino', version: '1.7.11'
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

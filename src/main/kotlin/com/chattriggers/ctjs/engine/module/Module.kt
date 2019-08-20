@@ -9,7 +9,6 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.triggers.OnTrigger
 import jdk.nashorn.internal.runtime.ECMAException
 import java.io.File
-import javax.script.ScriptException
 
 class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
     private val gui = object {
@@ -58,7 +57,7 @@ class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
         gui.y = y
 
         Renderer.drawRect(
-                0xaa000000.toInt(),
+                0xaa000000,
                 x, y, width, 13f)
         Renderer.drawStringWithShadow(
                 metadata.name ?: name,

@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.engine.IRegister
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -19,8 +18,8 @@ import javax.vecmath.Vector2d
 abstract class DisplayLine {
     private lateinit var text: Text
     private var textWidth = 0f
-    private var textColor: Int? = null
-    private var backgroundColor: Int? = null
+    private var textColor: Long? = null
+    private var backgroundColor: Long? = null
 
     private var background: DisplayHandler.Background? = null
     private var align: DisplayHandler.Align? = null
@@ -41,8 +40,8 @@ abstract class DisplayLine {
         setText(text)
         for (i in 0..5) this.mouseState[i] = false
 
-        this.textColor = config.getOption("textColor", null)?.toInt()
-        this.backgroundColor = config.getOption("backgroundColor", null)?.toInt()
+        this.textColor = config.getOption("textColor", null)?.toLong()
+        this.backgroundColor = config.getOption("backgroundColor", null)?.toLong()
 
         this.setAlign(config.getOption("align", null))
         this.setBackground(config.getOption("background", null))
@@ -59,8 +58,8 @@ abstract class DisplayLine {
         this.textWidth = Renderer.getStringWidth(text) * this.text.getScale()
     }
 
-    fun getTextColor(): Int? = this.textColor
-    fun setTextColor(color: Int) = apply {
+    fun getTextColor(): Long? = this.textColor
+    fun setTextColor(color: Long) = apply {
         this.textColor = color
     }
 
@@ -91,8 +90,8 @@ abstract class DisplayLine {
         }
     }
 
-    fun getBackgroundColor(): Int? = this.backgroundColor
-    fun setBackgroundColor(color: Int) = apply {
+    fun getBackgroundColor(): Long? = this.backgroundColor
+    fun setBackgroundColor(color: Long) = apply {
         this.backgroundColor = color
     }
 
@@ -167,17 +166,17 @@ abstract class DisplayLine {
         this.draggedState[button] = Vector2d(Client.getMouseX().toDouble(), Client.getMouseY().toDouble())
     }
 
-    private fun drawFullBG(bg: DisplayHandler.Background, color: Int, x: Float, y: Float, width: Float, height: Float) {
+    private fun drawFullBG(bg: DisplayHandler.Background, color: Long, x: Float, y: Float, width: Float, height: Float) {
         if (bg === DisplayHandler.Background.FULL)
             Renderer.drawRect(color, x, y, width, height)
     }
 
-    private fun drawPerLineBG(bg: DisplayHandler.Background, color: Int, x: Float, y: Float, width: Float, height: Float) {
+    private fun drawPerLineBG(bg: DisplayHandler.Background, color: Long, x: Float, y: Float, width: Float, height: Float) {
         if (bg === DisplayHandler.Background.PER_LINE)
             Renderer.drawRect(color, x, y, width, height)
     }
 
-    fun drawLeft(x: Float, y: Float, maxWidth: Float, background: DisplayHandler.Background, backgroundColor: Int, textColor: Int) {
+    fun drawLeft(x: Float, y: Float, maxWidth: Float, background: DisplayHandler.Background, backgroundColor: Long, textColor: Long) {
         val bg = this.background ?: background
         val bgColor = this.backgroundColor ?: backgroundColor
         val textCol = this.textColor ?: textColor
@@ -197,13 +196,13 @@ abstract class DisplayLine {
             xOff = x - this.textWidth / 2 + maxWidth / 2
         }
 
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, (this.textWidth + 2).toFloat(), 10 * this.text.getScale())
+        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
         this.text.setX(xOff).setY(y).setColor(textCol).draw()
 
-        handleInput(xOff - 1, y - 1, (this.textWidth + 2).toFloat(), 10 * this.text.getScale())
+        handleInput(xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
     }
 
-    fun drawRight(x: Float, y: Float, maxWidth: Float, background: DisplayHandler.Background, backgroundColor: Int, textColor: Int) {
+    fun drawRight(x: Float, y: Float, maxWidth: Float, background: DisplayHandler.Background, backgroundColor: Long, textColor: Long) {
         val bg = this.background ?: background
         val bgColor = this.backgroundColor ?: backgroundColor
         val textCol = this.textColor ?: textColor
@@ -229,7 +228,7 @@ abstract class DisplayLine {
         handleInput(xOff - 1, y - 1, (this.textWidth + 2).toFloat(), 10 * this.text.getScale())
     }
 
-    fun drawCenter(x: Float, y: Float, maxWidth: Float, background: DisplayHandler.Background, backgroundColor: Int, textColor: Int) {
+    fun drawCenter(x: Float, y: Float, maxWidth: Float, background: DisplayHandler.Background, backgroundColor: Long, textColor: Long) {
         val bg = this.background ?: background
         val bgColor = this.backgroundColor ?: backgroundColor
         val textCol = this.textColor ?: textColor
@@ -249,10 +248,10 @@ abstract class DisplayLine {
             xOff = x + maxWidth / 2 - this.textWidth
         }
 
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, (this.textWidth + 2).toFloat(), 10 * this.text.getScale())
+        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
         this.text.setX(xOff).setY(y).setColor(textCol).draw()
 
-        handleInput(xOff - 1, y - 1, (this.textWidth + 2).toFloat(), 10 * this.text.getScale())
+        handleInput(xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
     }
 
     internal abstract fun getLoader(): ILoader

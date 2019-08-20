@@ -13,8 +13,8 @@ abstract class Display {
     private var renderY = 0f
     private var shouldRender = true
 
-    private var backgroundColor = 0x50000000
-    private var textColor = 0xffffffff.toInt()
+    private var backgroundColor: Long = 0x50000000
+    private var textColor: Long = 0xffffffff
 
     private var background = DisplayHandler.Background.NONE
     private var align = DisplayHandler.Align.LEFT
@@ -33,8 +33,8 @@ abstract class Display {
         this.renderX = config.getOption("renderX", 0).toFloat()
         this.renderY = config.getOption("renderY", 0).toFloat()
 
-        this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toInt()
-        this.textColor = config.getOption("textColor", 0xffffffff.toInt()).toInt()
+        this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toLong()
+        this.textColor = config.getOption("textColor", 0xffffffff).toLong()
 
         this.setBackground(config.getOption("background", DisplayHandler.Background.NONE))
         this.setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
@@ -50,13 +50,13 @@ abstract class Display {
         return this.getOrDefault(key, default).toString()
     }
 
-    fun getBackgroundColor(): Int = this.backgroundColor
-    fun setBackgroundColor(backgroundColor: Int) = apply {
+    fun getBackgroundColor(): Long = this.backgroundColor
+    fun setBackgroundColor(backgroundColor: Long) = apply {
         this.backgroundColor = backgroundColor
     }
 
-    fun getTextColor(): Int = this.textColor
-    fun setTextColor(textColor: Int) = apply {
+    fun getTextColor(): Long = this.textColor
+    fun setTextColor(textColor: Long) = apply {
         this.textColor = textColor
     }
 

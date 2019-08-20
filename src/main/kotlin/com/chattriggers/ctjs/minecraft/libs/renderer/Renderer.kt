@@ -20,7 +20,7 @@ import java.util.*
 
 @External
 object Renderer {
-    var colorized: Int? = null
+    var colorized: Long? = null
     private var retainTransforms = false
     private var drawMode: Int? = null
 
@@ -42,7 +42,7 @@ object Renderer {
     @JvmStatic val WHITE = color(255, 255, 255, 255)
 
     @JvmStatic
-    fun getColor(color: Int): Int {
+    fun getColor(color: Int): Long {
         return when (color) {
             0 -> BLACK
             1 -> DARK_BLUE
@@ -80,18 +80,18 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun color(red: Int, green: Int, blue: Int, alpha: Int = 255): Int {
-        return (MathLib.clamp(alpha, 0, 255) * 0x1000000
-                + MathLib.clamp(red, 0, 255) * 0x10000
-                + MathLib.clamp(green, 0, 255) * 0x100
-                + MathLib.clamp(blue, 0, 255))
+    fun color(red: Long, green: Long, blue: Long, alpha: Long = 255): Long {
+        return (MathLib.clamp(alpha.toInt(), 0, 255) * 0x1000000
+                + MathLib.clamp(red.toInt(), 0, 255) * 0x10000
+                + MathLib.clamp(green.toInt(), 0, 255) * 0x100
+                + MathLib.clamp(blue.toInt(), 0, 255)).toLong()
     }
 
     @JvmStatic @JvmOverloads
-    fun getRainbow(step: Float, speed: Float = 1f): Int {
-        val red = ((Math.sin((step / speed).toDouble()) + 0.75) * 170).toInt()
-        val green = ((Math.sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
-        val blue = ((Math.sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
+    fun getRainbow(step: Float, speed: Float = 1f): Long {
+        val red = ((Math.sin((step / speed).toDouble()) + 0.75) * 170).toLong()
+        val green = ((Math.sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toLong()
+        val blue = ((Math.sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toLong()
         return color(red, green, blue, 255)
     }
 
@@ -127,7 +127,7 @@ object Renderer {
 
     @JvmStatic @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) {
-        colorized = fixAlpha(color(red.toInt(), green.toInt(), blue.toInt(), alpha.toInt()))
+        colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()).toLong())
 
         GlStateManager.color(
                 MathLib.clampFloat(red, 0f, 255f),
@@ -145,7 +145,7 @@ object Renderer {
     fun getDrawMode() = this.drawMode
 
     @JvmStatic
-    fun fixAlpha(color: Int): Int {
+    fun fixAlpha(color: Long): Long {
         val alpha = color shr 24 and 255
         return if (alpha < 10)
             (color and 0xFF_FF_FF) or 0xA_FF_FF_FF
@@ -153,7 +153,7 @@ object Renderer {
     }
 
     @JvmStatic
-    fun drawRect(color: Int, x: Float, y: Float, width: Float, height: Float) {
+    fun drawRect(color: Long, x: Float, y: Float, width: Float, height: Float) {
         val pos = mutableListOf(x, y, x + width, y + height)
         if (pos[0] > pos[2])
             Collections.swap(pos, 0, 2)
@@ -167,13 +167,7 @@ object Renderer {
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
-        }
+        doColor(color)
         worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION)
         worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
@@ -189,7 +183,7 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun drawShape(color: Int, vararg vertexes: List<Float>, drawMode: Int = 7) {
+    fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 7) {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
 
@@ -197,13 +191,7 @@ object Renderer {
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
-        }
+        doColor(color)
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
@@ -223,7 +211,7 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun drawLine(color: Int, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 9) {
+    fun drawLine(color: Long, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 9) {
         val theta = -Math.atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
         val i = Math.sin(theta).toFloat() * (thickness / 2)
         val j = Math.cos(theta).toFloat() * (thickness / 2)
@@ -235,13 +223,7 @@ object Renderer {
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
-        }
+        doColor(color)
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
@@ -260,7 +242,7 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun drawCircle(color: Int, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
+    fun drawCircle(color: Long, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
         val theta = 2 * Math.PI / steps
         val cos = Math.cos(theta).toFloat()
         val sin = Math.sin(theta).toFloat()
@@ -275,13 +257,7 @@ object Renderer {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
-        }
+        doColor(color)
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
@@ -313,7 +289,7 @@ object Renderer {
             var newY = y
 
             ChatLib.addColor(text).split("\n").forEach {
-                fr.drawString(it, x, newY, colorized ?: WHITE, false)
+                fr.drawString(it, x, newY, colorized?.toInt()  ?: WHITE.toInt() , false)
 
                 newY += fr.FONT_HEIGHT
             }
@@ -321,13 +297,13 @@ object Renderer {
             return
         }
 
-        fr.drawString(ChatLib.addColor(text), x, y, colorized ?: 0xffffffff.toInt(), false)
+        fr.drawString(ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt(), false)
         finishDraw()
     }
 
     @JvmStatic
     fun drawStringWithShadow(text: String, x: Float, y: Float) {
-        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized ?: 0xffffffff.toInt(), true)
+        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized?.toInt()  ?: 0xffffffff.toInt(), true)
         finishDraw()
     }
 
@@ -409,6 +385,18 @@ object Renderer {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit)
 
         finishDraw()
+    }
+
+    private fun doColor(longColor: Long) {
+        val color = longColor.toInt()
+
+        if (colorized == null) {
+            val a = (color shr 24 and 255).toFloat() / 255.0f
+            val r = (color shr 16 and 255).toFloat() / 255.0f
+            val g = (color shr 8 and 255).toFloat() / 255.0f
+            val b = (color and 255).toFloat() / 255.0f
+            GlStateManager.color(r, g, b, a)
+        }
     }
 
     @JvmStatic
