@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR
 import org.mozilla.javascript.ContextFactory
+import org.mozilla.javascript.WrapFactory
 import org.mozilla.javascript.tools.ToolErrorReporter
 import java.net.URL
 import java.net.URLClassLoader
@@ -21,6 +22,7 @@ object JSContextFactory : ContextFactory() {
         cx.optimizationLevel = if (optimize) 9 else 0
         cx.languageVersion = Context.VERSION_ES6
         cx.errorReporter = ToolErrorReporter(true, JSLoader.console.out)
+        cx.wrapFactory = WrapFactory().apply { isJavaPrimitiveWrap = false }
     }
 
     override fun hasFeature(cx: Context?, featureIndex: Int): Boolean {

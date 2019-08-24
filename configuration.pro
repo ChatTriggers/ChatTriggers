@@ -28,6 +28,7 @@
 -keep class org.spongepowered.** { *; }
 -keep class kotlin.reflect.jvm.** { *; }
 -keep class me.falsehonesty.asmhelper.** { *; }
+-keep class org.mozilla.** { *; }
 
 -keepattributes *Annotation*
 
