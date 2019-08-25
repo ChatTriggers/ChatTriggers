@@ -99,6 +99,8 @@ object DefaultLoader {
     }
 
     private fun findModulesAndUpdate(updateCheck: Boolean): List<Module> {
+        modulesFolder.mkdirs()
+
         return getFoldersInDir(modulesFolder).map {
             getModule(it, updateCheck)
         }.flatten().distinctBy {
