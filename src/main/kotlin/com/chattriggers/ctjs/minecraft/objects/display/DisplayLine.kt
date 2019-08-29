@@ -9,8 +9,8 @@ import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
-import jdk.nashorn.api.scripting.ScriptObjectMirror
 import org.lwjgl.input.Mouse
+import org.mozilla.javascript.NativeObject
 import javax.vecmath.Vector2d
 
 @External
@@ -36,7 +36,7 @@ abstract class DisplayLine {
         for (i in 0..5) this.mouseState[i] = false
     }
 
-    constructor(text: String, config: ScriptObjectMirror) {
+    constructor(text: String, config: NativeObject) {
         setText(text)
         for (i in 0..5) this.mouseState[i] = false
 
@@ -47,7 +47,7 @@ abstract class DisplayLine {
         this.setBackground(config.getOption("background", null))
     }
 
-    private fun ScriptObjectMirror?.getOption(key: String, default: Any?): String? {
+    private fun NativeObject?.getOption(key: String, default: Any?): String? {
         if (this == null) return default?.toString()
         return this.getOrDefault(key, default).toString()
     }

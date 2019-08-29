@@ -102,7 +102,9 @@ global.Thread = function(f) {
             this.func();
         } catch (e) {
             Console.out.println('Error executing thread');
-            Console.printStackTrace(e.nashornException);
+            Console.out.println(e);
+            // TODO
+            // Console.printStackTrace(e.nashornException);
         }
     }.bind(this));
 

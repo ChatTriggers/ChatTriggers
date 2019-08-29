@@ -27,6 +27,7 @@ class TextAreaOutputStream(private val textArea: JTextArea, lang: String) : Outp
 
             textArea.append(line)
             logger.append(line)
+            textArea.caretPosition = textArea.document.length;
 
             buffer.delete(0, buffer.length)
         }

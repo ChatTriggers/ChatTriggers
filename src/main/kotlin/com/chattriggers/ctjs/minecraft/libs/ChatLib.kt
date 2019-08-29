@@ -10,9 +10,9 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
-import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraft.client.gui.ChatLine
 import net.minecraftforge.client.event.ClientChatReceivedEvent
+import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
 
 @External
@@ -31,6 +31,11 @@ object ChatLib {
             is TextComponent -> text.chat()
             else -> Message(text.toString()).chat()
         }
+    }
+
+    @JvmStatic
+    fun test(e: Any) {
+        println(e)
     }
 
     /**
@@ -194,7 +199,7 @@ object ChatLib {
      * @param replacements the new message(s) to be put in replace of the old one
      */
     @JvmStatic
-    fun editChat(regexp: ScriptObjectMirror, vararg replacements: Message) {
+    fun editChat(regexp: NativeObject, vararg replacements: Message) {
         val global = regexp["global"] as Boolean
         val ignoreCase = regexp["ignoreCase"] as Boolean
         val multiline = regexp["multiline"] as Boolean

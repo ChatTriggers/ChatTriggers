@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.objects.display
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
-import jdk.nashorn.api.scripting.ScriptObjectMirror
+import org.mozilla.javascript.NativeObject
 
 @External
 @NotAbstract
@@ -28,7 +28,7 @@ abstract class Display {
         DisplayHandler.registerDisplay(this)
     }
 
-    constructor(config: ScriptObjectMirror?) {
+    constructor(config: NativeObject?) {
         this.shouldRender = config.getOption("shouldRender", true).toBoolean()
         this.renderX = config.getOption("renderX", 0).toFloat()
         this.renderY = config.getOption("renderY", 0).toFloat()
@@ -45,7 +45,7 @@ abstract class Display {
         DisplayHandler.registerDisplay(this)
     }
 
-    private fun ScriptObjectMirror?.getOption(key: String, default: Any): String {
+    private fun NativeObject?.getOption(key: String, default: Any): String {
         if (this == null) return default.toString()
         return this.getOrDefault(key, default).toString()
     }

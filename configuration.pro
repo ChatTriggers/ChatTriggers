@@ -16,7 +16,6 @@
 -dontwarn net.minecraft.**
 -dontwarn net.minecraftforge.**
 -dontwarn javax.**
--dontwarn jdk.nashorn.**
 -dontwarn org.lwjgl.**
 -dontwarn paulscode.**
 -dontwarn org.jetbrains.**
