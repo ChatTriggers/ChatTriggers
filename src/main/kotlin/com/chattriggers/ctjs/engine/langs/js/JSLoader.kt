@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Function
+import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider
 import org.mozilla.javascript.commonjs.module.Require
@@ -136,9 +137,9 @@ object JSLoader : ILoader {
         JSContextFactory.addAllURLs(files)
 
         moduleContext = JSContextFactory.enterContext()
-        scope = moduleContext.initStandardObjects()
+        scope = ImporterTopLevel(moduleContext)
 
-        val sourceProvider = UrlModuleSourceProvider(listOf(ILoader.modulesFolder.toURI()), listOf())
+        val sourceProvider = UrlModuleSourceProvider(listOf(modulesFolder.toURI()), listOf())
         val moduleProvider = StrongCachingModuleScriptProvider(sourceProvider)
         require = CTRequire(moduleProvider)
         require.install(scope)
