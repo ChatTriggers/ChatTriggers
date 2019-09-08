@@ -43,7 +43,6 @@ global.Image = Java.type('com.chattriggers.ctjs.minecraft.libs.renderer.Image');
 global.Tessellator = Java.type('com.chattriggers.ctjs.minecraft.libs.Tessellator');
 global.FileLib = Java.type('com.chattriggers.ctjs.minecraft.libs.FileLib');
 global.MathLib = Java.type('com.chattriggers.ctjs.minecraft.libs.MathLib');
-global.XMLHttpRequest = Java.type('com.chattriggers.ctjs.engine.langs.js.JSXMLHttpRequest');
 
 // Objects
 global.Display = Java.type('com.chattriggers.ctjs.engine.langs.js.JSDisplay');
