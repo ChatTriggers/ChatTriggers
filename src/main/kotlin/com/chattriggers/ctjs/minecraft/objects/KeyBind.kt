@@ -16,19 +16,21 @@ class KeyBind {
     /**
      * Creates a new key bind, editable in the user's controls.
      *
+     * @param category the keybind category the keybind will be in
      * @param description what the key bind does
      * @param keyCode     the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
      * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
-    constructor(description: String, keyCode: Int) {
+    @JvmOverloads
+    constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
         for (key in Client.getMinecraft().gameSettings.keyBindings) {
-            if (key.keyCategory == "ChatTriggers" && key.keyDescription == description) {
+            if (key.keyCategory == category && key.keyDescription == description) {
                 Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, key)
                 break
             }
         }
 
-        this.keyBinding = KeyBinding(description, keyCode, "ChatTriggers")
+        this.keyBinding = KeyBinding(description, keyCode, category)
         ClientRegistry.registerKeyBinding(this.keyBinding)
 
         keyBinds.add(this)

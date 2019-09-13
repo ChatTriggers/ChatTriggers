@@ -90,12 +90,13 @@ object Client {
      * @return the [KeyBind] from a Minecraft KeyBinding, or null if one doesn't exist
      * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
+    @JvmOverloads
     @JvmStatic
-    fun getKeyBindFromKey(keyCode: Int, description: String): KeyBind {
+    fun getKeyBindFromKey(keyCode: Int, description: String, category: String  = "ChatTriggers"): KeyBind {
         return getMinecraft().gameSettings.keyBindings
                 .firstOrNull { it.keyCode == keyCode }
                 ?.let { KeyBind(it) }
-                ?: KeyBind(description, keyCode)
+                ?: KeyBind(description, keyCode, category)
     }
 
     /**
