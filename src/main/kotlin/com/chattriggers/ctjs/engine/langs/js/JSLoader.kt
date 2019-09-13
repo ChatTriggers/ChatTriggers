@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.engine.langs.js
 
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.ILoader.Companion.modulesFolder
 import com.chattriggers.ctjs.engine.IRegister
@@ -19,6 +20,7 @@ import java.io.File
 import java.lang.invoke.MethodHandles
 import java.net.URI
 import java.net.URL
+import java.util.concurrent.CompletableFuture
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.jvm.javaMethod
 
@@ -33,10 +35,10 @@ object JSLoader : ILoader {
     private lateinit var scope: Scriptable
     private lateinit var require: CTRequire
 
-    override fun load(modules: List<Module>) {
+    override fun load(modules: List<Module>): CompletableFuture<Unit> {
         cachedModules.clear()
 
-        if (::moduleContext.isInitialized) {
+        if (Context.getCurrentContext() != null) {
             Context.exit()
         }
 
@@ -58,24 +60,38 @@ object JSLoader : ILoader {
                 true
         )
 
-        JSContextFactory.enterContext(moduleContext)
+        val future = CompletableFuture<Unit>()
 
-        try {
-            moduleContext.evaluateString(
-                scope,
-                providedLibs,
-                "provided",
-                1, null
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            console.printStackTrace(e)
-            return
+        Reference.conditionalThread {
+            JSContextFactory.enterContext(moduleContext)
+
+            try {
+                moduleContext.evaluateString(
+                    scope,
+                    providedLibs,
+                    "provided",
+                    1, null
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                console.printStackTrace(e)
+
+                Context.exit()
+
+                future.complete(Unit)
+                return@conditionalThread
+            }
+
+            modules.forEach(::evalModule)
+
+            cachedModules.addAll(modules)
+
+            Context.exit()
+
+            future.complete(Unit)
         }
 
-        modules.forEach(::evalModule)
-
-        cachedModules.addAll(modules)
+        return future
     }
 
     override fun loadExtra(module: Module) {
@@ -119,6 +135,8 @@ object JSLoader : ILoader {
     override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
+        if (Context.getCurrentContext() == null) JSContextFactory.enterContext(moduleContext)
+
         try {
             if (method !is Function) throw ClassCastException("Need to pass actual function to the register function, not the name!")
 

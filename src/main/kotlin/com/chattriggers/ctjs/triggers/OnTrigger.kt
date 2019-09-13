@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.triggers
 
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.IRegister
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -48,6 +49,8 @@ abstract class OnTrigger protected constructor(
     }
 
     protected fun callMethod(vararg args: Any?) {
+        if (!Reference.isLoaded) return
+
         this.loader.trigger(this, this.method, *args)
     }
 

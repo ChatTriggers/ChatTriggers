@@ -23,7 +23,7 @@ object Reference {
             + "&stacktrace.app.packages=com.chattriggers"
             + "&uncaught.handler.enabled=false")
 
-    private var isLoaded = true
+    var isLoaded = true
 
     fun reloadCT() = loadCT(true)
 
@@ -53,13 +53,11 @@ object Reference {
         unloadCT(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
-        conditionalThread {
-            (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
+        (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
 
-            CTJS.loadConfig()
+        CTJS.loadConfig()
 
-            ModuleManager.load(updateCheck)
-
+        ModuleManager.load(updateCheck).whenComplete { _, _ ->
             ChatLib.chat("&aDone reloading scripts!")
 
             TriggerType.GAME_LOAD.triggerAll()

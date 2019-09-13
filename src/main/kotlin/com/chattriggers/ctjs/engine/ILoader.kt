@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.util.concurrent.CompletableFuture
 
 interface ILoader {
     var triggers: MutableList<OnTrigger>
@@ -19,7 +20,7 @@ interface ILoader {
      * a full load, which is different from [loadExtra], as this method
      * should clear old modules.
      */
-    fun load(modules: List<Module>)
+    fun load(modules: List<Module>): CompletableFuture<Unit>
 
     /**
      * Loads a single Module into the loader. This differs from [load] in that
