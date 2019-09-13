@@ -16,6 +16,7 @@ class KeyBind {
     /**
      * Creates a new key bind, editable in the user's controls.
      *
+     * @param category the keybind category the keybind will be in
      * @param description what the key bind does
      * @param keyCode     the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
      * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
