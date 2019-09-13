@@ -91,11 +91,11 @@ object Client {
      * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
     @JvmStatic
-    fun getKeyBindFromKey(keyCode: Int, description: String): KeyBind {
+    fun getKeyBindFromKey(keyCode: Int, description: String, category: String): KeyBind {
         return getMinecraft().gameSettings.keyBindings
                 .firstOrNull { it.keyCode == keyCode }
                 ?.let { KeyBind(it) }
-                ?: KeyBind(description, keyCode)
+                ?: KeyBind(category, description, keyCode)
     }
 
     /**
@@ -106,7 +106,7 @@ object Client {
      * @return the key bind, or null if one doesn't exist
      */
     @JvmStatic
-    fun getKeyBindFromDescription(description: String): KeyBind? {
+    fun getKeyBindFromDescription(category: String, description: String): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
                 .firstOrNull { it.keyDescription == description }
                 ?.let { KeyBind(it) }
