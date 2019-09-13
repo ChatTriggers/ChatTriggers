@@ -21,7 +21,8 @@ class KeyBind {
      * @param keyCode     the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
      * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
-    constructor(category: String, description: String, keyCode: Int) {
+    @JvmOverloads
+    constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
         for (key in Client.getMinecraft().gameSettings.keyBindings) {
             if (key.keyCategory == category && key.keyDescription == description) {
                 Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, key)
