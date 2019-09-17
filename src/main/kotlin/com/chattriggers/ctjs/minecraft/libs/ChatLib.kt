@@ -11,6 +11,7 @@ import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.ChatLine
+import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
@@ -84,6 +85,18 @@ object ChatLib {
      */
     @JvmStatic
     fun command(text: String) = say("/$text")
+
+    /**
+     * Runs a command.
+     *
+     * @param text the command to run, without the leading slash (Ex. "help")
+     * @param clientSide should the command be ran as a client side command
+     */
+    @JvmStatic
+    fun command(text: String, clientSide: Boolean) {
+        if (clientSide) ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
+        else say("/$text")
+    }
 
     @JvmStatic
     fun clearChat() {
@@ -208,9 +221,9 @@ object ChatLib {
         val pattern = Pattern.compile(regexp["source"] as String, flags)
 
         editChat({
-                    val matcher = pattern.matcher(it.getChatMessage().unformattedText)
-                    if (global) matcher.find() else matcher.matches()
-                },
+            val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+            if (global) matcher.find() else matcher.matches()
+        },
                 *replacements
         )
     }
