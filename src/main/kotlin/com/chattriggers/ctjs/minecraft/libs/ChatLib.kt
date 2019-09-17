@@ -82,18 +82,11 @@ object ChatLib {
      * Runs a command.
      *
      * @param text the command to run, without the leading slash (Ex. "help")
-     */
-    @JvmStatic
-    fun command(text: String) = say("/$text")
-
-    /**
-     * Runs a command.
-     *
-     * @param text the command to run, without the leading slash (Ex. "help")
      * @param clientSide should the command be ran as a client side command
      */
+    @JvmOverloads
     @JvmStatic
-    fun command(text: String, clientSide: Boolean) {
+    fun command(text: String, clientSide: Boolean = false) {
         if (clientSide) ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
         else say("/$text")
     }
