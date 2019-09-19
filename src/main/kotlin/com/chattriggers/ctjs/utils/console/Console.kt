@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.config.Config
 import io.sentry.Sentry
-import net.minecraft.network.ThreadQuickExitException
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -52,18 +51,18 @@ class Console(val loader: ILoader?) {
             override fun keyReleased(e: KeyEvent) {
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER -> {
-                        var toPrint: Any? = null
+                        var toPrint: Any?
 
                         val command = inputField.text
                         inputField.text = ""
                         history.add(command)
                         historyOffset = 0
 
-                        try {
-                            toPrint = loader?.eval(command)
-                        } catch (error: ThreadQuickExitException) { } catch (e: Exception) {
+                        toPrint = try {
+                            loader?.eval(command)
+                        } catch (e: Throwable) {
                             printStackTrace(e)
-                            toPrint = "> $command"
+                            "> $command"
                         }
 
                         taos.println(toPrint ?: command)

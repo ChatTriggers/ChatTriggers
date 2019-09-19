@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory
 
+import com.chattriggers.ctjs.engine.langs.js.JSONImpl
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction
@@ -9,7 +10,7 @@ import net.minecraft.inventory.Container
 import net.minecraft.inventory.IInventory
 
 @External
-class Inventory {
+class Inventory : JSONImpl {
     val inventory: IInventory?
     val container: Container?
 
