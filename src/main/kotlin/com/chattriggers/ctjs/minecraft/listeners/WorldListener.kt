@@ -37,9 +37,9 @@ object WorldListener {
         shouldTriggerWorldLoad = false
 
         CTJS.sounds
-                .stream()
-                .filter { it.isListening }
-                .forEach { it.onWorldLoad() }
+            .stream()
+            .filter { it.isListening }
+            .forEach { it.onWorldLoad() }
 
         CTJS.sounds.clear()
     }
@@ -53,57 +53,65 @@ object WorldListener {
     @SubscribeEvent
     fun onSoundPlay(event: PlaySoundEvent) {
         val position = Vector3f(
-                event.sound.xPosF,
-                event.sound.yPosF,
-                event.sound.zPosF
+            event.sound.xPosF,
+            event.sound.yPosF,
+            event.sound.zPosF
         )
 
-        val vol = try { event.sound.volume } catch (ignored: Exception) { 0 }
-        val pitch = try { event.sound.volume } catch (ignored: Exception) { 1 }
+        val vol = try {
+            event.sound.volume
+        } catch (ignored: Exception) {
+            0
+        }
+        val pitch = try {
+            event.sound.volume
+        } catch (ignored: Exception) {
+            1
+        }
 
         TriggerType.SOUND_PLAY.triggerAll(
-                position,
-                event.name,
-                vol,
-                pitch,
-                //#if MC<=10809
-                event.category ?: event.category?.categoryName,
-                //#else
-                //$$ event.sound.category ?: event.sound.category.name,
-                //#endif
-                event
+            position,
+            event.name,
+            vol,
+            pitch,
+            //#if MC<=10809
+            event.category ?: event.category?.categoryName,
+            //#else
+            //$$ event.sound.category ?: event.sound.category.name,
+            //#endif
+            event
         )
     }
 
     @SubscribeEvent
     fun noteBlockEventPlay(event: NoteBlockEvent.Play) {
         val position = Vector3d(
-                event.pos.x.toDouble(),
-                event.pos.y.toDouble(),
-                event.pos.z.toDouble()
+            event.pos.x.toDouble(),
+            event.pos.y.toDouble(),
+            event.pos.z.toDouble()
         )
 
         TriggerType.NOTE_BLOCK_PLAY.triggerAll(
-                position,
-                event.note.name,
-                event.octave,
-                event
+            position,
+            event.note.name,
+            event.octave,
+            event
         )
     }
 
     @SubscribeEvent
     fun noteBlockEventChange(event: NoteBlockEvent.Change) {
         val position = Vector3d(
-                event.pos.x.toDouble(),
-                event.pos.y.toDouble(),
-                event.pos.z.toDouble()
+            event.pos.x.toDouble(),
+            event.pos.y.toDouble(),
+            event.pos.z.toDouble()
         )
 
         TriggerType.NOTE_BLOCK_CHANGE.triggerAll(
-                position,
-                event.note.name,
-                event.octave,
-                event
+            position,
+            event.note.name,
+            event.octave,
+            event
         )
     }
 

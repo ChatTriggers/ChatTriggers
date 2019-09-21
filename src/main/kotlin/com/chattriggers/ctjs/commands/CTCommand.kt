@@ -44,7 +44,7 @@ object CTCommand : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 0
 
-    @Throws (CommandException::class)
+    @Throws(CommandException::class)
     //#if MC<=10809
     override fun processCommand(sender: ICommandSender?, args: Array<String>) = run(args)
     //#else
@@ -82,18 +82,18 @@ object CTCommand : CommandBase() {
         }
     }
 
-    private fun getUsage()  =
-            "&b&m${ChatLib.getChatBreak()}\n" +
-            "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
-            "&c/ct import [module] &7- &oImports a module.\n" +
-            "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
-            "&c/ct modules &7- &oOpens the modules gui\n" +
-            "&c/ct console &7- &oOpens the ct console.\n" +
-            "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
-            "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
-            "&c/ct settings &7- &oChange ChatTrigger's settings.\n" +
-            "&c/ct &7- &oDisplays this help dialog.\n" +
-            "&b&m${ChatLib.getChatBreak()}"
+    private fun getUsage() =
+        "&b&m${ChatLib.getChatBreak()}\n" +
+                "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
+                "&c/ct import [module] &7- &oImports a module.\n" +
+                "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
+                "&c/ct modules &7- &oOpens the modules gui\n" +
+                "&c/ct console &7- &oOpens the ct console.\n" +
+                "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
+                "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
+                "&c/ct settings &7- &oChange ChatTrigger's settings.\n" +
+                "&c/ct &7- &oDisplays this help dialog.\n" +
+                "&b&m${ChatLib.getChatBreak()}"
 
     private fun openFileLocation() {
         try {
@@ -125,14 +125,15 @@ object CTCommand : CommandBase() {
     private fun dumpActionBar(lines: Int = 100) = dumpList(ChatListener.actionBarHistory, lines)
     private fun dumpList(messages: List<String>, lines: Int) {
         clearOldDump()
-        
+
         var toDump = lines
         if (toDump > messages.size) toDump = messages.size
         Message("&6&m${ChatLib.getChatBreak()}").setChatLineId(this.idFixed).chat()
         var msg: String
         for (i in 0 until toDump) {
             msg = ChatLib.replaceFormatting(messages[messages.size - toDump + i])
-            Message(TextComponent(msg)
+            Message(
+                TextComponent(msg)
                     .setClick("run_command", "/ct copy $msg")
                     .setHoverValue(ChatLib.addColor("&eClick here to copy this message."))
                     .setFormatted(false)

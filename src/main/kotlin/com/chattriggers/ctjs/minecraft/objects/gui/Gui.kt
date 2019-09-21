@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.engine.IRegister
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
@@ -211,6 +210,7 @@ abstract class Gui : GuiScreen() {
      * Internal method to run trigger. Not meant for public use
      */
     override fun doesGuiPauseGame() = this.doesPauseGame
+
     fun setDoesPauseGame(doesPauseGame: Boolean) = apply { this.doesPauseGame = doesPauseGame }
 
     /**

@@ -119,8 +119,8 @@ class Console(val loader: ILoader?) {
 
     fun printStackTrace(error: Throwable, trigger: OnTrigger) {
         Sentry.getContext().addTag(
-                "method",
-                trigger.method.toString()
+            "method",
+            trigger.method.toString()
         )
 
         printStackTrace(error)

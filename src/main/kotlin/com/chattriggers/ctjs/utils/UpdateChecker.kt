@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.utils
 
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
@@ -14,7 +13,6 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import java.net.UnknownHostException
 
 object UpdateChecker {
     private var worldLoaded = false
@@ -22,8 +20,11 @@ object UpdateChecker {
     private var warned = false
 
     init {
-        try { getUpdate() }
-        catch (exception: Exception) { exception.print() }
+        try {
+            getUpdate()
+        } catch (exception: Exception) {
+            exception.print()
+        }
         warned = !Config.showUpdatesInChat
     }
 
@@ -49,15 +50,15 @@ object UpdateChecker {
 
         World.playSound("note.bass", 1000f, 1f)
         Message(
-                "&c&m" + ChatLib.getChatBreak("-"),
-                "\n",
-                "&cChatTriggers requires an update to work properly!",
-                "\n",
-                TextComponent("&a[Download]").setClick("open_url", "https://www.chattriggers.com/#download"),
-                " ",
-                TextComponent("&e[Changelog]").setClick("open_url", "https://github.com/ChatTriggers/ct.js/releases"),
-                "\n",
-                "&c&m" + ChatLib.getChatBreak("-")
+            "&c&m" + ChatLib.getChatBreak("-"),
+            "\n",
+            "&cChatTriggers requires an update to work properly!",
+            "\n",
+            TextComponent("&a[Download]").setClick("open_url", "https://www.chattriggers.com/#download"),
+            " ",
+            TextComponent("&e[Changelog]").setClick("open_url", "https://github.com/ChatTriggers/ct.js/releases"),
+            "\n",
+            "&c&m" + ChatLib.getChatBreak("-")
         ).chat()
 
         this.warned = true
@@ -69,13 +70,13 @@ object UpdateChecker {
         GlStateManager.pushMatrix()
 
         Renderer.getFontRenderer()
-                .drawString(
-                        ChatLib.addColor("&cChatTriggers requires an update to work properly!"),
-                        2f,
-                        2f,
-                        -0x1,
-                        false
-                )
+            .drawString(
+                ChatLib.addColor("&cChatTriggers requires an update to work properly!"),
+                2f,
+                2f,
+                -0x1,
+                false
+            )
 
         GlStateManager.popMatrix()
     }

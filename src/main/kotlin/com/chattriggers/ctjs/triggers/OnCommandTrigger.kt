@@ -3,25 +3,19 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.command.ICommand
-import net.minecraft.command.ICommandManager
-import net.minecraft.command.ICommandSender
-import net.minecraft.network.play.client.C14PacketTabComplete
 import net.minecraftforge.client.ClientCommandHandler
-import scala.Console
 
 @External
 class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.COMMAND, loader) {
-    private var commandName: String? = null
+    private lateinit var commandName: String
     private var tabCompletions: MutableList<String> = mutableListOf()
-    private var command: Command? = null
+    private lateinit var command: Command
 
     override fun trigger(vararg args: Any?) {
         if (args::javaClass == Array<String>::javaClass) throw IllegalArgumentException("Arguments must be string array")
 
-        callMethod(*args)
+        callMethod(args)
     }
 
     /**
@@ -61,16 +55,16 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
         for (command in CommandHandler.getCommandList()) {
             //#if MC<=10809
             if (command.commandName == this.commandName) {
-            //#else
-            //$$ if (command.name == this.commandName) {
-            //#endif
+                //#else
+                //$$ if (command.name == this.commandName) {
+                //#endif
                 command.getTriggers().add(this)
                 return
             }
         }
 
-        this.command = Command(this, this.commandName!!, "/${this.commandName}", this.tabCompletions)
-        ClientCommandHandler.instance.registerCommand(this.command!!)
-        CommandHandler.getCommandList().add(this.command ?: return)
+        this.command = Command(this, this.commandName, "/${this.commandName}", this.tabCompletions)
+        ClientCommandHandler.instance.registerCommand(this.command)
+        CommandHandler.getCommandList().add(this.command)
     }
 }

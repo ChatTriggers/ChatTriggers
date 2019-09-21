@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.minecraft.imixins.IMixinEntityPlayer
-import com.chattriggers.ctjs.minecraft.mixins.MixinEntityPlayer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
@@ -73,8 +72,8 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
         return networkPlayerInfoIn.displayName?.formattedText
             ?: ScorePlayerTeam.formatPlayerName(
-                    networkPlayerInfoIn.playerTeam,
-                    networkPlayerInfoIn.gameProfile.name
+                networkPlayerInfoIn.playerTeam,
+                networkPlayerInfoIn.gameProfile.name
             )
     }
 

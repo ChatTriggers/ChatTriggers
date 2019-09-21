@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
 
 @External
@@ -20,9 +19,10 @@ class OnSoundPlayTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigg
     override fun trigger(vararg args: Any?) {
         if (args[2] is String
             && soundNameCriteria != ""
-            && !(args[2] as String).equals(soundNameCriteria, ignoreCase = true))
+            && !(args[2] as String).equals(soundNameCriteria, ignoreCase = true)
+        )
             return
 
-        callMethod(*args)
+        callMethod(args)
     }
 }

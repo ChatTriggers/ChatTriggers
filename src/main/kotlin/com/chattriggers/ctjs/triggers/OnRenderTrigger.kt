@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 
@@ -24,6 +23,6 @@ class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : 
         val event = args[0] as RenderGameOverlayEvent
         if (!triggerIfCanceled && event.isCanceled) return
 
-        callMethod(*args)
+        callMethod(args)
     }
 }

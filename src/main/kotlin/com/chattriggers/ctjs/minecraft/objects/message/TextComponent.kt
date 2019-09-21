@@ -88,20 +88,20 @@ class TextComponent {
     fun actionBar() = Message(this).actionBar()
 
     override fun toString() =
-            "TextComponent{" +
-                    "text:$text, " +
-                    "formatted:$formatted, " +
-                    "hoverAction:$hoverAction, " +
-                    "hoverValue:$hoverValue, " +
-                    "clickAction:$clickAction, " +
-                    "clickValue:$clickValue, " +
-                    "}"
+        "TextComponent{" +
+                "text:$text, " +
+                "formatted:$formatted, " +
+                "hoverAction:$hoverAction, " +
+                "hoverValue:$hoverValue, " +
+                "clickAction:$clickAction, " +
+                "clickValue:$clickValue, " +
+                "}"
 
     private fun reInstance() {
         this.chatComponentText = BaseTextComponent(
-                        if (this.formatted) ChatLib.addColor(this.text)
-                        else this.text
-                )
+            if (this.formatted) ChatLib.addColor(this.text)
+            else this.text
+        )
 
         reInstanceClick()
         reInstanceHover()
@@ -111,33 +111,33 @@ class TextComponent {
         if (this.clickAction == null || this.clickValue == null) return
 
         this.chatComponentText.getStyling()
-                //#if MC<=10809
-                .chatClickEvent =
+            //#if MC<=10809
+            .chatClickEvent =
                 //#else
                 //$$ .clickEvent =
                 //#endif
-                TextClickEvent(
-                        ClickEventAction.getValueByCanonicalName(this.clickAction),
-                        if (this.formatted) ChatLib.addColor(this.clickValue)
-                        else this.clickValue
-                )
+            TextClickEvent(
+                ClickEventAction.getValueByCanonicalName(this.clickAction),
+                if (this.formatted) ChatLib.addColor(this.clickValue)
+                else this.clickValue
+            )
     }
 
     private fun reInstanceHover() {
         if (this.hoverAction == null || this.hoverValue == null) return
 
         this.chatComponentText.getStyling()
-                //#if MC<=10809
-                .chatHoverEvent =
+            //#if MC<=10809
+            .chatHoverEvent =
                 //#else
                 //$$ .hoverEvent =
                 //#endif
-                TextHoverEvent(
-                        HoverEventAction.getValueByCanonicalName(this.hoverAction),
-                        BaseTextComponent(
-                                if (this.formatted) ChatLib.addColor(this.hoverValue)
-                                else this.hoverValue
-                        )
+            TextHoverEvent(
+                HoverEventAction.getValueByCanonicalName(this.hoverAction),
+                BaseTextComponent(
+                    if (this.formatted) ChatLib.addColor(this.hoverValue)
+                    else this.hoverValue
                 )
+            )
     }
 }

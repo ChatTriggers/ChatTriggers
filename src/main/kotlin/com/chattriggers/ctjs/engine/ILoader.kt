@@ -33,7 +33,7 @@ interface ILoader {
      * Tells the loader that it should activate all triggers
      * of a certain type with the specified arguments.
      */
-    fun exec(type: TriggerType, vararg args: Any?) {
+    fun exec(type: TriggerType, args: Array<out Any?>) {
         val newTriggers = triggers.toMutableList()
         newTriggers.removeAll(toRemove)
         toRemove.clear()
@@ -41,7 +41,7 @@ interface ILoader {
         newTriggers.filter {
             it.type == type
         }.forEach {
-            it.trigger(*args)
+            it.trigger(args)
         }
 
         triggers = newTriggers
@@ -79,7 +79,7 @@ interface ILoader {
     /**
      * Actually calls the method for this trigger in this loader
      */
-    fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?)
+    fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>)
 
     /**
      * Removes a trigger from the current pool
@@ -106,7 +106,7 @@ interface ILoader {
 
         val parsedResourceName = resourceName.replace('\\', '/')
         val resource = this.javaClass.getResourceAsStream(parsedResourceName)
-                ?: throw IllegalArgumentException("The embedded resource '$parsedResourceName' cannot be found.")
+            ?: throw IllegalArgumentException("The embedded resource '$parsedResourceName' cannot be found.")
 
         val res = resource.bufferedReader().readText()
         FileUtils.write(outputFile, res)

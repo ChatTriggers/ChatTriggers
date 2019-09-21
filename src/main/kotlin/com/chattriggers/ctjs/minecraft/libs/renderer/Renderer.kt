@@ -17,6 +17,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
 import org.lwjgl.opengl.GL11
 import java.util.*
+import kotlin.math.atan
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 @External
 object Renderer {
@@ -24,22 +28,38 @@ object Renderer {
     private var retainTransforms = false
     private var drawMode: Int? = null
 
-    @JvmStatic val BLACK = color(0, 0, 0, 255)
-    @JvmStatic val DARK_BLUE = color(0, 0, 190, 255)
-    @JvmStatic val DARK_GREEN = color(0, 190, 0, 255)
-    @JvmStatic val DARK_AQUA = color(0, 190, 190, 255)
-    @JvmStatic val DARK_RED = color(190, 0, 0, 255)
-    @JvmStatic val DARK_PURPLE = color(190, 0, 190, 255)
-    @JvmStatic val GOLD = color(217, 163, 52, 255)
-    @JvmStatic val GRAY = color(190, 190, 190, 255)
-    @JvmStatic val DARK_GRAY = color(63, 63, 63, 255)
-    @JvmStatic val BLUE = color(63, 63, 254, 255)
-    @JvmStatic val GREEN = color(63, 254, 63, 255)
-    @JvmStatic val AQUA = color(63, 254, 254, 255)
-    @JvmStatic val RED = color(254, 63, 63, 255)
-    @JvmStatic val LIGHT_PURPLE = color(254, 63, 254, 255)
-    @JvmStatic val YELLOW = color(254, 254, 63, 255)
-    @JvmStatic val WHITE = color(255, 255, 255, 255)
+    @JvmStatic
+    val BLACK = color(0, 0, 0, 255)
+    @JvmStatic
+    val DARK_BLUE = color(0, 0, 190, 255)
+    @JvmStatic
+    val DARK_GREEN = color(0, 190, 0, 255)
+    @JvmStatic
+    val DARK_AQUA = color(0, 190, 190, 255)
+    @JvmStatic
+    val DARK_RED = color(190, 0, 0, 255)
+    @JvmStatic
+    val DARK_PURPLE = color(190, 0, 190, 255)
+    @JvmStatic
+    val GOLD = color(217, 163, 52, 255)
+    @JvmStatic
+    val GRAY = color(190, 190, 190, 255)
+    @JvmStatic
+    val DARK_GRAY = color(63, 63, 63, 255)
+    @JvmStatic
+    val BLUE = color(63, 63, 254, 255)
+    @JvmStatic
+    val GREEN = color(63, 254, 63, 255)
+    @JvmStatic
+    val AQUA = color(63, 254, 254, 255)
+    @JvmStatic
+    val RED = color(254, 63, 63, 255)
+    @JvmStatic
+    val LIGHT_PURPLE = color(254, 63, 254, 255)
+    @JvmStatic
+    val YELLOW = color(254, 254, 63, 255)
+    @JvmStatic
+    val WHITE = color(255, 255, 255, 255)
 
     @JvmStatic
     fun getColor(color: Int): Long {
@@ -72,14 +92,16 @@ object Renderer {
         //#endif
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun getStringWidth(text: String, removeFormatting: Boolean = true): Int {
         return if (removeFormatting)
             getFontRenderer().getStringWidth(ChatLib.removeFormatting(text))
-            else getFontRenderer().getStringWidth(text)
+        else getFontRenderer().getStringWidth(text)
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun color(red: Long, green: Long, blue: Long, alpha: Long = 255): Long {
         return (MathLib.clamp(alpha.toInt(), 0, 255) * 0x1000000
                 + MathLib.clamp(red.toInt(), 0, 255) * 0x10000
@@ -87,19 +109,21 @@ object Renderer {
                 + MathLib.clamp(blue.toInt(), 0, 255)).toLong()
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun getRainbow(step: Float, speed: Float = 1f): Long {
-        val red = ((Math.sin((step / speed).toDouble()) + 0.75) * 170).toLong()
-        val green = ((Math.sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toLong()
-        val blue = ((Math.sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toLong()
+        val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toLong()
+        val green = ((sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toLong()
+        val blue = ((sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toLong()
         return color(red, green, blue, 255)
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun getRainbowColors(step: Float, speed: Float = 1f): IntArray {
-        val red = ((Math.sin((step / speed).toDouble()) + 0.75) * 170).toInt()
-        val green = ((Math.sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
-        val blue = ((Math.sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
+        val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toInt()
+        val green = ((sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
+        val blue = ((sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
         return intArrayOf(red, green, blue)
     }
 
@@ -115,7 +139,8 @@ object Renderer {
         GL11.glTranslated(x.toDouble(), y.toDouble(), z.toDouble())
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun scale(scaleX: Float, scaleY: Float = scaleX) {
         GL11.glScalef(scaleX, scaleY, 1f)
     }
@@ -125,15 +150,16 @@ object Renderer {
         GL11.glRotatef(angle, 0f, 0f, 1f)
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) {
-        colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()).toLong())
+        colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()))
 
         GlStateManager.color(
-                MathLib.clampFloat(red, 0f, 255f),
-                MathLib.clampFloat(green, 0f, 255f),
-                MathLib.clampFloat(blue, 0f, 255f),
-                MathLib.clampFloat(alpha, 0f, 255f)
+            MathLib.clampFloat(red, 0f, 255f),
+            MathLib.clampFloat(green, 0f, 255f),
+            MathLib.clampFloat(blue, 0f, 255f),
+            MathLib.clampFloat(alpha, 0f, 255f)
         )
     }
 
@@ -141,6 +167,7 @@ object Renderer {
     fun setDrawMode(drawMode: Int) = apply {
         this.drawMode = drawMode
     }
+
     @JvmStatic
     fun getDrawMode() = this.drawMode
 
@@ -182,7 +209,8 @@ object Renderer {
         finishDraw()
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 7) {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
@@ -210,11 +238,12 @@ object Renderer {
         finishDraw()
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun drawLine(color: Long, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 9) {
-        val theta = -Math.atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
-        val i = Math.sin(theta).toFloat() * (thickness / 2)
-        val j = Math.cos(theta).toFloat() * (thickness / 2)
+        val theta = -atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
+        val i = sin(theta).toFloat() * (thickness / 2)
+        val j = cos(theta).toFloat() * (thickness / 2)
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
@@ -241,11 +270,12 @@ object Renderer {
         finishDraw()
     }
 
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun drawCircle(color: Long, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
         val theta = 2 * Math.PI / steps
-        val cos = Math.cos(theta).toFloat()
-        val sin = Math.sin(theta).toFloat()
+        val cos = cos(theta).toFloat()
+        val sin = sin(theta).toFloat()
 
         var xHolder: Float
         var circleX = 1f
@@ -261,7 +291,7 @@ object Renderer {
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
-        for (i in 0 .. steps) {
+        for (i in 0..steps) {
             worldRenderer.pos(x.toDouble(), y.toDouble(), 0.0).endVertex()
             worldRenderer.pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
             xHolder = circleX
@@ -289,7 +319,7 @@ object Renderer {
             var newY = y
 
             ChatLib.addColor(text).split("\n").forEach {
-                fr.drawString(it, x, newY, colorized?.toInt()  ?: WHITE.toInt() , false)
+                fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
 
                 newY += fr.FONT_HEIGHT
             }
@@ -303,7 +333,7 @@ object Renderer {
 
     @JvmStatic
     fun drawStringWithShadow(text: String, x: Float, y: Float) {
-        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized?.toInt()  ?: 0xffffffff.toInt(), true)
+        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt(), true)
         finishDraw()
     }
 
@@ -335,14 +365,14 @@ object Renderer {
         val mouseX = -30f
         val mouseY = 0f
 
-        var ent: EntityLivingBase? = Player.getPlayer()
+        var ent: EntityLivingBase = Player.getPlayer()!!
         if (player is PlayerMP)
             ent = player.player
 
         GlStateManager.enableColorMaterial()
         RenderHelper.enableStandardItemLighting()
 
-        val f = ent!!.renderYawOffset
+        val f = ent.renderYawOffset
         val f1 = ent.rotationYaw
         val f2 = ent.rotationPitch
         val f3 = ent.prevRotationYawHead
@@ -352,11 +382,11 @@ object Renderer {
         GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f)
         GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f)
         GlStateManager.rotate(-45.0f, 0.0f, 1.0f, 0.0f)
-        GlStateManager.rotate(-Math.atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f, 1.0f, 0.0f, 0.0f)
+        GlStateManager.rotate(-atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f, 1.0f, 0.0f, 0.0f)
         if (!rotate) {
-            ent.renderYawOffset = Math.atan((mouseX / 40.0f).toDouble()).toFloat() * 20.0f
-            ent.rotationYaw = Math.atan((mouseX / 40.0f).toDouble()).toFloat() * 40.0f
-            ent.rotationPitch = -Math.atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f
+            ent.renderYawOffset = atan((mouseX / 40.0f).toDouble()).toFloat() * 20.0f
+            ent.rotationYaw = atan((mouseX / 40.0f).toDouble()).toFloat() * 40.0f
+            ent.rotationPitch = -atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f
             ent.rotationYawHead = ent.rotationYaw
             ent.prevRotationYawHead = ent.rotationYaw
         }
@@ -412,8 +442,10 @@ object Renderer {
     object screen {
         @JvmStatic
         fun getWidth(): Int = ScaledResolution(Client.getMinecraft()).scaledWidth
+
         @JvmStatic
         fun getHeight(): Int = ScaledResolution(Client.getMinecraft()).scaledHeight
+
         @JvmStatic
         fun getScale(): Int = ScaledResolution(Client.getMinecraft()).scaleFactor
     }

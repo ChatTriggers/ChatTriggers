@@ -5,8 +5,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
 import org.apache.commons.lang3.ArrayUtils
-
-import java.util.ArrayList
+import java.util.*
 
 @External
 class KeyBind {
@@ -23,7 +22,8 @@ class KeyBind {
     constructor(description: String, keyCode: Int) {
         for (key in Client.getMinecraft().gameSettings.keyBindings) {
             if (key.keyCategory == "ChatTriggers" && key.keyDescription == description) {
-                Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, key)
+                Client.getMinecraft().gameSettings.keyBindings =
+                    ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, key)
                 break
             }
         }
@@ -76,7 +76,8 @@ class KeyBind {
         fun clearKeyBinds() {
             keyBinds.forEach {
                 if (!it.isCustom) return
-                Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, it.keyBinding)
+                Client.getMinecraft().gameSettings.keyBindings =
+                    ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, it.keyBinding)
             }
         }
     }

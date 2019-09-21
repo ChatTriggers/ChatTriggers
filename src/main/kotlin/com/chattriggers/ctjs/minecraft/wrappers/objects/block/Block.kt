@@ -1,14 +1,12 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
-import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
-import net.minecraft.block.state.IBlockState
-import net.minecraft.init.Blocks
-import net.minecraft.block.Block as MCBlock
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.block.state.IBlockState
+import net.minecraft.block.Block as MCBlock
 
 @External
 open class Block {

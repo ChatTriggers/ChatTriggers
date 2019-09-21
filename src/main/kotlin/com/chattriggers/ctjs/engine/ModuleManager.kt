@@ -67,9 +67,9 @@ object ModuleManager {
         }
     }
 
-    fun trigger(type: TriggerType, vararg arguments: Any?) {
+    fun trigger(type: TriggerType, arguments: Array<out Any?>) {
         loaders.forEach {
-            it.exec(type, *arguments)
+            it.exec(type, arguments)
         }
     }
 

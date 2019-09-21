@@ -27,7 +27,7 @@ class Message {
      *
      * @param event the chat event
      */
-    constructor(event: ClientChatReceivedEvent): this(event.message)
+    constructor(event: ClientChatReceivedEvent) : this(event.message)
 
     /**
      * Creates a new Message object from an IChatComponent.
@@ -48,7 +48,7 @@ class Message {
      * @param messageParts the list of TextComponents or Strings
      */
     constructor(messageParts: ArrayList<Any>) {
-        this.messageParts.addAll(messageParts.map{
+        this.messageParts.addAll(messageParts.map {
             when (it) {
                 is String -> TextComponent(it)
                 is TextComponent -> it
@@ -62,8 +62,7 @@ class Message {
      *
      * @param components the TextComponents or Strings
      */
-    constructor(vararg components: Any): this(ArrayList(components.asList()))
-
+    constructor(vararg components: Any) : this(ArrayList(components.asList()))
 
 
     fun getChatMessage(): ITextComponent {
@@ -131,7 +130,7 @@ class Message {
     fun clone(): Message = copy()
     fun copy(): Message {
         val copy = Message(this.messageParts)
-                .setChatLineId(this.chatLineId)
+            .setChatLineId(this.chatLineId)
         copy.recursive = this.recursive
         copy.formatted = this.formatted
         return copy
@@ -160,9 +159,9 @@ class Message {
 
         //#if MC<=10809
         if (this.recursive) {
-           Client.getConnection().handleChat(ChatPacket(this.chatMessage, 0))
+            Client.getConnection().handleChat(ChatPacket(this.chatMessage, 0))
         } else {
-           Player.getPlayer()?.addChatMessage(this.chatMessage)
+            Player.getPlayer()?.addChatMessage(this.chatMessage)
         }
         //#else
         //$$ if (this.recursive) {
@@ -181,24 +180,24 @@ class Message {
         if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.formattedText)) return
 
         Client.getConnection().handleChat(
-                ChatPacket(
-                        this.chatMessage,
-                        //#if MC<=10809
-                        2
-                        //#else
-                        //$$ ChatType.GAME_INFO
-                        //#endif
-                )
+            ChatPacket(
+                this.chatMessage,
+                //#if MC<=10809
+                2
+                //#else
+                //$$ ChatType.GAME_INFO
+                //#endif
+            )
         )
     }
 
     override fun toString() =
-            "Message{" +
-                    "formatted=$formatted, " +
-                    "recursive=$recursive, " +
-                    "chatLineId=$chatLineId, " +
-                    "messageParts=$messageParts" +
-                    "}"
+        "Message{" +
+                "formatted=$formatted, " +
+                "recursive=$recursive, " +
+                "chatLineId=$chatLineId, " +
+                "messageParts=$messageParts" +
+                "}"
 
     private fun parseMessage() {
         this.chatMessage = BaseTextComponent("")

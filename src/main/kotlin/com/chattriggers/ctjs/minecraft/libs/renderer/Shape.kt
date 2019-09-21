@@ -77,7 +77,7 @@ class Shape(private var color: Int) {
         var circleX = 1f
         var circleY = 0f
 
-        for (i in 0 .. steps) {
+        for (i in 0..steps) {
             this.vertexes.add(Vector2f(x, y))
             this.vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
             xHolder = circleX

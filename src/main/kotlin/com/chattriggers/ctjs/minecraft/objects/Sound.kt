@@ -69,12 +69,9 @@ class Sound(private val config: NativeObject) {
     fun onWorldLoad() {
         isListening = false
 
-        println("Loading sound system")
         loadSndSystem()
-        println("sound system loaded: " + sndSystem!!)
 
         try {
-            println("Bootstrapping")
             bootstrap()
         } catch (exc: MalformedURLException) {
             exc.printStackTrace()
@@ -197,20 +194,28 @@ class Sound(private val config: NativeObject) {
     /**
      * Plays/resumes the sound
      */
-    fun play() { sndSystem!!.play(this.source) }
+    fun play() {
+        sndSystem!!.play(this.source)
+    }
 
     /**
      * Pauses the sound, to be resumed later
      */
-    fun pause() { sndSystem!!.pause(this.source) }
+    fun pause() {
+        sndSystem!!.pause(this.source)
+    }
 
     /**
      * Completely stops the song
      */
-    fun stop() { sndSystem!!.stop(this.source) }
+    fun stop() {
+        sndSystem!!.stop(this.source)
+    }
 
     /**
      * I really don't know what this does
      */
-    fun rewind() { sndSystem!!.rewind(this.source) }
+    fun rewind() {
+        sndSystem!!.rewind(this.source)
+    }
 }

@@ -53,11 +53,12 @@ object JSLoader : ILoader {
         instanceContexts(jars)
 
         val providedLibs = saveResource(
-                "/providedLibs.js",
-                File(modulesFolder.parentFile,
-                        "chattriggers-provided-libs.js"
-                ),
-                true
+            "/providedLibs.js",
+            File(
+                modulesFolder.parentFile,
+                "chattriggers-provided-libs.js"
+            ),
+            true
         )
 
         val future = CompletableFuture<Unit>()
@@ -96,8 +97,8 @@ object JSLoader : ILoader {
 
     override fun loadExtra(module: Module) {
         if (cachedModules.any {
-            it.name == module.name
-        }) return
+                it.name == module.name
+            }) return
 
         cachedModules.add(module)
         evalModule(module)
@@ -134,7 +135,7 @@ object JSLoader : ILoader {
 
     override fun getLanguage() = Lang.JS
 
-    override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
+    override fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>) {
         if (Context.getCurrentContext() == null) JSContextFactory.enterContext(moduleContext)
 
         try {
@@ -170,7 +171,8 @@ object JSLoader : ILoader {
         JSContextFactory.optimize = true
     }
 
-    class CTRequire(moduleProvider: ModuleScriptProvider) : Require(moduleContext, scope, moduleProvider, null, null, false) {
+    class CTRequire(moduleProvider: ModuleScriptProvider) :
+        Require(moduleContext, scope, moduleProvider, null, null, false) {
         fun loadCTModule(name: String, entry: String, uri: URI) {
             getExportedModuleInterface.invokeWithArguments(
                 this,
@@ -185,7 +187,7 @@ object JSLoader : ILoader {
             val getExportedModuleInterface = MethodHandles.lookup()
                 .unreflect(Require::class.declaredFunctions
                     .find { it.name == "getExportedModuleInterface" }
-                    ?.javaMethod!!.apply { isAccessible = true }
+                    ?.javaMethod?.apply { isAccessible = true }
                 )
         }
     }

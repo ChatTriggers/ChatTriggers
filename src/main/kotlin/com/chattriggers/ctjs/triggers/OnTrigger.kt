@@ -7,9 +7,9 @@ import com.chattriggers.ctjs.utils.kotlin.External
 
 @External
 abstract class OnTrigger protected constructor(
-        var method: Any,
-        var type: TriggerType,
-        protected var loader: ILoader
+    var method: Any,
+    var type: TriggerType,
+    protected var loader: ILoader
 ) {
     var owningModule = IRegister.currentModule
     var priority: Priority = Priority.NORMAL
@@ -48,10 +48,10 @@ abstract class OnTrigger protected constructor(
         this.loader.removeTrigger(this)
     }
 
-    protected fun callMethod(vararg args: Any?) {
+    protected fun callMethod(args: Array<out Any?>) {
         if (!Reference.isLoaded) return
 
-        this.loader.trigger(this, this.method, *args)
+        this.loader.trigger(this, this.method, args)
     }
 
     abstract fun trigger(vararg args: Any?)
@@ -62,6 +62,7 @@ abstract class OnTrigger protected constructor(
 
     enum class Priority {
         //LOWEST IS RAN LAST
-        HIGHEST, HIGH, NORMAL, LOW, LOWEST
+        HIGHEST,
+        HIGH, NORMAL, LOW, LOWEST
     }
 }

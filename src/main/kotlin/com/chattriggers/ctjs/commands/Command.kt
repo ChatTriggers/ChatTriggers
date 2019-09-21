@@ -6,7 +6,12 @@ import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.BlockPos
 
-class Command(trigger: OnTrigger, private val name: String, private val usage: String, private val tabCompletionOptions: MutableList<String>) : CommandBase() {
+class Command(
+    trigger: OnTrigger,
+    private val name: String,
+    private val usage: String,
+    private val tabCompletionOptions: MutableList<String>
+) : CommandBase() {
     private var triggers = mutableListOf<OnTrigger>()
 
     init {
@@ -29,11 +34,15 @@ class Command(trigger: OnTrigger, private val name: String, private val usage: S
     //$$ override fun getUsage(sender: ICommandSender) = this.usage
     //#endif
 
-    override fun addTabCompletionOptions(sender: ICommandSender?, args: Array<out String>?, pos: BlockPos?): MutableList<String> {
+    override fun addTabCompletionOptions(
+        sender: ICommandSender?,
+        args: Array<out String>?,
+        pos: BlockPos?
+    ): MutableList<String> {
         return this.tabCompletionOptions
     }
 
-    @Throws (CommandException::class)
+    @Throws(CommandException::class)
     //#if MC<=10809
     override fun processCommand(sender: ICommandSender, args: Array<String>) = trigger(args)
     //#else
@@ -42,6 +51,6 @@ class Command(trigger: OnTrigger, private val name: String, private val usage: S
 
     private fun trigger(args: Array<String>) {
         for (trigger in this.triggers)
-            trigger.trigger(*args)
+            trigger.trigger(args)
     }
 }

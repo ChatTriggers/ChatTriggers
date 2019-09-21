@@ -30,9 +30,9 @@ class Item {
     constructor(itemStack: ItemStack?) {
         //#if MC<=10809
         if (itemStack == null) {
-        //#else
-        //$$ if (itemStack == null || itemStack == ItemStack.EMPTY) {
-        //#endif
+            //#else
+            //$$ if (itemStack == null || itemStack == ItemStack.EMPTY) {
+            //#endif
             this.item = ItemBlock(Block(0).block)
             this.itemStack = ItemStack(item)
         } else {
@@ -42,7 +42,7 @@ class Item {
     }
 
     constructor(itemName: String) {
-        item = MCItem.getByNameOrId(itemName)!!
+        item = MCItem.getByNameOrId(itemName)
         itemStack = ItemStack(item)
     }
 
@@ -135,12 +135,12 @@ class Item {
         return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
             //#if MC<=10809
             Enchantment.getEnchantmentById(
-               it.key
+                it.key
             )
-            //#else
-            //$$ it.key
-            //#endif
-                    .name.replace("enchantment.", "")
+                //#else
+                //$$ it.key
+                //#endif
+                .name.replace("enchantment.", "")
         }
     }
 
@@ -159,7 +159,7 @@ class Item {
         return this.itemStack.canHarvestBlock(block.block)
         //#else
         //$$ return this.itemStack.canHarvestBlock(
-        //$$         World.getWorld()!!.getBlockState(block.blockPos)
+        //$$         World.getWorld().getBlockState(block.blockPos)
         //$$ )
         //#endif
     }
@@ -226,9 +226,9 @@ class Item {
      */
     override fun equals(other: Any?): Boolean {
         return other is Item &&
-            getID() == other.getID() &&
-            getStackSize() == other.getStackSize() &&
-            getDamage() == other.getDamage()
+                getID() == other.getID() &&
+                getStackSize() == other.getStackSize() &&
+                getDamage() == other.getDamage()
     }
 
     override fun hashCode(): Int {
