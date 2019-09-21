@@ -51,21 +51,18 @@ class Console(val loader: ILoader?) {
             override fun keyReleased(e: KeyEvent) {
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER -> {
-                        var toPrint: Any?
-
                         val command = inputField.text
                         inputField.text = ""
                         history.add(command)
                         historyOffset = 0
 
-                        toPrint = try {
-                            loader?.eval(command)
+                        taos.println("eval > $command")
+
+                        try {
+                            taos.println(loader?.eval(command) ?: return)
                         } catch (e: Throwable) {
                             printStackTrace(e)
-                            "> $command"
                         }
-
-                        taos.println(toPrint ?: command)
                     }
 
                     KeyEvent.VK_UP -> {
