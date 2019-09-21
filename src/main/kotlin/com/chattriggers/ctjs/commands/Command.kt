@@ -4,8 +4,9 @@ import com.chattriggers.ctjs.triggers.OnTrigger
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
+import net.minecraft.util.BlockPos
 
-class Command(trigger: OnTrigger, private val name: String, private val usage: String) : CommandBase() {
+class Command(trigger: OnTrigger, private val name: String, private val usage: String, private val tabCompletionOptions: MutableList<String>) : CommandBase() {
     private var triggers = mutableListOf<OnTrigger>()
 
     init {
@@ -27,6 +28,10 @@ class Command(trigger: OnTrigger, private val name: String, private val usage: S
     //#else
     //$$ override fun getUsage(sender: ICommandSender) = this.usage
     //#endif
+
+    override fun addTabCompletionOptions(sender: ICommandSender?, args: Array<out String>?, pos: BlockPos?): MutableList<String> {
+        return this.tabCompletionOptions
+    }
 
     @Throws (CommandException::class)
     //#if MC<=10809

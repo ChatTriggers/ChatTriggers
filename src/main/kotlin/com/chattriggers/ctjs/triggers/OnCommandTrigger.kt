@@ -5,17 +5,33 @@ import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.command.ICommand
+import net.minecraft.command.ICommandManager
+import net.minecraft.command.ICommandSender
+import net.minecraft.network.play.client.C14PacketTabComplete
 import net.minecraftforge.client.ClientCommandHandler
+import scala.Console
 
 @External
 class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.COMMAND, loader) {
     private var commandName: String? = null
+    private var tabCompletions: MutableList<String> = mutableListOf()
     private var command: Command? = null
 
     override fun trigger(vararg args: Any?) {
         if (args::javaClass == Array<String>::javaClass) throw IllegalArgumentException("Arguments must be string array")
 
         callMethod(*args)
+    }
+
+    /**
+     * Sets the tab completion options for the command.
+     * This method must be used before setting the command name, otherwise, the tab completions will not be set.
+     *
+     * @param args all the tab completion options.
+     */
+    fun setTabCompletions(vararg args: String) = apply {
+        this.tabCompletions = args.toMutableList()
     }
 
     /**
@@ -53,7 +69,7 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
             }
         }
 
-        this.command = Command(this, this.commandName!!, "/${this.commandName}")
+        this.command = Command(this, this.commandName!!, "/${this.commandName}", this.tabCompletions)
         ClientCommandHandler.instance.registerCommand(this.command!!)
         CommandHandler.getCommandList().add(this.command ?: return)
     }
