@@ -111,10 +111,10 @@ public abstract class MixinGuiScreen {
             //$$ ITextComponent component,
             //#endif
             CallbackInfoReturnable ci) {
-        TriggerType.CHAT_COMPONENT_CLICKED.trigger(
+        TriggerType.CHAT_COMPONENT_CLICKED.trigger(new Object[]{
                 component == null ? null : new TextComponent(component),
                 ci
-        );
+        });
     }
 
     @Inject(
@@ -134,12 +134,12 @@ public abstract class MixinGuiScreen {
             //$$ ITextComponent component,
             //#endif
             int x, int y, CallbackInfo ci) {
-        TriggerType.CHAT_COMPONENT_HOVERED.trigger(
+        TriggerType.CHAT_COMPONENT_HOVERED.trigger(new Object[]{
                 component == null ? null : new TextComponent(component),
                 x,
                 y,
                 ci
-        );
+        });
     }
 
 //    @Inject(
