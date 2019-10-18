@@ -92,26 +92,7 @@ global.ChatTriggers = Java.type("com.chattriggers.ctjs.Reference").INSTANCE;
 /*End Built in Vars */
 
 // Thread
-global.JThread = Java.type("java.lang.Thread");
-global.Thread = function(f) {
-    this.func = f;
-
-    this.thread = new JThread(function() {
-        try {
-            this.func();
-        } catch (e) {
-            Console.out.println("Error executing thread");
-            Console.out.println(e);
-            // TODO
-            // Console.printStackTrace(e.nashornException);
-        }
-    }.bind(this));
-
-    this.start = function() {
-        this.thread.start();
-    }.bind(this);
-}
-Thread.sleep = JThread.sleep;
+global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread");
 
 // simplified methods
 global.print = function(toPrint) {
