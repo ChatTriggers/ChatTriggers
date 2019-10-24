@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
+import java.awt.Color
 
 @External
 object Tessellator {
@@ -72,6 +73,12 @@ object Tessellator {
     @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) = apply {
         GlStateManager.color(red, green, blue, alpha)
+        this.colorized = true
+    }
+
+    @JvmStatic
+    fun colorize(color: Color) = apply {
+        GlStateManager.color(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
         this.colorized = true
     }
 

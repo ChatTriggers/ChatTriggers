@@ -2,10 +2,11 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import org.lwjgl.util.vector.Vector2f
+import java.awt.Color
 
 @External
 class Rectangle(
-        private var color: Int,
+        private var color: Color,
         private var x: Float,
         private var y: Float,
         private var width: Float,
@@ -14,8 +15,8 @@ class Rectangle(
     private var shadow = Shadow(this)
     private var outline = Outline(this)
 
-    fun getColor(): Int = this.color
-    fun setColor(color: Int) = apply { this.color = color }
+    fun getColor(): Color = this.color
+    fun setColor(color: Color) = apply { this.color = color }
 
     fun getX(): Float = this.x
     fun setX(x: Float) = apply { this.x = x }

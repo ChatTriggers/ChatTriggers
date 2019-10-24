@@ -6,9 +6,10 @@ import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.util.vector.Vector2f
+import java.awt.Color
 
 @External
-class Shape(private var color: Int) {
+class Shape(private var color: Color) {
     private var vertexes = mutableListOf<Vector2f>()
     private var drawMode = 9
 
@@ -20,8 +21,8 @@ class Shape(private var color: Int) {
         return clone
     }
 
-    fun getColor(): Int = this.color
-    fun setColor(color: Int) = apply { this.color = color }
+    fun getColor(): Color = this.color
+    fun setColor(color: Color) = apply { this.color = color }
 
     fun getDrawMode(): Int = this.drawMode
     /**
@@ -90,11 +91,6 @@ class Shape(private var color: Int) {
     }
 
     fun draw() = apply {
-        val a = (this.color shr 24 and 255).toFloat() / 255.0f
-        val r = (this.color shr 16 and 255).toFloat() / 255.0f
-        val g = (this.color shr 8 and 255).toFloat() / 255.0f
-        val b = (this.color and 255).toFloat() / 255.0f
-
         val tessellator = MCTessellator.getInstance()
         val worldRenderer = tessellator.getRenderer()
 
@@ -102,7 +98,7 @@ class Shape(private var color: Int) {
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         if (Renderer.colorized == null)
-            GlStateManager.color(r, g, b, a)
+            GlStateManager.color(this.color.red.toFloat(), this.color.green.toFloat(), this.color.blue.toFloat(), this.color.alpha.toFloat())
 
         worldRenderer.begin(this.drawMode, DefaultVertexFormats.POSITION)
 

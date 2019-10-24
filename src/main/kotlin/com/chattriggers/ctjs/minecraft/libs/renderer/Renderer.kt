@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
 import org.lwjgl.opengl.GL11
+import java.awt.Color
 import java.util.*
 
 @External
@@ -138,6 +139,12 @@ object Renderer {
     }
 
     @JvmStatic
+    fun colorize(color: Color) {
+        colorized = fixAlpha(color(color.red, color.green, color.blue))
+        GlStateManager.color(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
+    }
+
+    @JvmStatic
     fun setDrawMode(drawMode: Int) = apply {
         this.drawMode = drawMode
     }
@@ -153,7 +160,7 @@ object Renderer {
     }
 
     @JvmStatic
-    fun drawRect(color: Int, x: Float, y: Float, width: Float, height: Float) {
+    fun drawRect(color: Color, x: Float, y: Float, width: Float, height: Float) {
         val pos = mutableListOf(x, y, x + width, y + height)
         if (pos[0] > pos[2])
             Collections.swap(pos, 0, 2)
@@ -168,11 +175,7 @@ object Renderer {
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
+            GlStateManager.color(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
         }
         worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION)
         worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
@@ -189,7 +192,7 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun drawShape(color: Int, vararg vertexes: List<Float>, drawMode: Int = 7) {
+    fun drawShape(color: Color, vararg vertexes: List<Float>, drawMode: Int = 7) {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
 
@@ -198,11 +201,7 @@ object Renderer {
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
+            GlStateManager.color(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
         }
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
@@ -223,7 +222,7 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun drawLine(color: Int, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 9) {
+    fun drawLine(color: Color, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 9) {
         val theta = -Math.atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
         val i = Math.sin(theta).toFloat() * (thickness / 2)
         val j = Math.cos(theta).toFloat() * (thickness / 2)
@@ -236,11 +235,7 @@ object Renderer {
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
+            GlStateManager.color(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
         }
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
@@ -260,7 +255,7 @@ object Renderer {
     }
 
     @JvmStatic @JvmOverloads
-    fun drawCircle(color: Int, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
+    fun drawCircle(color: Color, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
         val theta = 2 * Math.PI / steps
         val cos = Math.cos(theta).toFloat()
         val sin = Math.sin(theta).toFloat()
@@ -276,11 +271,7 @@ object Renderer {
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
+            GlStateManager.color(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
         }
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
