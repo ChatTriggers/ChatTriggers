@@ -50,7 +50,6 @@ class Command(
     //#endif
 
     private fun trigger(args: Array<String>) {
-        for (trigger in this.triggers)
-            trigger.trigger(args)
+        triggers.forEach { it.trigger(args) }
     }
 }

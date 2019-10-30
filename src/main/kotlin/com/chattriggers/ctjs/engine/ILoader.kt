@@ -40,9 +40,7 @@ interface ILoader {
 
         newTriggers.filter {
             it.type == type
-        }.forEach {
-            it.trigger(args)
-        }
+        }.forEach { it.trigger(*args) }
 
         triggers = newTriggers
     }

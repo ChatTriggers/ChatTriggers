@@ -13,6 +13,8 @@ import java.util.*
 
 @External
 object TabList {
+    private val playerComparator = Ordering.from(PlayerComparator())
+
     /**
      * Gets names set in scoreboard objectives
      *
@@ -34,13 +36,24 @@ object TabList {
         }
     }
 
+    @JvmStatic
+    fun getNames(): List<String> {
+        if (Client.getTabGui() == null) return listOf()
+
+        val playerList = playerComparator.sortedCopy(Client.getMinecraft().thePlayer.sendQueue.playerInfoMap)
+
+        return playerList.map {
+            Client.getTabGui()!!.getPlayerName(it)
+        }
+    }
+
     /**
      * Gets all names in tabs without formatting
      *
      * @return the unformatted names
      */
     @JvmStatic
-    fun getNames(): List<String> {
+    fun getUnformattedNames(): List<String> {
         if (Player.getPlayer() == null) return listOf()
 
         val tab = Ordering.from(PlayerComparator())
