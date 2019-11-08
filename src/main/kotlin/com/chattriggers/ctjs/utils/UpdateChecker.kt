@@ -9,6 +9,9 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.config.Config
+import com.chattriggers.ctjs.utils.kotlin.fromJson
+import com.chattriggers.ctjs.utils.kotlin.toVersion
+import com.google.gson.Gson
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.world.WorldEvent
@@ -29,11 +32,11 @@ object UpdateChecker {
     }
 
     private fun getUpdate() {
-        val fileName = "ctjs-" + Reference.MODVERSION + ".jar"
-        val get = FileLib.getUrlContent("https://www.chattriggers.com/versions/latest/").trim { it <= ' ' }
-        if ("" == get) return
+        val latestVersion = Gson().fromJson<List<String>>(
+            FileLib.getUrlContent("https://www.chattriggers.com/api/versions")
+        ).take(1).map(String::toVersion).first()
 
-        this.updateAvailable = fileName != get
+        this.updateAvailable = latestVersion > Reference.MODVERSION.toVersion()
     }
 
     @SubscribeEvent

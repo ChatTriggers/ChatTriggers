@@ -1,5 +1,8 @@
 package com.chattriggers.ctjs.utils.kotlin
 
+import com.fasterxml.jackson.core.Version
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import net.minecraft.client.renderer.Tessellator
 
 fun ITextComponent.getStyling(): TextStyle =
@@ -38,4 +41,11 @@ operator fun String.times(times: Number): String {
     }
 
     return stringBuilder.toString()
+}
+
+inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
+
+fun String.toVersion(): Version {
+    val split = this.split(".").map(String::toInt)
+    return Version(split[0], split[1], split[2], null, null, null)
 }
