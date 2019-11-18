@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAct
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.inventory.Container
+import net.minecraft.inventory.ContainerChest
 import net.minecraft.inventory.IInventory
 
 @External
@@ -156,7 +157,12 @@ class Inventory : JSONImpl {
      *
      * @return the name of the inventory
      */
-    fun getName(): String = inventory?.name ?: "container"
+    fun getName(): String {
+        return when (container) {
+            is ContainerChest -> container.lowerChestInventory.name
+            else -> inventory?.name ?: "container"
+        }
+    }
 
     fun getClassName(): String = inventory?.javaClass?.simpleName ?: container!!.javaClass.simpleName
 
