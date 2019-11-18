@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.io.FileReader
-import java.net.UnknownHostException
 import kotlin.concurrent.thread
 
 @Mod(
@@ -76,7 +75,7 @@ object CTJS {
 
         try {
             FileLib.getUrlContent("https://www.chattriggers.com/tracker/?uuid=$sha256uuid")
-        } catch (e: UnknownHostException) {
+        } catch (e: Exception) {
             e.print()
         }
     }

@@ -132,7 +132,7 @@ object DefaultLoader {
                     val newMetadataFile = File(dir, "updateMeta.json")
 
                     val connection =
-                        URL("https://www.chattriggers.com/downloads/metadata/${metadata.fileName}").openConnection()
+                        URL("https://www.chattriggers.com/api/modules/${metadata.fileName}/metadata?modVersion=${Reference.MODVERSION}").openConnection()
                     connection.setRequestProperty("User-Agent", "Mozilla/5.0")
                     FileUtils.copyInputStreamToFile(connection.getInputStream(), newMetadataFile)
 
@@ -177,7 +177,7 @@ object DefaultLoader {
     private fun downloadModule(name: String, existCheck: Boolean): Boolean {
         if (existCheck) {
             try {
-                FileLib.getUrlContent("https://www.chattriggers.com/downloads/metadata/$name")
+                FileLib.getUrlContent("https://www.chattriggers.com/api/modules/$name/metadata?modVersion=${Reference.MODVERSION}")
             } catch (exception: Exception) {
                 exception.print()
                 return false
@@ -187,7 +187,7 @@ object DefaultLoader {
         try {
             val downloadZip = File(modulesFolder, "currDownload.zip")
 
-            val connection = URL("https://www.chattriggers.com/downloads/scripts/$name").openConnection()
+            val connection = URL("https://www.chattriggers.com/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}").openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
 
