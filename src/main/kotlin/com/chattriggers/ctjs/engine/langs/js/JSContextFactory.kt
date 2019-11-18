@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.engine.langs.js
 
 import net.minecraft.client.Minecraft
 import org.mozilla.javascript.Context
-import org.mozilla.javascript.Context.*
+import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR
 import org.mozilla.javascript.ContextFactory
 import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.WrapFactory
@@ -37,7 +37,6 @@ object JSContextFactory : ContextFactory() {
     override fun hasFeature(cx: Context?, featureIndex: Int): Boolean {
         when (featureIndex) {
             FEATURE_LOCATION_INFORMATION_IN_ERROR -> return true
-            FEATURE_STRICT_EVAL, FEATURE_STRICT_MODE, FEATURE_STRICT_VARS -> return true
         }
 
         return super.hasFeature(cx, featureIndex)
