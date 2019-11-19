@@ -352,6 +352,23 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs before the player's armor bar is drawn.
+     *
+     * Passes through one argument:
+     * - The render event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The name of the method to callback when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderArmor(method: Any): OnRenderTrigger {
+        return OnRenderTrigger(method, TriggerType.RENDER_ARMOR, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs before the player's food is being drawn.
      *
      * Passes through one argument:
