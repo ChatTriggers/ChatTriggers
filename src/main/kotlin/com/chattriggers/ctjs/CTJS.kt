@@ -27,10 +27,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.io.FileReader
-import java.net.UnknownHostException
 import kotlin.concurrent.thread
 
-@Mod(modid = Reference.MODID,
+@Mod(
+    modid = Reference.MODID,
     name = Reference.MODNAME,
     version = Reference.MODVERSION,
     clientSideOnly = true,
@@ -67,15 +67,15 @@ object CTJS {
         Sentry.init(Reference.SENTRYDSN)
 
         Sentry.getContext().user = UserBuilder()
-                .setUsername(Player.getName())
-                .setId(Player.getUUID())
-                .build()
+            .setUsername(Player.getName())
+            .setId(Player.getUUID())
+            .build()
 
         val sha256uuid = DigestUtils.sha256Hex(Player.getUUID())
 
         try {
             FileLib.getUrlContent("https://www.chattriggers.com/tracker/?uuid=$sha256uuid")
-        } catch (e: UnknownHostException) {
+        } catch (e: Exception) {
             e.print()
         }
     }
@@ -102,9 +102,9 @@ object CTJS {
         try {
             val parser = JsonParser()
             val obj = parser.parse(
-                    FileReader(
-                            File(this.configLocation, "ChatTriggers.json")
-                    )
+                FileReader(
+                    File(this.configLocation, "ChatTriggers.json")
+                )
             ).asJsonObject
 
             Config.load(obj)
@@ -124,7 +124,7 @@ object CTJS {
         ClientCommandHandler.instance.registerCommand(CTCommand)
 
         Runtime.getRuntime().addShutdownHook(
-                Thread { TriggerType.GAME_UNLOAD::triggerAll }
+            Thread { TriggerType.GAME_UNLOAD::triggerAll }
         )
     }
 }

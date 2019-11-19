@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.threading
 
-import java.util.ArrayList
+import java.util.*
 import java.util.function.Consumer
 
 class ThreadHandler {
@@ -11,10 +11,10 @@ class ThreadHandler {
     }
 
     fun addThread(thread: WrappedThread) =
-            this.activeThreads.add(thread)
+        this.activeThreads.add(thread)
 
     fun removeThread(thread: WrappedThread) =
-            activeThreads.removeIf { thread1 -> thread1 === thread }
+        activeThreads.removeIf { thread1 -> thread1 === thread }
 
     fun stopThreads() {
         activeThreads.forEach(Consumer<WrappedThread> { it.interrupt() })

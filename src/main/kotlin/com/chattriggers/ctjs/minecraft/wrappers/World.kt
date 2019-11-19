@@ -158,8 +158,8 @@ object World {
     @Throws(IllegalArgumentException::class)
     fun getPlayerByName(name: String): PlayerMP {
         return PlayerMP(
-                getWorld()?.getPlayerEntityByName(name)
-                        ?: throw IllegalArgumentException()
+            getWorld()?.getPlayerEntityByName(name)
+                ?: throw IllegalArgumentException()
         )
     }
 
@@ -169,9 +169,9 @@ object World {
     @JvmStatic
     fun getChunk(x: Int, y: Int, z: Int): Chunk {
         return Chunk(
-                getWorld()!!.getChunkFromBlockCoords(
-                        BlockPos(x, y, z)
-                )
+            getWorld()!!.getChunkFromBlockCoords(
+                BlockPos(x, y, z)
+            )
         )
     }
 
@@ -295,7 +295,15 @@ object World {
          * @return the newly spawned particle for further configuration
          */
         @JvmStatic
-        fun spawnParticle(particle: String, x: Double, y: Double, z: Double, xSpeed: Double, ySpeed: Double, zSpeed: Double): Particle? {
+        fun spawnParticle(
+            particle: String,
+            x: Double,
+            y: Double,
+            z: Double,
+            xSpeed: Double,
+            ySpeed: Double,
+            zSpeed: Double
+        ): Particle? {
             val particleType = EnumParticleTypes.valueOf(particle)
 
             val fx = RenderGlobal::class.declaredMemberFunctions.firstOrNull {
@@ -303,10 +311,10 @@ object World {
             }?.let {
                 it.isAccessible = true
                 it.call(
-                        Client.getMinecraft().renderGlobal,
-                        particleType.particleID,
-                        particleType.shouldIgnoreRange,
-                        x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
+                    Client.getMinecraft().renderGlobal,
+                    particleType.particleID,
+                    particleType.shouldIgnoreRange,
+                    x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
                 ) as MCParticle
             }!!
 

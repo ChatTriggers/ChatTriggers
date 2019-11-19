@@ -26,7 +26,7 @@ object Client {
      * @return The Minecraft object
      */
     @JvmStatic
-    fun getMinecraft(): Minecraft = Minecraft.getMinecraft()!!
+    fun getMinecraft(): Minecraft = Minecraft.getMinecraft()
 
     /**
      * Gets Minecraft's NetHandlerPlayClient object
@@ -37,9 +37,9 @@ object Client {
     fun getConnection(): NetHandlerPlayClient =
         //#if MC<=10809
         getMinecraft().netHandler
-        //#else
-        //$$ getMinecraft().connection!!
-        //#endif
+    //#else
+    //$$ getMinecraft().connection
+    //#endif
 
     /**
      * Gets the Minecraft GuiNewChat object for the chat gui
@@ -56,7 +56,7 @@ object Client {
     fun getTabGui(): GuiPlayerTabOverlay? = getMinecraft().ingameGUI?.tabList
 
     @JvmStatic
-    fun isInTab(): Boolean =  getMinecraft().gameSettings.keyBindPlayerList.isKeyDown
+    fun isInTab(): Boolean = getMinecraft().gameSettings.keyBindPlayerList.isKeyDown
 
     /**
      * Gets whether or not the Minecraft window is active
@@ -78,8 +78,8 @@ object Client {
     @JvmStatic
     fun getKeyBindFromKey(keyCode: Int): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
-                .firstOrNull { it.keyCode == keyCode }
-                ?.let { KeyBind(it) }
+            .firstOrNull { it.keyCode == keyCode }
+            ?.let { KeyBind(it) }
     }
 
     /**
@@ -109,8 +109,8 @@ object Client {
     @JvmStatic
     fun getKeyBindFromDescription(description: String): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
-                .firstOrNull { it.keyDescription == description }
-                ?.let { KeyBind(it) }
+            .firstOrNull { it.keyDescription == description }
+            ?.let { KeyBind(it) }
     }
 
     @JvmStatic
@@ -130,7 +130,7 @@ object Client {
 
     @JvmStatic
     fun getMemoryUsage(): Int = Math.round(
-            (getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()
+        (getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()
     )
 
     @JvmStatic

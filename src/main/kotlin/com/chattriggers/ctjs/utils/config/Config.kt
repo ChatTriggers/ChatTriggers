@@ -77,7 +77,7 @@ object Config {
         }
 
         file.writeText(
-                gson.toJson(obj)
+            gson.toJson(obj)
         )
     }
 }

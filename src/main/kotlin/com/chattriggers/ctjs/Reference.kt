@@ -16,14 +16,14 @@ import kotlin.concurrent.thread
 object Reference {
     const val MODID = "ct.js"
     const val MODNAME = "ChatTriggers"
-    const val MODVERSION = "@MOD_VERSION@"
+    const val MODVERSION = "1.0.0"
     val SENTRYDSN = ("https://a69c5c01577c457b88434de9b995ceec:317ddf76172b4020b80f79befe536f98@sentry.io/259416"
             + "?release=" + MODVERSION
             + "&environment=" + (if (Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean) "development" else "production")
-            + "&stacktrace.app.packages=com.chattriggers,jdk.nashorn"
+            + "&stacktrace.app.packages=com.chattriggers"
             + "&uncaught.handler.enabled=false")
 
-    private var isLoaded = true
+    var isLoaded = true
 
     fun reloadCT() = loadCT(true)
 
@@ -53,13 +53,11 @@ object Reference {
         unloadCT(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
-        conditionalThread {
-            (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
+        (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
 
-            CTJS.loadConfig()
+        CTJS.loadConfig()
 
-            ModuleManager.load(updateCheck)
-
+        ModuleManager.load(updateCheck).whenComplete { _, _ ->
             ChatLib.chat("&aDone reloading scripts!")
 
             TriggerType.GAME_LOAD.triggerAll()

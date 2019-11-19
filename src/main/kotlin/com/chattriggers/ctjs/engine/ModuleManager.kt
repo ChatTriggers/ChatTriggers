@@ -7,6 +7,8 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
 import java.io.File
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.atomic.AtomicInteger
 
 object ModuleManager {
     val loaders = mutableListOf<ILoader>()
@@ -28,13 +30,24 @@ object ModuleManager {
         return false
     }
 
-    fun load(updateCheck: Boolean) {
+    fun load(updateCheck: Boolean): CompletableFuture<Unit> {
         val modules = DefaultLoader.load(updateCheck)
         cachedModules = modules
 
+        val atomicInt = AtomicInteger(0)
+        val future = CompletableFuture<Unit>()
+
         loaders.forEach {
-            it.load(modules)
+            it.load(modules).whenComplete { _, _ ->
+                val index = atomicInt.incrementAndGet()
+
+                if (index == loaders.size) {
+                    future.complete(Unit)
+                }
+            }
         }
+
+        return future
     }
 
     fun load(module: Module) {
@@ -54,9 +67,9 @@ object ModuleManager {
         }
     }
 
-    fun trigger(type: TriggerType, vararg arguments: Any?) {
+    fun trigger(type: TriggerType, arguments: Array<out Any?>) {
         loaders.forEach {
-            it.exec(type, *arguments)
+            it.exec(type, arguments)
         }
     }
 

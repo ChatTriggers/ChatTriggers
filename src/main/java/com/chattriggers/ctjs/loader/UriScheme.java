@@ -22,6 +22,8 @@ public class UriScheme {
             return;
         }
 
+
+
         if (!args[0].startsWith(PROTOCOL)) {
             System.out.println("URL found is not supported, aborting...");
             System.out.println(args[0]);

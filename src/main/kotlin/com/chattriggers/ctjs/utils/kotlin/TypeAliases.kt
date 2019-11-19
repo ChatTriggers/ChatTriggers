@@ -7,6 +7,7 @@ internal typealias MCTessellator = net.minecraft.client.renderer.Tessellator
 
 //#if MC<=10809
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX
+
 internal typealias BlockPos = net.minecraft.util.BlockPos
 internal typealias RayTraceType = net.minecraft.util.MovingObjectPosition.MovingObjectType
 internal typealias MathHelper = net.minecraft.util.MathHelper

@@ -56,10 +56,10 @@ object ClientListener {
             if (Mouse.isButtonDown(button) == this.mouseState[button]) continue
 
             TriggerType.CLICKED.triggerAll(
-                    Client.getMouseX(),
-                    Client.getMouseY(),
-                    button,
-                    Mouse.isButtonDown(button)
+                Client.getMouseX(),
+                Client.getMouseY(),
+                button,
+                Mouse.isButtonDown(button)
             )
 
             this.mouseState[button] = Mouse.isButtonDown(button)
@@ -77,11 +77,11 @@ object ClientListener {
             return
 
         TriggerType.DRAGGED.triggerAll(
-                Client.getMouseX() - (this.draggedState[button]?.x ?: 0f),
-                Client.getMouseY() - (this.draggedState[button]?.y ?: 0f),
-                Client.getMouseX(),
-                Client.getMouseY(),
-                button
+            Client.getMouseX() - (this.draggedState[button]?.x ?: 0f),
+            Client.getMouseY() - (this.draggedState[button]?.y ?: 0f),
+            Client.getMouseX(),
+            Client.getMouseY(),
+            button
         )
 
         // update dragged
@@ -136,9 +136,9 @@ object ClientListener {
         if (event.target == null || event.target.blockPos == null) return
 
         val position = Vector3d(
-                event.target.blockPos.x.toDouble(),
-                event.target.blockPos.y.toDouble(),
-                event.target.blockPos.z.toDouble()
+            event.target.blockPos.x.toDouble(),
+            event.target.blockPos.y.toDouble(),
+            event.target.blockPos.z.toDouble()
         )
 
         TriggerType.BLOCK_HIGHLIGHT.triggerAll(position, event)
@@ -153,26 +153,26 @@ object ClientListener {
         val item = event.item
 
         val position = Vector3d(
-                item.posX,
-                item.posY,
-                item.posZ
+            item.posX,
+            item.posY,
+            item.posZ
         )
         val motion = Vector3d(
-                item.motionX,
-                item.motionY,
-                item.motionZ
+            item.motionX,
+            item.motionY,
+            item.motionZ
         )
 
         TriggerType.PICKUP_ITEM.triggerAll(
-                //#if MC<=10809
-                Item(item.entityItem),
-                //#else
-                //$$ Item(item.item),
-                //#endif
-                PlayerMP(player),
-                position,
-                motion,
-                event
+            //#if MC<=10809
+            Item(item.entityItem),
+            //#else
+            //$$ Item(item.item),
+            //#endif
+            PlayerMP(player),
+            position,
+            motion,
+            event
         )
     }
 
@@ -182,9 +182,9 @@ object ClientListener {
         val event = CancellableEvent()
 
         TriggerType.DROP_ITEM.triggerAll(
-                Item(item),
-                PlayerMP(player),
-                event
+            Item(item),
+            PlayerMP(player),
+            event
         )
 
         return event.isCancelled()
@@ -216,9 +216,9 @@ object ClientListener {
 
 
         TriggerType.PLAYER_INTERACT.triggerAll(
-                action,
-                Vector3d((e.pos?.x ?: 0).toDouble(), (e.pos?.y ?: 0).toDouble(), (e.pos?.z ?: 0).toDouble()),
-                e
+            action,
+            Vector3d((e.pos?.x ?: 0).toDouble(), (e.pos?.y ?: 0).toDouble(), (e.pos?.z ?: 0).toDouble()),
+            e
         )
     }
     //#else

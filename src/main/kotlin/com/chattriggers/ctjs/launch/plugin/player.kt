@@ -20,11 +20,13 @@ private fun injectItemDropEvent() = inject {
     methodDesc = "(Z)Lnet/minecraft/entity/item/EntityItem;"
 
     // net/minecraft/entity/player/InventoryPlayer.getCurrentItem ()Lnet/minecraft/item/ItemStack;
-    val invoker = InjectionPoint.INVOKE(Descriptor(
-        "net/minecraft/entity/player/InventoryPlayer",
-        "getCurrentItem",
-        "()Lnet/minecraft/item/ItemStack;"
-    ), 0)
+    val invoker = InjectionPoint.INVOKE(
+        Descriptor(
+            "net/minecraft/entity/player/InventoryPlayer",
+            "getCurrentItem",
+            "()Lnet/minecraft/item/ItemStack;"
+        ), 0
+    )
 
     /*
     GETFIELD net/minecraft/entity/player/EntityPlayer.inventory : Lnet/minecraft/entity/player/InventoryPlayer;

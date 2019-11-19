@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.config.Config
 import io.sentry.Sentry
-import net.minecraft.network.ThreadQuickExitException
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -34,6 +33,7 @@ class Console(val loader: ILoader?) {
         textArea.autoscrolls = true
         val caret = textArea.caret as DefaultCaret
         caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
+        inputField.caretColor = Color.WHITE
 
         inputField.margin = Insets(5, 5, 5, 5)
         textArea.margin = Insets(5, 5, 5, 5)
@@ -51,21 +51,18 @@ class Console(val loader: ILoader?) {
             override fun keyReleased(e: KeyEvent) {
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER -> {
-                        var toPrint: Any? = null
-
                         val command = inputField.text
                         inputField.text = ""
                         history.add(command)
                         historyOffset = 0
 
-                        try {
-                            toPrint = loader?.eval(command)
-                        } catch (error: ThreadQuickExitException) { } catch (e: Exception) {
-                            printStackTrace(e)
-                            toPrint = "> $command"
-                        }
+                        taos.println("eval > $command")
 
-                        taos.println(toPrint ?: command)
+                        try {
+                            taos.println(loader?.eval(command) ?: return)
+                        } catch (e: Throwable) {
+                            printStackTrace(e)
+                        }
                     }
 
                     KeyEvent.VK_UP -> {
@@ -119,8 +116,8 @@ class Console(val loader: ILoader?) {
 
     fun printStackTrace(error: Throwable, trigger: OnTrigger) {
         Sentry.getContext().addTag(
-                "method",
-                trigger.method.toString()
+            "method",
+            trigger.method.toString()
         )
 
         printStackTrace(error)

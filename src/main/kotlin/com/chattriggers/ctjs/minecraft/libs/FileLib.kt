@@ -84,7 +84,8 @@ object FileLib {
      * @return the string stored in the url content
      */
     @Throws(UnknownHostException::class)
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun getUrlContent(theUrl: String, userAgent: String? = "Mozilla/5.0"): String {
         val conn = URL(theUrl).openConnection()
         conn.setRequestProperty("User-Agent", userAgent)
@@ -96,14 +97,7 @@ object FileLib {
 
     @JvmStatic
     fun deleteDirectory(dir: File): Boolean {
-        if (dir.isDirectory) {
-            val children = dir.listFiles()
-            for (child in children!!) {
-                if (!deleteDirectory(child)) return false
-            }
-        }
-
-        return dir.delete()
+        return dir.deleteRecursively()
     }
 
     /**

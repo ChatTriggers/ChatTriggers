@@ -19,11 +19,11 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 class Book(bookName: String) {
     private var bookScreen: GuiScreenBook? = null
     private val book: ItemStack
-            //#if MC<=10809
+    //#if MC<=10809
             = ItemStack(Items.written_book)
-            //#else
-            //$$ = ItemStack(Items.WRITTEN_BOOK)
-            //#endif
+    //#else
+    //$$ = ItemStack(Items.WRITTEN_BOOK)
+    //#endif
     private val bookData: NBTTagCompound = NBTTagCompound()
 
     init {
@@ -43,11 +43,13 @@ class Book(bookName: String) {
     fun addPage(message: Message) = apply {
         val pages = bookData["pages"] as NBTTagList
 
-        pages.appendTag(NBTTagString(
+        pages.appendTag(
+            NBTTagString(
                 TextComponentSerializer.componentToJson(
-                        message.getChatMessage()
+                    message.getChatMessage()
                 )
-        ))
+            )
+        )
 
         updateBookScreen(pages)
     }
@@ -72,11 +74,13 @@ class Book(bookName: String) {
     fun setPage(pageNumber: Int, message: Message) = apply {
         val pages = bookData.getTag("pages") as NBTTagList
 
-        pages.set(pageNumber, NBTTagString(
+        pages.set(
+            pageNumber, NBTTagString(
                 TextComponentSerializer.componentToJson(
-                        message.getChatMessage()
+                    message.getChatMessage()
                 )
-        ))
+            )
+        )
 
         updateBookScreen(pages)
     }
@@ -88,10 +92,10 @@ class Book(bookName: String) {
 
         if (bookScreen != null) {
             ReflectionHelper.setPrivateValue<GuiScreenBook, NBTTagList>(
-                    GuiScreenBook::class.java,
-                    bookScreen, pages,
-                    "field_146483_y",
-                    "bookPages"
+                GuiScreenBook::class.java,
+                bookScreen, pages,
+                "field_146483_y",
+                "bookPages"
             )
         }
     }
@@ -103,11 +107,11 @@ class Book(bookName: String) {
         }
 
         ReflectionHelper.setPrivateValue<GuiScreenBook, Int>(
-                GuiScreenBook::class.java,
-                bookScreen,
-                page,
-                "currPage",
-                "field_146484_x"
+            GuiScreenBook::class.java,
+            bookScreen,
+            page,
+            "currPage",
+            "field_146484_x"
         )
 
         GuiHandler.openGui(bookScreen ?: return)
@@ -118,7 +122,12 @@ class Book(bookName: String) {
     }
 
     fun getCurrentPage(): Int {
-        return if (!isOpen()) -1 else ReflectionHelper.getPrivateValue<Int, GuiScreenBook>(GuiScreenBook::class.java, bookScreen, "currPage", "field_146484_x")
+        return if (!isOpen()) -1 else ReflectionHelper.getPrivateValue<Int, GuiScreenBook>(
+            GuiScreenBook::class.java,
+            bookScreen,
+            "currPage",
+            "field_146484_x"
+        )
     }
 
     operator fun NBTTagCompound.set(tag: String, value: NBTBase) {

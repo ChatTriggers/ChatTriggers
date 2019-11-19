@@ -7,11 +7,10 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.SoundCategory
-import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraft.client.audio.SoundManager
 import net.minecraftforge.fml.relauncher.ReflectionHelper
+import org.mozilla.javascript.NativeObject
 import paulscode.sound.SoundSystem
-
 import java.io.File
 import java.net.MalformedURLException
 
@@ -45,7 +44,7 @@ import java.net.MalformedURLException
  * @param config the JavaScript config object
  */
 @External
-class Sound(private val config: ScriptObjectMirror) {
+class Sound(private val config: NativeObject) {
     private var sndSystem: SoundSystem? = null
     private val source: String = config["source"] as String
     var isListening = false
@@ -70,12 +69,9 @@ class Sound(private val config: ScriptObjectMirror) {
     fun onWorldLoad() {
         isListening = false
 
-        println("Loading sound system")
         loadSndSystem()
-        println("sound system loaded: " + sndSystem!!)
 
         try {
-            println("Bootstrapping")
             bootstrap()
         } catch (exc: MalformedURLException) {
             exc.printStackTrace()
@@ -96,18 +92,16 @@ class Sound(private val config: ScriptObjectMirror) {
 
     @Throws(MalformedURLException::class)
     private fun bootstrap() {
-        val configMap = config as? Map<String, *> ?: return
-
         val source = config["source"]?.toString() ?: throw IllegalArgumentException("Sound source is null.")
-        val priority = configMap.getOrDefault("priority", false) as Boolean
-        val loop = configMap.getOrDefault("loop", false) as Boolean
-        val stream = configMap.getOrDefault("stream", false) as Boolean
+        val priority = config.getOrDefault("priority", false) as Boolean
+        val loop = config.getOrDefault("loop", false) as Boolean
+        val stream = config.getOrDefault("stream", false) as Boolean
 
         val url = File(CTJS.assetsDir, source).toURI().toURL()
-        val x = (configMap.getOrDefault("x", Player.getX()) as Double).toFloat()
-        val y = (configMap.getOrDefault("y", Player.getY()) as Double).toFloat()
-        val z = (configMap.getOrDefault("z", Player.getZ()) as Double).toFloat()
-        val attModel = configMap.getOrDefault("attenuation", 1) as Int
+        val x = (config.getOrDefault("x", Player.getX()) as Double).toFloat()
+        val y = (config.getOrDefault("y", Player.getY()) as Double).toFloat()
+        val z = (config.getOrDefault("z", Player.getZ()) as Double).toFloat()
+        val attModel = config.getOrDefault("attenuation", 1) as Int
         val distOrRoll = 16
 
         if (stream) {
@@ -138,15 +132,15 @@ class Sound(private val config: ScriptObjectMirror) {
             )
         }
 
-        if (config.hasMember("volume")) {
+        if (config["volume"] != null) {
             setVolume(config["volume"] as Float)
         }
 
-        if (config.hasMember("pitch")) {
+        if (config["pitch"] != null) {
             setPitch(config["pitch"] as Float)
         }
 
-        if (config.hasMember("category")) {
+        if (config["category"] != null) {
             setCategory(config["category"] as String)
         }
     }
@@ -200,20 +194,28 @@ class Sound(private val config: ScriptObjectMirror) {
     /**
      * Plays/resumes the sound
      */
-    fun play() { sndSystem!!.play(this.source) }
+    fun play() {
+        sndSystem!!.play(this.source)
+    }
 
     /**
      * Pauses the sound, to be resumed later
      */
-    fun pause() { sndSystem!!.pause(this.source) }
+    fun pause() {
+        sndSystem!!.pause(this.source)
+    }
 
     /**
      * Completely stops the song
      */
-    fun stop() { sndSystem!!.stop(this.source) }
+    fun stop() {
+        sndSystem!!.stop(this.source)
+    }
 
     /**
      * I really don't know what this does
      */
-    fun rewind() { sndSystem!!.rewind(this.source) }
+    fun rewind() {
+        sndSystem!!.rewind(this.source)
+    }
 }

@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.engine.langs.js
 
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.ILoader.Companion.modulesFolder
 import com.chattriggers.ctjs.engine.IRegister
@@ -7,30 +8,39 @@ import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
-import jdk.nashorn.api.scripting.NashornScriptEngine
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory
-import jdk.nashorn.api.scripting.ScriptObjectMirror
-import jdk.nashorn.internal.objects.Global
-import jdk.nashorn.internal.runtime.ECMAException
-import net.minecraft.client.Minecraft
+import org.mozilla.javascript.Context
+import org.mozilla.javascript.Function
+import org.mozilla.javascript.ImporterTopLevel
+import org.mozilla.javascript.Scriptable
+import org.mozilla.javascript.commonjs.module.ModuleScriptProvider
+import org.mozilla.javascript.commonjs.module.Require
+import org.mozilla.javascript.commonjs.module.provider.StrongCachingModuleScriptProvider
+import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider
 import java.io.File
+import java.lang.invoke.MethodHandles
+import java.net.URI
 import java.net.URL
-import java.net.URLClassLoader
-import javax.script.ScriptException
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
+import java.util.concurrent.CompletableFuture
+import kotlin.reflect.full.declaredFunctions
+import kotlin.reflect.jvm.javaMethod
 
 object JSLoader : ILoader {
     override var triggers = mutableListOf<OnTrigger>()
     override val toRemove = mutableListOf<OnTrigger>()
     override val console by lazy { Console(this) }
 
-    private var global: Global? = null
     private val cachedModules = mutableListOf<Module>()
-    private lateinit var scriptEngine: NashornScriptEngine
+    private lateinit var moduleContext: Context
+    private lateinit var evalContext: Context
+    private lateinit var scope: Scriptable
+    private lateinit var require: CTRequire
 
-    override fun load(modules: List<Module>) {
+    override fun load(modules: List<Module>): CompletableFuture<Unit> {
         cachedModules.clear()
+
+        if (Context.getCurrentContext() != null) {
+            Context.exit()
+        }
 
         val jars = modules.map {
             it.folder.listFiles()?.toList() ?: listOf()
@@ -40,31 +50,55 @@ object JSLoader : ILoader {
             it.toURI().toURL()
         }
 
-        scriptEngine = instanceScriptEngine(jars)
+        instanceContexts(jars)
 
         val providedLibs = saveResource(
-                "/providedLibs.js",
-                File(modulesFolder.parentFile,
-                        "chattriggers-provided-libs.js"
-                ),
-                true
+            "/providedLibs.js",
+            File(
+                modulesFolder.parentFile,
+                "chattriggers-provided-libs.js"
+            ),
+            true
         )
 
-        try {
-            scriptEngine.eval(providedLibs)
-        } catch (e: Exception) {
-            console.printStackTrace(e)
+        val future = CompletableFuture<Unit>()
+
+        Reference.conditionalThread {
+            JSContextFactory.enterContext(moduleContext)
+
+            try {
+                moduleContext.evaluateString(
+                    scope,
+                    providedLibs,
+                    "provided",
+                    1, null
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                console.printStackTrace(e)
+
+                Context.exit()
+
+                future.complete(Unit)
+                return@conditionalThread
+            }
+
+            modules.forEach(::evalModule)
+
+            cachedModules.addAll(modules)
+
+            Context.exit()
+
+            future.complete(Unit)
         }
 
-        modules.forEach(::evalModule)
-
-        cachedModules.addAll(modules)
+        return future
     }
 
     override fun loadExtra(module: Module) {
         if (cachedModules.any {
-            it.name == module.name
-        }) return
+                it.name == module.name
+            }) return
 
         cachedModules.add(module)
         evalModule(module)
@@ -73,37 +107,43 @@ object JSLoader : ILoader {
     private fun evalModule(module: Module) {
         IRegister.currentModule = module
 
-        val files = module.getFilesWithExtension(".js")
+        var entry = module.metadata.entry ?: return
+        entry = entry.replace('/', File.separatorChar).replace('\\', File.separatorChar)
 
-        files.forEach {
-            try {
-                scriptEngine.context.setAttribute("javax.script.filename", it.absolutePath.substringAfter(ILoader.modulesFolder.absolutePath), 100)
-                scriptEngine.eval(it.readText())
-            } catch (e: ScriptException) {
+        val entryFile = File(module.folder, entry).toURI()
 
-                console.printStackTrace(e)
-            }
+        try {
+            require.loadCTModule(module.name, entry, entryFile)
+        } catch (e: Exception) {
+            println("Error loading module ${module.name}")
+            e.printStackTrace()
+            console.out.println("Error loading module ${module.name}")
+            console.printStackTrace(e)
         }
 
         IRegister.currentModule = null
     }
 
-    override fun eval(code: String): Any? {
-        scriptEngine.context.setAttribute("javax.script.filename", null, 100)
-        return scriptEngine.eval(code)
+    override fun eval(code: String): String? {
+        JSContextFactory.enterContext(evalContext)
+        try {
+            return Context.toString(evalContext.evaluateString(scope, code, "<eval>", 1, null))
+        } finally {
+            Context.exit()
+        }
     }
 
     override fun getLanguage() = Lang.JS
 
-    override fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?) {
+    override fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>) {
+        if (Context.getCurrentContext() == null) JSContextFactory.enterContext(moduleContext)
+
         try {
-            if (method is String) {
-                callNamedMethod(method, *args)
-            } else {
-                callActualMethod(method, *args)
-            }
-        } catch (e: ECMAException) {
-            // trigger.owningModule?.reportError(getLanguage(), e, trigger)
+            if (method !is Function) throw ClassCastException("Need to pass actual function to the register function, not the name!")
+
+            method.call(moduleContext, scope, scope, args)
+        } catch (e: Exception) {
+            console.printStackTrace(e)
             removeTrigger(trigger)
         }
     }
@@ -112,34 +152,43 @@ object JSLoader : ILoader {
         return cachedModules
     }
 
-    private fun callActualMethod(method: Any, vararg args: Any?) {
-        val som: ScriptObjectMirror = if (method is ScriptObjectMirror) {
-            method
-        } else {
-            if (global == null) {
-                val prop = NashornScriptEngine::class.memberProperties.firstOrNull {
-                    it.name == "global"
-                }!!
+    private fun instanceContexts(files: List<URL>) {
+        JSContextFactory.addAllURLs(files)
 
-                prop.isAccessible = true
-                global = prop.get(scriptEngine) as Global
-            }
+        moduleContext = JSContextFactory.enterContext()
+        scope = ImporterTopLevel(moduleContext)
 
-            val obj = ScriptObjectMirror.wrap(method, global)
+        val sourceProvider = UrlModuleSourceProvider(listOf(modulesFolder.toURI()), listOf())
+        val moduleProvider = StrongCachingModuleScriptProvider(sourceProvider)
+        require = CTRequire(moduleProvider)
+        require.install(scope)
 
-            obj as ScriptObjectMirror
+        Context.exit()
+
+        JSContextFactory.optimize = false
+        evalContext = JSContextFactory.enterContext()
+        Context.exit()
+        JSContextFactory.optimize = true
+    }
+
+    class CTRequire(moduleProvider: ModuleScriptProvider) :
+        Require(moduleContext, scope, moduleProvider, null, null, false) {
+        fun loadCTModule(name: String, entry: String, uri: URI) {
+            getExportedModuleInterface.invokeWithArguments(
+                this,
+                moduleContext,
+                name + File.separator + entry,
+                uri, null, false
+            )
         }
 
-        som.call(som, *args)
-    }
-
-    private fun callNamedMethod(method: String, vararg args: Any?) {
-        scriptEngine.invokeFunction(method, *args)
-    }
-
-    private fun instanceScriptEngine(files: List<URL>): NashornScriptEngine {
-        val ucl = URLClassLoader(files.toTypedArray(), Minecraft::class.java.classLoader)
-
-        return NashornScriptEngineFactory().getScriptEngine(ucl) as NashornScriptEngine
+        companion object {
+            @JvmStatic
+            val getExportedModuleInterface = MethodHandles.lookup()
+                .unreflect(Require::class.declaredFunctions
+                    .find { it.name == "getExportedModuleInterface" }
+                    ?.javaMethod?.apply { isAccessible = true }
+                )
+        }
     }
 }

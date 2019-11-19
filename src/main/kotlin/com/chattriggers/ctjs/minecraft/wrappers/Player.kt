@@ -75,11 +75,11 @@ object Player {
      */
     @JvmStatic
     fun getPitch(): Float = MathHelper.
-            //#if MC<=10809
-            wrapAngleTo180_float(getPlayer()?.rotationPitch ?: 0f)
-            //#else
-            //$$ wrapDegrees(getPlayer()?.rotationPitch ?: 0f);
-            //#endif
+        //#if MC<=10809
+        wrapAngleTo180_float(getPlayer()?.rotationPitch ?: 0f)
+    //#else
+    //$$ wrapDegrees(getPlayer()?.rotationPitch ?: 0f);
+    //#endif
 
     /**
      * Gets the player's camera yaw.
@@ -88,11 +88,11 @@ object Player {
      */
     @JvmStatic
     fun getYaw(): Float = MathHelper.
-            //#if MC<=10809
-            wrapAngleTo180_float(getPlayer()?.rotationYaw ?: 0f)
-            //#else
-            //$$ wrapDegrees(getPlayer()?.rotationYaw ?: 0f);
-            //#endif
+        //#if MC<=10809
+        wrapAngleTo180_float(getPlayer()?.rotationYaw ?: 0f)
+    //#else
+    //$$ wrapDegrees(getPlayer()?.rotationYaw ?: 0f);
+    //#endif
 
     /**
      * Gets the player's yaw rotation without wrapping.
@@ -212,10 +212,10 @@ object Player {
     @JvmStatic
     fun getActivePotionEffects(): List<PotionEffect> {
         return getPlayer()?.activePotionEffects
-                ?.stream()
-                ?.map { PotionEffect(it) }
-                ?.collect(Collectors.toList())
-                ?: listOf()
+            ?.stream()
+            ?.map { PotionEffect(it) }
+            ?.collect(Collectors.toList())
+            ?: listOf()
     }
 
     /**

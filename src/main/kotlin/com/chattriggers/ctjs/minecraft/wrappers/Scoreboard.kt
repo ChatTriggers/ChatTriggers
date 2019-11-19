@@ -40,7 +40,8 @@ object Scoreboard {
      *
      * @return the list of lines
      */
-    @JvmStatic @JvmOverloads
+    @JvmStatic
+    @JvmOverloads
     fun getLines(descending: Boolean = true): List<Score> {
         // the array will only be updated upon request
         if (needsUpdate) {
@@ -104,7 +105,8 @@ object Scoreboard {
             //#endif
 
             theScore.scorePoints = score
-        } catch (ignored: Exception) { }
+        } catch (ignored: Exception) {
+        }
     }
 
     @JvmStatic
@@ -122,14 +124,15 @@ object Scoreboard {
         try {
             val scoreboard = World.getWorld()?.scoreboard ?: return
             val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
-            scoreboardTitle = sidebarObjective!!.displayName
+            scoreboardTitle = sidebarObjective.displayName ?: return
 
             val scores = scoreboard.getSortedScores(sidebarObjective)
 
             scoreboardNames = scores.map {
                 Score(it)
             }.toMutableList()
-        } catch (ignored: Exception) { }
+        } catch (ignored: Exception) {
+        }
     }
 
     @JvmStatic
@@ -152,8 +155,8 @@ object Scoreboard {
          * @return the display name
          */
         fun getName(): String = ScorePlayerTeam.formatPlayerName(
-                World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
-                score.playerName
+            World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
+            score.playerName
         )
 
         override fun toString(): String = getName()

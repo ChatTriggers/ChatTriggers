@@ -67,9 +67,9 @@ object EventLib {
             is PlaySoundEvent ->
                 //#if MC<=10809
                 event.result = null
-                //#else
-                //$$ event.resultSound =null
-                //#endif
+            //#else
+            //$$ event.resultSound =null
+            //#endif
             is CancellableEvent -> event.setCanceled(true)
             else -> throw IllegalArgumentException()
         }

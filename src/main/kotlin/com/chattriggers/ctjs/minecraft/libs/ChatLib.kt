@@ -10,9 +10,10 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
-import jdk.nashorn.api.scripting.ScriptObjectMirror
 import net.minecraft.client.gui.ChatLine
+import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
+import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
 
 @External
@@ -31,6 +32,11 @@ object ChatLib {
             is TextComponent -> text.chat()
             else -> Message(text.toString()).chat()
         }
+    }
+
+    @JvmStatic
+    fun test(e: Any) {
+        println(e)
     }
 
     /**
@@ -76,9 +82,14 @@ object ChatLib {
      * Runs a command.
      *
      * @param text the command to run, without the leading slash (Ex. "help")
+     * @param clientSide should the command be ran as a client side command
      */
+    @JvmOverloads
     @JvmStatic
-    fun command(text: String) = say("/$text")
+    fun command(text: String, clientSide: Boolean = false) {
+        if (clientSide) ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
+        else say("/$text")
+    }
 
     @JvmStatic
     fun clearChat() {
@@ -179,8 +190,10 @@ object ChatLib {
         }
 
         return stringBuilder.deleteCharAt(
-                if (left) 0 else stringBuilder.length - 1).toString().replace(removeFormatting(text),
-                text
+            if (left) 0 else stringBuilder.length - 1
+        ).toString().replace(
+            removeFormatting(text),
+            text
         )
     }
 
@@ -194,7 +207,7 @@ object ChatLib {
      * @param replacements the new message(s) to be put in replace of the old one
      */
     @JvmStatic
-    fun editChat(regexp: ScriptObjectMirror, vararg replacements: Message) {
+    fun editChat(regexp: NativeObject, vararg replacements: Message) {
         val global = regexp["global"] as Boolean
         val ignoreCase = regexp["ignoreCase"] as Boolean
         val multiline = regexp["multiline"] as Boolean
@@ -202,11 +215,12 @@ object ChatLib {
         val flags = (if (ignoreCase) Pattern.CASE_INSENSITIVE else 0) or if (multiline) Pattern.MULTILINE else 0
         val pattern = Pattern.compile(regexp["source"] as String, flags)
 
-        editChat({
-                    val matcher = pattern.matcher(it.getChatMessage().unformattedText)
-                    if (global) matcher.find() else matcher.matches()
-                },
-                *replacements
+        editChat(
+            {
+                val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+                if (global) matcher.find() else matcher.matches()
+            },
+            *replacements
         )
     }
 
@@ -219,10 +233,10 @@ object ChatLib {
     @JvmStatic
     fun editChat(toReplace: String, vararg replacements: Message) {
         editChat(
-                {
-                    removeFormatting(it.getChatMessage().unformattedText) == toReplace
-                },
-                *replacements
+            {
+                removeFormatting(it.getChatMessage().unformattedText) == toReplace
+            },
+            *replacements
         )
     }
 
@@ -235,10 +249,13 @@ object ChatLib {
     @JvmStatic
     fun editChat(toReplace: Message, vararg replacements: Message) {
         editChat(
-                {
-                    toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst("\\u00a7r".toRegex(), "")
-                },
-                *replacements
+            {
+                toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
+                    "\\u00a7r".toRegex(),
+                    ""
+                )
+            },
+            *replacements
         )
     }
 
@@ -251,10 +268,10 @@ object ChatLib {
     @JvmStatic
     fun editChat(chatLineId: Int, vararg replacements: Message) {
         editChat(
-                {
-                    message -> message.getChatLineId() == chatLineId
-                },
-                *replacements
+            { message ->
+                message.getChatLineId() == chatLineId
+            },
+            *replacements
         )
     }
 
@@ -278,14 +295,18 @@ object ChatLib {
         editChatLineList(drawnChatLines, toReplace, *replacements)
     }
 
-    private fun editChatLineList(lineList: MutableList<ChatLine>, toReplace: (Message) -> Boolean, vararg replacements: Message) {
+    private fun editChatLineList(
+        lineList: MutableList<ChatLine>,
+        toReplace: (Message) -> Boolean,
+        vararg replacements: Message
+    ) {
         val chatLineIterator = lineList.listIterator()
 
         while (chatLineIterator.hasNext()) {
             val chatLine = chatLineIterator.next()
 
             val result = toReplace(
-                    Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)
+                Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)
             )
 
             if (!result) {

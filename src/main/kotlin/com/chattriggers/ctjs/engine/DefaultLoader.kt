@@ -23,13 +23,15 @@ object DefaultLoader {
         if (toDownload.exists()) {
             val content = FileLib.read(toDownload)
 
-            for (module in content!!.split(",".toRegex())) {
-                if ("\n" == module || "" == module) continue
+            if (content != null) {
+                for (module in content.split(",".toRegex())) {
+                    if ("\n" == module || "" == module) continue
 
-                importModule(module, false)
+                    importModule(module, false)
+                }
+
+                toDownload.delete()
             }
-
-            toDownload.delete()
         }
 
         return findModulesAndUpdate(updateCheck)
@@ -37,7 +39,7 @@ object DefaultLoader {
 
     fun importModule(name: String, extra: Boolean, isRequired: Boolean = false): List<Module>? {
         if (extra) {
-            Reference.conditionalThread ct@ {
+            Reference.conditionalThread ct@{
                 ChatLib.chat("&7Importing $name...")
                 val res = doImport(name)
 
@@ -46,9 +48,9 @@ object DefaultLoader {
                     return@ct
                 }
 
-                val moduleFolder = getFoldersInDir(modulesFolder).firstOrNull {
+                val moduleFolder = getFoldersInDir(modulesFolder).first {
                     it.name.toLowerCase() == name.toLowerCase()
-                }!!
+                }
 
                 val modules = getModule(moduleFolder, false)
 
@@ -70,9 +72,9 @@ object DefaultLoader {
                 return null
             }
 
-            val moduleFolder = getFoldersInDir(modulesFolder).firstOrNull {
+            val moduleFolder = getFoldersInDir(modulesFolder).first {
                 it.name.toLowerCase() == name.toLowerCase()
-            }!!
+            }
 
             return getModule(moduleFolder, false)
         }
@@ -92,13 +94,15 @@ object DefaultLoader {
         }.filter {
             it.exists() && !it.isFile
         }.map {
-            it.listFiles().toList()
+            it.listFiles()?.toList() ?: emptyList()
         }.flatten().forEach {
             FileUtils.copyFileToDirectory(it, toCopy)
         }
     }
 
     private fun findModulesAndUpdate(updateCheck: Boolean): List<Module> {
+        modulesFolder.mkdirs()
+
         return getFoldersInDir(modulesFolder).map {
             getModule(it, updateCheck)
         }.flatten().distinctBy {
@@ -127,7 +131,8 @@ object DefaultLoader {
 
                     val newMetadataFile = File(dir, "updateMeta.json")
 
-                    val connection = URL("https://www.chattriggers.com/downloads/metadata/${metadata.fileName}").openConnection()
+                    val connection =
+                        URL("https://www.chattriggers.com/api/modules/${metadata.fileName}/metadata?modVersion=${Reference.MODVERSION}").openConnection()
                     connection.setRequestProperty("User-Agent", "Mozilla/5.0")
                     FileUtils.copyInputStreamToFile(connection.getInputStream(), newMetadataFile)
 
@@ -151,18 +156,20 @@ object DefaultLoader {
             }
 
             modules.addAll(
-                    getRequiredModules(metadata, updateCheck)
+                getRequiredModules(metadata, updateCheck)
             )
         } catch (exception: Exception) {
             "Error loading module from $dir".print()
             exception.print()
         }
 
-        modules.add(Module(
+        modules.add(
+            Module(
                 dir.name,
                 metadata,
                 dir
-        ))
+            )
+        )
 
         return modules
     }
@@ -170,7 +177,7 @@ object DefaultLoader {
     private fun downloadModule(name: String, existCheck: Boolean): Boolean {
         if (existCheck) {
             try {
-                FileLib.getUrlContent("https://www.chattriggers.com/downloads/metadata/$name")
+                FileLib.getUrlContent("https://www.chattriggers.com/api/modules/$name/metadata?modVersion=${Reference.MODVERSION}")
             } catch (exception: Exception) {
                 exception.print()
                 return false
@@ -180,7 +187,7 @@ object DefaultLoader {
         try {
             val downloadZip = File(modulesFolder, "currDownload.zip")
 
-            val connection = URL("https://www.chattriggers.com/downloads/scripts/$name").openConnection()
+            val connection = URL("https://www.chattriggers.com/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}").openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
 
@@ -210,7 +217,7 @@ object DefaultLoader {
                 }
 
                 modules.addAll(
-                        newModules
+                    newModules
                 )
             } else {
                 val newModules = importModule(it.name, false, isRequired = true)

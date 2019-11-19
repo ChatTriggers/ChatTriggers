@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.objects.display
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
-import jdk.nashorn.api.scripting.ScriptObjectMirror
+import org.mozilla.javascript.NativeObject
 
 @External
 @NotAbstract
@@ -13,8 +13,8 @@ abstract class Display {
     private var renderY = 0f
     private var shouldRender = true
 
-    private var backgroundColor = 0x50000000
-    private var textColor = 0xffffffff.toInt()
+    private var backgroundColor: Long = 0x50000000
+    private var textColor: Long = 0xffffffff
 
     private var background = DisplayHandler.Background.NONE
     private var align = DisplayHandler.Align.LEFT
@@ -28,13 +28,13 @@ abstract class Display {
         DisplayHandler.registerDisplay(this)
     }
 
-    constructor(config: ScriptObjectMirror?) {
+    constructor(config: NativeObject?) {
         this.shouldRender = config.getOption("shouldRender", true).toBoolean()
         this.renderX = config.getOption("renderX", 0).toFloat()
         this.renderY = config.getOption("renderY", 0).toFloat()
 
-        this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toInt()
-        this.textColor = config.getOption("textColor", 0xffffffff.toInt()).toInt()
+        this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toLong()
+        this.textColor = config.getOption("textColor", 0xffffffff).toLong()
 
         this.setBackground(config.getOption("background", DisplayHandler.Background.NONE))
         this.setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
@@ -45,18 +45,18 @@ abstract class Display {
         DisplayHandler.registerDisplay(this)
     }
 
-    private fun ScriptObjectMirror?.getOption(key: String, default: Any): String {
+    private fun NativeObject?.getOption(key: String, default: Any): String {
         if (this == null) return default.toString()
         return this.getOrDefault(key, default).toString()
     }
 
-    fun getBackgroundColor(): Int = this.backgroundColor
-    fun setBackgroundColor(backgroundColor: Int) = apply {
+    fun getBackgroundColor(): Long = this.backgroundColor
+    fun setBackgroundColor(backgroundColor: Long) = apply {
         this.backgroundColor = backgroundColor
     }
 
-    fun getTextColor(): Int = this.textColor
-    fun setTextColor(textColor: Int) = apply {
+    fun getTextColor(): Long = this.textColor
+    fun setTextColor(textColor: Long) = apply {
         this.textColor = textColor
     }
 
@@ -69,7 +69,7 @@ abstract class Display {
         }
     }
 
-    fun getAlign(): DisplayHandler.Align= this.align
+    fun getAlign(): DisplayHandler.Align = this.align
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
@@ -88,7 +88,7 @@ abstract class Display {
     }
 
     fun setLine(index: Int, line: Any) = apply {
-        while (this.lines.size -1 < index) this.lines.add(createDisplayLine(""))
+        while (this.lines.size - 1 < index) this.lines.add(createDisplayLine(""))
         this.lines[index] = when (line) {
             is String -> createDisplayLine(line)
             is DisplayLine -> line
@@ -114,13 +114,15 @@ abstract class Display {
         else this.lines.add(index, toAdd)
     }
 
-    fun addLines(vararg lines: Any) = apply{
+    fun addLines(vararg lines: Any) = apply {
         lines.forEach {
-            this.lines.add(when (it) {
-                is String -> createDisplayLine(it)
-                is DisplayLine -> it
-                else -> createDisplayLine("")
-            })
+            this.lines.add(
+                when (it) {
+                    is String -> createDisplayLine(it)
+                    is DisplayLine -> it
+                    else -> createDisplayLine("")
+                }
+            )
         }
     }
 
@@ -180,9 +182,30 @@ abstract class Display {
 
     private fun drawLine(line: DisplayLine, x: Float, y: Float, maxWidth: Float) {
         when (this.align) {
-            DisplayHandler.Align.LEFT -> line.drawLeft(x, y, maxWidth, this.background, this.backgroundColor, this.textColor)
-            DisplayHandler.Align.RIGHT -> line.drawRight(x, y, maxWidth, this.background, this.backgroundColor, this.textColor)
-            DisplayHandler.Align.CENTER -> line.drawCenter(x, y, maxWidth, this.background, this.backgroundColor, this.textColor)
+            DisplayHandler.Align.LEFT -> line.drawLeft(
+                x,
+                y,
+                maxWidth,
+                this.background,
+                this.backgroundColor,
+                this.textColor
+            )
+            DisplayHandler.Align.RIGHT -> line.drawRight(
+                x,
+                y,
+                maxWidth,
+                this.background,
+                this.backgroundColor,
+                this.textColor
+            )
+            DisplayHandler.Align.CENTER -> line.drawCenter(
+                x,
+                y,
+                maxWidth,
+                this.background,
+                this.backgroundColor,
+                this.textColor
+            )
             else -> return
         }
     }
@@ -190,13 +213,13 @@ abstract class Display {
     internal abstract fun createDisplayLine(text: String): DisplayLine
 
     override fun toString() =
-            "Display{" +
-                    "shouldRender=$shouldRender, " +
-                    "renderX=$renderX, renderY=$renderY, " +
-                    "background=$background, backgroundColor=$backgroundColor, " +
-                    "textColor=$textColor, align=$align, order=$order, " +
-                    "minWidth=$minWidth, width=$width, height=$height, " +
-                    "lines=$lines" +
-                    "}"
+        "Display{" +
+                "shouldRender=$shouldRender, " +
+                "renderX=$renderX, renderY=$renderY, " +
+                "background=$background, backgroundColor=$backgroundColor, " +
+                "textColor=$textColor, align=$align, order=$order, " +
+                "minWidth=$minWidth, width=$width, height=$height, " +
+                "lines=$lines" +
+                "}"
 
 }

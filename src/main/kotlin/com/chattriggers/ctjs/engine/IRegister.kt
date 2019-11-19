@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.engine
 
 import com.chattriggers.ctjs.engine.module.Module
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.*
 import kotlin.reflect.full.memberFunctions
 

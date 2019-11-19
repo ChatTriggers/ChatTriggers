@@ -16,7 +16,6 @@
 -dontwarn net.minecraft.**
 -dontwarn net.minecraftforge.**
 -dontwarn javax.**
--dontwarn jdk.nashorn.**
 -dontwarn org.lwjgl.**
 -dontwarn paulscode.**
 -dontwarn org.jetbrains.**
@@ -28,6 +27,7 @@
 -keep class org.spongepowered.** { *; }
 -keep class kotlin.reflect.jvm.** { *; }
 -keep class me.falsehonesty.asmhelper.** { *; }
+-keep class org.mozilla.** { *; }
 
 -keepattributes *Annotation*
 

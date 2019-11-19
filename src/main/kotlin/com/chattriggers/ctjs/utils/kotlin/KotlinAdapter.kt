@@ -29,7 +29,12 @@ class KotlinAdapter : ILanguageAdapter {
         target.set(proxyTarget.kotlin.objectInstance, proxy)
     }
 
-    override fun getNewInstance(container: FMLModContainer, objectClass: Class<*>, classLoader: ClassLoader, factoryMarkedAnnotation: Method?): Any {
+    override fun getNewInstance(
+        container: FMLModContainer,
+        objectClass: Class<*>,
+        classLoader: ClassLoader,
+        factoryMarkedAnnotation: Method?
+    ): Any {
         log.debug("FML has asked for ${objectClass.simpleName} to be constructed")
         return objectClass.kotlin.objectInstance ?: objectClass.newInstance()
     }

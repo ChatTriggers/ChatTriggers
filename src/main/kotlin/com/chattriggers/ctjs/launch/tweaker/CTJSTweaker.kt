@@ -7,7 +7,6 @@ import org.spongepowered.asm.launch.MixinBootstrap
 import org.spongepowered.asm.mixin.MixinEnvironment
 import org.spongepowered.asm.mixin.Mixins
 import java.io.File
-import java.net.MalformedURLException
 import java.net.URISyntaxException
 
 class CTJSTweaker : ITweaker {
@@ -34,13 +33,6 @@ class CTJSTweaker : ITweaker {
             println("No CodeSource, if this is not a development environment we might run into problems!")
             println(javaClass.protectionDomain)
         }
-
-        try {
-            classLoader.addURL(File(System.getProperty("java.home"), "lib/ext/nashorn.jar").toURI().toURL())
-        } catch (e: MalformedURLException) {
-            e.printStackTrace()
-        }
-
     }
 
     override fun getLaunchTarget(): String {

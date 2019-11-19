@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.util.concurrent.CompletableFuture
 
 interface ILoader {
     var triggers: MutableList<OnTrigger>
@@ -19,7 +20,7 @@ interface ILoader {
      * a full load, which is different from [loadExtra], as this method
      * should clear old modules.
      */
-    fun load(modules: List<Module>)
+    fun load(modules: List<Module>): CompletableFuture<Unit>
 
     /**
      * Loads a single Module into the loader. This differs from [load] in that
@@ -32,16 +33,14 @@ interface ILoader {
      * Tells the loader that it should activate all triggers
      * of a certain type with the specified arguments.
      */
-    fun exec(type: TriggerType, vararg args: Any?) {
+    fun exec(type: TriggerType, args: Array<out Any?>) {
         val newTriggers = triggers.toMutableList()
         newTriggers.removeAll(toRemove)
         toRemove.clear()
 
         newTriggers.filter {
             it.type == type
-        }.forEach {
-            it.trigger(*args)
-        }
+        }.forEach { it.trigger(*args) }
 
         triggers = newTriggers
     }
@@ -49,7 +48,7 @@ interface ILoader {
     /**
      * Gets the result from evaluating a certain line of code in this loader
      */
-    fun eval(code: String): Any?
+    fun eval(code: String): String?
 
     /**
      * Adds a trigger to this loader to be activated during the game
@@ -78,7 +77,7 @@ interface ILoader {
     /**
      * Actually calls the method for this trigger in this loader
      */
-    fun trigger(trigger: OnTrigger, method: Any, vararg args: Any?)
+    fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>)
 
     /**
      * Removes a trigger from the current pool
@@ -105,7 +104,7 @@ interface ILoader {
 
         val parsedResourceName = resourceName.replace('\\', '/')
         val resource = this.javaClass.getResourceAsStream(parsedResourceName)
-                ?: throw IllegalArgumentException("The embedded resource '$parsedResourceName' cannot be found.")
+            ?: throw IllegalArgumentException("The embedded resource '$parsedResourceName' cannot be found.")
 
         val res = resource.bufferedReader().readText()
         FileUtils.write(outputFile, res)

@@ -1,15 +1,17 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory
 
+import com.chattriggers.ctjs.engine.langs.js.JSONImpl
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.inventory.Container
+import net.minecraft.inventory.ContainerChest
 import net.minecraft.inventory.IInventory
 
 @External
-class Inventory {
+class Inventory : JSONImpl {
     val inventory: IInventory?
     val container: Container?
 
@@ -63,7 +65,7 @@ class Inventory {
      * @param item the item for checking
      * @return whether or not it can be shift clicked in
      */
-    fun isItemValidForSlot(slot: Int, item: Item): Boolean  {
+    fun isItemValidForSlot(slot: Int, item: Item): Boolean {
         return inventory == null
                 || inventory.isItemValidForSlot(slot, item.itemStack)
     }
@@ -155,7 +157,12 @@ class Inventory {
      *
      * @return the name of the inventory
      */
-    fun getName(): String = inventory?.name ?: "container"
+    fun getName(): String {
+        return when (container) {
+            is ContainerChest -> container.lowerChestInventory.name
+            else -> inventory?.name ?: "container"
+        }
+    }
 
     fun getClassName(): String = inventory?.javaClass?.simpleName ?: container!!.javaClass.simpleName
 

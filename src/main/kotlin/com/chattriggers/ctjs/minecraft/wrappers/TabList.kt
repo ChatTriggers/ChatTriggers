@@ -9,10 +9,12 @@ import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
-import java.util.Comparator
+import java.util.*
 
 @External
 object TabList {
+    private val playerComparator = Ordering.from(PlayerComparator())
+
     /**
      * Gets names set in scoreboard objectives
      *
@@ -21,7 +23,7 @@ object TabList {
     @JvmStatic
     fun getNamesByObjectives(): List<String> {
         return try {
-            val scoreboard = World.getWorld()!!.scoreboard
+            val scoreboard = World.getWorld()?.scoreboard ?: return emptyList()
             val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0)
             val scores = scoreboard.getSortedScores(sidebarObjective)
 
@@ -30,7 +32,18 @@ object TabList {
                 ScorePlayerTeam.formatPlayerName(team, it.playerName)
             }
         } catch (e: Exception) {
-            listOf()
+            emptyList()
+        }
+    }
+
+    @JvmStatic
+    fun getNames(): List<String> {
+        if (Client.getTabGui() == null) return listOf()
+
+        val playerList = playerComparator.sortedCopy(Client.getMinecraft().thePlayer.sendQueue.playerInfoMap)
+
+        return playerList.map {
+            Client.getTabGui()!!.getPlayerName(it)
         }
     }
 
@@ -40,7 +53,7 @@ object TabList {
      * @return the unformatted names
      */
     @JvmStatic
-    fun getNames(): List<String> {
+    fun getUnformattedNames(): List<String> {
         if (Player.getPlayer() == null) return listOf()
 
         val tab = Ordering.from(PlayerComparator())
@@ -60,7 +73,7 @@ object TabList {
 
     @JvmStatic
     fun setHeader(header: Any) {
-        when(header) {
+        when (header) {
             is String -> Client.getTabGui()?.setHeader(Message(header).getChatMessage())
             is Message -> Client.getTabGui()?.setHeader(header.getChatMessage())
             is ITextComponent -> Client.getTabGui()?.setHeader(header)
@@ -75,7 +88,7 @@ object TabList {
 
     @JvmStatic
     fun setFooter(footer: Any) {
-        when(footer) {
+        when (footer) {
             is String -> Client.getTabGui()?.setHeader(Message(footer).getChatMessage())
             is Message -> Client.getTabGui()?.setHeader(footer.getChatMessage())
             is ITextComponent -> Client.getTabGui()?.setHeader(footer)
@@ -88,22 +101,22 @@ object TabList {
             val teamTwo = playerTwo.playerTeam
 
             return ComparisonChain
-                    .start()
-                    .compareTrueFirst(
-                            playerOne.gameType != GameType.SPECTATOR,
-                            playerTwo.gameType != GameType.SPECTATOR
-                    ).compare(
-                            //#if MC<=10809
-                            teamOne?.registeredName ?: "",
-                            teamTwo?.registeredName ?: ""
-                            //#else
-                            //$$ teamOne?.name ?: "",
-                            //$$ teamTwo?.name ?: ""
-                            //#endif
-                    ).compare(
-                            playerOne.gameProfile.name,
-                            playerTwo.gameProfile.name
-                    ).result()
+                .start()
+                .compareTrueFirst(
+                    playerOne.gameType != GameType.SPECTATOR,
+                    playerTwo.gameType != GameType.SPECTATOR
+                ).compare(
+                    //#if MC<=10809
+                    teamOne?.registeredName ?: "",
+                    teamTwo?.registeredName ?: ""
+                    //#else
+                    //$$ teamOne?.name ?: "",
+                    //$$ teamTwo?.name ?: ""
+                    //#endif
+                ).compare(
+                    playerOne.gameProfile.name,
+                    playerTwo.gameProfile.name
+                ).result()
         }
     }
 }

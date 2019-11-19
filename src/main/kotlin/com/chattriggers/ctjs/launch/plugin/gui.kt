@@ -23,8 +23,13 @@ private fun injectTooltipTrigger() = inject {
     // net/minecraft/item/Item;getFontRenderer(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/gui/FontRenderer;
     at = At(
         InjectionPoint.INVOKE(
-        Descriptor("net/minecraft/item/Item", "getFontRenderer", "(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/gui/FontRenderer;")
-    ), before = false, shift = 1)
+            Descriptor(
+                "net/minecraft/item/Item",
+                "getFontRenderer",
+                "(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/gui/FontRenderer;"
+            )
+        ), before = false, shift = 1
+    )
 
     codeBlock {
         val local4 = shadowLocal<List<String>>()

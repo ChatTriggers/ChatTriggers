@@ -1,14 +1,13 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
 
 @External
 class OnStepTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.STEP, loader) {
     private var fps: Long = 60L
-    private var delay: Long? = null
+    private var delay: Long = -1
     private var systemTime: Long = Client.getSystemTime()
     private var elapsed: Long = 0L
 
@@ -31,21 +30,21 @@ class OnStepTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerTyp
      */
     fun setDelay(delay: Long) = apply {
         this.delay = if (delay < 1) 1L else delay
-        this.systemTime = Client.getSystemTime() - this.delay!! * 1000
+        this.systemTime = Client.getSystemTime() - this.delay * 1000
     }
 
-    override fun trigger(vararg args: Any?) {
-        if (this.delay == null) {
+    override fun trigger(args: Array<out Any?>) {
+        if (this.delay < 0) {
             // run trigger based on set fps value (60 per second by default)
             while (this.systemTime < Client.getSystemTime() + 1000 / this.fps) {
-                callMethod(++this.elapsed)
+                callMethod(arrayOf(++this.elapsed))
                 this.systemTime += 1000 / this.fps
             }
         } else {
             // run trigger based on set delay in seconds
-            while (Client.getSystemTime() > this.systemTime + this.delay!! * 1000) {
-                callMethod(++this.elapsed)
-                this.systemTime += this.delay!! * 1000
+            while (Client.getSystemTime() > this.systemTime + this.delay * 1000) {
+                callMethod(arrayOf(++this.elapsed))
+                this.systemTime += this.delay * 1000
             }
         }
     }

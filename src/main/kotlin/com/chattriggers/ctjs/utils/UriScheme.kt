@@ -1,8 +1,6 @@
 package com.chattriggers.ctjs.utils
 
-import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.ModuleManager
 import net.minecraftforge.fml.common.Loader
 import java.io.BufferedReader
@@ -19,18 +17,18 @@ object UriScheme {
     fun installUriScheme() {
         try {
             regAdd(
-                    " /f /ve /d " + quote("URL:chattriggers Protocol")
+                " /f /ve /d " + quote("URL:chattriggers Protocol")
             )
 
             regAdd(
-                    " /f /v " +
-                            quote("URL Protocol") +
-                            " /d " +
-                            quote("")
+                " /f /v " +
+                        quote("URL Protocol") +
+                        " /d " +
+                        quote("")
             )
 
-            val container = Loader.instance().indexedModList[Reference.MODID]
-            val modJar = container!!.source.absolutePath
+            val container = Loader.instance().indexedModList.getValue(Reference.MODID)
+            val modJar = container.source.absolutePath
 
             val sep = File.separator
             val javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "javaw.exe"
@@ -38,8 +36,8 @@ object UriScheme {
             val value = """\"$javaProgram\" -cp \"$modJar\" com.chattriggers.ctjs.loader.UriScheme \"%1\""""
 
             regAdd(
-                    ("\\shell\\open\\command /f /ve /d " +
-                            "\"" + value + "\"")
+                ("\\shell\\open\\command /f /ve /d " +
+                        "\"" + value + "\"")
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -71,7 +69,7 @@ object UriScheme {
                         serverSocket.accept().use { clientSocket ->
                             val inputStream = clientSocket.getInputStream()
                             val module = BufferedReader(InputStreamReader(inputStream))
-                                    .lines().collect(Collectors.joining("\n"))
+                                .lines().collect(Collectors.joining("\n"))
                             ModuleManager.importModule(module)
                         }
                     } catch (e: Exception) {
