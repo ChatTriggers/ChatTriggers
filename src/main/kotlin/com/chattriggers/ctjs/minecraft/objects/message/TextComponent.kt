@@ -74,7 +74,7 @@ class TextComponent {
 
     /**
      * Sets the click action and value of the component.
-     * See [setClickAction] for possible click actions.
+     * See [TextComponent.setClickAction] for possible click actions.
      * @param action the click action
      * @param value the click value
      */
@@ -111,7 +111,7 @@ class TextComponent {
 
     /**
      * Sets the value to be used by the click action.
-     * See [clickAction] for possible click actions.
+     * See [TextComponent.setClickAction] for possible click actions.
      * @param value the click value
      */
     fun setClickValue(value: String) = apply {
@@ -121,7 +121,7 @@ class TextComponent {
 
     /**
      * Sets the hover action and value of the component.
-     * See [hoverAction] for possible hover actions.
+     * See [TextComponent.setHoverValue] for possible hover actions.
      * @param action the hover action
      * @param value the hover value
      */
@@ -158,7 +158,7 @@ class TextComponent {
 
     /**
      * Sets the value to be used by the hover action.
-     * See [hoverAction] for possible hover actions.
+     * See [TextComponent.setHoverValue] for possible hover actions.
      * @param value the hover value
      */
     fun setHoverValue(value: String) = apply {

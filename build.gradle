@@ -221,6 +221,52 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
     jdkVersion = 8
 
     classpath += configurations.compile
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.engine"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.utils"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.listeners"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.minecraft.imixins"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.loader"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.launch"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.commands"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.minecraft.wrappers.objects.threading"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.minecraft.mixins"
+        suppress = true
+    }
+
 //    exclude "com/chattriggers/ctjs/commands/**.java"
 //    exclude "com/chattriggers/ctjs/listeners/**.java"
 //    exclude "com/chattriggers/ctjs/utils/*/**.java"
