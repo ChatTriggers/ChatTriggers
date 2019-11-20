@@ -24,14 +24,12 @@ class Message {
 
     /**
      * Creates a new Message object from a chat event.
-     *
      * @param event the chat event
      */
     constructor(event: ClientChatReceivedEvent) : this(event.message)
 
     /**
      * Creates a new Message object from an IChatComponent.
-     *
      * @param component the IChatComponent
      */
     constructor(component: ITextComponent) {
@@ -44,7 +42,6 @@ class Message {
 
     /**
      * Creates a new Message object in parts of TextComponents or Strings.
-     *
      * @param messageParts the list of TextComponents or Strings
      */
     constructor(messageParts: ArrayList<Any>) {
@@ -59,36 +56,67 @@ class Message {
 
     /**
      * Creates a new Message object in parts of TextComponents or Strings.
-     *
      * @param components the TextComponents or Strings
      */
     constructor(vararg components: Any) : this(ArrayList(components.asList()))
 
-
+    /**
+     * @return the parsed message as an ITextComponent
+     */
     fun getChatMessage(): ITextComponent {
         parseMessage()
         return this.chatMessage
     }
 
     /**
-     * Gets the message TextComponent parts as a list.
-     *
-     * @return the message parts
+     * @return the formatted text of the parsed message
+     */
+    fun getFormattedText(): String = getChatMessage().formattedText
+
+    /**
+     * @return the unformatted text of the parsed message
+     */
+    fun getUnformattedText(): String = getChatMessage().unformattedText
+
+    /**
+     * @return the message [TextComponent] parts as a list.
      */
     fun getMessageParts(): List<TextComponent> = this.messageParts
 
+    /**
+     * @return the chat line ID of the message
+     */
     fun getChatLineId(): Int = this.chatLineId
+
+    /**
+     * Sets the chat line ID of the message. Useful for updating an already sent chat message.
+     */
     fun setChatLineId(id: Int) = apply { this.chatLineId = id }
 
+    /**
+     * @return true if the message can trip other triggers.
+     */
     fun isRecursive(): Boolean = this.recursive
+
+    /**
+     * Sets whether or not the message can trip other triggers.
+     * @param recursive true if message can trip other triggers.
+     */
     fun setRecursive(recursive: Boolean) = apply { this.recursive = recursive }
 
+    /**
+     * @return true if the message is formatted
+     */
     fun isFormatted(): Boolean = this.formatted
+
+    /**
+     * Sets if the message is to be formatted
+     * @param formatted true if formatted
+     */
     fun setFormatted(formatted: Boolean) = apply { this.formatted = formatted }
 
     /**
      * Sets the TextComponent or String in the Message at index.
-     *
      * @param index    the index of the TextComponent or String to change
      * @param component the new TextComponent or String to replace with
      * @return the Message for method chaining
@@ -102,7 +130,6 @@ class Message {
 
     /**
      * Adds a TextComponent or String to the end of the Message.
-     *
      * @param component the new TextComponent or String to add
      * @return the Message for method chaining
      */
@@ -115,7 +142,6 @@ class Message {
 
     /**
      * Adds a TextComponent or String at index of the Message.
-     *
      * @param index the index to insert the new TextComponent or String
      * @param component the new TextComponent or String to insert
      * @return the Message for method chaining
@@ -138,7 +164,6 @@ class Message {
 
     /**
      * Edits this message (once it is already sent)
-     *
      * @param replacements the new message(s) to be put in place of the old one
      */
     fun edit(vararg replacements: Message) {
