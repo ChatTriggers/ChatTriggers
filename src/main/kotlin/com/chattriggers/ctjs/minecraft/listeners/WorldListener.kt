@@ -1,20 +1,21 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.Server
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.triggers.TriggerType
 import io.sentry.Sentry
 import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.world.BlockEvent
 import net.minecraftforge.event.world.NoteBlockEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import javax.vecmath.Vector3d
-import javax.vecmath.Vector3f
+import org.lwjgl.util.vector.Vector3f
 
 object WorldListener {
     private var shouldTriggerWorldLoad: Boolean = false
@@ -42,6 +43,12 @@ object WorldListener {
             .forEach { it.onWorldLoad() }
 
         CTJS.sounds.clear()
+    }
+
+    @SubscribeEvent
+    fun onRenderWorld(event: RenderWorldLastEvent) {
+        Tessellator.partialTicks = event.partialTicks
+        TriggerType.RENDER_WORLD.triggerAll(event.partialTicks)
     }
 
     @SubscribeEvent
@@ -85,10 +92,10 @@ object WorldListener {
 
     @SubscribeEvent
     fun noteBlockEventPlay(event: NoteBlockEvent.Play) {
-        val position = Vector3d(
-            event.pos.x.toDouble(),
-            event.pos.y.toDouble(),
-            event.pos.z.toDouble()
+        val position = Vector3f(
+            event.pos.x.toFloat(),
+            event.pos.y.toFloat(),
+            event.pos.z.toFloat()
         )
 
         TriggerType.NOTE_BLOCK_PLAY.triggerAll(
@@ -101,10 +108,10 @@ object WorldListener {
 
     @SubscribeEvent
     fun noteBlockEventChange(event: NoteBlockEvent.Change) {
-        val position = Vector3d(
-            event.pos.x.toDouble(),
-            event.pos.y.toDouble(),
-            event.pos.z.toDouble()
+        val position = Vector3f(
+            event.pos.x.toFloat(),
+            event.pos.y.toFloat(),
+            event.pos.z.toFloat()
         )
 
         TriggerType.NOTE_BLOCK_CHANGE.triggerAll(

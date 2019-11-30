@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
-import javax.vecmath.Vector3d
+import org.lwjgl.util.vector.Vector3f
 
 object ClientListener {
     private var ticksPassed: Int = 0
@@ -89,11 +89,6 @@ object ClientListener {
     }
 
     @SubscribeEvent
-    fun onRenderWorld(event: RenderWorldLastEvent) {
-        TriggerType.RENDER_WORLD.triggerAll(event.partialTicks)
-    }
-
-    @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent) {
         GL11.glPushMatrix()
         handleOverlayTriggers(event)
@@ -135,10 +130,10 @@ object ClientListener {
     fun onBlockHighlight(event: DrawBlockHighlightEvent) {
         if (event.target == null || event.target.blockPos == null) return
 
-        val position = Vector3d(
-            event.target.blockPos.x.toDouble(),
-            event.target.blockPos.y.toDouble(),
-            event.target.blockPos.z.toDouble()
+        val position = Vector3f(
+            event.target.blockPos.x.toFloat(),
+            event.target.blockPos.y.toFloat(),
+            event.target.blockPos.z.toFloat()
         )
 
         TriggerType.BLOCK_HIGHLIGHT.triggerAll(position, event)
@@ -152,15 +147,15 @@ object ClientListener {
 
         val item = event.item
 
-        val position = Vector3d(
-            item.posX,
-            item.posY,
-            item.posZ
+        val position = Vector3f(
+            item.posX.toFloat(),
+            item.posY.toFloat(),
+            item.posZ.toFloat()
         )
-        val motion = Vector3d(
-            item.motionX,
-            item.motionY,
-            item.motionZ
+        val motion = Vector3f(
+            item.motionX.toFloat(),
+            item.motionY.toFloat(),
+            item.motionZ.toFloat()
         )
 
         TriggerType.PICKUP_ITEM.triggerAll(
@@ -217,7 +212,7 @@ object ClientListener {
 
         TriggerType.PLAYER_INTERACT.triggerAll(
             action,
-            Vector3d((e.pos?.x ?: 0).toDouble(), (e.pos?.y ?: 0).toDouble(), (e.pos?.z ?: 0).toDouble()),
+            Vector3f((e.pos?.x ?: 0).toFloat(), (e.pos?.y ?: 0).toFloat(), (e.pos?.z ?: 0).toFloat()),
             e
         )
     }

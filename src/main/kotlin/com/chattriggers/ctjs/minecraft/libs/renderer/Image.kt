@@ -66,16 +66,18 @@ class Image(var image: BufferedImage?) {
 
         Renderer.drawImage(this, x, y, width, height)
     }
-}
 
-private fun getBufferedImage(name: String, url: String? = null): BufferedImage? {
-    val resourceFile = File(CTJS.assetsDir, name)
+    companion object {
+        private fun getBufferedImage(name: String, url: String? = null): BufferedImage? {
+            val resourceFile = File(CTJS.assetsDir, name)
 
-    if (resourceFile.exists()) {
-        return ImageIO.read(resourceFile)
+            if (resourceFile.exists()) {
+                return ImageIO.read(resourceFile)
+            }
+
+            val image = ImageIO.read(URL(url))
+            ImageIO.write(image, "png", resourceFile)
+            return image
+        }
     }
-
-    val image = ImageIO.read(URL(url))
-    ImageIO.write(image, "png", resourceFile)
-    return image
 }

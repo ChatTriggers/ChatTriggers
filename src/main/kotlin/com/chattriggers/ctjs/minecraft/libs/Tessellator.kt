@@ -11,9 +11,12 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
+import org.lwjgl.util.vector.Vector3f
+import kotlin.math.sqrt
 
 @External
 object Tessellator {
+    var partialTicks = 0f
     private var tessellator = MCTessellator.getInstance()
     private var worldRenderer = this.tessellator.getRenderer()
 
@@ -173,29 +176,43 @@ object Tessellator {
     }
 
     /**
+     * Gets a fixed render position from x, y, and z inputs adjusted with partial ticks
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return the [Position] to render at
+     */
+    fun getRenderPos(x: Float, y: Float, z: Float): Vector3f {
+        return Vector3f(
+            x - (Player.getPlayer()!!.lastTickPosX + (Player.getPlayer()!!.posX - Player.getPlayer()!!.lastTickPosX) * partialTicks).toFloat(),
+            y - (Player.getPlayer()!!.lastTickPosY + (Player.getPlayer()!!.posY - Player.getPlayer()!!.lastTickPosY) * partialTicks).toFloat(),
+            z - (Player.getPlayer()!!.lastTickPosZ + (Player.getPlayer()!!.posZ - Player.getPlayer()!!.lastTickPosZ) * partialTicks).toFloat()
+        )
+    }
+
+    /**
      * Renders floating lines of text in the 3D world at a specific position.
      *
      * @param text           The string array of text to render
      * @param x              X coordinate in the game world
      * @param y              Y coordinate in the game world
      * @param z              Z coordinate in the game world
-     * @param renderBlackBox render a pretty black border behind the text
-     * @param partialTicks   the partial ticks of the current render pass, passed in through the world render trigger
-     * @param scale          the scale of the text
      * @param color          the color of the text
+     * @param renderBlackBox render a pretty black border behind the text
+     * @param scale          the scale of the text
      * @param increase       whether or not to scale the text up as the player moves away
      */
     @JvmStatic
+    @JvmOverloads
     fun drawString(
         text: String,
         x: Float,
         y: Float,
         z: Float,
-        renderBlackBox: Boolean,
-        partialTicks: Float,
-        scale: Float,
-        color: Int,
-        increase: Boolean
+        color: Int = 0xffffffff.toInt(),
+        renderBlackBox: Boolean = true,
+        scale: Float = 1f,
+        increase: Boolean = true
     ) {
         var lScale = scale
         val mc = Minecraft.getMinecraft()
@@ -203,26 +220,17 @@ object Tessellator {
         val renderManager = mc.renderManager
         val fontRenderer = Renderer.getFontRenderer()
 
-        val playerX =
-            (Player.getPlayer()!!.lastTickPosX + (Player.getPlayer()!!.posX - Player.getPlayer()!!.lastTickPosX) * partialTicks).toFloat()
-        val playerY =
-            (Player.getPlayer()!!.lastTickPosY + (Player.getPlayer()!!.posY - Player.getPlayer()!!.lastTickPosY) * partialTicks).toFloat()
-        val playerZ =
-            (Player.getPlayer()!!.lastTickPosZ + (Player.getPlayer()!!.posZ - Player.getPlayer()!!.lastTickPosZ) * partialTicks).toFloat()
-
-        val dx = x - playerX
-        val dy = y - playerY
-        val dz = z - playerZ
+        val renderPos = getRenderPos(x, y, z)
 
         if (increase) {
-            val distance = Math.sqrt((dx * dx + dy * dy + dz * dz).toDouble()).toFloat()
+            val distance = sqrt(renderPos.x * renderPos.x + renderPos.y * renderPos.y + renderPos.z * renderPos.z)
             val multiplier = distance / 120f //mobs only render ~120 blocks away
             lScale *= 0.45f * multiplier
         }
 
         GL11.glColor4f(1f, 1f, 1f, 0.5f)
         GL11.glPushMatrix()
-        GL11.glTranslatef(dx, dy, dz)
+        GL11.glTranslatef(renderPos.x, renderPos.y, renderPos.z)
         GL11.glRotatef(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         GL11.glRotatef(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
         GL11.glScalef(-lScale, -lScale, lScale)
