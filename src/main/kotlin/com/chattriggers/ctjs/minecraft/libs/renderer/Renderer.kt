@@ -13,6 +13,7 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
+import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
 import org.lwjgl.opengl.GL11
@@ -90,6 +91,11 @@ object Renderer {
         //#else
         //$$ return Client.getMinecraft().fontRenderer
         //#endif
+    }
+
+    @JvmStatic
+    fun getRenderManager(): RenderManager {
+        return Client.getMinecraft().renderManager
     }
 
     @JvmStatic

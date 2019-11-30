@@ -182,6 +182,7 @@ object Tessellator {
      * @param z the Z coordinate
      * @return the Vector3f position to render at
      */
+    @JvmStatic
     fun getRenderPos(x: Float, y: Float, z: Float): Vector3f {
         return Vector3f(
             x - (Player.getPlayer()!!.lastTickPosX + (Player.getPlayer()!!.posX - Player.getPlayer()!!.lastTickPosX) * partialTicks).toFloat(),
@@ -215,9 +216,8 @@ object Tessellator {
         increase: Boolean = true
     ) {
         var lScale = scale
-        val mc = Minecraft.getMinecraft()
 
-        val renderManager = mc.renderManager
+        val renderManager = Renderer.getRenderManager()
         val fontRenderer = Renderer.getFontRenderer()
 
         val renderPos = getRenderPos(x, y, z)
