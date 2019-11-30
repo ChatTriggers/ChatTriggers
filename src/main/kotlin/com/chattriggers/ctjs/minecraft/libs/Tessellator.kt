@@ -180,7 +180,7 @@ object Tessellator {
      * @param x the X coordinate
      * @param y the Y coordinate
      * @param z the Z coordinate
-     * @return the [Position] to render at
+     * @return the Vector3f position to render at
      */
     fun getRenderPos(x: Float, y: Float, z: Float): Vector3f {
         return Vector3f(
