@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
@@ -75,23 +74,6 @@ object World {
         //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
         //$$ getWorld()?.playRecord(BlockPos(x, y, z), sound)
         //#endif
-    }
-
-    /**
-     * Display a title.
-     *
-     * @param title    title text
-     * @param subtitle subtitle text
-     * @param fadeIn   time to fade in
-     * @param time     time to stay on screen
-     * @param fadeOut  time to fade out
-     */
-    @JvmStatic
-    fun showTitle(title: String, subtitle: String, fadeIn: Int, time: Int, fadeOut: Int) {
-        val gui = Client.getMinecraft().ingameGUI
-        gui.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut)
-        gui.displayTitle(null, ChatLib.addColor(subtitle), fadeIn, time, fadeOut)
-        gui.displayTitle(null, null, fadeIn, time, fadeOut)
     }
 
     @JvmStatic
