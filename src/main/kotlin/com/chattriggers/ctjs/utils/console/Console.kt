@@ -35,7 +35,8 @@ class Console(val loader: ILoader?) {
         val caret = textArea.caret as DefaultCaret
         caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
         inputField.caretColor = Color.WHITE
-        inputField.font = FIRA_FONT
+        val attrs = FIRA_FONT.attributes.apply { (this as MutableMap<TextAttribute, Any>)[TextAttribute.LIGATURES] = TextAttribute.LIGATURES_ON }
+        inputField.font = FIRA_FONT.deriveFont(attrs)
 
         inputField.margin = Insets(5, 5, 5, 5)
         textArea.margin = Insets(5, 5, 5, 5)
@@ -220,18 +221,15 @@ class Console(val loader: ILoader?) {
     companion object {
         val FIRA_FONT: Font
 
-
         init {
-            val font = Font.createFont(
+            FIRA_FONT = Font.createFont(
                 Font.TRUETYPE_FONT,
                 this::class.java.getResourceAsStream("/FiraCode-Regular.otf")
             ).deriveFont(9f)
 
-            val attrs = font.attributes.apply { (this as MutableMap<TextAttribute, Any>)[TextAttribute.LIGATURES] = TextAttribute.LIGATURES_ON }
-
-            FIRA_FONT = font.deriveFont(attrs)
-
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FIRA_FONT)
+
+            println("Registered font.")
         }
     }
 }
