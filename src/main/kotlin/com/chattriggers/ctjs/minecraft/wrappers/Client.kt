@@ -212,7 +212,7 @@ object Client {
          */
         @JvmStatic
         fun close() {
-            getMinecraft().displayGuiScreen(null)
+            Player.getPlayer()?.closeScreen()
         }
     }
 
