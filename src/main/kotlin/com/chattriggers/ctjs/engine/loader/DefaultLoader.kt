@@ -1,10 +1,11 @@
-package com.chattriggers.ctjs.engine
+package com.chattriggers.ctjs.engine.loader
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.ILoader.Companion.getFoldersInDir
-import com.chattriggers.ctjs.engine.ILoader.Companion.modulesFolder
+import com.chattriggers.ctjs.engine.loader.ILoader.Companion.getFoldersInDir
+import com.chattriggers.ctjs.engine.loader.ILoader.Companion.modulesFolder
 import com.chattriggers.ctjs.engine.module.Module
+import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
@@ -156,7 +157,7 @@ object DefaultLoader {
             }
 
             modules.addAll(
-                getRequiredModules(metadata, updateCheck)
+                    getRequiredModules(metadata, updateCheck)
             )
         } catch (exception: Exception) {
             "Error loading module from $dir".print()

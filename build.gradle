@@ -223,7 +223,17 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
     classpath += configurations.compile
 
     packageOptions {
-        prefix = "com.chattriggers.ctjs.engine"
+        prefix = "com.chattriggers.ctjs.engine.langs"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.engine.loader"
+        suppress = true
+    }
+
+    packageOptions {
+        prefix = "com.chattriggers.ctjs.engine.module"
         suppress = true
     }
 

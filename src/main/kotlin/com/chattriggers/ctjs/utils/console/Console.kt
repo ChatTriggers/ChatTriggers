@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.utils.console
 
-import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.config.Config
 import io.sentry.Sentry

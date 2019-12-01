@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.commands.CommandHandler
-import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.ClientCommandHandler
 

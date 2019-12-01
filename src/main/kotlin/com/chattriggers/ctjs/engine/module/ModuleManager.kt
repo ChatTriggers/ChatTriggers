@@ -1,7 +1,8 @@
-package com.chattriggers.ctjs.engine
+package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.module.Module
+import com.chattriggers.ctjs.engine.loader.DefaultLoader
+import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config

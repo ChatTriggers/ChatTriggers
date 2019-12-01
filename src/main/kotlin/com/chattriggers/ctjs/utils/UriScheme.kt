@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.utils
 
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.ModuleManager
+import com.chattriggers.ctjs.engine.module.ModuleManager
 import net.minecraftforge.fml.common.Loader
 import java.io.BufferedReader
 import java.io.File

@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.engine
+package com.chattriggers.ctjs.engine.loader
 
 import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
