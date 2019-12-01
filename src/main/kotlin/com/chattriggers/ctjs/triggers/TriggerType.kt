@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.triggers
 
-import com.chattriggers.ctjs.engine.ModuleManager
+import com.chattriggers.ctjs.engine.module.ModuleManager
 
 enum class TriggerType {
     // client

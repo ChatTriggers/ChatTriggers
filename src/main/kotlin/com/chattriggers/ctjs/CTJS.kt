@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
-import com.chattriggers.ctjs.engine.ModuleManager
+import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.FileLib
