@@ -8,6 +8,7 @@ import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowEvent
+import java.awt.font.TextAttribute
 import java.io.PrintStream
 import javax.swing.*
 import javax.swing.text.DefaultCaret
@@ -27,13 +28,14 @@ class Console(val loader: ILoader?) {
         val textArea = JTextArea()
         this.taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
         textArea.isEditable = false
-        textArea.font = Font("DejaVu Sans Mono", Font.PLAIN, 15)
+        textArea.font = FIRA_FONT
         val inputField = JTextField(1)
         inputField.isFocusable = true
         textArea.autoscrolls = true
         val caret = textArea.caret as DefaultCaret
         caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
         inputField.caretColor = Color.WHITE
+        inputField.font = FIRA_FONT
 
         inputField.margin = Insets(5, 5, 5, 5)
         textArea.margin = Insets(5, 5, 5, 5)
@@ -213,5 +215,23 @@ class Console(val loader: ILoader?) {
     protected fun finalize() {
         this.frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         this.frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
+    }
+
+    companion object {
+        val FIRA_FONT: Font
+
+
+        init {
+            val font = Font.createFont(
+                Font.TRUETYPE_FONT,
+                this::class.java.getResourceAsStream("/FiraCode-Regular.otf")
+            ).deriveFont(9f)
+
+            val attrs = font.attributes.apply { (this as MutableMap<TextAttribute, Any>)[TextAttribute.LIGATURES] = TextAttribute.LIGATURES_ON }
+
+            FIRA_FONT = font.deriveFont(attrs)
+
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FIRA_FONT)
+        }
     }
 }
