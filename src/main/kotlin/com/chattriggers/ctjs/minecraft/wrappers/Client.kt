@@ -4,22 +4,29 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.mixins.MixinGuiChat
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
+import com.chattriggers.ctjs.minecraft.wrappers.settings.Settings
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiNewChat
 import net.minecraft.client.gui.GuiPlayerTabOverlay
-import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
+import kotlin.math.roundToInt
 
 @External
 object Client {
     @JvmStatic
-    val settings = Settings
+    val settings = Settings()
+
+    @JvmStatic
+    val currentGui = CurrentGui()
+
+    @JvmStatic
+    val camera = Camera()
 
     /**
      * Gets Minecraft's Minecraft object
@@ -130,9 +137,7 @@ object Client {
     fun getFreeMemory(): Long = Runtime.getRuntime().freeMemory()
 
     @JvmStatic
-    fun getMemoryUsage(): Int = Math.round(
-        (getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()
-    )
+    fun getMemoryUsage(): Int = ((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()).roundToInt()
 
     @JvmStatic
     fun getSystemTime(): Long = Minecraft.getSystemTime()
@@ -154,7 +159,7 @@ object Client {
     }
 
     @JvmStatic
-    fun isInGui(): Boolean = gui.get() != null
+    fun isInGui(): Boolean = currentGui.get() != null
 
     /**
      * Gets the chat message currently typed into the chat gui.
@@ -206,42 +211,5 @@ object Client {
         gui.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut)
         gui.displayTitle(null, ChatLib.addColor(subtitle), fadeIn, time, fadeOut)
         gui.displayTitle(null, null, fadeIn, time, fadeOut)
-    }
-
-    object gui {
-        /**
-         * Gets the Java class name of the currently open gui, for example, "GuiChest"
-         *
-         * @return the class name of the current gui
-         */
-        @JvmStatic
-        fun getClassName(): String = get()?.javaClass?.simpleName ?: "null"
-
-        /**
-         * Gets the Minecraft gui class that is currently open
-         *
-         * @return the Minecraft gui
-         */
-        @JvmStatic
-        fun get(): GuiScreen? = getMinecraft().currentScreen
-
-        /**
-         * Closes the currently open gui
-         */
-        @JvmStatic
-        fun close() {
-            Player.getPlayer()?.closeScreen()
-        }
-    }
-
-    object camera {
-        @JvmStatic
-        fun getX(): Double = Client.getMinecraft().renderManager.viewerPosX
-
-        @JvmStatic
-        fun getY(): Double = Client.getMinecraft().renderManager.viewerPosY
-
-        @JvmStatic
-        fun getZ(): Double = Client.getMinecraft().renderManager.viewerPosZ
     }
 }
