@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.gui.FontRenderer
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
@@ -60,9 +61,6 @@ object Renderer {
     val YELLOW = color(254, 254, 63, 255)
     @JvmStatic
     val WHITE = color(255, 255, 255, 255)
-
-    @JvmStatic
-    val screen = Screen()
 
     @JvmStatic
     fun getColor(color: Int): Long {
@@ -445,5 +443,16 @@ object Renderer {
             GL11.glPopMatrix()
             GL11.glPushMatrix()
         }
+    }
+
+    object screen {
+        @JvmStatic
+        fun getWidth(): Int = ScaledResolution(Client.getMinecraft()).scaledWidth
+
+        @JvmStatic
+        fun getHeight(): Int = ScaledResolution(Client.getMinecraft()).scaledHeight
+
+        @JvmStatic
+        fun getScale(): Int = ScaledResolution(Client.getMinecraft()).scaleFactor
     }
 }
