@@ -71,15 +71,30 @@ class Inventory : JSONImpl {
     }
 
     /**
+     * @return a list of the [Item]s in an inventory
+     */
+    fun getItems(): List<Item> {
+        return (0 until getSize()).map { getStackInSlot(it) }
+    }
+
+    /**
      * Checks whether the inventory contains the given item.
      *
      * @param item the item to check for
      * @return whether or not the inventory contains the item
      */
     fun contains(item: Item): Boolean {
-        return (0 until getSize()).map {
-            getStackInSlot(it)
-        }.contains(item)
+        return getItems().contains(item)
+    }
+
+    /**
+     * Checks whether the inventory contains an item with ID.
+     *
+     * @param id the ID of the item to match
+     * @retun whether or not the inventory contains an item with ID
+     */
+    fun contains(id: Int): Boolean {
+        return getItems().any { it.getID() == id }
     }
 
     /**
@@ -90,9 +105,18 @@ class Inventory : JSONImpl {
      * @return the index of the given item
      */
     fun indexOf(item: Item): Int {
-        return (0 until getSize()).map {
-            getStackInSlot(it)
-        }.indexOf(item)
+        return getItems().indexOf(item)
+    }
+
+    /**
+     * Gets the index of any item in the inventory with matching ID, and returns the slot number.
+     * Returns -1 if the inventory does not contain the item.
+     *
+     * @param id the item ID to check for
+     * @return the index of the given item with ID
+     */
+    fun indexOf(id: Int): Int {
+        return getItems().indexOfFirst { it.getID() == id }
     }
 
     /**
