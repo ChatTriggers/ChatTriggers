@@ -244,6 +244,40 @@ abstract class Gui : GuiScreen() {
             it.id == buttonId
         }?.visible = visible
     }
+    
+    /**
+     * Draws text on screen
+     *
+     * @param text the text to draw
+     * @param x X position of the text
+     * @param y Y position of the text
+     * @param color color of the text
+     */
+    fun drawString(text: String, x: Int, y: Int, color: Int) {
+        this.drawString(this.mc.fontRendererObj, text, x, y, color)
+    }
+
+    /**
+     * Draws hovering text that follows the mouse
+     *
+     * @param text the text to draw
+     * @param mouseX X position of mouse
+     * @param mouseY Y position of mouse
+     */
+    fun drawCreativeTabHoveringString(text: String, mouseX: Int, mouseY: Int) {
+        this.drawCreativeTabHoveringText(text, mouseX, mouseY)
+    }
+
+    /**
+     * Draws hovering tex that doesn't follow the mouse
+     *
+     * @param text the text's to draw
+     * @param x X position of the text
+     * @param y Y position of the text
+     */
+    fun drawHoveringString(text: List<String>, x: Int, y: Int) {
+        this.drawHoveringText(text, x, y, this.mc.fontRendererObj)
+    }
 
     internal abstract fun getLoader(): ILoader
 }
