@@ -154,7 +154,7 @@ object Client {
     }
 
     @JvmStatic
-    fun isInGui(): Boolean = gui.get() != null
+    fun isInGui(): Boolean = currentGui.get() != null
 
     /**
      * Gets the chat message currently typed into the chat gui.
@@ -208,7 +208,7 @@ object Client {
         gui.displayTitle(null, null, fadeIn, time, fadeOut)
     }
 
-    object gui {
+    object currentGui {
         /**
          * Gets the Java class name of the currently open gui, for example, "GuiChest"
          *
