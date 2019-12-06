@@ -25,7 +25,7 @@ class Image(var image: BufferedImage?) {
     constructor(name: String, url: String? = null) : this(getBufferedImage(name, url))
     
     @JvmOverloads
-    constructor(resourceFile: File, name: String? = null, url: String? = null) : this(getBufferedImage(resourceFile, name, url))
+    constructor(resourceFile: File, url: String? = null) : this(getBufferedImage(resourceFile, url))
 
     fun getTextureWidth(): Int = this.textureWidth
     fun getTextureHeight(): Int = this.textureHeight
@@ -83,7 +83,7 @@ class Image(var image: BufferedImage?) {
             return image
         }
         
-        private fun getBufferedImage(resourceFile: File, name: String? = null, url: String? = null): BufferedImage? {
+        private fun getBufferedImage(resourceFile: File, url: String? = null): BufferedImage? {
             if (resourceFile.exists()) {
                 return ImageIO.read(resourceFile)
             }
