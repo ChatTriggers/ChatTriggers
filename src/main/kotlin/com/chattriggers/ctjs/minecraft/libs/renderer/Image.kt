@@ -23,6 +23,9 @@ class Image(var image: BufferedImage?) {
 
     @JvmOverloads
     constructor(name: String, url: String? = null) : this(getBufferedImage(name, url))
+    
+    @JvmOverloads
+    constructor(resourceFile: File, name: String? = null, url: String? = null) : this(getBufferedImage(resourceFile, name, url))
 
     fun getTextureWidth(): Int = this.textureWidth
     fun getTextureHeight(): Int = this.textureHeight
@@ -71,6 +74,16 @@ class Image(var image: BufferedImage?) {
         private fun getBufferedImage(name: String, url: String? = null): BufferedImage? {
             val resourceFile = File(CTJS.assetsDir, name)
 
+            if (resourceFile.exists()) {
+                return ImageIO.read(resourceFile)
+            }
+
+            val image = ImageIO.read(URL(url))
+            ImageIO.write(image, "png", resourceFile)
+            return image
+        }
+        
+        private fun getBufferedImage(resourceFile: File, name: String? = null, url: String? = null): BufferedImage? {
             if (resourceFile.exists()) {
                 return ImageIO.read(resourceFile)
             }
