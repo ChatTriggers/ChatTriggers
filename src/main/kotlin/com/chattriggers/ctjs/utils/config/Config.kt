@@ -28,19 +28,25 @@ object Config {
     @ConfigOpt(name = "Auto-Open Console on Error", x = 110, y = 65, type = ConfigBoolean::class)
     var openConsoleOnError: Boolean = false
 
-    @ConfigOpt(name = "Custom Console Theme", x = 110, y = 120, type = ConfigBoolean::class)
+    @ConfigOpt(name = "Console Pretty Font", x = 110, y = 120, type = ConfigBoolean::class)
+    var consolePrettyFont: Boolean = true
+
+    @ConfigOpt(name = "Console Font Size", x = 110, y = 175, type = ConfigString::class)
+    var consoleFontSize: String = "9"
+
+    @ConfigOpt(name = "Custom Console Theme", x = 110, y = 230, type = ConfigBoolean::class)
     var customTheme: Boolean = false
 
-    @ConfigOpt(name = "Console Theme", x = 110, y = 175, type = ConsoleThemeSelector::class)
+    @ConfigOpt(name = "Console Theme", x = 110, y = 285, type = ConsoleThemeSelector::class)
     var consoleTheme: String = "default.dark"
 
-    @ConfigOpt(name = "Console Foreground Color", x = 110, y = 175, type = SpecialConfigColor::class)
+    @ConfigOpt(name = "Console Foreground Color", x = 110, y = 285, type = SpecialConfigColor::class)
     var consoleForegroundColor: Color = Color(208, 208, 208)
 
-    @ConfigOpt(name = "Console Background Color", x = 110, y = 250, type = SpecialConfigColor::class)
+    @ConfigOpt(name = "Console Background Color", x = 110, y = 360, type = SpecialConfigColor::class)
     var consoleBackgroundColor: Color = Color(21, 21, 21)
 
-    @ConfigOpt(name = "Threaded Loading", x = -110, y = 250, type = ConfigBoolean::class)
+    @ConfigOpt(name = "Threaded Loading", x = -110, y = 230, type = ConfigBoolean::class)
     var threadedLoading = false
 
     fun load(jsonObject: JsonObject) {

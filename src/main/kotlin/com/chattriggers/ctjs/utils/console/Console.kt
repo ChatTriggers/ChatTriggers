@@ -8,7 +8,6 @@ import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowEvent
-import java.awt.font.TextAttribute
 import java.io.PrintStream
 import javax.swing.*
 import javax.swing.text.DefaultCaret
@@ -21,22 +20,20 @@ class Console(val loader: ILoader?) {
     private var historyOffset = 0
 
     val out: PrintStream
+    val textArea = JTextArea()
+    val inputField = JTextField(1)
 
     init {
         this.frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 
-        val textArea = JTextArea()
         this.taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
         textArea.isEditable = false
-        textArea.font = FIRA_FONT
-        val inputField = JTextField(1)
+
         inputField.isFocusable = true
         textArea.autoscrolls = true
         val caret = textArea.caret as DefaultCaret
         caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
         inputField.caretColor = Color.WHITE
-        val attrs = FIRA_FONT.attributes.apply { (this as MutableMap<TextAttribute, Any>)[TextAttribute.LIGATURES] = TextAttribute.LIGATURES_ON }
-        inputField.font = FIRA_FONT.deriveFont(attrs)
 
         inputField.margin = Insets(5, 5, 5, 5)
         textArea.margin = Insets(5, 5, 5, 5)
@@ -59,7 +56,7 @@ class Console(val loader: ILoader?) {
                         history.add(command)
                         historyOffset = 0
 
-                        taos.println("eval > $command")
+                        taos.println("eval> $command")
 
                         try {
                             taos.println(loader?.eval(command) ?: return)
@@ -209,6 +206,14 @@ class Console(val loader: ILoader?) {
             comp.foreground = fg
         }
 
+        val chosenFont = if (Config.consolePrettyFont) FIRA_FONT.deriveFont(Config.consoleFontSize.toFloat()) else Font("DejaVu Sans Mono", Font.PLAIN, 15).deriveFont(Config.consoleFontSize.toFloat())
+
+        textArea.font = chosenFont
+        // TODO: Ligatures make everything extremely slow for some reason. Is this fixable?
+//        val attrs = FIRA_FONT.attributes.apply { (this as MutableMap<TextAttribute, Any>)[TextAttribute.LIGATURES] = TextAttribute.LIGATURES_ON }
+//        inputField.font = FIRA_FONT.deriveFont(attrs)
+        inputField.font = chosenFont
+
         this.frame.toFront()
         this.frame.repaint()
     }
@@ -228,8 +233,6 @@ class Console(val loader: ILoader?) {
             ).deriveFont(9f)
 
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FIRA_FONT)
-
-            println("Registered font.")
         }
     }
 }
