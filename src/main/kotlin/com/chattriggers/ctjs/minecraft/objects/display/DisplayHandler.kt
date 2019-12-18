@@ -5,10 +5,11 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.lwjgl.opengl.GL11
+import java.util.concurrent.CopyOnWriteArrayList
 
 @External
 object DisplayHandler {
-    private var displays = mutableListOf<Display>()
+    private var displays = CopyOnWriteArrayList<Display>()
 
     init {
         MinecraftForge.EVENT_BUS.register(this)
