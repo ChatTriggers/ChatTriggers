@@ -131,10 +131,11 @@ class Inventory : JSONImpl {
      * Shorthand for {@link ClickAction}
      *
      * @param slot the slot to click on
-     * @param shift whether shift is being held
+     * @param button the mouse button to use. "LEFT" by default.
+     * @param shift whether shift is being held. False by default
      * @return this inventory for method chaining
      */
-    fun click(slot: Int, shift: Boolean) = apply {
+    @JvmOverloads fun click(slot: Int, button: String = "LEFT", shift: Boolean = false) = apply {
         ClickAction(slot, getWindowId())
             .setClickString("LEFT")
             .setHoldingShift(shift)
