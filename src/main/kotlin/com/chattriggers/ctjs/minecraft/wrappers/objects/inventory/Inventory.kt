@@ -137,7 +137,7 @@ class Inventory : JSONImpl {
      */
     @JvmOverloads fun click(slot: Int, button: String = "LEFT", shift: Boolean = false) = apply {
         ClickAction(slot, getWindowId())
-            .setClickString("LEFT")
+            .setClickString(button)
             .setHoldingShift(shift)
             .complete()
     }
