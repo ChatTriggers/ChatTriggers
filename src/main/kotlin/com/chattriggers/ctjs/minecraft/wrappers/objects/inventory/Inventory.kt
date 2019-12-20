@@ -135,7 +135,7 @@ class Inventory : JSONImpl {
      * @param shift whether shift is being held. False by default
      * @return this inventory for method chaining
      */
-    @JvmOverloads fun click(slot: Int, button: String = "LEFT", shift: Boolean = false) = apply {
+    @JvmOverloads fun click(slot: Int, shift: Boolean = false, button: String = "LEFT") = apply {
         ClickAction(slot, getWindowId())
             .setClickString(button)
             .setHoldingShift(shift)
