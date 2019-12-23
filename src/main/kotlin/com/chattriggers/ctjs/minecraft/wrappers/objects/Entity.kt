@@ -15,7 +15,7 @@ open class Entity(val entity: MCEntity) {
 
     fun getLastX() = entity.lastTickPosX
     fun getLastY() = entity.lastTickPosY
-    fun getLastZ() = entity.lastTickPosY
+    fun getLastZ() = entity.lastTickPosZ
 
     fun getRenderX() = getLastX() + (getX() - getLastX()) * Tessellator.partialTicks
     fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
