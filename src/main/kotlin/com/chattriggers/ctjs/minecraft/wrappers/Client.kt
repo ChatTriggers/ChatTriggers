@@ -68,6 +68,15 @@ object Client {
     @JvmStatic
     fun isTabbedIn(): Boolean = Display.isActive()
 
+    @JvmStatic
+    fun isControlDown(): Boolean = GuiScreen.isCtrlKeyDown()
+
+    @JvmStatic
+    fun isShiftDown(): Boolean = GuiScreen.isShiftKeyDown()
+
+    @JvmStatic
+    fun isAltDown(): Boolean = GuiScreen.isAltKeyDown()
+
     /**
      * Get the [KeyBind] from an already existing
      * Minecraft KeyBinding, otherwise, returns null.
