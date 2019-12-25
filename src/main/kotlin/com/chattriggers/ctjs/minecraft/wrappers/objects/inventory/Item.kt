@@ -87,6 +87,8 @@ class Item {
     }
     /* End of constructors */
 
+    fun getRawNBT() = itemStack.serializeNBT().toString()
+
     fun getID(): Int = MCItem.getIdFromItem(item)
 
     fun setStackSize(stackSize: Int) = apply {
