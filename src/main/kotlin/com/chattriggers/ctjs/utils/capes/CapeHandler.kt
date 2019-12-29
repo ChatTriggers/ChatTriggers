@@ -18,14 +18,18 @@ object CapeHandler {
                 Special::class.java
         )
 
-        bindTexture("https://imgur.com/WcArdQZ.png", "capes/ct/supporter")
-        bindTexture("https://imgur.com/a0fU4s7.png", "capes/ct/developer")
+        bindTexture("https://imgur.com/9O3o7DM.png", "capes/ct/developer")
+        bindTexture("https://imgur.com/5I2hF2q.png", "capes/ct/supporter")
+        bindTexture("https://imgur.com/U5P61R0.png", "capes/ct/creator")
+        bindTexture("https://imgur.com/gbGbZo6.png", "capes/ct/special")
     }
 
     fun getCapeResource(player: AbstractClientPlayer): ResourceLocation? {
         return when (player.uniqueID.toString()) {
             in this.special.developers -> ResourceLocation("capes/ct/developer")
             in this.special.supporters -> ResourceLocation("capes/ct/supporter")
+            in this.special.creators -> ResourceLocation("capes/ct/creator")
+            in this.special.special -> ResourceLocation("capes/ct/special")
             else -> null
         }
     }
@@ -60,5 +64,5 @@ object CapeHandler {
         return imgNew
     }
 
-    class Special(val supporters: Array<String>, val developers: Array<String>)
+    class Special(val supporters: Array<String>, val developers: Array<String>, val creators: Array<String>, val special: Array<String>)
 }
