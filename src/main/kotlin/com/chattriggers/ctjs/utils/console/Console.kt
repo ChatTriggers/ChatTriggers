@@ -111,6 +111,21 @@ class Console(val loader: ILoader?) {
             showConsole()
         }
 
+        val index = error.stackTrace.indexOfFirst {
+            it?.fileName?.toLowerCase()?.contains("jsloader") ?: false
+        }
+
+        error.stackTrace = error.stackTrace.dropLast(error.stackTrace.size - index - 1).map {
+            val fileNameIndex = it.fileName?.indexOf("ChatTriggers/modules/") ?: return@map it
+            val classNameIndex = it.className.indexOf("ChatTriggers_modules_")
+
+            if (fileNameIndex != -1) {
+                StackTraceElement(it.className.substring(classNameIndex + 21), it.methodName, it.fileName!!.substring(fileNameIndex + 21), it.lineNumber)
+            } else {
+                it
+            }
+        }.toTypedArray()
+
         error.printStackTrace(out)
     }
 
