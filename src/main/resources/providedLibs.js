@@ -14,7 +14,9 @@ global.Java = {
     }
 }
 
-// // Extra libs
+global.sync = (func, lock) => new org.mozilla.javascript.Synchronizer(func, lock);
+
+// Extra libs
 global.ArrayList = Java.type("java.util.ArrayList");
 global.HashMap = Java.type("java.util.HashMap");
 global.Keyboard = Java.type("org.lwjgl.input.Keyboard");
