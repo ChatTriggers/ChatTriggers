@@ -96,6 +96,8 @@ global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.thre
 
 // simplified methods
 global.print = function(toPrint) {
+    if (toPrint === null) Console.out.println("null");
+    if (toPrint === undefined) Console.out.println("undefined");
     Console.out.println(toPrint);
 }
 
