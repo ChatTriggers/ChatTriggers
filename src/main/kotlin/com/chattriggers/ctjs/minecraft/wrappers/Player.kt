@@ -230,14 +230,15 @@ object Player {
         val mop = Client.getMinecraft().objectMouseOver ?: return Block(0)
         val world = World.getWorld() ?: return Block(0)
 
-        return when {
-            mop.typeOfHit == RayTraceType.BLOCK -> {
-                val pos = mop.blockPos
-                val block = Block(world.getBlockState(pos).block).setBlockPos(pos)
+        return when (mop.typeOfHit) {
+            RayTraceType.BLOCK -> {
+                val block = Block(world.getBlockState(mop.blockPos).block)
+                    .setBlockPos(mop.blockPos)
+                    .setFace(mop.typeOfHit.ordinal)
 
                 if (block.block is BlockSign) Sign(block) else block
             }
-            mop.typeOfHit == RayTraceType.ENTITY -> Entity(mop.entityHit)
+            RayTraceType.ENTITY -> Entity(mop.entityHit)
             else -> Block(0)
         }
     }

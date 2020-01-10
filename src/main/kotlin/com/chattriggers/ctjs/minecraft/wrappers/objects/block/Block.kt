@@ -12,6 +12,7 @@ import net.minecraft.block.Block as MCBlock
 open class Block {
     var block: MCBlock
     var blockPos: BlockPos = BlockPos(0, 0, 0)
+    var face: Int? = null
 
     constructor(block: MCBlock) {
         this.block = block
@@ -49,6 +50,18 @@ open class Block {
      */
     fun setBlockPos(blockPos: BlockPos) = apply {
         this.blockPos = blockPos
+    }
+
+    /**
+     * Sets the face that is being looked at by the player.<br>
+     * This is automatically set by {@link Player#lookingAt()}.<br>
+     * This method is not meant for public use.
+     *
+     * @param face this face that is being looked at
+     * @return the Block object
+     */
+    fun setFace(face: Int) = apply {
+        this.face = face
     }
 
     fun getID(): Int = MCBlock.getIdFromBlock(block)

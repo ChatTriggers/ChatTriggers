@@ -21,6 +21,8 @@ open class Entity(val entity: MCEntity) {
     fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
     fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
 
+    var face: Int? = null
+
     /**
      * Gets the pitch, the horizontal direction the entity is facing towards.
      * This has a range of -180 to 180.
