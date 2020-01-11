@@ -10,9 +10,13 @@ class BlockFace(val facing: EnumFacing) {
     fun getYOffset(): Int = facing.frontOffsetY
     fun getZOffset(): Int = facing.frontOffsetZ
 
+    override fun toString() = "BlockFace{name=${getName()}, xOffset=${getXOffset()}, yOffset=${getYOffset()}, zOffset = ${getZOffset()}, axis=$axis}"
+
     class Axis(val axis: EnumFacing.Axis) {
         fun getName(): String = axis.getName()
         fun isHorizontal(): Boolean = axis.isHorizontal
         fun isVertical(): Boolean = axis.isVertical
+
+        override fun toString() = "Axis{name=${getName()}, horizontal=${isHorizontal()}, vertical=${isVertical()}}"
     }
 }
