@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MathHelper
@@ -21,7 +22,7 @@ open class Entity(val entity: MCEntity) {
     fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
     fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
 
-    var face: Int? = null
+    var face: BlockFace? = null
 
     /**
      * Gets the pitch, the horizontal direction the entity is facing towards.

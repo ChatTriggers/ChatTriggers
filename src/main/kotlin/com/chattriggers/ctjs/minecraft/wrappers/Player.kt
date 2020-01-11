@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
@@ -234,7 +235,7 @@ object Player {
             RayTraceType.BLOCK -> {
                 val block = Block(world.getBlockState(mop.blockPos).block)
                     .setBlockPos(mop.blockPos)
-                    .setFace(mop.typeOfHit.ordinal)
+                    .setFace(BlockFace(mop.sideHit))
 
                 if (block.block is BlockSign) Sign(block) else block
             }

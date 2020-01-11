@@ -6,13 +6,14 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.block.state.IBlockState
+import net.minecraft.util.EnumFacing
 import net.minecraft.block.Block as MCBlock
 
 @External
 open class Block {
     var block: MCBlock
     var blockPos: BlockPos = BlockPos(0, 0, 0)
-    var face: Int? = null
+    var face: BlockFace? = null
 
     constructor(block: MCBlock) {
         this.block = block
@@ -60,7 +61,7 @@ open class Block {
      * @param face this face that is being looked at
      * @return the Block object
      */
-    fun setFace(face: Int) = apply {
+    fun setFace(face: BlockFace) = apply {
         this.face = face
     }
 
