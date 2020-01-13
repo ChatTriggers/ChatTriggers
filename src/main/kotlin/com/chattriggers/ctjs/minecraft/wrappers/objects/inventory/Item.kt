@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory
 
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
@@ -201,10 +202,8 @@ class Item {
      * @param scale the scale
      */
     @JvmOverloads
-    fun draw(x: Float, y: Float, scale: Float = 1f) {
+    fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f) {
         val itemRenderer = Client.getMinecraft().renderItem
-
-        GlStateManager.pushMatrix()
 
         GlStateManager.scale(scale, scale, 1f)
         GlStateManager.translate(x / scale, y / scale, 0f)
@@ -216,7 +215,7 @@ class Item {
         itemRenderer.zLevel = 200f
         itemRenderer.renderItemIntoGUI(itemStack, 0, 0)
 
-        GlStateManager.popMatrix()
+        Renderer.finishDraw()
     }
 
     /**
