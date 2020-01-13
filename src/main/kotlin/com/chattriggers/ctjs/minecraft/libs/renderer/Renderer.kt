@@ -367,7 +367,8 @@ object Renderer {
     }
 
     @JvmStatic
-    fun drawPlayer(player: Any, x: Int, y: Int, rotate: Boolean) {
+    @JvmOverloads
+    fun drawPlayer(player: Any, x: Int, y: Int, rotate: Boolean = false) {
         val mouseX = -30f
         val mouseY = 0f
 

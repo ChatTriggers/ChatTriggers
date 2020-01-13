@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.minecraft.imixins.IMixinEntityPlayer
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
@@ -67,6 +68,11 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
      */
     fun setNametagName(textComponent: TextComponent) {
         (player as IMixinEntityPlayer).setDisplayName(textComponent.chatComponentText.formattedText)
+    }
+
+    @JvmOverloads
+    fun draw(x: Int, y: Int, rotate: Boolean = false) = apply {
+        Renderer.drawPlayer(player, x, y, rotate)
     }
 
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
