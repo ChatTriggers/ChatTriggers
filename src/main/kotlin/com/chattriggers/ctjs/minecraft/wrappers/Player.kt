@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect
@@ -298,6 +299,12 @@ object Player {
      */
     @JvmStatic
     fun getOpenedInventory(): Inventory = Inventory(getPlayer()!!.openContainer)
+
+    @JvmStatic
+    @JvmOverloads
+    fun draw(x: Int, y: Int, rotate: Boolean = true) = apply {
+        Renderer.drawPlayer(this, x, y, rotate)
+    }
 
     object armor {
         /**
