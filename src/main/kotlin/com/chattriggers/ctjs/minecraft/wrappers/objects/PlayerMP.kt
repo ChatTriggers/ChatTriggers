@@ -25,7 +25,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     }
 
     fun getPing(): Int {
-        return getPlayerInfo().responseTime
+        return getPlayerInfo()?.responseTime ?: -1
     }
 
     /**
@@ -57,7 +57,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     }
 
     fun setTabDisplayName(textComponent: TextComponent) {
-        getPlayerInfo().displayName = textComponent.chatComponentText
+        getPlayerInfo()?.displayName = textComponent.chatComponentText
     }
 
     /**
@@ -75,15 +75,15 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         Renderer.drawPlayer(player, x, y, rotate)
     }
 
-    private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
-        return networkPlayerInfoIn.displayName?.formattedText
+    private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo?): String {
+        return networkPlayerInfoIn?.displayName?.formattedText
             ?: ScorePlayerTeam.formatPlayerName(
-                networkPlayerInfoIn.playerTeam,
-                networkPlayerInfoIn.gameProfile.name
-            )
+                networkPlayerInfoIn?.playerTeam,
+                networkPlayerInfoIn?.gameProfile?.name
+            ) ?: ""
     }
 
-    private fun getPlayerInfo(): NetworkPlayerInfo = Client.getConnection().getPlayerInfo(this.player.uniqueID)
+    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection().getPlayerInfo(this.player.uniqueID)
 
     override fun toString(): String {
         return "PlayerMP{name:" + getName() +
