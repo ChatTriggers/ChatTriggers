@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
-import com.chattriggers.ctjs.minecraft.imixins.IMixinEntityPlayer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
@@ -8,6 +7,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.scoreboard.ScorePlayerTeam
+import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 //#if MC>10809
 //$$ import net.minecraft.inventory.EntityEquipmentSlot;
@@ -15,6 +15,11 @@ import net.minecraft.scoreboard.ScorePlayerTeam
 
 @External
 class PlayerMP(val player: EntityPlayer) : Entity(player) {
+    val displayNameField = ReflectionHelper.findField(
+            EntityPlayer::class.java,
+            "displayname"
+    )
+
     fun isSpectator() = this.player.isSpectator
 
     fun getActivePotionEffects(): List<PotionEffect> {
@@ -66,7 +71,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
      * @param textComponent the new name to display
      */
     fun setNametagName(textComponent: TextComponent) {
-        (player as IMixinEntityPlayer).setDisplayName(textComponent.chatComponentText.formattedText)
+        displayNameField.set(player, textComponent.chatComponentText.formattedText)
     }
 
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {

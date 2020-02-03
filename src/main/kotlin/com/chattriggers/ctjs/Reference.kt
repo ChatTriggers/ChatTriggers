@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs
 
+import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import com.chattriggers.ctjs.minecraft.imixins.IClientCommandHandler
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
@@ -53,7 +53,8 @@ object Reference {
         unloadCT(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
-        (ClientCommandHandler.instance as IClientCommandHandler).removeCTCommands()
+        ClientCommandHandler.instance.commandSet.removeIf { it is Command }
+        ClientCommandHandler.instance.commandMap.entries.removeIf { it.value is Command }
 
         CTJS.loadConfig()
 

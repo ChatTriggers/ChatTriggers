@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.mixins.MixinGuiTabList
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.GameType
@@ -66,10 +65,10 @@ object TabList {
     }
 
     @JvmStatic
-    fun getHeaderMessage() = Message((Client.getTabGui() as MixinGuiTabList).header)
+    fun getHeaderMessage() = Client.getTabGui()?.header?.let(::Message)
 
     @JvmStatic
-    fun getHeader() = (Client.getTabGui() as MixinGuiTabList).header.formattedText
+    fun getHeader() = Client.getTabGui()?.header?.formattedText
 
     @JvmStatic
     fun setHeader(header: Any) {
@@ -81,10 +80,10 @@ object TabList {
     }
 
     @JvmStatic
-    fun getFooterMessage() = Message((Client.getTabGui() as MixinGuiTabList).footer)
+    fun getFooterMessage() = Client.getTabGui()?.footer?.let(::Message)
 
     @JvmStatic
-    fun getFooter() = (Client.getTabGui() as MixinGuiTabList).footer.formattedText
+    fun getFooter() = Client.getTabGui()?.footer?.formattedText
 
     @JvmStatic
     fun setFooter(footer: Any) {

@@ -31,7 +31,6 @@ buildscript {
                 mcVersion >= 10809 ? "2.1-SNAPSHOT" :
                                      "invalid"
         )
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
 //        classpath "io.franzbecker:gradle-lombok:1.10"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
@@ -39,7 +38,6 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'org.spongepowered.mixin'
 //apply plugin: "io.franzbecker.gradle-lombok"
 apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
@@ -89,7 +87,6 @@ minecraft {
     runDir = "run"
 
     makeObfSourceJar = true
-    clientJvmArgs = ["--tweakClass", "com.chattriggers.ctjs.launch.tweaker.CTJSTweaker"]
 }
 
 afterEvaluate {
@@ -112,21 +109,13 @@ repositories {
 }
 
 dependencies {
-    provided ('org.spongepowered:mixin:0.7.5-SNAPSHOT') {
-        exclude module: 'launchwrapper'
-        exclude module: 'guava'
-        exclude module: 'gson'
-        exclude module: 'commons-io'
-        exclude module: 'log4j-core'
-    }
-
     // You should fork the repo, apply your modifications
     // and either use jitpack (simplest) or create your own maven repo for it
     provided files("libs/sentry.jar")
     provided group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.3"
     provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    provided 'com.github.sk1erllc:asmhelper:code-block-SNAPSHOT'
+    provided 'com.github.falsehonesty:asmhelper:58127c0b45'
     provided 'com.github.chattriggers:rhino:e21999fe44'
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
@@ -161,19 +150,10 @@ jar {
     }
 
     manifest.attributes(
-            'MixinConfigs': 'mixins.ctjs.json',
-            'TweakOrder': '0',
-            'TweakClass': 'com.chattriggers.ctjs.launch.tweaker.CTJSTweaker',
             "FMLCorePlugin": "com.chattriggers.ctjs.launch.plugin.CTJSLoadingPlugin",
-            "FMLCorePluginContainsFMLMod": "true"
+            "FMLCorePluginContainsFMLMod": "true",
+            "FMLAT": "ctjs_at.cfg"
     )
-
-}
-
-mixin {
-    // Specify "notch" or "searge" here
-    defaultObfuscationEnv searge
-    add sourceSets.main, "mixins.ctjs.refmap.json"
 }
 
 processResources {
@@ -191,6 +171,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
+
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
@@ -248,11 +229,6 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
     }
 
     packageOptions {
-        prefix = "com.chattriggers.ctjs.minecraft.imixins"
-        suppress = true
-    }
-
-    packageOptions {
         prefix = "com.chattriggers.ctjs.loader"
         suppress = true
     }
@@ -272,11 +248,6 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
         suppress = true
     }
 
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.minecraft.mixins"
-        suppress = true
-    }
-
 //    exclude "com/chattriggers/ctjs/commands/**.java"
 //    exclude "com/chattriggers/ctjs/listeners/**.java"
 //    exclude "com/chattriggers/ctjs/utils/*/**.java"
@@ -286,8 +257,6 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
 //    exclude "com/chattriggers/ctjs/loader/**.java"
 //    exclude "com/chattriggers/ctjs/handlers/GuiHandler.java"
 //    exclude "com/chattriggers/ctjs/utils/*.java"
-//    exclude "com/chattriggers/ctjs/minecraft/mixins/*.java"
-//    exclude "com/chattriggers/ctjs/minecraft/imixins/*.java"
 }
 
 task copySrg(type: Copy, dependsOn: 'genSrgs') {

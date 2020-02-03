@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.CTJS
-import com.chattriggers.ctjs.minecraft.mixins.MixinSoundHandler
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
@@ -80,7 +79,7 @@ class Sound(private val config: NativeObject) {
     }
 
     private fun loadSndSystem() {
-        val sndManager = (Client.getMinecraft().soundHandler as MixinSoundHandler).sndManager
+        val sndManager = Client.getMinecraft().soundHandler.sndManager
 
         sndSystem = ReflectionHelper.getPrivateValue<SoundSystem, SoundManager>(
             SoundManager::class.java,
@@ -147,12 +146,12 @@ class Sound(private val config: NativeObject) {
 
     /**
      * Sets the category of this sound, making it respect the Player's sound volume sliders.
-     * Options are: MASTER, MUSIC, RECORDS, WEATHER, BLOCKS, MOBS, ANIMALS, PLAYERS, and AMBIENT
+     * Options are: master, music, record, weather, block, hostile, neutral, player, and ambient
      *
      * @param category the category
      */
     fun setCategory(category: String) = apply {
-        val category1 = SoundCategory.valueOf(category.toUpperCase())
+        val category1 = SoundCategory.getCategory(category.toLowerCase())
         setVolume(Client.getMinecraft().gameSettings.getSoundLevel(category1))
     }
 

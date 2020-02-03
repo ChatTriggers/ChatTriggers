@@ -11,7 +11,14 @@ class CTJSTransformer : BaseClassTransformer() {
     }
 
     override fun makeTransformers() {
-        makePlayerTransformers()
-        makeGuiTransformers()
+        injectEffectRenderer()
+        injectCrashReport()
+        injectEntityPlayer()
+        injectGuiMainMenu()
+        injectMinecraft()
+        injectScreenshotHelper()
+        injectNetHandlerPlayClient()
+        injectRenderManager()
+        makeGuiScreenInjections()
     }
 }
