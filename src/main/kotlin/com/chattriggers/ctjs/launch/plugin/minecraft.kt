@@ -14,12 +14,14 @@ fun injectMinecraft() = inject {
     at = At(
         InjectionPoint.INVOKE(
             Descriptor(
-                "net/minecraft/client/gui/GuiNewChat",
-                "printChatMessage",
-                "(L$ICHAT_COMPONENT;)V"
+                "net/minecraft/client/gui/GuiIngame",
+                "getChatGUI",
+                "()Lnet/minecraft/client/gui/GuiNewChat;"
             ),
             ordinal = 1
-        )
+        ),
+        before = true,
+        shift = -2
     )
 
     insnList {
