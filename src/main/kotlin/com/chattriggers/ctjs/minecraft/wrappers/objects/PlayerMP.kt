@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
@@ -29,7 +30,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     }
 
     fun getPing(): Int {
-        return getPlayerInfo().responseTime
+        return getPlayerInfo()?.responseTime ?: -1
     }
 
     /**
@@ -61,7 +62,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     }
 
     fun setTabDisplayName(textComponent: TextComponent) {
-        getPlayerInfo().displayName = textComponent.chatComponentText
+        getPlayerInfo()?.displayName = textComponent.chatComponentText
     }
 
     /**
@@ -74,15 +75,20 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         displayNameField.set(player, textComponent.chatComponentText.formattedText)
     }
 
-    private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
-        return networkPlayerInfoIn.displayName?.formattedText
-            ?: ScorePlayerTeam.formatPlayerName(
-                networkPlayerInfoIn.playerTeam,
-                networkPlayerInfoIn.gameProfile.name
-            )
+    @JvmOverloads
+    fun draw(x: Int, y: Int, rotate: Boolean = false) = apply {
+        Renderer.drawPlayer(player, x, y, rotate)
     }
 
-    private fun getPlayerInfo(): NetworkPlayerInfo = Client.getConnection().getPlayerInfo(this.player.uniqueID)
+    private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo?): String {
+        return networkPlayerInfoIn?.displayName?.formattedText
+            ?: ScorePlayerTeam.formatPlayerName(
+                networkPlayerInfoIn?.playerTeam,
+                networkPlayerInfoIn?.gameProfile?.name
+            ) ?: ""
+    }
+
+    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection().getPlayerInfo(this.player.uniqueID)
 
     override fun toString(): String {
         return "PlayerMP{name:" + getName() +
