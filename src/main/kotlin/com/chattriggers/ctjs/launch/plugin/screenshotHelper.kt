@@ -9,8 +9,12 @@ fun injectScreenshotHelper() = inject {
     className = "net/minecraft/util/ScreenShotHelper"
     methodName = "saveScreenshot"
     methodDesc = "(L$FILE;IILnet/minecraft/client/shader/Framebuffer;)L$ICHAT_COMPONENT;"
-
     at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf(
+        "getTimestampedPNGFileForDirectory" to "func_74290_a",
+        "func_148260_a" to "saveScreenshot"
+    )
 
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")

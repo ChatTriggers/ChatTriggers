@@ -9,8 +9,9 @@ fun injectNetHandlerPlayClient() = inject {
     className = "net/minecraft/client/network/NetHandlerPlayClient"
     methodName = "addToSendQueue"
     methodDesc = "(L$PACKET;)V"
-
     at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf("func_147297_a" to "addToSendQueue")
 
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")

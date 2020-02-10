@@ -22,6 +22,14 @@ fun injectEntityPlayer() = inject {
         shift = 2
     )
 
+    fieldMaps = mapOf("inventory" to "field_71071_by")
+
+    methodMaps = mapOf(
+        "getCurrentItem" to "func_70448_g",
+        "func_71040_bB" to "dropOneItem",
+        "func_70448_g" to "getCurrentItem"
+    )
+
     insnList {
         invokeKOBjectFunction(CLIENT_LISTENER, "onDropItem", "(L$ENTITY_PLAYER;L$ITEM_STACK;)Z") {
             aload(0)

@@ -1,5 +1,3 @@
-
-// For those who want the bleeding edge
 buildscript {
     def f = file("gradle/mcversion.txt")
 
@@ -31,14 +29,12 @@ buildscript {
                 mcVersion >= 10809 ? "2.1-SNAPSHOT" :
                                      "invalid"
         )
-//        classpath "io.franzbecker:gradle-lombok:1.10"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
         classpath ':proguard:'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-//apply plugin: "io.franzbecker.gradle-lombok"
 apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
 
@@ -90,10 +86,7 @@ minecraft {
 }
 
 afterEvaluate {
-    // Note cannot use minecraft.replace because that has already been forwarded to the task by FG by now
     tasks.sourceMainJava.replace '@MOD_VERSION@', project.version
-    // Includes intentional whitespace to stop Forge from declaring the mod to be compatible with
-    // a newer srg-compatible MC version (that may be using a different protocol version)
     tasks.sourceMainJava.replace '@MC_VERSION@', "[ ${project.minecraft.version} ]"
 }
 
@@ -109,35 +102,13 @@ repositories {
 }
 
 dependencies {
-    // You should fork the repo, apply your modifications
-    // and either use jitpack (simplest) or create your own maven repo for it
     provided files("libs/sentry.jar")
+    // provided files("libs/AsmHelper-1.0.jar")
     provided group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.3"
     provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    provided 'com.github.falsehonesty:asmhelper:58127c0b45'
+    provided 'com.github.falsehonesty:asmhelper:4330d716d7'
     provided 'com.github.chattriggers:rhino:e21999fe44'
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
 }
 
 jar {
@@ -174,24 +145,6 @@ processResources {
 
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
-
-//
-//
-///*
-// * Userdocs
-// */
-//
-//import io.franzbecker.gradle.lombok.task.DelombokTask
-//
-//task delombok(type: DelombokTask, dependsOn: compileJava) {
-//    description = "Delomboks source code in order to compile javadocs"
-//    group = "Documentation"
-//
-//    ext.outputDir = file("$buildDir/src-delomboked")
-//    sourceSets.main.java.srcDirs.each {
-//        args(it, "-f", "pretty", "-d", outputDir)
-//    }
-//}
 
 task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
     description = "Generate the docs to be used by scripters, excludes internal classes"
@@ -247,16 +200,6 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
         prefix = "com.chattriggers.ctjs.minecraft.wrappers.objects.threading"
         suppress = true
     }
-
-//    exclude "com/chattriggers/ctjs/commands/**.java"
-//    exclude "com/chattriggers/ctjs/listeners/**.java"
-//    exclude "com/chattriggers/ctjs/utils/*/**.java"
-//    exclude "com/chattriggers/ctjs/*.java"
-//    exclude "com/chattriggers/ctjs/triggers/TriggerType.java"
-//    exclude "com/chattriggers/ctjs/modules/**.java"
-//    exclude "com/chattriggers/ctjs/loader/**.java"
-//    exclude "com/chattriggers/ctjs/handlers/GuiHandler.java"
-//    exclude "com/chattriggers/ctjs/utils/*.java"
 }
 
 task copySrg(type: Copy, dependsOn: 'genSrgs') {
@@ -300,7 +243,7 @@ task changeMcVersion() {
 task proguard(type: proguard.gradle.ProGuardTask) {
     configuration 'configuration.pro'
 
-//    dontobfuscate()
+    // dontobfuscate()
 
     libraryjars files(configurations.runtimeClasspath.collect())
 

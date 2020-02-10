@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.launch.plugin
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin
 
+@IFMLLoadingPlugin.SortingIndex(1000)
 class CTJSLoadingPlugin : IFMLLoadingPlugin {
     override fun getModContainerClass() = null
 

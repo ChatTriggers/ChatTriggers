@@ -9,7 +9,6 @@ fun injectEffectRenderer() = inject {
     className = EFFECT_RENDERER
     methodName = "spawnEffectParticle"
     methodDesc = "(IDDDDDD[I)L$ENTITY_FX;"
-
     at = At(
         InjectionPoint.INVOKE(
             Descriptor(
@@ -18,6 +17,12 @@ fun injectEffectRenderer() = inject {
                 "(L$ENTITY_FX;)V"
             )
         )
+    )
+
+    methodMaps = mapOf(
+        "getParticleFromId" to "func_179342_a",
+        "func_178927_a" to "spawnEffectParticle",
+        "func_78873_a" to "addEffect"
     )
 
     insnList {

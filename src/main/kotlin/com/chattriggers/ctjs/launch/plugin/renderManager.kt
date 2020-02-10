@@ -9,8 +9,9 @@ fun injectRenderManager() = inject {
     className = "net/minecraft/client/renderer/entity/RenderManager"
     methodName = "doRenderEntity"
     methodDesc = "(L$ENTITY;DDDFFZ)Z"
-
     at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf("func_147939_a" to "doRenderEntity")
 
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")

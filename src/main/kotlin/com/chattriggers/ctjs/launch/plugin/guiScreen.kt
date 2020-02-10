@@ -20,8 +20,9 @@ fun injectSendChatMessage() = inject {
     className = "net/minecraft/client/gui/GuiScreen"
     methodName = "sendChatMessage"
     methodDesc = "(Ljava/lang/String;Z)V"
-
     at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf("func_175281_b" to "sendChatMessage")
 
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")
@@ -57,6 +58,11 @@ fun injectHandleKeyboardInput() = inject {
                 "(CI)V"
             )
         )
+    )
+
+    methodMaps = mapOf(
+        "func_146282_l" to "handleKeyboardInput",
+        "func_73869_a" to "keyTyped"
     )
 
     insnList {
@@ -106,6 +112,11 @@ fun injectMouseClick() = inject {
                 "(III)V"
             )
         )
+    )
+
+    methodMaps = mapOf(
+        "func_146274_d" to "handleMouseInput",
+        "func_73864_a" to "mouseClicked"
     )
 
     insnList {
@@ -162,6 +173,11 @@ fun injectMouseRelease() = inject {
         )
     )
 
+    methodMaps = mapOf(
+        "func_146274_d" to "handleMouseInput",
+        "func_146286_b" to "mouseReleased"
+    )
+
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")
         val event = astore()
@@ -216,6 +232,11 @@ fun injectMouseDrag() = inject {
         )
     )
 
+    methodMaps = mapOf(
+        "func_146274_d" to "handleMouseInput",
+        "func_146273_a" to "mouseClickMove"
+    )
+
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")
         val event = astore()
@@ -259,8 +280,9 @@ fun injectTextComponentClick() = inject {
     className = "net/minecraft/client/gui/GuiScreen"
     methodName = "handleComponentClick"
     methodDesc = "(L$ICHAT_COMPONENT;)Z"
-
     at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf("func_175276_a" to "handleComponentClick")
 
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")
@@ -302,8 +324,9 @@ fun injectTextComponentHover() = inject {
     className = "net/minecraft/client/gui/GuiScreen"
     methodName = "handleComponentHover"
     methodDesc = "(L$ICHAT_COMPONENT;II)V"
-
     at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf("func_175272_a" to "handleComponentHover")
 
     insnList {
         createInstance(CANCELLABLE_EVENT, "()V")
@@ -365,6 +388,11 @@ fun injectRenderTooltip() = inject {
         ),
         before = false,
         shift = 1
+    )
+
+    methodMaps = mapOf(
+        "func_146285_a" to "renderToolTip",
+        "func_82840_a" to "getTooltip"
     )
 
     insnList {
