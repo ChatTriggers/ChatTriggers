@@ -89,6 +89,11 @@ object ClientListener {
     }
 
     @SubscribeEvent
+    fun onDrawScreenEvent(event: GuiScreenEvent.DrawScreenEvent.Post) {
+        TriggerType.POST_GUI_RENDER.triggerAll(event.gui, event.mouseX, event.mouseY)
+    }
+
+    @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent) {
         GL11.glPushMatrix()
         handleOverlayTriggers(event)

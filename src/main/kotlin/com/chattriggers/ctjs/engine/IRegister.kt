@@ -31,7 +31,8 @@ interface IRegister {
             it.name.toLowerCase() == "register$name"
         }
 
-        return func?.call(this, method) as OnTrigger? ?: throw NoSuchMethodException()
+        return func?.call(this, method) as OnTrigger? ?:
+            throw NoSuchMethodException("No trigger type named '$triggerType'")
     }
 
     /**
@@ -47,7 +48,7 @@ interface IRegister {
      * - [OnChatTrigger.setParameter] Sets the chat parameter
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerChat(method: Any): OnChatTrigger {
@@ -67,7 +68,7 @@ interface IRegister {
      * - [OnChatTrigger.setParameter] Sets the chat parameter
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerActionBar(method: Any): OnChatTrigger {
@@ -80,7 +81,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerWorldLoad(method: Any): OnRegularTrigger {
@@ -93,7 +94,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerWorldUnload(method: Any): OnRegularTrigger {
@@ -112,7 +113,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerClicked(method: Any): OnRegularTrigger {
@@ -132,7 +133,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerDragged(method: Any): OnRegularTrigger {
@@ -154,7 +155,7 @@ interface IRegister {
      * - [OnSoundPlayTrigger.setCriteria] Sets the sound name criteria
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerSoundPlay(method: Any): OnSoundPlayTrigger {
@@ -173,7 +174,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerNoteBlockPlay(method: Any): OnRegularTrigger {
@@ -192,7 +193,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerNoteBlockChange(method: Any): OnRegularTrigger {
@@ -208,7 +209,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerTick(method: Any): OnRegularTrigger {
@@ -228,7 +229,7 @@ interface IRegister {
      *      to fire. Overrides [OnStepTrigger.setFps].
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerStep(method: Any): OnStepTrigger {
@@ -244,7 +245,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderWorld(method: Any): OnRegularTrigger {
@@ -260,7 +261,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderOverlay(method: Any): OnRenderTrigger {
@@ -277,7 +278,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderPlayerList(method: Any): OnRenderTrigger {
@@ -294,7 +295,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderCrosshair(method: Any): OnRenderTrigger {
@@ -311,7 +312,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderDebug(method: Any): OnRenderTrigger {
@@ -328,7 +329,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderBossHealth(method: Any): OnRenderTrigger {
@@ -345,7 +346,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderHealth(method: Any): OnRenderTrigger {
@@ -362,7 +363,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderArmor(method: Any): OnRenderTrigger {
@@ -379,7 +380,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderFood(method: Any): OnRenderTrigger {
@@ -396,7 +397,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderMountHealth(method: Any): OnRenderTrigger {
@@ -414,7 +415,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderExperience(method: Any): OnRenderTrigger {
@@ -431,7 +432,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderHotbar(method: Any): OnRenderTrigger {
@@ -448,7 +449,7 @@ interface IRegister {
      * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderAir(method: Any): OnRenderTrigger {
@@ -465,7 +466,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerDrawBlockHighlight(method: Any): OnRegularTrigger {
@@ -481,7 +482,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGameLoad(method: Any): OnRegularTrigger {
@@ -496,7 +497,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGameUnload(method: Any): OnRegularTrigger {
@@ -513,7 +514,7 @@ interface IRegister {
      * - [OnCommandTrigger.setCommandName] Sets the command name
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerCommand(method: Any): OnCommandTrigger {
@@ -529,7 +530,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGuiOpened(method: Any): OnRegularTrigger {
@@ -548,7 +549,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerPlayerJoined(method: Any): OnRegularTrigger {
@@ -567,7 +568,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerPlayerLeft(method: Any): OnRegularTrigger {
@@ -587,7 +588,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerPickupItem(method: Any): OnRegularTrigger {
@@ -607,7 +608,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerDropItem(method: Any): OnRegularTrigger {
@@ -624,7 +625,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerScreenshotTaken(method: Any): OnRegularTrigger {
@@ -641,7 +642,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerMessageSent(method: Any): OnRegularTrigger {
@@ -661,7 +662,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerItemTooltip(method: Any): OnRegularTrigger {
@@ -692,7 +693,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerPlayerInteract(method: Any): OnRegularTrigger {
@@ -710,7 +711,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerBlockBreak(method: Any): OnRegularTrigger {
@@ -728,7 +729,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGuiRender(method: Any): OnRegularTrigger {
@@ -747,7 +748,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGuiKey(method: Any): OnRegularTrigger {
@@ -768,7 +769,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGuiMouseClick(method: Any): OnRegularTrigger {
@@ -789,7 +790,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGuiMouseRelease(method: Any): OnRegularTrigger {
@@ -810,7 +811,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerGuiMouseDrag(method: Any): OnRegularTrigger {
@@ -827,7 +828,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerPacketSent(method: Any): OnRegularTrigger {
@@ -845,7 +846,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerChatComponentClicked(method: Any): OnRegularTrigger {
@@ -863,7 +864,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerChatComponentHovered(method: Any): OnRegularTrigger {
@@ -882,11 +883,29 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerRenderEntity(method: Any): OnRegularTrigger {
         return OnRegularTrigger(method, TriggerType.RENDER_ENTITY, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs after the current screen is rendered
+     *
+     * Passes through three arguments:
+     * - The GuiScreen
+     * - The mouseX
+     * - The mouseY
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerPostGuiRender(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.POST_GUI_RENDER, getImplementationLoader())
     }
 
     /**
@@ -900,7 +919,7 @@ interface IRegister {
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
      *
-     * @param method The name of the method to callback when the event is fired
+     * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
     fun registerSpawnParticle(method: Any): OnRegularTrigger {
