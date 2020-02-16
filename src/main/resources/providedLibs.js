@@ -1,4 +1,4 @@
-let global = this;
+let global = this
 
 global.Java = {
     type: function(clazz) {
@@ -7,10 +7,10 @@ global.Java = {
         let returned = Packages;
 
         for (let i = 0; i < split.length; i++) {
-            returned = returned[split[i]]
+            returned = returned[split[i]];
         }
 
-        return returned
+        return returned;
     }
 }
 
@@ -96,11 +96,18 @@ global.ChatTriggers = Java.type("com.chattriggers.ctjs.Reference").INSTANCE;
 // Thread
 global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread");
 
+global.setTimeout = function(func, delay) {
+    new Thread(function() {
+        Thread.sleep(delay);
+        func();
+    }).start();
+}
+
 // simplified methods
 global.print = function(toPrint) {
     if (toPrint === null) {
         Console.out.println("null");
-        return
+        return;
     }
     Console.out.println(toPrint);
 }
@@ -129,15 +136,9 @@ global.easeOut = function(start, finish, speed, jump) {
     }
 }
 
-// Number.__proto__.easeOut = function(to, speed, jump) {
-//     if (!jump) jump = 1;
-//
-//     if (Math.floor(Math.abs(to - this) / jump) > 0) {
-//         this = this + (to - this) / speed;
-//     } else {
-//         this = to
-//     }
-// };
+Number.prototype.easeOut = function(to, speed, jump) {
+    return easeOut(this, to, speed, jump);
+}
 
 global.easeColor = function(start, finish, speed, jump) {
     return Renderer.color(
@@ -148,18 +149,19 @@ global.easeColor = function(start, finish, speed, jump) {
     );
 }
 
-// Number.__proto__.easeColor = function(start, finish, speed, jump) {
-//     this = Renderer.color(
-//         easeOut((start >> 16) & 0xFF, (finish >> 16) & 0xFF, speed, jump),
-//         easeOut((start >> 8) & 0xFF, (finish >> 8) & 0xFF, speed, jump),
-//         easeOut(start & 0xFF, finish & 0xFF, speed, jump),
-//         easeOut((start >> 24) & 0xFF, (finish >> 24) & 0xFF, speed, jump)
-//     );
-// };
+Number.prototype.easeColor = function(to, speed, jump) {
+    return easeColor(this, to, speed, jump);
+}
 
-global.setTimeout = function(func, delay) {
-    new Thread(function() {
-        Thread.sleep(delay);
-        func();
-    }).start();
+// String prototypes
+String.prototype.addFormatting = function() {
+    return ChatLib.addFormatting(this);
+}
+
+String.prototype.removeFormatting = function() {
+    return ChatLib.removeFormatting(this);
+}
+
+String.prototype.replaceFormatting = function() {
+    return ChatLib.replaceFormatting(this);
 }
