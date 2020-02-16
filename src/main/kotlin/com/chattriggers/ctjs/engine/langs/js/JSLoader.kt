@@ -73,7 +73,7 @@ object JSLoader : ILoader {
                     "provided",
                     1, null
                 )
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 e.printStackTrace()
                 console.printStackTrace(e)
 
@@ -114,7 +114,7 @@ object JSLoader : ILoader {
 
         try {
             require.loadCTModule(module.name, entry, entryFile)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             println("Error loading module ${module.name}")
             e.printStackTrace()
             console.out.println("Error loading module ${module.name}")
@@ -142,7 +142,7 @@ object JSLoader : ILoader {
             if (method !is Function) throw ClassCastException("Need to pass actual function to the register function, not the name!")
 
             method.call(moduleContext, scope, scope, args)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             console.printStackTrace(e)
             removeTrigger(trigger)
         }
