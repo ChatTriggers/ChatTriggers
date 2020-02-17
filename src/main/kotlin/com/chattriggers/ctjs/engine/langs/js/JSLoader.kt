@@ -112,6 +112,7 @@ object JSLoader : ILoader {
 
         val entryFile = File(module.folder, entry).toURI()
 
+        JSContextFactory.enterContext(moduleContext)
         try {
             require.loadCTModule(module.name, entry, entryFile)
         } catch (e: Throwable) {
@@ -119,6 +120,8 @@ object JSLoader : ILoader {
             e.printStackTrace()
             console.out.println("Error loading module ${module.name}")
             console.printStackTrace(e)
+        } finally {
+            Context.exit()
         }
 
         IRegister.currentModule = null
