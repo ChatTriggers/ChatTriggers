@@ -26,6 +26,7 @@ object JSContextFactory : ContextFactory() {
         cx.wrapFactory = object : WrapFactory() {
             override fun wrap(cx: Context?, scope: Scriptable?, obj: Any?, staticType: Class<*>?): Any? {
                 if (obj is Collection<*>) {
+                    // TODO: Wrapping an array is somewhat slow
                     return super.wrap(cx, scope, obj.toTypedArray(), staticType)
                 }
 

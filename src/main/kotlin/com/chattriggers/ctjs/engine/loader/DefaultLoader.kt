@@ -35,6 +35,8 @@ object DefaultLoader {
             }
         }
 
+        // TODO: Multi-thread loading & updating
+        //  this will probably involve making all of these completable-futures
         return findModulesAndUpdate(updateCheck)
     }
 

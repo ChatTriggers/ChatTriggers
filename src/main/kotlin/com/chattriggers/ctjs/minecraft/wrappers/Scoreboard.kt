@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.scoreboard.Score
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.client.GuiIngameForge
 
@@ -123,16 +124,15 @@ object Scoreboard {
 
         try {
             val scoreboard = World.getWorld()?.scoreboard ?: return
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
+            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
             scoreboardTitle = sidebarObjective.displayName ?: return
 
-            val scores = scoreboard.getSortedScores(sidebarObjective)
+            val scores: Collection<net.minecraft.scoreboard.Score> = scoreboard.getSortedScores(sidebarObjective)
 
             scoreboardNames = scores.map {
                 Score(it)
             }.toMutableList()
-        } catch (ignored: Exception) {
-        }
+        } catch (ignored: Exception) { }
     }
 
     @JvmStatic

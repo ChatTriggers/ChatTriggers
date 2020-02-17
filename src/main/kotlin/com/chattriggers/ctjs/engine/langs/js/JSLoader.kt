@@ -176,21 +176,7 @@ object JSLoader : ILoader {
 
     class CTRequire(moduleProvider: ModuleScriptProvider) : Require(moduleContext, scope, moduleProvider, null, null, false) {
         fun loadCTModule(name: String, entry: String, uri: URI) {
-            getExportedModuleInterface.invokeWithArguments(
-                this,
-                moduleContext,
-                name + File.separator + entry,
-                uri, null, false
-            )
-        }
-
-        companion object {
-            @JvmStatic
-            val getExportedModuleInterface = MethodHandles.lookup()
-                .unreflect(Require::class.declaredFunctions
-                    .find { it.name == "getExportedModuleInterface" }
-                    ?.javaMethod?.apply { isAccessible = true }
-                )
+            getExportedModuleInterface(moduleContext, name + File.separator + entry, uri, null, false)
         }
     }
 }
