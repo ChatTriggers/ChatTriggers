@@ -5,13 +5,12 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiChat
-import net.minecraft.client.gui.GuiNewChat
-import net.minecraft.client.gui.GuiPlayerTabOverlay
-import net.minecraft.client.gui.GuiScreen
+import net.minecraft.client.gui.*
+import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
+import net.minecraft.realms.RealmsBridge
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 
@@ -40,6 +39,22 @@ object Client {
     //#else
     //$$ getMinecraft().connection
     //#endif
+
+    /**
+     * Quits the client back to the main menu.
+     * This acts just like clicking the "Disconnect" or "Save and quit to title" button.
+     */
+    @JvmStatic
+    fun disconnect() {
+        World.getWorld()?.sendQuittingDisconnectingPacket()
+        getMinecraft().loadWorld(null as WorldClient?)
+
+        when {
+            getMinecraft().isIntegratedServerRunning -> getMinecraft().displayGuiScreen(GuiMainMenu())
+            getMinecraft().isConnectedToRealms -> RealmsBridge().switchToRealms(GuiMainMenu())
+            else -> getMinecraft().displayGuiScreen(GuiMultiplayer(GuiMainMenu()))
+        }
+    }
 
     /**
      * Gets the Minecraft GuiNewChat object for the chat gui
