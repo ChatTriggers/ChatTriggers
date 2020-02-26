@@ -90,6 +90,6 @@ fun String.print() {
     try {
         ModuleManager.generalConsole.out.println(this)
     } catch (exception: Exception) {
-        System.out.println(this)
+        println(this)
     }
 }

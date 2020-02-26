@@ -158,21 +158,13 @@ object DefaultLoader {
                 "Can't find page for ${dir.name}".print()
             }
 
-            modules.addAll(
-                    getRequiredModules(metadata, updateCheck)
-            )
+            modules.addAll(getRequiredModules(metadata, updateCheck))
         } catch (exception: Exception) {
             "Error loading module from $dir".print()
             exception.print()
         }
 
-        modules.add(
-            Module(
-                dir.name,
-                metadata,
-                dir
-            )
-        )
+        modules.add(Module(dir.name, metadata, dir))
 
         return modules
     }
