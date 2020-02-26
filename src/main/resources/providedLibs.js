@@ -1,7 +1,7 @@
 let global = this;
 
 global.Java = {
-    type: function(clazz) {
+    type: function (clazz) {
         const split = clazz.split(".");
 
         let returned = Packages;
@@ -96,15 +96,15 @@ global.ChatTriggers = Java.type("com.chattriggers.ctjs.Reference").INSTANCE;
 // Thread
 global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread");
 
-global.setTimeout = function(func, delay) {
-    new Thread(function() {
+global.setTimeout = function (func, delay) {
+    new Thread(function () {
         Thread.sleep(delay);
         func();
     }).start();
 };
 
 // simplified methods
-global.print = function(toPrint) {
+global.print = function (toPrint) {
     if (toPrint === null) {
         Console.out.println("null");
         return;
@@ -112,21 +112,21 @@ global.print = function(toPrint) {
     Console.out.println(toPrint);
 };
 
-global.cancel = function(event) {
+global.cancel = function (event) {
     try {
         EventLib.cancel(event);
-    } catch(err) {
+    } catch (err) {
         if (!event.isCancelable()) return;
         event.setCanceled(true);
     }
 };
 
-global.register = function(triggerType, methodName) {
+global.register = function (triggerType, methodName) {
     return TriggerRegister.register(triggerType, methodName);
 };
 
 // animation
-global.easeOut = function(start, finish, speed, jump) {
+global.easeOut = function (start, finish, speed, jump) {
     if (!jump) jump = 1;
 
     if (Math.floor(Math.abs(finish - start) / jump) > 0) {
@@ -136,11 +136,11 @@ global.easeOut = function(start, finish, speed, jump) {
     }
 };
 
-Number.prototype.easeOut = function(to, speed, jump) {
+Number.prototype.easeOut = function (to, speed, jump) {
     return easeOut(this, to, speed, jump);
 };
 
-global.easeColor = function(start, finish, speed, jump) {
+global.easeColor = function (start, finish, speed, jump) {
     return Renderer.color(
         easeOut((start >> 16) & 0xFF, (finish >> 16) & 0xFF, speed, jump),
         easeOut((start >> 8) & 0xFF, (finish >> 8) & 0xFF, speed, jump),
@@ -149,20 +149,20 @@ global.easeColor = function(start, finish, speed, jump) {
     );
 };
 
-Number.prototype.easeColor = function(to, speed, jump) {
+Number.prototype.easeColor = function (to, speed, jump) {
     return easeColor(this, to, speed, jump);
 };
 
 // String prototypes
-String.prototype.addFormatting = function() {
+String.prototype.addFormatting = function () {
     return ChatLib.addFormatting(this);
 };
 
-String.prototype.removeFormatting = function() {
+String.prototype.removeFormatting = function () {
     return ChatLib.removeFormatting(this);
 };
 
-String.prototype.replaceFormatting = function() {
+String.prototype.replaceFormatting = function () {
     return ChatLib.replaceFormatting(this);
 };
 
@@ -238,19 +238,26 @@ String.prototype.replaceFormatting = function() {
     _.counters = Object.create(null);
 
     _.defaultStringifier = function (anyValue) {
-        switch(typeof anyValue) {
-            case "boolean": return anyValue + "";
-            case "function": return "[object Function(" + anyValue.length + ")]";
-            case "number": return anyValue + "";
+        switch (typeof anyValue) {
+            case "boolean":
+                return anyValue + "";
+            case "function":
+                return "[object Function(" + anyValue.length + ")]";
+            case "number":
+                return anyValue + "";
             case "object": {
-                if(anyValue === null) return "null";
-                else if(Array.isArray(anyValue)) return "[object Array(" + anyValue.length + ")]";
+                if (anyValue === null) return "null";
+                else if (Array.isArray(anyValue)) return "[object Array(" + anyValue.length + ")]";
                 else return _.toString(anyValue);
             }
-            case "string": return JSON.stringify(anyValue);
-            case "symbol": return anyValue + "";
-            case "undefined": return "undefined";
-            case "unknown": return "[object #Unknown]";
+            case "string":
+                return JSON.stringify(anyValue);
+            case "symbol":
+                return anyValue + "";
+            case "undefined":
+                return "undefined";
+            case "unknown":
+                return "[object #Unknown]";
         }
     };
 
@@ -274,19 +281,17 @@ String.prototype.replaceFormatting = function() {
     // Formatter
     _.formatArguments = function (argumentObject) {
         const rv = [];
-        for(var i = 0; i < argumentObject.length; i++) {
+        for (var i = 0; i < argumentObject.length; i++) {
             const arg = argumentObject[i];
             const args = argumentObject;
-            if(typeof arg === "string") {
+            if (typeof arg === "string") {
                 rv[rv.length] = arg.replace(/%[cdfiosO%]/g, (match, index) => {
-                    if(match === "%%") return "%";
+                    if (match === "%%") return "%";
                     return ++i in args ? _.formats[match](args[i]) : match;
                 });
-            }
-            else if(Object(arg) === arg) {
+            } else if (Object(arg) === arg) {
                 rv[rv.length] = _.toString(arg);
-            }
-            else {
+            } else {
                 rv[rv.length] = String(arg);
             }
         }
@@ -296,25 +301,12 @@ String.prototype.replaceFormatting = function() {
 
     _.formatAttributes = function (attributes) {
         const a = [];
-        for(var i = 0; i < attributes.length; i++) {
+        for (var i = 0; i < attributes.length; i++) {
             const attribute = attributes.item(i);
             a[a.length] = attribute.name + "=" + JSON.stringify(attribute.value);
         }
         return a.join(" ");
     };
-
-
-    _.formatNode = function (node) {
-        // Not sure how text nodes should be serialized.
-        if(node.nodeType === org.w3c.dom.Node.TEXT_NODE) return "[#text: " + node.data + "]";
-        var rv = "<" + node.tagName;
-        if(node.attributes.length) rv += " " + _.formatAttributes(node.attributes);
-        if(node.childNodes && node.childNodes.length) {
-            return rv + ">" + "..." + node.childNodes.length + "..." + "</" + node.tagName + ">";
-        }
-        else return rv + " />";
-    };
-
 
     _.formatObject = function (object) {
         const sep = _.lineSep;
@@ -322,14 +314,8 @@ String.prototype.replaceFormatting = function() {
             _.defaultStringifier(key) + ": " + _.defaultStringifier(object[key])).join("," + sep + " ") + (sep + "}");
     };
 
-
-    _.isNode = function (arg) {
-        return arg instanceof org.w3c.dom.Node;
-    };
-
-
     _.makeTimeStamp = function () {
-        if(console.config.showMilliseconds) {
+        if (console.config.showMilliseconds) {
             const date = new Date();
             return date.toLocaleTimeString() + "," + date.getMilliseconds();
         }
@@ -358,7 +344,7 @@ String.prototype.replaceFormatting = function() {
 
     // Logger
     _.writeln = function (msgType, msg) {
-        if(arguments.length < 2) return;
+        if (arguments.length < 2) return;
         const showMessageType = console.config.showMessageType;
         const showTimeStamp = console.config.showTimeStamp;
         const msgTypePart = showMessageType ? msgType : "";
@@ -369,8 +355,10 @@ String.prototype.replaceFormatting = function() {
         const indent = (this.indentLevel > 0
             ? _.repeat(console.config.indent, this.indentLevel)
             : "");
-        switch(msgType) {
-            case "assert": case "error": case "warn": {
+        switch (msgType) {
+            case "assert":
+            case "error":
+            case "warn": {
                 _.printLineToStdErr(prefix + indent + msg);
                 break;
             }
@@ -385,10 +373,10 @@ String.prototype.replaceFormatting = function() {
      * Tests whether the given expression is true. If not, logs a message with the visual "error" representation.
      */
     console.assert = function assert(booleanValue, arg) {
-        if(!!booleanValue) return;
+        if (!!booleanValue) return;
         const defaultMessage = "assertion failed";
-        if(arguments.length < 2) return _.writeln("assert", defaultMessage);
-        if(typeof arg !== "string") return _.writeln("assert", _.formatArguments([defaultMessage, arg]));
+        if (arguments.length < 2) return _.writeln("assert", defaultMessage);
+        if (typeof arg !== "string") return _.writeln("assert", _.formatArguments([defaultMessage, arg]));
         _.writeln("assert", (defaultMessage + ": " + arg));
     };
 
@@ -400,7 +388,7 @@ String.prototype.replaceFormatting = function() {
     console.clear = function clear() {
         try {
             Console.clearConsole();
-        } catch(_) {
+        } catch (_) {
             // Pass
         }
     };
@@ -410,9 +398,9 @@ String.prototype.replaceFormatting = function() {
      * Prints the number of times that 'console.count()' was called with the same label.
      */
     console.count = function count(label) {
-        if(typeof label === "undefined") label = "default";
+        if (typeof label === "undefined") label = "default";
         label = String(label);
-        if(!(label in _.counters)) _.counters[label] = 0;
+        if (!(label in _.counters)) _.counters[label] = 0;
         _.counters[label]++;
         _.writeln("count", label + ": " + _.counters[label]);
     };
@@ -432,7 +420,7 @@ String.prototype.replaceFormatting = function() {
      * @todo Use the `options` argument.
      */
     console.dir = function dir(arg, options) {
-        if(Object(arg) === arg) {
+        if (Object(arg) === arg) {
             _.writeln("dir", _.formatObject(arg));
             return;
         }
@@ -446,9 +434,8 @@ String.prototype.replaceFormatting = function() {
      */
     console.dirxml = function dirxml(args) {
         const list = [];
-        for(const arg of _.slice(arguments)) {
-            if(_.isNode(arg)) list[list.length] = _.formatNode(arg);
-            else if(Object(arg) === arg) list[list.length] = _.formatObject(arg);
+        for (const arg of _.slice(arguments)) {
+            if (Object(arg) === arg) list[list.length] = _.formatObject(arg);
             else list[list.length] = _.defaultStringifier(arg);
         }
         _.writeln("dirxml", list.join(" "));
@@ -472,7 +459,7 @@ String.prototype.replaceFormatting = function() {
      * it can be an interactive block or just a set of indented sub messages.
      */
     console.group = function group(args) {
-        if(arguments.length) {
+        if (arguments.length) {
             const s = _.formatArguments(arguments);
             _.writeln("group", s);
         }
@@ -490,7 +477,7 @@ String.prototype.replaceFormatting = function() {
      * to 'console.group()' or 'console.groupCollapsed()'.
      */
     console.groupEnd = function groupEnd() {
-        if(_.indentLevel < 1) return;
+        if (_.indentLevel < 1) return;
         _.indentLevel--;
     };
 
@@ -514,9 +501,9 @@ String.prototype.replaceFormatting = function() {
 
 
     console.time = function time(label) {
-        if(typeof label === "undefined") label = "default";
+        if (typeof label === "undefined") label = "default";
         label = String(label);
-        if(label in _.timers) return;
+        if (label in _.timers) return;
         _.timers[label] = Date.now();
     };
 
@@ -525,7 +512,7 @@ String.prototype.replaceFormatting = function() {
      * Stops a timer created by a call to `console.time(label)` and logs the elapsed time.
      */
     console.timeEnd = function timeEnd(label) {
-        if(typeof label === "undefined") label = "default";
+        if (typeof label === "undefined") label = "default";
         label = String(label);
         const milliseconds = Date.now() - _.timers[label];
         _.writeln("timeEnd", label + ": " + milliseconds + " ms");
