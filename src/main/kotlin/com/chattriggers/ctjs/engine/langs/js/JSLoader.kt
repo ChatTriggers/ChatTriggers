@@ -139,12 +139,12 @@ object JSLoader : ILoader {
     override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>) {
-        if (Context.getCurrentContext() == null) JSContextFactory.enterContext(moduleContext)
+        if (Context.getCurrentContext() == null) JSContextFactory.enterContext()
 
         try {
             if (method !is Function) throw ClassCastException("Need to pass actual function to the register function, not the name!")
 
-            method.call(moduleContext, scope, scope, args)
+            method.call(Context.getCurrentContext(), scope, scope, args)
         } catch (e: Throwable) {
             console.printStackTrace(e)
             removeTrigger(trigger)

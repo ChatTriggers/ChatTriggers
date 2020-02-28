@@ -11,7 +11,7 @@ object IconHandler {
     private var icons = mutableListOf<Icon>()
 
     init {
-        val imageUrl = "http://167.99.3.229/assets/images/"
+        val imageUrl = "https://chattriggers.com/assets/images/"
 
         this.icons.add(Icon(Image("CT_logo.png", imageUrl + "logo-icon.png"), "https://chattriggers.com/"))
         this.icons.add(

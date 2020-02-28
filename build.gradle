@@ -107,7 +107,7 @@ dependencies {
     provided group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.3"
     provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    provided 'com.github.falsehonesty:asmhelper:4330d716d7'
+    provided 'com.github.falsehonesty:asmhelper:b9f48209ad'
     provided 'com.github.chattriggers:rhino:dc3717e721'
 }
 
