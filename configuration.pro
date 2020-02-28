@@ -26,7 +26,7 @@
 
 -keep class com.chattriggers.** { *; }
 -keep class org.spongepowered.** { *; }
--keep class kotlin.reflect.jvm.** { *; }
+-keep class kotlin.reflect.** { *; }
 -keep class kotlin.jvm.internal.Intrinsics { *; }
 -keep class me.falsehonesty.asmhelper.** { *; }
 -keep class org.mozilla.** { *; }
