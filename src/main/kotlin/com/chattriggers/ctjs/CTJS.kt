@@ -18,8 +18,6 @@ import com.chattriggers.ctjs.utils.UpdateChecker
 import com.chattriggers.ctjs.utils.capes.LayerCape
 import com.chattriggers.ctjs.utils.config.Config
 import com.google.gson.JsonParser
-import io.sentry.Sentry
-import io.sentry.event.UserBuilder
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
@@ -65,13 +63,6 @@ object CTJS {
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
-
-        Sentry.init(Reference.SENTRYDSN)
-
-        Sentry.getContext().user = UserBuilder()
-            .setUsername(Player.getName())
-            .setId(Player.getUUID())
-            .build()
 
         val sha256uuid = DigestUtils.sha256Hex(Player.getUUID())
 

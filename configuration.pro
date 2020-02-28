@@ -22,6 +22,7 @@
 -dontwarn org.spongepowered.**
 -dontwarn com.mojang.**
 -dontwarn com.chattriggers.**
+-dontwarn org.mozilla.**
 
 -keep class com.chattriggers.** { *; }
 -keep class org.spongepowered.** { *; }

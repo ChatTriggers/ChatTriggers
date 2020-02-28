@@ -3,9 +3,6 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
-import io.sentry.Sentry
-import io.sentry.event.Breadcrumb
-import io.sentry.event.BreadcrumbBuilder
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 import java.util.*
@@ -181,8 +178,6 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
         val variables = getVariables(chatMessage) ?: return
         variables.add(chatEvent)
 
-        recordBreadcrumb(chatMessage)
-
         callMethod(variables.toTypedArray())
     }
 
@@ -197,19 +192,6 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
         if (::criteriaPattern.isInitialized)
             matchesChatCriteria(chatMessage.replace("\n", "->newLine<-"))
         else ArrayList()
-
-    // helper method to record a breadcrumb for sentry
-    private fun recordBreadcrumb(chatMessage: String) {
-        Sentry.getContext().recordBreadcrumb(
-            BreadcrumbBuilder()
-                .setCategory("generic")
-                .setLevel(Breadcrumb.Level.INFO)
-                .setTimestamp(Date())
-                .setType(Breadcrumb.Type.DEFAULT)
-                .setMessage("Chat message: $chatMessage")
-                .build()
-        )
-    }
 
     /**
      * A method to check whether or not a received chat message
