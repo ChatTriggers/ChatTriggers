@@ -8,6 +8,7 @@ class CTJSTransformer : BaseClassTransformer() {
     override fun setup(classLoader: LaunchClassLoader) {
         super.setup(classLoader)
 
+        classLoader.addTransformerExclusion("ct.") // for proguard builds
         classLoader.addTransformerExclusion("com.chattriggers.ctjs.launch.plugin.")
     }
 

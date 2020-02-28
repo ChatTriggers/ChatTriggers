@@ -248,3 +248,5 @@ task proguard(type: proguard.gradle.ProGuardTask) {
     injars "build/libs/ctjs-${version}.jar"
     outjars "build/libs/ctjs-${version}-RELEASE.jar"
 }
+
+proguard.dependsOn build
