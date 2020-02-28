@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.launch.plugin
 
 import me.falsehonesty.asmhelper.BaseClassTransformer
 import net.minecraft.launchwrapper.LaunchClassLoader
+import kotlin.properties.Delegates
 
 class CTJSTransformer : BaseClassTransformer() {
     override fun setup(classLoader: LaunchClassLoader) {
@@ -11,7 +12,6 @@ class CTJSTransformer : BaseClassTransformer() {
     }
 
     override fun makeTransformers() {
-        injectEffectRenderer()
         injectCrashReport()
         injectEntityPlayer()
         injectGuiMainMenu()
@@ -20,5 +20,22 @@ class CTJSTransformer : BaseClassTransformer() {
         injectNetHandlerPlayClient()
         injectRenderManager()
         makeGuiScreenInjections()
+
+        try {
+            println("Trying to find frames+")
+            Class.forName("io.framesplus.util.NativeUtil")
+            println("Found frames+")
+            HAS_FRAMES_PLUS = true
+        } catch (e: ClassNotFoundException) {
+            // If Frames+ is present, this injection causes MC
+            // to crash
+            e.printStackTrace()
+            println("Did not find frames+")
+            injectEffectRenderer()
+        }
+    }
+
+    companion object {
+        var HAS_FRAMES_PLUS = false
     }
 }
