@@ -105,10 +105,11 @@ global.setTimeout = function (func, delay) {
 
 // simplified methods
 global.print = function (toPrint) {
-    if (toPrint === null) {
-        Console.out.println("null");
-        return;
-    }
+    if (toPrint === null)
+        toPrint = 'null';
+    else if (toPrint === undefined)
+        toPrint = 'undefined';
+
     Console.out.println(toPrint);
 };
 
