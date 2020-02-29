@@ -7,8 +7,6 @@ import com.chattriggers.ctjs.launch.plugin.CTJSTransformer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.*
-import com.chattriggers.ctjs.utils.console.Console
-import org.mozilla.javascript.JavaScriptException
 import kotlin.reflect.full.memberFunctions
 
 @Suppress("unused")
