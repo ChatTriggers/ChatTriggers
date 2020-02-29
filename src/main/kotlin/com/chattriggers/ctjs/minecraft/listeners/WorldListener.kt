@@ -4,12 +4,15 @@ import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.Server
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.triggers.TriggerType
 import io.sentry.Sentry
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
+import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.event.world.BlockEvent
 import net.minecraftforge.event.world.NoteBlockEvent
 import net.minecraftforge.event.world.WorldEvent
@@ -153,6 +156,21 @@ object WorldListener {
             World.getBlockAt(event.pos.x, event.pos.y, event.pos.z),
             PlayerMP(event.player),
             event
+        )
+    }
+
+    @SubscribeEvent
+    fun livingDeathEvent(event: LivingDeathEvent) {
+        TriggerType.ENTITY_DEATH.triggerAll(
+            Entity(event.entity)
+        )
+    }
+
+    @SubscribeEvent
+    fun attackEntityEvent(event: AttackEntityEvent) {
+        TriggerType.ENTITY_ATTACK.triggerAll(
+            Entity(event.target),
+            PlayerMP(event.entityPlayer)
         )
     }
 }

@@ -719,6 +719,33 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs before an entity is attacked
+     *
+     * Passes through two arguments:
+     * - The target Entity that is attacked
+     * - The PlayerMP attacker
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerEntityAttack(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.ENTITY_ATTACK, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before an entity dies
+     *
+     * Passes through one argument:
+     * - The Entity that died
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerEntityDeath(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.ENTITY_DEATH, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs as a gui is rendered
      *
      * Passes through three arguments:

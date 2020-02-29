@@ -34,6 +34,7 @@ enum class TriggerType {
     WORLD_LOAD, WORLD_UNLOAD,
     BLOCK_BREAK,
     SPAWN_PARTICLE,
+    ENTITY_DEATH, ENTITY_ATTACK,
 
     // misc
     COMMAND,
