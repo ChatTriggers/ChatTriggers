@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
-import com.chattriggers.ctjs.minecraft.wrappers.Server
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
@@ -164,7 +163,7 @@ object WorldListener {
 
     @SubscribeEvent
     fun attackEntityEvent(event: AttackEntityEvent) {
-        TriggerType.ENTITY_ATTACK.triggerAll(
+        TriggerType.ENTITY_DAMAGE.triggerAll(
             Entity(event.target),
             PlayerMP(event.entityPlayer)
         )
