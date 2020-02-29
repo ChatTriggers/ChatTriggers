@@ -1,10 +1,14 @@
 package com.chattriggers.ctjs.engine
 
+import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.engine.module.Module
+import com.chattriggers.ctjs.launch.plugin.CTJSTransformer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.*
+import com.chattriggers.ctjs.utils.console.Console
+import org.mozilla.javascript.JavaScriptException
 import kotlin.reflect.full.memberFunctions
 
 @Suppress("unused")
@@ -950,6 +954,10 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerSpawnParticle(method: Any): OnRegularTrigger {
+        if (CTJSTransformer.HAS_FRAMES_PLUS) {
+            JSLoader.console.out.println("WARNING: 'spawnParticle' trigger has been disabled because " +
+                    "Frames+ is present")
+        }
         return OnRegularTrigger(method, TriggerType.SPAWN_PARTICLE, getImplementationLoader())
     }
 

@@ -7,7 +7,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.triggers.TriggerType
-import io.sentry.Sentry
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
@@ -28,8 +27,6 @@ object WorldListener {
     fun onWorldLoad(event: WorldEvent.Load) {
         this.playerList.clear()
         this.shouldTriggerWorldLoad = true
-
-        Sentry.getStoredClient().serverName = Server.getName()
     }
 
     @SubscribeEvent
@@ -57,7 +54,6 @@ object WorldListener {
     @SubscribeEvent
     fun onWorldUnload(event: WorldEvent.Unload) {
         TriggerType.WORLD_UNLOAD.triggerAll()
-        Sentry.getStoredClient().serverName = "Not connected"
     }
 
     @SubscribeEvent

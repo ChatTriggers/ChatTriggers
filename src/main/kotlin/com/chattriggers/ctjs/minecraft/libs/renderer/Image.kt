@@ -8,6 +8,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.awt.image.BufferedImage
 import java.io.File
+import java.net.HttpURLConnection
 import java.net.URL
 import javax.imageio.ImageIO
 
@@ -75,7 +76,13 @@ class Image(var image: BufferedImage?) {
                 return ImageIO.read(resourceFile)
             }
 
-            val image = ImageIO.read(URL(url))
+            val conn = (URL(url).openConnection() as HttpURLConnection).apply {
+                requestMethod = "GET"
+                doOutput = true
+                setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
+            }
+
+            val image = ImageIO.read(conn.inputStream) ?: return null
             ImageIO.write(image, "png", resourceFile)
             return image
         }
