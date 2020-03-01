@@ -30,7 +30,6 @@ class CTJSTransformer : BaseClassTransformer() {
         } catch (e: ClassNotFoundException) {
             // If Frames+ is present, this injection causes MC
             // to crash
-            e.printStackTrace()
             println("Did not find frames+")
             injectEffectRenderer()
         }
