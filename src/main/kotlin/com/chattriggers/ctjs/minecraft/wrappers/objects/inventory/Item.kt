@@ -13,6 +13,7 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import org.lwjgl.opengl.GL11
 import net.minecraft.item.Item as MCItem
 
@@ -151,7 +152,7 @@ class Item {
 
     fun isEnchanted(): Boolean = itemStack.isItemEnchanted
 
-    fun getItemNBT(): String = itemStack.serializeNBT().toString()
+    fun getItemNBT(): NBTTagCompound = itemStack.serializeNBT()
 
     fun getMetadata(): Int = itemStack.metadata
 
