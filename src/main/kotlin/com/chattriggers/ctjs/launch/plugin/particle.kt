@@ -54,7 +54,7 @@ fun injectEffectRenderer() = inject {
         load(event)
         invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
 
-        ifClause(JumpCondition.TRUE) {
+        ifClause(JumpCondition.FALSE) {
             aconst_null()
             areturn()
         }
