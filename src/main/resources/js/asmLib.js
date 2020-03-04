@@ -1,7 +1,8 @@
 const ASMAt = Java.type('me.falsehonesty.asmhelper.dsl.At');
 const ASMInjectionPoint = Java.type('me.falsehonesty.asmhelper.dsl.InjectionPoint');
 const ASMDescriptor = Java.type('me.falsehonesty.asmhelper.dsl.instructions.Descriptor');
-const asmInjection = Java.type('com.chattriggers.ctjs.launch.AsmUtils').INSTANCE.inject;
+const asmInjection = Java.type('com.chattriggers.ctjs.launch.AsmUtilsKt').inject;
+const HashMap = Java.type("java.util.HashMap");
 
 class InjectBuilder {
     constructor(className, at, methodName, descriptor) {
@@ -9,18 +10,30 @@ class InjectBuilder {
         this.at = at;
         this.methodName = methodName;
         this.descriptor = descriptor;
+        this.methodMap = new HashMap();
+        this.fieldMap = new HashMap();
     }
 
     methodMaps(maps) {
-        this.methodMaps = maps;
+        maps.forEach(([key, val]) => {
+            this.methodMap.put(key, val);
+        });
+
+        return this;
     }
 
     fieldMaps(maps) {
-        this.fieldMaps = maps;
+        maps.forEach(([key, val]) => {
+            this.fieldMap.put(key, val);
+        });
+
+        return this;
     }
 
     instructions(insnList) {
         this.insnList = insnList;
+
+        return this;
     }
 
     execute() {
@@ -28,7 +41,7 @@ class InjectBuilder {
             throw new Error('InjectBuilder requires a call to instructions()');
         }
 
-        asmInjection(this.className, this.at, this.methodName, this.descriptor, this.fieldMaps, this.methodMaps, this.insnList);
+        asmInjection(this.className, this.at, this.methodName, this.descriptor, this.fieldMap, this.methodMap, this.insnList);
     }
 }
 
@@ -55,7 +68,7 @@ ASM.At.HEAD = ASMInjectionPoint.HEAD.INSTANCE;
 
 ASM.At.RETURN = function(ordinal = null) {
     return new ASMInjectionPoint.RETURN(ordinal);
-}
+};
 
 ASM.At.INVOKE = function(
     owner = throw new Error('ASM.At.INVOKE requires an owner parameter'),
@@ -64,12 +77,10 @@ ASM.At.INVOKE = function(
     ordinal = null
 ) {
     return new ASMInjectionPoint.INVOKE(new ASMDescriptor(owner, name, descriptor), ordinal)
-}
+};
 
 ASM.At.TAIL = ASMInjectionPoint.TAIL.INSTANCE;
 
 ASM.At.CUSTOM = function(finder = () => ([])) {
     return new ASMInjectionPoint.CUSTOM(finder);
-}
-
-export const a = 10;
+};

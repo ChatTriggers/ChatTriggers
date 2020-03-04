@@ -6,10 +6,8 @@ import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
-import org.mozilla.javascript.Context
+import org.mozilla.javascript.*
 import org.mozilla.javascript.Function
-import org.mozilla.javascript.ImporterTopLevel
-import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider
 import org.mozilla.javascript.commonjs.module.Require
 import org.mozilla.javascript.commonjs.module.provider.StrongCachingModuleScriptProvider
@@ -27,7 +25,7 @@ object JSLoader : ILoader {
     private lateinit var evalContext: Context
     private lateinit var scope: Scriptable
     private lateinit var require: CTRequire
-    private lateinit var ASMLib: Scriptable
+    private lateinit var ASMLib: Any
 
     override fun setup(jars: List<URL>) {
         if (Context.getCurrentContext() != null) {
@@ -68,7 +66,9 @@ object JSLoader : ILoader {
 
         try {
             val returned = require.loadCTModule("ASMLib", "ASMLib", asmLibFile.toURI())
-            println("test")
+
+            // Get the default export, the ASM Helper
+            ASMLib = ScriptableObject.getProperty(returned, "default")
         } catch (e: Throwable) {
             e.printStackTrace()
             console.printStackTrace(e)
@@ -86,7 +86,16 @@ object JSLoader : ILoader {
 
         try {
             val returned = require.loadCTModule(module.name, module.metadata.asmEntry!!, asmURI)
-            println("test")
+
+            val asmFunction = ScriptableObject.getProperty(returned, "default") as? Function
+
+            if (asmFunction == null) {
+                console.out.println("Asm entry for module ${module.name} has an invalid export. " +
+                        "An Asm entry must have a default export of a function.")
+                return
+            }
+
+            asmFunction.call(moduleContext, scope, scope, arrayOf(ASMLib))
         } catch (e: Throwable) {
             println("Error loading asm entry for module ${module.name}")
             e.printStackTrace()
