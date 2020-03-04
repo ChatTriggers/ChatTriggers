@@ -23,6 +23,12 @@ interface ILoader {
      */
     fun setup(jars: List<URL>)
 
+    fun asmSetup()
+
+    fun asmPass(module: Module, asmURI: URI)
+
+    fun entrySetup()
+
     /**
      * Loads a list of modules into the loader. This method will only
      * ever be called with modules that have an entry point corresponding

@@ -27,6 +27,7 @@ object JSLoader : ILoader {
     private lateinit var evalContext: Context
     private lateinit var scope: Scriptable
     private lateinit var require: CTRequire
+    private lateinit var ASMLib: Scriptable
 
     override fun setup(jars: List<URL>) {
         if (Context.getCurrentContext() != null) {
@@ -35,9 +36,9 @@ object JSLoader : ILoader {
 
         instanceContexts(jars)
 
-        val providedLibs = saveResource(
-            "/providedLibs.js",
-            File(modulesFolder.parentFile, "chattriggers-provided-libs.js"),
+        val asmProvidedLibs = saveResource(
+            "/js/asmProvidedLibs.js",
+            File(modulesFolder.parentFile, "chattriggers-asm-provided-libs.js"),
             true
         )
 
@@ -46,18 +47,82 @@ object JSLoader : ILoader {
         try {
             moduleContext.evaluateString(
                 scope,
-                providedLibs,
-                "provided",
+                asmProvidedLibs,
+                "asmProvided",
                 1, null
             )
         } catch (e: Throwable) {
             e.printStackTrace()
             console.printStackTrace(e)
+        } finally {
+            Context.exit()
+        }
+    }
 
+    override fun asmSetup() {
+        val asmLibFile = File(modulesFolder.parentFile, "chattriggers-asmLib.js")
+
+        saveResource("/js/asmLib.js", asmLibFile, true)
+
+        JSContextFactory.enterContext(moduleContext)
+
+        try {
+            val returned = require.loadCTModule("ASMLib", "ASMLib", asmLibFile.toURI())
+            println("test")
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            console.printStackTrace(e)
+        } finally {
+            Context.exit()
+        }
+    }
+
+    override fun asmPass(module: Module, asmURI: URI) {
+        if (Context.getCurrentContext() != null) {
             Context.exit()
         }
 
-        Context.exit()
+        JSContextFactory.enterContext(moduleContext)
+
+        try {
+            val returned = require.loadCTModule(module.name, module.metadata.asmEntry!!, asmURI)
+            println("test")
+        } catch (e: Throwable) {
+            println("Error loading asm entry for module ${module.name}")
+            e.printStackTrace()
+            console.out.println("Error loading asm entry for module ${module.name}")
+            console.printStackTrace(e)
+        } finally {
+            Context.exit()
+        }
+    }
+
+    override fun entrySetup() {
+        if (Context.getCurrentContext() != null) {
+            Context.exit()
+        }
+
+        val moduleProvidedLibs = saveResource(
+            "/js/moduleProvidedLibs.js",
+            File(modulesFolder.parentFile, "chattriggers-modules-provided-libs.js"),
+            true
+        )
+
+        JSContextFactory.enterContext(moduleContext)
+
+        try {
+            moduleContext.evaluateString(
+                scope,
+                moduleProvidedLibs,
+                "moduleProvided",
+                1, null
+            )
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            console.printStackTrace(e)
+        } finally {
+            Context.exit()
+        }
     }
 
     override fun entryPass(module: Module, entryURI: URI) {
@@ -66,6 +131,7 @@ object JSLoader : ILoader {
         }
 
         JSContextFactory.enterContext(moduleContext)
+
         try {
             require.loadCTModule(module.name, module.metadata.entry!!, entryURI)
         } catch (e: Throwable) {
@@ -123,8 +189,8 @@ object JSLoader : ILoader {
     }
 
     class CTRequire(moduleProvider: ModuleScriptProvider) : Require(moduleContext, scope, moduleProvider, null, null, false) {
-        fun loadCTModule(name: String, entry: String, uri: URI) {
-            getExportedModuleInterface(moduleContext, name + File.separator + entry, uri, null, false)
+        fun loadCTModule(name: String, entry: String, uri: URI): Scriptable {
+            return getExportedModuleInterface(moduleContext, name + File.separator + entry, uri, null, false)
         }
     }
 }

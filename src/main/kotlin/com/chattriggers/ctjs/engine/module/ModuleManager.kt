@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
+import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.engine.loader.ModuleUpdater
 import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.minecraft.libs.FileLib
@@ -16,7 +17,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
 
 object ModuleManager {
-    val loaders = mutableListOf<ILoader>()
+    val loaders = listOf(JSLoader)
     val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
@@ -68,6 +69,32 @@ object ModuleManager {
         }
     }
 
+    fun asmPass() {
+        loaders.forEach(ILoader::asmSetup)
+
+        // Load the modules
+        loaders.forEach { loader ->
+            cachedModules.filter {
+                File(it.folder, it.metadata.asmEntry ?: return@filter false).extension == loader.getLanguage().extension
+            }.forEach {
+                loader.asmPass(it, File(it.folder, it.metadata.asmEntry!!).toURI())
+            }
+        }
+    }
+
+    fun entryPass(modules: List<Module> = cachedModules) {
+        loaders.forEach(ILoader::entrySetup)
+
+        // Load the modules
+        loaders.forEach { loader ->
+            modules.filter {
+                File(it.folder, it.metadata.entry ?: return@filter false).extension == loader.getLanguage().extension
+            }.forEach {
+                loader.entryPass(it, File(it.folder, it.metadata.entry!!).toURI())
+            }
+        }
+    }
+
     private fun getFoldersInDir(dir: File): List<File> {
         if (!dir.isDirectory) return emptyList()
 
@@ -89,17 +116,6 @@ object ModuleManager {
         }
 
         return Module(directory.name, metadata, directory)
-    }
-
-    fun entryPass(modules: List<Module> = cachedModules) {
-        // Load the modules
-        loaders.forEach { loader ->
-            modules.filter {
-                File(it.folder, it.metadata.entry ?: return@filter false).extension == loader.getLanguage().extension
-            }.forEach {
-                loader.entryPass(it, File(it.folder, it.metadata.entry!!).toURI())
-            }
-        }
     }
 
     fun importModule(moduleName: String): Module? {

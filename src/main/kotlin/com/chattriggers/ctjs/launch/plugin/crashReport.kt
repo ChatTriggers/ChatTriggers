@@ -3,8 +3,6 @@ package com.chattriggers.ctjs.launch.plugin
 import me.falsehonesty.asmhelper.dsl.At
 import me.falsehonesty.asmhelper.dsl.InjectionPoint
 import me.falsehonesty.asmhelper.dsl.inject
-import me.falsehonesty.asmhelper.dsl.instructions.getLocalField
-import me.falsehonesty.asmhelper.dsl.instructions.invokeKOBjectFunction
 
 fun injectCrashReport() = inject {
     className = "net/minecraft/crash/CrashReport"

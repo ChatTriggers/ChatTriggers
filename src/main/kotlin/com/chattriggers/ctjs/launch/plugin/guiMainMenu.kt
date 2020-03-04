@@ -4,7 +4,6 @@ import me.falsehonesty.asmhelper.dsl.At
 import me.falsehonesty.asmhelper.dsl.InjectionPoint
 import me.falsehonesty.asmhelper.dsl.inject
 import me.falsehonesty.asmhelper.dsl.instructions.Descriptor
-import me.falsehonesty.asmhelper.dsl.instructions.invokeKOBjectFunction
 
 fun injectGuiMainMenu() = inject {
     className = "net/minecraft/client/gui/GuiMainMenu"
