@@ -11,7 +11,6 @@ abstract class OnTrigger protected constructor(
     var type: TriggerType,
     protected var loader: ILoader
 ) {
-    var owningModule = IRegister.currentModule
     var priority: Priority = Priority.NORMAL
         private set
 

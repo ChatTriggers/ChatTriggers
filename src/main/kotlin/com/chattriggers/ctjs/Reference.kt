@@ -9,7 +9,6 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
-import net.minecraft.launchwrapper.Launch
 import net.minecraftforge.client.ClientCommandHandler
 import kotlin.concurrent.thread
 
@@ -20,7 +19,8 @@ object Reference {
 
     var isLoaded = true
 
-    fun reloadCT() = loadCT(true)
+    @Deprecated("Does not provide any additional functionality", ReplaceWith("loadCT"))
+    fun reloadCT() = loadCT()
 
     fun unloadCT(asCommand: Boolean = true) {
         TriggerType.WORLD_UNLOAD.triggerAll()
@@ -29,19 +29,15 @@ object Reference {
         DisplayHandler.clearDisplays()
         GuiHandler.clearGuis()
         CommandHandler.getCommandList().clear()
-        ModuleManager.unload()
-
-        if (Config.clearConsoleOnLoad)
-            ModuleManager.loaders.forEach { it.console.clearConsole() }
+        ModuleManager.teardown()
 
         if (asCommand) {
             ChatLib.chat("&7Unloaded all of ChatTriggers")
-            this.isLoaded = true
+            this.isLoaded = false
         }
     }
 
-    @JvmOverloads
-    fun loadCT(updateCheck: Boolean = false) {
+    fun loadCT() {
         if (!this.isLoaded) return
         this.isLoaded = false
 
@@ -53,7 +49,10 @@ object Reference {
 
         CTJS.loadConfig()
 
-        ModuleManager.load(updateCheck).whenComplete { _, _ ->
+        conditionalThread {
+            ModuleManager.setup()
+            ModuleManager.entryPass()
+
             ChatLib.chat("&aDone reloading scripts!")
 
             TriggerType.GAME_LOAD.triggerAll()

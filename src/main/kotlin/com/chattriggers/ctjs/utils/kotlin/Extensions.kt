@@ -47,5 +47,5 @@ inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, obje
 
 fun String.toVersion(): Version {
     val split = this.split(".").map(String::toInt)
-    return Version(split[0], split[1], split[2], null, null, null)
+    return Version(split.getOrNull(0) ?: 0, split.getOrNull(1) ?: 0, split.getOrNull(2) ?: 0, null, null, null)
 }

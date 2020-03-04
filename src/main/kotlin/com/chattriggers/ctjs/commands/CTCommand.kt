@@ -58,13 +58,12 @@ object CTCommand : CommandBase() {
         }
 
         when (args[0].toLowerCase()) {
-            "load" -> Reference.loadCT()
-            "reload" -> Reference.reloadCT()
+            "reload", "load" -> Reference.loadCT()
             "unload" -> Reference.unloadCT()
             "files", "file" -> openFileLocation()
             "import" ->
                 if (args.size == 1) ChatLib.chat("&c/ct import [module name]")
-                else ModuleManager.importModule(args[1])
+                else import(args[1])
             "delete" ->
                 if (args.size == 1) ChatLib.chat("&c/ct delete [module name]")
                 else ChatLib.chat((if (ModuleManager.deleteModule(args[1])) "&aDeleted " else "&cFailed to delete ") + args[1])
@@ -79,6 +78,22 @@ object CTCommand : CommandBase() {
             "dump" -> dump(args)
             "copy" -> copyArgsToClipboard(args)
             else -> ChatLib.chat(getUsage())
+        }
+    }
+
+    private fun import(moduleName: String) {
+        if (ModuleManager.cachedModules.any { it.name.equals(moduleName, ignoreCase = true) }) {
+            ChatLib.chat("&cModule $moduleName is already installed!")
+        } else {
+            ChatLib.chat("&cImporting ${moduleName}...")
+            Reference.conditionalThread {
+                val module = ModuleManager.importModule(moduleName)
+                if (module == null) {
+                    ChatLib.chat("&cUnable to import module $moduleName")
+                } else {
+                    ChatLib.chat("&aSuccessfully imported ${module.metadata.name ?: module.name}")
+                }
+            }
         }
     }
 

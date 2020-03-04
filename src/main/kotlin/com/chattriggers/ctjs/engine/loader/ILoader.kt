@@ -8,6 +8,8 @@ import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.net.URI
+import java.net.URL
 import java.util.concurrent.CompletableFuture
 
 interface ILoader {
@@ -16,18 +18,17 @@ interface ILoader {
     val console: Console
 
     /**
-     * Loads a list of modules into the loader. This is meant to be called on
-     * a full load, which is different from [loadExtra], as this method
-     * should clear old modules.
+     * Performs initial engine setup given a list of jars. Note that
+     * these are all jars from all modules.
      */
-    fun load(modules: List<Module>): CompletableFuture<Unit>
+    fun setup(jars: List<URL>)
 
     /**
-     * Loads a single Module into the loader. This differs from [load] in that
-     * it is meant to be called only when importing modules as it differs
-     * semantically in that it shouldn't clear out old modules.
+     * Loads a list of modules into the loader. This method will only
+     * ever be called with modules that have an entry point corresponding
+     * to this loader's languages's extension
      */
-    fun loadExtra(module: Module)
+    fun entryPass(module: Module, entryURI: URI)
 
     /**
      * Tells the loader that it should activate all triggers
@@ -87,11 +88,6 @@ interface ILoader {
     }
 
     /**
-     * Gets a list of all currently loaded modules
-     */
-    fun getModules(): List<Module>
-
-    /**
      * Save a resource to the OS's filesystem from inside the jar
      * @param resourceName name of the file inside the jar
      * @param outputFile file to save to
@@ -109,17 +105,5 @@ interface ILoader {
         val res = resource.bufferedReader().readText()
         FileUtils.write(outputFile, res)
         return res
-    }
-
-    companion object {
-        internal val modulesFolder = File(Config.modulesFolder)
-
-        internal fun getFoldersInDir(dir: File): List<File> {
-            if (!dir.isDirectory) return emptyList()
-
-            return dir.listFiles()?.filter {
-                it.isDirectory
-            } ?: listOf()
-        }
     }
 }

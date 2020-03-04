@@ -11,10 +11,6 @@ import kotlin.reflect.full.memberFunctions
 
 @Suppress("unused")
 interface IRegister {
-    companion object {
-        var currentModule: Module? = null
-    }
-
     /**
      * Helper method register a trigger.
      *

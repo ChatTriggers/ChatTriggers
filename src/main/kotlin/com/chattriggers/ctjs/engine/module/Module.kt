@@ -5,7 +5,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import java.io.File
 
-class Module(val name: String, val metadata: ModuleMetadata, val folder: File) {
+class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
     private val gui = object {
         var collapsed = true
         var x = 0f

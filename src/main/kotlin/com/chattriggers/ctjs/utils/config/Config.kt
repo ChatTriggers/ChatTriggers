@@ -47,7 +47,7 @@ object Config {
     var consoleBackgroundColor: Color = Color(21, 21, 21)
 
     @ConfigOpt(name = "Threaded Loading", x = -110, y = 230, type = ConfigBoolean::class)
-    var threadedLoading = false
+    var threadedLoading = true
 
     fun load(jsonObject: JsonObject) {
         val gson = Gson()

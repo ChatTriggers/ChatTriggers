@@ -76,7 +76,8 @@ object CTJS {
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
         Reference.conditionalThread {
-            ModuleManager.load(true)
+            ModuleManager.setup()
+            ModuleManager.entryPass()
         }
 
         registerHooks()
