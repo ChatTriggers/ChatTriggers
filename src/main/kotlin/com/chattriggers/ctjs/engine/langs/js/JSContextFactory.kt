@@ -1,12 +1,16 @@
 package com.chattriggers.ctjs.engine.langs.js
 
 import net.minecraft.client.Minecraft
+import net.minecraft.launchwrapper.Launch
+import net.minecraftforge.common.ForgeModContainer
 import org.mozilla.javascript.Context
+import org.mozilla.javascript.Context.EMIT_DEBUG_OUTPUT
 import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR
 import org.mozilla.javascript.ContextFactory
 import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.WrapFactory
 import org.mozilla.javascript.tools.ToolErrorReporter
+import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
 
@@ -19,6 +23,7 @@ object JSContextFactory : ContextFactory() {
     override fun onContextCreated(cx: Context) {
         super.onContextCreated(cx)
 
+        cx.debugOutputPath = File(".", "DEBUG")
         cx.applicationClassLoader = classLoader
         cx.optimizationLevel = if (optimize) 9 else 0
         cx.languageVersion = Context.VERSION_ES6
@@ -38,6 +43,7 @@ object JSContextFactory : ContextFactory() {
     override fun hasFeature(cx: Context?, featureIndex: Int): Boolean {
         when (featureIndex) {
             FEATURE_LOCATION_INFORMATION_IN_ERROR -> return true
+            EMIT_DEBUG_OUTPUT -> return Launch.blackboard.getOrDefault("fml.deobfuscatedEnvironment", false) as Boolean
         }
 
         return super.hasFeature(cx, featureIndex)

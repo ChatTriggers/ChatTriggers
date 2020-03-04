@@ -106,7 +106,7 @@ dependencies {
     provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     provided 'com.github.falsehonesty:asmhelper:b9f48209ad'
-    provided 'com.github.chattriggers:rhino:34c76f1882'
+    provided 'com.github.chattriggers:rhino:3b4c66c252'
 }
 
 jar {
