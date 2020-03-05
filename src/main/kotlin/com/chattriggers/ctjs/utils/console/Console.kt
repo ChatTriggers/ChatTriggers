@@ -22,10 +22,11 @@ class Console(val loader: ILoader?) {
 
     val out: PrintStream
     private val textArea = JTextArea()
-    private val inputField = RSyntaxTextArea(4, 1).apply {
-        syntaxEditingStyle = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT
+    private val inputField = RSyntaxTextArea(5, 1).apply {
+        syntaxEditingStyle = loader?.getLanguage()?.syntaxStyle ?: SyntaxConstants.SYNTAX_STYLE_NONE
         Theme.load(this::class.java.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml")).apply(this)
         margin = Insets(5, 5, 5, 5)
+        isCodeFoldingEnabled = true
     }
 
     init {
