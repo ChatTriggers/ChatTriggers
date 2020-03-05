@@ -5,6 +5,10 @@ import jdk.internal.org.objectweb.asm.tree.InsnList
 import me.falsehonesty.asmhelper.dsl.At
 import me.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
 import net.minecraft.crash.CrashReportCategory
+import java.lang.invoke.CallSite
+import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodType
+import java.lang.invoke.MutableCallSite
 
 object AsmUtils {
     fun addCrashSectionCallable(crashReport: CrashReportCategory) {

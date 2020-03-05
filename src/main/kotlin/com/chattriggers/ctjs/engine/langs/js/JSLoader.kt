@@ -13,6 +13,9 @@ import org.mozilla.javascript.commonjs.module.Require
 import org.mozilla.javascript.commonjs.module.provider.StrongCachingModuleScriptProvider
 import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider
 import java.io.File
+import java.lang.invoke.MethodHandle
+import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodType
 import java.net.URI
 import java.net.URL
 
@@ -26,6 +29,12 @@ object JSLoader : ILoader {
     private lateinit var scope: Scriptable
     private lateinit var require: CTRequire
     private lateinit var ASMLib: Any
+
+    private val INVOKE_JS_CALL = MethodHandles.lookup().findStatic(
+        JSLoader::class.java,
+        "asmInvoke",
+        MethodType.methodType(Any::class.java, Callable::class.java, Array<Any?>::class.java)
+    )
 
     override fun setup(jars: List<URL>) {
         if (Context.getCurrentContext() != null) {
@@ -154,25 +163,50 @@ object JSLoader : ILoader {
         }
     }
 
-    override fun invokeASMExportedFunction(module: Module, functionURI: URI, args: Array<Any?>): Any? {
+    override fun asmInvokeLookup(module: Module, functionURI: URI): MethodHandle {
         if (Context.getCurrentContext() != null) {
             Context.exit()
         }
 
         JSContextFactory.enterContext(moduleContext)
 
-        return try {
+        try {
             val returned = require.loadCTModule(module.name, File(functionURI).name, functionURI)
             val func = ScriptableObject.getProperty(returned, "default") as Callable
-            func.call(moduleContext, scope, scope, args)
+
+            // When a call to this function ID is made, we always want to point it
+            // to our asmInvoke method, which in turn should always call [func].
+            return INVOKE_JS_CALL.bindTo(func)
         } catch (e: Throwable) {
-            println("Error loading module ${module.name}")
+            println("Error loading asm function $functionURI in module ${module.name}.")
             e.printStackTrace()
-            console.out.println("Error loading module ${module.name}")
+            console.out.println("Error loading asm function $functionURI in module ${module.name}.")
             console.printStackTrace(e)
-            null
+
+            // If we can't resolve the target function correctly, we will return
+            //  a no-op method handle that will always return null.
+            //  It still needs to match the method type (Object[])Object, so we drop the arguments param.
+            return MethodHandles.dropArguments(
+                MethodHandles.constant(Any::class.java, null),
+                0,
+                Array<Any?>::class.java
+            )
         } finally {
             Context.exit()
+        }
+    }
+
+    @JvmStatic
+    fun asmInvoke(func: Callable, args: Array<Any?>): Any? {
+        val missingContext = Context.getCurrentContext() == null
+        if (missingContext) {
+            JSContextFactory.enterContext(moduleContext)
+        }
+
+        try {
+            return func.call(moduleContext, scope, scope, args)
+        } finally {
+            if (missingContext) Context.exit()
         }
     }
 

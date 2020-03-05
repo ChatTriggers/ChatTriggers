@@ -23,6 +23,6 @@ fun injectGuiMainMenu() = inject {
     methodMaps = mapOf("func_73863_a" to "drawScreen")
 
     insnList {
-        invokeKOBjectFunction("com/chattriggers/ctjs/utils/UpdateChecker", "drawUpdateMessage", "()V")
+        invokeKObjectFunction("com/chattriggers/ctjs/utils/UpdateChecker", "drawUpdateMessage", "()V")
     }
 }

@@ -57,6 +57,8 @@ export default class ASM {
     static BYTE = "Ljava/lang/Byte;";
     static OBJECT = "Ljava/lang/Object;";
 
+    static currentModule = "";
+
     static ARRAY(o) {
         return "[" + o;
     }
@@ -74,14 +76,20 @@ export default class ASM {
     }
 
     static invokeJS($, functionId) {
-        const { OBJECT, STRING, ARRAY } = ASM;
+        let handle = $.indyHandle(
+            $.H_INVOKESTATIC,
+            "com/chattriggers/ctjs/launch/IndySupport",
+            "bootstrapInvokeJS",
+            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;"
+        );
 
-        const MM = "com/chattriggers/ctjs/engine/module/ModuleManager";
-        $.ldc(this.currentModule);
-        $.swap();
-        $.ldc(functionId)
-        $.swap();
-        $.invokeKObjectFunction(MM, "invokeASMExportedFunction", ASM.desc(OBJECT, STRING, STRING, ARRAY(OBJECT)));
+        $.invokeDynamic(
+            "invokeJSFunction",
+            "([Ljava/lang/Object;)Ljava/lang/Object;",
+            handle,
+            ASM.currentModule,
+            functionId
+        );
     }
 }
 

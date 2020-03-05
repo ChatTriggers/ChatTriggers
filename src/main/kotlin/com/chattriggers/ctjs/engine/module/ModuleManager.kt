@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.engine.loader.ModuleUpdater
 import com.chattriggers.ctjs.engine.loader.ILoader
+import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -14,6 +15,7 @@ import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.lang.IllegalArgumentException
+import java.lang.invoke.MethodHandle
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -68,6 +70,10 @@ object ModuleManager {
         loaders.forEach {
             it.setup(jars)
         }
+
+        // We're finished setting up all of our loaders,
+        //  which means they can now have their ASM invocation re-lookups happen
+        IndySupport.invalidateInvocations()
     }
 
     fun asmPass() {
@@ -96,18 +102,20 @@ object ModuleManager {
         }
     }
 
-    fun invokeASMExportedFunction(moduleName: String, funcId: String, args: Array<Any?>): Any? {
+    fun asmInvokeLookup(moduleName: String, functionID: String): MethodHandle {
+        // Find the targeted module
         val module = cachedModules.first { it.name == moduleName }
 
-        val funcPath = module.metadata.asmExportedFunctions?.get(funcId) ?: throw IllegalArgumentException(
-            "Module $module contains no asm exported function with id $funcId"
+        // Get the target function file from the metadata lookup table
+        val funcPath = module.metadata.asmExportedFunctions?.get(functionID) ?: throw IllegalArgumentException(
+            "Module $module contains no asm exported function with id $functionID"
         )
 
         val funcFile = File(module.folder, funcPath.replace('/', File.separatorChar).replace('\\', File.separatorChar))
 
         return loaders.first {
             it.getLanguage().extension == funcFile.extension
-        }.invokeASMExportedFunction(module, funcFile.toURI(), args)
+        }.asmInvokeLookup(module, funcFile.toURI())
     }
 
     private fun getFoldersInDir(dir: File): List<File> {
