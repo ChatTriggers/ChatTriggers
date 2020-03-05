@@ -21,6 +21,7 @@ class CTJSTransformer : BaseClassTransformer() {
         injectNetHandlerPlayClient()
         injectRenderManager()
         makeGuiScreenInjections()
+        makePlayerControllerMPInjections()
 
         try {
             println("Trying to find frames+")

@@ -955,5 +955,43 @@ interface IRegister {
         return OnRegularTrigger(method, TriggerType.SPAWN_PARTICLE, getImplementationLoader())
     }
 
+    /**
+     * Registers a new trigger that runs whenever the player has left clicked on an entity
+     *
+     * Passes through three arguments:
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.Entity] that is being hit
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerAttackEntity(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.ATTACK_ENTITY, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs whenever a block is left clicked
+     *
+     * Note: this is not continuously called while the block is being broken, only once
+     * when first left clicked.
+     *
+     * Passes through three arguments:
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block] being hit
+     * - The specific [com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace] being hit
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerHitBlock(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.HIT_BLOCK, getImplementationLoader())
+    }
+
     fun getImplementationLoader(): ILoader
 }
