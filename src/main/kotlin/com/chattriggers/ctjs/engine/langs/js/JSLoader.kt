@@ -95,6 +95,7 @@ object JSLoader : ILoader {
                 return
             }
 
+            ScriptableObject.putProperty(ASMLib, "currentModule", module.name)
             asmFunction.call(moduleContext, scope, scope, arrayOf(ASMLib))
         } catch (e: Throwable) {
             println("Error loading asm entry for module ${module.name}")
@@ -148,6 +149,28 @@ object JSLoader : ILoader {
             e.printStackTrace()
             console.out.println("Error loading module ${module.name}")
             console.printStackTrace(e)
+        } finally {
+            Context.exit()
+        }
+    }
+
+    override fun invokeASMExportedFunction(module: Module, functionURI: URI, args: Array<Any?>): Any? {
+        if (Context.getCurrentContext() != null) {
+            Context.exit()
+        }
+
+        JSContextFactory.enterContext(moduleContext)
+
+        return try {
+            val returned = require.loadCTModule(module.name, File(functionURI).name, functionURI)
+            val func = ScriptableObject.getProperty(returned, "default") as Callable
+            func.call(moduleContext, scope, scope, args)
+        } catch (e: Throwable) {
+            println("Error loading module ${module.name}")
+            e.printStackTrace()
+            console.out.println("Error loading module ${module.name}")
+            console.printStackTrace(e)
+            null
         } finally {
             Context.exit()
         }

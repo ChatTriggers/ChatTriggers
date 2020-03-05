@@ -36,6 +36,8 @@ interface ILoader {
      */
     fun entryPass(module: Module, entryURI: URI)
 
+    fun invokeASMExportedFunction(module: Module, functionURI: URI, args: Array<Any?>): Any?
+
     /**
      * Tells the loader that it should activate all triggers
      * of a certain type with the specified arguments.

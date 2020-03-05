@@ -3,6 +3,7 @@ const ASMInjectionPoint = Java.type('me.falsehonesty.asmhelper.dsl.InjectionPoin
 const ASMDescriptor = Java.type('me.falsehonesty.asmhelper.dsl.instructions.Descriptor');
 const asmInjection = Java.type('com.chattriggers.ctjs.launch.AsmUtilsKt').inject;
 const HashMap = Java.type("java.util.HashMap");
+const ModuleManager = Java.type("com.chattriggers.ctjs.engine.module.ModuleManager").INSTANCE;
 
 class InjectBuilder {
     constructor(className, at, methodName, descriptor) {
@@ -47,9 +48,18 @@ class InjectBuilder {
 
 export default class ASM {
     static STRING = 'Ljava/lang/String;';
-    static I = "I";
-    static L = "L";
     static INTEGER = "Ljava/lang/Integer;";
+    static DOUBLE = "Ljava/lang/Double;";
+    static LONG = "Ljava/lang/Long;";
+    static BOOLEAN = "Ljava/lang/Boolean;";
+    static SHORT = "Ljava/lang/Short;";
+    static CHARACTER = "Ljava/lang/Character";
+    static BYTE = "Ljava/lang/Byte;";
+    static OBJECT = "Ljava/lang/Object;";
+
+    static ARRAY(o) {
+        return "[" + o;
+    }
 
     static At(injectionPoint, before = true, shift = 0) {
         return new ASMAt(injectionPoint, before, shift);
@@ -61,6 +71,17 @@ export default class ASM {
 
     static injectBuilder(className, at, methodName, descriptor) {
         return new InjectBuilder(className, at, methodName, descriptor);
+    }
+
+    static invokeJS($, functionId) {
+        const { OBJECT, STRING, ARRAY } = ASM;
+
+        const MM = "com/chattriggers/ctjs/engine/module/ModuleManager";
+        $.ldc(this.currentModule);
+        $.swap();
+        $.ldc(functionId)
+        $.swap();
+        $.invokeKObjectFunction(MM, "invokeASMExportedFunction", ASM.desc(OBJECT, STRING, STRING, ARRAY(OBJECT)));
     }
 }
 

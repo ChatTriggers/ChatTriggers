@@ -13,6 +13,7 @@ import com.chattriggers.ctjs.utils.console.Console
 import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -93,6 +94,20 @@ object ModuleManager {
                 loader.entryPass(it, File(it.folder, it.metadata.entry!!).toURI())
             }
         }
+    }
+
+    fun invokeASMExportedFunction(moduleName: String, funcId: String, args: Array<Any?>): Any? {
+        val module = cachedModules.first { it.name == moduleName }
+
+        val funcPath = module.metadata.asmExportedFunctions?.get(funcId) ?: throw IllegalArgumentException(
+            "Module $module contains no asm exported function with id $funcId"
+        )
+
+        val funcFile = File(module.folder, funcPath.replace('/', File.separatorChar).replace('\\', File.separatorChar))
+
+        return loaders.first {
+            it.getLanguage().extension == funcFile.extension
+        }.invokeASMExportedFunction(module, funcFile.toURI(), args)
     }
 
     private fun getFoldersInDir(dir: File): List<File> {
