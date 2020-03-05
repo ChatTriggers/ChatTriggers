@@ -32,7 +32,62 @@ class InjectBuilder {
     }
 
     instructions(insnList) {
-        this.insnList = insnList;
+        // Wrap the insnList in a proxy so we can "add" methods to the
+        // InsnListBuilder provided by ASMHelper. This proxy delegates
+        // all gets and calls to the target handler except those specified
+        // in the 'get' trap
+        this.insnList = $ => {
+            const proxy = new Proxy({ builder: $ }, {
+                get(target, key) {
+                    // Here is where new methods are "added". Currently, we only
+                    // add one method: invokeJS.
+                    if (key === 'invokeJS') {
+                        // We have to return a function to make it callable. Inside
+                        // the function, we do our logic (the invoke dynamic calls).
+                        // It is important that we are sure to bind all function calls
+                        // on the InsnListBuilder to that builder. Otherwise, thisObj
+                        // will be set to the global scope.
+                        return functionId => {
+                            let handle = target.builder.indyHandle.bind(target.builder)(
+                                target.builder.H_INVOKESTATIC,
+                                "com/chattriggers/ctjs/launch/IndySupport",
+                                "bootstrapInvokeJS",
+                                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;"
+                            );
+
+                            target.builder.invokeDynamic.bind(target.builder)(
+                                "invokeJSFunction",
+                                "([Ljava/lang/Object;)Ljava/lang/Object;",
+                                handle,
+                                ASM.currentModule,
+                                functionId
+                            );
+
+                            // We return this proxy, which is like returning the
+                            // original InsnListBuilder for method chaining
+                            return proxy;
+                        };
+                    } else {
+                        // We delegate the call to the InsnListBuilder. However,
+                        // all of the methods on InsnListBuilder will return an
+                        // instance of itself, not our special proxy object. So
+                        // here, we return another proxy which will execute the
+                        // function call, and then return our InsnListBuilder
+                        // proxy
+                        return new Proxy(target.builder[key], {
+                            apply(innerTarget, thisArg, argArray) {
+                                // Make sure that the target function has the original
+                                // InsnListBuilder object as it's thisObj
+                                innerTarget.bind($)(...argArray)
+                                return proxy;
+                            }
+                        })
+                    }
+                }
+            });
+
+            insnList(proxy);
+        };
 
         return this;
     }
@@ -73,23 +128,6 @@ export default class ASM {
 
     static injectBuilder(className, at, methodName, descriptor) {
         return new InjectBuilder(className, at, methodName, descriptor);
-    }
-
-    static invokeJS($, functionId) {
-        let handle = $.indyHandle(
-            $.H_INVOKESTATIC,
-            "com/chattriggers/ctjs/launch/IndySupport",
-            "bootstrapInvokeJS",
-            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;"
-        );
-
-        $.invokeDynamic(
-            "invokeJSFunction",
-            "([Ljava/lang/Object;)Ljava/lang/Object;",
-            handle,
-            ASM.currentModule,
-            functionId
-        );
     }
 }
 
