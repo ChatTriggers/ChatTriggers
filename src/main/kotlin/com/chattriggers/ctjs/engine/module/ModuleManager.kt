@@ -11,13 +11,10 @@ import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
-import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.lang.IllegalArgumentException
 import java.lang.invoke.MethodHandle
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.atomic.AtomicInteger
 
 object ModuleManager {
     val loaders = listOf(JSLoader)

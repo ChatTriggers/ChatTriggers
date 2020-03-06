@@ -31,12 +31,7 @@ object ModuleUpdater {
 
         try {
             if (metadata.name == null) return
-
-            if (metadata.version == null) {
-                "Module ${metadata.name} has no version in it's metadata, so it will not be updated!".print()
-                return
-            }
-
+            
             "Checking for update in ${metadata.name}".print()
 
             val url = "https://www.chattriggers.com/api/modules/${metadata.name}/metadata?modVersion=${Reference.MODVERSION}"
@@ -48,11 +43,12 @@ object ModuleUpdater {
             val newMetadata = gson.fromJson(newMetadataText, ModuleMetadata::class.java)
 
             if (newMetadata.version == null) {
-                "Remote module ${metadata.name} has no version in it's metadata, so it will not be updated!".print()
+                ("Remote version of module ${metadata.name} have no version numbers, so it will " +
+                    "not be updated!").print()
+                return
+            } else if (metadata.version != null && metadata.version.toVersion() >= newMetadata.version.toVersion()) {
                 return
             }
-
-            if (metadata.version.toVersion() >= newMetadata.version.toVersion()) return
 
             downloadModule(metadata.name)
             "Updated module ${metadata.name}".print()

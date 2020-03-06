@@ -4,13 +4,20 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.BlockPos
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
-import net.minecraftforge.client.event.*
+import net.minecraft.util.EnumFacing
+import net.minecraftforge.client.event.DrawBlockHighlightEvent
+import net.minecraftforge.client.event.GuiOpenEvent
+import net.minecraftforge.client.event.GuiScreenEvent
+import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -176,6 +183,18 @@ object ClientListener {
         )
     }
 
+    fun onHitBlock(pos: BlockPos, facing: EnumFacing): Boolean {
+        val event = CancellableEvent()
+
+        TriggerType.HIT_BLOCK.triggerAll(
+            Block(World.getWorld()!!.getBlockState(pos).block),
+            BlockFace(facing),
+            event
+        )
+
+        return event.isCancelled()
+    }
+
     fun onDropItem(player: EntityPlayer, item: ItemStack?): Boolean {
         if (player !is EntityPlayerMP) return false
 
@@ -205,7 +224,7 @@ object ClientListener {
 
     //#if MC<=10809
     @SubscribeEvent
-    fun onLeftClick(e: PlayerInteractEvent) {
+    fun onInteract(e: PlayerInteractEvent) {
         val action = when (e.action) {
             PlayerInteractEvent.Action.LEFT_CLICK_BLOCK -> PlayerInteractAction.LEFT_CLICK_BLOCK
             PlayerInteractEvent.Action.RIGHT_CLICK_AIR -> PlayerInteractAction.RIGHT_CLICK_EMPTY
@@ -247,6 +266,7 @@ object ClientListener {
         RIGHT_CLICK_BLOCK,
         RIGHT_CLICK_EMPTY,
         LEFT_CLICK_BLOCK,
+
         //#if MC>10809
         //$$RIGHT_CLICK_ENTITY,
         //$$RIGHT_CLICK_ITEM,

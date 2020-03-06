@@ -1,41 +1,15 @@
 # Development Workspace Setup
-Setup is a little bit more involved than just a normal Forge dev workspace setup but isn't too hard. Follow these steps and you should be ready to submit pull requests.
+Set up the repository as you would any normal Forge project,
+import into your IDE of choice (IntelliJ is our preference), run the decompile task,
+and set up your run configurations.
 
-### 0. Set up JDK 8 and set your JAVA_HOME path variable (use google)
-### 1. Clone the repository to your computer<br>
-![clone repo](http://i66.tinypic.com/9jdlp5.png)
-### 2. Run the setup script
-  - Windows: `setup.ps1`
-  - Unix: `setup.sh` 
-    - _Note: You may need to run `sudo chmod a+x ./setup.sh` before running the script._
-### 3. Set up IntelliJ Idea
-  - open the project within IDEA by clicking the recently created .ipr file<br>
-![open project](http://i65.tinypic.com/2irsoyc.png)
-  - right click project > open module settings<br>
-![open module settings](https://i.imgur.com/F7clio5.png)
-  - project > project language level > SDK default (8)<br>
-![set language level](http://i66.tinypic.com/2rormrn.png)
-  - file > settings<br>
-![open idea settings](http://i65.tinypic.com/35bco0h.png)
-  - plugins > browse all repositories > search "lombok" > install<br>
-![install lombok](http://i67.tinypic.com/t8sv2p.png)
-  - still in settings > Build, Execution, Deployment > Annotation Processors > Enable annotation processing (in newer versions of IntelliJ settings > Build, Execution, Deployment > Compiler > Annotation Processors > Enable Annotation Processing)<br>
-![enable annotation processing](http://i66.tinypic.com/676slz.png)
-  - down that page > Annotation Processor options > green +
-    - Option name: `reobfSrgFile`
-    - Value: `location-of-fork\mappings\mcp-srg.srg`<br>
-![set annotation processing option](https://i.imgur.com/PS2t8Yc.png)
-There won't be any file there currently, but as soon as you build, change versions, or run
-the `./gradlew copySrg` command, it will appear.
-### 4. Debug client setup
-  - run > edit configuration<br>
-![edit configuration](http://i65.tinypic.com/t6yq7b.png)
-  - Use classpath for module > select the main ct.js (it might be named differently depending on your fork)<br>
-![classpath](http://i67.tinypic.com/15z34fd.png)
-  - Program arguments
-    - `--tweakClass com.chattriggers.ctjs.launch.CTJSTweaker`<br>
-![edit program arguments](https://i.imgur.com/UcVOq71.png)
-### 5. Developing for different versions
+ChatTriggers uses a custom loading plugin, and as such, requires modifying the
+run configuration in your development environment. 
+Add `-Dfml.coreMods.load=com.chattriggers.ctjs.launch.plugin.CTJSLoadingPlugin` to your list of
+VM Options.
+
+
+# Developing for different versions
 CT uses a preprocessor to develop the mod using one codebase for multiple versions. The preprocessor used 
 is the same as the one the [Replay Mod uses](https://github.com/ReplayMod/ReplayMod/blob/develop/README.md#the-preprocessor).
 You can read up more information on it there. One example of this code is:

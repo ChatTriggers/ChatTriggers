@@ -1,8 +1,10 @@
 package com.chattriggers.ctjs.utils.console
 
 import com.chattriggers.ctjs.engine.loader.ILoader
-import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.config.Config
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants
+import org.fife.ui.rsyntaxtextarea.Theme
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -19,8 +21,13 @@ class Console(val loader: ILoader?) {
     private var historyOffset = 0
 
     val out: PrintStream
-    val textArea = JTextArea()
-    val inputField = JTextField(1)
+    private val textArea = JTextArea()
+    private val inputField = RSyntaxTextArea(5, 1).apply {
+        syntaxEditingStyle = loader?.getLanguage()?.syntaxStyle ?: SyntaxConstants.SYNTAX_STYLE_NONE
+        Theme.load(this::class.java.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml")).apply(this)
+        margin = Insets(5, 5, 5, 5)
+        isCodeFoldingEnabled = true
+    }
 
     init {
         this.frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
@@ -28,17 +35,12 @@ class Console(val loader: ILoader?) {
         this.taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
         textArea.isEditable = false
 
-        inputField.isFocusable = true
+        textArea.margin = Insets(5, 5, 5, 5)
         textArea.autoscrolls = true
         val caret = textArea.caret as DefaultCaret
         caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
-        inputField.caretColor = Color.WHITE
-
-        inputField.margin = Insets(5, 5, 5, 5)
-        textArea.margin = Insets(5, 5, 5, 5)
 
         components.add(textArea)
-        components.add(inputField)
 
         out = taos.printStream
 
@@ -48,6 +50,8 @@ class Console(val loader: ILoader?) {
             override fun keyPressed(e: KeyEvent) {}
 
             override fun keyReleased(e: KeyEvent) {
+                if (!e.isControlDown) return
+
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER -> {
                         val command = inputField.text
@@ -55,7 +59,7 @@ class Console(val loader: ILoader?) {
                         history.add(command)
                         historyOffset = 0
 
-                        taos.println("eval> $command")
+                        taos.println("eval> ${command.prependIndent("    > ").substring(6)}")
 
                         try {
                             taos.println(loader?.eval(command) ?: return)
@@ -87,6 +91,10 @@ class Console(val loader: ILoader?) {
                             historyOffset = 0
                             inputField.text = ""
                         }
+                    }
+
+                    KeyEvent.VK_L -> {
+                        clearConsole()
                     }
                 }
             }
@@ -190,7 +198,7 @@ class Console(val loader: ILoader?) {
                     fg = Color(192, 20, 214)
                 }
                 "default.dark" -> {
-                    bg = Color(21, 21, 21)
+                    bg = Color(41, 49, 52)
                     fg = Color(208, 208, 208)
                 }
                 else -> {
