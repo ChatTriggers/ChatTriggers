@@ -213,6 +213,9 @@ class Console(val loader: ILoader?) {
             comp.foreground = fg
         }
 
+        this.frame.toFront()
+        this.frame.repaint()
+
         val chosenFont = if (Config.consolePrettyFont) FIRA_FONT.deriveFont(Config.consoleFontSize.toFloat()) else Font("DejaVu Sans Mono", Font.PLAIN, 15).deriveFont(Config.consoleFontSize.toFloat())
 
         textArea.font = chosenFont
