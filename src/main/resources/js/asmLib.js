@@ -123,7 +123,7 @@ export default class ASM {
     static OBJECT = 'java/lang/Object';
     static STRING = 'java/lang/String';
 
-    static MINECRAFT = 'net/minecraft/client/Minecraft'
+    static MINECRAFT = 'net/minecraft/client/Minecraft';
     static ENTITY = 'net/minecraft/entity/Entity';
     static ENTITY_FX = 'net/minecraft/client/particle/EntityFX';
     static ENTITY_ITEM = 'net/minecraft/entity/item/EntityItem';
@@ -136,7 +136,7 @@ export default class ASM {
     static PACKET = 'net/minecraft/network/Packet';
     static BLOCK_POS = 'net/minecraft/util/BlockPos';
     static ENUM_FACING = 'net/minecraft/util/EnumFacing';
-    static CANCELLABLE_EVENT = 'com/chattriggers/ctjs/minecraft/listeners/CancellableEvent'
+    static CANCELLABLE_EVENT = 'com/chattriggers/ctjs/minecraft/listeners/CancellableEvent';
     static TRIGGER_TYPE = 'com/chattriggers/ctjs/triggers/TriggerType';
 
     static currentModule = "";

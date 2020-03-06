@@ -1,13 +1,11 @@
 package com.chattriggers.ctjs.launch
 
-import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import java.io.File
 import java.lang.invoke.*
 
 object IndySupport {
     private var invocationInvalidator = SwitchPoint()
-    
+
     @JvmStatic
     fun bootstrapInvokeJS(
         lookup: MethodHandles.Lookup,
@@ -25,17 +23,19 @@ object IndySupport {
         // It requires the call site, module name, and function ID as parameters,
         // which are all constants known to us at this point in time,
         // so we will simply insert said arguments into that handle, leaving us with the desired type.
-        val initHandle = MethodHandles.insertArguments(lookup.findStatic(
-            IndySupport::class.java,
-            "initInvokeJS",
-            MethodType.methodType(
-                Any::class.java,
-                MutableCallSite::class.java,
-                String::class.java,
-                String::class.java,
-                Array<Any?>::class.java
-            )
-        ), 0, callSite, moduleName, functionID)
+        val initHandle = MethodHandles.insertArguments(
+            lookup.findStatic(
+                IndySupport::class.java,
+                "initInvokeJS",
+                MethodType.methodType(
+                    Any::class.java,
+                    MutableCallSite::class.java,
+                    String::class.java,
+                    String::class.java,
+                    Array<Any?>::class.java
+                )
+            ), 0, callSite, moduleName, functionID
+        )
 
         callSite.target = initHandle.asType(type)
         return callSite
