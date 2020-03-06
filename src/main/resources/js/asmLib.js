@@ -1,32 +1,27 @@
 const ASMAt = Java.type('me.falsehonesty.asmhelper.dsl.At');
 const ASMInjectionPoint = Java.type('me.falsehonesty.asmhelper.dsl.InjectionPoint');
 const ASMDescriptor = Java.type('me.falsehonesty.asmhelper.dsl.instructions.Descriptor');
-const asmInjection = Java.type('com.chattriggers.ctjs.launch.AsmUtilsKt').inject;
+const asmInjection = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmHelperInject;
 const HashMap = Java.type("java.util.HashMap");
-const ModuleManager = Java.type("com.chattriggers.ctjs.engine.module.ModuleManager").INSTANCE;
 
 class InjectBuilder {
-    constructor(className, at, methodName, descriptor) {
+    constructor(className, methodName, descriptor, at) {
         this.className = className;
-        this.at = at;
         this.methodName = methodName;
         this.descriptor = descriptor;
+        this.at = at;
         this.methodMap = new HashMap();
         this.fieldMap = new HashMap();
     }
 
-    methodMaps(maps) {
-        maps.forEach(([key, val]) => {
-            this.methodMap.put(key, val);
-        });
+    methodMaps(obj) {
+        this.methodMap = obj;
 
         return this;
     }
 
-    fieldMaps(maps) {
-        maps.forEach(([key, val]) => {
-            this.fieldMap.put(key, val);
-        });
+    fieldMaps(obj) {
+        this.fieldMap = obj;
 
         return this;
     }
@@ -69,7 +64,7 @@ class InjectBuilder {
                         };
                     } else {
                         // We delegate the call to the InsnListBuilder. However,
-                        // all of the methods on InsnListBuilder will return an
+                        // most of the methods on InsnListBuilder will return an
                         // instance of itself, not our special proxy object. So
                         // here, we return another proxy which will execute the
                         // function call, and then return our InsnListBuilder
@@ -78,7 +73,23 @@ class InjectBuilder {
                             apply(innerTarget, thisArg, argArray) {
                                 // Make sure that the target function has the original
                                 // InsnListBuilder object as it's thisObj
-                                innerTarget.bind($)(...argArray)
+                                const result = innerTarget.bind($)(...argArray);
+
+                                // The following methods always return something other
+                                // than the builder
+                                if (key === 'makeLabel' || key === 'indyHandle') {
+                                    return result;
+                                }
+
+                                // The following methods only return something other
+                                // than the builder on a particular overload (an overload
+                                // that takes no arguments)
+                                if (argArray.length === 0 && ['astore', 'fstore', 'istore', 'dstore', 'lstore'].includes(key)) {
+                                    return result;
+                                }
+
+                                // The method we've called just returns the builder,
+                                // so instead return our modified proxy
                                 return proxy;
                             }
                         })
@@ -102,20 +113,42 @@ class InjectBuilder {
 }
 
 export default class ASM {
-    static STRING = 'Ljava/lang/String;';
-    static INTEGER = "Ljava/lang/Integer;";
-    static DOUBLE = "Ljava/lang/Double;";
-    static LONG = "Ljava/lang/Long;";
-    static BOOLEAN = "Ljava/lang/Boolean;";
-    static SHORT = "Ljava/lang/Short;";
-    static CHARACTER = "Ljava/lang/Character";
-    static BYTE = "Ljava/lang/Byte;";
-    static OBJECT = "Ljava/lang/Object;";
+    static INTEGER = 'java/lang/Integer';
+    static DOUBLE = 'java/lang/Double';
+    static LONG = 'java/lang/Long';
+    static BOOLEAN = 'java/lang/Boolean';
+    static SHORT = 'java/lang/Short';
+    static CHARACTER = 'java/lang/Character';
+    static BYTE = 'java/lang/Byte';
+    static OBJECT = 'java/lang/Object';
+    static STRING = 'java/lang/String';
+
+    static MINECRAFT = 'net/minecraft/client/Minecraft'
+    static ENTITY = 'net/minecraft/entity/Entity';
+    static ENTITY_FX = 'net/minecraft/client/particle/EntityFX';
+    static ENTITY_ITEM = 'net/minecraft/entity/item/EntityItem';
+    static ENTITY_PLAYER = 'net/minecraft/entity/player/EntityPlayer';
+    static FILE = 'java/io/File';
+    static FRAME_BUFFER = 'net/minecraft/client/shader/Framebuffer';
+    static ICHATCOMPONENT = 'net/minecraft/util/IChatComponent';
+    static INVENTORY_PLAYER = 'net/minecraft/entity/player/InventoryPlayer';
+    static ITEM_STACK = 'net/minecraft/item/ItemStack';
+    static PACKET = 'net/minecraft/network/Packet';
+    static BLOCK_POS = 'net/minecraft/util/BlockPos';
+    static ENUM_FACING = 'net/minecraft/util/EnumFacing';
+    static CANCELLABLE_EVENT = 'com/chattriggers/ctjs/minecraft/listeners/CancellableEvent'
+    static TRIGGER_TYPE = 'com/chattriggers/ctjs/triggers/TriggerType';
 
     static currentModule = "";
 
+    static JumpCondition = Java.type('me.falsehonesty.asmhelper.dsl.instructions.JumpCondition');
+
     static ARRAY(o) {
-        return "[" + o;
+        return `[${o}`;
+    }
+
+    static L(o) {
+        return `L${o};`;
     }
 
     static At(injectionPoint, before = true, shift = 0) {
@@ -123,11 +156,11 @@ export default class ASM {
     }
 
     static desc(returnType, ...paramTypes) {
-        return `(${paramTypes.join()})${returnType}`;
+        return `(${paramTypes.join('')})${returnType}`;
     }
 
-    static injectBuilder(className, at, methodName, descriptor) {
-        return new InjectBuilder(className, at, methodName, descriptor);
+    static injectBuilder(className, methodName, descriptor, at) {
+        return new InjectBuilder(className, methodName, descriptor, at);
     }
 }
 
