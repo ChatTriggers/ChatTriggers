@@ -29,6 +29,7 @@
 -keep class kotlin.** { *; }
 -keep class me.falsehonesty.asmhelper.** { *; }
 -keep class org.mozilla.** { *; }
+-keep class org.fife.** { *; }
 
 -keepattributes *Annotation*
 

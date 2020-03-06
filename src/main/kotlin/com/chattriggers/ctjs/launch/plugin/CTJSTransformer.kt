@@ -10,6 +10,7 @@ class CTJSTransformer : BaseClassTransformer() {
 
         classLoader.addTransformerExclusion("ct.") // for proguard builds
         classLoader.addTransformerExclusion("com.chattriggers.ctjs.launch.plugin.")
+        classLoader.addTransformerExclusion("org.fife.")
     }
 
     override fun makeTransformers() {
