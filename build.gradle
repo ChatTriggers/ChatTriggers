@@ -105,7 +105,7 @@ dependencies {
     provided "com.fasterxml.jackson.core:jackson-core:2.9.3"
     provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    provided 'com.github.falsehonesty:asmhelper:b9f48209ad'
+    provided 'com.github.falsehonesty:asmhelper:7386f0cb3c'
     provided 'com.github.chattriggers:rhino:266f161f93'
     provided 'com.fifesoft:rsyntaxtextarea:3.0.8'
 }

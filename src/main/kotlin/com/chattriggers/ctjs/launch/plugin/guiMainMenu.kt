@@ -4,7 +4,6 @@ import me.falsehonesty.asmhelper.dsl.At
 import me.falsehonesty.asmhelper.dsl.InjectionPoint
 import me.falsehonesty.asmhelper.dsl.inject
 import me.falsehonesty.asmhelper.dsl.instructions.Descriptor
-import me.falsehonesty.asmhelper.dsl.instructions.invokeKOBjectFunction
 
 fun injectGuiMainMenu() = inject {
     className = "net/minecraft/client/gui/GuiMainMenu"
@@ -24,6 +23,6 @@ fun injectGuiMainMenu() = inject {
     methodMaps = mapOf("func_73863_a" to "drawScreen")
 
     insnList {
-        invokeKOBjectFunction("com/chattriggers/ctjs/utils/UpdateChecker", "drawUpdateMessage", "()V")
+        invokeKObjectFunction("com/chattriggers/ctjs/utils/UpdateChecker", "drawUpdateMessage", "()V")
     }
 }

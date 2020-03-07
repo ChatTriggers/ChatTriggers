@@ -2,8 +2,10 @@ package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
+import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.engine.loader.ModuleUpdater
 import com.chattriggers.ctjs.engine.loader.ILoader
+import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -11,9 +13,11 @@ import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.lang.IllegalArgumentException
+import java.lang.invoke.MethodHandle
 
 object ModuleManager {
-    val loaders = mutableListOf<ILoader>()
+    val loaders = listOf(JSLoader)
     val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
@@ -63,6 +67,52 @@ object ModuleManager {
         loaders.forEach {
             it.setup(jars)
         }
+
+        // We're finished setting up all of our loaders,
+        //  which means they can now have their ASM invocation re-lookups happen
+        IndySupport.invalidateInvocations()
+    }
+
+    fun asmPass() {
+        loaders.forEach(ILoader::asmSetup)
+
+        // Load the modules
+        loaders.forEach { loader ->
+            cachedModules.filter {
+                File(it.folder, it.metadata.asmEntry ?: return@filter false).extension == loader.getLanguage().extension
+            }.forEach {
+                loader.asmPass(it, File(it.folder, it.metadata.asmEntry!!).toURI())
+            }
+        }
+    }
+
+    fun entryPass(modules: List<Module> = cachedModules) {
+        loaders.forEach(ILoader::entrySetup)
+
+        // Load the modules
+        loaders.forEach { loader ->
+            modules.filter {
+                File(it.folder, it.metadata.entry ?: return@filter false).extension == loader.getLanguage().extension
+            }.forEach {
+                loader.entryPass(it, File(it.folder, it.metadata.entry!!).toURI())
+            }
+        }
+    }
+
+    fun asmInvokeLookup(moduleName: String, functionID: String): MethodHandle {
+        // Find the targeted module
+        val module = cachedModules.first { it.name == moduleName }
+
+        // Get the target function file from the metadata lookup table
+        val funcPath = module.metadata.asmExposedFunctions?.get(functionID) ?: throw IllegalArgumentException(
+            "Module $module contains no asm exported function with id $functionID"
+        )
+
+        val funcFile = File(module.folder, funcPath.replace('/', File.separatorChar).replace('\\', File.separatorChar))
+
+        return loaders.first {
+            it.getLanguage().extension == funcFile.extension
+        }.asmInvokeLookup(module, funcFile.toURI())
     }
 
     private fun getFoldersInDir(dir: File): List<File> {
@@ -86,17 +136,6 @@ object ModuleManager {
         }
 
         return Module(directory.name, metadata, directory)
-    }
-
-    fun entryPass(modules: List<Module> = cachedModules) {
-        // Load the modules
-        loaders.forEach { loader ->
-            modules.filter {
-                File(it.folder, it.metadata.entry ?: return@filter false).extension == loader.getLanguage().extension
-            }.forEach {
-                loader.entryPass(it, File(it.folder, it.metadata.entry!!).toURI())
-            }
-        }
     }
 
     fun importModule(moduleName: String): Module? {

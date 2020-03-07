@@ -55,7 +55,7 @@ fun injectHitBlock() = inject {
     methodMaps = mapOf("func_180511_b" to "clickBlock")
 
     insnList {
-        invokeKOBjectFunction(CLIENT_LISTENER, "onHitBlock", "(L$BLOCK_POS;L$ENUM_FACING;)Z") {
+        invokeKObjectFunction(CLIENT_LISTENER, "onHitBlock", "(L$BLOCK_POS;L$ENUM_FACING;)Z") {
             aload(1)
             aload(2)
         }

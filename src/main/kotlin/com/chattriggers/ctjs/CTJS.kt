@@ -57,10 +57,6 @@ object CTJS {
             MinecraftForge.EVENT_BUS.register(it)
         }
 
-        listOf(JSLoader).forEach {
-            ModuleManager.loaders.add(it)
-        }
-
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
 
@@ -76,7 +72,6 @@ object CTJS {
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
         Reference.conditionalThread {
-            ModuleManager.setup()
             ModuleManager.entryPass()
         }
 

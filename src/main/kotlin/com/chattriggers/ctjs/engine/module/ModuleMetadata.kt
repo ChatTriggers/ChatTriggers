@@ -6,6 +6,8 @@ data class ModuleMetadata(
     val name: String? = null,
     val version: String? = null,
     var entry: String? = null,
+    val asmEntry: String? = null,
+    val asmExposedFunctions: Map<String, String>? = null,
     val tags: ArrayList<String>? = null,
     val pictureLink: String? = null,
     val creator: String? = null,

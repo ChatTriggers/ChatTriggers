@@ -49,7 +49,7 @@ object JSContextFactory : ContextFactory() {
         return super.hasFeature(cx, featureIndex)
     }
 
-    private class ModifiedURLClassLoader : URLClassLoader(arrayOf(), Minecraft::class.java.classLoader) {
+    private class ModifiedURLClassLoader : URLClassLoader(arrayOf(), this::class.java.classLoader) {
         val sources = mutableListOf<URL>()
 
         fun addAllURLs(urls: List<URL>) {

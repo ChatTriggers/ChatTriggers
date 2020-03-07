@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.lang.invoke.MethodHandle
 import java.net.URI
 import java.net.URL
 import java.util.concurrent.CompletableFuture
@@ -23,12 +24,28 @@ interface ILoader {
      */
     fun setup(jars: List<URL>)
 
+    fun asmSetup()
+
+    fun asmPass(module: Module, asmURI: URI)
+
+    fun entrySetup()
+
     /**
      * Loads a list of modules into the loader. This method will only
      * ever be called with modules that have an entry point corresponding
      * to this loader's languages's extension
      */
     fun entryPass(module: Module, entryURI: URI)
+
+    /**
+     * If we inject bytecode through ASM that wishes to callback to the user's script,
+     * we need to link it to code that will actually make that call.
+     *
+     * This method lets each specific engine handle function invocation specifics themselves.
+     *
+     * @return a [MethodHandle] with type (Object[])Object
+     */
+    fun asmInvokeLookup(module: Module, functionURI: URI): MethodHandle
 
     /**
      * Tells the loader that it should activate all triggers

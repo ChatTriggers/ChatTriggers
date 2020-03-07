@@ -31,7 +31,7 @@ fun injectEntityPlayer() = inject {
     )
 
     insnList {
-        invokeKOBjectFunction(CLIENT_LISTENER, "onDropItem", "(L$ENTITY_PLAYER;L$ITEM_STACK;)Z") {
+        invokeKObjectFunction(CLIENT_LISTENER, "onDropItem", "(L$ENTITY_PLAYER;L$ITEM_STACK;)Z") {
             aload(0)
 
             getLocalField(ENTITY_PLAYER, "inventory", "L$INVENTORY_PLAYER;")
