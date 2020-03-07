@@ -104,7 +104,7 @@ object ModuleManager {
         val module = cachedModules.first { it.name == moduleName }
 
         // Get the target function file from the metadata lookup table
-        val funcPath = module.metadata.asmExportedFunctions?.get(functionID) ?: throw IllegalArgumentException(
+        val funcPath = module.metadata.asmExposedFunctions?.get(functionID) ?: throw IllegalArgumentException(
             "Module $module contains no asm exported function with id $functionID"
         )
 
