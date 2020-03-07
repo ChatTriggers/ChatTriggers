@@ -4,13 +4,18 @@ import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
+import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
+import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraftforge.client.ClientCommandHandler
+import java.lang.Math.round
 import kotlin.concurrent.thread
+import kotlin.math.roundToInt
 
 object Reference {
     const val MODID = "ct.js"
@@ -49,9 +54,11 @@ object Reference {
 
         CTJS.loadConfig()
 
+        printLoadCompletionStatus(0f)
+
         conditionalThread {
             ModuleManager.setup()
-            ModuleManager.entryPass()
+            ModuleManager.entryPass(completionListener = ::printLoadCompletionStatus)
 
             ChatLib.chat("&aDone reloading scripts!")
 
@@ -61,6 +68,25 @@ object Reference {
 
             this.isLoaded = true
         }
+    }
+
+    private fun printLoadCompletionStatus(percentComplete: Float) {
+        val completionInteger = (percentComplete * 100).roundToInt()
+        val prefix = "$completionInteger% ["
+        val postfix = "]"
+
+        val charWidth = Renderer.getStringWidth("=")
+        val availableWidth = ChatLib.getChatWidth() - Renderer.getStringWidth(prefix + postfix)
+        val correctLength = availableWidth / charWidth
+        val completedLength = (percentComplete * correctLength).roundToInt()
+        val fullWidth = "=" * completedLength
+        val spaceWidth = Renderer.getStringWidth(" ")
+        val spaceLeft = (availableWidth - completedLength * charWidth) / spaceWidth
+        val padding = " " * spaceLeft
+
+        val correctLine = "&c$prefix$fullWidth$padding$postfix"
+
+        Message(correctLine).setChatLineId(28445).chat()
     }
 
     fun conditionalThread(block: () -> Unit) {

@@ -36,7 +36,7 @@ fun Tessellator.getRenderer(): WorldRenderer =
 operator fun String.times(times: Number): String {
     val stringBuilder = StringBuilder()
 
-    for (i in 0..times.toInt()) {
+    for (i in 0 until times.toInt()) {
         stringBuilder.append(this)
     }
 

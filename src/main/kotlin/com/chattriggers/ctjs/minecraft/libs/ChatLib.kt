@@ -124,7 +124,7 @@ object ChatLib {
     @JvmStatic
     fun getChatBreak(separator: String = "-"): String {
         val len = Renderer.getStringWidth(separator)
-        val times = (getChatWidth() / len) - 1
+        val times = getChatWidth() / len
 
         return separator * times
     }
