@@ -26,79 +26,93 @@ class InjectBuilder {
         return this;
     }
 
+    proxyInsnList($) {
+        const self = this;
+
+        const proxy = new Proxy({ builder: $ }, {
+            get(target, key) {
+                // Here is where new methods are "added". Currently, we only
+                // add one method: invokeJS.
+                if (key === 'invokeJS') {
+                    // We have to return a function to make it callable. Inside
+                    // the function, we do our logic (the invoke dynamic calls).
+                    // It is important that we are sure to bind all function calls
+                    // on the InsnListBuilder to that builder. Otherwise, thisObj
+                    // will be set to the global scope.
+                    return functionId => {
+                        let handle = target.builder.indyHandle.bind(target.builder)(
+                            target.builder.H_INVOKESTATIC,
+                            "com/chattriggers/ctjs/launch/IndySupport",
+                            "bootstrapInvokeJS",
+                            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;"
+                        );
+
+                        target.builder.invokeDynamic.bind(target.builder)(
+                            "invokeJSFunction",
+                            "([Ljava/lang/Object;)Ljava/lang/Object;",
+                            handle,
+                            ASM.currentModule,
+                            functionId
+                        );
+
+                        // We return this proxy, which is like returning the
+                        // original InsnListBuilder for method chaining
+                        return proxy;
+                    };
+                } else {
+                    // We delegate the call to the InsnListBuilder. However,
+                    // most of the methods on InsnListBuilder will return an
+                    // instance of itself, not our special proxy object. So
+                    // here, we return another proxy which will execute the
+                    // function call, and then return our InsnListBuilder
+                    // proxy
+                    return new Proxy(target.builder[key], {
+                        apply(innerTarget, thisArg, argArray) {
+                            // If any arguments are functions, they are single arguments
+                            // functions that take the plain InsnListBuidler. Make sure
+                            // they actually receive our modified builder
+                            for (let i = 0; i < argArray.length; i++) {
+                                const arg = argArray[i];
+                                if (typeof arg === 'function') {
+                                    argArray[i] = $ => arg(self.proxyInsnList($));
+                                }
+                            }
+
+                            // Make sure that the target function has the original
+                            // InsnListBuilder object as it's thisObj
+                            const result = innerTarget.bind($)(...argArray);
+
+                            // The following methods always return something other
+                            // than the builder
+                            if (key === 'makeLabel' || key === 'indyHandle') {
+                                return result;
+                            }
+
+                            // The following methods only return something other
+                            // than the builder on a particular overload (an overload
+                            // that takes no arguments)
+                            if (argArray.length === 0 && ['astore', 'fstore', 'istore', 'dstore', 'lstore'].includes(key)) {
+                                return result;
+                            }
+
+                            // The method we've called just returns the builder,
+                            // so instead return our modified proxy
+                            return proxy;
+                        }
+                    })
+                }
+            }
+        });
+
+        return proxy;
+    }
+
     instructions(insnList) {
         // Wrap the insnList in a proxy so we can "add" methods to the
         // InsnListBuilder provided by ASMHelper. This proxy delegates
         // all gets and calls to the target handler except those specified
         // in the 'get' trap
-        this.insnList = $ => {
-            const proxy = new Proxy({ builder: $ }, {
-                get(target, key) {
-                    // Here is where new methods are "added". Currently, we only
-                    // add one method: invokeJS.
-                    if (key === 'invokeJS') {
-                        // We have to return a function to make it callable. Inside
-                        // the function, we do our logic (the invoke dynamic calls).
-                        // It is important that we are sure to bind all function calls
-                        // on the InsnListBuilder to that builder. Otherwise, thisObj
-                        // will be set to the global scope.
-                        return functionId => {
-                            let handle = target.builder.indyHandle.bind(target.builder)(
-                                target.builder.H_INVOKESTATIC,
-                                "com/chattriggers/ctjs/launch/IndySupport",
-                                "bootstrapInvokeJS",
-                                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;"
-                            );
-
-                            target.builder.invokeDynamic.bind(target.builder)(
-                                "invokeJSFunction",
-                                "([Ljava/lang/Object;)Ljava/lang/Object;",
-                                handle,
-                                ASM.currentModule,
-                                functionId
-                            );
-
-                            // We return this proxy, which is like returning the
-                            // original InsnListBuilder for method chaining
-                            return proxy;
-                        };
-                    } else {
-                        // We delegate the call to the InsnListBuilder. However,
-                        // most of the methods on InsnListBuilder will return an
-                        // instance of itself, not our special proxy object. So
-                        // here, we return another proxy which will execute the
-                        // function call, and then return our InsnListBuilder
-                        // proxy
-                        return new Proxy(target.builder[key], {
-                            apply(innerTarget, thisArg, argArray) {
-                                // Make sure that the target function has the original
-                                // InsnListBuilder object as it's thisObj
-                                const result = innerTarget.bind($)(...argArray);
-
-                                // The following methods always return something other
-                                // than the builder
-                                if (key === 'makeLabel' || key === 'indyHandle') {
-                                    return result;
-                                }
-
-                                // The following methods only return something other
-                                // than the builder on a particular overload (an overload
-                                // that takes no arguments)
-                                if (argArray.length === 0 && ['astore', 'fstore', 'istore', 'dstore', 'lstore'].includes(key)) {
-                                    return result;
-                                }
-
-                                // The method we've called just returns the builder,
-                                // so instead return our modified proxy
-                                return proxy;
-                            }
-                        })
-                    }
-                }
-            });
-
-            insnList(proxy);
-        };
+        this.insnList = $ => insnList(this.proxyInsnList($));
 
         return this;
     }
@@ -166,11 +180,11 @@ export default class ASM {
 
 ASM.At.HEAD = ASMInjectionPoint.HEAD.INSTANCE;
 
-ASM.At.RETURN = function(ordinal = null) {
+ASM.At.RETURN = function (ordinal = null) {
     return new ASMInjectionPoint.RETURN(ordinal);
 };
 
-ASM.At.INVOKE = function(
+ASM.At.INVOKE = function (
     owner = throw new Error('ASM.At.INVOKE requires an owner parameter'),
     name = throw new Error('ASM.At.INVOKE requires a name parameter'),
     descriptor = throw new Error('ASM.At.INVOKE requires a descriptor parameter'),
@@ -181,6 +195,6 @@ ASM.At.INVOKE = function(
 
 ASM.At.TAIL = ASMInjectionPoint.TAIL.INSTANCE;
 
-ASM.At.CUSTOM = function(finder = () => ([])) {
+ASM.At.CUSTOM = function (finder = () => ([])) {
     return new ASMInjectionPoint.CUSTOM(finder);
 };
