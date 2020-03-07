@@ -86,8 +86,11 @@ object ModuleManager {
         }
     }
 
-    fun entryPass(modules: List<Module> = cachedModules) {
+    fun entryPass(modules: List<Module> = cachedModules, completionListener: (percentComplete: Float) -> Unit = {}) {
         loaders.forEach(ILoader::entrySetup)
+
+        val total = modules.count { it.metadata.entry != null }
+        var completed = 0
 
         // Load the modules
         loaders.forEach { loader ->
@@ -95,6 +98,9 @@ object ModuleManager {
                 File(it.folder, it.metadata.entry ?: return@filter false).extension == loader.getLanguage().extension
             }.forEach {
                 loader.entryPass(it, File(it.folder, it.metadata.entry!!).toURI())
+
+                completed++
+                completionListener(completed.toFloat() / total)
             }
         }
     }
