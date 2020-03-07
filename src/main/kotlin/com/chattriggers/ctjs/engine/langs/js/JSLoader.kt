@@ -178,7 +178,11 @@ object JSLoader : ILoader {
 
         val missingContext = Context.getCurrentContext() == null
         if (missingContext) {
-            JSContextFactory.enterContext(context)
+            try {
+                JSContextFactory.enterContext(context)
+            } catch (e: Throwable) {
+                JSContextFactory.enterContext()
+            }
         }
 
         try {
