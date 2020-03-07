@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.utils.console.Console
 import me.falsehonesty.asmhelper.dsl.At
 import me.falsehonesty.asmhelper.dsl.inject
 import me.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
+import me.falsehonesty.asmhelper.dsl.remove
 import org.mozilla.javascript.*
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider
@@ -188,7 +189,7 @@ object JSLoader : ILoader {
     }
 
     @JvmStatic
-    fun asmHelperInject(
+    fun asmInjectHelper(
         _className: String,
         _at: At,
         _methodName: String,
@@ -210,6 +211,25 @@ object JSLoader : ILoader {
                     _insnList(NativeJavaObject(scope, this, InsnListBuilder::class.java))
                 }
             }
+        }
+    }
+
+    @JvmStatic
+    fun asmRemoveHelper(
+        _className: String,
+        _at: At,
+        _methodName: String,
+        _methodDesc: String,
+        _methodMaps: Map<String, String>,
+        _numberToRemove: Int
+    ) {
+        remove {
+            className = _className
+            methodName = _methodName
+            methodDesc = _methodDesc
+            at = _at
+            methodMaps = _methodMaps
+            numberToRemove = _numberToRemove
         }
     }
 
