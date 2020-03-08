@@ -11,12 +11,19 @@ import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
+import com.google.common.reflect.ClassPath
+import me.ntrrgc.tsGenerator.TypeScriptGenerator
 import net.minecraftforge.client.ClientCommandHandler
+import java.io.File
 import java.lang.Math.round
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
+import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.hasAnnotation
 
+@External
 object Reference {
     const val MODID = "ct.js"
     const val MODNAME = "ChatTriggers"
@@ -25,8 +32,10 @@ object Reference {
     var isLoaded = true
 
     @Deprecated("Does not provide any additional functionality", ReplaceWith("loadCT"))
+    @JvmStatic
     fun reloadCT() = loadCT()
 
+    @JvmStatic
     fun unloadCT(asCommand: Boolean = true) {
         TriggerType.WORLD_UNLOAD.triggerAll()
         TriggerType.GAME_UNLOAD.triggerAll()
@@ -42,6 +51,7 @@ object Reference {
         }
     }
 
+    @JvmStatic
     fun loadCT() {
         if (!this.isLoaded) return
         this.isLoaded = false
@@ -89,12 +99,23 @@ object Reference {
         Message(correctLine).setChatLineId(28445).chat()
     }
 
+    @JvmStatic
     fun conditionalThread(block: () -> Unit) {
         if (Config.threadedLoading) {
             thread { block() }
         } else {
             block()
         }
+    }
+
+    internal fun generateBindings() {
+        val classpath = ClassPath.from(this::class.java.classLoader)
+        val externalClasses = classpath.getTopLevelClassesRecursive("com.chattriggers.ctjs").map {
+            it.load()
+        }.filter { it.isAnnotationPresent(External::class.java) }.map { it.kotlin }
+
+        val generator = TypeScriptGenerator(rootClasses = externalClasses)
+        File(CTJS.assetsDir.parent, "typings.d.ts").apply { createNewFile() }.writeText(generator.definitionsText)
     }
 }
 
