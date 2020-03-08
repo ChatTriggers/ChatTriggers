@@ -108,6 +108,7 @@ dependencies {
     provided 'com.github.falsehonesty:asmhelper:7386f0cb3c'
     provided 'com.github.chattriggers:rhino:266f161f93'
     provided 'com.fifesoft:rsyntaxtextarea:3.0.8'
+    provided 'com.github.falsehonesty:ts-generator:adfb57a8f6'
 }
 
 jar {
@@ -200,16 +201,6 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
         suppress = true
     }
 }
-
-task copySrg(type: Copy, dependsOn: 'genSrgs') {
-    from {project.tasks.genSrgs.mcpToSrg}
-    into 'mappings'
-}
-
-compileJava.dependsOn copySrg
-
-setupDecompWorkspace.dependsOn copySrg
-setupDevWorkspace.dependsOn copySrg
 
 apply from: 'preprocessor.gradle'
 

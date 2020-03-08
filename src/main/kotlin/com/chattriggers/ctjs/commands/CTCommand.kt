@@ -77,6 +77,7 @@ object CTCommand : CommandBase() {
                 ChatLib.simulateChat(args.copyOfRange(1, args.size).joinToString(" "))
             "dump" -> dump(args)
             "copy" -> copyArgsToClipboard(args)
+            "generatebindings" -> Reference.generateBindings()
             else -> ChatLib.chat(getUsage())
         }
     }
