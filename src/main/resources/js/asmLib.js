@@ -3,6 +3,7 @@ const ASMInjectionPoint = Java.type('me.falsehonesty.asmhelper.dsl.InjectionPoin
 const ASMDescriptor = Java.type('me.falsehonesty.asmhelper.dsl.instructions.Descriptor');
 const asmInjectHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmInjectHelper;
 const asmRemoveHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmRemoveHelper;
+const asmFieldHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmFieldHelper;
 
 const proxyInsnList = $ => {
     const proxy = new Proxy({builder: $}, {
@@ -114,6 +115,24 @@ class RemoveBuilder extends ASMBuilder {
     }
 }
 
+class FieldBuilder {
+    constructor(className, fieldName, descriptor, accessTypes) {
+        this.className = className;
+        this.fieldName = fieldName;
+        this.descriptor = descriptor;
+        this.accessTypes = accessTypes ?? [];
+    }
+
+    initialValue(obj) {
+        this._initialValue = obj;
+        return this;
+    }
+
+    execute() {
+        asmFieldHelper(this.className, this.fieldName, this.descriptor, this._initialValue, this.accessTypes);
+    }
+}
+
 class InjectBuilder extends ASMBuilder {
     _methodMaps = {};
     _fieldMaps = {};
@@ -182,6 +201,8 @@ export default class ASM {
 
     static JumpCondition = Java.type('me.falsehonesty.asmhelper.dsl.instructions.JumpCondition');
 
+    static AccessType = Java.type('me.falsehonesty.asmhelper.dsl.writers.AccessType');
+
     static ARRAY(o) {
         return `[${o}`;
     }
@@ -204,6 +225,10 @@ export default class ASM {
 
     static removeBuilder(className, methodName, descriptor, at) {
         return new RemoveBuilder(className, methodName, descriptor, at);
+    }
+
+    static fieldBuilder(className, fieldName, descriptor, ...accessTypes) {
+        return new FieldBuilder(className, fieldName, descriptor, accessTypes);
     }
 }
 

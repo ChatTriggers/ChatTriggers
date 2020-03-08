@@ -7,9 +7,11 @@ import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
 import me.falsehonesty.asmhelper.dsl.At
+import me.falsehonesty.asmhelper.dsl.applyField
 import me.falsehonesty.asmhelper.dsl.inject
 import me.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
 import me.falsehonesty.asmhelper.dsl.remove
+import me.falsehonesty.asmhelper.dsl.writers.AccessType
 import org.mozilla.javascript.*
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider
@@ -230,6 +232,23 @@ object JSLoader : ILoader {
             at = _at
             methodMaps = _methodMaps
             numberToRemove = _numberToRemove
+        }
+    }
+
+    @JvmStatic
+    fun asmFieldHelper(
+        _className: String,
+        _fieldName: String,
+        _fieldDesc: String,
+        _initialValue: Any?,
+        _accessTypes: List<AccessType>
+    ) {
+        applyField {
+            className = _className
+            fieldName = _fieldName
+            fieldDesc = _fieldDesc
+            initialValue = _initialValue
+            accessTypes = _accessTypes
         }
     }
 
