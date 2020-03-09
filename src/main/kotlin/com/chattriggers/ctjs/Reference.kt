@@ -27,7 +27,7 @@ import kotlin.reflect.full.hasAnnotation
 object Reference {
     const val MODID = "ct.js"
     const val MODNAME = "ChatTriggers"
-    const val MODVERSION = "1.1.1"
+    const val MODVERSION = "1.1.2"
 
     var isLoaded = true
 
