@@ -38,17 +38,12 @@ import kotlin.concurrent.thread
     modLanguageAdapter = "com.chattriggers.ctjs.utils.kotlin.KotlinAdapter"
 )
 object CTJS {
-    lateinit var assetsDir: File
-    private lateinit var configLocation: File
+    val configLocation = File("./config")
+    val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
-        this.configLocation = event.modConfigurationDirectory
-        val pictures = File(event.modConfigurationDirectory, "ChatTriggers/images/")
-        pictures.mkdirs()
-        assetsDir = pictures
-
         thread(start = true) {
             loadConfig()
         }
