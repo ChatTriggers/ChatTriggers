@@ -13,7 +13,7 @@ import java.net.URL
 import javax.imageio.ImageIO
 
 @External
-class Image(var image: BufferedImage?) {
+class Image constructor(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
     private val textureWidth = image?.width ?: 0
     private val textureHeight = image?.height ?: 0

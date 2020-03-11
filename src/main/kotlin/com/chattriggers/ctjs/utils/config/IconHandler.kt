@@ -6,35 +6,34 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.print
 import java.awt.Desktop
 import java.net.URL
+import javax.imageio.ImageIO
 
 object IconHandler {
     private var icons = mutableListOf<Icon>()
 
     init {
-        val imageUrl = "https://chattriggers.com/assets/images/"
+        this.icons.add(Icon(
+            Image(ImageIO.read(IconHandler.javaClass.classLoader.getResourceAsStream("images/CT_logo.png"))),
+            "https://chattriggers.com/"
+        ))
 
-        this.icons.add(Icon(Image("CT_logo.png", imageUrl + "logo-icon.png"), "https://chattriggers.com/"))
-        this.icons.add(
-            Icon(
-                Image("CT_Patreon.png", imageUrl + "Patreon-dark.png"),
-                "https://www.patreon.com/ChatTriggers",
-                1
-            )
-        )
-        this.icons.add(
-            Icon(
-                Image("CT_Github.png", imageUrl + "github-dark.png"),
-                "https://github.com/ChatTriggers/ct.js",
-                2
-            )
-        )
-        this.icons.add(
-            Icon(
-                Image("CT_Discord.png", imageUrl + "discord-dark.png"),
-                "https://discordapp.com/invite/0fNjZyopOvBHZyG8",
-                3
-            )
-        )
+        this.icons.add(Icon(
+            Image(ImageIO.read(IconHandler.javaClass.classLoader.getResourceAsStream("images/CT_patreon.png"))),
+            "https://www.patreon.com/ChatTriggers",
+            1
+        ))
+
+        this.icons.add(Icon(
+            Image(ImageIO.read(IconHandler.javaClass.classLoader.getResourceAsStream("images/CT_github.png"))),
+            "https://github.com/ChatTriggers/ct.js",
+            2
+        ))
+
+        this.icons.add(Icon(
+            Image(ImageIO.read(IconHandler.javaClass.classLoader.getResourceAsStream("images/CT_discord.png"))),
+            "https://discordapp.com/invite/0fNjZyopOvBHZyG8",
+            3
+        ))
     }
 
     fun drawIcons() = icons.forEach { it.draw() }

@@ -10,7 +10,6 @@ import kotlin.reflect.full.declaredMemberProperties
 class GuiConfig : GuiScreen() {
     private val configOptions: ArrayList<ConfigOption> = ArrayList()
     private var isOpen = false
-    private val iconHandler = IconHandler
 
     init {
         Config::class.declaredMemberProperties.forEach { prop ->
@@ -44,7 +43,7 @@ class GuiConfig : GuiScreen() {
         for (configOption in this.configOptions)
             configOption.draw(mouseX, mouseY, partialTicks)
 
-        iconHandler.drawIcons()
+        IconHandler.drawIcons()
 
         GlStateManager.popMatrix()
     }
@@ -61,7 +60,7 @@ class GuiConfig : GuiScreen() {
         for (configOption in this.configOptions)
             configOption.mouseClicked(mouseX, mouseY)
 
-        iconHandler.clickIcons(mouseX, mouseY)
+        IconHandler.clickIcons(mouseX, mouseY)
     }
 
     public override fun mouseReleased(mouseX: Int, mouseY: Int, state: Int) {
