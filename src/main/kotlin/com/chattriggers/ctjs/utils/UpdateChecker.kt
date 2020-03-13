@@ -34,9 +34,11 @@ object UpdateChecker {
     private fun getUpdate() {
         val latestVersion = Gson().fromJson<List<String>>(
             FileLib.getUrlContent("https://www.chattriggers.com/api/versions")
-        ).take(1).map(String::toVersion).first()
+        ).take(1).map(String::toVersion).max()!!
+        val currentVersion = Reference.MODVERSION.toVersion()
 
-        this.updateAvailable = latestVersion > Reference.MODVERSION.toVersion()
+        this.updateAvailable = latestVersion.majorVersion > currentVersion.majorVersion
+                            || latestVersion.minorVersion > currentVersion.minorVersion
     }
 
     @SubscribeEvent
