@@ -13,10 +13,19 @@ object CapeHandler {
     private val special: Special
 
     init {
-        this.special = Gson().fromJson(
+        this.special = try {
+            Gson().fromJson(
                 FileLib.getUrlContent("https://www.chattriggers.com/assets/capes/capes.json"),
                 Special::class.java
-        )
+            )
+        } catch (e: Exception) {
+            Special(
+                arrayOf(),
+                arrayOf(),
+                arrayOf(),
+                arrayOf()
+            )
+        }
 
         bindTexture("https://imgur.com/9O3o7DM.png", "capes/ct/developer")
         bindTexture("https://imgur.com/5I2hF2q.png", "capes/ct/supporter")
@@ -24,12 +33,17 @@ object CapeHandler {
         bindTexture("https://imgur.com/gbGbZo6.png", "capes/ct/special")
     }
 
+    private val DEV_CAPE = ResourceLocation("capes/ct/developer")
+    private val SUPPORTER_CAPE = ResourceLocation("capes/ct/supporter")
+    private val CREATOR_CAPE = ResourceLocation("capes/ct/creator")
+    private val SPECIAL_CAPE = ResourceLocation("capes/ct/special")
+
     fun getCapeResource(player: AbstractClientPlayer): ResourceLocation? {
         return when (player.uniqueID.toString()) {
-            in this.special.developers -> ResourceLocation("capes/ct/developer")
-            in this.special.supporters -> ResourceLocation("capes/ct/supporter")
-            in this.special.creators -> ResourceLocation("capes/ct/creator")
-            in this.special.special -> ResourceLocation("capes/ct/special")
+            in this.special.developers -> DEV_CAPE
+            in this.special.supporters -> SUPPORTER_CAPE
+            in this.special.creators -> CREATOR_CAPE
+            in this.special.special -> SPECIAL_CAPE
             else -> null
         }
     }
@@ -64,5 +78,10 @@ object CapeHandler {
         return imgNew
     }
 
-    class Special(val supporters: Array<String>, val developers: Array<String>, val creators: Array<String>, val special: Array<String>)
+    class Special(
+        val supporters: Array<String>,
+        val developers: Array<String>,
+        val creators: Array<String>,
+        val special: Array<String>
+    )
 }

@@ -16,11 +16,11 @@ import net.minecraft.tileentity.TileEntitySign
 class Sign(block: Block) : Block(block) {
     private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(blockPos) as TileEntitySign
 
-    fun getLines(): List<Message> = sign.signText.map { Message(it) }
+    fun getLines(): List<Message> = sign.signText.map { it?.let(::Message) ?: Message("") }
 
-    fun getFormattedLines(): List<String> = sign.signText.map { it -> it.formattedText }
+    fun getFormattedLines(): List<String> = sign.signText.map { it?.formattedText ?: "" }
 
-    fun getUnformattedLines(): List<String> = sign.signText.map { it -> it.unformattedText }
+    fun getUnformattedLines(): List<String> = sign.signText.map { it?.unformattedText ?: "" }
 
     override fun toString(): String =
         "Sign{lines=${getLines()}, name=${block.registryName}, x=${getX()}, y=${getY()}, z=${getZ()}}"
