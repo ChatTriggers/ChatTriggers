@@ -40,6 +40,8 @@ object Reference {
         TriggerType.WORLD_UNLOAD.triggerAll()
         TriggerType.GAME_UNLOAD.triggerAll()
 
+        isLoaded = false
+
         DisplayHandler.clearDisplays()
         GuiHandler.clearGuis()
         CommandHandler.getCommandList().clear()
@@ -47,14 +49,13 @@ object Reference {
 
         if (asCommand) {
             ChatLib.chat("&7Unloaded all of ChatTriggers")
-            this.isLoaded = false
+            isLoaded = false
         }
     }
 
     @JvmStatic
     fun loadCT() {
-        if (!this.isLoaded) return
-        this.isLoaded = false
+        if (!isLoaded) return
 
         unloadCT(false)
 
@@ -72,11 +73,11 @@ object Reference {
 
             ChatLib.chat("&aDone reloading scripts!")
 
+            isLoaded = true
+
             TriggerType.GAME_LOAD.triggerAll()
             if (World.isLoaded())
                 TriggerType.WORLD_LOAD.triggerAll()
-
-            this.isLoaded = true
         }
     }
 
