@@ -130,19 +130,14 @@ object World {
     } ?: listOf()
 
     /**
-     * Gets a player by their username, must be in the currently loaded world!
+     * Gets a player by their username, must be in the currently loaded chunks!
      *
      * @param name the username
-     * @return the player with said username
-     * @throws IllegalArgumentException if the player is not valid
+     * @return the player with said username, or null if they dont exist.
      */
     @JvmStatic
-    @Throws(IllegalArgumentException::class)
-    fun getPlayerByName(name: String): PlayerMP {
-        return PlayerMP(
-            getWorld()?.getPlayerEntityByName(name)
-                ?: throw IllegalArgumentException()
-        )
+    fun getPlayerByName(name: String): PlayerMP? {
+        return getWorld()?.getPlayerEntityByName(name)?.let(::PlayerMP)
     }
 
     @JvmStatic
