@@ -24,7 +24,7 @@ class OnStepTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerTyp
 
     /**
      * Sets the delay in seconds between the trigger activation.
-     * This has a minimum of one step every second. This will override [.setFps].
+     * This has a minimum of one step every second. This will override [setFps].
      * @param delay The delay in seconds
      * @return the trigger for method chaining
      */

@@ -249,7 +249,7 @@ object World {
     object particle {
         /**
          * Gets an array of all the different particle names you can pass
-         * to [.spawnParticle]
+         * to [spawnParticle]
          *
          * @return the array of name strings
          */
@@ -262,7 +262,7 @@ object World {
          * Spawns a particle into the world with the given attributes,
          * which can be configured further with the returned [Particle]
          *
-         * @param particle the name of the particle to spawn, see [.getParticleNames]
+         * @param particle the name of the particle to spawn, see [getParticleNames]
          * @param x the x coordinate to spawn the particle at
          * @param y the y coordinate to spawn the particle at
          * @param z the z coordinate to spawn the particle at

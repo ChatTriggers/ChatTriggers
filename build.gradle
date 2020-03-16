@@ -3,6 +3,8 @@ buildscript {
 
     project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
     ext.kotlin_version = "1.3.70"
+    ext.dokka_version = "0.10.1"
+    ext.json_docs_version = "2.0.8"
 
     repositories {
         jcenter()
@@ -30,7 +32,7 @@ buildscript {
                                      "invalid"
         )
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
         classpath ':proguard:'
     }
 }
@@ -92,6 +94,7 @@ afterEvaluate {
 
 repositories {
     mavenCentral()
+    jcenter()
     maven {
         name = 'sponge'
         url = 'http://repo.spongepowered.org/maven'
@@ -150,55 +153,19 @@ task userdocs(type: org.jetbrains.dokka.gradle.DokkaTask) {
     description = "Generate the docs to be used by scripters, excludes internal classes"
     group = "documentation"
 
-    outputFormat = 'javadoc'
+    outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
-    jdkVersion = 8
 
-    classpath += configurations.compile
 
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.engine.langs"
-        suppress = true
-    }
+    configuration {
+        jdkVersion = 8
 
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.engine.loader"
-        suppress = true
-    }
-
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.engine.module"
-        suppress = true
-    }
-
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.utils"
-        suppress = true
-    }
-
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.listeners"
-        suppress = true
-    }
-
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.loader"
-        suppress = true
-    }
-
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.launch"
-        suppress = true
-    }
-
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.commands"
-        suppress = true
-    }
-
-    packageOptions {
-        prefix = "com.chattriggers.ctjs.minecraft.wrappers.objects.threading"
-        suppress = true
+        for (def pkg : ["engine.langs", "engine.loader", "engine.module", "utils", "listeners", "loader", "launch", "commands", "minecraft.wrappers.objects.threading"]) {
+            perPackageOption {
+                prefix = "com.chattriggers.ctjs.$pkg"
+                suppress = true
+            }
+        }
     }
 }
 

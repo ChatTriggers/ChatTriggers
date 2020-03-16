@@ -25,7 +25,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     fun triggerIfCanceled(bool: Boolean) = apply { this.triggerIfCanceled = bool }
 
     /**
-     * Sets the chat criteria for [.matchesChatCriteria].<br></br>
+     * Sets the chat criteria for [matchesChatCriteria].<br></br>
      * Arguments for the trigger's method can be passed in using ${variable}.<br></br>
      * Example: `OnChatTrigger.setChatCriteria("<${name}> ${message}");`<br></br>
      * Use ${*} to match a chat message but ignore the pass through.
@@ -71,7 +71,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     }
 
     /**
-     * Alias for [.setChatCriteria].
+     * Alias for [setChatCriteria].
      * @param chatCriteria the chat criteria to set
      * @return the trigger object for method chaining
      */

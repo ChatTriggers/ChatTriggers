@@ -157,7 +157,7 @@ class Sound(private val config: NativeObject) {
 
     /**
      * Sets this sound's volume.
-     * Will override the category if called after [.setCategory], but not if called before.
+     * Will override the category if called after [setCategory], but not if called before.
      *
      * @param volume New volume, float value ( 0.0f - 1.0f ).
      */

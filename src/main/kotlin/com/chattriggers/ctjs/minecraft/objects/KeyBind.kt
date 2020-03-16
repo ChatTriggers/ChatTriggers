@@ -49,7 +49,7 @@ class KeyBind {
     fun isKeyDown(): Boolean = keyBinding.isKeyDown
 
     /**
-     * Returns true on the initial key press. For continuous querying use [.isKeyDown].
+     * Returns true on the initial key press. For continuous querying use [isKeyDown].
      *
      * @return whether or not the key has just been pressed
      */
