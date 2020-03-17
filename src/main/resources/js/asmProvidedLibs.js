@@ -1,17 +1,7 @@
 let global = this;
 
 global.Java = {
-    type: function (clazz) {
-        const split = clazz.split(".");
-
-        let returned = Packages;
-
-        for (let i = 0; i < split.length; i++) {
-            returned = returned[split[i]];
-        }
-
-        return returned;
-    }
+    type: clazz => Packages[clazz]
 };
 
 global.sync = (func, lock) => new org.mozilla.javascript.Synchronizer(func, lock);
