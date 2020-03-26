@@ -163,6 +163,8 @@ class Sound(private val config: NativeObject) {
      */
     fun setVolume(volume: Float) = apply { sndSystem!!.setVolume(this.source, volume) }
 
+    fun getVolume() = sndSystem!!.getVolume(this.source)
+
     /**
      * Updates the position of this sound
      *
@@ -178,6 +180,8 @@ class Sound(private val config: NativeObject) {
      * @param pitch A float value ( 0.5f - 2.0f ).
      */
     fun setPitch(pitch: Float) = apply { sndSystem!!.setPitch(this.source, pitch) }
+
+    fun getPitch() = sndSystem!!.getPitch(this.source)
 
     /**
      * Sets the attenuation (fade out over space) of the song.
