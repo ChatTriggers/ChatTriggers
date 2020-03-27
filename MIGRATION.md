@@ -74,8 +74,7 @@ import { add } from './lib'; // note that you could also import from '<MyModuleN
 print(add(4, 9)); // prints '13'
 ```
 
-Take a look at the guide posted above for a complete list of all possible syntax. Note that inline exporting
-is **not** supported (ie. `export const function myFunc() {}` would produce an error);
+Take a look at the guide posted above for a complete list of all possible syntax.
 
 ##### CT Changes
 

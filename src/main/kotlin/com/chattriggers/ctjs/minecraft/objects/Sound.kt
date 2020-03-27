@@ -157,11 +157,13 @@ class Sound(private val config: NativeObject) {
 
     /**
      * Sets this sound's volume.
-     * Will override the category if called after [.setCategory], but not if called before.
+     * Will override the category if called after [setCategory], but not if called before.
      *
      * @param volume New volume, float value ( 0.0f - 1.0f ).
      */
     fun setVolume(volume: Float) = apply { sndSystem!!.setVolume(this.source, volume) }
+
+    fun getVolume() = sndSystem!!.getVolume(this.source)
 
     /**
      * Updates the position of this sound
@@ -178,6 +180,8 @@ class Sound(private val config: NativeObject) {
      * @param pitch A float value ( 0.5f - 2.0f ).
      */
     fun setPitch(pitch: Float) = apply { sndSystem!!.setPitch(this.source, pitch) }
+
+    fun getPitch() = sndSystem!!.getPitch(this.source)
 
     /**
      * Sets the attenuation (fade out over space) of the song.

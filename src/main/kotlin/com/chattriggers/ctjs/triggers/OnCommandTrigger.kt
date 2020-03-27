@@ -43,7 +43,7 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
     }
 
     /**
-     * Alias for [.setCommandName]
+     * Alias for [setCommandName]
      *
      * @param commandName The command name
      * @return the trigger for additional modification
