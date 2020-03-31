@@ -8,11 +8,16 @@ import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.*
 import com.chattriggers.ctjs.utils.kotlin.External
+import kotlin.reflect.KFunction
 import kotlin.reflect.full.memberFunctions
 
 @Suppress("unused")
 @External
 interface IRegister {
+    companion object {
+        private val methodMap = mutableMapOf<String, KFunction<*>>()
+    }
+
     /**
      * Helper method register a trigger.
      *
@@ -27,12 +32,18 @@ interface IRegister {
     fun register(triggerType: String, method: Any): OnTrigger {
         val name = triggerType.toLowerCase()
 
-        val func = this::class.memberFunctions.firstOrNull {
-            it.name.toLowerCase() == "register$name"
+        var func = methodMap[name]
+
+        if (func == null) {
+            func = this::class.memberFunctions.firstOrNull {
+                it.name.toLowerCase() == "register$name"
+            } ?: throw NoSuchMethodException("No trigger type named '$triggerType'")
+            methodMap[name] = func
         }
 
-        return func?.call(this, method) as OnTrigger? ?:
-            throw NoSuchMethodException("No trigger type named '$triggerType'")
+        println("[IRegister.register] Registering")
+
+        return func.call(this, method) as OnTrigger
     }
 
     /**
