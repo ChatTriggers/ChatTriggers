@@ -76,7 +76,7 @@ object ModulesGui : GuiScreen() {
             return
         }
 
-        ModuleManager.cachedModules.forEach {
+        ModuleManager.cachedModules.toList().forEach {
             it.click(mouseX, mouseY, width)
         }
     }
