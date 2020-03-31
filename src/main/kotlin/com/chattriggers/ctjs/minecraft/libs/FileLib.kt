@@ -36,6 +36,30 @@ object FileLib {
     }
 
     /**
+     * Writes a file to folder in modules.
+     *
+     * @param importName name of the import
+     * @param fileName   name of the file
+     * @param toAppend    string to append in file
+     */
+    @JvmStatic
+    fun append(importName: String, fileName: String, toAppend: String) {
+        append(Config.modulesFolder + "/" + importName + "/" + fileName, toAppend)
+    }
+
+    /**
+     * Writes a file to anywhere on the system.<br></br>
+     * Use "./" for the ".minecraft" folder.
+     *
+     * @param fileLocation the location and file name
+     * @param toAppend      string to append in file
+     */
+    @JvmStatic
+    fun append(fileLocation: String, toAppend: String) {
+        File(fileLocation).appendText(toAppend)
+    }
+
+    /**
      * Reads a file from folder in modules.<br></br>
      * Returns an empty string if file is not found.
      *
