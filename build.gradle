@@ -49,10 +49,8 @@ group = "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-nam
 archivesBaseName = "ctjs"
 
 apply plugin: "java"
-compileJava {
-    sourceCompatibility = "1.8"
-    targetCompatibility = "1.8"
-}
+
+sourceCompatibility = targetCompatibility = 1.8
 
 configurations {
     provided
