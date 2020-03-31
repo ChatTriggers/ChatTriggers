@@ -24,10 +24,12 @@ import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.net.URI
 import java.net.URL
+import java.util.*
+import java.util.concurrent.ConcurrentSkipListSet
+import kotlin.Comparator
 
 object JSLoader : ILoader {
-    override var triggers = mutableListOf<OnTrigger>()
-    override val toRemove = mutableListOf<OnTrigger>()
+    override var triggers: SortedSet<OnTrigger> = ConcurrentSkipListSet()
     override val console by lazy { Console(this) }
 
     private lateinit var moduleContext: Context

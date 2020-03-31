@@ -10,10 +10,9 @@ abstract class OnTrigger protected constructor(
     var method: Any,
     var type: TriggerType,
     protected var loader: ILoader
-) {
+) : Comparable<OnTrigger> {
     var priority: Priority = Priority.NORMAL
         private set
-
 
     init {
         register()
@@ -53,10 +52,13 @@ abstract class OnTrigger protected constructor(
         this.loader.trigger(this, this.method, args)
     }
 
-    abstract fun trigger(vararg args: Any?)
+    abstract fun trigger(args: Array<out Any?>)
 
-    enum class TriggerResult {
-        CANCEL
+    override fun compareTo(other: OnTrigger): Int {
+        val ordCmp = priority.ordinal - other.priority.ordinal
+        return if (ordCmp == 0)
+            hashCode() - other.hashCode()
+        else ordCmp
     }
 
     enum class Priority {

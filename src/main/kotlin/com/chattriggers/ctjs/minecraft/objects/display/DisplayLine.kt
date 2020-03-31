@@ -137,19 +137,19 @@ abstract class DisplayLine {
     }
 
     private fun handleClicked(button: Int) {
-        this.onClicked?.trigger(
+        this.onClicked?.trigger(arrayOf(
             Client.getMouseX(),
             Client.getMouseY(),
             button,
             Mouse.isButtonDown(button)
-        )
+        ))
     }
 
     private fun handleHovered() {
-        this.onHovered?.trigger(
+        this.onHovered?.trigger(arrayOf(
             Client.getMouseX(),
             Client.getMouseY()
-        )
+        ))
     }
 
     private fun handleDragged(button: Int) {
@@ -158,13 +158,13 @@ abstract class DisplayLine {
         if (!this.draggedState.containsKey(button))
             return
 
-        this.onDragged?.trigger(
+        this.onDragged?.trigger(arrayOf(
             Client.getMouseX() - this.draggedState.getValue(button).x,
             Client.getMouseY() - this.draggedState.getValue(button).y,
             Client.getMouseX(),
             Client.getMouseY(),
             button
-        )
+        ))
 
         this.draggedState[button] = Vector2d(Client.getMouseX().toDouble(), Client.getMouseY().toDouble())
     }

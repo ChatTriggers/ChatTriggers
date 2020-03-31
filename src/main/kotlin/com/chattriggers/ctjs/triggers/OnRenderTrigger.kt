@@ -16,7 +16,7 @@ class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : 
      */
     fun triggerIfCanceled(bool: Boolean) = apply { this.triggerIfCanceled = bool }
 
-    override fun trigger(vararg args: Any?) {
+    override fun trigger(args: Array<out Any?>) {
         if (args[0] !is RenderGameOverlayEvent)
             throw IllegalArgumentException("Argument 0 must be a RenderGameOverlayEvent")
 

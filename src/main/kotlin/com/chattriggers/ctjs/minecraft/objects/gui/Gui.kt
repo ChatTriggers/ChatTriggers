@@ -140,7 +140,7 @@ abstract class Gui : GuiScreen() {
      */
     override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
         super.mouseClicked(mouseX, mouseY, button)
-        this.onClick?.trigger(mouseX, mouseY, button)
+        this.onClick?.trigger(arrayOf(mouseX, mouseY, button))
     }
 
     /**
@@ -148,7 +148,7 @@ abstract class Gui : GuiScreen() {
      */
     override fun mouseReleased(mouseX: Int, mouseY: Int, button: Int) {
         super.mouseReleased(mouseX, mouseY, button)
-        this.onMouseReleased?.trigger(mouseX, mouseY, button)
+        this.onMouseReleased?.trigger(arrayOf(mouseX, mouseY, button))
     }
 
     /**
@@ -156,7 +156,7 @@ abstract class Gui : GuiScreen() {
      */
     override fun actionPerformed(button: GuiButton) {
         super.actionPerformed(button)
-        this.onActionPerformed?.trigger(button.id)
+        this.onActionPerformed?.trigger(arrayOf(button.id))
     }
 
     /**
@@ -164,7 +164,7 @@ abstract class Gui : GuiScreen() {
      */
     override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
-        this.onMouseDragged?.trigger(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
+        this.onMouseDragged?.trigger(arrayOf(mouseX, mouseY, clickedMouseButton, timeSinceLastClick))
     }
 
     /**
@@ -176,8 +176,8 @@ abstract class Gui : GuiScreen() {
         val i = Mouse.getEventDWheel()
 
         when {
-            i > 0 -> this.onClick?.trigger(this.mouseX, this.mouseY, -1)
-            i < 0 -> this.onClick?.trigger(this.mouseX, this.mouseY, -2)
+            i > 0 -> this.onClick?.trigger(arrayOf(this.mouseX, this.mouseY, -1))
+            i < 0 -> this.onClick?.trigger(arrayOf(this.mouseX, this.mouseY, -2))
         }
     }
 
@@ -192,7 +192,7 @@ abstract class Gui : GuiScreen() {
         this.mouseX = mouseX
         this.mouseY = mouseY
 
-        this.onDraw?.trigger(mouseX, mouseY, partialTicks)
+        this.onDraw?.trigger(arrayOf(mouseX, mouseY, partialTicks))
 
         GlStateManager.popMatrix()
     }
@@ -203,7 +203,7 @@ abstract class Gui : GuiScreen() {
     override fun keyTyped(typedChar: Char, keyCode: Int) {
         super.keyTyped(typedChar, keyCode)
 
-        this.onKeyTyped?.trigger(typedChar, keyCode)
+        this.onKeyTyped?.trigger(arrayOf(typedChar, keyCode))
     }
 
     /**

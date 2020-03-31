@@ -12,7 +12,7 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
     private var tabCompletions: MutableList<String> = mutableListOf()
     private lateinit var command: Command
 
-    override fun trigger(vararg args: Any?) {
+    override fun trigger(args: Array<out Any?>) {
         if (args::javaClass == Array<String>::javaClass) throw IllegalArgumentException("Arguments must be string array")
 
         callMethod(args)

@@ -41,8 +41,6 @@ interface IRegister {
             methodMap[name] = func
         }
 
-        println("[IRegister.register] Registering")
-
         return func.call(this, method) as OnTrigger
     }
 

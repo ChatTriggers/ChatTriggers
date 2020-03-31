@@ -11,11 +11,13 @@ import java.io.File
 import java.lang.invoke.MethodHandle
 import java.net.URI
 import java.net.URL
+import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentSkipListSet
+import kotlin.collections.AbstractSet
 
 interface ILoader {
-    var triggers: MutableList<OnTrigger>
-    val toRemove: MutableList<OnTrigger>
+    var triggers: SortedSet<OnTrigger>
     val console: Console
 
     /**
@@ -52,15 +54,10 @@ interface ILoader {
      * of a certain type with the specified arguments.
      */
     fun exec(type: TriggerType, args: Array<out Any?>) {
-        val newTriggers = triggers.toMutableList()
-        newTriggers.removeAll(toRemove)
-        toRemove.clear()
-
-        newTriggers.filter {
-            it.type == type
-        }.forEach { it.trigger(*args) }
-
-        triggers = newTriggers
+        triggers.iterator().forEach {
+            if (it.type == type)
+                it.trigger(args)
+        }
     }
 
     /**
@@ -73,10 +70,6 @@ interface ILoader {
      */
     fun addTrigger(trigger: OnTrigger) {
         triggers.add(trigger)
-
-        triggers.sortBy {
-            it.priority.ordinal
-        }
     }
 
     /**
@@ -101,7 +94,7 @@ interface ILoader {
      * Removes a trigger from the current pool
      */
     fun removeTrigger(trigger: OnTrigger) {
-        toRemove.add(trigger)
+        triggers.remove(trigger)
     }
 
     /**
