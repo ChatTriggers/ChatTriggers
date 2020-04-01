@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.utils.console
 
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.utils.config.Config
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
@@ -14,7 +15,7 @@ import javax.swing.*
 import javax.swing.text.DefaultCaret
 
 class Console(val loader: ILoader?) {
-    private val frame: JFrame = JFrame("ct.js ${loader?.getLanguage()?.langName ?: "Default"} Console")
+    private val frame: JFrame = JFrame("ChatTriggers ${Reference.MODVERSION} ${loader?.getLanguage()?.langName ?: "Default"} Console")
     private val taos: TextAreaOutputStream
     private val components = mutableListOf<Component>()
     private val history = mutableListOf<String>()
