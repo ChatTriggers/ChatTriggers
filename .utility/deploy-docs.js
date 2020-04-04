@@ -1,4 +1,4 @@
-if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
+if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ChatTriggers"
     && process.env.TRAVIS_PULL_REQUEST == "false"
     && (process.env.TRAVIS_BRANCH === "master" || process.env.TRAVIS_BRANCH === "travis")) {
 
@@ -11,10 +11,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
     var { exec } = require('child_process');
 
-    exec("cp -R ../build/docs/javadoc/ .");
-    exec("mv javadoc/ javadocs");
-
-    console.log(process.env.FTP_USER + ":" + process.env.FTP_PASSWORD);
+    exec("cp -R ../build/javadoc/ ./javadocs");
 
     var FtpClient = require('ftp-client');
     var client = new FtpClient({
@@ -28,7 +25,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ct.js"
 
 
     client.connect(function () {
-        client.upload(['javadocs/**'], '/public_html/javadocs', {
+        client.upload(['javadocs/**'], '/root/web/static/home/javadocs', {
             baseDir: 'javadocs',
             overwrite: 'all'
         }, function (result) {
