@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.objects.message
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.BaseTextComponent
 import com.chattriggers.ctjs.utils.kotlin.ChatPacket
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -49,6 +50,7 @@ class Message {
             when (it) {
                 is String -> TextComponent(it)
                 is TextComponent -> it
+                is Item -> it.getTextComponent()
                 else -> return
             }
         })
