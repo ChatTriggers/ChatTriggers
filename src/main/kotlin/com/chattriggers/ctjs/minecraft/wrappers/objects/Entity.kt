@@ -18,9 +18,9 @@ open class Entity(val entity: MCEntity) {
     fun getLastY() = entity.lastTickPosY
     fun getLastZ() = entity.lastTickPosZ
 
-    fun getRenderX() = getLastX() + (getX() - getLastX()) * Tessellator.getPartialTicks()
-    fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.getPartialTicks()
-    fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.getPartialTicks()
+    fun getRenderX() = getLastX() + (getX() - getLastX()) * Tessellator.partialTicks
+    fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
+    fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
 
     var face: BlockFace? = null
 

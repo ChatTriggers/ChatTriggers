@@ -15,23 +15,15 @@ import kotlin.math.sqrt
 
 @External
 object Tessellator {
-    private var partialTicks = 0f
+    @JvmStatic var partialTicks = 0f
+    internal set
+
     private var tessellator = MCTessellator.getInstance()
     private var worldRenderer = this.tessellator.getRenderer()
 
     private var firstVertex = true
     private var began = false
     private var colorized = false
-
-    /**
-     * Gets the partial render ticks between actual client ticks
-     */
-    @JvmStatic
-    fun getPartialTicks() = partialTicks
-
-    fun setPartialTicks(partialTicks: Float) {
-        this.partialTicks = partialTicks
-    }
 
     /**
      * Binds a texture to the client for the Tessellator to use.

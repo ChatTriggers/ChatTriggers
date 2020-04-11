@@ -46,7 +46,7 @@ object WorldListener {
 
     @SubscribeEvent
     fun onRenderWorld(event: RenderWorldLastEvent) {
-        Tessellator.setPartialTicks(event.partialTicks)
+        Tessellator.partialTicks = event.partialTicks
         TriggerType.RENDER_WORLD.triggerAll(event.partialTicks)
     }
 
