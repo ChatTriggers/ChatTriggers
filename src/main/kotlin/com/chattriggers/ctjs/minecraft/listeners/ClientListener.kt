@@ -262,6 +262,10 @@ object ClientListener {
     //$$}
     //#endif
 
+    /**
+     * Used as a pass through argument in [com.chattriggers.ctjs.engine.IRegister.registerPlayerInteract].\n
+     * Exposed in providedLibs as InteractAction.
+     */
     enum class PlayerInteractAction {
         RIGHT_CLICK_BLOCK,
         RIGHT_CLICK_EMPTY,
