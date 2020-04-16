@@ -41,10 +41,12 @@ class CTJSTransformer : BaseClassTransformer() {
             try {
                 Class.forName("io.framesplus.util.NativeUtil")
                 HAS_FRAMES_PLUS = true
+                println("Found frames+")
             } catch (e: Throwable) {
                 // If Frames+ is present, this injection causes MC
                 // to crash
                 injectEffectRenderer()
+                println("Did not find frames+")
             }
 
             ModuleManager.setup()
