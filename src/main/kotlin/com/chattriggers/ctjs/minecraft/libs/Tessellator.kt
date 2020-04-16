@@ -15,7 +15,10 @@ import kotlin.math.sqrt
 
 @External
 object Tessellator {
+    @JvmStatic
     var partialTicks = 0f
+        internal set
+
     private var tessellator = MCTessellator.getInstance()
     private var worldRenderer = this.tessellator.getRenderer()
 

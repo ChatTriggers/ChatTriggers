@@ -10,7 +10,7 @@ global.ReflectionHelper = Java.type("net.minecraftforge.fml.relauncher.Reflectio
 global.TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
 global.Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
 //#if MC<=10809
-global.InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent.Action");
+global.InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent").Action;
 //#else
 //$$ global.InteractAction = Java.type("com.chattriggers.ctjs.minecraft.listeners.ClientListener").INSTANCE.PlayerInteractAction;
 //#endif
