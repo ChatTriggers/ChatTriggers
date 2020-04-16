@@ -6,13 +6,15 @@ import net.minecraft.launchwrapper.LaunchClassLoader
 import kotlin.properties.Delegates
 
 class CTJSTransformer : BaseClassTransformer() {
+    private var transforming = false
+
     override fun setup(classLoader: LaunchClassLoader) {
         super.setup(classLoader)
 
         classLoader.addTransformerExclusion("ct.") // for proguard builds
         classLoader.addTransformerExclusion("com.chattriggers.ctjs.")
         classLoader.addClassLoaderExclusion("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread")
-        classLoader.addTransformerExclusion("ct.minecraft.wrappers.objects.threading.WrappedThread")
+        classLoader.addClassLoaderExclusion("ct.minecraft.wrappers.objects.threading.WrappedThread")
         classLoader.addTransformerExclusion("file__") // for rhino generated classes
         classLoader.addTransformerExclusion("com.google.gson.")
         classLoader.addTransformerExclusion("org.mozilla.javascript")
@@ -23,6 +25,9 @@ class CTJSTransformer : BaseClassTransformer() {
     }
 
     override fun makeTransformers() {
+        if (transforming) return
+        transforming = true
+
         try {
             injectCrashReport()
             injectEntityPlayer()
