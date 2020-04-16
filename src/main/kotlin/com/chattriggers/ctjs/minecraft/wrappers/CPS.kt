@@ -19,10 +19,6 @@ object CPS {
     private var leftClicksMax = 0
     private var rightClicksMax = 0
 
-    init {
-        MinecraftForge.EVENT_BUS.register(this)
-    }
-
     @SubscribeEvent
     fun update(event: RenderGameOverlayEvent) {
         while (Client.getSystemTime() > sysTime + 50L) {

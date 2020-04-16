@@ -10,8 +10,10 @@ class CTJSTransformer : BaseClassTransformer() {
         super.setup(classLoader)
 
         classLoader.addTransformerExclusion("ct.") // for proguard builds
-        classLoader.addTransformerExclusion("file__") // for rhino generated classes
         classLoader.addTransformerExclusion("com.chattriggers.ctjs.")
+        classLoader.addClassLoaderExclusion("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread")
+        classLoader.addTransformerExclusion("ct.minecraft.wrappers.objects.threading.WrappedThread")
+        classLoader.addTransformerExclusion("file__") // for rhino generated classes
         classLoader.addTransformerExclusion("com.google.gson.")
         classLoader.addTransformerExclusion("org.mozilla.javascript")
         classLoader.addTransformerExclusion("org.mozilla.classfile")
@@ -32,14 +34,11 @@ class CTJSTransformer : BaseClassTransformer() {
             makeGuiScreenInjections()
 
             try {
-                println("Trying to find frames+")
                 Class.forName("io.framesplus.util.NativeUtil")
-                println("Found frames+")
                 HAS_FRAMES_PLUS = true
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 // If Frames+ is present, this injection causes MC
                 // to crash
-                println("Did not find frames+")
                 injectEffectRenderer()
             }
 

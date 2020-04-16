@@ -15,7 +15,7 @@ if (process.env.TRAVIS_REPO_SLUG === "ChatTriggers/ChatTriggers"
 
     var FtpClient = require('ftp-client');
     var client = new FtpClient({
-        host: 'chattriggers.com',
+        host: process.env.FTP_URL,
         port: 21,
         user: process.env.FTP_USER,
         password: process.env.FTP_PASSWORD
