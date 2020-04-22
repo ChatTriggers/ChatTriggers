@@ -116,7 +116,7 @@ object FileLib {
 
         return conn.getInputStream().use {
             it.readBytes()
-        }.toString(Charset.defaultCharset())
+        }.toString(Charset.forName("UTF-8"))
     }
 
     @JvmStatic
