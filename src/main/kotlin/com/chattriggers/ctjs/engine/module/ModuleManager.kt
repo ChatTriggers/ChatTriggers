@@ -163,8 +163,10 @@ object ModuleManager {
     }
 
     fun deleteModule(name: String): Boolean {
-        val file = File(modulesFolder, name)
-        if (!file.exists()) return false
+        val module = cachedModules.find { it.name.toLowerCase() == name.toLowerCase() } ?: return false
+
+        val file = File(modulesFolder, module.name)
+        if (!file.exists()) throw IllegalStateException("Expected module to have an existing folder5")
 
         if (file.deleteRecursively()) {
             Reference.loadCT()
