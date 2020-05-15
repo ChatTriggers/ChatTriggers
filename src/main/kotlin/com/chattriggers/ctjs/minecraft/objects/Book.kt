@@ -13,7 +13,6 @@ import com.chattriggers.ctjs.utils.kotlin.TextComponentSerializer
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 @External
 class Book(bookName: String) {
@@ -87,15 +86,7 @@ class Book(bookName: String) {
         bookData.removeTag("pages")
         bookData["pages"] = pages
         book.tagCompound = bookData.rawNBT
-
-        if (bookScreen != null) {
-            ReflectionHelper.setPrivateValue<GuiScreenBook, NBTTagList>(
-                GuiScreenBook::class.java,
-                bookScreen, pages,
-                "field_146483_y",
-                "bookPages"
-            )
-        }
+        bookScreen?.bookPages = pages.rawNBT
     }
 
     @JvmOverloads
@@ -104,14 +95,7 @@ class Book(bookName: String) {
             bookScreen = GuiScreenBook(Player.getPlayer(), book, false)
         }
 
-        ReflectionHelper.setPrivateValue<GuiScreenBook, Int>(
-            GuiScreenBook::class.java,
-            bookScreen,
-            page,
-            "currPage",
-            "field_146484_x"
-        )
-
+        bookScreen!!.currPage = page
         GuiHandler.openGui(bookScreen ?: return)
     }
 
@@ -120,11 +104,6 @@ class Book(bookName: String) {
     }
 
     fun getCurrentPage(): Int {
-        return if (!isOpen()) -1 else ReflectionHelper.getPrivateValue<Int, GuiScreenBook>(
-            GuiScreenBook::class.java,
-            bookScreen,
-            "currPage",
-            "field_146484_x"
-        )
+        return if (!isOpen() || bookScreen == null) -1 else bookScreen!!.currPage
     }
 }
