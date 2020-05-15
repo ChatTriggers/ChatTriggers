@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
@@ -14,7 +15,6 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import org.lwjgl.opengl.GL11
 import net.minecraft.item.Item as MCItem
 
@@ -94,6 +94,11 @@ class Item {
 
     fun getRawNBT() = itemStack.serializeNBT().toString()
 
+    fun getNBT() = NBTTagCompound(itemStack.serializeNBT())
+
+    @Deprecated("Use the better-named method", ReplaceWith("getNBT"))
+    fun getItemNBT(): NBTTagCompound = getNBT()
+
     fun getID(): Int = MCItem.getIdFromItem(item)
 
     fun setStackSize(stackSize: Int) = apply {
@@ -154,8 +159,6 @@ class Item {
     fun isEnchantable(): Boolean = itemStack.isItemEnchantable
 
     fun isEnchanted(): Boolean = itemStack.isItemEnchanted
-
-    fun getItemNBT(): NBTTagCompound = itemStack.serializeNBT()
 
     fun getMetadata(): Int = itemStack.metadata
 

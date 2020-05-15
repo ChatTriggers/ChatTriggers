@@ -7,6 +7,10 @@ internal typealias MCTessellator = net.minecraft.client.renderer.Tessellator
 
 //#if MC<=10809
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX
+internal typealias MCNBTBase = net.minecraft.nbt.NBTBase
+internal typealias MCNBTTagCompound = net.minecraft.nbt.NBTTagCompound
+internal typealias MCNBTTagList = net.minecraft.nbt.NBTTagList
+internal typealias MCNBTTagString = net.minecraft.nbt.NBTTagString
 
 internal typealias BlockPos = net.minecraft.util.BlockPos
 internal typealias RayTraceType = net.minecraft.util.MovingObjectPosition.MovingObjectType

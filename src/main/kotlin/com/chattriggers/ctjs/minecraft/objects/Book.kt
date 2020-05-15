@@ -4,15 +4,15 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
-import com.chattriggers.ctjs.utils.kotlin.External
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList
+import com.chattriggers.ctjs.utils.kotlin.*
+import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
+import com.chattriggers.ctjs.utils.kotlin.MCNBTTagString
 import com.chattriggers.ctjs.utils.kotlin.TextComponentSerializer
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTBase
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.nbt.NBTTagList
-import net.minecraft.nbt.NBTTagString
 import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 @External
@@ -24,14 +24,14 @@ class Book(bookName: String) {
     //#else
     //$$ = ItemStack(Items.WRITTEN_BOOK)
     //#endif
-    private val bookData: NBTTagCompound = NBTTagCompound()
+    private val bookData: NBTTagCompound = NBTTagCompound(MCNBTTagCompound())
 
     init {
-        bookData["author"] = NBTTagString(Player.getName())
-        bookData["title"] = NBTTagString("CT-$bookName")
-        bookData["pages"] = NBTTagList()
+        bookData["author"] = MCNBTTagString(Player.getName())
+        bookData["title"] = MCNBTTagString("CT-$bookName")
+        bookData["pages"] = MCNBTTagList()
 
-        book.tagCompound = bookData
+        book.tagCompound = bookData.rawNBT
     }
 
     /**
@@ -41,10 +41,10 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun addPage(message: Message) = apply {
-        val pages = bookData["pages"] as NBTTagList
+        val pages = (bookData["pages"] ?: return@apply) as NBTTagList
 
         pages.appendTag(
-            NBTTagString(
+            MCNBTTagString(
                 TextComponentSerializer.componentToJson(
                     message.getChatMessage()
                 )
@@ -74,11 +74,9 @@ class Book(bookName: String) {
     fun setPage(pageNumber: Int, message: Message) = apply {
         val pages = bookData.getTag("pages") as NBTTagList
 
-        pages.set(
-            pageNumber, NBTTagString(
-                TextComponentSerializer.componentToJson(
+        pages[pageNumber] = MCNBTTagString(
+            TextComponentSerializer.componentToJson(
                     message.getChatMessage()
-                )
             )
         )
 
@@ -88,7 +86,7 @@ class Book(bookName: String) {
     fun updateBookScreen(pages: NBTTagList) {
         bookData.removeTag("pages")
         bookData["pages"] = pages
-        book.tagCompound = bookData
+        book.tagCompound = bookData.rawNBT
 
         if (bookScreen != null) {
             ReflectionHelper.setPrivateValue<GuiScreenBook, NBTTagList>(
@@ -128,13 +126,5 @@ class Book(bookName: String) {
             "currPage",
             "field_146484_x"
         )
-    }
-
-    operator fun NBTTagCompound.set(tag: String, value: NBTBase) {
-        this.setTag(tag, value)
-    }
-
-    operator fun NBTTagCompound.get(tag: String): NBTBase {
-        return this.getTag(tag)
     }
 }
