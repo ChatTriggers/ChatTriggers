@@ -98,18 +98,20 @@ object CTCommand : CommandBase() {
         }
     }
 
-    private fun getUsage() =
-        "&b&m${ChatLib.getChatBreak()}\n" +
-                "&c/ct <load/reload> &7- &oReloads all of the ct modules.\n" +
-                "&c/ct import [module] &7- &oImports a module.\n" +
-                "&c/ct files &7- &oOpens the ChatTriggers folder.\n" +
-                "&c/ct modules &7- &oOpens the modules gui\n" +
-                "&c/ct console &7- &oOpens the ct console.\n" +
-                "&c/ct simulate [message]&7- &oSimulates a received chat message.\n" +
-                "&c/ct dump &7- &oDumps previous chat messages into chat.\n" +
-                "&c/ct settings &7- &oChange ChatTrigger's settings.\n" +
-                "&c/ct &7- &oDisplays this help dialog.\n" +
-                "&b&m${ChatLib.getChatBreak()}"
+    private fun getUsage() = """
+        &b&m${ChatLib.getChatBreak()}
+        &c/ct load &7- &oReloads all of the ct modules.
+        &c/ct import [module] &7- &oImports a module.
+        &c/ct delete [module] &7- &oDeletes a module.
+        &c/ct files &7- &oOpens the ChatTriggers folder.
+        &c/ct modules &7- &oOpens the modules gui
+        &c/ct console [language] &7- &oOpens the ct console.
+        &c/ct simulate [message]&7- &oSimulates a received chat message.
+        &c/ct dump &7- &oDumps previous chat messages into chat.
+        &c/ct settings &7- &oChange ChatTrigger's settings.
+        &c/ct &7- &oDisplays this help dialog.
+        &b&m${ChatLib.getChatBreak()}
+    """.trimIndent()
 
     private fun openFileLocation() {
         try {
