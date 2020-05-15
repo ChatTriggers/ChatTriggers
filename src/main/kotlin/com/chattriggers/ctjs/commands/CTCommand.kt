@@ -169,7 +169,7 @@ object CTCommand : CommandBase() {
 
     private fun copyArgsToClipboard(args: Array<String>) {
         clearOldDump()
-        val toCopy = Arrays.copyOfRange(args, 1, args.size).joinToString(" ")
+        val toCopy = args.copyOfRange(1, args.size).joinToString(" ")
         Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(toCopy), null)
     }
 }

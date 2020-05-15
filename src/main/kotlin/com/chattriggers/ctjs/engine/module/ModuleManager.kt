@@ -163,7 +163,10 @@ object ModuleManager {
     }
 
     fun deleteModule(name: String): Boolean {
-        if (FileLib.deleteDirectory(File(modulesFolder, name))) {
+        val file = File(modulesFolder, name)
+        if (!file.exists()) return false
+
+        if (file.deleteRecursively()) {
             Reference.loadCT()
             return true
         }
