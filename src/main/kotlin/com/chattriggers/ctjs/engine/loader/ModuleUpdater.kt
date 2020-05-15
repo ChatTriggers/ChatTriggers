@@ -13,6 +13,9 @@ import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.net.URL
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 object ModuleUpdater {
     val gson = Gson()
@@ -21,7 +24,9 @@ object ModuleUpdater {
         val toDownload = File(modulesFolder, ".to_download.txt")
         if (!toDownload.exists()) return
 
-        toDownload.readText().split(",").filter(String::isBlank).forEach(::downloadModule)
+        toDownload.readText().split(",").filter(String::isBlank).forEach {
+            importModule(it)
+        }
 
         toDownload.delete()
     }
@@ -64,9 +69,9 @@ object ModuleUpdater {
     fun importModule(moduleName: String): List<Module> {
         if (cachedModules.any { it.name == moduleName }) return emptyList()
 
-        downloadModule(moduleName)
+        val realName = downloadModule(moduleName) ?: return emptyList()
 
-        val moduleDir = File(modulesFolder, moduleName)
+        val moduleDir = File(modulesFolder, realName)
         val module = ModuleManager.parseModule(moduleDir)
 
         cachedModules.add(module)
@@ -74,20 +79,44 @@ object ModuleUpdater {
         return listOf(module) + (module.metadata.requires?.map(::importModule)?.flatten() ?: emptyList())
     }
 
-    private fun downloadModule(name: String) {
+    private fun downloadModule(name: String): String? {
+        val downloadZip = File(modulesFolder, "currDownload.zip")
+
         try {
-            val downloadZip = File(modulesFolder, "currDownload.zip")
 
             val url = "https://www.chattriggers.com/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
             val connection = URL(url).openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
 
-            FileLib.unzip(downloadZip.absolutePath, modulesFolder.absolutePath)
+            FileSystems.newFileSystem(downloadZip.toPath(), null).use {
+                val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
 
-            downloadZip.delete()
+                if (!rootFolder.hasNext()) throw Exception("Too small")
+                val moduleFolder = rootFolder.next()
+                if (rootFolder.hasNext()) throw Exception("Too big")
+
+                val realName = moduleFolder.fileName.toString().trimEnd(File.separatorChar)
+                val targetPath = File(modulesFolder, realName).apply { mkdir() }.toPath()
+
+                Files.walk(moduleFolder).use { paths ->
+                    paths.forEach { path ->
+                        val relativePath = moduleFolder.relativize(path).fileName?.toString()
+
+                        if (relativePath != null) {
+                            Files.copy(path, targetPath.resolve(relativePath))
+                        }
+                    }
+                }
+
+                return realName
+            }
         } catch (exception: Exception) {
             exception.print()
+        } finally {
+            downloadZip.delete()
         }
+
+        return null
     }
 }
