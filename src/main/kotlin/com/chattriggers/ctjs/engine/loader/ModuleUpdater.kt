@@ -101,9 +101,9 @@ object ModuleUpdater {
 
                 Files.walk(moduleFolder).use { paths ->
                     paths.forEach { path ->
-                        val relativePath = moduleFolder.relativize(path).fileName?.toString()
+                        val relativePath = path.drop(1).joinToString(File.separatorChar.toString())
 
-                        if (relativePath != null) {
+                        if (relativePath.isNotEmpty()) {
                             Files.copy(path, targetPath.resolve(relativePath))
                         }
                     }
