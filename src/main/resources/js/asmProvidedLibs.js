@@ -6,9 +6,6 @@ global.Java = {
 
 global.sync = (func, lock) => new org.mozilla.javascript.Synchronizer(func, lock);
 
-// Thread
-global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread");
-
 global.setTimeout = function (func, delay) {
     new Thread(function () {
         Thread.sleep(delay);

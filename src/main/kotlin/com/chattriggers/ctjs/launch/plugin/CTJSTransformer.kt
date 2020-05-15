@@ -13,8 +13,6 @@ class CTJSTransformer : BaseClassTransformer() {
 
         classLoader.addTransformerExclusion("ct.") // for proguard builds
         classLoader.addTransformerExclusion("com.chattriggers.ctjs.")
-        classLoader.addClassLoaderExclusion("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread")
-        classLoader.addClassLoaderExclusion("ct.minecraft.wrappers.objects.threading.WrappedThread")
         classLoader.addTransformerExclusion("file__") // for rhino generated classes
         classLoader.addTransformerExclusion("com.google.gson.")
         classLoader.addTransformerExclusion("org.mozilla.javascript")

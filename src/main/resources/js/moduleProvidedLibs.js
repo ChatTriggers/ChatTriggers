@@ -6,6 +6,9 @@ global.HashMap = Java.type("java.util.HashMap");
 global.Keyboard = Java.type("org.lwjgl.input.Keyboard");
 global.ReflectionHelper = Java.type("net.minecraftforge.fml.relauncher.ReflectionHelper");
 
+// Thread
+global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread");
+
 // Triggers
 global.TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
 global.Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
