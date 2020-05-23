@@ -300,6 +300,9 @@ object Player {
     @JvmStatic
     fun getOpenedInventory(): Inventory = Inventory(getPlayer()!!.openContainer)
 
+    /**
+     * Draws the player in the GUI
+     */
     @JvmStatic
     @JvmOverloads
     fun draw(x: Int, y: Int, rotate: Boolean = true) = apply {

@@ -75,6 +75,9 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         displayNameField.set(player, textComponent.chatComponentText.formattedText)
     }
 
+    /**
+     * Draws the player in the GUI
+     */
     @JvmOverloads
     fun draw(x: Int, y: Int, rotate: Boolean = false) = apply {
         Renderer.drawPlayer(player, x, y, rotate)
