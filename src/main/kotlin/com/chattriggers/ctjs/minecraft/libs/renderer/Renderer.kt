@@ -319,7 +319,7 @@ object Renderer {
     fun drawString(text: String, x: Float, y: Float) {
         val fr = getFontRenderer()
 
-        //TODO: THIS DEF AIN'T THE RIGHT PLACE FOR THIS BUT THATS @kerbybit's JOB!
+        //TODO: THIS DEF AIN'T THE RIGHT PLACE FOR THIS BUT THAT'S @kerbybit's JOB!
         //      THIS IS JUST A POC >:(
         if (text.contains("\n")) {
             var newY = y
@@ -329,7 +329,7 @@ object Renderer {
 
                 newY += fr.FONT_HEIGHT
             }
-
+            finishDraw()
             return
         }
 
