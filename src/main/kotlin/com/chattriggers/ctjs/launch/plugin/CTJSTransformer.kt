@@ -34,6 +34,7 @@ class CTJSTransformer : BaseClassTransformer() {
             injectScreenshotHelper()
             injectNetHandlerPlayClient()
             injectRenderManager()
+            injectNetworkManager()
             makeGuiScreenInjections()
 
             try {
