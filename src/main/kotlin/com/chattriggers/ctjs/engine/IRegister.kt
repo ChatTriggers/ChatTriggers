@@ -855,7 +855,7 @@ interface IRegister {
     }
 
     /**
-     * Registers a new trigger that runs whenever a packet is sent to the client
+     * Registers a new trigger that runs whenever a packet is sent from the client to the server
      *
      * Passes through two arguments:
      * - The packet
@@ -869,6 +869,23 @@ interface IRegister {
      */
     fun registerPacketSent(method: Any): OnRegularTrigger {
         return OnRegularTrigger(method, TriggerType.PACKET_SENT, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs whenever a packet is sent to the client from the server
+     *
+     * Passes through two arguments:
+     * - The packet
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerPacketReceived(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.PACKET_RECEIVED, getImplementationLoader())
     }
 
     /**
