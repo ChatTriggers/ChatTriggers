@@ -94,10 +94,9 @@ class ASMBuilder {
 }
 
 class RemoveBuilder extends ASMBuilder {
-    _methodMaps = {};
-
     constructor(className, methodName, descriptor, at) {
         super(className, methodName, descriptor, at);
+        this._methodMaps = {};
     }
 
     methodMaps(obj) {
@@ -134,11 +133,10 @@ class FieldBuilder {
 }
 
 class InjectBuilder extends ASMBuilder {
-    _methodMaps = {};
-    _fieldMaps = {};
-
     constructor(className, methodName, descriptor, at) {
         super(className, methodName, descriptor, at);
+        this._methodMaps = {};
+        this._fieldMaps = {};
     }
 
     methodMaps(obj) {
