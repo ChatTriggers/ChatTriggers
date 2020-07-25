@@ -64,7 +64,7 @@ object Settings {
         fun getLeftPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.LEFT_PANTS_LEG)
 
         @JvmStatic
-        fun setLeftPantsLef(toggled: Boolean) {
+        fun setLeftPantsLeg(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.LEFT_PANTS_LEG)
         }
 
@@ -72,7 +72,7 @@ object Settings {
         fun getRightPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.RIGHT_PANTS_LEG)
 
         @JvmStatic
-        fun setRightPantsLef(toggled: Boolean) {
+        fun setRightPantsLeg(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.RIGHT_PANTS_LEG)
         }
 
