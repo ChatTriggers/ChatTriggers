@@ -43,7 +43,7 @@ abstract class Action(var slot: Int, var windowId: Int) {
          *
          * @param inventory the inventory to complete the action on
          * @param slot the slot to complete the action on
-         * @param typeString the type of action to do (CLICK, DRAG, KEY)
+         * @param typeString the type of action to do (CLICK, DRAG, DROP, KEY)
          * @return the new action
          */
         @JvmStatic
