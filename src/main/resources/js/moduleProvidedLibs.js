@@ -61,6 +61,7 @@ global.Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Enti
 global.Action = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action");
 global.ClickAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction");
 global.DragAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction");
+global.DropAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction");
 global.KeyAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.KeyAction");
 global.Particle = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Particle");
 
