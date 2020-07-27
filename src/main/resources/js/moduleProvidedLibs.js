@@ -95,8 +95,10 @@ global.register = function (triggerType, methodName) {
 
 // String prototypes
 String.prototype.addFormatting = function () {
-    return ChatLib.addFormatting(this);
+    return ChatLib.addColor(this);
 };
+
+String.prototype.addColor = String.prototype.addFormatting;
 
 String.prototype.removeFormatting = function () {
     return ChatLib.removeFormatting(this);
