@@ -135,9 +135,7 @@ object WorldListener {
         while (ite.hasNext()) {
             val it = ite.next()
 
-            try {
-                World.getPlayerByName(it)
-            } catch (exception: Exception) {
+            if (World.getPlayerByName(it) == null) {
                 this.playerList.remove(it)
                 TriggerType.PLAYER_LEAVE.triggerAll(it)
                 break
