@@ -56,6 +56,13 @@ object ClientListener {
     private fun handleMouseInput() {
         if (!Mouse.isCreated()) return
 
+        val scroll = Mouse.getEventDWheel()
+
+        when {
+            scroll > 0 -> TriggerType.SCROLLED.triggerAll(Client.getMouseX(), Client.getMouseY(), 1)
+            scroll < 0 -> TriggerType.SCROLLED.triggerAll(Client.getMouseX(), Client.getMouseY(), -1)
+        }
+
         for (button in 0..4) {
             handleDragged(button)
 

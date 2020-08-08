@@ -17,6 +17,7 @@ import org.lwjgl.input.Mouse
 abstract class Gui : GuiScreen() {
     private var onDraw: OnRegularTrigger? = null
     private var onClick: OnRegularTrigger? = null
+    private var onScroll: OnRegularTrigger? = null
     private var onKeyTyped: OnRegularTrigger? = null
     private var onMouseReleased: OnRegularTrigger? = null
     private var onMouseDragged: OnRegularTrigger? = null
@@ -71,6 +72,19 @@ abstract class Gui : GuiScreen() {
     fun registerClicked(method: Any): OnRegularTrigger? {
         onClick = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
         return onClick
+    }
+
+    /**
+     * Registers a method to be ran while the gui is open.<br></br>
+     * Registered method runs on mouse scroll.<br></br>
+     * Arguments passed through to method:<br></br>
+     * int mouseX<br></br>
+     * int mouseY<br></br>
+     * int scroll direction
+     */
+    fun registerScrolled(method: Any): OnRegularTrigger? {
+        onScroll = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        return onScroll
     }
 
     /**
@@ -176,8 +190,8 @@ abstract class Gui : GuiScreen() {
         val i = Mouse.getEventDWheel()
 
         when {
-            i > 0 -> this.onClick?.trigger(arrayOf(this.mouseX, this.mouseY, -1))
-            i < 0 -> this.onClick?.trigger(arrayOf(this.mouseX, this.mouseY, -2))
+            i > 0 -> this.onScroll?.trigger(arrayOf(this.mouseX, this.mouseY, 1))
+            i < 0 -> this.onScroll?.trigger(arrayOf(this.mouseX, this.mouseY, -1))
         }
     }
 
