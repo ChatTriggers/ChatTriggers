@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.config.GuiConfig
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
@@ -93,6 +94,9 @@ object CTCommand : CommandBase() {
                     ChatLib.chat("&cUnable to import module $moduleName")
                 } else {
                     ChatLib.chat("&aSuccessfully imported ${module.metadata.name ?: module.name}")
+                    if (Config.moduleImportHelp && module.metadata.helpMessage != null) {
+                        ChatLib.chat("${if (module.metadata.helpMessage.toString().length <= 384) module.metadata.helpMessage else module.metadata.helpMessage.toString().substring(0, 383)}")
+                    }
                 }
             }
         }

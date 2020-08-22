@@ -13,6 +13,7 @@ data class ModuleMetadata(
     val creator: String? = null,
     val description: String? = null,
     val requires: ArrayList<String>? = null,
+    val helpMessage: String? = null,
     val ignored: ArrayList<String>? = null,
     var isRequired: Boolean = false
 ) {
