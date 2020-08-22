@@ -49,6 +49,9 @@ object Config {
     @ConfigOpt(name = "Threaded Loading", x = -110, y = 230, type = ConfigBoolean::class)
     var threadedLoading = true
 
+    @ConfigOpt(name = "Show Module Help on Import", x = -110, y = 285, type = ConfigBoolean::class)
+    var moduleImportHelp = true
+
     fun load(jsonObject: JsonObject) {
         val gson = Gson()
 
