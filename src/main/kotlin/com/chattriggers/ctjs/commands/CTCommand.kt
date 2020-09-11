@@ -104,15 +104,15 @@ object CTCommand : CommandBase() {
 
     private fun getUsage() = """
         &b&m${ChatLib.getChatBreak()}
-        &c/ct load &7- &oReloads all of the ct modules.
+        &c/ct load &7- &oReloads all of the ChatTriggers modules.
         &c/ct import [module] &7- &oImports a module.
         &c/ct delete [module] &7- &oDeletes a module.
         &c/ct files &7- &oOpens the ChatTriggers folder.
-        &c/ct modules &7- &oOpens the modules gui
-        &c/ct console [language] &7- &oOpens the ct console.
-        &c/ct simulate [message]&7- &oSimulates a received chat message.
+        &c/ct modules &7- &oOpens the modules GUI.
+        &c/ct console [language] &7- &oOpens the ChatTriggers console.
+        &c/ct simulate [message] &7- &oSimulates a received chat message.
         &c/ct dump &7- &oDumps previous chat messages into chat.
-        &c/ct settings &7- &oChange ChatTrigger's settings.
+        &c/ct settings &7- &oOpens the ChatTriggers settings.
         &c/ct &7- &oDisplays this help dialog.
         &b&m${ChatLib.getChatBreak()}
     """.trimIndent()
