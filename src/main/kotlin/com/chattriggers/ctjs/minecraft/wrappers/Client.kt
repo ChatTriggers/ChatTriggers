@@ -16,6 +16,10 @@ import org.lwjgl.opengl.Display
 
 @External
 object Client {
+    /**
+     * DEPRECATED: Use Settings instead of Client.settings
+     */
+    @Deprecated("Use Settings instead of Client.settings")
     @JvmStatic
     val settings = Settings
 
