@@ -11,7 +11,7 @@ global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.thre
 
 // Triggers
 global.TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
-global.Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger.Priority");
+global.Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger").Priority;
 //#if MC<=10809
 global.InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent").Action;
 //#else
