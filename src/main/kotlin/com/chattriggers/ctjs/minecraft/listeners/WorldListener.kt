@@ -37,7 +37,6 @@ object WorldListener {
         shouldTriggerWorldLoad = false
 
         CTJS.sounds
-            .stream()
             .filter { it.isListening }
             .forEach { it.onWorldLoad() }
 
