@@ -22,8 +22,6 @@ public class UriScheme {
             return;
         }
 
-
-
         if (!args[0].startsWith(PROTOCOL)) {
             System.out.println("URL found is not supported, aborting...");
             System.out.println(args[0]);
@@ -46,15 +44,15 @@ public class UriScheme {
     public static void installUriScheme() {
         try {
             regAdd(
-                    " /f /ve /d " +
-                            quote("URL:chattriggers Protocol")
+                " /f /ve /d " +
+                    quote("URL:chattriggers Protocol")
             );
 
             regAdd(
-                    " /f /v " +
-                            quote("URL Protocol") +
-                            " /d " +
-                            quote("")
+                " /f /v " +
+                    quote("URL Protocol") +
+                    " /d " +
+                    quote("")
             );
 
             ModContainer container = Loader.instance().getIndexedModList().get(Reference.MODID);
@@ -63,11 +61,11 @@ public class UriScheme {
             String javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "javaw.exe";
 
             String value = ("\"" + javaProgram + "\" -cp \"" + modJar
-                    + "\" com.chattriggers.ctjs.loader.UriScheme " + "\"%1\"").replace("\"", "\\\"");
+                + "\" com.chattriggers.ctjs.loader.UriScheme " + "\"%1\"").replace("\"", "\\\"");
 
             regAdd(
-                    "\\shell\\open\\command /f /ve /d " +
-                            "\"" + value + "\""
+                "\\shell\\open\\command /f /ve /d " +
+                    "\"" + value + "\""
             );
         } catch (Exception e) {
             System.err.println("Unable to install chattriggers URI scheme, disregard if OS is not Windows");
@@ -92,10 +90,10 @@ public class UriScheme {
     private static void socketListener() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             while (!Thread.interrupted()) {
-                try (Socket clientSocket = serverSocket.accept()) {
-                    InputStream inputStream = clientSocket.getInputStream();
-                    String module = new BufferedReader(new InputStreamReader(inputStream))
-                            .lines().collect(Collectors.joining("\n"));
+                try (Socket clientSocket = serverSocket.accept();
+                     InputStream stream = clientSocket.getInputStream();
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+                    String module = reader.lines().collect(Collectors.joining("\n"));
                     ModuleManager.INSTANCE.importModule(module);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -107,9 +105,9 @@ public class UriScheme {
     }
 
     private static void connectWithSockets(String module) throws Exception {
-        Socket socket = new Socket(InetAddress.getLocalHost(), PORT);
-        socket.getOutputStream().write(module.getBytes());
-        socket.close();
+        try (Socket socket = new Socket(InetAddress.getLocalHost(), PORT)) {
+            socket.getOutputStream().write(module.getBytes());
+        }
     }
 
     private static void copyModuleIn(String module) {
@@ -120,10 +118,8 @@ public class UriScheme {
 
         File toDownload = new File(modulesDir, ".to_download.txt");
 
-        try {
-            PrintWriter pw = new PrintWriter(new FileWriter(toDownload, true));
+        try (PrintWriter pw = new PrintWriter(new FileWriter(toDownload, true))) {
             pw.append(module).append(",");
-            pw.close();
         } catch (Exception e) {
             System.out.println("Error writing to file.");
         }

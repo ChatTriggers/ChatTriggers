@@ -48,8 +48,10 @@ object CTJS {
             MinecraftForge.EVENT_BUS.register(it)
         }
 
-        UriScheme.installUriScheme()
-        UriScheme.createSocketListener()
+        thread(start = true) {
+            UriScheme.installUriScheme()
+            UriScheme.createSocketListener()
+        }
 
         val sha256uuid = DigestUtils.sha256Hex(Player.getUUID())
 

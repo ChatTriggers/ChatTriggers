@@ -83,6 +83,9 @@ minecraft {
     runDir = "run"
 
     makeObfSourceJar = true
+
+    // automatically apply jvm arg when running genIntellijRuns
+    clientJvmArgs += ["-Dfml.coreMods.load=com.chattriggers.ctjs.launch.plugin.CTJSLoadingPlugin"]
 }
 
 afterEvaluate {
