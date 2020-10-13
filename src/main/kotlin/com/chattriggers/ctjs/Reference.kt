@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
+import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
@@ -57,6 +58,7 @@ object Reference {
     fun loadCT() {
         if (!isLoaded) return
 
+        Client.getMinecraft().gameSettings.saveOptions()
         unloadCT(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
@@ -71,8 +73,8 @@ object Reference {
             ModuleManager.setup()
             ModuleManager.entryPass(completionListener = ::printLoadCompletionStatus)
 
+            Client.getMinecraft().gameSettings.loadOptions()
             ChatLib.chat("&aDone reloading scripts!")
-
             isLoaded = true
 
             TriggerType.GAME_LOAD.triggerAll()
