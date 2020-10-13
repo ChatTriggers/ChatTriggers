@@ -47,7 +47,6 @@ global.PlayerMP = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Pl
 
 // Wrappers
 global.Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
-global.Settings = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Settings");
 global.Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
 global.World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
 global.Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");
