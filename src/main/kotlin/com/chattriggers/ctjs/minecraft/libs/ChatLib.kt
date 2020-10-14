@@ -16,6 +16,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
 import kotlin.concurrent.thread
+import kotlin.math.roundToInt
 
 @External
 object ChatLib {
@@ -173,29 +174,20 @@ object ChatLib {
      */
     @JvmStatic
     fun getCenteredText(text: String): String {
-        var left = true
-        val stringBuilder = StringBuilder(removeFormatting(text))
+        val textWidth = Renderer.getStringWidth(addColor(text))
+        val chatWidth = getChatWidth()
 
-        if (Renderer.getStringWidth(stringBuilder.toString()) > getChatWidth()) {
-            return stringBuilder.toString()
-        }
+        if (textWidth >= chatWidth)
+            return text
 
-        while (Renderer.getStringWidth(stringBuilder.toString()) < getChatWidth()) {
-            left = if (left) {
-                stringBuilder.insert(0, " ")
-                false
-            } else {
-                stringBuilder.append(" ")
-                true
+        val spaceWidth = (chatWidth - textWidth) / 2f
+        val spaceBuilder = StringBuilder().apply {
+            repeat((spaceWidth / Renderer.getStringWidth(" ")).roundToInt()) {
+                append(' ')
             }
         }
 
-        return stringBuilder.deleteCharAt(
-            if (left) 0 else stringBuilder.length - 1
-        ).toString().replace(
-            removeFormatting(text),
-            text
-        )
+        return spaceBuilder.append(text).toString()
     }
 
     /**

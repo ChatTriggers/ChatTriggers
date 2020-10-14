@@ -99,12 +99,7 @@ object Renderer {
     }
 
     @JvmStatic
-    @JvmOverloads
-    fun getStringWidth(text: String, removeFormatting: Boolean = true): Int {
-        return if (removeFormatting)
-            getFontRenderer().getStringWidth(ChatLib.removeFormatting(text))
-        else getFontRenderer().getStringWidth(text)
-    }
+    fun getStringWidth(text: String) = getFontRenderer().getStringWidth(text)
 
     @JvmStatic
     @JvmOverloads
