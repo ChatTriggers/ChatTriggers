@@ -25,6 +25,7 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
         INT_ARRAY,
         BOOLEAN,
         COMPOUND_TAG,
+        TAG_LIST,
     }
 
     fun getTag(key: String) = when (val tag = rawNBT.getTag(key)) {
@@ -53,9 +54,13 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
 
     fun getIntArray(key: String) = rawNBT.getIntArray(key)
 
+    fun getBoolean(key: String) = rawNBT.getBoolean(key)
+
     fun getCompoundTag(key: String) = NBTTagCompound(rawNBT.getCompoundTag(key))
 
-    fun get(key: String, type: NBTDataType): Any? {
+    fun getTagList(key: String, type: Int) = rawNBT.getTagList(key, type)
+
+    fun get(key: String, type: NBTDataType, tagType: Int?): Any? {
         return when (type) {
             NBTDataType.BYTE -> getByte(key)
             NBTDataType.SHORT -> getShort(key)
@@ -66,8 +71,9 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.STRING -> if (rawNBT.hasKey(key, 8)) (tagMap[key] as NBTBase).toString() else null
             NBTDataType.BYTE_ARRAY -> if (rawNBT.hasKey(key, 7)) (tagMap[key] as NBTTagByteArray).byteArray else null
             NBTDataType.INT_ARRAY -> if (rawNBT.hasKey(key, 11)) (tagMap[key] as NBTTagIntArray).intArray else null
-            NBTDataType.BOOLEAN -> get(key, NBTDataType.BYTE) != 0
+            NBTDataType.BOOLEAN -> getBoolean(key)
             NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
+            NBTDataType.TAG_LIST -> if (tagType == null) throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument") else getTagList(key, tagType)
         }
     }
 
