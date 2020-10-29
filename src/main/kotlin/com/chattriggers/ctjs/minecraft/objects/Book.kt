@@ -40,8 +40,7 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun addPage(message: Message) = apply {
-        val pages = (bookData["pages"] ?: return@apply) as NBTTagList
-
+        val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
         pages.appendTag(
             MCNBTTagString(
                 TextComponentSerializer.componentToJson(
@@ -71,7 +70,7 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun setPage(pageNumber: Int, message: Message) = apply {
-        val pages = bookData.getTag("pages") as NBTTagList
+        val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
 
         pages[pageNumber] = MCNBTTagString(
             TextComponentSerializer.componentToJson(
@@ -91,9 +90,7 @@ class Book(bookName: String) {
 
     @JvmOverloads
     fun display(page: Int = 0) {
-        if (bookScreen == null) {
-            bookScreen = GuiScreenBook(Player.getPlayer(), book, false)
-        }
+        bookScreen = GuiScreenBook(Player.getPlayer(), book, false)
 
         bookScreen!!.currPage = page
         GuiHandler.openGui(bookScreen ?: return)
