@@ -7,7 +7,7 @@ any questions you might have about updating your modules from 0.18.4 to 1.0.0.
 ### What changed?
 
 0.18.4, as well as all previous versions of ct.js, used a JavaScript engine called 
-[Nashorn](https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine). Nashorn was built and maintained 
+[Nashorn](https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)). Nashorn was built and maintained 
 by Oracle. This was fine initially, however with the release of Java 11, Nashorn has been officially
 deprecated and will be removed from the JDK at some point. Nashorn implements ES5, and considering 
 the deprecation, will not support any of the newer ES6/ESNEXT features.
