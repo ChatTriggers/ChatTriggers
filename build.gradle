@@ -40,7 +40,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
 
-version = "1.3.0-" + (
+version = "1.3.1-" + (
     mcVersion.toString().substring(0, 1) + "."
     + mcVersion.toString().substring(1, 3).replace("0", "") + "."
     + mcVersion.toString().substring(3, 5).replace("0", "")
