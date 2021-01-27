@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
 import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
@@ -32,6 +33,7 @@ object ModuleUpdater {
     }
 
     fun updateModule(module: Module) {
+        if (!Config.autoUpdateModules) return
         val metadata = module.metadata
 
         try {

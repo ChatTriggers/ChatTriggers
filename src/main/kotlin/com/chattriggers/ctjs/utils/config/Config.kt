@@ -19,8 +19,8 @@ object Config {
     @ConfigOpt(name = "Show Update Messages in Chat", x = -110, y = 120, type = ConfigBoolean::class)
     var showUpdatesInChat: Boolean = true
 
-    @ConfigOpt(name = "Update Modules on Launch", x = -110, y = 175, type = ConfigBoolean::class)
-    var updateModulesOnBoot: Boolean = true
+    @ConfigOpt(name = "Automatically Update Modules", x = -110, y = 175, type = ConfigBoolean::class)
+    var autoUpdateModules: Boolean = true
 
     @ConfigOpt(name = "Clear Console on Load", x = 110, y = 10, type = ConfigBoolean::class)
     var clearConsoleOnLoad: Boolean = true
