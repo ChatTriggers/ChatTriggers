@@ -12,11 +12,11 @@ buildscript {
         mavenCentral()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
         }
         maven {
             name = "sponge"
-            url = "https://repo.spongepowered.org/maven"
+            url = "https://repo.spongepowered.org/repository/maven-public/"
         }
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -95,7 +95,7 @@ repositories {
     jcenter()
     maven {
         name = 'sponge'
-        url = 'http://repo.spongepowered.org/maven'
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
     }
     maven {
         url = 'https://jitpack.io'
