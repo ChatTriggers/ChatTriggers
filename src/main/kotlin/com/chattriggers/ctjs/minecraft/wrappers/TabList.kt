@@ -88,9 +88,9 @@ object TabList {
     @JvmStatic
     fun setFooter(footer: Any) {
         when (footer) {
-            is String -> Client.getTabGui()?.setHeader(Message(footer).getChatMessage())
-            is Message -> Client.getTabGui()?.setHeader(footer.getChatMessage())
-            is ITextComponent -> Client.getTabGui()?.setHeader(footer)
+            is String -> Client.getTabGui()?.setFooter(Message(footer).getChatMessage())
+            is Message -> Client.getTabGui()?.setFooter(footer.getChatMessage())
+            is ITextComponent -> Client.getTabGui()?.setFooter(footer)
         }
     }
 
