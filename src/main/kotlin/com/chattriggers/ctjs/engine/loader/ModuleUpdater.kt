@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.print
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
@@ -57,8 +58,22 @@ object ModuleUpdater {
                 return
             }
 
+            val moduleUrl = "https://www.chattriggers.com/api/modules/${metadata.name}"
+            val moduleUrlConnection = URL(moduleUrl).openConnection().apply {
+                setRequestProperty("User-Agent", "Mozilla/5.0")
+            }
+
+            val moduleDescriptionText = moduleUrlConnection.getInputStream().bufferedReader().readText()
+            val moduleDescription = gson.fromJson(moduleDescriptionText, ModuleDescriptionOnline::class.java)
+
+            val release = moduleDescription.releases.find {
+                 it.releaseVersion == newMetadata.version
+            }
+
             downloadModule(metadata.name)
             "Updated module ${metadata.name}".print()
+            ChatLib.chat("&aUpdated module ${metadata.name} to version ${newMetadata.version}")
+            ChatLib.chat("&aChangelog: &r\n${release!!.changelog}")
 
             module.metadata = File(module.folder, "metadata.json").let {
                 gson.fromJson(it.readText(), ModuleMetadata::class.java)
