@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.launch.plugin
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import me.falsehonesty.asmhelper.BaseClassTransformer
 import net.minecraft.launchwrapper.LaunchClassLoader
-import kotlin.properties.Delegates
+import org.apache.commons.lang3.SystemUtils
 
 class CTJSTransformer : BaseClassTransformer() {
     private var transforming = false
@@ -26,6 +26,8 @@ class CTJSTransformer : BaseClassTransformer() {
         if (transforming) return
         transforming = true
 
+        ModuleManager.canPrintToConsole = !SystemUtils.IS_OS_LINUX
+
         try {
             injectCrashReport()
             injectEntityPlayer()
@@ -43,5 +45,7 @@ class CTJSTransformer : BaseClassTransformer() {
         } catch (e: Throwable) {
             e.printStackTrace()
         }
+
+        ModuleManager.canPrintToConsole = true
     }
 }

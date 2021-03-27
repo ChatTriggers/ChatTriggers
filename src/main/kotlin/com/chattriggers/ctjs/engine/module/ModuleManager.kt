@@ -22,6 +22,8 @@ object ModuleManager {
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
 
+    var canPrintToConsole = false
+
     fun setup() {
         modulesFolder.mkdirs()
 

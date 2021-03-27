@@ -124,15 +124,23 @@ object Reference {
 
 fun Exception.print() {
     try {
-        ModuleManager.generalConsole.printStackTrace(this)
+        if (ModuleManager.canPrintToConsole) {
+            ModuleManager.generalConsole.printStackTrace(this)
+        } else {
+            printStackTrace()
+        }
     } catch (exception: Exception) {
-        this.printStackTrace()
+        printStackTrace()
     }
 }
 
 fun String.print() {
     try {
-        ModuleManager.generalConsole.out.println(this)
+        if (ModuleManager.canPrintToConsole) {
+            ModuleManager.generalConsole.out.println(this)
+        } else {
+            println(this)
+        }
     } catch (exception: Exception) {
         println(this)
     }
