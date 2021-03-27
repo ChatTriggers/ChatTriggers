@@ -35,27 +35,13 @@ class CTJSTransformer : BaseClassTransformer() {
             injectNetHandlerPlayClient()
             injectRenderManager()
             injectPacketThreadUtil()
+            injectEffectRenderer()
             makeGuiScreenInjections()
-
-            try {
-                Class.forName("io.framesplus.util.NativeUtil")
-                HAS_FRAMES_PLUS = true
-                println("Found frames+")
-            } catch (e: Throwable) {
-                // If Frames+ is present, this injection causes MC
-                // to crash
-                injectEffectRenderer()
-                println("Did not find frames+")
-            }
 
             ModuleManager.setup()
             ModuleManager.asmPass()
         } catch (e: Throwable) {
             e.printStackTrace()
         }
-    }
-
-    companion object {
-        var HAS_FRAMES_PLUS = false
     }
 }

@@ -994,10 +994,6 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerSpawnParticle(method: Any): OnRegularTrigger {
-        if (CTJSTransformer.HAS_FRAMES_PLUS) {
-            JSLoader.console.out.println("WARNING: 'spawnParticle' trigger has been disabled because " +
-                    "Frames+ is present")
-        }
         return OnRegularTrigger(method, TriggerType.SPAWN_PARTICLE, getImplementationLoader())
     }
 
