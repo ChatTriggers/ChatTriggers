@@ -110,7 +110,7 @@ dependencies {
     provided "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     provided "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     provided 'com.github.falsehonesty:asmhelper:1d4cc32e6a'
-    provided 'com.chattriggers:rhino:1.8.1'
+    provided 'com.chattriggers:rhino:1.8.2'
     provided 'com.fifesoft:rsyntaxtextarea:3.0.8'
     provided 'com.github.falsehonesty:ts-generator:adfb57a8f6'
 }
