@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
+import com.chattriggers.ctjs.utils.kotlin.BlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MathHelper
@@ -82,41 +83,36 @@ open class Entity(val entity: MCEntity) {
      * @return the entity's health
      */
     fun getHP(): Float {
-        return if (this.entity is EntityLivingBase)
+        return if (this.entity is EntityLivingBase) {
             this.entity.health
-        else -1f
+        } else -1f
+    }
+
+    fun getMaxHP(): Float {
+        return if (this.entity is EntityLivingBase) {
+            this.entity.maxHealth
+        } else -1f
     }
 
     fun getRiding(): Entity? {
-        val riding = this.entity.ridingEntity
-
-        return if (riding == null)
-            null
-        else
-            Entity(riding)
+        return entity.ridingEntity?.let(::Entity)
     }
 
     fun getRider(): Entity? {
         //#if MC<=10809
-        return if (this.entity.riddenByEntity == null)
-            null
-        else
-            Entity(this.entity.riddenByEntity)
+        return entity.riddenByEntity?.let(::Entity)
         //#else
-        //$$ return if (getRiders().isEmpty())
-        //$$     null
-        //$$ else
+        //$$ return if (getRiders().isNotEmpty()) {
         //$$     getRiders().get(0)
+        //$$ } else null
         //#endif
     }
 
     fun getRiders(): List<Entity> {
         //#if MC<=10809
-        return listOf()
+        return emptyList()
         //#elseif
-        //$$ return this.entity.getPassengers().map {
-        //$$     Entity(it)
-        //$$ }
+        //$$ return this.entity.getPassengers().map(::Entity)
         //#endif
     }
 
@@ -175,12 +171,23 @@ open class Entity(val entity: MCEntity) {
      */
     fun getUUID(): UUID = this.entity.uniqueID
 
+    fun distanceTo(other: Entity): Float = distanceTo(other.entity)
+
+    fun distanceTo(other: MCEntity): Float = entity.getDistanceToEntity(other)
+
+    fun distanceTo(blockPos: BlockPos): Float = entity.getDistance(
+        blockPos.x.toDouble(),
+        blockPos.y.toDouble(),
+        blockPos.z.toDouble()
+    ).toFloat()
+
+    fun distanceTo(x: Float, y: Float, z: Float): Float = entity.getDistance(
+        x.toDouble(),
+        y.toDouble(),
+        z.toDouble()
+    ).toFloat()
+
     override fun toString(): String {
-        return ("Entity{"
-                + getName()
-                + ",x:" + getX()
-                + ",y:" + getY()
-                + ",z:" + getZ()
-                + "}")
+        return "Entity{name=${getName()}, x=${getX()}, y=${getY()}, z=${getZ()}}"
     }
 }
