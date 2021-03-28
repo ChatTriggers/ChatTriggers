@@ -4,6 +4,7 @@ const ASMDescriptor = Java.type('me.falsehonesty.asmhelper.dsl.instructions.Desc
 const asmInjectHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmInjectHelper;
 const asmRemoveHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmRemoveHelper;
 const asmFieldHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmFieldHelper;
+const ASMMethodKt = Java.type('me.falsehonesty.asmhelper.dsl.Method');
 
 const proxyInsnList = $ => {
     const proxy = new Proxy({builder: $}, {
@@ -227,6 +228,10 @@ export default class ASM {
 
     static fieldBuilder(className, fieldName, descriptor, ...accessTypes) {
         return new FieldBuilder(className, fieldName, descriptor, accessTypes);
+    }
+
+    static modify(className, block) {
+        ASMMethodKt.modify(className, block);
     }
 }
 
