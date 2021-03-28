@@ -14,9 +14,7 @@ object ChatListener {
 
     @SubscribeEvent
     fun onReceiveChat(event: ClientChatReceivedEvent) {
-        val type = EventLib.getType(event)
-
-        when (type) {
+        when (EventLib.getType(event)) {
             in 0..1 -> {
                 // save to chatHistory
                 chatHistory += ChatLib.getChatMessage(event, true)

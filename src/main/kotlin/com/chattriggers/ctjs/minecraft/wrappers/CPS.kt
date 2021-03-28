@@ -20,7 +20,7 @@ object CPS {
     private var rightClicksMax = 0
 
     @SubscribeEvent
-    fun update(event: RenderGameOverlayEvent) {
+    fun update(event: RenderGameOverlayEvent.Pre) {
         while (Client.getSystemTime() > sysTime + 50L) {
             sysTime += 50L
 

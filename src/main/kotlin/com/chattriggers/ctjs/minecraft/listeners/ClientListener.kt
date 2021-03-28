@@ -109,7 +109,7 @@ object ClientListener {
     }
 
     @SubscribeEvent
-    fun onRenderGameOverlay(event: RenderGameOverlayEvent) {
+    fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
         GL11.glPushMatrix()
         handleOverlayTriggers(event)
         GL11.glPopMatrix()
@@ -122,10 +122,8 @@ object ClientListener {
         handleMouseInput()
     }
 
-    private fun handleOverlayTriggers(event: RenderGameOverlayEvent) {
-        val element = event.type
-
-        when (element) {
+    private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
+        when (event.type) {
             RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RENDER_PLAYER_LIST.triggerAll(event)
             RenderGameOverlayEvent.ElementType.CROSSHAIRS -> TriggerType.RENDER_CROSSHAIR.triggerAll(event)
             RenderGameOverlayEvent.ElementType.DEBUG -> TriggerType.RENDER_DEBUG.triggerAll(event)

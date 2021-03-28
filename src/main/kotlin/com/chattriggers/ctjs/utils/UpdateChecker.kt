@@ -53,7 +53,7 @@ object UpdateChecker {
     }
 
     @SubscribeEvent
-    fun renderOverlay(event: RenderGameOverlayEvent) {
+    fun renderOverlay(event: RenderGameOverlayEvent.Pre) {
         if (!this.worldLoaded) return
         this.worldLoaded = false
 

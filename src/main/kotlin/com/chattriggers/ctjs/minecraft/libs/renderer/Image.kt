@@ -48,7 +48,7 @@ class Image constructor(var image: BufferedImage?) {
     }
 
     @SubscribeEvent
-    fun onRender(event: RenderGameOverlayEvent) {
+    fun onRender(event: RenderGameOverlayEvent.Pre) {
         if (image != null) {
             texture = DynamicTexture(image)
             image = null
