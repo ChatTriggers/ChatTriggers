@@ -30,9 +30,12 @@ object Player {
         //#if MC<=10809
         return Client.getMinecraft().thePlayer
         //#else
-        //$$ return Client.getMinecraft().player;
+        //$$ return Client.getMinecraft().player
         //#endif
     }
+
+    @JvmStatic
+    fun asEntity() = getPlayer()?.let(::Entity)
 
     @JvmStatic
     fun getX(): Double = getPlayer()?.posX ?: 0.0
@@ -80,7 +83,7 @@ object Player {
         //#if MC<=10809
         wrapAngleTo180_float(getPlayer()?.rotationPitch ?: 0f)
     //#else
-    //$$ wrapDegrees(getPlayer()?.rotationPitch ?: 0f);
+    //$$ wrapDegrees(getPlayer()?.rotationPitch ?: 0f)
     //#endif
 
     /**
@@ -93,7 +96,7 @@ object Player {
         //#if MC<=10809
         wrapAngleTo180_float(getPlayer()?.rotationYaw ?: 0f)
     //#else
-    //$$ wrapDegrees(getPlayer()?.rotationYaw ?: 0f);
+    //$$ wrapDegrees(getPlayer()?.rotationYaw ?: 0f)
     //#endif
 
     /**
