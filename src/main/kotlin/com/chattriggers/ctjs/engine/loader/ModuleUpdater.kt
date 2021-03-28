@@ -6,7 +6,8 @@ import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
-import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.printToConsole
+import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import com.google.gson.Gson
@@ -39,7 +40,7 @@ object ModuleUpdater {
         try {
             if (metadata.name == null) return
 
-            "Checking for update in ${metadata.name}".print()
+            "Checking for update in ${metadata.name}".printToConsole()
 
             val url = "https://www.chattriggers.com/api/modules/${metadata.name}/metadata?modVersion=${Reference.MODVERSION}"
             val connection = URL(url).openConnection().apply {
@@ -51,20 +52,20 @@ object ModuleUpdater {
 
             if (newMetadata.version == null) {
                 ("Remote version of module ${metadata.name} have no version numbers, so it will " +
-                        "not be updated!").print()
+                        "not be updated!").printToConsole()
                 return
             } else if (metadata.version != null && metadata.version.toVersion() >= newMetadata.version.toVersion()) {
                 return
             }
 
             downloadModule(metadata.name)
-            "Updated module ${metadata.name}".print()
+            "Updated module ${metadata.name}".printToConsole()
 
             module.metadata = File(module.folder, "metadata.json").let {
                 gson.fromJson(it.readText(), ModuleMetadata::class.java)
             }
         } catch (e: Exception) {
-            "Can't find page for ${metadata.name}".print()
+            "Can't find page for ${metadata.name}".printToConsole()
         }
     }
 
@@ -109,7 +110,7 @@ object ModuleUpdater {
             }
 
         } catch (exception: Exception) {
-            exception.print()
+            exception.printTraceToConsole()
         } finally {
             downloadZip.delete()
         }

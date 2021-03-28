@@ -7,7 +7,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.kotlin.fromJson
 import com.chattriggers.ctjs.utils.kotlin.toVersion
@@ -27,7 +27,7 @@ object UpdateChecker {
         try {
             getUpdate()
         } catch (exception: Exception) {
-            exception.print()
+            exception.printTraceToConsole()
         }
         warned = !Config.showUpdatesInChat
     }

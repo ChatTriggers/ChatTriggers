@@ -4,6 +4,8 @@ import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
+import com.chattriggers.ctjs.printToConsole
+import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
 import me.falsehonesty.asmhelper.dsl.At
@@ -63,7 +65,7 @@ object JSLoader : ILoader {
                 )
             } catch (e: Throwable) {
                 e.printStackTrace()
-                console.printStackTrace(e)
+                e.printTraceToConsole(console)
             }
         }
     }
@@ -80,7 +82,7 @@ object JSLoader : ILoader {
             ASMLib = ScriptableObject.getProperty(returned, "default")
         } catch (e: Throwable) {
             e.printStackTrace()
-            console.printStackTrace(e)
+            e.printTraceToConsole(console)
         }
     }
 
@@ -91,8 +93,8 @@ object JSLoader : ILoader {
             val asmFunction = ScriptableObject.getProperty(returned, "default") as? Function
 
             if (asmFunction == null) {
-                console.out.println("Asm entry for module ${module.name} has an invalid export. " +
-                        "An Asm entry must have a default export of a function.")
+                "Asm entry for module ${module.name} has an invalid export. " +
+                        "An Asm entry must have a default export of a function.".printToConsole(console)
                 return@wrapInContext
             }
 
@@ -101,8 +103,8 @@ object JSLoader : ILoader {
         } catch (e: Throwable) {
             println("Error loading asm entry for module ${module.name}")
             e.printStackTrace()
-            console.out.println("Error loading asm entry for module ${module.name}")
-            console.printStackTrace(e)
+            e.printTraceToConsole(console)
+            "Error loading asm entry for module ${module.name}".printToConsole(console)
         }
     }
 
@@ -122,7 +124,7 @@ object JSLoader : ILoader {
             )
         } catch (e: Throwable) {
             e.printStackTrace()
-            console.printStackTrace(e)
+            e.printTraceToConsole(console)
         }
     }
 
@@ -132,8 +134,9 @@ object JSLoader : ILoader {
         } catch (e: Throwable) {
             println("Error loading module ${module.name}")
             e.printStackTrace()
-            console.out.println("Error loading module ${module.name}")
-            console.printStackTrace(e)
+
+            "Error loading module ${module.name}".printToConsole(console)
+            e.printTraceToConsole(console)
         }
     }
 
@@ -149,8 +152,9 @@ object JSLoader : ILoader {
             } catch (e: Throwable) {
                 println("Error loading asm function $functionURI in module ${module.name}.")
                 e.printStackTrace()
-                console.out.println("Error loading asm function $functionURI in module ${module.name}.")
-                console.printStackTrace(e)
+
+                "Error loading asm function $functionURI in module ${module.name}.".printToConsole(console)
+                e.printTraceToConsole(console)
 
                 // If we can't resolve the target function correctly, we will return
                 //  a no-op method handle that will always return null.
@@ -277,7 +281,7 @@ object JSLoader : ILoader {
 
                 method.call(Context.getCurrentContext(), scope, scope, args)
             } catch (e: Throwable) {
-                console.printStackTrace(e)
+                e.printTraceToConsole(console)
                 removeTrigger(trigger)
             }
         }

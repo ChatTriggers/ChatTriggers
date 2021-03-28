@@ -4,28 +4,24 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.printTraceToConsole
 import net.minecraft.client.gui.GuiButton
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty
 
-open class ConfigStringSelector
-    (
+open class ConfigStringSelector(
     private val prop: KMutableProperty<String>,
     override val name: String = "",
     private val values: Array<String> = emptyArray(),
     x: Int = 0,
     y: Int = 0
 ) : ConfigOption() {
-
-
     private var value: Int by Delegates.observable(
         values.indexOf(prop.getter.call(Config))
     ) { _, _, new ->
         prop.setter.call(Config, values[new])
     }
     private val initial = value
-
 
     private lateinit var leftArrowButton: GuiButton
     private lateinit var rightArrowButton: GuiButton
@@ -39,10 +35,9 @@ open class ConfigStringSelector
         try {
             return this.values[this.value]
         } catch (exception: IndexOutOfBoundsException) {
-            if (this.values.isNotEmpty())
+            if (this.values.isNotEmpty()) {
                 return this.values[0]
-            else
-                exception.print()
+            } else exception.printTraceToConsole()
         }
 
         return ""
@@ -71,7 +66,8 @@ open class ConfigStringSelector
     }
 
     override fun draw(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        if (this.hidden) return
+        if (this.hidden)
+            return
 
         val middle = Renderer.screen.getWidth() / 2
 
@@ -125,9 +121,14 @@ open class ConfigStringSelector
     }
 }
 
-class ConsoleThemeSelector
-    (prop: KMutableProperty<String>, name: String = "", x: Int = 0, y: Int = 0) : ConfigStringSelector(
-    prop, name,
+class ConsoleThemeSelector(
+    prop: KMutableProperty<String>,
+    name: String = "",
+    x: Int = 0,
+    y: Int = 0
+) : ConfigStringSelector(
+    prop,
+    name,
     arrayOf(
         "default.dark",
         "ashes.dark",
@@ -144,7 +145,8 @@ class ConsoleThemeSelector
         "green",
         "aids"
     ),
-    x, y
+    x,
+    y
 ) {
     override fun draw(mouseX: Int, mouseY: Int, partialTicks: Float) {
         hidden = Config.customTheme

@@ -15,12 +15,13 @@ global.setTimeout = function (func, delay) {
 
 // simplified methods
 global.print = function (toPrint) {
-    if (toPrint === null)
+    if (toPrint === null) {
         toPrint = 'null';
-    else if (toPrint === undefined)
+    } else if (toPrint === undefined) {
         toPrint = 'undefined';
+    }
 
-    Console.out.println(toPrint);
+    Console.println(toPrint);
 };
 
 /**
@@ -182,15 +183,15 @@ global.print = function (toPrint) {
 
     // Printer
     _.println = function (s) {
-        Console.out.println(s);
+        Console.println(s);
     };
 
     _.printLineToStdErr = function (s) {
-        Console.out.println(s);
+        Console.println(s);
     };
 
     _.printLineToStdOut = function (s) {
-        Console.out.println(s);
+        Console.println(s);
     };
 
 

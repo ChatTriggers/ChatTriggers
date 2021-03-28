@@ -8,7 +8,7 @@ import com.chattriggers.ctjs.minecraft.listeners.ChatListener
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
-import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.config.GuiConfig
 import net.minecraft.command.CommandBase
@@ -19,7 +19,6 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.File
 import java.io.IOException
-import java.util.*
 
 object CTCommand : CommandBase() {
     private const val idFixed = 90123 // ID for dumped chat
@@ -121,7 +120,7 @@ object CTCommand : CommandBase() {
         try {
             Desktop.getDesktop().open(File("./config/ChatTriggers"))
         } catch (exception: IOException) {
-            exception.print()
+            exception.printTraceToConsole()
             ChatLib.chat("&cCould not open file location")
         }
     }

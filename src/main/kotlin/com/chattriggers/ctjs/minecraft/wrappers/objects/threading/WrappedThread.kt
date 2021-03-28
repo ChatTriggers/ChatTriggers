@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.threading
 
 import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
+import com.chattriggers.ctjs.printTraceToConsole
 import org.mozilla.javascript.Context
 
 class WrappedThread(task: Runnable) : Thread({
@@ -10,6 +11,6 @@ class WrappedThread(task: Runnable) : Thread({
         task.run()
         Context.exit()
     } catch (e: Throwable) {
-        JSLoader.console.printStackTrace(e)
+        e.printTraceToConsole(JSLoader.console)
     }
 })

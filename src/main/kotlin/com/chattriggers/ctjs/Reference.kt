@@ -12,13 +12,16 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
+import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import com.google.common.reflect.ClassPath
 import me.ntrrgc.tsGenerator.TypeScriptGenerator
 import net.minecraftforge.client.ClientCommandHandler
+import org.apache.commons.lang3.SystemUtils
 import java.io.File
 import java.lang.Math.round
+import javax.swing.SwingUtilities
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 import kotlin.reflect.full.findAnnotation
@@ -42,6 +45,7 @@ object Reference {
         TriggerType.GAME_UNLOAD.triggerAll()
 
         isLoaded = false
+        ModuleManager.canPrintToConsole = !SystemUtils.IS_OS_LINUX
 
         DisplayHandler.clearDisplays()
         GuiHandler.clearGuis()
@@ -76,6 +80,7 @@ object Reference {
             Client.getMinecraft().gameSettings.loadOptions()
             ChatLib.chat("&aDone reloading scripts!")
             isLoaded = true
+            ModuleManager.canPrintToConsole = true
 
             TriggerType.GAME_LOAD.triggerAll()
             if (World.isLoaded())
@@ -122,26 +127,5 @@ object Reference {
     }
 }
 
-fun Exception.print() {
-    try {
-        if (ModuleManager.canPrintToConsole) {
-            ModuleManager.generalConsole.printStackTrace(this)
-        } else {
-            printStackTrace()
-        }
-    } catch (exception: Exception) {
-        printStackTrace()
-    }
-}
-
-fun String.print() {
-    try {
-        if (ModuleManager.canPrintToConsole) {
-            ModuleManager.generalConsole.out.println(this)
-        } else {
-            println(this)
-        }
-    } catch (exception: Exception) {
-        println(this)
-    }
-}
+fun Any.printToConsole(console: Console = ModuleManager.generalConsole) = console.println(this)
+fun Throwable.printTraceToConsole(console: Console = ModuleManager.generalConsole) = console.printStackTrace(this)

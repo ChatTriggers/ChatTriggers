@@ -7,7 +7,7 @@ import com.chattriggers.ctjs.engine.loader.ModuleUpdater
 import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.minecraft.libs.FileLib
-import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
 import com.chattriggers.ctjs.utils.console.Console
@@ -139,7 +139,7 @@ object ModuleManager {
             try {
                 metadata = ModuleUpdater.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
             } catch (exception: Exception) {
-                exception.print()
+                exception.printTraceToConsole()
             }
         }
 

@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
-import com.chattriggers.ctjs.print
+import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.config.Config
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -27,7 +27,7 @@ object ChatListener {
 
                 // print to console
                 if (Config.printChatToConsole) {
-                    "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".print()
+                    "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".printToConsole()
                 }
             }
             2 -> {

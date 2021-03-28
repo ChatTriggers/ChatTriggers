@@ -56,7 +56,7 @@ object CTJS {
         try {
             FileLib.getUrlContent("https://www.chattriggers.com/tracker/?uuid=$sha256uuid")
         } catch (e: Exception) {
-            e.print()
+            e.printTraceToConsole()
         }
     }
 

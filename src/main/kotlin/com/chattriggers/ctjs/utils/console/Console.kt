@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.utils.console
 
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.loader.ILoader
+import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.utils.config.Config
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants
@@ -65,7 +66,7 @@ class Console(val loader: ILoader?) {
                         try {
                             taos.println(loader?.eval(command) ?: return)
                         } catch (e: Throwable) {
-                            printStackTrace(e)
+                            print(e)
                         }
                     }
 
@@ -109,30 +110,59 @@ class Console(val loader: ILoader?) {
     }
 
     fun clearConsole() {
-        this.taos.clear()
+        SwingUtilities.invokeLater {
+            this.taos.clear()
+        }
+    }
+
+    fun println(obj: Any) {
+        SwingUtilities.invokeLater {
+            try {
+                if (ModuleManager.canPrintToConsole) {
+                    out.println(obj.toString())
+                } else {
+                    println(obj.toString())
+                }
+            } catch (exception: Exception) {
+                println(obj.toString())
+            }
+        }
     }
 
     fun printStackTrace(error: Throwable) {
-        if (Config.openConsoleOnError) {
-            showConsole()
+        if (!ModuleManager.canPrintToConsole) {
+            error.printStackTrace()
+            return
         }
 
-        val index = error.stackTrace.indexOfFirst {
-            it?.fileName?.toLowerCase()?.contains("jsloader") ?: false
-        }
+        SwingUtilities.invokeLater {
+            try {
+                if (Config.openConsoleOnError)
+                    showConsole()
 
-        error.stackTrace = error.stackTrace.dropLast(error.stackTrace.size - index - 1).map {
-            val fileNameIndex = it.fileName?.indexOf("ChatTriggers/modules/") ?: return@map it
-            val classNameIndex = it.className.indexOf("ChatTriggers_modules_")
+                val index = error.stackTrace.indexOfFirst {
+                    it?.fileName?.toLowerCase()?.contains("jsloader") ?: false
+                }
 
-            if (fileNameIndex != -1) {
-                StackTraceElement(it.className.substring(classNameIndex + 21), it.methodName, it.fileName!!.substring(fileNameIndex + 21), it.lineNumber)
-            } else {
-                it
+                error.stackTrace = error.stackTrace.dropLast(error.stackTrace.size - index - 1).map {
+                    val fileNameIndex = it.fileName?.indexOf("ChatTriggers/modules/") ?: return@map it
+                    val classNameIndex = it.className.indexOf("ChatTriggers_modules_")
+
+                    if (fileNameIndex != -1) {
+                        StackTraceElement(
+                            it.className.substring(classNameIndex + 21),
+                            it.methodName,
+                            it.fileName!!.substring(fileNameIndex + 21),
+                            it.lineNumber
+                        )
+                    } else it
+                }.toTypedArray()
+
+                error.printStackTrace(out)
+            } catch (ignored: Throwable) {
+                error.printStackTrace()
             }
-        }.toTypedArray()
-
-        error.printStackTrace(out)
+        }
     }
 
     fun showConsole() {
