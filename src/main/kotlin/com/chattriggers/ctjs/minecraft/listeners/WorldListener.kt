@@ -68,7 +68,7 @@ object WorldListener {
             0
         }
         val pitch = try {
-            event.sound.volume
+            event.sound.pitch
         } catch (ignored: Exception) {
             1
         }
