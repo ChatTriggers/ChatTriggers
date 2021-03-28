@@ -26,6 +26,81 @@ object Tessellator {
     private var began = false
     private var colorized = false
 
+    @JvmStatic
+    fun disableAlpha() = apply {
+        GlStateManager.disableAlpha()
+    }
+
+    @JvmStatic
+    fun enableAlpha() = apply {
+        GlStateManager.enableAlpha()
+    }
+
+    @JvmStatic
+    fun alphaFunc(func: Int, ref: Float) = apply {
+        GlStateManager.alphaFunc(func, ref)
+    }
+
+    @JvmStatic
+    fun enableLighting() = apply {
+        GlStateManager.enableLighting()
+    }
+
+    @JvmStatic
+    fun disableLighting() = apply {
+        GlStateManager.disableLighting()
+    }
+
+    @JvmStatic
+    fun disableDepth() = apply {
+        GlStateManager.disableDepth()
+    }
+
+    @JvmStatic
+    fun enableDepth() = apply {
+        GlStateManager.enableDepth()
+    }
+
+    @JvmStatic
+    fun depthFunc(depthFunc: Int) = apply {
+        GlStateManager.depthFunc(depthFunc)
+    }
+
+    @JvmStatic
+    fun depthMask(flagIn: Boolean) = apply {
+        GlStateManager.depthMask(flagIn)
+    }
+
+    @JvmStatic
+    fun disableBlend() = apply {
+        GlStateManager.disableBlend()
+    }
+
+    @JvmStatic
+    fun enableBlend() = apply {
+        GlStateManager.enableBlend()
+    }
+
+    @JvmStatic
+    fun blendFunc(sourceFactor: Int, destFactor: Int) = apply {
+        GlStateManager.blendFunc(sourceFactor, destFactor)
+    }
+
+    @JvmStatic
+    fun tryBlendFuncSeparate(sourceFactor: Int, destFactor: Int, sourceFactorAlpha: Int, destFactorAlpha: Int) = apply {
+        GlStateManager.tryBlendFuncSeparate(sourceFactor, destFactor, sourceFactorAlpha, destFactorAlpha)
+    }
+
+    @JvmStatic
+    fun enableTexture2D() = apply {
+        GlStateManager.enableTexture2D()
+    }
+
+    @JvmStatic
+    fun disableTexture2D() = apply {
+        GlStateManager.disableTexture2D()
+    }
+
     /**
      * Binds a texture to the client for the Tessellator to use.
      *
@@ -35,6 +110,21 @@ object Tessellator {
     @JvmStatic
     fun bindTexture(texture: Image) = apply {
         GlStateManager.bindTexture(texture.getTexture().glTextureId)
+    }
+
+    @JvmStatic
+    fun deleteTexture(texture: Image) = apply {
+        GlStateManager.deleteTexture(texture.getTexture().glTextureId)
+    }
+
+    @JvmStatic
+    fun pushMatrix() = apply {
+        GlStateManager.pushMatrix()
+    }
+
+    @JvmStatic
+    fun popMatrix() = apply {
+        GlStateManager.popMatrix()
     }
 
     /**
