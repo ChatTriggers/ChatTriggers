@@ -9,10 +9,14 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
+import io.netty.channel.ChannelDuplexHandler
+import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.ChannelPromise
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
+import net.minecraft.network.Packet
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.event.DrawBlockHighlightEvent
 import net.minecraftforge.client.event.GuiOpenEvent
@@ -22,6 +26,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
+import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector3f
@@ -100,6 +105,31 @@ object ClientListener {
 
         // update dragged
         this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
+    }
+
+    @SubscribeEvent
+    fun onNetworkEvent(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
+        event.manager.channel().pipeline().addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
+            override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
+                val packetReceivedEvent = CancellableEvent()
+
+                if (msg is Packet<*>)
+                    TriggerType.PACKET_RECEIVED.triggerAll(msg, packetReceivedEvent)
+
+                if (!packetReceivedEvent.isCanceled())
+                    ctx?.fireChannelRead(msg)
+            }
+
+            override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
+                val packetSentEvent = CancellableEvent()
+
+                if (msg is Packet<*>)
+                    TriggerType.PACKET_SENT.triggerAll(msg, packetSentEvent)
+
+                if (!packetSentEvent.isCanceled())
+                    ctx?.write(msg, promise)
+            }
+        })
     }
 
     @SubscribeEvent
