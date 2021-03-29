@@ -45,8 +45,7 @@ object ClientListener {
 
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
-        if (World.getWorld() == null || event.phase == TickEvent.Phase.END)
-            return
+        if (World.getWorld() == null) return
 
         TriggerType.TICK.triggerAll(this.ticksPassed)
         this.ticksPassed++

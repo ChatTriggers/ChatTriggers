@@ -20,9 +20,6 @@ object GuiHandler {
 
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
-        if (event.phase == TickEvent.Phase.END)
-            return
-
         this.GUIs.forEach {
             if (it.value == 0) {
                 Minecraft.getMinecraft().displayGuiScreen(it.key)

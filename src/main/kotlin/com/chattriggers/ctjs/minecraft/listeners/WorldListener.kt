@@ -121,9 +121,6 @@ object WorldListener {
 
     @SubscribeEvent
     fun updatePlayerList(event: TickEvent.ClientTickEvent) {
-        if (event.phase == TickEvent.Phase.END)
-            return
-
         World.getAllPlayers().filter {
             !playerList.contains(it.getName())
         }.forEach {
