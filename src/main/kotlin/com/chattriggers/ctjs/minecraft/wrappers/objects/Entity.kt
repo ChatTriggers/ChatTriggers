@@ -2,11 +2,14 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MathHelper
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.util.Vec3
+import net.minecraft.world.World
 import java.util.*
 
 @External
@@ -102,9 +105,7 @@ open class Entity(val entity: MCEntity) {
         //#if MC<=10809
         return entity.riddenByEntity?.let(::Entity)
         //#else
-        //$$ return if (getRiders().isNotEmpty()) {
-        //$$     getRiders().get(0)
-        //$$ } else null
+        //$$ return riders.firstOrNull()?.let(::Entity)
         //#endif
     }
 
@@ -112,7 +113,7 @@ open class Entity(val entity: MCEntity) {
         //#if MC<=10809
         return emptyList()
         //#elseif
-        //$$ return this.entity.getPassengers().map(::Entity)
+        //$$ return this.entity.passengers.map(::Entity)
         //#endif
     }
 
@@ -186,6 +187,106 @@ open class Entity(val entity: MCEntity) {
         y.toDouble(),
         z.toDouble()
     ).toFloat()
+
+    fun isOnGround() = entity.onGround
+
+    fun isCollided() = entity.isCollided
+
+    fun getDistanceWalked() = entity.distanceWalkedModified / 0.6
+
+    fun getStepHeight() = entity.stepHeight
+
+    fun hasNoClip() = entity.noClip
+
+    fun getTicksExisted() = entity.ticksExisted
+
+    fun getFireResistance() = entity.fireResistance
+
+    fun isImmuneToFire() = entity.isImmuneToFire
+
+    fun isInWater() = entity.isInWater
+
+    fun isWet() = entity.isWet
+
+    fun isAirborne() = entity.isAirBorne
+
+    fun getDimension() = entity.dimension
+
+    fun setPosition(x: Double, y: Double, z: Double) = apply {
+        entity.setPosition(x, y, z)
+    }
+
+    fun setAngles(yaw: Float, pitch: Float) = apply {
+        entity.setAngles(yaw, pitch)
+    }
+
+    fun getMaxInPortalTime() = entity.maxInPortalTime
+
+    fun setOnFire(seconds: Int) = apply {
+        entity.setFire(seconds)
+    }
+
+    fun extinguish() = apply {
+        entity.extinguish()
+    }
+
+    fun move(x: Double, y: Double, z: Double) = apply {
+        entity.moveEntity(x, y, z)
+    }
+
+    fun isSilent() = entity.isSilent
+
+    fun setIsSilent(silent: Boolean) = apply {
+        entity.isSilent = silent
+    }
+
+    fun isInLava() = entity.isInLava
+
+    fun addVelocity(x: Double, y: Double, z: Double) = apply {
+        entity.addVelocity(x, y, z)
+    }
+
+    fun getLookVector(partialTicks: Float): Vec3 = entity.getLook(partialTicks)
+
+    fun getEyePosition(partialTicks: Float): Vec3 = entity.getPositionEyes(partialTicks)
+
+    fun canBeCollidedWith() = entity.canBeCollidedWith()
+
+    fun canBePushed() = entity.canBePushed()
+
+    fun dropItem(item: Item, size: Int) = entity.dropItem(item.item, size)
+
+    fun isSneaking() = entity.isSneaking
+
+    fun setIsSneaking(sneaking: Boolean) = apply {
+        entity.isSneaking = sneaking
+    }
+
+    fun isSprinting() = entity.isSprinting
+
+    fun setIsSprinting(sprinting: Boolean) = apply {
+        entity.isSprinting = sprinting
+    }
+
+    fun isInvisible() = entity.isInvisible
+
+    fun setIsInvisible(invisible: Boolean) = apply {
+        entity.isInvisible = invisible
+    }
+
+    fun isEating() = entity.isEating
+
+    fun setIsEating(eating: Boolean) = apply {
+        entity.isEating = eating
+    }
+
+    fun isOutsideBorder() = entity.isOutsideBorder
+
+    fun setIsOutsideBorder(outside: Boolean) = apply {
+        entity.isOutsideBorder = outside
+    }
+
+    fun getWorld(): World = entity.entityWorld
 
     override fun toString(): String {
         return "Entity{name=${getName()}, x=${getX()}, y=${getY()}, z=${getZ()}}"
