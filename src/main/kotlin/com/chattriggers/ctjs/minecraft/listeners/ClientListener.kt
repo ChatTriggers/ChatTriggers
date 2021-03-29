@@ -109,6 +109,11 @@ object ClientListener {
     }
 
     @SubscribeEvent
+    fun onRenderTick(event: TickEvent.RenderTickEvent) {
+        TriggerType.STEP.triggerAll()
+    }
+
+    @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
         GL11.glPushMatrix()
         handleOverlayTriggers(event)
@@ -116,8 +121,6 @@ object ClientListener {
 
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
             return
-
-        TriggerType.STEP.triggerAll()
 
         handleMouseInput()
     }
