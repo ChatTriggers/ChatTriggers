@@ -32,9 +32,7 @@ class CTJSTransformer : BaseClassTransformer() {
             injectGuiMainMenu()
             injectMinecraft()
             injectScreenshotHelper()
-            injectNetHandlerPlayClient()
             injectRenderManager()
-            injectPacketThreadUtil()
             injectEffectRenderer()
             makeGuiScreenInjections()
 
