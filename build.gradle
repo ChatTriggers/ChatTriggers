@@ -6,7 +6,7 @@ buildscript {
 
     project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
     ext.kotlin_version = "1.5.21"
-    ext.dokka_version = "0.10.1"
+    ext.dokka_version = "1.4.30"
     ext.json_docs_version = "2.0.8"
 
     repositories {
@@ -35,7 +35,7 @@ buildscript {
                         "invalid"
         ) + ":all")
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath ':proguard:'
     }
 }
@@ -164,19 +164,33 @@ processResources {
 }
 
 task userdocs(type: DokkaTask) {
-    description = "Generate the docs to be used by scripters, excludes internal classes"
-    group = "documentation"
+    dependencies {
+        userdocsPlugin("org.jetbrains.dokka:javadoc-plugin:$dokka_version")
+    }
 
-    outputFormat = "javadoc"
-    outputDirectory = "$buildDir/javadoc"
+    outputDirectory = file("$buildDir/javadoc")
+}
 
-    configuration {
-        jdkVersion = 8
+task dokkaUserdocs(type: DokkaTask) {
+    outputDirectory = file("$buildDir/dokkaJavadoc")
+}
 
-        for (def pkg : ["engine.langs", "engine.loader", "engine.module", "utils", "listeners", "loader", "launch", "commands", "minecraft.wrappers.objects.threading"]) {
-            perPackageOption {
-                prefix = "com.chattriggers.ctjs.$pkg"
-                suppress = true
+tasks.withType(DokkaTask).configureEach {
+    dokkaSourceSets {
+        named("main") {
+            for (def pkg : ["engine.langs", "engine.loader", "engine.module", "utils", "minecraft.listeners", "loader", "launch", "commands", "minecraft.wrappers.objects.threading"]) {
+                perPackageOption {
+                    matchingRegex.set("${"com.chattriggers.ctjs.$pkg".replace(".", "\\.")}(\$|\\.).*")
+                    suppress.set(true)
+                }
+            }
+
+            sourceLink {
+                localDirectory.set(file("src/main/kotlin"))
+
+                remoteUrl.set(new URL(
+                        "https://github.com/ChatTriggers/ChatTriggers/blob/master/src/main/kotlin"))
+                remoteLineSuffix.set("#L")
             }
         }
     }
