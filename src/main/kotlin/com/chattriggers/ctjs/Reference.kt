@@ -45,7 +45,6 @@ object Reference {
         TriggerType.GAME_UNLOAD.triggerAll()
 
         isLoaded = false
-        ModuleManager.canPrintToConsole = !SystemUtils.IS_OS_LINUX
 
         DisplayHandler.clearDisplays()
         GuiHandler.clearGuis()
@@ -80,7 +79,6 @@ object Reference {
             Client.getMinecraft().gameSettings.loadOptions()
             ChatLib.chat("&aDone reloading scripts!")
             isLoaded = true
-            ModuleManager.canPrintToConsole = true
 
             TriggerType.GAME_LOAD.triggerAll()
             if (World.isLoaded())

@@ -118,11 +118,7 @@ class Console(val loader: ILoader?) {
     fun println(obj: Any) {
         SwingUtilities.invokeLater {
             try {
-                if (ModuleManager.canPrintToConsole) {
-                    out.println(obj.toString())
-                } else {
-                    println(obj.toString())
-                }
+                out.println(obj.toString())
             } catch (exception: Exception) {
                 println(obj.toString())
             }
@@ -130,11 +126,6 @@ class Console(val loader: ILoader?) {
     }
 
     fun printStackTrace(error: Throwable) {
-        if (!ModuleManager.canPrintToConsole) {
-            error.printStackTrace()
-            return
-        }
-
         SwingUtilities.invokeLater {
             try {
                 if (Config.openConsoleOnError)

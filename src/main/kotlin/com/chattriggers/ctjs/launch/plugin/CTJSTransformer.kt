@@ -26,8 +26,6 @@ class CTJSTransformer : BaseClassTransformer() {
         if (transforming) return
         transforming = true
 
-        ModuleManager.canPrintToConsole = !SystemUtils.IS_OS_LINUX
-
         try {
             injectCrashReport()
             injectEntityPlayer()
@@ -45,7 +43,5 @@ class CTJSTransformer : BaseClassTransformer() {
         } catch (e: Throwable) {
             e.printStackTrace()
         }
-
-        ModuleManager.canPrintToConsole = true
     }
 }
