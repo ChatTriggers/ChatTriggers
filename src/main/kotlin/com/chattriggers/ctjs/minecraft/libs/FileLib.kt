@@ -20,7 +20,7 @@ object FileLib {
      */
     @JvmStatic
     fun write(importName: String, fileName: String, toWrite: String) {
-        write(Config.modulesFolder + "/" + importName + "/" + fileName, toWrite)
+        write(absoluteLocation(importName, fileName), toWrite)
     }
 
     /**
@@ -44,7 +44,7 @@ object FileLib {
      */
     @JvmStatic
     fun append(importName: String, fileName: String, toAppend: String) {
-        append(Config.modulesFolder + "/" + importName + "/" + fileName, toAppend)
+        append(absoluteLocation(importName, fileName), toAppend)
     }
 
     /**
@@ -69,7 +69,7 @@ object FileLib {
      */
     @JvmStatic
     fun read(importName: String, fileName: String): String? {
-        return read(Config.modulesFolder + "/" + importName + "/" + fileName)
+        return read(File(absoluteLocation(importName, fileName)))
     }
 
     /**
@@ -98,6 +98,53 @@ object FileLib {
         } catch (e: Exception) {
             null
         }
+    }
+
+    /**
+     * Determines if a file or directory exists at the specified location
+     *
+     * @param importName name of the import
+     * @param fileName   name of the file
+     * @return if the file exists
+     */
+    @JvmStatic
+    fun exists(importName: String, fileName: String): Boolean {
+        return exists(absoluteLocation(importName, fileName))
+    }
+
+    /**
+     * Determines if a file or directory exists at the specified location
+     *
+     * @param fileLocation the path of the file
+     * @return if the file exists
+     */
+    @JvmStatic
+    fun exists(fileLocation: String): Boolean {
+        return File(fileLocation).exists()
+    }
+
+    /**
+     * Determines if a file or directory exists at the specified location
+     *
+     * @param importName name of the import
+     * @param fileName   name of the file
+     * @return if the location is a directory
+     */
+    @JvmStatic
+    fun isDirectory(importName: String, fileName: String): Boolean {
+        return isDirectory(absoluteLocation(importName, fileName))
+    }
+
+
+    /**
+     * Determines if a file or directory exists at the specified location
+     *
+     * @param fileLocation the path of the file
+     * @return if the location is a directory
+     */
+    @JvmStatic
+    fun isDirectory(fileLocation: String): Boolean {
+        return File(fileLocation).isDirectory
     }
 
     /**
@@ -171,5 +218,9 @@ object FileLib {
             read = zipIn.read(bytesIn)
         }
         bos.close()
+    }
+
+    private fun absoluteLocation(importName: String, fileLocation: String): String {
+        return Config.modulesFolder + File.separator + importName + File.separator + fileLocation
     }
 }
