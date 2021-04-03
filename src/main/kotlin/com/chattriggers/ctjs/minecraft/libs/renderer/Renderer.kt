@@ -99,7 +99,7 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getStringWidth(text: String) = getFontRenderer().getStringWidth(text)
+    fun getStringWidth(text: String) = getFontRenderer().getStringWidth(ChatLib.addColor(text))
 
     @JvmStatic
     @JvmOverloads

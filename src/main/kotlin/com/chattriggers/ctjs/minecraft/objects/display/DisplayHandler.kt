@@ -19,9 +19,7 @@ object DisplayHandler {
     fun clearDisplays() = this.displays.clear()
 
     @SubscribeEvent
-    fun renderDisplays(event: RenderGameOverlayEvent.Pre) {
-        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return
-
+    fun renderDisplays(event: RenderGameOverlayEvent.Text) {
         GL11.glPushMatrix()
         this.displays.forEach(Display::render)
         GL11.glPopMatrix()
