@@ -11,6 +11,7 @@ import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowEvent
+import java.io.File
 import java.io.PrintStream
 import javax.swing.*
 import javax.swing.text.DefaultCaret
@@ -261,7 +262,8 @@ class Console(val loader: ILoader?) {
         init {
             FIRA_FONT = Font.createFont(
                 Font.TRUETYPE_FONT,
-                this::class.java.getResourceAsStream("/FiraCode-Regular.otf")
+                File("/playground/FiraCode-Regular.otf")
+//                this::class.java.getResourceAsStream("/FiraCode-Regular.otf")
             ).deriveFont(9f)
 
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FIRA_FONT)

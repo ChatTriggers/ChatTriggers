@@ -1,8 +1,10 @@
 package com.chattriggers.ctjs.launch.plugin
 
-import me.falsehonesty.asmhelper.dsl.At
-import me.falsehonesty.asmhelper.dsl.InjectionPoint
-import me.falsehonesty.asmhelper.dsl.inject
+import com.chattriggers.ctjs.engine.module.ModuleManager
+import dev.falsehonesty.asmhelper.dsl.At
+import dev.falsehonesty.asmhelper.dsl.InjectionPoint
+import dev.falsehonesty.asmhelper.dsl.inject
+import net.minecraft.crash.CrashReportCategory
 
 fun injectCrashReport() = inject {
     className = "net/minecraft/crash/CrashReport"
@@ -18,4 +20,14 @@ fun injectCrashReport() = inject {
             getLocalField(className, "theReportCategory", "L$CRASH_REPORT_CATEGORY;")
         }
     }
+
+//    codeBlock {
+//        val theReportCategory = shadowField<CrashReportCategory>()
+//
+//        code {
+//            theReportCategory.addCrashSectionCallable("ct.js modules") {
+//                ModuleManager.cachedModules.toString()
+//            }
+//        }
+//    }
 }

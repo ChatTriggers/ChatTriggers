@@ -1,9 +1,13 @@
 package com.chattriggers.ctjs.launch.plugin
 
-import me.falsehonesty.asmhelper.dsl.At
-import me.falsehonesty.asmhelper.dsl.InjectionPoint
-import me.falsehonesty.asmhelper.dsl.inject
-import me.falsehonesty.asmhelper.dsl.instructions.*
+import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
+import com.chattriggers.ctjs.triggers.TriggerType
+import dev.falsehonesty.asmhelper.dsl.At
+import dev.falsehonesty.asmhelper.dsl.InjectionPoint
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
+import dev.falsehonesty.asmhelper.dsl.inject
+import org.lwjgl.util.vector.Vector3f
 
 fun injectRenderManager() = inject {
     className = "net/minecraft/client/renderer/entity/RenderManager"
@@ -13,48 +17,24 @@ fun injectRenderManager() = inject {
 
     methodMaps = mapOf("func_147939_a" to "doRenderEntity")
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local1 = shadowLocal<net.minecraft.entity.Entity>()
+        val local2 = shadowLocal<Double>()
+        val local4 = shadowLocal<Double>()
+        val local6 = shadowLocal<Double>()
+        val local9 = shadowLocal<Float>()
 
-        getStatic(TRIGGER_TYPE, "RENDER_ENTITY", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(4, "java/lang/Object") {
-                aadd {
-                    createInstance("com/chattriggers/ctjs/minecraft/wrappers/objects/Entity", "(L$ENTITY;)V") {
-                        aload(1)
-                    }
-                }
+        code {
+            val event = CancellableEvent()
+            TriggerType.RENDER_ENTITY.triggerAll(
+                Entity(local1),
+                Vector3f(local2.toFloat(), local4.toFloat(), local6.toFloat()),
+                local9,
+                event
+            )
 
-                aadd {
-                    createInstance("org/lwjgl/util/vector/Vector3f", "(FFF)V") {
-                        dload(2)
-                        d2f()
-                        dload(4)
-                        d2f()
-                        dload(6)
-                        d2f()
-                    }
-                }
-
-                aadd {
-                    invokeStatic("java/lang/Float", "valueOf", "(F)Ljava/lang/Float;") {
-                        fload(9)
-                    }
-                }
-
-                aadd {
-                    load(event)
-                }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            int(0)
-            ireturn()
+            if (event.isCancelled())
+                iReturn(0)
         }
     }
 }

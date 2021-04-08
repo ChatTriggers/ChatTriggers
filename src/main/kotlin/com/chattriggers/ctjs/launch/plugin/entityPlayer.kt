@@ -1,9 +1,13 @@
 package com.chattriggers.ctjs.launch.plugin
 
-import me.falsehonesty.asmhelper.dsl.At
-import me.falsehonesty.asmhelper.dsl.InjectionPoint
-import me.falsehonesty.asmhelper.dsl.inject
-import me.falsehonesty.asmhelper.dsl.instructions.*
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import dev.falsehonesty.asmhelper.dsl.At
+import dev.falsehonesty.asmhelper.dsl.InjectionPoint
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.aReturn
+import dev.falsehonesty.asmhelper.dsl.inject
+import dev.falsehonesty.asmhelper.dsl.instructions.*
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.InventoryPlayer
 
 fun injectEntityPlayer() = inject {
     className = ENTITY_PLAYER
@@ -26,21 +30,17 @@ fun injectEntityPlayer() = inject {
 
     methodMaps = mapOf(
         "getCurrentItem" to "func_70448_g",
-        "func_71040_bB" to "dropOneItem",
-        "func_70448_g" to "getCurrentItem"
+        "func_71040_bB" to "dropOneItem"
     )
 
-    insnList {
-        invokeKObjectFunction(CLIENT_LISTENER, "onDropItem", "(L$ENTITY_PLAYER;L$ITEM_STACK;)Z") {
-            aload(0)
+    codeBlock {
+        val local0 = shadowLocal<EntityPlayer>()
+        val inventory = shadowField<InventoryPlayer>()
 
-            getLocalField(ENTITY_PLAYER, "inventory", "L$INVENTORY_PLAYER;")
-            invokeVirtual(INVENTORY_PLAYER, "getCurrentItem", "()L$ITEM_STACK;")
-        }
-
-        ifClause(JumpCondition.FALSE) {
-            aconst_null()
-            areturn()
+        code {
+            if (ClientListener.onDropItem(local0, inventory.getCurrentItem())) {
+                aReturn(null)
+            }
         }
     }
 }

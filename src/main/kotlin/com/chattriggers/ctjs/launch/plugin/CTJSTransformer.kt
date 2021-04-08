@@ -1,9 +1,8 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import me.falsehonesty.asmhelper.BaseClassTransformer
+import dev.falsehonesty.asmhelper.BaseClassTransformer
 import net.minecraft.launchwrapper.LaunchClassLoader
-import org.apache.commons.lang3.SystemUtils
 
 class CTJSTransformer : BaseClassTransformer() {
     private var transforming = false
@@ -34,7 +33,10 @@ class CTJSTransformer : BaseClassTransformer() {
             injectScreenshotHelper()
             injectRenderManager()
             injectEffectRenderer()
-            makeGuiScreenInjections()
+            injectGuiScreen()
+
+            // TODO: Investigate
+//            injectPlayerControllerMP()
 
             ModuleManager.setup()
             ModuleManager.asmPass()

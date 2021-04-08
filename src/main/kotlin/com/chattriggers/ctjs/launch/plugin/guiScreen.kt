@@ -1,11 +1,20 @@
 package com.chattriggers.ctjs.launch.plugin
 
-import me.falsehonesty.asmhelper.dsl.At
-import me.falsehonesty.asmhelper.dsl.InjectionPoint
-import me.falsehonesty.asmhelper.dsl.inject
-import me.falsehonesty.asmhelper.dsl.instructions.*
+import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.ITextComponent
+import dev.falsehonesty.asmhelper.dsl.At
+import dev.falsehonesty.asmhelper.dsl.InjectionPoint
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
+import dev.falsehonesty.asmhelper.dsl.inject
+import dev.falsehonesty.asmhelper.dsl.instructions.*
+import net.minecraft.item.ItemStack
+import org.lwjgl.input.Keyboard
 
-fun makeGuiScreenInjections() {
+fun injectGuiScreen() {
     injectSendChatMessage()
     injectHandleKeyboardInput()
     injectMouseClick()
@@ -24,23 +33,15 @@ fun injectSendChatMessage() = inject {
 
     methodMaps = mapOf("func_175281_b" to "sendChatMessage")
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local1 = shadowLocal<String>()
 
-        getStatic(TRIGGER_TYPE, "MESSAGE_SENT", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(2, "java/lang/Object") {
-                aadd { aload(1) }
-                aadd { load(event) }
-            }
-        }
+        code {
+            val event = CancellableEvent()
+            TriggerType.MESSAGE_SENT.triggerAll(local1, event)
 
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }
@@ -65,36 +66,20 @@ fun injectHandleKeyboardInput() = inject {
         "func_73869_a" to "keyTyped"
     )
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local0 = shadowLocal<Any>()
 
-        getStatic(TRIGGER_TYPE, "GUI_KEY", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(4, "java/lang/Object") {
-                aadd {
-                    invokeStatic("org/lwjgl/input/Keyboard", "getEventCharacter", "()C")
-                    invokeStatic("java/lang/Character", "valueOf", "(C)Ljava/lang/Character;")
-                }
+        code {
+            val event = CancellableEvent()
+            TriggerType.GUI_KEY.triggerAll(
+                Keyboard.getEventCharacter(),
+                Keyboard.getEventKey(),
+                local0,
+                event
+            )
 
-                aadd {
-                    invokeStatic("org/lwjgl/input/Keyboard", "getEventKey", "()I")
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    aload(0)
-                }
-
-                aadd { load(event) }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }
@@ -119,41 +104,17 @@ fun injectMouseClick() = inject {
         "func_73864_a" to "mouseClicked"
     )
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local0 = shadowLocal<Any>()
+        val local1 = shadowLocal<Int>()
+        val local2 = shadowLocal<Int>()
+        val local3 = shadowLocal<Int>()
 
-        getStatic(TRIGGER_TYPE, "GUI_MOUSE_CLICK", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(5, "java/lang/Object") {
-                aadd {
-                    iload(1)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    iload(2)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    iload(3)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    aload(0)
-                }
-
-                aadd { load(event) }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+        code {
+            val event = CancellableEvent()
+            TriggerType.GUI_MOUSE_CLICK.triggerAll(local1, local2, local3, local0, event)
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }
@@ -178,41 +139,17 @@ fun injectMouseRelease() = inject {
         "func_146286_b" to "mouseReleased"
     )
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local0 = shadowLocal<Any>()
+        val local1 = shadowLocal<Int>()
+        val local2 = shadowLocal<Int>()
+        val local3 = shadowLocal<Int>()
 
-        getStatic(TRIGGER_TYPE, "GUI_MOUSE_RELEASE", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(5, "java/lang/Object") {
-                aadd {
-                    iload(1)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    iload(2)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    iload(3)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    aload(0)
-                }
-
-                aadd { load(event) }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+        code {
+            val event = CancellableEvent()
+            TriggerType.GUI_MOUSE_RELEASE.triggerAll(local1, local2, local3, local0, event)
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }
@@ -237,41 +174,17 @@ fun injectMouseDrag() = inject {
         "func_146273_a" to "mouseClickMove"
     )
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local0 = shadowLocal<Any>()
+        val local1 = shadowLocal<Int>()
+        val local2 = shadowLocal<Int>()
+        val local3 = shadowLocal<Int>()
 
-        getStatic(TRIGGER_TYPE, "GUI_MOUSE_DRAG", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(5, "java/lang/Object") {
-                aadd {
-                    iload(1)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    iload(2)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    iload(3)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    aload(0)
-                }
-
-                aadd { load(event) }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+        code {
+            val event = CancellableEvent()
+            TriggerType.GUI_MOUSE_DRAG.triggerAll(local1, local2, local3, local0, event)
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }
@@ -284,38 +197,14 @@ fun injectTextComponentClick() = inject {
 
     methodMaps = mapOf("func_175276_a" to "handleComponentClick")
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local1 = shadowLocal<ITextComponent?>()
 
-        getStatic(TRIGGER_TYPE, "CHAT_COMPONENT_CLICKED", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "trigger", "([Ljava/lang/Object;)V") {
-            array(2, "java/lang/Object") {
-                aadd {
-                    aload(1)
-
-                    ifElseClause(JumpCondition.NULL) {
-                        ifCode {
-                            aconst_null()
-                        }
-                        elseCode {
-                            createInstance("com/chattriggers/ctjs/minecraft/objects/message/TextComponent", "(L$ICHAT_COMPONENT;)V") {
-                                aload(1)
-                            }
-                        }
-                    }
-                }
-
-                aadd { load(event) }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            int(0)
-            ireturn()
+        code {
+            val event = CancellableEvent()
+            TriggerType.CHAT_COMPONENT_CLICKED.triggerAll(local1?.let(::TextComponent), event)
+            if (event.isCancelled())
+                iReturn(0)
         }
     }
 }
@@ -328,47 +217,16 @@ fun injectTextComponentHover() = inject {
 
     methodMaps = mapOf("func_175272_a" to "handleComponentHover")
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local1 = shadowLocal<ITextComponent?>()
+        val local2 = shadowLocal<Int>()
+        val local3 = shadowLocal<Int>()
 
-        getStatic(TRIGGER_TYPE, "CHAT_COMPONENT_HOVERED", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "trigger", "([Ljava/lang/Object;)V") {
-            array(4, "java/lang/Object") {
-                aadd {
-                    aload(1)
-
-                    ifElseClause(JumpCondition.NULL) {
-                        ifCode {
-                            aconst_null()
-                        }
-                        elseCode {
-                            createInstance("com/chattriggers/ctjs/minecraft/objects/message/TextComponent", "(L$ICHAT_COMPONENT;)V") {
-                                aload(1)
-                            }
-                        }
-                    }
-                }
-
-                aadd {
-                    iload(2)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd {
-                    iload(3)
-                    invokeStatic("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
-                }
-
-                aadd { load(event) }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+        code {
+            val event = CancellableEvent()
+            TriggerType.CHAT_COMPONENT_HOVERED.triggerAll(local1?.let(::TextComponent), local2, local3, event)
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }
@@ -395,32 +253,15 @@ fun injectRenderTooltip() = inject {
         "func_82840_a" to "getTooltip"
     )
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local1 = shadowLocal<ItemStack>()
+        val local4 = shadowLocal<List<String>>()
 
-        getStatic(TRIGGER_TYPE, "TOOLTIP", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(3, "java/lang/Object") {
-                aadd {
-                    aload(4)
-                }
-
-                aadd {
-                    createInstance("com/chattriggers/ctjs/minecraft/wrappers/objects/inventory/Item", "(L$ITEM_STACK;)V") {
-                        aload(1)
-                    }
-                }
-
-                aadd { load(event) }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+        code {
+            val event = CancellableEvent()
+            TriggerType.TOOLTIP.triggerAll(local4, Item(local1), event)
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }

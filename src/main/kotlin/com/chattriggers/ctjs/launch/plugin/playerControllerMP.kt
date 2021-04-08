@@ -1,11 +1,19 @@
 package com.chattriggers.ctjs.launch.plugin
 
-import me.falsehonesty.asmhelper.dsl.At
-import me.falsehonesty.asmhelper.dsl.InjectionPoint
-import me.falsehonesty.asmhelper.dsl.inject
-import me.falsehonesty.asmhelper.dsl.instructions.*
+import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
+import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.BlockPos
+import dev.falsehonesty.asmhelper.dsl.At
+import dev.falsehonesty.asmhelper.dsl.InjectionPoint
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
+import dev.falsehonesty.asmhelper.dsl.inject
+import dev.falsehonesty.asmhelper.dsl.instructions.*
+import net.minecraft.util.EnumFacing
 
-fun makePlayerControllerMPInjections() {
+fun injectPlayerControllerMP() {
     injectAttackEntity()
     injectHitBlock()
 }
@@ -18,30 +26,14 @@ fun injectAttackEntity() = inject {
 
     methodMaps = mapOf("func_78764_a" to "attackEntity")
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local2 = shadowLocal<net.minecraft.entity.Entity>()
 
-        getStatic(TRIGGER_TYPE, "ATTACK_ENTITY", "L$TRIGGER_TYPE;")
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(2, "java/lang/Object") {
-                aadd {
-                    createInstance("com/chattriggers/ctjs/minecraft/wrappers/objects/Entity", "(L$ENTITY;)V") {
-                        aload(2)
-                    }
-                }
-
-                aadd {
-                    load(event)
-                }
-            }
-        }
-
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            methodReturn()
+        code {
+            val event = CancellableEvent()
+            TriggerType.ATTACK_ENTITY.triggerAll(Entity(local2), event)
+            if (event.isCancelled())
+                methodReturn()
         }
     }
 }
@@ -54,15 +46,13 @@ fun injectHitBlock() = inject {
 
     methodMaps = mapOf("func_180511_b" to "clickBlock")
 
-    insnList {
-        invokeKObjectFunction(CLIENT_LISTENER, "onHitBlock", "(L$BLOCK_POS;L$ENUM_FACING;)Z") {
-            aload(1)
-            aload(2)
-        }
+    codeBlock {
+        val local1 = shadowLocal<BlockPos>()
+        val local2 = shadowLocal<EnumFacing>()
 
-        ifClause(JumpCondition.FALSE) {
-            int(0)
-            ireturn()
+        code {
+            if (ClientListener.onHitBlock(local1, local2))
+                iReturn(0)
         }
     }
 }

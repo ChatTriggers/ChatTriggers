@@ -8,10 +8,10 @@ import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.utils.console.Console
-import me.falsehonesty.asmhelper.dsl.*
-import me.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
-import me.falsehonesty.asmhelper.dsl.writers.AccessType
-import me.falsehonesty.asmhelper.dsl.writers.GeneralModificationWriter
+import dev.falsehonesty.asmhelper.dsl.*
+import dev.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
+import dev.falsehonesty.asmhelper.dsl.writers.AccessType
+import dev.falsehonesty.asmhelper.dsl.writers.GeneralModificationWriter
 import org.mozilla.javascript.*
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider

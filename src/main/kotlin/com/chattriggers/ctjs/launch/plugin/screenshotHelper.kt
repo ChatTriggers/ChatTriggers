@@ -1,9 +1,12 @@
 package com.chattriggers.ctjs.launch.plugin
 
-import me.falsehonesty.asmhelper.dsl.At
-import me.falsehonesty.asmhelper.dsl.InjectionPoint
-import me.falsehonesty.asmhelper.dsl.inject
-import me.falsehonesty.asmhelper.dsl.instructions.*
+import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.triggers.TriggerType
+import dev.falsehonesty.asmhelper.dsl.At
+import dev.falsehonesty.asmhelper.dsl.InjectionPoint
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.aReturn
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.asm
+import dev.falsehonesty.asmhelper.dsl.inject
 
 fun injectScreenshotHelper() = inject {
     className = "net/minecraft/util/ScreenShotHelper"
@@ -16,36 +19,27 @@ fun injectScreenshotHelper() = inject {
         "func_148260_a" to "saveScreenshot"
     )
 
-    insnList {
-        createInstance(CANCELLABLE_EVENT, "()V")
-        val event = astore()
+    codeBlock {
+        val local5 = shadowLocal<String>()
 
-        getStatic(TRIGGER_TYPE, "SCREENSHOT_TAKEN", "L$TRIGGER_TYPE;")
+        code {
+            val event = CancellableEvent()
 
-        invokeVirtual(TRIGGER_TYPE, "triggerAll", "([Ljava/lang/Object;)V") {
-            array(2, "java/lang/Object") {
-                aadd {
-                    invokeStatic(className, "getTimestampedPNGFileForDirectory", "(L$FILE;)L$FILE;") {
-                        createInstance(FILE, "(L$FILE;Ljava/lang/String;)V") {
-                            aload(0)
-                            ldc("screenshots")
-                        }
+            asm {
+                // Private method
+                invokeStatic("net/minecraft/util/ScreenShotHelper", "getTimestampedPNGFileForDirectory", "(L$FILE;)L$FILE;") {
+                    createInstance(FILE, "(L$FILE;Ljava/lang/String;)V") {
+                        aload(0)
+                        ldc("screenshots")
                     }
-                    invokeVirtual(FILE, "getName", "()Ljava/lang/String;")
                 }
-
-                aadd {
-                    load(event)
-                }
+                invokeVirtual(FILE, "getName", "()Ljava/lang/String;")
+                astore(5)
             }
-        }
 
-        load(event)
-        invoke(InvokeType.VIRTUAL, CANCELLABLE_EVENT, "isCancelled", "()Z")
-
-        ifClause(JumpCondition.FALSE) {
-            aconst_null()
-            areturn()
+            TriggerType.SCREENSHOT_TAKEN.triggerAll(local5, event)
+            if (event.isCancelled())
+                aReturn(null)
         }
     }
 }

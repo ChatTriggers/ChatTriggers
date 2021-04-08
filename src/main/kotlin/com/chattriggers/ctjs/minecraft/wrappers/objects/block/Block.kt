@@ -6,7 +6,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.BlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.EnumFacing
 import net.minecraft.block.Block as MCBlock
 
 @External
