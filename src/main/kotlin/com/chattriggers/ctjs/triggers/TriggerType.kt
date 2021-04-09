@@ -40,11 +40,7 @@ enum class TriggerType {
     COMMAND,
     OTHER;
 
-    fun trigger(args: Array<out Any?>) {
-        ModuleManager.trigger(this, args)
-    }
-
     fun triggerAll(vararg args: Any?) {
-        trigger(args)
+        ModuleManager.trigger(this, args)
     }
 }
