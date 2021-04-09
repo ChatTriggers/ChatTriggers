@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.OnTrigger
+import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.console.Console
 import dev.falsehonesty.asmhelper.dsl.*
 import dev.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
@@ -26,11 +27,12 @@ import java.lang.invoke.MethodType
 import java.net.URI
 import java.net.URL
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.Comparator
 
 object JSLoader : ILoader {
-    override var triggers: SortedSet<OnTrigger> = ConcurrentSkipListSet()
+    private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<OnTrigger>>()
     override val console by lazy { Console(this) }
 
     private lateinit var moduleContext: Context
@@ -44,6 +46,26 @@ object JSLoader : ILoader {
         "asmInvoke",
         MethodType.methodType(Any::class.java, Callable::class.java, Array<Any?>::class.java)
     )
+
+    override fun exec(type: TriggerType, args: Array<out Any?>) {
+        triggers[type]?.forEach { it.trigger(args) }
+    }
+
+    override fun addTrigger(trigger: OnTrigger) {
+        triggers.getOrPut(trigger.type, ::newTriggerSet).add(trigger)
+    }
+
+    override fun clearTriggers() {
+        triggers.clear()
+    }
+
+    override fun removeTrigger(trigger: OnTrigger) {
+        triggers[trigger.type]?.remove(trigger)
+    }
+
+    private fun newTriggerSet() = ConcurrentSkipListSet<OnTrigger> { o1, o2 ->
+        o1.priority.ordinal - o2.priority.ordinal
+    }
 
     override fun setup(jars: List<URL>) {
         instanceContexts(jars)

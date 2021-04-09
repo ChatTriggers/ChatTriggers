@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.collections.AbstractSet
 
 interface ILoader {
-    var triggers: SortedSet<OnTrigger>
     val console: Console
 
     /**
@@ -53,12 +52,7 @@ interface ILoader {
      * Tells the loader that it should activate all triggers
      * of a certain type with the specified arguments.
      */
-    fun exec(type: TriggerType, args: Array<out Any?>) {
-        triggers.iterator().forEach {
-            if (it.type == type)
-                it.trigger(args)
-        }
-    }
+    fun exec(type: TriggerType, args: Array<out Any?>)
 
     /**
      * Gets the result from evaluating a certain line of code in this loader
@@ -68,17 +62,12 @@ interface ILoader {
     /**
      * Adds a trigger to this loader to be activated during the game
      */
-    fun addTrigger(trigger: OnTrigger) {
-        triggers.add(trigger)
-    }
+    fun addTrigger(trigger: OnTrigger)
 
     /**
      * Removes all triggers
      */
-    fun clearTriggers() {
-        triggers.forEach { it.unregister() }
-        triggers.clear()
-    }
+    fun clearTriggers()
 
     /**
      * Returns the names of this specific loader's implemented languages
@@ -93,9 +82,7 @@ interface ILoader {
     /**
      * Removes a trigger from the current pool
      */
-    fun removeTrigger(trigger: OnTrigger) {
-        triggers.remove(trigger)
-    }
+    fun removeTrigger(trigger: OnTrigger)
 
     /**
      * Save a resource to the OS's filesystem from inside the jar
