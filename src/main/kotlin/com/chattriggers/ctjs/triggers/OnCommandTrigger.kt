@@ -1,16 +1,14 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.commands.Command
-import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.engine.loader.ILoader
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraftforge.client.ClientCommandHandler
 
 @External
 class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.COMMAND, loader) {
     private lateinit var commandName: String
     private var tabCompletions: MutableList<String> = mutableListOf()
-    private lateinit var command: Command
+    private var command: Command? = null
 
     override fun trigger(args: Array<out Any?>) {
         if (args::javaClass == Array<String>::javaClass) throw IllegalArgumentException("Arguments must be string array")
@@ -39,7 +37,10 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      */
     fun setCommandName(commandName: String) = apply {
         this.commandName = commandName
-        reInstance()
+
+        command?.unregister()
+        command = Command(this, commandName, "/$commandName", tabCompletions)
+        command!!.register()
     }
 
     /**
@@ -49,22 +50,4 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      * @return the trigger for additional modification
      */
     fun setName(commandName: String) = setCommandName(commandName)
-
-    // helper method to re instance the command
-    private fun reInstance() {
-        for (command in CommandHandler.getCommandList()) {
-            //#if MC<=10809
-            if (command.commandName == this.commandName) {
-                //#else
-                //$$ if (command.name == this.commandName) {
-                //#endif
-                command.getTriggers().add(this)
-                return
-            }
-        }
-
-        this.command = Command(this, this.commandName, "/${this.commandName}", this.tabCompletions)
-        ClientCommandHandler.instance.registerCommand(this.command)
-        CommandHandler.getCommandList().add(this.command)
-    }
 }

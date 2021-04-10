@@ -6,6 +6,11 @@ import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.BlockPos
 
+//#if MC==10809
+import net.minecraftforge.client.ClientCommandHandler
+//#else
+//#endif
+
 class Command(
     trigger: OnTrigger,
     private val name: String,
@@ -51,5 +56,20 @@ class Command(
 
     private fun trigger(args: Array<String>) {
         triggers.forEach { it.trigger(args) }
+    }
+
+    fun register() {
+        ClientCommandHandler.instance.registerCommand(this)
+        activeCommands[name] = this
+    }
+
+    fun unregister() {
+        ClientCommandHandler.instance.commandSet.remove(this)
+        ClientCommandHandler.instance.commandMap.remove(name)
+        activeCommands.remove(name)
+    }
+
+    companion object {
+        internal val activeCommands = mutableMapOf<String, Command>()
     }
 }

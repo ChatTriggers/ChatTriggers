@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.Command
-import com.chattriggers.ctjs.commands.CommandHandler
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
@@ -17,15 +16,9 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import com.google.common.reflect.ClassPath
 import me.ntrrgc.tsGenerator.TypeScriptGenerator
-import net.minecraftforge.client.ClientCommandHandler
-import org.apache.commons.lang3.SystemUtils
 import java.io.File
-import java.lang.Math.round
-import javax.swing.SwingUtilities
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.hasAnnotation
 
 @External
 object Reference {
@@ -48,8 +41,9 @@ object Reference {
 
         DisplayHandler.clearDisplays()
         GuiHandler.clearGuis()
-        CommandHandler.getCommandList().clear()
         ModuleManager.teardown()
+
+        Command.activeCommands.values.forEach(Command::unregister)
 
         if (asCommand) {
             ChatLib.chat("&7Unloaded all of ChatTriggers")
@@ -65,11 +59,8 @@ object Reference {
         unloadCT(false)
 
         ChatLib.chat("&cReloading ct.js scripts...")
-        ClientCommandHandler.instance.commandSet.removeIf { it is Command }
-        ClientCommandHandler.instance.commandMap.entries.removeIf { it.value is Command }
 
         CTJS.loadConfig()
-
         printLoadCompletionStatus(0f)
 
         conditionalThread {
