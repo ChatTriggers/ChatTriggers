@@ -99,7 +99,13 @@ object Reference {
     @JvmStatic
     fun conditionalThread(block: () -> Unit) {
         if (Config.threadedLoading) {
-            thread { block() }
+            thread { 
+                try {
+                    block()
+                } catch (e: Throwable) {
+                    e.printTraceToConsole()
+                }
+            }
         } else {
             block()
         }
