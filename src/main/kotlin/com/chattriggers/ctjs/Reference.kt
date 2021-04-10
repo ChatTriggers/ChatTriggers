@@ -43,7 +43,7 @@ object Reference {
         GuiHandler.clearGuis()
         ModuleManager.teardown()
 
-        Command.activeCommands.values.forEach(Command::unregister)
+        Command.activeCommands.values.toList().forEach(Command::unregister)
 
         if (asCommand) {
             ChatLib.chat("&7Unloaded all of ChatTriggers")
