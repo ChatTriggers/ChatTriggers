@@ -257,14 +257,13 @@ class Console(val loader: ILoader?) {
     }
 
     companion object {
-        val FIRA_FONT: Font
+        val FIRA_FONT: Font = Font.createFont(
+            Font.TRUETYPE_FONT,
+            System.getProperty("ct.firaFile", null)?.let { File(it).inputStream() }
+                ?: this::class.java.getResourceAsStream("/FiraCode-Regular.otf")
+        ).deriveFont(9f)
 
         init {
-            FIRA_FONT = Font.createFont(
-                Font.TRUETYPE_FONT,
-                File("/playground/FiraCode-Regular.otf")
-//                this::class.java.getResourceAsStream("/FiraCode-Regular.otf")
-            ).deriveFont(9f)
 
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FIRA_FONT)
         }
