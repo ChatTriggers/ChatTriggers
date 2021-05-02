@@ -166,7 +166,7 @@ object ModuleManager {
         val module = cachedModules.find { it.name.toLowerCase() == name.toLowerCase() } ?: return false
 
         val file = File(modulesFolder, module.name)
-        if (!file.exists()) throw IllegalStateException("Expected module to have an existing folder5")
+        if (!file.exists()) throw IllegalStateException("Expected module to have an existing folder!")
 
         if (file.deleteRecursively()) {
             Reference.loadCT()
