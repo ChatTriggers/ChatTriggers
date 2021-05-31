@@ -63,9 +63,7 @@ object JSLoader : ILoader {
         triggers[trigger.type]?.remove(trigger)
     }
 
-    private fun newTriggerSet() = ConcurrentSkipListSet<OnTrigger> { o1, o2 ->
-        o1.priority.ordinal - o2.priority.ordinal
-    }
+    private fun newTriggerSet() = ConcurrentSkipListSet<OnTrigger>()
 
     override fun setup(jars: List<URL>) {
         instanceContexts(jars)
