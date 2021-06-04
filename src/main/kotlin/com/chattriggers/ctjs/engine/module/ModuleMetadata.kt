@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.engine.loader.CTRepositoryHandler
+import com.chattriggers.ctjs.engine.loader.GitHubRepositoryHandler
 import com.chattriggers.ctjs.engine.loader.RepositoryHandler
 import java.util.*
 
@@ -21,12 +22,12 @@ data class ModuleMetadata(
     val repository: RepositoryInfo? = null
 )
 
-data class RepositoryInfo(
-    val type: RepositoryType,
-    val identifier: String,
-    val version: String
-)
+sealed class RepositoryInfo(val handler: RepositoryHandler)
 
-enum class RepositoryType(val handler: RepositoryHandler) {
-    CT(CTRepositoryHandler)
-}
+class CTRepositoryInfo(val identifier: String, val version: String) : RepositoryInfo(CTRepositoryHandler)
+
+class GitHubRepositoryInfo(
+    val username: String,
+    val repoName: String,
+    val lastModification: Long
+) : RepositoryInfo(GitHubRepositoryHandler)

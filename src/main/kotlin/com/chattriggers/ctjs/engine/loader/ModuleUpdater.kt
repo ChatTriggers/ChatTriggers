@@ -9,10 +9,11 @@ import com.chattriggers.ctjs.utils.config.Config
 import java.io.File
 
 object ModuleUpdater {
-    private val repositoryHandlers = listOf(CTRepositoryHandler)
+    // CTRepositoryHandler must be last in this list
+    private val repositoryHandlers = listOf(GitHubRepositoryHandler, CTRepositoryHandler)
 
     private fun repositoryForModule(module: Module): RepositoryHandler {
-        return module.metadata.repository?.type?.handler ?: return CTRepositoryHandler
+        return module.metadata.repository?.handler ?: return CTRepositoryHandler
     }
 
     fun importPending() {
