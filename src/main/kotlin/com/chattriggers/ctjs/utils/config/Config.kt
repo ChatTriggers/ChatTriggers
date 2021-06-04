@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.utils.config
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.chattriggers.ctjs.CTJS
 import com.google.gson.JsonObject
 import java.awt.Color
 import java.io.File
@@ -53,8 +52,6 @@ object Config {
     var moduleImportHelp = true
 
     fun load(jsonObject: JsonObject) {
-        val gson = Gson()
-
         this::class.declaredMemberProperties.filter {
             it.annotations.any { ann ->
                 ann.annotationClass == ConfigOpt::class
@@ -64,7 +61,7 @@ object Config {
         }.forEach {
             val wrapper = jsonObject.getAsJsonObject(it.name)
 
-            val value = gson.fromJson(wrapper.get("value"), it.javaField?.type)
+            val value = CTJS.gson.fromJson(wrapper.get("value"), it.javaField?.type)
 
             it.setter.call(this, value)
         }
@@ -72,7 +69,6 @@ object Config {
 
     fun save(file: File) {
         val obj = JsonObject()
-        val gson = GsonBuilder().setPrettyPrinting().create()
 
         this::class.declaredMemberProperties.filter {
             it.annotations.any { ann ->
@@ -80,13 +76,13 @@ object Config {
             }
         }.forEach {
             val wrapper = JsonObject()
-            wrapper.add("value", gson.toJsonTree(it.getter.call(this)))
+            wrapper.add("value", CTJS.gson.toJsonTree(it.getter.call(this)))
 
             obj.add(it.name, wrapper)
         }
 
         file.writeText(
-            gson.toJson(obj)
+            CTJS.gson.toJson(obj)
         )
     }
 }
