@@ -242,7 +242,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
         companion object {
             fun getParameterByName(name: String) =
                 values().find { param ->
-                    param.names.any { it.toLowerCase() == name }
+                    param.names.any { it.lowercase() == name }
                 }
         }
     }

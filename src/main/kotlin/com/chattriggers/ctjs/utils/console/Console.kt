@@ -133,7 +133,7 @@ class Console(val loader: ILoader?) {
                     showConsole()
 
                 val index = error.stackTrace.indexOfFirst {
-                    it?.fileName?.toLowerCase()?.contains("jsloader") ?: false
+                    it?.fileName?.lowercase()?.contains("jsloader") ?: false
                 }
 
                 error.stackTrace = error.stackTrace.dropLast(error.stackTrace.size - index - 1).map {

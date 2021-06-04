@@ -2,7 +2,7 @@ buildscript {
     def f = file("gradle/mcversion.txt")
 
     project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
-    ext.kotlin_version = "1.3.70"
+    ext.kotlin_version = "1.5.10"
     ext.dokka_version = "0.10.1"
     ext.json_docs_version = "2.0.8"
 
@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
         maven {
             name = "forge"
-            url = "https://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net"
         }
         maven {
             name = "sponge"
@@ -21,19 +21,24 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        flatDir dirs: 'libs'
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:" + (
-            mcVersion >= 11200 ? '2.3-SNAPSHOT' :
-                mcVersion >= 10904 ? '2.2-SNAPSHOT' :
-                    mcVersion >= 10809 ? "2.1-SNAPSHOT" :
-                        "invalid"
-        )
+        classpath('com.github.ReplayMod:ForgeGradle:' + (
+            mcVersion >= 11200 ? '541e1485' : // FG 2.3
+                mcVersion >= 10904 ? '5c1f53dc' : // FG 2.2
+                    '48c4f0c6'   // FG 2.1
+        ) + ':all') {
+            exclude group: 'net.sf.trove4j', module: 'trove4j' // preprocessor/idea requires more recent one
+            exclude group: 'trove', module: 'trove' // different name same thing
+        }
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
-        classpath ':proguard:'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -197,17 +202,3 @@ task changeMcVersion() {
         project.convertTree(vars, 'src/main/resources')
     }
 }
-
-
-task proguard(type: proguard.gradle.ProGuardTask) {
-    configuration 'configuration.pro'
-
-    // dontobfuscate()
-
-    libraryjars files(configurations.runtimeClasspath.collect())
-
-    injars "build/libs/ctjs-${version}.jar"
-    outjars "build/libs/ctjs-${version}-RELEASE.jar"
-}
-
-proguard.dependsOn build

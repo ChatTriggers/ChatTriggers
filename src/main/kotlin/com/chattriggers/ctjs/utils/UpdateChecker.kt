@@ -39,7 +39,7 @@ object UpdateChecker {
             object : TypeToken<Map<String, List<String>>>() {}.type
         )
 
-        val latestVersion = versions.flatMap { entry -> entry.value.map { "${entry.key}.$it".toVersion() } }.max()
+        val latestVersion = versions.flatMap { entry -> entry.value.map { "${entry.key}.$it".toVersion() } }.maxOrNull()
         val currentVersion = Reference.MODVERSION.toVersion()
 
         if (latestVersion == null) return

@@ -165,7 +165,7 @@ class Inventory : JSONImpl {
     fun drag(type: String, vararg slots: Int) = apply {
         DragAction(-999, getWindowId()).run {
             setStage(DragAction.Stage.BEGIN)
-                .setClickType(DragAction.ClickType.valueOf(type.toUpperCase()))
+                .setClickType(DragAction.ClickType.valueOf(type.uppercase()))
                 .complete()
 
             setStage(DragAction.Stage.SLOT)
