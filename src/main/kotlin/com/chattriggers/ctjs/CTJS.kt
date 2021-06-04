@@ -14,6 +14,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.chattriggers.ctjs.utils.config.Config
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
@@ -37,6 +38,7 @@ object CTJS {
     val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
+    val gson = GsonBuilder().setPrettyPrinting().create()
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {

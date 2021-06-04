@@ -26,7 +26,7 @@ object ModuleManager {
         modulesFolder.mkdirs()
 
         // Download pending modules
-        ModuleUpdater.importPendingModules()
+        ModuleUpdater.importPending()
 
         // Get existing modules
         val installedModules = getFoldersInDir(modulesFolder).map {
@@ -36,14 +36,14 @@ object ModuleManager {
         }
 
         // Check if those modules have updates
-        installedModules.forEach(ModuleUpdater::updateModule)
+        installedModules.forEach(ModuleUpdater::update)
         cachedModules.addAll(installedModules)
 
         // Import required modules
         installedModules.asSequence().mapNotNull {
             it.metadata.requires
         }.flatten().distinct().forEach {
-            ModuleUpdater.importModule(it)
+            ModuleUpdater.import(it)
         }
 
         // Load their assets
@@ -135,7 +135,7 @@ object ModuleManager {
 
         if (metadataFile.exists()) {
             try {
-                metadata = ModuleUpdater.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
+                metadata = CTJS.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
             } catch (exception: Exception) {
                 exception.printTraceToConsole()
             }
@@ -145,7 +145,7 @@ object ModuleManager {
     }
 
     fun importModule(moduleName: String): Module? {
-        val newModules = ModuleUpdater.importModule(moduleName)
+        val newModules = ModuleUpdater.import(moduleName)
 
         // Load their assets
         loadAssets(newModules)
