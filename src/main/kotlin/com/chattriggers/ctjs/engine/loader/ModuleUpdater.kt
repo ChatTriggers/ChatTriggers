@@ -42,6 +42,11 @@ object ModuleUpdater {
             File(module.folder, "metadata.json").readText(),
             ModuleMetadata::class.java
         )
+
+        // Try to import any dependencies, as they could have changed. Note that
+        // we don't need to update them if they exist, since this is only called
+        // during ct load which updates _all_ modules.
+        module.metadata.requires?.forEach { import(it) }
     }
 
     fun import(identifier: String): List<Module> {
@@ -55,6 +60,9 @@ object ModuleUpdater {
         val module = ModuleManager.parseModule(moduleDir)
 
         ModuleManager.cachedModules.add(module)
+
+        // Try to import any dependencies
+        module.metadata.requires?.forEach { import(it) }
 
         return listOf(module) + (module.metadata.requires?.map(::import)?.flatten() ?: emptyList())
     }
