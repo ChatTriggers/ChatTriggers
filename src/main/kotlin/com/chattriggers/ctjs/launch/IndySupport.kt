@@ -64,7 +64,7 @@ object IndySupport {
 
         // But since we're actually still being invoked currently, we need to still need to do what the user
         // expects and call back into their target function.
-        return targetHandle.invoke(*args)
+        return targetHandle.invokeWithArguments(args)
     }
 
     fun invalidateInvocations() {

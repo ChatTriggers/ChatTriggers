@@ -41,7 +41,7 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     fun getAlign(): DisplayHandler.Align = this.align
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
-            is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
+            is String -> DisplayHandler.Align.valueOf(align.uppercase())
             is DisplayHandler.Align -> align
             else -> DisplayHandler.Align.LEFT
         }

@@ -30,13 +30,13 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun register(triggerType: String, method: Any): OnTrigger {
-        val name = triggerType.toLowerCase()
+        val name = triggerType.lowercase()
 
         var func = methodMap[name]
 
         if (func == null) {
             func = this::class.memberFunctions.firstOrNull {
-                it.name.toLowerCase() == "register$name"
+                it.name.lowercase() == "register$name"
             } ?: throw NoSuchMethodException("No trigger type named '$triggerType'")
             methodMap[name] = func
         }

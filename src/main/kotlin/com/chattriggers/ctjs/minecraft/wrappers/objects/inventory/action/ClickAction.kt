@@ -72,7 +72,7 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
      * @return the current Action for method chaining
      */
     fun setClickString(clickType: String) = apply {
-        this.clickType = ClickType.valueOf(clickType.toUpperCase())
+        this.clickType = ClickType.valueOf(clickType.uppercase())
     }
 
     override fun complete() {

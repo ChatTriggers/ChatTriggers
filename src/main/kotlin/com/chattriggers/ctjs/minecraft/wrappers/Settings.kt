@@ -296,7 +296,7 @@ object Settings {
 
         @JvmStatic
         fun setVisibility(visibility: String) {
-            when (visibility.toLowerCase()) {
+            when (visibility.lowercase()) {
                 "hidden" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN
                 "commands", "system" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.SYSTEM
                 else -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.FULL

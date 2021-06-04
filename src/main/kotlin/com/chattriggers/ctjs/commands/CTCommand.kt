@@ -57,7 +57,7 @@ object CTCommand : CommandBase() {
             return
         }
 
-        when (args[0].toLowerCase()) {
+        when (args[0].lowercase()) {
             "reload", "load" -> Reference.loadCT()
             "unload" -> Reference.unloadCT()
             "files", "file" -> openFileLocation()
@@ -130,7 +130,7 @@ object CTCommand : CommandBase() {
             dumpChat()
             return
         }
-        when (args[1].toLowerCase()) {
+        when (args[1].lowercase()) {
             "chat" -> {
                 if (args.size == 2) dumpChat()
                 else dumpChat(args[2].toInt())

@@ -48,7 +48,7 @@ abstract class Action(var slot: Int, var windowId: Int) {
          */
         @JvmStatic
         fun of(inventory: Inventory, slot: Int, typeString: String) =
-            when (Type.valueOf(typeString.toUpperCase())) {
+            when (Type.valueOf(typeString.uppercase())) {
                 Type.CLICK -> ClickAction(slot, inventory.getWindowId())
                 Type.DRAG -> DragAction(slot, inventory.getWindowId())
                 Type.KEY -> KeyAction(slot, inventory.getWindowId())
