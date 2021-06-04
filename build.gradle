@@ -41,9 +41,9 @@ apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
 
 version = "1.4.0-" + (
-    mcVersion.toString().substring(0, 1) + "."
-        + mcVersion.toString().substring(1, 3).replace("0", "") + "."
-        + mcVersion.toString().substring(3, 5).replace("0", "")
+    mcVersion.toString().substring(0, 1) + "." +
+        mcVersion.toString().substring(1, 3).replace("0", "") + "." +
+        mcVersion.toString().substring(3, 5).replace("0", "")
 )
 group = "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ctjs"
@@ -113,6 +113,7 @@ dependencies {
     provided 'com.chattriggers:rhino:1.8.2'
     provided 'com.fifesoft:rsyntaxtextarea:3.0.8'
     provided 'com.github.falsehonesty:ts-generator:adfb57a8f6'
+    provided 'org.kohsuke:github-api:1.130'
 }
 
 jar {
