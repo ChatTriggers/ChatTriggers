@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.engine.module
 
+import com.chattriggers.ctjs.engine.loader.CTRepositoryHandler
+import com.chattriggers.ctjs.engine.loader.RepositoryHandler
 import java.util.*
 
 data class ModuleMetadata(
@@ -16,8 +18,16 @@ data class ModuleMetadata(
     val helpMessage: String? = null,
     val changelog: String? = null,
     val ignored: ArrayList<String>? = null,
-    var isRequired: Boolean = false
-) {
-    val isDefault: Boolean
-        get() = name == null
+    var isRequired: Boolean = false,
+    val repository: RepositoryInfo? = null
+)
+
+data class RepositoryInfo(
+    val type: RepositoryType,
+    val identifier: String,
+    val version: String
+)
+
+enum class RepositoryType(val handler: RepositoryHandler) {
+    CT(CTRepositoryHandler)
 }
