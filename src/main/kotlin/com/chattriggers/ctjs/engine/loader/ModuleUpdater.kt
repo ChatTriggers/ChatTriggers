@@ -10,10 +10,11 @@ import com.chattriggers.ctjs.utils.config.Config
 import java.io.File
 
 object ModuleUpdater {
-    private val repositoryHandlers = listOf(CTRepositoryHandler)
+    // CTRepositoryHandler must be last in this list
+    private val repositoryHandlers = listOf(GitHubRepositoryHandler, CTRepositoryHandler)
 
     private fun repositoryForModule(module: Module): RepositoryHandler {
-        return module.metadata.repository?.type?.handler ?: return CTRepositoryHandler
+        return module.metadata.repository?.handler ?: return CTRepositoryHandler
     }
 
     fun importPending() {
@@ -40,7 +41,7 @@ object ModuleUpdater {
         "Updated module ${module.metadata.name}".printToConsole()
 
         val newMetadata = CTJS.gson.fromJson(
-            File(module.folder, "metadata.json").readText(),
+            File(module.folder, ModuleManager.METADATA_FILE_NAME).readText(),
             ModuleMetadata::class.java
         )
 

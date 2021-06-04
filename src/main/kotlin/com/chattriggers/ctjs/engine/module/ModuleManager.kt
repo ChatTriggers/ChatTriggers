@@ -21,6 +21,7 @@ object ModuleManager {
     val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
+    const val METADATA_FILE_NAME = "metadata.json"
 
     fun setup() {
         modulesFolder.mkdirs()
@@ -130,7 +131,7 @@ object ModuleManager {
     }
 
     fun parseModule(directory: File): Module {
-        val metadataFile = File(directory, "metadata.json")
+        val metadataFile = File(directory, ModuleManager.METADATA_FILE_NAME)
         var metadata = ModuleMetadata()
 
         if (metadataFile.exists()) {
