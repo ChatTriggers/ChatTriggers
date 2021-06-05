@@ -42,7 +42,7 @@ object CTRepositoryHandler : RepositoryHandler {
     }
 
     override fun update(module: Module) {
-        val name = (module.metadata.repository as? CTRepositoryInfo)?.identifier ?: module.metadata.name ?: module.name
+        val name = (module.metadata.repository as? CTRepositoryInfo)?.name ?: module.metadata.name ?: module.name
 
         downloadModule(name)
     }

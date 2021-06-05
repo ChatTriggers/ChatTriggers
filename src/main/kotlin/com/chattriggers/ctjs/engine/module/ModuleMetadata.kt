@@ -3,6 +3,8 @@ package com.chattriggers.ctjs.engine.module
 import com.chattriggers.ctjs.engine.loader.CTRepositoryHandler
 import com.chattriggers.ctjs.engine.loader.GitHubRepositoryHandler
 import com.chattriggers.ctjs.engine.loader.RepositoryHandler
+import com.chattriggers.ctjs.utils.RuntimeTypeAdapterFactory
+import com.google.gson.annotations.SerializedName
 import java.util.*
 
 data class ModuleMetadata(
@@ -23,12 +25,27 @@ data class ModuleMetadata(
     val repository: RepositoryInfo? = null
 )
 
-sealed class RepositoryInfo(val handler: RepositoryHandler)
+sealed class RepositoryInfo {
+    // This must be a function because the RuntimeTypeAdapterFactory creates
+    // objects without invoking their constructor. If it was a property, it
+    // would never actually get assigned
+    abstract fun handler(): RepositoryHandler
 
-class CTRepositoryInfo(val identifier: String, val version: String) : RepositoryInfo(CTRepositoryHandler)
+    companion object {
+        val typeAdapterFactory = RuntimeTypeAdapterFactory(RepositoryInfo::class.java)
+            .registerSubtype(CTRepositoryInfo::class.java, "ct")
+            .registerSubtype(GitHubRepositoryInfo::class.java, "github")
+    }
+}
+
+class CTRepositoryInfo(val name: String, val version: String) : RepositoryInfo() {
+    override fun handler() = CTRepositoryHandler
+}
 
 class GitHubRepositoryInfo(
     val username: String,
     val repoName: String,
     val lastModification: Long
-) : RepositoryInfo(GitHubRepositoryHandler)
+) : RepositoryInfo() {
+    override fun handler() = GitHubRepositoryHandler
+}
