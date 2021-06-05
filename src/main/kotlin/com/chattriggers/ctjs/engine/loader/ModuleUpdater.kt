@@ -13,7 +13,7 @@ object ModuleUpdater {
     private val repositoryHandlers = listOf(GitHubRepositoryHandler, CTRepositoryHandler)
 
     private fun repositoryForModule(module: Module): RepositoryHandler {
-        return module.metadata.repository?.handler ?: return CTRepositoryHandler
+        return module.metadata.repository?.handler() ?: return CTRepositoryHandler
     }
 
     fun importPending() {

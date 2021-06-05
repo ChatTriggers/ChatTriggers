@@ -3,18 +3,10 @@ package com.chattriggers.ctjs.engine.loader
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.module.*
-import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
-import com.chattriggers.ctjs.utils.kotlin.fromJson
 import com.chattriggers.ctjs.utils.kotlin.toVersion
-import org.apache.commons.io.FileUtils
-import java.io.File
 import java.net.URL
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 
 object CTRepositoryHandler : RepositoryHandler {
     override fun matches(identifier: String): Boolean {
@@ -48,7 +40,7 @@ object CTRepositoryHandler : RepositoryHandler {
     }
 
     override fun update(module: Module) {
-        val name = (module.metadata.repository as? CTRepositoryInfo)?.identifier ?: module.metadata.name ?: module.name
+        val name = (module.metadata.repository as? CTRepositoryInfo)?.name ?: module.metadata.name ?: module.name
 
         downloadModule(name)
     }
