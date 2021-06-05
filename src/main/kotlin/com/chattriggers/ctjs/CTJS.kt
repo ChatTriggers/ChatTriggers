@@ -105,7 +105,7 @@ object CTJS {
         ClientCommandHandler.instance.registerCommand(CTCommand)
 
         Runtime.getRuntime().addShutdownHook(
-            Thread { TriggerType.GAME_UNLOAD::triggerAll }
+            Thread(TriggerType.GAME_UNLOAD::triggerAll)
         )
     }
 }
