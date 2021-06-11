@@ -8,23 +8,19 @@
     <a href="https://discord.gg/0fNjZyopOvBHZyG8">
       <img src="https://discordapp.com/api/guilds/119493402902528000/embed.png" alt="Discord" />
     </a>
-    <a href="https://travis-ci.org/ChatTriggers/ct.js">
-      <img src="https://travis-ci.org/ChatTriggers/ct.js.svg?branch=master" alt="Build Status" />
+    <a href="https://travis-ci.org/ChatTriggers/ChatTriggers">
+      <img src="https://api.travis-ci.org/ChatTriggers/ChatTriggers.svg?branch=master" alt="Build Status" />
     </a>
-    <a href="https://www.codacy.com/app/FalseHonesty/ct.js?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ChatTriggers/ct.js&amp;utm_campaign=Badge_Grade">
-      <img src="https://api.codacy.com/project/badge/Grade/f3bccfe6845d4f6b8733c3948314ea95" alt="Grade" />
-    </a>
-    <a href="https://github.com/ChatTriggers/ct.js/releases">
-      <img src="https://img.shields.io/github/release/ChatTriggers/ct.js/all.svg" alt="Releases" />
+    <a href="https://github.com/ChatTriggers/ChatTriggers/releases">
+      <img src="https://img.shields.io/github/v/release/ChatTriggers/ChatTriggers.svg?include_prereleases" alt="Releases" />
     </a>
   </p>
 </div>
 
-### *Beta*
 [![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)<br>
-ChatTriggers is currently in beta. Although we try to follow standard version conventions 
+ChatTriggers is always in development. Although we try to follow standard version conventions 
 and deprecate old methods before removing them, there may be times where we need to restructure
- something to the point where deprecation is impossible. Modules can and will break at any  time.
+ something to the point where deprecation is impossible. Modules can and will break at any time.
 
 # About
 ChatTriggers is a framework for Minecraft that allows for live scripting and client modification
