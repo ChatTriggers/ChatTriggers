@@ -55,13 +55,13 @@ object ModuleManager {
         }
 
         // Get all jars
-        val jars = cachedModules.map {
-            it.folder.listFiles()?.toList() ?: listOf()
-        }.flatten().filter {
-            it.name.endsWith(".jar")
-        }.map {
-            it.toURI().toURL()
-        }
+        val jars = cachedModules.map { module ->
+            module.folder.walk().filter {
+                it.isFile && it.extension == "jar"
+            }.map {
+                it.toURI().toURL()
+            }.toList()
+        }.flatten()
 
         // Setup all loaders
         loaders.forEach {
