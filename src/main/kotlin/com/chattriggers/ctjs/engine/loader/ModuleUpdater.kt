@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.config.Config
@@ -51,7 +52,7 @@ object ModuleUpdater {
             val newMetadata = gson.fromJson(newMetadataText, ModuleMetadata::class.java)
 
             if (newMetadata.version == null) {
-                ("Remote version of module ${metadata.name} have no version numbers, so it will " +
+                ("Remote version of module ${metadata.name} has no version numbers, so it will " +
                         "not be updated!").printToConsole()
                 return
             } else if (metadata.version != null && metadata.version.toVersion() >= newMetadata.version.toVersion()) {
@@ -60,6 +61,11 @@ object ModuleUpdater {
 
             downloadModule(metadata.name)
             "Updated module ${metadata.name}".printToConsole()
+
+            if (Config.moduleChangelog && newMetadata.changelog != null) {
+                ChatLib.chat("&a[ChatTriggers] ${metadata.name} has updated to version ${newMetadata.version}")
+                ChatLib.chat("&aChangelog: &r${newMetadata.changelog}")
+            }
 
             module.metadata = File(module.folder, "metadata.json").let {
                 gson.fromJson(it.readText(), ModuleMetadata::class.java)

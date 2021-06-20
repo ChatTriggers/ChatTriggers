@@ -52,6 +52,9 @@ object Config {
     @ConfigOpt(name = "Show Module Help on Import", x = -110, y = 285, type = ConfigBoolean::class)
     var moduleImportHelp = true
 
+    @ConfigOpt(name = "Show Module Changelog", x = -110, y = 340, type = ConfigBoolean::class)
+    var moduleChangelog = true
+
     fun load(jsonObject: JsonObject) {
         val gson = Gson()
 
