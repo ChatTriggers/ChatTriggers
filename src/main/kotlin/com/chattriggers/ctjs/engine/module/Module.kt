@@ -74,5 +74,5 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
         }
     }
 
-    override fun toString() = "Module{name=$name,folder=$folder,metadata=$metadata}"
+    override fun toString() = "Module{name=$name,version=${metadata.version}}"
 }
