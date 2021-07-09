@@ -20,7 +20,6 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.io.FileReader
 import kotlin.concurrent.thread
@@ -50,14 +49,6 @@ object CTJS {
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
-
-        val sha256uuid = DigestUtils.sha256Hex(Player.getUUID())
-
-        try {
-            FileLib.getUrlContent("https://www.chattriggers.com/tracker/?uuid=$sha256uuid")
-        } catch (e: Exception) {
-            e.printTraceToConsole()
-        }
     }
 
     @Mod.EventHandler
