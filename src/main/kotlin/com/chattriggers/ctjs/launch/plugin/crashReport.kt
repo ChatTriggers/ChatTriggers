@@ -1,10 +1,8 @@
 package com.chattriggers.ctjs.launch.plugin
 
-import com.chattriggers.ctjs.engine.module.ModuleManager
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.inject
-import net.minecraft.crash.CrashReportCategory
 
 fun injectCrashReport() = inject {
     className = "net/minecraft/crash/CrashReport"

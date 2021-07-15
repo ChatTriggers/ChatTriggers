@@ -38,7 +38,7 @@ class ParticleEffect @JvmOverloads constructor(
         //#if MC<=10809
         super.setDead()
         //#else
-        //$$ super.setExpired();
+        //$$ super.setExpired()
         //#endif
     }
 }

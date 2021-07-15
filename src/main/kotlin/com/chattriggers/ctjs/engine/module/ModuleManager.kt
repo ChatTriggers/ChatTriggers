@@ -32,7 +32,7 @@ object ModuleManager {
         val installedModules = getFoldersInDir(modulesFolder).map {
             parseModule(it)
         }.distinctBy {
-            it.name.toLowerCase()
+            it.name.lowercase()
         }
 
         // Check if those modules have updates
@@ -163,7 +163,7 @@ object ModuleManager {
     }
 
     fun deleteModule(name: String): Boolean {
-        val module = cachedModules.find { it.name.toLowerCase() == name.toLowerCase() } ?: return false
+        val module = cachedModules.find { it.name.lowercase() == name.lowercase() } ?: return false
 
         val file = File(modulesFolder, module.name)
         if (!file.exists()) throw IllegalStateException("Expected module to have an existing folder!")

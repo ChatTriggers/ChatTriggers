@@ -78,7 +78,7 @@ class Particle(val underlyingEntity: MCParticle) {
         //#if MC<=10809
         this.underlyingEntity.setDead()
         //#else
-        //$$ this.underlyingEntity.setExpired();
+        //$$ this.underlyingEntity.setExpired()
         //#endif
     }
 

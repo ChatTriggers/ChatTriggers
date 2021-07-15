@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.printTraceToConsole
 import org.mozilla.javascript.Context
-import java.util.concurrent.Executors
 import java.util.concurrent.ForkJoinPool
 
 @Suppress("unused")

@@ -63,7 +63,7 @@ static def convertSource(Map<String, String> kws, Map<String, Integer> vars, Lis
                 indentStack.push(getIndent(line))
             }
             ifStack.push(head)
-            active = true;
+            active = true
             ifStack.each {
                 if (it != null) {
                     active &= it
@@ -81,7 +81,7 @@ static def convertSource(Map<String, String> kws, Map<String, Integer> vars, Lis
             def head = ifStack.pop()
             if (head != null) {
                 indentStack.pop()
-                active = true;
+                active = true
                 ifStack.each {
                     if (it != null) {
                         active &= it

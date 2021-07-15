@@ -72,7 +72,7 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
      * @return the current Action for method chaining
      */
     fun setClickString(clickType: String) = apply {
-        this.clickType = ClickType.valueOf(clickType.toUpperCase())
+        this.clickType = ClickType.valueOf(clickType.uppercase())
     }
 
     override fun complete() {
@@ -104,6 +104,6 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     }
 
     enum class ClickType(val button: Int) {
-        LEFT(0), RIGHT(1), MIDDLE(2);
+        LEFT(0), RIGHT(1), MIDDLE(2)
     }
 }

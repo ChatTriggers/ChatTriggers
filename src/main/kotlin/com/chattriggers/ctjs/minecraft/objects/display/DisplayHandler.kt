@@ -26,14 +26,14 @@ object DisplayHandler {
     }
 
     enum class Background {
-        NONE, FULL, PER_LINE;
+        NONE, FULL, PER_LINE
     }
 
     enum class Align {
-        NONE, LEFT, CENTER, RIGHT;
+        NONE, LEFT, CENTER, RIGHT
     }
 
     enum class Order {
-        UP, DOWN;
+        UP, DOWN
     }
 }

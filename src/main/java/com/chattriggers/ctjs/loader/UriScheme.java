@@ -22,8 +22,6 @@ public class UriScheme {
             return;
         }
 
-
-
         if (!args[0].startsWith(PROTOCOL)) {
             System.out.println("URL found is not supported, aborting...");
             System.out.println(args[0]);
@@ -31,9 +29,7 @@ public class UriScheme {
         }
 
         String url = args[0];
-
         System.out.println("Trying to work with URL: " + url);
-
         String module = url.substring(PROTOCOL.length()).replace("/", "");
 
         try {
@@ -45,17 +41,9 @@ public class UriScheme {
 
     public static void installUriScheme() {
         try {
-            regAdd(
-                    " /f /ve /d " +
-                            quote("URL:chattriggers Protocol")
-            );
+            regAdd(" /f /ve /d " + quote("URL:chattriggers Protocol"));
 
-            regAdd(
-                    " /f /v " +
-                            quote("URL Protocol") +
-                            " /d " +
-                            quote("")
-            );
+            regAdd(" /f /v " + quote("URL Protocol") + " /d " + quote(""));
 
             ModContainer container = Loader.instance().getIndexedModList().get(Reference.MODID);
             String modJar = container.getSource().getAbsolutePath();
@@ -63,12 +51,9 @@ public class UriScheme {
             String javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "javaw.exe";
 
             String value = ("\"" + javaProgram + "\" -cp \"" + modJar
-                    + "\" com.chattriggers.ctjs.loader.UriScheme " + "\"%1\"").replace("\"", "\\\"");
+                + "\" com.chattriggers.ctjs.loader.UriScheme " + "\"%1\"").replace("\"", "\\\"");
 
-            regAdd(
-                    "\\shell\\open\\command /f /ve /d " +
-                            "\"" + value + "\""
-            );
+            regAdd("\\shell\\open\\command /f /ve /d " + "\"" + value + "\"");
         } catch (Exception e) {
             System.err.println("Unable to install chattriggers URI scheme, disregard if OS is not Windows");
         }
@@ -95,7 +80,7 @@ public class UriScheme {
                 try (Socket clientSocket = serverSocket.accept()) {
                     InputStream inputStream = clientSocket.getInputStream();
                     String module = new BufferedReader(new InputStreamReader(inputStream))
-                            .lines().collect(Collectors.joining("\n"));
+                        .lines().collect(Collectors.joining("\n"));
                     ModuleManager.INSTANCE.importModule(module);
                 } catch (Exception e) {
                     e.printStackTrace();

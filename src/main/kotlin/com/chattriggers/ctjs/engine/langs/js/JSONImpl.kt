@@ -4,7 +4,6 @@ import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
 
 interface JSONImpl {
-    // JSON.stringify(Player.getOpenedInventory())
     fun toJSON(key: String): String {
         val sb = StringBuilder()
         sb.append("{")

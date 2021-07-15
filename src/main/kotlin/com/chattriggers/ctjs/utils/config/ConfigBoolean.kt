@@ -9,10 +9,12 @@ import net.minecraft.client.gui.GuiButton
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty
 
-class ConfigBoolean
-    (private val prop: KMutableProperty<Boolean>, override val name: String = "", x: Int = 0, y: Int = 0) :
-    ConfigOption() {
-
+class ConfigBoolean(
+    private val prop: KMutableProperty<Boolean>,
+    override val name: String = "",
+    x: Int = 0,
+    y: Int = 0,
+) : ConfigOption() {
     private var value: Boolean by Delegates.observable(prop.getter.call(Config)) { _, _, new ->
         prop.setter.call(Config, new)
     }
@@ -48,8 +50,8 @@ class ConfigBoolean
         this.button.xPosition = middle - 100 + this.x
         this.button.drawButton(Client.getMinecraft(), mouseX, mouseY)
         //#else
-        //$$ this.button.x = middle - 100 + this.x;
-        //$$ this.button.drawButton(Client.getMinecraft(), mouseX, mouseY, partialTicks);
+        //$$ this.button.x = middle - 100 + this.x
+        //$$ this.button.drawButton(Client.getMinecraft(), mouseX, mouseY, partialTicks)
         //#endif
 
         super.draw(mouseX, mouseY, partialTicks)

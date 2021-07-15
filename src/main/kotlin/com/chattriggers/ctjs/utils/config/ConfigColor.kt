@@ -10,10 +10,12 @@ import java.awt.Color
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty
 
-open class ConfigColor
-    (private val prop: KMutableProperty<Color>, override val name: String = "", x: Int = 0, y: Int = 0) :
-    ConfigOption() {
-
+open class ConfigColor(
+    private val prop: KMutableProperty<Color>,
+    override val name: String = "",
+    x: Int = 0,
+    y: Int = 0,
+) : ConfigOption() {
     private var value: Color by Delegates.observable(prop.getter.call(Config)) { _, _, new ->
         prop.setter.call(Config, new)
     }
@@ -23,7 +25,6 @@ open class ConfigColor
         this.x = x
         this.y = y
     }
-
 
     private var redButton = GuiButton(
         0,

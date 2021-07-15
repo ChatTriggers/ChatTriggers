@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.scoreboard.Score
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.client.GuiIngameForge
 
@@ -102,7 +101,7 @@ object Scoreboard {
             //#if MC<=10809
             val theScore = scoreboard.getValueFromObjective(line, sidebarObjective)
             //#else
-            //$$ val theScore = scoreboard.getOrCreateScore(line, sidebarObjective);
+            //$$ val theScore = scoreboard.getOrCreateScore(line, sidebarObjective)
             //#endif
 
             theScore.scorePoints = score

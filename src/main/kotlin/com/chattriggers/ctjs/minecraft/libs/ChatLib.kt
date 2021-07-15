@@ -10,12 +10,10 @@ import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.ChatLine
-import net.minecraft.client.gui.GuiNewChat
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
-import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
 @External
@@ -98,7 +96,7 @@ object ChatLib {
         //#if MC<=10809
         Client.getChatGUI()?.clearChatMessages()
         //#else
-        //$$ Client.getChatGUI()?.clearChatMessages(false);
+        //$$ Client.getChatGUI()?.clearChatMessages(false)
         //#endif
     }
 
@@ -350,7 +348,7 @@ object ChatLib {
     }
 
     /**
-     * Replaces the easier to type '&amp;' color codes with proper color codes in a string.
+     * Replaces the easier to type '&' color codes with proper color codes in a string.
      *
      * @param message The string to add color codes to
      * @return the formatted message

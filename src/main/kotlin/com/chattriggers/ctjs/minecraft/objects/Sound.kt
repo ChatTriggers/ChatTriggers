@@ -151,7 +151,7 @@ class Sound(private val config: NativeObject) {
      * @param category the category
      */
     fun setCategory(category: String) = apply {
-        val category1 = SoundCategory.getCategory(category.toLowerCase())
+        val category1 = SoundCategory.getCategory(category.lowercase())
         setVolume(Client.getMinecraft().gameSettings.getSoundLevel(category1))
     }
 

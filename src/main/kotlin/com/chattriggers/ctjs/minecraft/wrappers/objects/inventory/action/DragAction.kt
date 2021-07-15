@@ -44,7 +44,7 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
      * @return the current Action for method chaining
      */
     fun setClickString(clickType: String) = apply {
-        this.clickType = ClickType.valueOf(clickType.toUpperCase())
+        this.clickType = ClickType.valueOf(clickType.uppercase())
     }
 
     /**
@@ -55,7 +55,7 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
      * @return the current Action for method chaining
      */
     fun setStageString(stage: String) = apply {
-        this.stage = Stage.valueOf(stage.toUpperCase())
+        this.stage = Stage.valueOf(stage.uppercase())
     }
 
     override fun complete() {
@@ -81,4 +81,3 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         BEGIN(0), SLOT(1), END(2)
     }
 }
-

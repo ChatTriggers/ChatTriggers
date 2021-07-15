@@ -11,7 +11,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 //#if MC>10809
-//$$ import net.minecraft.inventory.EntityEquipmentSlot;
+//$$ import net.minecraft.inventory.EntityEquipmentSlot
 //#endif
 
 @External
@@ -48,7 +48,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         //$$ return Item(player.getItemStackFromSlot(
         //$$        EntityEquipmentSlot.values()[slot]
         //$$     )
-        //$$ );
+        //$$ )
         //#endif
     }
 

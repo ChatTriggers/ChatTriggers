@@ -64,8 +64,8 @@ class Item {
         this.item = entityItem.entityItem.item
         this.itemStack = entityItem.entityItem
         //#else
-        //$$ this.item = entityItem.item.item;
-        //$$ this.itemStack = entityItem.item;
+        //$$ this.item = entityItem.item.item
+        //$$ this.itemStack = entityItem.item
         //#endif
     }
 
@@ -81,8 +81,8 @@ class Item {
             this.item = entity.entity.entityItem.item
             this.itemStack = entity.entity.entityItem
             //#else
-            //$$ this.item = entity.entity.item.item;
-            //$$ this.itemStack = entity.entity.item;
+            //$$ this.item = entity.entity.item.item
+            //$$ this.itemStack = entity.entity.item
             //#endif
         } else {
             throw IllegalArgumentException("Entity is not of type EntityItem")
@@ -197,7 +197,7 @@ class Item {
         //#if MC<=10809
         return itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips)
         //#else
-        //$$ return itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED);
+        //$$ return itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED)
         //#endif
     }
 

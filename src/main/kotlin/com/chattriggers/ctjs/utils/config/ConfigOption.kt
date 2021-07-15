@@ -31,13 +31,13 @@ abstract class ConfigOption {
         //#if MC<=10809
         this.resetButton.xPosition = Renderer.screen.getWidth() / 2 - 100 + this.x + 185
         //#else
-        //$$ this.resetButton.x = Renderer.screen.getWidth() / 2 - 100 + this.x + 185;
+        //$$ this.resetButton.x = Renderer.screen.getWidth() / 2 - 100 + this.x + 185
         //#endif
 
         //#if MC<=10809
         this.resetButton.drawButton(Client.getMinecraft(), mouseX, mouseY)
         //#else
-        //$$ this.resetButton.drawButton(Client.getMinecraft(), mouseX, mouseY, partialTicks);
+        //$$ this.resetButton.drawButton(Client.getMinecraft(), mouseX, mouseY, partialTicks)
         //#endif
 
         Text("\u21BA", (Renderer.screen.getWidth() / 2 - 100 + this.x + 189).toFloat(), (this.y - 4).toFloat())

@@ -16,7 +16,6 @@ import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
-import java.util.stream.Collectors
 
 @External
 object Player {

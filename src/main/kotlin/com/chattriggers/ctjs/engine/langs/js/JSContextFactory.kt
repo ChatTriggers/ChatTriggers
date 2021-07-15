@@ -1,8 +1,6 @@
 package com.chattriggers.ctjs.engine.langs.js
 
-import net.minecraft.client.Minecraft
 import net.minecraft.launchwrapper.Launch
-import net.minecraftforge.common.ForgeModContainer
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Context.EMIT_DEBUG_OUTPUT
 import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR

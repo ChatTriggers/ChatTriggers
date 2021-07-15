@@ -14,7 +14,7 @@ open class ConfigStringSelector(
     override val name: String = "",
     private val values: Array<String> = emptyArray(),
     x: Int = 0,
-    y: Int = 0
+    y: Int = 0,
 ) : ConfigOption() {
     private var value: Int by Delegates.observable(
         values.indexOf(prop.getter.call(Config))

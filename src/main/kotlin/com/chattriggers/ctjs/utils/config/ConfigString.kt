@@ -10,10 +10,12 @@ import java.io.File
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty
 
-class ConfigString
-    (private val prop: KMutableProperty<String>, override val name: String = "", x: Int = 0, y: Int = 0) :
-    ConfigOption() {
-
+class ConfigString(
+    private val prop: KMutableProperty<String>,
+    override val name: String = "",
+    x: Int = 0,
+    y: Int = 0,
+) : ConfigOption() {
     private var value: String by Delegates.observable(prop.getter.call(Config)) { _, _, new ->
         prop.setter.call(Config, new)
     }

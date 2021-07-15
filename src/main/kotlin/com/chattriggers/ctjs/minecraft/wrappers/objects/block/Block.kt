@@ -76,7 +76,7 @@ open class Block {
         //#if MC<=10809
         return this.block.registryName
         //#else
-        //$$ return this.block.registryName.toString();
+        //$$ return this.block.registryName.toString()
         //#endif
     }
 
@@ -104,7 +104,7 @@ open class Block {
         //$$         World.getWorld()!!.getBlockState(blockPos),
         //$$         World.getWorld(),
         //$$         blockPos
-        //$$ );
+        //$$ )
         //#endif
     }
 
@@ -125,7 +125,7 @@ open class Block {
         //#else
         //$$ return this.block.canProvidePower(
         //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ );
+        //$$ )
         //#endif
     }
 
@@ -150,7 +150,7 @@ open class Block {
         //#else
         //$$ return this.block.isTranslucent(
         //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ );
+        //$$ )
         //#endif
     }
 

@@ -43,7 +43,7 @@ class PotionEffect(private val effect: MCPotionEffect) {
         //#if MC<=10809
         return this.effect.isShowParticles
         //#else
-        //$$ return this.effect.doesShowParticles();
+        //$$ return this.effect.doesShowParticles()
         //#endif
     }
 

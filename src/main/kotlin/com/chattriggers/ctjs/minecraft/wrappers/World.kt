@@ -33,7 +33,7 @@ object World {
         //#if MC<=10809
         return Client.getMinecraft().theWorld
         //#else
-        //$$ return Client.getMinecraft().world;
+        //$$ return Client.getMinecraft().world
         //#endif
     }
 
@@ -52,8 +52,8 @@ object World {
         //#if MC<=10809
         Player.getPlayer()?.playSound(name, volume, pitch)
         //#else
-        //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name));
-        //$$ Player.getPlayer()?.playSound(sound, volume, pitch);
+        //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
+        //$$ Player.getPlayer()?.playSound(sound, volume, pitch)
         //#endif
     }
 
@@ -99,7 +99,7 @@ object World {
         //#if MC<=10809
         return getWorld()?.worldType?.worldTypeName.toString()
         //#else
-        //$$ return getWorld()?.worldType?.name.toString();
+        //$$ return getWorld()?.worldType?.name.toString()
         //#endif
     }
 

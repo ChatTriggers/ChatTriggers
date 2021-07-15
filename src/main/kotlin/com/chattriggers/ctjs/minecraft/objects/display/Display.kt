@@ -63,7 +63,7 @@ abstract class Display {
     fun getBackground(): DisplayHandler.Background = this.background
     fun setBackground(background: Any) = apply {
         this.background = when (background) {
-            is String -> DisplayHandler.Background.valueOf(background.toUpperCase().replace(" ", "_"))
+            is String -> DisplayHandler.Background.valueOf(background.uppercase().replace(" ", "_"))
             is DisplayHandler.Background -> background
             else -> DisplayHandler.Background.NONE
         }
@@ -72,7 +72,7 @@ abstract class Display {
     fun getAlign(): DisplayHandler.Align = this.align
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
-            is String -> DisplayHandler.Align.valueOf(align.toUpperCase())
+            is String -> DisplayHandler.Align.valueOf(align.uppercase())
             is DisplayHandler.Align -> align
             else -> DisplayHandler.Align.LEFT
         }
@@ -81,7 +81,7 @@ abstract class Display {
     fun getOrder(): DisplayHandler.Order = this.order
     fun setOrder(order: Any) = apply {
         this.order = when (order) {
-            is String -> DisplayHandler.Order.valueOf(order.toUpperCase())
+            is String -> DisplayHandler.Order.valueOf(order.uppercase())
             is DisplayHandler.Order -> order
             else -> DisplayHandler.Order.DOWN
         }
