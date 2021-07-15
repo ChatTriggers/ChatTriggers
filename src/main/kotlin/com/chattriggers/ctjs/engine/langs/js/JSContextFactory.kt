@@ -25,7 +25,7 @@ object JSContextFactory : ContextFactory() {
         cx.applicationClassLoader = classLoader
         cx.optimizationLevel = if (optimize) 9 else 0
         cx.languageVersion = Context.VERSION_ES6
-        cx.errorReporter = ToolErrorReporter(true, JSLoader.console.out)
+        cx.errorReporter = JSErrorReporter(JSLoader.console.out)
         cx.wrapFactory = object : WrapFactory() {
             override fun wrap(cx: Context?, scope: Scriptable?, obj: Any?, staticType: Class<*>?): Any? {
                 if (obj is Collection<*>) {
