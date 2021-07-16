@@ -42,7 +42,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
 
-version = "1.4.0-" + (
+version = "1.4.0-BETA-" + (
     mcVersion.toString().substring(0, 1) + "." +
         mcVersion.toString().substring(1, 3).replace("0", "") + "." +
         mcVersion.toString().substring(3, 5).replace("0", "")
@@ -122,6 +122,8 @@ jar {
     // Include all of the jars from the bundled configuration in our jar
     from configurations.provided.collect {
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
         exclude 'LICENSE.txt'
         exclude 'META-INF/LICENSE.txt'
         exclude "**/module-info.class"
