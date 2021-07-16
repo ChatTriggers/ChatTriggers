@@ -27,7 +27,11 @@ import java.net.URL
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentSkipListSet
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
+@OptIn(ExperimentalContracts::class)
 object JSLoader : ILoader {
     private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<OnTrigger>>()
     override val console by lazy { Console(this) }
@@ -124,7 +128,7 @@ object JSLoader : ILoader {
         }
     }
 
-    override fun entrySetup() = wrapInContext {
+    override fun entrySetup(): Unit = wrapInContext {
         val moduleProvidedLibs = saveResource(
             "/js/moduleProvidedLibs.js",
             File(modulesFolder.parentFile, "chattriggers-modules-provided-libs.js"),
@@ -144,7 +148,7 @@ object JSLoader : ILoader {
         }
     }
 
-    override fun entryPass(module: Module, entryURI: URI) = wrapInContext {
+    override fun entryPass(module: Module, entryURI: URI): Unit = wrapInContext {
         try {
             require.loadCTModule(module.name, module.metadata.entry!!, entryURI)
         } catch (e: Throwable) {
@@ -157,14 +161,14 @@ object JSLoader : ILoader {
     }
 
     override fun asmInvokeLookup(module: Module, functionURI: URI): MethodHandle {
-        wrapInContext {
+        return wrapInContext {
             try {
                 val returned = require.loadCTModule(module.name, File(functionURI).name, functionURI)
                 val func = ScriptableObject.getProperty(returned, "default") as Callable
 
                 // When a call to this function ID is made, we always want to point it
                 // to our asmInvoke method, which in turn should always call [func].
-                return INVOKE_JS_CALL.bindTo(func)
+                INVOKE_JS_CALL.bindTo(func)
             } catch (e: Throwable) {
                 println("Error loading asm function $functionURI in module ${module.name}.")
                 e.printStackTrace()
@@ -175,30 +179,26 @@ object JSLoader : ILoader {
                 // If we can't resolve the target function correctly, we will return
                 //  a no-op method handle that will always return null.
                 //  It still needs to match the method type (Object[])Object, so we drop the arguments param.
-                return MethodHandles.dropArguments(
+                MethodHandles.dropArguments(
                     MethodHandles.constant(Any::class.java, null),
                     0,
-                    Array<Any?>::class.java
+                    Array<Any?>::class.java,
                 )
             }
         }
-
-        // Will never happen
-        return null as MethodHandle
     }
 
     @JvmStatic
-    fun asmInvoke(func: Callable, args: Array<Any?>): Any? {
-        wrapInContext {
-            return func.call(moduleContext, scope, scope, args)
+    fun asmInvoke(func: Callable, args: Array<Any?>): Any {
+        return wrapInContext {
+            func.call(moduleContext, scope, scope, args)
         }
-
-        // Will never happen
-        return null
     }
 
-    private inline fun wrapInContext(context: Context = moduleContext, block: () -> Unit) {
-        // TODO for Kotlin 1.4: make block a CALL_EXACTLY_ONCE contract
+    private inline fun <T> wrapInContext(context: Context = moduleContext, crossinline block: () -> T): T {
+        contract {
+            callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+        }
 
         val missingContext = Context.getCurrentContext() == null
         if (missingContext) {
@@ -210,7 +210,7 @@ object JSLoader : ILoader {
         }
 
         try {
-            block()
+            return block()
         } finally {
             if (missingContext) Context.exit()
         }
@@ -278,13 +278,10 @@ object JSLoader : ILoader {
         }
     }
 
-    override fun eval(code: String): String? {
-        wrapInContext(evalContext) {
-            return Context.toString(evalContext.evaluateString(scope, code, "<eval>", 1, null))
+    override fun eval(code: String): String {
+        return wrapInContext(evalContext) {
+            Context.toString(evalContext.evaluateString(scope, code, "<eval>", 1, null))
         }
-
-        // Will never happen
-        return null
     }
 
     override fun getLanguage() = Lang.JS
