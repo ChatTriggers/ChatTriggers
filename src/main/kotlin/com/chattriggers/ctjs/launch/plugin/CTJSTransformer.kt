@@ -17,7 +17,7 @@ class CTJSTransformer : BaseClassTransformer() {
         classLoader.addTransformerExclusion("org.mozilla.javascript")
         classLoader.addTransformerExclusion("org.mozilla.classfile")
         classLoader.addTransformerExclusion("com.fasterxml.jackson.core.Version")
-        classLoader.addTransformerExclusion("me.falsehonesty.asmhelper.")
+        classLoader.addTransformerExclusion("dev.falsehonesty.asmhelper.")
         classLoader.addTransformerExclusion("org.fife.")
     }
 
