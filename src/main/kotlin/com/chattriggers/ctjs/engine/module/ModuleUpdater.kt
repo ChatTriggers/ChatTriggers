@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
-import com.chattriggers.ctjs.utils.config.Config
+import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
@@ -33,6 +33,7 @@ object ModuleUpdater {
 
     fun updateModule(module: Module) {
         if (!Config.autoUpdateModules) return
+
         val metadata = module.metadata
 
         try {
@@ -89,7 +90,6 @@ object ModuleUpdater {
         val downloadZip = File(modulesFolder, "currDownload.zip")
 
         try {
-
             val url = "https://www.chattriggers.com/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
             val connection = URL(url).openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
@@ -111,7 +111,6 @@ object ModuleUpdater {
                 }
                 return realName
             }
-
         } catch (exception: Exception) {
             exception.printTraceToConsole()
         } finally {
