@@ -27,33 +27,20 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
 
         layerRenderers = arrayListOf<LayerRenderer<AbstractClientPlayer>>()
 
-        if(showArmor) addLayer(LayerBipedArmor(this))
-        if(showHeldItem) addLayer(LayerHeldItem(this))
-        if(showArrows) addLayer(LayerArrow(this))
+        if (showArmor) addLayer(LayerBipedArmor(this))
+        if (showHeldItem) addLayer(LayerHeldItem(this))
+        if (showArrows) addLayer(LayerArrow(this))
         addLayer(LayerDeadmau5Head(this))
-        if(showCape) addLayer(LayerCape(this))
-        if(showArmor) addLayer(LayerCustomHead(this.getMainModel().bipedHead))
-    }
-
-    override fun doRender(
-            entity: AbstractClientPlayer?,
-            x: Double,
-            y: Double,
-            z: Double,
-            entityYaw: Float,
-            partialTicks: Float
-    ) {
-        super.doRender(entity, x, y, z, entityYaw, partialTicks)
+        if (showCape) addLayer(LayerCape(this))
+        if (showArmor) addLayer(LayerCustomHead(this.getMainModel().bipedHead))
     }
 
     override fun setModelVisibilities(clientPlayer: AbstractClientPlayer) {
         super.setModelVisibilities(clientPlayer)
-        if(!showHeldItem) getMainModel().heldItemRight = 0
+        if (!showHeldItem) getMainModel().heldItemRight = 0
     }
 
-    override fun canRenderName(entity: AbstractClientPlayer?): Boolean {
-        return showNametag
-    }
+    override fun canRenderName(entity: AbstractClientPlayer?) = showNametag
 
     override fun renderOffsetLivingLabel(
             entityIn: AbstractClientPlayer?,
@@ -64,11 +51,11 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
             p_177069_9_: Float,
             p_177069_10_: Double
     ) {
-        if(showNametag) super.renderOffsetLivingLabel(entityIn, x, y, z, str, p_177069_9_, p_177069_10_)
+        if (showNametag) super.renderOffsetLivingLabel(entityIn, x, y, z, str, p_177069_9_, p_177069_10_)
     }
 
     override fun renderName(entity: AbstractClientPlayer?, x: Double, y: Double, z: Double) {
-        if(showNametag) super.renderName(entity, x, y, z)
+        if (showNametag) super.renderName(entity, x, y, z)
     }
 
     override fun renderLivingLabel(
@@ -79,6 +66,6 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
             z: Double,
             maxDistance: Int
     ) {
-        if(showNametag) super.renderLivingLabel(entityIn, str, x, y, z, maxDistance)
+        if (showNametag) super.renderLivingLabel(entityIn, str, x, y, z, maxDistance)
     }
 }

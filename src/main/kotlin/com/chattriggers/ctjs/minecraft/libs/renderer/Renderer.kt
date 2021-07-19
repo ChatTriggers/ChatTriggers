@@ -24,7 +24,6 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-
 @External
 object Renderer {
     var colorized: Long? = null
@@ -363,9 +362,9 @@ object Renderer {
         finishDraw()
     }
 
-    private val renderMgr = Client.getMinecraft().renderManager
-    private val slimCTRenderPlayer = CTRenderPlayer(renderMgr, true)
-    private val normalCTRenderPlayer = CTRenderPlayer(renderMgr, false)
+    private val renderManager = Client.getMinecraft().renderManager
+    private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
+    private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
 
     @JvmStatic
     @JvmOverloads
@@ -416,7 +415,7 @@ object Renderer {
         renderManager.isRenderShadow = false
         //#if MC<=10809
         val isSmall = (ent as AbstractClientPlayer).skinType == "slim"
-        val ctRenderPlayer = if(isSmall) slimCTRenderPlayer else normalCTRenderPlayer
+        val ctRenderPlayer = if (isSmall) slimCTRenderPlayer else normalCTRenderPlayer
 
         ctRenderPlayer.setOptions(showNametag, showArmor, showCape, showHeldItem, showArrows)
         ctRenderPlayer.doRender(ent, 0.0, 0.0, 0.0, 0.0f, 1.0f)
