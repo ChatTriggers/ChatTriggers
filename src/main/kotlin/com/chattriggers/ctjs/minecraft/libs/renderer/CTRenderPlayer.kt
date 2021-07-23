@@ -13,11 +13,11 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
     private var showArrows = true
 
     fun setOptions(
-            showNametag: Boolean,
-            showArmor: Boolean,
-            showCape: Boolean,
-            showHeldItem: Boolean,
-            showArrows: Boolean
+        showNametag: Boolean,
+        showArmor: Boolean,
+        showCape: Boolean,
+        showHeldItem: Boolean,
+        showArrows: Boolean
     ) {
         this.showNametag = showNametag
         this.showArmor = showArmor
@@ -43,13 +43,13 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
     override fun canRenderName(entity: AbstractClientPlayer?) = showNametag
 
     override fun renderOffsetLivingLabel(
-            entityIn: AbstractClientPlayer?,
-            x: Double,
-            y: Double,
-            z: Double,
-            str: String?,
-            p_177069_9_: Float,
-            p_177069_10_: Double
+        entityIn: AbstractClientPlayer?,
+        x: Double,
+        y: Double,
+        z: Double,
+        str: String?,
+        p_177069_9_: Float,
+        p_177069_10_: Double
     ) {
         if (showNametag) super.renderOffsetLivingLabel(entityIn, x, y, z, str, p_177069_9_, p_177069_10_)
     }
@@ -59,12 +59,12 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
     }
 
     override fun renderLivingLabel(
-            entityIn: AbstractClientPlayer?,
-            str: String?,
-            x: Double,
-            y:Double,
-            z: Double,
-            maxDistance: Int
+        entityIn: AbstractClientPlayer?,
+        str: String?,
+        x: Double,
+        y:Double,
+        z: Double,
+        maxDistance: Int
     ) {
         if (showNametag) super.renderLivingLabel(entityIn, str, x, y, z, maxDistance)
     }

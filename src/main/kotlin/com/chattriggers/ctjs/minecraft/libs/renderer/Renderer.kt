@@ -369,15 +369,15 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun drawPlayer(
-            player: Any,
-            x: Int,
-            y: Int,
-            rotate: Boolean = false,
-            showNametag: Boolean = false,
-            showArmor: Boolean = true,
-            showCape: Boolean = true,
-            showHeldItem: Boolean = true,
-            showArrows: Boolean = true
+        player: Any,
+        x: Int,
+        y: Int,
+        rotate: Boolean = false,
+        showNametag: Boolean = false,
+        showArmor: Boolean = true,
+        showCape: Boolean = true,
+        showHeldItem: Boolean = true,
+        showArrows: Boolean = true
     ) {
         val mouseX = -30f
         val mouseY = 0f
