@@ -1,6 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt
 
 import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
+import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
+import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
+import net.minecraft.nbt.*
+import org.mozilla.javascript.NativeArray
+import org.mozilla.javascript.NativeObject
 
 open class NBTBase(open val rawNBT: MCNBTBase) {
     /**
@@ -26,4 +31,57 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     override fun hashCode() = rawNBT.hashCode()
 
     override fun toString() = rawNBT.toString()
+
+    companion object {
+        fun MCNBTBase.toObject(): Any? {
+            return when (this) {
+                is NBTTagString -> this.string
+                is NBTTagByte -> this.byte
+                is NBTTagShort -> this.short
+                is NBTTagInt -> this.int
+                is NBTTagLong -> this.long
+                is NBTTagFloat -> this.float
+                is NBTTagDouble -> this.double
+                is MCNBTTagCompound -> this.toObject()
+                is MCNBTTagList -> this.toObject()
+                is NBTTagByteArray -> NativeArray(byteArray.toTypedArray()).expose()
+                is NBTTagIntArray -> NativeArray(intArray.toTypedArray()).expose()
+                else -> error("Unknown tag type ${this.javaClass}")
+            }
+        }
+
+        fun MCNBTTagCompound.toObject(): NativeObject {
+            val o = NativeObject()
+            o.expose()
+
+            for (key in keySet) {
+                val value = tagMap[key]
+                if (value != null) {
+                    o.put(key, o, value.toObject())
+                }
+            }
+
+            return o
+        }
+
+        fun MCNBTTagList.toObject(): NativeArray {
+            val tags = mutableListOf<Any?>()
+            for (i in 0 until tagCount()) {
+                tags.add(get(i).toObject())
+            }
+            val array = NativeArray(tags.toTypedArray())
+            array.expose()
+            return array
+        }
+
+        private fun NativeArray.expose() = apply {
+            // Taken from the private NativeArray#init method
+            exportAsJSClass(32, this, false)
+        }
+
+        private fun NativeObject.expose() = apply {
+            // Taken from the private NativeObject#init method
+            exportAsJSClass(12, this, false)
+        }
+    }
 }
