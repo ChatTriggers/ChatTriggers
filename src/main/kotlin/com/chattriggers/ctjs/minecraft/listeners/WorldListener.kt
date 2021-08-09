@@ -143,15 +143,6 @@ object WorldListener {
     }
 
     @SubscribeEvent
-    fun blockBreak(event: BlockEvent.BreakEvent) {
-        TriggerType.BLOCK_BREAK.triggerAll(
-            World.getBlockAt(event.pos.x, event.pos.y, event.pos.z),
-            PlayerMP(event.player),
-            event
-        )
-    }
-
-    @SubscribeEvent
     fun livingDeathEvent(event: LivingDeathEvent) {
         TriggerType.ENTITY_DEATH.triggerAll(
             Entity(event.entity)
