@@ -1,11 +1,8 @@
-package com.chattriggers.ctjs.engine.loader
+package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.module.Module
-import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
-import com.chattriggers.ctjs.engine.module.ModuleMetadata
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
@@ -85,7 +82,7 @@ object ModuleUpdater {
 
         cachedModules.add(module)
 
-        return listOf(module) + (module.metadata.requires?.map(::importModule)?.flatten() ?: emptyList())
+        return listOf(module) + (module.metadata.requires?.map(ModuleUpdater::importModule)?.flatten() ?: emptyList())
     }
 
     private fun downloadModule(name: String): String? {
