@@ -115,7 +115,6 @@ dependencies {
     provided 'com.chattriggers:rhino:1.8.2'
     provided 'com.fifesoft:rsyntaxtextarea:3.0.8'
     provided 'com.github.falsehonesty:ts-generator:adfb57a8f6'
-    provided 'org.kohsuke:github-api:1.130'
 }
 
 jar {
