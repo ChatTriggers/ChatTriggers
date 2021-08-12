@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.utils
 
-import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
@@ -33,7 +32,7 @@ object UpdateChecker {
     }
 
     private fun getUpdate() {
-        val versions = CTJS.gson.fromJson<Map<String, List<String>>>(
+        val versions = Gson().fromJson<Map<String, List<String>>>(
             FileLib.getUrlContent("https://www.chattriggers.com/api/versions"),
             object : TypeToken<Map<String, List<String>>>() {}.type
         )

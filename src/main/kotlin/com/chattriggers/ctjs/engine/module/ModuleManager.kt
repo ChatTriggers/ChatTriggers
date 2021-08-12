@@ -21,13 +21,12 @@ object ModuleManager {
     val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
-    const val METADATA_FILE_NAME = "metadata.json"
 
     fun setup() {
         modulesFolder.mkdirs()
 
         // Download pending modules
-        ModuleUpdater.importPending()
+        ModuleUpdater.importPendingModules()
 
         // Get existing modules
         val installedModules = getFoldersInDir(modulesFolder).map {
@@ -37,14 +36,14 @@ object ModuleManager {
         }
 
         // Check if those modules have updates
-        installedModules.forEach(ModuleUpdater::update)
+        installedModules.forEach(ModuleUpdater::updateModule)
         cachedModules.addAll(installedModules)
 
         // Import required modules
         installedModules.asSequence().mapNotNull {
             it.metadata.requires
         }.flatten().distinct().forEach {
-            ModuleUpdater.import(it)
+            ModuleUpdater.importModule(it)
         }
 
         // Load their assets
@@ -131,12 +130,12 @@ object ModuleManager {
     }
 
     fun parseModule(directory: File): Module {
-        val metadataFile = File(directory, ModuleManager.METADATA_FILE_NAME)
+        val metadataFile = File(directory, "metadata.json")
         var metadata = ModuleMetadata()
 
         if (metadataFile.exists()) {
             try {
-                metadata = CTJS.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
+                metadata = ModuleUpdater.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
             } catch (exception: Exception) {
                 exception.printTraceToConsole()
             }
@@ -146,7 +145,7 @@ object ModuleManager {
     }
 
     fun importModule(moduleName: String): Module? {
-        val newModules = ModuleUpdater.import(moduleName)
+        val newModules = ModuleUpdater.importModule(moduleName)
 
         // Load their assets
         loadAssets(newModules)

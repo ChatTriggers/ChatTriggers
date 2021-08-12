@@ -1,78 +1,126 @@
 package com.chattriggers.ctjs.engine.loader
 
-import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager
+import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
+import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.engine.module.ModuleMetadata
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.printToConsole
+import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.config.Config
+import com.chattriggers.ctjs.utils.kotlin.toVersion
+import com.google.gson.Gson
+import org.apache.commons.io.FileUtils
 import java.io.File
+import java.net.URL
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 object ModuleUpdater {
-    // CTRepositoryHandler must be last in this list
-    private val repositoryHandlers = listOf(GitHubRepositoryHandler, CTRepositoryHandler)
+    val gson = Gson()
 
-    private fun repositoryForModule(module: Module): RepositoryHandler {
-        return module.metadata.repository?.handler() ?: return CTRepositoryHandler
-    }
-
-    fun importPending() {
-        val toDownload = File(ModuleManager.modulesFolder, ".to_download.txt")
+    fun importPendingModules() {
+        val toDownload = File(modulesFolder, ".to_download.txt")
         if (!toDownload.exists()) return
 
         toDownload.readText().split(",").filter(String::isBlank).forEach {
-            import(it)
+            importModule(it)
         }
 
         toDownload.delete()
     }
 
-    fun update(module: Module) {
+    fun updateModule(module: Module) {
         if (!Config.autoUpdateModules) return
+        val metadata = module.metadata
 
-        "Checking for update in ${module.metadata.name}".printToConsole()
+        try {
+            if (metadata.name == null) return
 
-        val repositoryHandler = repositoryForModule(module)
-        if (!repositoryHandler.shouldUpdate(module)) return
+            "Checking for update in ${metadata.name}".printToConsole()
 
-        repositoryHandler.update(module)
+            val url = "https://www.chattriggers.com/api/modules/${metadata.name}/metadata?modVersion=${Reference.MODVERSION}"
+            val connection = URL(url).openConnection().apply {
+                setRequestProperty("User-Agent", "Mozilla/5.0")
+            }
 
-        "Updated module ${module.metadata.name}".printToConsole()
+            val newMetadataText = connection.getInputStream().bufferedReader().readText()
+            val newMetadata = gson.fromJson(newMetadataText, ModuleMetadata::class.java)
 
-        val newMetadata = CTJS.gson.fromJson(
-            File(module.folder, ModuleManager.METADATA_FILE_NAME).readText(),
-            ModuleMetadata::class.java
-        )
+            if (newMetadata.version == null) {
+                ("Remote version of module ${metadata.name} has no version numbers, so it will " +
+                        "not be updated!").printToConsole()
+                return
+            } else if (metadata.version != null && metadata.version.toVersion() >= newMetadata.version.toVersion()) {
+                return
+            }
 
-        if (Config.moduleChangelog && newMetadata.changelog != null) {
-            ChatLib.chat("&a[ChatTriggers] ${newMetadata.name} has updated to version ${newMetadata.version}")
-            ChatLib.chat("&aChangelog: &r${newMetadata.changelog}")
+            downloadModule(metadata.name)
+            "Updated module ${metadata.name}".printToConsole()
+
+            if (Config.moduleChangelog && newMetadata.changelog != null) {
+                ChatLib.chat("&a[ChatTriggers] ${metadata.name} has updated to version ${newMetadata.version}")
+                ChatLib.chat("&aChangelog: &r${newMetadata.changelog}")
+            }
+
+            module.metadata = File(module.folder, "metadata.json").let {
+                gson.fromJson(it.readText(), ModuleMetadata::class.java)
+            }
+        } catch (e: Exception) {
+            "Can't find page for ${metadata.name}".printToConsole()
         }
-
-        module.metadata = newMetadata
-
-        // Try to import any dependencies, as they could have changed. Note that
-        // we don't need to update them if they exist, since this is only called
-        // during ct load which updates _all_ modules.
-        newMetadata.requires?.forEach { import(it) }
     }
 
-    fun import(identifier: String): List<Module> {
-        if (ModuleManager.cachedModules.any { it.name == identifier }) return emptyList()
+    fun importModule(moduleName: String): List<Module> {
+        if (cachedModules.any { it.name == moduleName }) return emptyList()
 
-        val repositoryHandler = repositoryHandlers.first { it.matches(identifier) }
+        val realName = downloadModule(moduleName) ?: return emptyList()
 
-        val realModuleName = repositoryHandler.import(identifier) ?: return emptyList()
-
-        val moduleDir = File(ModuleManager.modulesFolder, realModuleName)
+        val moduleDir = File(modulesFolder, realName)
         val module = ModuleManager.parseModule(moduleDir)
 
-        ModuleManager.cachedModules.add(module)
+        cachedModules.add(module)
 
-        // Try to import any dependencies
-        module.metadata.requires?.forEach { import(it) }
+        return listOf(module) + (module.metadata.requires?.map(::importModule)?.flatten() ?: emptyList())
+    }
 
-        return listOf(module) + (module.metadata.requires?.map(::import)?.flatten() ?: emptyList())
+    private fun downloadModule(name: String): String? {
+        val downloadZip = File(modulesFolder, "currDownload.zip")
+
+        try {
+
+            val url = "https://www.chattriggers.com/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
+            val connection = URL(url).openConnection()
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0")
+            FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
+            FileSystems.newFileSystem(downloadZip.toPath(), null).use {
+                val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
+                if (!rootFolder.hasNext()) throw Exception("Too small")
+                val moduleFolder = rootFolder.next()
+                if (rootFolder.hasNext()) throw Exception("Too big")
+
+                val realName = moduleFolder.fileName.toString().trimEnd(File.separatorChar)
+                File(modulesFolder, realName).apply { mkdir() }
+                Files.walk(moduleFolder).forEach { path ->
+                    val resolvedPath = Paths.get(modulesFolder.toString(), path.toString())
+                    if (Files.isDirectory(resolvedPath)) {
+                        return@forEach
+                    }
+                    Files.copy(path, resolvedPath, StandardCopyOption.REPLACE_EXISTING)
+                }
+                return realName
+            }
+
+        } catch (exception: Exception) {
+            exception.printTraceToConsole()
+        } finally {
+            downloadZip.delete()
+        }
+
+        return null
     }
 }

@@ -2,7 +2,6 @@ package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import com.chattriggers.ctjs.engine.module.RepositoryInfo
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
@@ -13,8 +12,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.CPS
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.chattriggers.ctjs.utils.config.Config
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
@@ -34,14 +31,9 @@ import kotlin.concurrent.thread
     modLanguageAdapter = "com.chattriggers.ctjs.utils.kotlin.KotlinAdapter"
 )
 object CTJS {
-    private val configLocation = File("./config")
+    val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
-    val gson: Gson = GsonBuilder().run {
-        setPrettyPrinting()
-        registerTypeAdapterFactory(RepositoryInfo.typeAdapterFactory)
-        create()
-    }
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
