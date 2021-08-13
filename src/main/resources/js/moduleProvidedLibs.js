@@ -78,7 +78,6 @@ global.OnTrigger = Java.type("com.chattriggers.ctjs.triggers.OnTrigger");
 global.Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
 global.Config = Java.type("com.chattriggers.ctjs.utils.config.Config").INSTANCE;
 global.ChatTriggers = Java.type("com.chattriggers.ctjs.Reference");
-/*End Built in Vars */
 
 global.cancel = function (event) {
     try {
