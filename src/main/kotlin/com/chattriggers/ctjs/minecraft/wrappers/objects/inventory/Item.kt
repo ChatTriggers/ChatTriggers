@@ -5,7 +5,7 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.GlStateManager
@@ -36,7 +36,7 @@ class Item {
             //#else
             //$$ if (itemStack == null || itemStack == ItemStack.EMPTY) {
             //#endif
-            this.item = ItemBlock(Block(0).block)
+            this.item = ItemBlock(BlockType(0).mcBlock)
             this.itemStack = ItemStack(item)
         } else {
             this.item = itemStack.item
@@ -54,8 +54,8 @@ class Item {
         itemStack = ItemStack(item)
     }
 
-    constructor(block: Block) {
-        item = MCItem.getItemFromBlock(block.block)
+    constructor(block: BlockType) {
+        item = MCItem.getItemFromBlock(block.mcBlock)
         itemStack = ItemStack(item)
     }
 
@@ -162,11 +162,11 @@ class Item {
 
     fun getMetadata(): Int = itemStack.metadata
 
-    fun canPlaceOn(block: Block): Boolean = itemStack.canPlaceOn(block.block)
+    fun canPlaceOn(block: BlockType): Boolean = itemStack.canPlaceOn(block.mcBlock)
 
-    fun canHarvest(block: Block): Boolean {
+    fun canHarvest(block: BlockType): Boolean {
         //#if MC<=10809
-        return this.itemStack.canHarvestBlock(block.block)
+        return this.itemStack.canHarvestBlock(block.mcBlock)
         //#else
         //$$ return this.itemStack.canHarvestBlock(
         //$$         World.getWorld().getBlockState(block.blockPos)
@@ -174,7 +174,7 @@ class Item {
         //#endif
     }
 
-    fun canDestroy(block: Block): Boolean = itemStack.canDestroy(block.block)
+    fun canDestroy(block: BlockType): Boolean = itemStack.canDestroy(block.mcBlock)
 
     /**
      * Gets the items durability, i.e. the number of uses left

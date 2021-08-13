@@ -3,156 +3,47 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
-import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.block.state.IBlockState
-import net.minecraft.block.Block as MCBlock
 
-@External
-open class Block {
-    var block: MCBlock
-    var blockPos: MCBlockPos = MCBlockPos(0, 0, 0)
-    var face: BlockFace? = null
+/**
+ * An immutable reference to a placed block in the world. It
+ * has a block type, a position, and optionally a specific face.
+ */
+open class Block(
+    val type: BlockType,
+    val pos: BlockPos,
+    val face: BlockFace? = null,
+) {
+    val x: Int get() = pos.x
+    val y: Int get() = pos.y
+    val z: Int get() = pos.z
 
-    constructor(block: MCBlock) {
-        this.block = block
-    }
+    fun withType(type: BlockType) = Block(type, pos, face)
 
-    /**
-     * Copies the block and blockPos of the provided block into
-     * this object.
-     */
-    constructor(block: Block) {
-        this.block = block.block
-        this.blockPos = block.blockPos
-    }
-
-    constructor(blockName: String) {
-        block = MCBlock.getBlockFromName(blockName)!!
-    }
-
-    constructor(blockID: Int) {
-        block = MCBlock.getBlockById(blockID)
-    }
-
-    constructor(item: Item) {
-        block = MCBlock.getBlockFromItem(item.item)
-    }
-    /* End of constructors */
+    fun withPos(pos: BlockPos) = Block(type, pos, face)
 
     /**
-     * Sets the block position in the world.<br>
-     * This is automatically set by {@link Player#lookingAt()}.<br>
-     * This method is not meant for public use.
-     *
-     * @param blockPos the block position
-     * @return the Block object
+     * Narrows this block to reference a certain face. Used by
+     * {@link Player#lookingAt()} to specify the block face
+     * being looked at.
      */
-    fun setBlockPos(blockPos: MCBlockPos) = apply {
-        this.blockPos = blockPos
-    }
+    fun withFace(face: BlockFace) = Block(type, pos, face)
 
-    /**
-     * Sets the face that is being looked at by the player.<br>
-     * This is automatically set by {@link Player#lookingAt()}.<br>
-     * This method is not meant for public use.
-     *
-     * @param face this face that is being looked at
-     * @return the Block object
-     */
-    fun setFace(face: BlockFace) = apply {
-        this.face = face
-    }
+    fun getState() = World.getBlockStateAt(pos)
 
-    fun getID(): Int = MCBlock.getIdFromBlock(block)
+    fun getMetadata(): Int = type.mcBlock.getMetaFromState(getState())
 
-    /**
-     * Gets the block's registry name.<br>
-     * Example: <code>minecraft:planks</code>
-     *
-     * @return the block's registry name
-     */
-    fun getRegistryName(): String {
-        //#if MC<=10809
-        return this.block.registryName
-        //#else
-        //$$ return this.block.registryName.toString()
-        //#endif
-    }
+    fun isPowered() = World.getWorld()!!.isBlockPowered(pos.toMCBlock())
 
-    /**
-     * Gets the block's unlocalized name.<br>
-     * Example: <code>tile.wood</code>
-     *
-     * @return the block's unlocalized name
-     */
-    fun getUnlocalizedName(): String = block.unlocalizedName
-
-    /**
-     * Gets the block's localized name.<br>
-     * Example: <code>Wooden Planks</code>
-     *
-     * @return the block's localized name
-     */
-    fun getName(): String = block.localizedName
-
-    fun getLightValue(): Int {
-        //#if MC<=10809
-        return this.block.lightValue
-        //#else
-        //$$ return this.block.getLightValue(
-        //$$         World.getWorld()!!.getBlockState(blockPos),
-        //$$         World.getWorld(),
-        //$$         blockPos
-        //$$ )
-        //#endif
-    }
-
-    fun getState(): IBlockState = World.getWorld()!!.getBlockState(blockPos)
-
-    fun getDefaultState(): IBlockState = block.defaultState
-
-    fun getX(): Int = blockPos.x
-    fun getY(): Int = blockPos.y
-    fun getZ(): Int = blockPos.z
-
-    fun getMetadata(): Int = block.getMetaFromState(getState())
-    fun getDefaultMetadata(): Int = block.getMetaFromState(getDefaultState())
-
-    fun canProvidePower(): Boolean {
-        //#if MC<=10809
-        return this.block.canProvidePower()
-        //#else
-        //$$ return this.block.canProvidePower(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
-        //#endif
-    }
-
-    fun isPowered(): Boolean = World.getWorld()!!.isBlockPowered(blockPos)
-
-    fun getRedstoneStrength(): Int = World.getWorld()!!.getStrongPower(blockPos)
+    fun getRedstoneStrength() = World.getWorld()!!.getStrongPower(pos.toMCBlock())
 
     /**
      * Checks whether the block can be mined with the tool in the player's hand
      *
      * @return whether the block can be mined
      */
-    fun canBeHarvested(): Boolean = block.canHarvestBlock(World.getWorld(), blockPos, Player.getPlayer())
+    fun canBeHarvested(): Boolean = type.mcBlock.canHarvestBlock(World.getWorld(), pos.toMCBlock(), Player.getPlayer())
 
-    fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(this)
+    fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
 
-    fun getHarvestLevel(): Int = block.getHarvestLevel(getDefaultState())
-
-    fun isTranslucent(): Boolean {
-        //#if MC<=10809
-        return this.block.isTranslucent
-        //#else
-        //$$ return this.block.isTranslucent(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
-        //#endif
-    }
-
-    override fun toString(): String = "Block{name=${block.registryName}, x=${getX()}, y=${getY()}, z=${getZ()}}"
+    override fun toString() = "Block{type=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"
 }

@@ -5,9 +5,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.*
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -245,23 +243,25 @@ object Player {
      * whether that be a block or an entity. Returns an air block when not looking
      * at anything.
      *
-     * @return the [Block], [Sign], or [Entity] being looked at
+     * @return the [BlockType], [Sign], or [Entity] being looked at
      */
     @JvmStatic
     fun lookingAt(): Any {
-        val mop = Client.getMinecraft().objectMouseOver ?: return Block(0)
-        val world = World.getWorld() ?: return Block(0)
+        val mop = Client.getMinecraft().objectMouseOver ?: return BlockType(0)
+        val world = World.getWorld() ?: return BlockType(0)
 
         return when (mop.typeOfHit) {
             MCRayTraceType.BLOCK -> {
-                val block = Block(world.getBlockState(mop.blockPos).block)
-                    .setBlockPos(mop.blockPos)
-                    .setFace(BlockFace(mop.sideHit))
+                val block = Block(
+                    BlockType(world.getBlockState(mop.blockPos).block),
+                    BlockPos(mop.blockPos),
+                    BlockFace.fromMCEnumFacing(mop.sideHit),
+                )
 
-                if (block.block is BlockSign) Sign(block) else block
+                if (block.type.mcBlock is BlockSign) Sign(block) else block
             }
             MCRayTraceType.ENTITY -> Entity(mop.entityHit)
-            else -> Block(0)
+            else -> BlockType(0)
         }
     }
 

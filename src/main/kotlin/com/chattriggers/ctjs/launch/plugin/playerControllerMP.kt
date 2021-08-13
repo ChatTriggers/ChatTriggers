@@ -73,8 +73,8 @@ fun injectBreakBlock() = inject {
 
         code {
             TriggerType.BLOCK_BREAK.triggerAll(
-                World.getBlockAt(local1.x, local1.y, local1.z),
-                BlockFace(local2)
+                World.getBlockAt(local1.x, local1.y, local1.z)
+                    .withFace(BlockFace.fromMCEnumFacing(local2)),
             )
         }
     }

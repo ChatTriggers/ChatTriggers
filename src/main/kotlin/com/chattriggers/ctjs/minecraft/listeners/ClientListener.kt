@@ -225,8 +225,7 @@ object ClientListener {
         val event = CancellableEvent()
 
         TriggerType.HIT_BLOCK.triggerAll(
-            World.getBlockAt(pos.x, pos.y, pos.z),
-            BlockFace(facing),
+            World.getBlockAt(pos.x, pos.y, pos.z).withFace(BlockFace.fromMCEnumFacing(facing)),
             event
         )
 

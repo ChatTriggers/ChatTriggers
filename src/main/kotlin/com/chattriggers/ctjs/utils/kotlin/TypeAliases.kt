@@ -4,6 +4,8 @@ internal typealias MCChunk = net.minecraft.world.chunk.Chunk
 internal typealias MCEntity = net.minecraft.entity.Entity
 internal typealias MCPotionEffect = net.minecraft.potion.PotionEffect
 internal typealias MCTessellator = net.minecraft.client.renderer.Tessellator
+internal typealias MCEnumFacing = net.minecraft.util.EnumFacing
+internal typealias MCBlock = net.minecraft.block.Block
 
 //#if MC<=10809
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX

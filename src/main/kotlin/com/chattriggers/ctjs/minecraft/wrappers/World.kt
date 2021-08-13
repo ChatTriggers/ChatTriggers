@@ -5,9 +5,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.renderer.RenderGlobal
 import net.minecraft.util.EnumParticleTypes
@@ -104,19 +107,36 @@ object World {
     }
 
     /**
-     * Gets the [Block] at a location in the world.
+     * Gets the [BlockType] at a location in the world.
      *
      * @param x the x position
      * @param y the y position
      * @param z the z position
-     * @return the [Block] at the location
+     * @return the [BlockType] at the location
      */
     @JvmStatic
-    fun getBlockAt(x: Int, y: Int, z: Int): Block {
-        val blockPos = MCBlockPos(x, y, z)
-        val blockState = getWorld()!!.getBlockState(blockPos)
+    fun getBlockAt(x: Number, y: Number, z: Number) = getBlockAt(BlockPos(x, y, z))
 
-        return Block(blockState.block).setBlockPos(blockPos)
+    /**
+     * Gets the [BlockType] at a location in the world.
+     *
+     * @param pos The block position
+     * @return the [BlockType] at the location
+     */
+    @JvmStatic
+    fun getBlockAt(pos: BlockPos): Block {
+        return Block(BlockType(getBlockStateAt(pos).block), pos)
+    }
+
+    /**
+     * Gets the [IBlockState] at a location in the world.
+     *
+     * @param pos The block position
+     * @return the [BlockType] at the location
+     */
+    @JvmStatic
+    fun getBlockStateAt(pos: BlockPos): IBlockState {
+        return getWorld()!!.getBlockState(pos.toMCBlock())
     }
 
     /**

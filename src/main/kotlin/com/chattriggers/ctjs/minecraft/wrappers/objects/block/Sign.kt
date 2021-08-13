@@ -13,8 +13,8 @@ import net.minecraft.tileentity.TileEntitySign
  * @param block the {@link Block} to convert to a Sign
  */
 @External
-class Sign(block: Block) : Block(block) {
-    private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(blockPos) as TileEntitySign
+class Sign(block: Block) : Block(block.type, block.pos, block.face) {
+    private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(pos.toMCBlock()) as TileEntitySign
 
     fun getLines(): List<Message> = sign.signText.map { it?.let(::Message) ?: Message("") }
 
@@ -23,5 +23,5 @@ class Sign(block: Block) : Block(block) {
     fun getUnformattedLines(): List<String> = sign.signText.map { it?.unformattedText ?: "" }
 
     override fun toString(): String =
-        "Sign{lines=${getLines()}, name=${block.registryName}, x=${getX()}, y=${getY()}, z=${getZ()}}"
+        "Sign{lines=${getLines()}, name=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"
 }
