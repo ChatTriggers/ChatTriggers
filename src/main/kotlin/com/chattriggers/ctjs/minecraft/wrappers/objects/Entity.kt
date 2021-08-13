@@ -2,6 +2,8 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -17,6 +19,8 @@ open class Entity(val entity: MCEntity) {
     fun getX() = entity.posX
     fun getY() = entity.posY
     fun getZ() = entity.posZ
+
+    fun getPos() = Vec3i(getX(), getY(), getZ())
 
     fun getLastX() = entity.lastTickPosX
     fun getLastY() = entity.lastTickPosY
@@ -176,7 +180,7 @@ open class Entity(val entity: MCEntity) {
 
     fun distanceTo(other: MCEntity): Float = entity.getDistanceToEntity(other)
 
-    fun distanceTo(blockPos: MCBlockPos): Float = entity.getDistance(
+    fun distanceTo(blockPos: BlockPos): Float = entity.getDistance(
         blockPos.x.toDouble(),
         blockPos.y.toDouble(),
         blockPos.z.toDouble()

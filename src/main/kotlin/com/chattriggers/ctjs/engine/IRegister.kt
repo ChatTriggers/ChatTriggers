@@ -726,10 +726,8 @@ interface IRegister {
     /**
      * Registers a new trigger that runs before the player breaks a block
      *
-     * Passes through three arguments:
+     * Passes through one argument:
      * - The block
-     * - The player who broke the block
-     * - The event, which can be cancelled
      *
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
@@ -1016,9 +1014,8 @@ interface IRegister {
      * Note: this is not continuously called while the block is being broken, only once
      * when first left clicked.
      *
-     * Passes through three arguments:
+     * Passes through two arguments:
      * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block] being hit
-     * - The specific [com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace] being hit
      * - The event, which can be cancelled
      *
      * Available modifications:
