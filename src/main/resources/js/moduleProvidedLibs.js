@@ -52,6 +52,9 @@ global.TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
 global.Scoreboard = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Scoreboard");
 global.CPS = Java.type("com.chattriggers.ctjs.minecraft.wrappers.CPS");
 global.Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item");
+global.NBTBase = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTBase");
+global.NBTTagCompound = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound");
+global.NBTTagList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList");
 global.Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block");
 global.Sign = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign");
 global.Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
@@ -75,6 +78,26 @@ global.OnTrigger = Java.type("com.chattriggers.ctjs.triggers.OnTrigger");
 global.Config = Java.type("com.chattriggers.ctjs.utils.config.Config").INSTANCE;
 global.ChatTriggers = Java.type("com.chattriggers.ctjs.Reference");
 /*End Built in Vars */
+
+// GL
+global.GlStateManager = Java.type("net.minecraft.client.renderer.GlStateManager");
+global.GL11 = Java.type("org.lwjgl.opengl.GL11");
+global.GL12 = Java.type("org.lwjgl.opengl.GL12");
+global.GL13 = Java.type("org.lwjgl.opengl.GL13");
+global.GL14 = Java.type("org.lwjgl.opengl.GL14");
+global.GL15 = Java.type("org.lwjgl.opengl.GL15");
+global.GL20 = Java.type("org.lwjgl.opengl.GL20");
+global.GL21 = Java.type("org.lwjgl.opengl.GL21");
+global.GL30 = Java.type("org.lwjgl.opengl.GL30");
+global.GL31 = Java.type("org.lwjgl.opengl.GL31");
+global.GL32 = Java.type("org.lwjgl.opengl.GL32");
+global.GL33 = Java.type("org.lwjgl.opengl.GL33");
+global.GL40 = Java.type("org.lwjgl.opengl.GL40");
+global.GL41 = Java.type("org.lwjgl.opengl.GL41");
+global.GL42 = Java.type("org.lwjgl.opengl.GL42");
+global.GL43 = Java.type("org.lwjgl.opengl.GL43");
+global.GL44 = Java.type("org.lwjgl.opengl.GL44");
+global.GL45 = Java.type("org.lwjgl.opengl.GL45");
 
 global.cancel = function (event) {
     try {

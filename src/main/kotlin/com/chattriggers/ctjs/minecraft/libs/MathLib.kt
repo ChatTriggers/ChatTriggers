@@ -32,7 +32,6 @@ object MathLib {
         return if (number < min) min else if (number > max) max else number
     }
 
-
     /**
      * Clamps an integer number between two values.
      *
