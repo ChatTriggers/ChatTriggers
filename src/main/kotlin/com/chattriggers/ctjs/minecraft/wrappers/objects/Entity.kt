@@ -3,10 +3,10 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.BlockPos
+import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
-import com.chattriggers.ctjs.utils.kotlin.MathHelper
+import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.Vec3
 import net.minecraft.world.World
@@ -36,7 +36,7 @@ open class Entity(val entity: MCEntity) {
      */
     fun getPitch(): Double {
         //#if MC<=10809
-        return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch).toDouble()
+        return MCMathHelper.wrapAngleTo180_float(this.entity.rotationPitch).toDouble()
         //#else
         //$$ return MathHelper.wrapDegrees(this.entity.rotationPitch).toDouble()
         //#endif
@@ -50,7 +50,7 @@ open class Entity(val entity: MCEntity) {
      */
     fun getYaw(): Double {
         //#if MC<=10809
-        return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw).toDouble()
+        return MCMathHelper.wrapAngleTo180_float(this.entity.rotationYaw).toDouble()
         //#else
         //$$ return MathHelper.wrapDegrees(this.entity.rotationYaw).toDouble()
         //#endif
@@ -176,7 +176,7 @@ open class Entity(val entity: MCEntity) {
 
     fun distanceTo(other: MCEntity): Float = entity.getDistanceToEntity(other)
 
-    fun distanceTo(blockPos: BlockPos): Float = entity.getDistance(
+    fun distanceTo(blockPos: MCBlockPos): Float = entity.getDistance(
         blockPos.x.toDouble(),
         blockPos.y.toDouble(),
         blockPos.z.toDouble()

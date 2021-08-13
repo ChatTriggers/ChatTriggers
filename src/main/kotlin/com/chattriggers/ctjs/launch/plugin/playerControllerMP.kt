@@ -6,13 +6,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.kotlin.BlockPos
+import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
-import dev.falsehonesty.asmhelper.dsl.instructions.*
 import net.minecraft.util.EnumFacing
 
 fun injectPlayerControllerMP() {
@@ -50,7 +49,7 @@ fun injectHitBlock() = inject {
     methodMaps = mapOf("func_180511_b" to "clickBlock")
 
     codeBlock {
-        val local1 = shadowLocal<BlockPos>()
+        val local1 = shadowLocal<MCBlockPos>()
         val local2 = shadowLocal<EnumFacing>()
 
         code {
@@ -69,7 +68,7 @@ fun injectBreakBlock() = inject {
     methodMaps = mapOf("func_178888_a" to "onPlayerDestroyBlock")
 
     codeBlock {
-        val local1 = shadowLocal<BlockPos>()
+        val local1 = shadowLocal<MCBlockPos>()
         val local2 = shadowLocal<EnumFacing>()
 
         code {

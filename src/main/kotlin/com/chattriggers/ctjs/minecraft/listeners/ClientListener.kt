@@ -4,11 +4,10 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.kotlin.BlockPos
+import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
@@ -222,7 +221,7 @@ object ClientListener {
         )
     }
 
-    fun onHitBlock(pos: BlockPos, facing: EnumFacing): Boolean {
+    fun onHitBlock(pos: MCBlockPos, facing: EnumFacing): Boolean {
         val event = CancellableEvent()
 
         TriggerType.HIT_BLOCK.triggerAll(

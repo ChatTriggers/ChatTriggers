@@ -9,7 +9,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList
 import com.chattriggers.ctjs.utils.kotlin.*
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagString
-import com.chattriggers.ctjs.utils.kotlin.TextComponentSerializer
+import com.chattriggers.ctjs.utils.kotlin.MCTextComponentSerializer
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
@@ -43,7 +43,7 @@ class Book(bookName: String) {
         val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
         pages.appendTag(
             MCNBTTagString(
-                TextComponentSerializer.componentToJson(
+                MCTextComponentSerializer.componentToJson(
                     message.getChatMessage()
                 )
             )
@@ -73,7 +73,7 @@ class Book(bookName: String) {
         val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
 
         pages[pageNumber] = MCNBTTagString(
-            TextComponentSerializer.componentToJson(
+            MCTextComponentSerializer.componentToJson(
                     message.getChatMessage()
             )
         )

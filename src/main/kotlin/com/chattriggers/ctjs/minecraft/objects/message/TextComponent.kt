@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.utils.kotlin.*
 @External
 class TextComponent {
 
-    lateinit var chatComponentText: ITextComponent
+    lateinit var chatComponentText: MCITextComponent
 
     private var text: String
     private var formatted = true
@@ -29,7 +29,7 @@ class TextComponent {
      * Creates a TextComponent from an existing ITextComponent.
      * @param chatComponent the ITextComponent to convert
      */
-    constructor(chatComponent: ITextComponent) {
+    constructor(chatComponent: MCITextComponent) {
         this.chatComponentText = chatComponent
         this.text = this.chatComponentText.formattedText
 
@@ -187,7 +187,7 @@ class TextComponent {
                 "}"
 
     private fun reInstance() {
-        this.chatComponentText = BaseTextComponent(
+        this.chatComponentText = MCBaseTextComponent(
             if (this.formatted) ChatLib.addColor(this.text)
             else this.text
         )
@@ -205,8 +205,8 @@ class TextComponent {
                 //#else
                 //$$ .clickEvent =
                 //#endif
-            TextClickEvent(
-                ClickEventAction.getValueByCanonicalName(this.clickAction),
+            MCTextClickEvent(
+                MCClickEventAction.getValueByCanonicalName(this.clickAction),
                 if (this.formatted) ChatLib.addColor(this.clickValue)
                 else this.clickValue
             )
@@ -221,9 +221,9 @@ class TextComponent {
                 //#else
                 //$$ .hoverEvent =
                 //#endif
-            TextHoverEvent(
-                HoverEventAction.getValueByCanonicalName(this.hoverAction),
-                BaseTextComponent(
+            MCTextHoverEvent(
+                MCHoverEventAction.getValueByCanonicalName(this.hoverAction),
+                MCBaseTextComponent(
                     if (this.formatted) ChatLib.addColor(this.hoverValue)
                     else this.hoverValue
                 )
