@@ -710,7 +710,7 @@ interface IRegister {
      *
      * Passes through three arguments:
      * - The [ClientListener.PlayerInteractAction]
-     * - The position of the target as a Vector3d
+     * - The position of the target as a Vector3f
      * - The event, which can be cancelled
      *
      * Available modifications:

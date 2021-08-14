@@ -229,6 +229,12 @@ object ClientListener {
             event
         )
 
+        TriggerType.PLAYER_INTERACT.triggerAll(
+            PlayerInteractAction.LEFT_CLICK_BLOCK,
+            Vector3f(pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat()),
+            event
+        )
+
         return event.isCancelled()
     }
 
@@ -263,13 +269,10 @@ object ClientListener {
     @SubscribeEvent
     fun onInteract(e: PlayerInteractEvent) {
         val action = when (e.action) {
-            PlayerInteractEvent.Action.LEFT_CLICK_BLOCK -> PlayerInteractAction.LEFT_CLICK_BLOCK
             PlayerInteractEvent.Action.RIGHT_CLICK_AIR -> PlayerInteractAction.RIGHT_CLICK_EMPTY
             PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK -> PlayerInteractAction.RIGHT_CLICK_BLOCK
-            null -> PlayerInteractAction.UNKNOWN
+            else -> PlayerInteractAction.UNKNOWN
         }
-
-
 
         TriggerType.PLAYER_INTERACT.triggerAll(
             action,
