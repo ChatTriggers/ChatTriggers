@@ -122,7 +122,34 @@ object FileLib {
     fun exists(fileLocation: String): Boolean {
         return File(fileLocation).exists()
     }
-
+    /**
+     * Writes a file at the specified location if it does not already exist
+     * 
+     * @param importName name of the import
+     * @param fileName name of the file
+     * @param toWrite string to write in file
+     * @return if the file was written
+     */
+    @JvmStatic
+    fun createConditionally(importName: String, fileName: String, toWrite: String): Boolean {
+      return createConditionally(absoluteLocation(importName, fileName), toWrite)
+    }
+    /**
+     * Writes a file at the specified location if it does not already exist
+     * 
+     * @param fileLocation the path of the  file
+     * @param toWrite string to write in file
+     * @return if the file was written
+     */
+    @JvmStatic
+    fun createConditionally(fileLocation: String, toWrite: String): Boolean {
+        if (exists(fileLocation)) {
+            return false
+        } else {
+            write(fileLocation, toWrite)
+            return true
+        }
+    }
     /**
      * Determines if a file or directory exists at the specified location
      *
