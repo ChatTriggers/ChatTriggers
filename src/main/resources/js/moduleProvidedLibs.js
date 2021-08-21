@@ -6,9 +6,6 @@ global.HashMap = Java.type("java.util.HashMap");
 global.Keyboard = Java.type("org.lwjgl.input.Keyboard");
 global.ReflectionHelper = Java.type("net.minecraftforge.fml.relauncher.ReflectionHelper");
 
-// Thread
-global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread");
-
 // Triggers
 global.TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
 global.Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger").Priority;
@@ -75,7 +72,6 @@ global.OnStepTrigger = Java.type("com.chattriggers.ctjs.triggers.OnStepTrigger")
 global.OnTrigger = Java.type("com.chattriggers.ctjs.triggers.OnTrigger");
 
 // Misc
-global.Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
 global.Config = Java.type("com.chattriggers.ctjs.utils.config.Config").INSTANCE;
 global.ChatTriggers = Java.type("com.chattriggers.ctjs.Reference");
 /*End Built in Vars */

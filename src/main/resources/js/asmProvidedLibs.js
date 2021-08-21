@@ -4,6 +4,9 @@ global.Java = {
     type: clazz => Packages[clazz]
 };
 
+global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.threading.WrappedThread");
+global.Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
+
 global.sync = (func, lock) => new org.mozilla.javascript.Synchronizer(func, lock);
 
 global.setTimeout = function (func, delay) {
