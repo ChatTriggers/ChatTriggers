@@ -24,7 +24,7 @@ import kotlin.math.roundToInt
 object Reference {
     const val MODID = "ct.js"
     const val MODNAME = "ChatTriggers"
-    const val MODVERSION = "1.4.0"
+    const val MODVERSION = "2.0.0"
 
     var isLoaded = true
 
