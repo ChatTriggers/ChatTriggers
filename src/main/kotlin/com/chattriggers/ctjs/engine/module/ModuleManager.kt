@@ -134,7 +134,7 @@ object ModuleManager {
 
         if (metadataFile.exists()) {
             try {
-                metadata = ModuleUpdater.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
+                metadata = CTJS.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
             } catch (exception: Exception) {
                 exception.printTraceToConsole()
             }

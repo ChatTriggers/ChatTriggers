@@ -12,6 +12,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.CPS
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.UpdateChecker
+import com.google.gson.Gson
 import gg.essential.vigilance.Vigilance
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
@@ -29,6 +30,7 @@ import java.io.File
     modLanguageAdapter = "com.chattriggers.ctjs.utils.kotlin.KotlinAdapter"
 )
 object CTJS {
+    val gson = Gson()
     val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()

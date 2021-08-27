@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.engine.module
 
+import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
@@ -18,8 +19,6 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 object ModuleUpdater {
-    val gson = Gson()
-
     fun importPendingModules() {
         val toDownload = File(modulesFolder, ".to_download.txt")
         if (!toDownload.exists()) return
@@ -47,7 +46,7 @@ object ModuleUpdater {
             }
 
             val newMetadataText = connection.getInputStream().bufferedReader().readText()
-            val newMetadata = gson.fromJson(newMetadataText, ModuleMetadata::class.java)
+            val newMetadata = CTJS.gson.fromJson(newMetadataText, ModuleMetadata::class.java)
 
             if (newMetadata.version == null) {
                 ("Remote version of module ${metadata.name} has no version numbers, so it will " +
@@ -66,7 +65,7 @@ object ModuleUpdater {
             }
 
             module.metadata = File(module.folder, "metadata.json").let {
-                gson.fromJson(it.readText(), ModuleMetadata::class.java)
+                CTJS.gson.fromJson(it.readText(), ModuleMetadata::class.java)
             }
         } catch (e: Exception) {
             "Can't find page for ${metadata.name}".printToConsole()
