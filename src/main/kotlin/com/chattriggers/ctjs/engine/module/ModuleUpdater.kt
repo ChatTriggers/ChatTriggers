@@ -40,7 +40,7 @@ object ModuleUpdater {
 
             "Checking for update in ${metadata.name}".printToConsole()
 
-            val url = "https://www.chattriggers.com/api/modules/${metadata.name}/metadata?modVersion=${Reference.MODVERSION}"
+            val url = "${CTJS.WEBSITE_ROOT}/api/modules/${metadata.name}/metadata?modVersion=${Reference.MODVERSION}"
             val connection = URL(url).openConnection().apply {
                 setRequestProperty("User-Agent", "Mozilla/5.0")
             }
@@ -89,7 +89,7 @@ object ModuleUpdater {
         val downloadZip = File(modulesFolder, "currDownload.zip")
 
         try {
-            val url = "https://www.chattriggers.com/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
+            val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
             val connection = URL(url).openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)

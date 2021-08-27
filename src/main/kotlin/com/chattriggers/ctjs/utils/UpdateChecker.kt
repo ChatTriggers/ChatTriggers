@@ -33,7 +33,7 @@ object UpdateChecker {
 
     private fun getUpdate() {
         val versions = CTJS.gson.fromJson<Map<String, List<String>>>(
-            FileLib.getUrlContent("http://www.chattriggers.com/api/versions"),
+            FileLib.getUrlContent("${CTJS.WEBSITE_ROOT}/api/versions"),
             object : TypeToken<Map<String, List<String>>>() {}.type
         )
 
@@ -62,7 +62,7 @@ object UpdateChecker {
             "\n",
             "&cChatTriggers requires an update to work properly!",
             "\n",
-            TextComponent("&a[Download]").setClick("open_url", "https://www.chattriggers.com/#download"),
+            TextComponent("&a[Download]").setClick("open_url", "${CTJS.WEBSITE_ROOT}/#download"),
             " ",
             TextComponent("&e[Changelog]").setClick("open_url", "https://github.com/ChatTriggers/ct.js/releases"),
             "\n",

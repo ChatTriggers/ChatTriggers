@@ -30,6 +30,7 @@ import java.io.File
     modLanguageAdapter = "com.chattriggers.ctjs.utils.kotlin.KotlinAdapter"
 )
 object CTJS {
+    const val WEBSITE_ROOT = "https://www.chattriggers.com"
     val gson = Gson()
     val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
