@@ -263,13 +263,11 @@ object ClientListener {
     @SubscribeEvent
     fun onInteract(e: PlayerInteractEvent) {
         val action = when (e.action) {
-            PlayerInteractEvent.Action.LEFT_CLICK_BLOCK -> PlayerInteractAction.LEFT_CLICK_BLOCK
+            PlayerInteractEvent.Action.LEFT_CLICK_BLOCK -> return
             PlayerInteractEvent.Action.RIGHT_CLICK_AIR -> PlayerInteractAction.RIGHT_CLICK_EMPTY
             PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK -> PlayerInteractAction.RIGHT_CLICK_BLOCK
             null -> PlayerInteractAction.UNKNOWN
         }
-
-
 
         TriggerType.PLAYER_INTERACT.triggerAll(
             action,
@@ -306,7 +304,6 @@ object ClientListener {
     enum class PlayerInteractAction {
         RIGHT_CLICK_BLOCK,
         RIGHT_CLICK_EMPTY,
-        LEFT_CLICK_BLOCK,
 
         //#if MC>10809
         //$$RIGHT_CLICK_ENTITY,
