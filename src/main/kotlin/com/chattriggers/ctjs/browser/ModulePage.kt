@@ -19,21 +19,21 @@ class ModulePage(private val module: WebsiteModule) : UIContainer() {
         height = ChildBasedRangeConstraint()
     } childOf this
 
-    private val title by UIText(module.name).constrain {
+    private val title by UIText(module.name, shadow = false).constrain {
         x = 20.pixels()
         y = 10.pixels()
         textScale = 2.pixels()
         color = VigilancePalette.getAccent().toConstraint()
     } childOf header
 
-    private val authorBy by UIText("by ").constrain {
+    private val authorBy by UIText("by ", shadow = false).constrain {
         x = 35.pixels()
         y = SiblingConstraint(5f)
         textScale = 1.2.pixels()
         color = VigilancePalette.getDarkText().toConstraint()
     } childOf header
 
-    private val author by UIText(module.owner.name).constrain {
+    private val author by UIText(module.owner.name, shadow = false).constrain {
         x = SiblingConstraint() boundTo authorBy
         y = CopyConstraintFloat() boundTo authorBy
         textScale = 1.2.pixels()

@@ -22,14 +22,14 @@ class BrowserEntry(val module: WebsiteModule) : UIContainer() {
         outlineWidth = 1f
     ) effect ScissorEffect() childOf this
 
-    private val title by UIText(module.name).constrain {
+    private val title by UIText(module.name, shadow = false).constrain {
         x = 10.pixels()
         y = 10.pixels()
         textScale = 1.5.pixels()
         color = VigilancePalette.getBrightText().toConstraint()
     } childOf block
 
-    private val owner by UIText("by ${module.owner.name}").constrain {
+    private val owner by UIText("by ${module.owner.name}", shadow = false).constrain {
         x = SiblingConstraint(10f)
         y = 13.pixels()
         color = VigilancePalette.getDarkText().toConstraint()
@@ -74,6 +74,7 @@ class BrowserEntry(val module: WebsiteModule) : UIContainer() {
         val markdownConfig = MarkdownConfig(
             textConfig = TextConfig(
                 color = VigilancePalette.getMidText(),
+                hasShadow = false,
             ),
         )
     }
