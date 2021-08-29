@@ -16,6 +16,7 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.google.gson.Gson
+import gg.essential.elementa.utils.elementaDev
 import gg.essential.vigilance.Vigilance
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
@@ -46,6 +47,8 @@ object CTJS {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
+        elementaDev = true
+
         listOf(
             WorldListener,
             CPS,
