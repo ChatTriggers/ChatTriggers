@@ -1,15 +1,10 @@
 package com.chattriggers.ctjs.browser
 
 import com.chattriggers.ctjs.browser.components.Tag
-import gg.essential.elementa.components.UIBlock
-import gg.essential.elementa.components.UIContainer
-import gg.essential.elementa.components.UIImage
-import gg.essential.elementa.components.UIText
-import gg.essential.elementa.constraints.CenterConstraint
-import gg.essential.elementa.constraints.ChildBasedRangeConstraint
-import gg.essential.elementa.constraints.CopyConstraintFloat
-import gg.essential.elementa.constraints.SiblingConstraint
+import gg.essential.elementa.components.*
+import gg.essential.elementa.constraints.*
 import gg.essential.elementa.dsl.*
+import gg.essential.elementa.markdown.MarkdownComponent
 import gg.essential.vigilance.gui.VigilancePalette
 import java.awt.Color
 
@@ -68,6 +63,26 @@ class ModulePage(private val module: WebsiteModule) : UIContainer() {
             width = 100.percent() - 30.pixels()
             height = 1.pixel()
         } childOf this
+    }
+
+    private val container by ScrollComponent().constrain {
+        x = 20.pixels()
+        y = SiblingConstraint(20f)
+        width = 100.percent() - 40.pixels()
+        height = FillConstraint()
+    } childOf this
+
+    private val description by MarkdownComponent(module.description, BrowserEntry.markdownConfig).constrain {
+        width = 100.percent()
+    } childOf container
+
+    init {
+        UIBlock(VigilancePalette.getDivider()).constrain {
+            x = 0.pixels()
+            y = SiblingConstraint(15f)
+            width = 100.percent()
+            height = 1.pixel()
+        } childOf container
     }
 
     init {

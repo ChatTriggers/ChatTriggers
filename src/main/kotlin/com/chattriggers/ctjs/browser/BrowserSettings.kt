@@ -8,7 +8,6 @@ import gg.essential.elementa.constraints.*
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.state.state
 import gg.essential.vigilance.gui.VigilancePalette
-import gg.essential.vigilance.gui.settings.SelectorComponent
 
 class BrowserSettings(private val reloadModules: () -> Unit) : UIContainer() {
     var search by state("")
