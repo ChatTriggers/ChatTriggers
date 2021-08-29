@@ -87,7 +87,7 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
         } childOf content
     }
 
-    private val settings by BrowserSettings().constrain {
+    private val settings by BrowserSettings { loadModules(true) }.constrain {
         width = 100.percent()
         height = 30.pixels()
     } childOf modulesPage
@@ -133,7 +133,7 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
         }
     }
 
-    private fun loadModules() {
+    private fun loadModules(clearModules: Boolean = false) {
         thread {
             var url = WEBSITE_MODULE_API
 
@@ -151,6 +151,9 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
             val response = CTJS.gson.fromJson<WebsiteResponse>(result)
 
             Window.enqueueRenderOperation {
+                if (clearModules)
+                    moduleContent.clearChildren()
+
                 response.modules.forEach {
                     val entry = BrowserEntry(it)
                     entry.onLeftClick {

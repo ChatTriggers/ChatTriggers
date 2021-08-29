@@ -10,7 +10,7 @@ import gg.essential.elementa.state.state
 import gg.essential.vigilance.gui.VigilancePalette
 import gg.essential.vigilance.gui.settings.SelectorComponent
 
-class BrowserSettings : UIContainer() {
+class BrowserSettings(private val reloadModules: () -> Unit) : UIContainer() {
     var search by state("")
     var filteredTags by state(emptyList<String>())
     var sort by state(Sort.DateNewestToOldest)
@@ -39,8 +39,13 @@ class BrowserSettings : UIContainer() {
     // private val pageInput by NumberComponent(1, 1, 10000 /* TODO */, 1) childOf pageSetting
 
     init {
-        // searchInput.onValueChange { search = it as String }
-        // sortInput.onValueChange { sort = Sort.valueOf(it as String) }
+        var stopSearchDelay: () -> Unit = {}
+
+        searchInput.onChange {
+            search = it
+            stopSearchDelay.invoke()
+            stopSearchDelay = searchInput.delay(1000L, reloadModules)
+        }
     }
 
     private class Setting(name: String) : UIContainer() {
