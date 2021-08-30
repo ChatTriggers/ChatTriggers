@@ -1,9 +1,12 @@
 package com.chattriggers.ctjs.browser
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.browser.components.AccountModal
 import com.chattriggers.ctjs.utils.kotlin.fromJson
+import gg.essential.api.gui.EssentialComponentFactory
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.components.*
+import gg.essential.elementa.components.inspector.Inspector
 import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.constraints.animation.Animations
@@ -92,6 +95,36 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
         height = 30.pixels()
     } childOf modulesPage
 
+    private val accountModal by AccountModal(this) childOf window
+
+    init {
+        accountModal.hide(instantly = true)
+    }
+
+    private val accountIcon by UIImage.ofResource("/images/account.png").constrain {
+        x = 15.pixels()
+        y = 15.pixels()
+        width = 12.pixels()
+        height = 12.pixels()
+        color = VigilancePalette.getMidText().toConstraint()
+    }.onMouseEnter {
+        animate {
+            setColorAnimation(Animations.OUT_EXP, 0.5f, VigilancePalette.getBrightText().toConstraint())
+        }
+    }.onMouseLeave {
+        animate {
+            setColorAnimation(Animations.OUT_EXP, 0.5f, VigilancePalette.getMidText().toConstraint())
+        }
+    }.onLeftClick {
+        accountModal.fadeIn()
+    } childOf modulesPage
+
+    private val accountName by UIText().constrain {
+        x = SiblingConstraint(10f)
+        y = CenterConstraint() boundTo accountIcon
+        color = VigilancePalette.getMidText().toConstraint()
+    } childOf modulesPage
+
     init {
         UIBlock(VigilancePalette.getDivider()).constrain {
             x = 15.pixels()
@@ -131,6 +164,10 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
                 loadModules()
             }
         }
+    }
+
+    fun onLoggedIn(username: String) {
+        accountName.setText(username)
     }
 
     private fun loadModules(clearModules: Boolean = false) {
