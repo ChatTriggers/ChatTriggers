@@ -103,9 +103,9 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
 
     private val accountIcon by UIImage.ofResource("/images/account.png").constrain {
         x = 15.pixels()
-        y = 15.pixels()
-        width = 12.pixels()
-        height = 12.pixels()
+        y = CenterConstraint() boundTo settings
+        width = 24.pixels()
+        height = 24.pixels()
         color = VigilancePalette.getMidText().toConstraint()
     }.onMouseEnter {
         animate {
