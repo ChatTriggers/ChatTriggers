@@ -26,6 +26,7 @@ abstract class Gui : GuiScreen() {
     private var mouseX = 0
     private var mouseY = 0
 
+    var buttons = mutableListOf<GuiButton>()
     var doesPauseGame = false
 
     fun open() {
@@ -184,6 +185,14 @@ abstract class Gui : GuiScreen() {
     /**
      * Internal method to run trigger. Not meant for public use
      */
+    override fun initGui() {
+        super.initGui()
+        buttons.forEach { this.buttonList.add(it) }
+    }
+
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
     override fun handleMouseInput() {
         super.handleMouseInput()
 
@@ -236,7 +245,7 @@ abstract class Gui : GuiScreen() {
      * @param buttonText the label of the button
      */
     fun addButton(buttonId: Int, x: Int, y: Int, buttonText: String) {
-        this.buttonList.add(GuiButton(buttonId, x, y, buttonText))
+        buttons.add(GuiButton(buttonId, x, y, buttonText))
     }
 
     /**
@@ -250,15 +259,15 @@ abstract class Gui : GuiScreen() {
      * @param buttonText the label of the button
      */
     fun addButton(buttonId: Int, x: Int, y: Int, width: Int = 200, height: Int = 20, buttonText: String) {
-        this.buttonList.add(GuiButton(buttonId, x, y, width, height, buttonText))
+        buttons.add(GuiButton(buttonId, x, y, width, height, buttonText))
     }
 
     fun setButtonVisibility(buttonId: Int, visible: Boolean) {
-        this.buttonList.firstOrNull {
+        buttons.firstOrNull {
             it.id == buttonId
         }?.visible = visible
     }
-    
+
     /**
      * Draws text on screen
      *
