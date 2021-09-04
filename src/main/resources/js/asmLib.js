@@ -18,7 +18,7 @@ const proxyInsnList = $ => {
                 // on the InsnListBuilder to that builder. Otherwise, thisObj
                 // will be set to the global scope.
                 return functionId => {
-                    let handle = target.builder.indyHandle.bind(target.builder)(
+                    let handle = target.builder.handle.bind(target.builder)(
                         target.builder.H_INVOKESTATIC,
                         "com/chattriggers/ctjs/launch/IndySupport",
                         "bootstrapInvokeJS",
@@ -62,7 +62,7 @@ const proxyInsnList = $ => {
 
                         // The following methods always return something other
                         // than the builder
-                        if (key === 'makeLabel' || key === 'indyHandle') {
+                        if (key === 'makeLabel' || key === 'handle') {
                             return result;
                         }
 
