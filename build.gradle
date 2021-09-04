@@ -110,7 +110,7 @@ repositories {
 
 dependencies {
     provided "gg.essential:loader-launchwrapper:1.1.0"
-    implementation "gg.essential:essential-1.8.9-forge:+"
+    implementation "gg.essential:essential-1.8.9-forge:1328"
 
     provided("dev.falsehonesty.asmhelper:AsmHelper:1.4-$mcVersion") {
         exclude group: "org.jetbrains.kotlin"
