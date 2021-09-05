@@ -22,7 +22,7 @@ class BrowserSettings(private val reloadModules: () -> Unit) : UIContainer() {
         height = 100.percent()
     } childOf this
 
-    private val searchSetting by Setting("Module Filter") childOf content
+    private val searchSetting by Setting("Search Modules") childOf content
     private val searchInput by TextInput().constrain {
         width = 20.percentOfWindow().coerceAtLeast(100.pixels())
     } childOf searchSetting

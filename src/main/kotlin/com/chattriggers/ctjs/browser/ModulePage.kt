@@ -1,7 +1,9 @@
 package com.chattriggers.ctjs.browser
 
+import com.chattriggers.ctjs.browser.components.ModuleRelease
 import com.chattriggers.ctjs.browser.components.Tag
 import gg.essential.elementa.components.*
+import gg.essential.elementa.components.inspector.Inspector
 import gg.essential.elementa.constraints.*
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.markdown.MarkdownComponent
@@ -72,17 +74,43 @@ class ModulePage(private val module: WebsiteModule) : UIContainer() {
         height = FillConstraint()
     } childOf this
 
-    private val description by MarkdownComponent(module.description, BrowserEntry.markdownConfig).constrain {
-        width = 100.percent()
+    private val descriptionTitle by UIText("Description").constrain {
+        textScale = 1.5.pixels()
+        color = VigilancePalette.getBrightText().toConstraint()
+    } childOf container
+
+    private val description by MarkdownComponent(
+        module.description.ifBlank { "No description" },
+        BrowserEntry.markdownConfig,
+    ).constrain {
+        x = 35.pixels()
+        y = SiblingConstraint(15f)
+        width = 100.percent() - 70.pixels()
     } childOf container
 
     init {
-        UIBlock(VigilancePalette.getDivider()).constrain {
-            x = 0.pixels()
-            y = SiblingConstraint(15f)
-            width = 100.percent()
-            height = 1.pixel()
-        } childOf container
+        if (module.releases.isNotEmpty()) {
+            UIBlock(VigilancePalette.getDivider()).constrain {
+                x = 0.pixels()
+                y = SiblingConstraint(15f)
+                width = 100.percent()
+                height = 1.pixel()
+            } childOf container
+
+            UIText("Releases").constrain {
+                y = SiblingConstraint(15f)
+                textScale = 1.5.pixels()
+                color = VigilancePalette.getBrightText().toConstraint()
+            } childOf container
+
+            module.releases.forEach {
+                ModuleRelease(it).constrain {
+                    x = 30.pixels()
+                    y = SiblingConstraint(15f)
+                    width = 100.percent() - 60.pixels()
+                } childOf container
+            }
+        }
     }
 
     init {

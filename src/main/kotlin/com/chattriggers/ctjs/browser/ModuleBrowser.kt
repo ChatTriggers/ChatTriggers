@@ -128,7 +128,7 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
     init {
         UIBlock(VigilancePalette.getDivider()).constrain {
             x = 15.pixels()
-            y = SiblingConstraint(15f)
+            y = SiblingConstraint(15f) boundTo settings
             width = 100.percent() - 30.pixels()
             height = 1.pixel()
         } childOf modulesPage
