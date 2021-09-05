@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.browser
 
 import com.chattriggers.ctjs.browser.components.HighlightedBlock
+import com.chattriggers.ctjs.minecraft.wrappers.Player
 import gg.essential.elementa.components.UIContainer
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.constraints.ChildBasedSizeConstraint
@@ -13,7 +14,7 @@ import gg.essential.elementa.markdown.MarkdownConfig
 import gg.essential.elementa.markdown.TextConfig
 import gg.essential.vigilance.gui.VigilancePalette
 
-class BrowserEntry(val module: WebsiteModule) : UIContainer() {
+class BrowserEntry(val module: BrowserModuleProvider) : UIContainer() {
     private val block by HighlightedBlock(
         backgroundColor = VigilancePalette.getBackground(),
         highlightColor = VigilancePalette.getBrightHighlight(),
@@ -22,31 +23,41 @@ class BrowserEntry(val module: WebsiteModule) : UIContainer() {
         outlineWidth = 1f
     ) effect ScissorEffect() childOf this
 
-    private val title by UIText(module.name, shadow = false).constrain {
+    private val title by UIText(module.name ?: "UNNAMED MODULE", shadow = false).constrain {
         x = 10.pixels()
         y = 10.pixels()
         textScale = 1.5.pixels()
-        color = VigilancePalette.getBrightText().toConstraint()
+        color = if (module.name == null) {
+            VigilancePalette.getWarning()
+        } else {
+            VigilancePalette.getBrightText()
+        }.toConstraint()
     } childOf block
 
-    private val owner by UIText("by ${module.owner.name}", shadow = false).constrain {
+    private val owner by UIText("by ${module.creator ?: Player.getName()}", shadow = false).constrain {
         x = SiblingConstraint(10f)
         y = 13.pixels()
         color = VigilancePalette.getDarkText().toConstraint()
     } childOf block
 
-    private val descriptionContainer: UIContainer by UIContainer().constrain {
-        x = 10.pixels()
-        y = SiblingConstraint(10f)
-        width = 100.percent() - 20.pixels()
-        height = ChildBasedSizeConstraint().coerceAtMost(100.pixels())
-    } childOf block
-
-    private val description by MarkdownComponent(module.description, markdownConfig).constrain {
-        width = 100.percent()
-    } childOf descriptionContainer
 
     init {
+        val description = module.description
+        val descriptionContainer = if (description != null) {
+            val descriptionContainer: UIContainer by UIContainer().constrain {
+                x = 10.pixels()
+                y = SiblingConstraint(10f)
+                width = 100.percent() - 20.pixels()
+                height = ChildBasedSizeConstraint().coerceAtMost(100.pixels())
+            } childOf block
+
+            val description by MarkdownComponent(description, markdownConfig).constrain {
+                width = 100.percent()
+            } childOf descriptionContainer
+
+            descriptionContainer
+        } else null
+
         constrain {
             y = SiblingConstraint(20f)
             width = 100.percent()
@@ -56,7 +67,7 @@ class BrowserEntry(val module: WebsiteModule) : UIContainer() {
         block.constrain {
             height = basicHeightConstraint {
                 val top = title.getTop()
-                val bottom = title.getBottom() + 10f + descriptionContainer.getHeight()
+                val bottom = title.getBottom() + 10f + (descriptionContainer?.getHeight() ?: 0f)
                 bottom - top + 20f
             }
         }.onHighlight {

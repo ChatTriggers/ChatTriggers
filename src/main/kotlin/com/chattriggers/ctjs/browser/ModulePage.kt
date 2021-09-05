@@ -2,21 +2,35 @@ package com.chattriggers.ctjs.browser
 
 import com.chattriggers.ctjs.browser.components.ModuleRelease
 import com.chattriggers.ctjs.browser.components.Tag
+import com.chattriggers.ctjs.minecraft.wrappers.Player
 import gg.essential.elementa.components.*
-import gg.essential.elementa.components.inspector.Inspector
 import gg.essential.elementa.constraints.*
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.markdown.MarkdownComponent
 import gg.essential.vigilance.gui.VigilancePalette
 import java.awt.Color
 
-class ModulePage(private val module: WebsiteModule) : UIContainer() {
+interface BrowserModuleProvider {
+    val name: String?
+    val creator: String?
+    val description: String?
+    val tags: List<String>
+    val releases: List<BrowserReleaseProvider>
+}
+
+interface BrowserReleaseProvider {
+    val releaseVersion: String
+    val modVersion: String
+    val changelog: String
+}
+
+class ModulePage(private val module: BrowserModuleProvider) : UIContainer() {
     private val header by UIContainer().constrain {
         width = 100.percent()
         height = ChildBasedRangeConstraint()
     } childOf this
 
-    private val title by UIText(module.name, shadow = false).constrain {
+    private val title by UIText(module.name ?: "UNNAMED MODULE", shadow = false).constrain {
         x = 20.pixels()
         y = 10.pixels()
         textScale = 2.pixels()
@@ -30,7 +44,7 @@ class ModulePage(private val module: WebsiteModule) : UIContainer() {
         color = VigilancePalette.getDarkText().toConstraint()
     } childOf header
 
-    private val author by UIText(module.owner.name, shadow = false).constrain {
+    private val author by UIText(module.creator ?: Player.getName(), shadow = false).constrain {
         x = SiblingConstraint() boundTo authorBy
         y = CopyConstraintFloat() boundTo authorBy
         textScale = 1.2.pixels()
@@ -80,7 +94,7 @@ class ModulePage(private val module: WebsiteModule) : UIContainer() {
     } childOf container
 
     private val description by MarkdownComponent(
-        module.description.ifBlank { "No description" },
+        module.description.let { if (it?.isBlank() != false) "No description" else it },
         BrowserEntry.markdownConfig,
     ).constrain {
         x = 35.pixels()

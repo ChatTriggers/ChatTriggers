@@ -16,14 +16,16 @@ data class WebsiteMeta(
 data class WebsiteModule(
     val id: Int,
     val owner: WebsiteOwner,
-    val name: String,
-    val description: String,
+    override val name: String,
+    override val description: String,
     val image: String,
     val downloads: Int,
-    val tags: List<String>,
-    val releases: List<WebsiteRelease>,
+    override val tags: List<String>,
+    override val releases: List<WebsiteRelease>,
     val flagged: Boolean,
-)
+) : BrowserModuleProvider {
+    override val creator: String get() = owner.name
+}
 
 data class WebsiteOwner(
     val id: Int,
@@ -42,9 +44,11 @@ data class WebsiteOwner(
 
 data class WebsiteRelease(
     val id: String,
-    val releaseVersion: String,
-    val modVersion: String,
-    val changelog: String,
+    override val releaseVersion: String,
+    override val modVersion: String,
+    override val changelog: String,
     val downloads: Int,
     val verified: Boolean,
-)
+) : BrowserReleaseProvider {
+
+}
