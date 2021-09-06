@@ -1,22 +1,24 @@
 package com.chattriggers.ctjs.browser
 
 import com.chattriggers.ctjs.browser.pages.AccountPage
+import com.chattriggers.ctjs.browser.pages.LoginPage
 import com.chattriggers.ctjs.browser.pages.ModulesPage
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.components.*
 import gg.essential.elementa.components.inspector.Inspector
 import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.FillConstraint
-import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.constraints.animation.Animations
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.effects.ScissorEffect
+import gg.essential.elementa.state.BasicState
 import gg.essential.elementa.state.state
 import gg.essential.vigilance.gui.VigilancePalette
 
 object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
     var isLoggedIn by state(false)
-    var username by state<String?>(null)
+    var username = BasicState<String?>(null)
+    var id = BasicState<Int?>(null)
     private var displayedPage: Page = Page.Modules
 
     init {
@@ -69,14 +71,14 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
     }
 
     fun showPage(page: Page) {
-        if (page == displayedPage)
+        val oldComponent = main.children[0]
+        val newComponent = page.component
+
+        if (oldComponent == newComponent)
             return
 
         val transitionDown = displayedPage.index < page.index
         displayedPage = page
-
-        val oldComponent = main.children[0]
-        val newComponent = page.component
 
         main.insertChildAfter(newComponent, oldComponent)
 
@@ -101,11 +103,15 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
     }
 
     init {
-        // Inspector(window) childOf window
+        Inspector(window) childOf window
     }
 
-    sealed class Page(val index: Int, val component: UIContainer) {
+    sealed class Page(val index: Int, open val component: UIContainer) {
         object Modules : Page(0, ModulesPage)
-        object Account : Page(1, AccountPage)
+
+        object Account : Page(1, UIContainer()) {
+            override val component: UIContainer
+                get() = if (isLoggedIn) AccountPage else LoginPage
+        }
     }
 }

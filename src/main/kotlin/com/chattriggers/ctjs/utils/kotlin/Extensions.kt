@@ -42,7 +42,7 @@ operator fun String.times(times: Number): String {
     return stringBuilder.toString()
 }
 
-inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson(json, object : TypeToken<T>() {}.type)
 
 fun String.toVersion(): Version {
     val split = this.split(".").map(String::toInt)
