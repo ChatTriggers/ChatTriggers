@@ -74,11 +74,14 @@ object WebsiteAPI {
                 it.flush()
             }
 
+            if (connection.responseCode != 200)
+                return Response(connection.responseCode, "")
+
             val text = BufferedReader(InputStreamReader(connection.inputStream)).use {
                 it.readText()
             }
 
-            return Response(connection.responseCode, text)
+            return Response(200, text)
         } finally {
             connection.disconnect()
         }
