@@ -13,6 +13,8 @@ import gg.essential.vigilance.utils.onLeftClick
 
 class TextInput(password: Boolean = false) : UIContainer() {
     private var onChangeAction: (String) -> Unit = {}
+    private var onTabAction: () -> Unit = {}
+    private var onEnterAction: () -> Unit = {}
 
     private val textHolder = UIBlock().constrain {
         width = 100.percent()
@@ -37,6 +39,12 @@ class TextInput(password: Boolean = false) : UIContainer() {
 
         textInput.onUpdate {
             onChangeAction(it)
+        }.onKeyType { _, keyCode ->
+            if (keyCode == 15) { // <tab>
+                onTabAction()
+            } else if (keyCode == 28) { // <enter>
+                onEnterAction()
+            }
         }.onLeftClick {
             it.stopPropagation()
             textInput.grabWindowFocus()
@@ -55,10 +63,28 @@ class TextInput(password: Boolean = false) : UIContainer() {
         }
     }
 
+    fun grabFocus() {
+        textInput.grabWindowFocus()
+        textInput.focus()
+    }
+
+    fun releaseFocus() {
+        textInput.releaseWindowFocus()
+        textInput.loseFocus()
+    }
+
     fun getText() = textInput.getText()
 
-    fun onChange(action: (String) -> Unit) {
+    fun onChange(action: (String) -> Unit) = apply {
         onChangeAction = action
+    }
+
+    fun onTab(action: () -> Unit) = apply {
+        onTabAction = action
+    }
+
+    fun onEnter(action: () -> Unit) = apply {
+        onEnterAction = action
     }
 
     companion object {

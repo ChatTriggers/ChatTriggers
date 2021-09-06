@@ -93,28 +93,32 @@ object LoginPage : UIContainer() {
             height = 100.percent()
         }
 
-        submit.onLeftClick {
-            if (Window.ofOrNull(submitButtonError) == null)
-                return@onLeftClick
+        usernameField.setNext(passwordField)
 
-            if (isOnLoginScreen) {
-                val username = usernameField.getText().trim()
-                val (id) = WebsiteAPI.login(username, passwordField.getText().trim()) ?: TODO()
-                ModuleBrowser.username.set(username)
-                ModuleBrowser.id.set(id)
-            } else {
-                val username = usernameField.getText().trim()
-                val email = emailField.getText().trim()
-                val password = passwordField.getText().trim()
-                val (id) = WebsiteAPI.createAccount(username, email, password) ?: TODO()
+        submit.onLeftClick { onSubmit() }
+    }
 
-                ModuleBrowser.username.set(username)
-                ModuleBrowser.id.set(id)
-            }
+    private fun onSubmit() {
+        if (Window.ofOrNull(submitButtonError) == null)
+            return
 
-            ModuleBrowser.isLoggedIn = true
-            ModuleBrowser.showPage(ModuleBrowser.Page.Account)
+        if (isOnLoginScreen) {
+            val username = usernameField.getText().trim()
+            val (id) = WebsiteAPI.login(username, passwordField.getText().trim()) ?: TODO()
+            ModuleBrowser.username.set(username)
+            ModuleBrowser.id.set(id)
+        } else {
+            val username = usernameField.getText().trim()
+            val email = emailField.getText().trim()
+            val password = passwordField.getText().trim()
+            val (id) = WebsiteAPI.createAccount(username, email, password) ?: TODO()
+
+            ModuleBrowser.username.set(username)
+            ModuleBrowser.id.set(id)
         }
+
+        ModuleBrowser.isLoggedIn = true
+        ModuleBrowser.showPage(ModuleBrowser.Page.Account)
     }
 
     override fun afterInitialization() {
@@ -130,6 +134,14 @@ object LoginPage : UIContainer() {
         isOnLoginScreen = !isOnLoginScreen
         loginButton.setActive(login)
         registerButton.setActive(!login)
+
+        if (login) {
+            usernameField.setNext(passwordField)
+        } else {
+            usernameField.setNext(emailField)
+            emailField.setNext(passwordField)
+            passwordField.setNext(confirmPasswordField)
+        }
 
         val method = if (login) InputField::transitionOut else InputField::transitionIn
         method(emailField)
@@ -204,6 +216,8 @@ object LoginPage : UIContainer() {
             x = 1.pixel()
             y = NearestSiblingConstraint(5f)
             width = 150.pixels()
+        }.onEnter {
+            onSubmit()
         } childOf container
 
         init {
@@ -240,6 +254,13 @@ object LoginPage : UIContainer() {
             animate {
                 setYAnimation(Animations.OUT_EXP, 0.5f, NearestSiblingConstraint(0f))
                 setHeightAnimation(Animations.OUT_EXP, 0.5f, 0.pixels())
+            }
+        }
+
+        fun setNext(next: InputField) {
+            input.onTab {
+                input.releaseFocus()
+                next.input.grabFocus()
             }
         }
 
