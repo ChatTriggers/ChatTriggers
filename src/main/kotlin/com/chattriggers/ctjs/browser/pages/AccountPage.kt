@@ -1,41 +1,38 @@
-package com.chattriggers.ctjs.browser.components
+package com.chattriggers.ctjs.browser.pages
 
-import com.chattriggers.ctjs.CTJS
-import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.browser.ModuleBrowser
+import com.chattriggers.ctjs.browser.NearestSiblingConstraint
 import com.chattriggers.ctjs.browser.WebsiteAPI
+import com.chattriggers.ctjs.browser.components.ButtonComponent
+import com.chattriggers.ctjs.browser.components.SubmitButtonError
+import com.chattriggers.ctjs.browser.components.TextInput
 import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.components.UIContainer
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.components.Window
-import gg.essential.elementa.components.inspector.Inspector
-import gg.essential.elementa.constraints.*
+import gg.essential.elementa.constraints.CenterConstraint
+import gg.essential.elementa.constraints.ChildBasedMaxSizeConstraint
+import gg.essential.elementa.constraints.ChildBasedSizeConstraint
 import gg.essential.elementa.constraints.animation.Animations
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.effects.ScissorEffect
-import gg.essential.elementa.transitions.SlideFromTransition
-import gg.essential.elementa.transitions.SlideToTransition
-import gg.essential.elementa.transitions.Transition
 import gg.essential.vigilance.gui.VigilancePalette
 import gg.essential.vigilance.utils.onLeftClick
-import java.awt.Color
-import java.net.URL
 
-class AccountModal(private val browser: ModuleBrowser) : Modal(
-    HighlightedBlock(
-        backgroundColor = VigilancePalette.getBackground(),
-        highlightColor = VigilancePalette.getHighlight(),
-        highlightHoverColor = VigilancePalette.getBrightHighlight(),
-    )
-) {
+object AccountPage : UIContainer() {
+    private val usernameRegex = """\w{3,16}""".toRegex()
+    // The simplest email regex the world has ever seen. By no means meant to
+    // _actually_ validate emails, the backend can do that
+    private val emailRegex = """.+@.+\..+""".toRegex()
+
     private var isOnLoginScreen = true
 
     private val content by UIContainer().constrain {
         x = CenterConstraint()
-        y = CenterConstraint()
+        y = 50.pixels()
         width = 230.pixels()
         height = 170.pixels()
-    } childOf container
+    } childOf this
 
     private val buttonContainer by UIContainer().constrain {
         x = CenterConstraint()
@@ -51,27 +48,27 @@ class AccountModal(private val browser: ModuleBrowser) : Modal(
     } childOf buttonContainer
 
     private val registerButton by ButtonComponent("Register").constrain {
-        x = SiblingConstraint() - 1.pixel()
+        x = NearestSiblingConstraint() - 1.pixel()
     }.onClick {
         setLogin(false)
     } childOf buttonContainer
 
     private val leftDivider by UIBlock(VigilancePalette.getDivider()).constrain {
-        x = SiblingConstraint(alignOpposite = true) boundTo buttonContainer
+        x = NearestSiblingConstraint(alignOpposite = true) boundTo buttonContainer
         y = CenterConstraint() boundTo buttonContainer
         width = 40.pixels()
         height = 1.pixel()
     } childOf content
 
     private val rightDivider by UIBlock(VigilancePalette.getDivider()).constrain {
-        x = SiblingConstraint() boundTo buttonContainer
+        x = NearestSiblingConstraint() boundTo buttonContainer
         y = CenterConstraint() boundTo buttonContainer
         width = 40.pixels()
         height = 1.pixel()
     } childOf content
 
     private val usernameField by InputField("Username").constrain {
-        y = SiblingConstraint(20f) boundTo buttonContainer
+        y = NearestSiblingConstraint(20f) boundTo buttonContainer
     } childOf content
 
     private val emailField by InputField("Email", initiallyHidden = true) childOf content
@@ -82,27 +79,31 @@ class AccountModal(private val browser: ModuleBrowser) : Modal(
 
     private val submit by ButtonComponent("Submit").constrain {
         x = CenterConstraint()
-        y = SiblingConstraint(20f)
+        y = NearestSiblingConstraint(20f)
     } childOf content
 
     private val submitButtonError by SubmitButtonError().constrain {
-        x = SiblingConstraint(10f)
+        x = NearestSiblingConstraint(10f)
         y = CenterConstraint() boundTo submit
     } childOf content
 
     init {
+        constrain {
+            width = 100.percent()
+            height = 100.percent()
+        }
+
         submit.onLeftClick {
             if (Window.ofOrNull(submitButtonError) == null)
                 return@onLeftClick
 
-            if (isOnLoginScreen) {
+            val username = if (isOnLoginScreen) {
                 val username = usernameField.getText().trim()
                 val result = WebsiteAPI.login(username, passwordField.getText().trim())
                 if (!result)
                     TODO()
 
-                fadeOut()
-                browser.onLoggedIn(username)
+                username
             } else {
                 val username = usernameField.getText().trim()
                 val email = emailField.getText().trim()
@@ -111,9 +112,11 @@ class AccountModal(private val browser: ModuleBrowser) : Modal(
                 if (!result)
                     TODO()
 
-                fadeOut()
-                browser.onLoggedIn(username)
+                username
             }
+
+            ModuleBrowser.isLoggedIn = true
+            ModuleBrowser.username = username
         }
     }
 
@@ -121,8 +124,6 @@ class AccountModal(private val browser: ModuleBrowser) : Modal(
         super.afterInitialization()
         loginButton.setActive(true)
         validateInputs()
-
-        // Inspector(this) childOf this
     }
 
     private fun setLogin(login: Boolean) {
@@ -191,7 +192,7 @@ class AccountModal(private val browser: ModuleBrowser) : Modal(
         submitButtonError.setErrors(errors)
     }
 
-    inner class InputField(text: String, password: Boolean = false, initiallyHidden: Boolean = false) : UIContainer() {
+    class InputField(text: String, password: Boolean = false, initiallyHidden: Boolean = false) : UIContainer() {
         private val container by UIContainer().constrain {
             y = 1.pixels(alignOpposite = true)
             width = ChildBasedMaxSizeConstraint()
@@ -204,14 +205,14 @@ class AccountModal(private val browser: ModuleBrowser) : Modal(
 
         private val input by TextInput(password).constrain {
             x = 1.pixel()
-            y = SiblingConstraint(5f)
+            y = NearestSiblingConstraint(5f)
             width = 150.pixels()
         } childOf container
 
         init {
             constrain {
                 x = CenterConstraint()
-                y = SiblingConstraint(if (initiallyHidden) 0f else 10f)
+                y = NearestSiblingConstraint(if (initiallyHidden) 0f else 10f)
                 width = ChildBasedSizeConstraint() + 2.pixels()
                 height = if (initiallyHidden) {
                     0.pixels()
@@ -233,25 +234,18 @@ class AccountModal(private val browser: ModuleBrowser) : Modal(
 
         fun transitionIn() {
             animate {
-                setYAnimation(Animations.OUT_EXP, 0.5f, SiblingConstraint(10f))
+                setYAnimation(Animations.OUT_EXP, 0.5f, NearestSiblingConstraint(10f))
                 setHeightAnimation(Animations.OUT_EXP, 0.5f, ChildBasedSizeConstraint() + 2.pixels())
             }
         }
 
         fun transitionOut() {
             animate {
-                setYAnimation(Animations.OUT_EXP, 0.5f, SiblingConstraint(0f))
+                setYAnimation(Animations.OUT_EXP, 0.5f, NearestSiblingConstraint(0f))
                 setHeightAnimation(Animations.OUT_EXP, 0.5f, 0.pixels())
             }
         }
 
         fun getText() = input.getText()
-    }
-
-    companion object {
-        private val usernameRegex = """\w{3,16}""".toRegex()
-        // The simplest email regex the world has ever seen. By no means meant to
-        // _actually_ validate emails, the backend can do that
-        private val emailRegex = """.+@.+\..+""".toRegex()
     }
 }

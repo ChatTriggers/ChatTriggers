@@ -1,11 +1,11 @@
 package com.chattriggers.ctjs.browser
 
 import com.chattriggers.ctjs.browser.components.HighlightedBlock
+import com.chattriggers.ctjs.browser.pages.BrowserModuleProvider
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import gg.essential.elementa.components.UIContainer
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.constraints.ChildBasedSizeConstraint
-import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.constraints.animation.Animations
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.effects.ScissorEffect
@@ -35,7 +35,7 @@ class BrowserEntry(val module: BrowserModuleProvider) : UIContainer() {
     } childOf block
 
     private val owner by UIText("by ${module.creator ?: Player.getName()}", shadow = false).constrain {
-        x = SiblingConstraint(10f)
+        x = NearestSiblingConstraint(10f)
         y = 13.pixels()
         color = VigilancePalette.getDarkText().toConstraint()
     } childOf block
@@ -46,7 +46,7 @@ class BrowserEntry(val module: BrowserModuleProvider) : UIContainer() {
         val descriptionContainer = if (description != null) {
             val descriptionContainer: UIContainer by UIContainer().constrain {
                 x = 10.pixels()
-                y = SiblingConstraint(10f)
+                y = NearestSiblingConstraint(10f)
                 width = 100.percent() - 20.pixels()
                 height = ChildBasedSizeConstraint().coerceAtMost(100.pixels())
             } childOf block
@@ -59,7 +59,7 @@ class BrowserEntry(val module: BrowserModuleProvider) : UIContainer() {
         } else null
 
         constrain {
-            y = SiblingConstraint(20f)
+            y = NearestSiblingConstraint(20f)
             width = 100.percent()
             height = ChildBasedSizeConstraint()
         }

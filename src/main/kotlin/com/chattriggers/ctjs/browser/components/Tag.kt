@@ -19,8 +19,8 @@ class Tag(text: String) : UIRoundedRectangle(6f) {
     private val text by UIText(text, shadow = false).constrain {
         x = CenterConstraint()
         y = CenterConstraint()
+        textScale = .75.pixels()
         color = VigilancePalette.getMidText().toConstraint()
-        textScale = 0.75f.pixels()
     } childOf textHolder
 
     init {

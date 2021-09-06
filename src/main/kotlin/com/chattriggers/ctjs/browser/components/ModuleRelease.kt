@@ -1,14 +1,13 @@
 package com.chattriggers.ctjs.browser.components
 
 import com.chattriggers.ctjs.browser.BrowserEntry
-import com.chattriggers.ctjs.browser.BrowserReleaseProvider
-import com.chattriggers.ctjs.browser.WebsiteRelease
+import com.chattriggers.ctjs.browser.NearestSiblingConstraint
+import com.chattriggers.ctjs.browser.pages.BrowserReleaseProvider
 import gg.essential.elementa.components.UIContainer
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.components.Window
 import gg.essential.elementa.constraints.ChildBasedSizeConstraint
 import gg.essential.elementa.constraints.CopyConstraintFloat
-import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.effects.ScissorEffect
 import gg.essential.elementa.markdown.MarkdownComponent
@@ -30,32 +29,32 @@ class ModuleRelease(private val release: BrowserReleaseProvider) : UIContainer()
     } childOf block
 
     private val text2 by UIText("v${release.releaseVersion}").constrain {
-        x = SiblingConstraint()
+        x = NearestSiblingConstraint()
         y = CopyConstraintFloat() boundTo text1
         color = VigilancePalette.getBrightText().toConstraint()
     } childOf block
 
     private val text3 by UIText(" for ct version ").constrain {
-        x = SiblingConstraint()
+        x = NearestSiblingConstraint()
         y = CopyConstraintFloat() boundTo text1
         color = VigilancePalette.getMidText().toConstraint()
     } childOf block
 
     private val text4 by UIText("v${release.modVersion}").constrain {
-        x = SiblingConstraint()
+        x = NearestSiblingConstraint()
         y = CopyConstraintFloat() boundTo text1
         color = VigilancePalette.getBrightText().toConstraint()
     } childOf block
 
     private val changelogTitle by UIText("Changelog:").constrain {
         x = 20.pixels()
-        y = SiblingConstraint(10f)
+        y = NearestSiblingConstraint(10f)
         color = VigilancePalette.getMidText().toConstraint()
     }
 
     private val changelog by MarkdownComponent(release.changelog, BrowserEntry.markdownConfig).constrain {
         x = 30.pixels()
-        y = SiblingConstraint(10f)
+        y = NearestSiblingConstraint(10f)
         width = 100.percent() - 60.pixels()
         color = VigilancePalette.getMidText().toConstraint()
     }

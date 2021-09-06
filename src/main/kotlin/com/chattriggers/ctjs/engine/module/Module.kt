@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.engine.module
 
-import com.chattriggers.ctjs.browser.BrowserModuleProvider
-import com.chattriggers.ctjs.browser.BrowserReleaseProvider
+import com.chattriggers.ctjs.browser.pages.BrowserModuleProvider
+import com.chattriggers.ctjs.browser.pages.BrowserReleaseProvider
 import java.io.File
 
 class Module(

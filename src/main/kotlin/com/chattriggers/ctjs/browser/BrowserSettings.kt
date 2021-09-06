@@ -50,7 +50,7 @@ class BrowserSettings(private val reloadModules: () -> Unit) : UIContainer() {
     private class Setting(name: String) : UIContainer() {
         init {
             constrain {
-                x = SiblingConstraint(20f)
+                x = NearestSiblingConstraint(20f)
                 width = ChildBasedMaxSizeConstraint()
                 height = 100.percent()
             }
@@ -64,7 +64,7 @@ class BrowserSettings(private val reloadModules: () -> Unit) : UIContainer() {
             if (component !is UIText) {
                 component.constrain {
                     x = 1.pixel()
-                    y = SiblingConstraint(5f)
+                    y = NearestSiblingConstraint(5f)
                 }
             }
 

@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.browser
 
+import com.chattriggers.ctjs.browser.pages.BrowserModuleProvider
+import com.chattriggers.ctjs.browser.pages.BrowserReleaseProvider
 import com.google.gson.annotations.SerializedName
 
 data class WebsiteResponse(
