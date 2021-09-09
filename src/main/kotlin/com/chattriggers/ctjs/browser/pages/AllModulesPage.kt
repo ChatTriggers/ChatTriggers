@@ -19,7 +19,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import kotlin.concurrent.thread
 
-object ModulesPage : UIContainer() {
+object AllModulesPage : UIContainer() {
     private const val WEBSITE_MODULE_API = "https://chattriggers.com/api/modules/"
     private var moduleOffset = 0
 

@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.browser
 
 import com.chattriggers.ctjs.browser.pages.AccountPage
 import com.chattriggers.ctjs.browser.pages.LoginPage
-import com.chattriggers.ctjs.browser.pages.ModulesPage
+import com.chattriggers.ctjs.browser.pages.AllModulesPage
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.components.*
 import gg.essential.elementa.components.inspector.Inspector
@@ -107,7 +107,7 @@ object ModuleBrowser : WindowScreen(restoreCurrentGuiOnClose = true) {
     }
 
     sealed class Page(val index: Int, open val component: UIContainer) {
-        object Modules : Page(0, ModulesPage)
+        object Modules : Page(0, AllModulesPage)
 
         object Account : Page(1, UIContainer()) {
             override val component: UIContainer
