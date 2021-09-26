@@ -187,7 +187,7 @@ class TextComponent {
                 "}"
 
     private fun reInstance() {
-        this.chatComponentText = MCBaseTextComponent(
+        this.chatComponentText = MCStringTextComponent(
             if (this.formatted) ChatLib.addColor(this.text)
             else this.text
         )
@@ -223,7 +223,7 @@ class TextComponent {
                 //#endif
             MCTextHoverEvent(
                 MCHoverEventAction.getValueByCanonicalName(this.hoverAction),
-                MCBaseTextComponent(
+                MCStringTextComponent(
                     if (this.formatted) ChatLib.addColor(this.hoverValue)
                     else this.hoverValue
                 )

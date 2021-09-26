@@ -4,7 +4,7 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.MCBaseTextComponent
+import com.chattriggers.ctjs.utils.kotlin.MCStringTextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCChatPacket
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
@@ -227,7 +227,7 @@ class Message {
                 "}"
 
     private fun parseMessage() {
-        this.chatMessage = MCBaseTextComponent("")
+        this.chatMessage = MCStringTextComponent("")
 
         this.messageParts.map {
             this.chatMessage.appendSibling(it.chatComponentText)
