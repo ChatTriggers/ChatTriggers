@@ -10,11 +10,16 @@ import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.ChatLine
-import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
+
+//#if MC==10809
+import net.minecraftforge.client.ClientCommandHandler
+//#else
+//$$ import com.chattriggers.ctjs.CTJS
+//#endif
 
 @External
 object ChatLib {
@@ -87,7 +92,13 @@ object ChatLib {
     @JvmOverloads
     @JvmStatic
     fun command(text: String, clientSide: Boolean = false) {
-        if (clientSide) ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
+        if (clientSide) {
+            //#if MC==10809
+            ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
+            //#else
+            //$$ CTJS.commandDispatcher.execute("/$text", Player.getPlayer())
+            //#endif
+        }
         else say("/$text")
     }
 

@@ -1,13 +1,12 @@
 package com.chattriggers.ctjs.engine.langs.js
 
-import net.minecraft.launchwrapper.Launch
+import dev.falsehonesty.asmhelper.AsmHelper
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Context.EMIT_DEBUG_OUTPUT
 import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR
 import org.mozilla.javascript.ContextFactory
 import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.WrapFactory
-import org.mozilla.javascript.tools.ToolErrorReporter
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
@@ -41,7 +40,7 @@ object JSContextFactory : ContextFactory() {
     override fun hasFeature(cx: Context?, featureIndex: Int): Boolean {
         when (featureIndex) {
             FEATURE_LOCATION_INFORMATION_IN_ERROR -> return true
-            EMIT_DEBUG_OUTPUT -> return Launch.blackboard.getOrDefault("fml.deobfuscatedEnvironment", false) as Boolean
+            EMIT_DEBUG_OUTPUT -> return AsmHelper.isDeobf
         }
 
         return super.hasFeature(cx, featureIndex)
