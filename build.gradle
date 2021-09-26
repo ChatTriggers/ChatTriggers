@@ -188,7 +188,7 @@ dependencies {
 
     modImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    modImplementation("dev.falsehonesty.asmhelper:AsmHelper:LOCAL-$mcVersion") {
+    modImplementation("dev.falsehonesty.asmhelper:AsmHelper:1.5-$mcVersion") {
         exclude group: "org.jetbrains.kotlin"
     }
     modImplementation("com.github.falsehonesty:ts-generator:adfb57a8f6") {
