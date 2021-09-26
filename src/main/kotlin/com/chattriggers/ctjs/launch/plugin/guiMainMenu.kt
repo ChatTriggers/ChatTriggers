@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.launch.plugin
 
+// TODO(1.16.2)
+//#if MC==10809
 import com.chattriggers.ctjs.utils.UpdateChecker
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
@@ -29,3 +31,4 @@ fun injectGuiMainMenu() = inject {
         }
     }
 }
+//#endif

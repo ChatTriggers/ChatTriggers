@@ -31,15 +31,17 @@ class CTJSTransformer : BaseClassTransformer() {
         transforming = true
 
         try {
-            injectCrashReport()
+            //#if MC==10809
+            injectEffectRenderer()
             injectEntityPlayer()
+            injectCrashReport()
             injectGuiMainMenu()
             injectMinecraft()
             injectScreenshotHelper()
             injectRenderManager()
-            injectEffectRenderer()
             injectGuiScreen()
             injectPlayerControllerMP()
+            //#endif
 
             ModuleManager.setup()
             ModuleManager.asmPass()

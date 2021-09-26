@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.launch.plugin
 
+// TODO(1.16.2)
+//#if MC==10809
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
@@ -265,3 +267,4 @@ fun injectRenderTooltip() = inject {
         }
     }
 }
+//#endif

@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.launch.plugin
 
+// TODO(1.16.2)
+//#if MC==10809
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.triggers.TriggerType
 import dev.falsehonesty.asmhelper.dsl.At
@@ -43,3 +45,4 @@ fun injectScreenshotHelper() = inject {
         }
     }
 }
+//#endif
