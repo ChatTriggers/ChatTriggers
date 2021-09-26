@@ -2,11 +2,15 @@ package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import dev.falsehonesty.asmhelper.BaseClassTransformer
+
+//#if MC==10809
 import net.minecraft.launchwrapper.LaunchClassLoader
+//#endif
 
 class CTJSTransformer : BaseClassTransformer() {
     private var transforming = false
 
+    //#if MC==10809
     override fun setup(classLoader: LaunchClassLoader) {
         super.setup(classLoader)
 
@@ -20,6 +24,7 @@ class CTJSTransformer : BaseClassTransformer() {
         classLoader.addTransformerExclusion("dev.falsehonesty.asmhelper.")
         classLoader.addTransformerExclusion("org.fife.")
     }
+    //#endif
 
     override fun makeTransformers() {
         if (transforming) return
