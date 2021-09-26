@@ -2,10 +2,8 @@ package com.chattriggers.ctjs.commands
 
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import com.chattriggers.ctjs.engine.module.ModulesGui
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.listeners.ChatListener
-import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.printTraceToConsole
@@ -56,7 +54,6 @@ object CTCommand : CommandBase() {
                 else -> ChatLib.chat("&cFailed to delete ${it[0]}")
             }
         },
-        subcommand("modules") { GuiHandler.openGui(ModulesGui) },
         subcommand("console") {
             if (it.isEmpty()) {
                 ModuleManager.generalConsole.showConsole()
