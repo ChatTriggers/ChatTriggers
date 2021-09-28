@@ -2,7 +2,6 @@ net.minecraft.client.particle.Particle net.minecraft.client.particle.EntityFX
 net.minecraft.util.math.BlockPos net.minecraft.util.BlockPos
 net.minecraft.util.math.RayTraceResult.Type net.minecraft.util.MovingObjectPosition.MovingObjectType
 net.minecraft.util.math.MathHelper net.minecraft.util.MathHelper
-net.minecraft.network.play.server.SPacketChat net.minecraft.network.play.server.S02PacketChat
 net.minecraft.util.text.ITextComponent net.minecraft.util.IChatComponent
 net.minecraft.util.text.StringTextComponent net.minecraft.util.ChatComponentText
 net.minecraft.util.text.event.ClickEvent net.minecraft.event.ClickEvent
@@ -16,3 +15,4 @@ net.minecraft.util.text.ITextComponent.Serializer net.minecraft.util.IChatCompon
 net.minecraft.util.SoundCategory net.minecraft.client.audio.SoundCategory
 net.minecraft.client.network.play.ClientPlayNetHandler net.minecraft.client.network.NetHandlerPlayClient
 net.minecraft.util.Direction net.minecraft.util.EnumFacing
+net.minecraft.network.play.server.SChatPacket net.minecraft.network.play.server.S02PacketChat

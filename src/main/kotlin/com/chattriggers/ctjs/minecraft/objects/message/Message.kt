@@ -8,15 +8,17 @@ import com.chattriggers.ctjs.utils.kotlin.MCStringTextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCChatPacket
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
+import net.minecraft.network.play.server.S02PacketChat
+import net.minecraft.util.IChatComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 
-//#if MC>=11202
+//#if MC==11602
 //$$ import net.minecraft.util.text.ChatType
 //#endif
 
 @External
 class Message {
-    private lateinit var chatMessage: MCITextComponent
+    private lateinit var chatMessage: IChatComponent
 
     private var messageParts = mutableListOf<TextComponent>()
     private var chatLineId = -1
@@ -35,9 +37,9 @@ class Message {
      */
     constructor(component: MCITextComponent) {
         if (component.siblings.isEmpty()) {
-            this.messageParts.add(TextComponent(component))
+            messageParts.add(TextComponent(component))
         } else {
-            this.messageParts.addAll(component.siblings.map { TextComponent(it) })
+            messageParts.addAll(component.siblings.map { TextComponent(it) })
         }
     }
 
@@ -46,7 +48,7 @@ class Message {
      * @param messageParts the list of TextComponents or Strings
      */
     constructor(messageParts: ArrayList<Any>) {
-        this.messageParts.addAll(messageParts.map {
+        messageParts.addAll(messageParts.map {
             when (it) {
                 is String -> TextComponent(it)
                 is TextComponent -> it
@@ -67,38 +69,38 @@ class Message {
      */
     fun getChatMessage(): MCITextComponent {
         parseMessage()
-        return this.chatMessage
+        return chatMessage
     }
 
     /**
      * @return the formatted text of the parsed message
      */
-    fun getFormattedText(): String = getChatMessage().formattedText
+    fun getFormattedText() = TextComponent(getChatMessage()).getFormattedText()
 
     /**
      * @return the unformatted text of the parsed message
      */
-    fun getUnformattedText(): String = getChatMessage().unformattedText
+    fun getUnformattedText(): String = TextComponent(getChatMessage()).getUnformattedText()
 
     /**
      * @return the message [TextComponent] parts as a list.
      */
-    fun getMessageParts(): List<TextComponent> = this.messageParts
+    fun getMessageParts(): List<TextComponent> = messageParts
 
     /**
      * @return the chat line ID of the message
      */
-    fun getChatLineId(): Int = this.chatLineId
+    fun getChatLineId(): Int = chatLineId
 
     /**
      * Sets the chat line ID of the message. Useful for updating an already sent chat message.
      */
-    fun setChatLineId(id: Int) = apply { this.chatLineId = id }
+    fun setChatLineId(id: Int) = apply { chatLineId = id }
 
     /**
      * @return true if the message can trip other triggers.
      */
-    fun isRecursive(): Boolean = this.recursive
+    fun isRecursive(): Boolean = recursive
 
     /**
      * Sets whether or not the message can trip other triggers.
@@ -109,7 +111,7 @@ class Message {
     /**
      * @return true if the message is formatted
      */
-    fun isFormatted(): Boolean = this.formatted
+    fun isFormatted(): Boolean = formatted
 
     /**
      * Sets if the message is to be formatted
@@ -125,8 +127,8 @@ class Message {
      */
     fun setTextComponent(index: Int, component: Any) = apply {
         when (component) {
-            is String -> this.messageParts[index] = TextComponent(component)
-            is TextComponent -> this.messageParts[index] = component
+            is String -> messageParts[index] = TextComponent(component)
+            is TextComponent -> messageParts[index] = component
         }
     }
 
@@ -137,8 +139,8 @@ class Message {
      */
     fun addTextComponent(component: Any) = apply {
         when (component) {
-            is String -> this.messageParts.add(TextComponent(component))
-            is TextComponent -> this.messageParts.add(component)
+            is String -> messageParts.add(TextComponent(component))
+            is TextComponent -> messageParts.add(component)
         }
     }
 
@@ -150,17 +152,17 @@ class Message {
      */
     fun addTextComponent(index: Int, component: Any) = apply {
         when (component) {
-            is String -> this.messageParts.add(index, TextComponent(component))
-            is TextComponent -> this.messageParts.add(index, component)
+            is String -> messageParts.add(index, TextComponent(component))
+            is TextComponent -> messageParts.add(index, component)
         }
     }
 
     fun clone(): Message = copy()
     fun copy(): Message {
-        val copy = Message(this.messageParts)
-            .setChatLineId(this.chatLineId)
-        copy.recursive = this.recursive
-        copy.formatted = this.formatted
+        val copy = Message(messageParts)
+            .setChatLineId(chatLineId)
+        copy.recursive = recursive
+        copy.formatted = formatted
         return copy
     }
 
@@ -177,24 +179,24 @@ class Message {
      */
     fun chat() {
         parseMessage()
-        if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.formattedText)) return
+        if (!ChatLib.isPlayer("[CHAT]: " + getFormattedText())) return
 
         if (this.chatLineId != -1) {
-            Client.getChatGUI()?.printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId)
+            Client.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
             return
         }
 
         //#if MC<=10809
         if (this.recursive) {
-            Client.getConnection().handleChat(MCChatPacket(this.chatMessage, 0))
+            Client.getConnection().handleChat(S02PacketChat(chatMessage, 0))
         } else {
-            Player.getPlayer()?.addChatMessage(this.chatMessage)
+            Player.getPlayer()?.addChatMessage(chatMessage)
         }
         //#else
         //$$ if (this.recursive) {
-        //$$    Client.getConnection().handleChat(ChatPacket(this.chatMessage, ChatType.CHAT))
+        //$$    Client.getConnection().handleChat(SChatPacket(chatMessage, ChatType.CHAT, Client.getMinecraft().session.profile.id))
         //$$ } else {
-        //$$    Player.getPlayer()?.sendMessage(this.chatMessage)
+        //$$    Player.getPlayer()?.sendMessage(chatMessage)
         //$$ }
         //#endif
     }
@@ -204,15 +206,16 @@ class Message {
      */
     fun actionBar() {
         parseMessage()
-        if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.formattedText)) return
+        if (!ChatLib.isPlayer("[ACTION BAR]: " + getFormattedText())) return
 
         Client.getConnection().handleChat(
             MCChatPacket(
-                this.chatMessage,
+                chatMessage,
                 //#if MC<=10809
                 2
                 //#else
-                //$$ ChatType.GAME_INFO
+                //$$ ChatType.GAME_INFO,
+                //$$ Client.getMinecraft().session.profile.id,
                 //#endif
             )
         )
@@ -227,10 +230,16 @@ class Message {
                 "}"
 
     private fun parseMessage() {
-        this.chatMessage = MCStringTextComponent("")
+        chatMessage = MCStringTextComponent("")
 
-        this.messageParts.map {
-            this.chatMessage.appendSibling(it.chatComponentText)
+        messageParts.map {
+            //#if MC==11602
+            //$$ // TODO: In 1.8.9 appendSibling does some styling stuff. Is
+            //$$ // this equivalent?
+            //$$ chatMessage.siblings.add(it.mcComponent)
+            //#else
+            chatMessage.appendSibling(it.mcComponent)
+            //#endif
         }
     }
 }
