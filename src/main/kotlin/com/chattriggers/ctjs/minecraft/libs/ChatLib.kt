@@ -15,10 +15,11 @@ import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
 
-//#if MC==10809
-import net.minecraftforge.client.ClientCommandHandler
-//#else
+//#if MC==11602
 //$$ import com.chattriggers.ctjs.CTJS
+//$$ import net.minecraft.util.text.ITextComponent
+//#else
+import net.minecraftforge.client.ClientCommandHandler
 //#endif
 
 @External
@@ -219,7 +220,7 @@ object ChatLib {
 
         editChat(
             {
-                val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+                val matcher = pattern.matcher(it.getUnformattedText())
                 if (global) matcher.find() else matcher.matches()
             },
             *replacements
@@ -236,7 +237,7 @@ object ChatLib {
     fun editChat(toReplace: String, vararg replacements: Message) {
         editChat(
             {
-                removeFormatting(it.getChatMessage().unformattedText) == toReplace
+                removeFormatting(it.getUnformattedText()) == toReplace
             },
             *replacements
         )
@@ -252,7 +253,7 @@ object ChatLib {
     fun editChat(toReplace: Message, vararg replacements: Message) {
         editChat(
             {
-                toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
+                toReplace.getFormattedText() == it.getFormattedText().replaceFirst(
                     "\\u00a7r".toRegex(),
                     ""
                 )
@@ -298,7 +299,11 @@ object ChatLib {
     }
 
     private fun editChatLineList(
+        //#if MC==11602
+        //$$ lineList: MutableList<ChatLine<ITextComponent>>,
+        //#else
         lineList: MutableList<ChatLine>,
+        //#endif
         toReplace: (Message) -> Boolean,
         vararg replacements: Message
     ) {
@@ -308,7 +313,11 @@ object ChatLib {
             val chatLine = chatLineIterator.next()
 
             val result = toReplace(
+                //#if MC==11602
+                //$$ Message(chatLine.lineString).setChatLineId(chatLine.chatLineID)
+                //#else
                 Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)
+                //#endif
             )
 
             if (!result) {
@@ -351,10 +360,8 @@ object ChatLib {
     @JvmOverloads
     @JvmStatic
     fun getChatMessage(event: ClientChatReceivedEvent, formatted: Boolean = false): String {
-        return if (formatted) {
-            replaceFormatting(EventLib.getMessage(event).formattedText)
-        } else {
-            EventLib.getMessage(event).unformattedText
+        return TextComponent(EventLib.getMessage(event)).let {
+            if (formatted) replaceFormatting(it.getFormattedText()) else it.getUnformattedText()
         }
     }
 
