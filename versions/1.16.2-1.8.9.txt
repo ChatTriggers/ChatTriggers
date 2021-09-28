@@ -4,7 +4,7 @@ net.minecraft.util.math.RayTraceResult.Type net.minecraft.util.MovingObjectPosit
 net.minecraft.util.math.MathHelper net.minecraft.util.MathHelper
 net.minecraft.network.play.server.SPacketChat net.minecraft.network.play.server.S02PacketChat
 net.minecraft.util.text.ITextComponent net.minecraft.util.IChatComponent
-net.minecraft.util.text.TextComponentString net.minecraft.util.ChatComponentText
+net.minecraft.util.text.StringTextComponent net.minecraft.util.ChatComponentText
 net.minecraft.util.text.event.ClickEvent net.minecraft.event.ClickEvent
 net.minecraft.util.text.event.HoverEvent net.minecraft.event.HoverEvent
 net.minecraft.util.text.event.ClickEvent.Action net.minecraft.event.ClickEvent.Action
