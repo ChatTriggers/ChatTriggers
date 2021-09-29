@@ -14,7 +14,6 @@ import com.chattriggers.ctjs.utils.kotlin.MCRayTraceType
 import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
-import net.minecraft.scoreboard.ScorePlayerTeam
 
 @External
 object Player {
@@ -290,7 +289,9 @@ object Player {
      * @return the display name
      */
     @JvmStatic
-    fun getDisplayName(): TextComponent = TextComponent(getPlayerName(getPlayerInfo()))
+    fun getDisplayName(): TextComponent = getPlayerInfo()?.let {
+        TextComponent(getPlayerName(it))
+    } ?: TextComponent(getName())
 
     /**
      * Sets the name for this player shown in tab list
@@ -299,18 +300,15 @@ object Player {
      */
     @JvmStatic
     fun setTabDisplayName(textComponent: TextComponent) {
-        getPlayerInfo().displayName = textComponent.chatComponentText
+        getPlayerInfo()?.displayName = textComponent.component
     }
 
     @JvmStatic
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
-        return if (networkPlayerInfoIn.displayName != null)
-            networkPlayerInfoIn.displayName?.formattedText.toString()
-        else
-            ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.playerTeam, networkPlayerInfoIn.gameProfile.name)
+        return networkPlayerInfoIn.displayName.formattedText.toString()
     }
 
-    private fun getPlayerInfo(): NetworkPlayerInfo = Client.getConnection().getPlayerInfo(getPlayer()!!.uniqueID)
+    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(getPlayer()!!.uniqueID)
 
     /**
      * Gets the inventory the user currently has open, i.e. a chest.

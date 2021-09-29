@@ -463,12 +463,29 @@ object Renderer {
 
     object screen {
         @JvmStatic
-        fun getWidth(): Int = ScaledResolution(Client.getMinecraft()).scaledWidth
+        fun getWidth(): Int {
+            //#if MC==11602
+            //$$ return Client.getMinecraft().mainWindow.scaledWidth
+            //#else
+            return ScaledResolution(Client.getMinecraft()).scaledWidth
+            //#endif
+        }
+        @JvmStatic
+        fun getHeight(): Int {
+            //#if MC==11602
+            //$$ return Client.getMinecraft().mainWindow.scaledHeight
+            //#else
+            return ScaledResolution(Client.getMinecraft()).scaledHeight
+            //#endif
+        }
 
         @JvmStatic
-        fun getHeight(): Int = ScaledResolution(Client.getMinecraft()).scaledHeight
-
-        @JvmStatic
-        fun getScale(): Int = ScaledResolution(Client.getMinecraft()).scaleFactor
+        fun getScale(): Double {
+            //#if MC==11602
+            //$$ return Client.getMinecraft().mainWindow.guiScaleFactor
+            //#else
+            return ScaledResolution(Client.getMinecraft()).scaleFactor.toDouble()
+            //#endif
+        }
     }
 }

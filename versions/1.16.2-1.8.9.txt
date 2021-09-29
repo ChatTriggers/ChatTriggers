@@ -16,3 +16,11 @@ net.minecraft.util.SoundCategory net.minecraft.client.audio.SoundCategory
 net.minecraft.client.network.play.ClientPlayNetHandler net.minecraft.client.network.NetHandlerPlayClient
 net.minecraft.util.Direction net.minecraft.util.EnumFacing
 net.minecraft.network.play.server.SChatPacket net.minecraft.network.play.server.S02PacketChat
+net.minecraft.client.world.ClientWorld net.minecraft.client.multiplayer.WorldClient
+net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
+net.minecraft.client.gui.screen.MainMenuScreen net.minecraft.client.gui.GuiMainMenu
+net.minecraft.client.gui.screen.MultiplayerScreen net.minecraft.client.gui.GuiMultiplayer
+net.minecraft.client.gui.screen.ChatScreen net.minecraft.client.gui.GuiChat
+net.minecraft.client.gui.NewChatGui net.minecraft.client.gui.GuiNewChat
+net.minecraft.client.gui.overlay.PlayerTabOverlayGui net.minecraft.client.gui.GuiPlayerTabOverlay
+net.minecraft.network.IPacket net.minecraft.network.Packet

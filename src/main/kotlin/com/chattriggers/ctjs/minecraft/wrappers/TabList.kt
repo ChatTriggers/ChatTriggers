@@ -55,13 +55,11 @@ object TabList {
     fun getUnformattedNames(): List<String> {
         if (Player.getPlayer() == null) return listOf()
 
-        val tab = Ordering.from(PlayerComparator())
-        val conn = Client.getConnection()
-        val list = tab.sortedCopy(conn.playerInfoMap)
-
-        return list.map {
+        return Client.getConnection()?.playerInfoMap?.let {
+            Ordering.from(PlayerComparator()).sortedCopy(it)
+        }?.map {
             it.gameProfile.name
-        }
+        } ?: emptyList()
     }
 
     @JvmStatic

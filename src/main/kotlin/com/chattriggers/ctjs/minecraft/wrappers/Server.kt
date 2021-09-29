@@ -60,7 +60,7 @@ object Server {
             return 5L
         }
 
-        return Client.getConnection().getPlayerInfo(player.uniqueID)?.responseTime?.toLong()
-            ?: Client.getMinecraft().currentServerData?.pingToServer ?: -1L
+        return Client.getConnection()?.getPlayerInfo(player.uniqueID)?.responseTime?.toLong()
+            ?: Client.getMinecraft().currentServerData.pingToServer ?: -1L
     }
 }

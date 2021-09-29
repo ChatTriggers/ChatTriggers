@@ -188,7 +188,7 @@ class Message {
 
         //#if MC<=10809
         if (this.recursive) {
-            Client.getConnection().handleChat(S02PacketChat(chatMessage, 0))
+            Client.getConnection()?.handleChat(S02PacketChat(chatMessage, 0))
         } else {
             Player.getPlayer()?.addChatMessage(chatMessage)
         }
@@ -208,7 +208,7 @@ class Message {
         parseMessage()
         if (!ChatLib.isPlayer("[ACTION BAR]: " + getFormattedText())) return
 
-        Client.getConnection().handleChat(
+        Client.getConnection()?.handleChat(
             MCChatPacket(
                 chatMessage,
                 //#if MC<=10809
@@ -238,7 +238,7 @@ class Message {
             //$$ // this equivalent?
             //$$ chatMessage.siblings.add(it.mcComponent)
             //#else
-            chatMessage.appendSibling(it.mcComponent)
+            chatMessage.appendSibling(it.component)
             //#endif
         }
     }

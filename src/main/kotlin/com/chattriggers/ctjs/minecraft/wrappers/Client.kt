@@ -3,9 +3,16 @@ package com.chattriggers.ctjs.minecraft.wrappers
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
+import gg.essential.universal.UKeyboard
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.*
+import net.minecraft.client.gui.GuiScreen
+import net.minecraft.client.gui.GuiChat
+import net.minecraft.client.gui.GuiPlayerTabOverlay
+import net.minecraft.client.gui.GuiMainMenu
+import net.minecraft.client.gui.GuiMultiplayer
+import net.minecraft.client.gui.GuiNewChat
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
@@ -13,6 +20,7 @@ import net.minecraft.network.Packet
 import net.minecraft.realms.RealmsBridge
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
+import kotlin.math.roundToInt
 
 @External
 object Client {
@@ -33,12 +41,12 @@ object Client {
      * @return The NetHandlerPlayClient object
      */
     @JvmStatic
-    fun getConnection(): NetHandlerPlayClient =
+    fun getConnection(): NetHandlerPlayClient? =
         //#if MC<=10809
         getMinecraft().netHandler
-    //#else
-    //$$ getMinecraft().connection
-    //#endif
+        //#else
+        //$$ getMinecraft().connection
+        //#endif
 
     /**
      * Quits the client back to the main menu.
@@ -83,13 +91,13 @@ object Client {
     fun isTabbedIn(): Boolean = Display.isActive()
 
     @JvmStatic
-    fun isControlDown(): Boolean = GuiScreen.isCtrlKeyDown()
+    fun isControlDown(): Boolean = UKeyboard.isCtrlKeyDown()
 
     @JvmStatic
-    fun isShiftDown(): Boolean = GuiScreen.isShiftKeyDown()
+    fun isShiftDown(): Boolean = UKeyboard.isShiftKeyDown()
 
     @JvmStatic
-    fun isAltDown(): Boolean = GuiScreen.isAltKeyDown()
+    fun isAltDown(): Boolean = UKeyboard.isAltKeyDown()
 
     /**
      * Get the [KeyBind] from an already existing
@@ -102,7 +110,13 @@ object Client {
     @JvmStatic
     fun getKeyBindFromKey(keyCode: Int): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
-            .firstOrNull { it.keyCode == keyCode }
+            .firstOrNull {
+                //#if MC==11602
+                //$$ it.key.keyCode == keyCode
+                //#else
+                it.keyCode == keyCode
+                //#endif
+            }
             ?.let { KeyBind(it) }
     }
 
@@ -118,7 +132,13 @@ object Client {
     @JvmStatic
     fun getKeyBindFromKey(keyCode: Int, description: String, category: String  = "ChatTriggers"): KeyBind {
         return getMinecraft().gameSettings.keyBindings
-                .firstOrNull { it.keyCode == keyCode }
+                .firstOrNull {
+                    //#if MC==11602
+                    //$$ it.key.keyCode == keyCode
+                    //#else
+                    it.keyCode == keyCode
+                    //#endif
+                }
                 ?.let { KeyBind(it) }
                 ?: KeyBind(description, keyCode, category)
     }
@@ -153,27 +173,49 @@ object Client {
     fun getFreeMemory(): Long = Runtime.getRuntime().freeMemory()
 
     @JvmStatic
-    fun getMemoryUsage(): Int = Math.round(
-        (getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()
-    )
+    fun getMemoryUsage(): Int = ((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()).roundToInt()
 
     @JvmStatic
     fun getSystemTime(): Long = Minecraft.getSystemTime()
 
     @JvmStatic
+    fun getDisplayWidth(): Float {
+        //#if MC==11602
+        //$$ return getMinecraft().mainWindow.width.toFloat()
+        //#else
+        return getMinecraft().displayWidth.toFloat()
+        //#endif
+    }
+
+    @JvmStatic
+    fun getDisplayHeight(): Float {
+        //#if MC==11602
+        //$$ return getMinecraft().mainWindow.height.toFloat()
+        //#else
+        return getMinecraft().displayHeight.toFloat()
+        //#endif
+    }
+
+    @JvmStatic
     fun getMouseX(): Float {
+        //#if MC==11602
+        //$$ val mx = getMinecraft().mouseHelper.mouseX.toFloat()
+        //#else
         val mx = Mouse.getX().toFloat()
+        //#endif
         val rw = Renderer.screen.getWidth().toFloat()
-        val dw = getMinecraft().displayWidth.toFloat()
-        return mx * rw / dw
+        return mx * rw / getDisplayWidth()
     }
 
     @JvmStatic
     fun getMouseY(): Float {
+        //#if MC==11602
+        //$$ val my = getMinecraft().mouseHelper.mouseY.toFloat()
+        //#else
         val my = Mouse.getY().toFloat()
+        //#endif
         val rh = Renderer.screen.getHeight().toFloat()
-        val dh = getMinecraft().displayHeight.toFloat()
-        return rh - my * rh / dh - 1f
+        return rh - my * rh / getDisplayHeight() - 1f
     }
 
     @JvmStatic
@@ -207,10 +249,10 @@ object Client {
 
     @JvmStatic
     fun <T : INetHandler> sendPacket(packet: Packet<T>) {
-        //#if MC<=10809
-        getMinecraft().netHandler.networkManager.sendPacket(packet)
+        //#if MC==11602
+        //$$ getMinecraft().connection?.networkManager?.sendPacket(packet)
         //#else
-        //$$getMinecraft().connection?.networkManager?.sendPacket(packet)
+        getMinecraft().netHandler.networkManager.sendPacket(packet)
         //#endif
     }
 
@@ -225,10 +267,16 @@ object Client {
      */
     @JvmStatic
     fun showTitle(title: String, subtitle: String, fadeIn: Int, time: Int, fadeOut: Int) {
-        val gui = Client.getMinecraft().ingameGUI
+        val gui = getMinecraft().ingameGUI
+        //#if MC==11602
+        //$$ gui.func_238452_a_(TextComponent(title).component, null, fadeIn, time, fadeOut)
+        //$$ gui.func_238452_a_(null, TextComponent(title).component, fadeIn, time, fadeOut)
+        //$$ gui.func_238452_a_(null, null, fadeIn, time, fadeOut)
+        //#else
         gui.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut)
         gui.displayTitle(null, ChatLib.addColor(subtitle), fadeIn, time, fadeOut)
         gui.displayTitle(null, null, fadeIn, time, fadeOut)
+        //#endif
     }
 
     object currentGui {

@@ -8,30 +8,16 @@ import net.minecraft.client.renderer.Tessellator
 fun MCITextComponent.getStyling(): MCTextStyle =
     //#if MC<=10809
     this.chatStyle
-
-//#else
-//$$ this.style
-//#endif
-fun MCTextStyle.getClick(): MCTextClickEvent? =
-    //#if MC<=10809
-    chatClickEvent
-//#else
-//$$ clickEvent
-//#endif
-
-fun MCTextStyle.getHover(): MCTextHoverEvent? =
-    //#if MC<=10809
-    chatHoverEvent
-//#else
-//$$ hoverEvent
-//#endif
+    //#else
+    //$$ this.style
+    //#endif
 
 fun Tessellator.getRenderer(): MCWorldRenderer =
     //#if MC<=10809
     worldRenderer
-//#else
-//$$ buffer
-//#endif
+    //#else
+    //$$ buffer
+    //#endif
 
 operator fun String.times(times: Number): String {
     val stringBuilder = StringBuilder()
