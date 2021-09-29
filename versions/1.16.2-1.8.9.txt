@@ -34,3 +34,5 @@ com.mojang.blaze3d.systems.RenderSystem blendFuncSeparate() tryBlendFuncSeparate
 com.mojang.blaze3d.systems.RenderSystem enableTexture() enableTexture2D()
 com.mojang.blaze3d.systems.RenderSystem disableTexture() disableTexture2D()
 com.mojang.blaze3d.systems.RenderSystem color4f() color()
+net.minecraft.client.entity.player.ClientPlayerEntity net.minecraft.client.entity.EntityPlayerSP
+net.minecraft.client.network.play.NetworkPlayerInfo net.minecraft.client.network.NetworkPlayerInfo

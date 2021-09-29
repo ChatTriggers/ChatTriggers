@@ -10,10 +10,18 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
-import com.chattriggers.ctjs.utils.kotlin.MCRayTraceType
 import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
+
+//#if MC==11602
+//$$ import net.minecraft.util.math.RayTraceResult
+//$$ import net.minecraft.util.math.BlockRayTraceResult
+//$$ import net.minecraft.util.math.EntityRayTraceResult
+//$$ import net.minecraft.block.AbstractSignBlock
+//#else
+import net.minecraft.util.MovingObjectPosition.MovingObjectType
+//#endif
 
 @External
 object Player {
@@ -68,7 +76,13 @@ object Player {
      * @return the player's x motion
      */
     @JvmStatic
-    fun getMotionX(): Double = getPlayer()?.motionX ?: 0.0
+    fun getMotionX(): Double {
+        //#if MC==11602
+        //$$ return getPlayer()?.motion?.x ?: 0.0
+        //#else
+        return getPlayer()?.motionX ?: 0.0
+        //#endif
+    }
 
     /**
      * Gets the player's y motion.
@@ -77,7 +91,13 @@ object Player {
      * @return the player's y motion
      */
     @JvmStatic
-    fun getMotionY(): Double = getPlayer()?.motionY ?: 0.0
+    fun getMotionY(): Double {
+        //#if MC==11602
+        //$$ return getPlayer()?.motion?.z ?: 0.0
+        //#else
+        return getPlayer()?.motionZ ?: 0.0
+        //#endif
+    }
 
     /**
      * Gets the player's z motion.
@@ -86,7 +106,13 @@ object Player {
      * @return the player's z motion
      */
     @JvmStatic
-    fun getMotionZ(): Double = getPlayer()?.motionZ ?: 0.0
+    fun getMotionZ(): Double {
+        //#if MC==11602
+        //$$ return getPlayer()?.motion?.z ?: 0.0
+        //#else
+        return getPlayer()?.motionZ ?: 0.0
+        //#endif
+    }
 
     /**
      * Gets the player's camera pitch.
@@ -168,15 +194,14 @@ object Player {
         val player = getPlayer() ?: return ""
         val world = World.getWorld() ?: return ""
 
-        val chunk = world.getChunkFromBlockCoords(player.position)
-
-        //#if MC<=10809
-        val biome = chunk.getBiome(player.position, world.worldChunkManager)
+        //#if MC==11602
+        //$$ return world.getBiome(player.position).category.name
         //#else
-        //$$ val biome = chunk.getBiome(player.position, world.biomeProvider)
+        return world
+            .getChunkFromBlockCoords(player.position)
+            .getBiome(player.position, world.worldChunkManager)
+            .biomeName
         //#endif
-
-        return biome.biomeName
     }
 
     /**
@@ -202,7 +227,13 @@ object Player {
     fun isFlying(): Boolean = !(getPlayer()?.isPushedByWater ?: true)
 
     @JvmStatic
-    fun isSleeping(): Boolean = getPlayer()?.isPlayerSleeping ?: false
+    fun isSleeping(): Boolean {
+        //#if MC==11602
+        //$$ return getPlayer()?.isSleeping ?: false
+        //#else
+        return getPlayer()?.isPlayerSleeping ?: false
+        //#endif
+    }
 
     /**
      * Gets the direction the player is facing.
@@ -249,8 +280,21 @@ object Player {
         val mop = Client.getMinecraft().objectMouseOver ?: return BlockType(0)
         val world = World.getWorld() ?: return BlockType(0)
 
+        //#if MC==11602
+        //$$ return when (mop) {
+        //$$     is BlockRayTraceResult -> Block(
+        //$$         BlockType(world.getBlockState(mop.pos).block),
+        //$$         BlockPos(mop.pos),
+        //$$         BlockFace.fromMCEnumFacing(mop.face)
+        //$$     ).let {
+        //$$         if (it.type.mcBlock is AbstractSignBlock) Sign(it) else it
+        //$$     }
+        //$$     is EntityRayTraceResult -> Entity(mop.entity)
+        //$$     else -> throw IllegalStateException("impossible")
+        //$$ }
+        //#else
         return when (mop.typeOfHit) {
-            MCRayTraceType.BLOCK -> {
+            MovingObjectType.BLOCK -> {
                 val block = Block(
                     BlockType(world.getBlockState(mop.blockPos).block),
                     BlockPos(mop.blockPos),
@@ -259,9 +303,10 @@ object Player {
 
                 if (block.type.mcBlock is BlockSign) Sign(block) else block
             }
-            MCRayTraceType.ENTITY -> Entity(mop.entityHit)
+            MovingObjectType.ENTITY -> Entity(mop.entityHit)
             else -> BlockType(0)
         }
+        //#endif
     }
 
     @JvmStatic
@@ -305,7 +350,9 @@ object Player {
 
     @JvmStatic
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
-        return networkPlayerInfoIn.displayName.formattedText.toString()
+        // Null assertion necessary for 1.16.2
+        @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+        return TextComponent(networkPlayerInfoIn.displayName!!).getFormattedText()
     }
 
     private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(getPlayer()!!.uniqueID)
