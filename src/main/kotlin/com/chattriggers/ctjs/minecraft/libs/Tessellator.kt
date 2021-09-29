@@ -10,11 +10,22 @@ import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
-import org.lwjgl.util.vector.Vector3f
 import kotlin.math.sqrt
+
+//#if MC==11602
+//$$ import com.mojang.blaze3d.matrix.MatrixStack
+//$$ import net.minecraft.util.math.vector.Quaternion
+//$$ import net.minecraft.util.math.vector.Vector3f
+//#else
+import org.lwjgl.util.vector.Vector3f
+//#endif
 
 @External
 object Tessellator {
+    //#if MC==11602
+    //$$ lateinit var boundMatrixStack: MatrixStack
+    //#endif
+
     @JvmStatic
     var partialTicks = 0f
         internal set
@@ -88,7 +99,11 @@ object Tessellator {
 
     @JvmStatic
     fun tryBlendFuncSeparate(sourceFactor: Int, destFactor: Int, sourceFactorAlpha: Int, destFactorAlpha: Int) = apply {
+        //#if MC==11602
+        //$$ RenderSystem.blendFuncSeparate(sourceFactor, destFactor, sourceFactorAlpha, destFactorAlpha)
+        //#else
         GlStateManager.tryBlendFuncSeparate(sourceFactor, destFactor, sourceFactorAlpha, destFactorAlpha)
+        //#endif
     }
 
     @JvmStatic
@@ -145,7 +160,11 @@ object Tessellator {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
 
         val renderManager = Client.getMinecraft().renderManager
-        GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ)
+        translate(
+            -Client.camera.getX().toFloat(),
+            -Client.camera.getY().toFloat(),
+            -Client.camera.getZ().toFloat(),
+        )
 
         this.worldRenderer.begin(
             drawMode,
@@ -183,7 +202,11 @@ object Tessellator {
      */
     @JvmStatic
     fun rotate(angle: Float, x: Float, y: Float, z: Float) = apply {
+        //#if MC==11602
+        //$$ boundMatrixStack.rotate(Quaternion(Vector3f(x, y, z), angle, true))
+        //#else
         GL11.glRotatef(angle, x, y, z)
+        //#endif
     }
 
     /**
@@ -197,7 +220,11 @@ object Tessellator {
      */
     @JvmStatic
     fun translate(x: Float, y: Float, z: Float) = apply {
+        //#if MC==11602
+        //$$ boundMatrixStack.translate(x.toDouble(), y.toDouble(), z.toDouble())
+        //#else
         GL11.glTranslatef(x, y, z)
+        //#endif
     }
 
     /**
@@ -212,7 +239,11 @@ object Tessellator {
     @JvmStatic
     @JvmOverloads
     fun scale(x: Float, y: Float = x, z: Float = x) = apply {
+        //#if MC==11602
+        //$$ boundMatrixStack.scale(x, y, z)
+        //#else
         GL11.glScalef(x, y, z)
+        //#endif
     }
 
     /**
@@ -243,7 +274,11 @@ object Tessellator {
      */
     @JvmStatic
     fun tex(u: Float, v: Float) = apply {
+        //#if MC==11602
+        //$$ this.worldRenderer.tex(u, v)
+        //#else
         this.worldRenderer.tex(u.toDouble(), v.toDouble())
+        //#endif
     }
 
     /**
@@ -346,7 +381,11 @@ object Tessellator {
             GlStateManager.enableTexture2D()
         }
 
+        //#if MC==11602
+        //$$ fontRenderer.drawString(boundMatrixStack, text, -textWidth / 2f, 0f, color)
+        //#else
         fontRenderer.drawString(text, -textWidth / 2, 0, color)
+        //#endif
 
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
         GL11.glDepthMask(true)

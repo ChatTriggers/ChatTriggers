@@ -24,3 +24,13 @@ net.minecraft.client.gui.screen.ChatScreen net.minecraft.client.gui.GuiChat
 net.minecraft.client.gui.NewChatGui net.minecraft.client.gui.GuiNewChat
 net.minecraft.client.gui.overlay.PlayerTabOverlayGui net.minecraft.client.gui.GuiPlayerTabOverlay
 net.minecraft.network.IPacket net.minecraft.network.Packet
+import net.minecraftforge.eventbus.api.SubscribeEvent import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+com.mojang.blaze3d.systems.RenderSystem net.minecraft.client.renderer.GlStateManager
+com.mojang.blaze3d.systems.RenderSystem disableAlphaTest() disableAlpha()
+com.mojang.blaze3d.systems.RenderSystem enableAlphaTest() enableAlpha()
+com.mojang.blaze3d.systems.RenderSystem disableDepthTest() disableDepth()
+com.mojang.blaze3d.systems.RenderSystem enableDepthTest() enableDepth()
+com.mojang.blaze3d.systems.RenderSystem blendFuncSeparate() tryBlendFuncSeparate()
+com.mojang.blaze3d.systems.RenderSystem enableTexture() enableTexture2D()
+com.mojang.blaze3d.systems.RenderSystem disableTexture() disableTexture2D()
+com.mojang.blaze3d.systems.RenderSystem color4f() color()

@@ -307,12 +307,12 @@ object Client {
 
     object camera {
         @JvmStatic
-        fun getX(): Double = Client.getMinecraft().renderManager.viewerPosX
+        fun getX(): Double = getMinecraft().renderManager.viewerPosX
 
         @JvmStatic
-        fun getY(): Double = Client.getMinecraft().renderManager.viewerPosY
+        fun getY(): Double = getMinecraft().renderManager.viewerPosY
 
         @JvmStatic
-        fun getZ(): Double = Client.getMinecraft().renderManager.viewerPosZ
+        fun getZ(): Double = getMinecraft().renderManager.viewerPosZ
     }
 }

@@ -11,7 +11,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
-import net.minecraftforge.event.world.BlockEvent
 import net.minecraftforge.event.world.NoteBlockEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -46,6 +45,9 @@ object WorldListener {
     @SubscribeEvent
     fun onRenderWorld(event: RenderWorldLastEvent) {
         Tessellator.partialTicks = event.partialTicks
+        //#if MC==11602
+        //$$ Tessellator.boundMatrixStack = event.matrixStack
+        //#endif
         TriggerType.RENDER_WORLD.triggerAll(event.partialTicks)
     }
 
