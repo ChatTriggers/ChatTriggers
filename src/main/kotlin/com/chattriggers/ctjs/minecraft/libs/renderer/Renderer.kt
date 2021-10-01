@@ -10,9 +10,7 @@ import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.gui.FontRenderer
-import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
@@ -26,6 +24,9 @@ import kotlin.math.sin
 
 //#if MC==11602
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
+//#else
+import net.minecraft.client.gui.ScaledResolution
+import net.minecraft.client.renderer.OpenGlHelper
 //#endif
 
 @External
@@ -343,7 +344,7 @@ object Renderer {
 
             ChatLib.addColor(text).split("\n").forEach {
                 //#if MC==11602
-                //$$ fr.drawString(getMatrixStack(), it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
+                //$$ fr.drawString(getMatrixStack(), it, x, newY, colorized?.toInt() ?: WHITE.toInt())
                 //#else
                 fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
                 //#endif
@@ -354,13 +355,23 @@ object Renderer {
             return
         }
 
+        //#if MC==11602
+        //$$ fr.drawString(getMatrixStack(), ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt())
+        //#else
         fr.drawString(ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt(), false)
+        //#endif
+
         finishDraw()
     }
 
     @JvmStatic
     fun drawStringWithShadow(text: String, x: Float, y: Float) {
+        //#if MC==11602
+        //$$ getFontRenderer().drawStringWithShadow(getMatrixStack(), ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt())
+        //#else
         getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt(), true)
+        //#endif
+
         finishDraw()
     }
 
@@ -378,10 +389,17 @@ object Renderer {
 
         worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
 
+        //#if MC==11602
+        //$$ worldRenderer.pos(x, y + height, 0.0).tex(0.0f, 1.0f).endVertex()
+        //$$ worldRenderer.pos(x + width, y + height, 0.0).tex(1.0f, 1.0f).endVertex()
+        //$$ worldRenderer.pos(x + width, y, 0.0).tex(1.0f, 0.0f).endVertex()
+        //$$ worldRenderer.pos(x, y, 0.0).tex(0.0f, 0.0f).endVertex()
+        //#else
         worldRenderer.pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
         worldRenderer.pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
         worldRenderer.pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex()
         worldRenderer.pos(x, y, 0.0).tex(0.0, 0.0).endVertex()
+        //#endif
         tessellator.draw()
 
         finishDraw()
@@ -391,6 +409,8 @@ object Renderer {
     private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
     private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
 
+    // TODO(1.16.2)
+    //#if MC==10809
     @JvmStatic
     @JvmOverloads
     fun drawPlayer(
@@ -463,6 +483,7 @@ object Renderer {
 
         finishDraw()
     }
+    //#endif
 
     private fun doColor(longColor: Long) {
         val color = longColor.toInt()
