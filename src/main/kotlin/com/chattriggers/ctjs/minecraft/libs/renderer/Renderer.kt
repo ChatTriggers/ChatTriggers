@@ -24,8 +24,16 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
+//#if MC==11602
+//$$ import com.mojang.blaze3d.matrix.MatrixStack
+//#endif
+
 @External
 object Renderer {
+    //#if MC==11602
+    //$$ private var matrixStacks = mutableListOf<MatrixStack>()
+    //#endif
+
     var colorized: Long? = null
     private var retainTransforms = false
     private var drawMode: Int? = null
@@ -62,6 +70,19 @@ object Renderer {
     val YELLOW = color(254, 254, 63, 255)
     @JvmStatic
     val WHITE = color(255, 255, 255, 255)
+
+    //#if MC==11602
+    //$$ fun getMatrixStack() = matrixStacks.firstOrNull() ?:
+    //$$     throw IllegalStateException("Attempt to get Renderer's MatrixStack outside of a 2D rendering context")
+    //$$
+    //$$ fun pushMatrixStack(stack: MatrixStack) {
+    //$$     matrixStacks.add(stack)
+    //$$ }
+    //$$
+    //$$ fun popMatrixStack() {
+    //$$     matrixStacks.removeLast()
+    //$$ }
+    //#endif
 
     @JvmStatic
     fun getColor(color: Int): Long {
@@ -321,7 +342,11 @@ object Renderer {
             var newY = y
 
             ChatLib.addColor(text).split("\n").forEach {
+                //#if MC==11602
+                //$$ fr.drawString(getMatrixStack(), it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
+                //#else
                 fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
+                //#endif
 
                 newY += fr.FONT_HEIGHT
             }

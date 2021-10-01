@@ -11,13 +11,11 @@ import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.network.Packet
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.client.event.DrawBlockHighlightEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.client.event.GuiScreenEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
@@ -25,10 +23,18 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
+import org.lwjgl.util.vector.Vector3f
+
+//#if MC==11602
+//$$ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+//$$ import net.minecraftforge.client.event.DrawHighlightEvent
+//#else
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
+import net.minecraftforge.client.event.DrawBlockHighlightEvent
+import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
-import org.lwjgl.util.vector.Vector3f
+//#endif
 
 object ClientListener {
     private var ticksPassed: Int = 0
@@ -58,6 +64,56 @@ object ClientListener {
         Scoreboard.resetCache()
     }
 
+    //#if MC==11602
+    //$$ @SubscribeEvent
+    //$$ fun onMouseScroll(event: GuiScreenEvent.MouseScrollEvent) {
+    //$$     if (event is GuiScreenEvent.MouseScrollEvent.Post)
+    //$$         return
+    //$$
+    //$$     val value = if (event.scrollDelta < 0) -1 else 1
+    //$$     TriggerType.SCROLLED.triggerAll(event.mouseX, event.mouseY, value)
+    //$$ }
+    //$$
+    //$$ @SubscribeEvent
+    //$$ fun onMouseClicked(event: GuiScreenEvent.MouseClickedEvent) {
+    //$$     if (event is GuiScreenEvent.MouseClickedEvent.Post)
+    //$$         return
+    //$$
+    //$$     TriggerType.CLICKED.triggerAll(
+    //$$         event.mouseX,
+    //$$         event.mouseY,
+    //$$         event.button,
+    //$$         true,
+    //$$     )
+    //$$ }
+    //$$
+    //$$ @SubscribeEvent
+    //$$ fun onMouseRelease(event: GuiScreenEvent.MouseReleasedEvent) {
+    //$$     if (event is GuiScreenEvent.MouseReleasedEvent.Post)
+    //$$         return
+    //$$
+    //$$     TriggerType.CLICKED.triggerAll(
+    //$$         event.mouseX,
+    //$$         event.mouseY,
+    //$$         event.button,
+    //$$         false,
+    //$$     )
+    //$$ }
+    //$$
+    //$$ @SubscribeEvent
+    //$$ fun onMouseDragged(event: GuiScreenEvent.MouseDragEvent) {
+    //$$     if (event is GuiScreenEvent.MouseDragEvent.Post)
+    //$$         return
+    //$$
+    //$$     TriggerType.DRAGGED.triggerAll(
+    //$$         event.dragX,
+    //$$         event.dragY,
+    //$$         event.mouseX,
+    //$$         event.mouseY,
+    //$$         event.mouseButton,
+    //$$     )
+    //$$ }
+    //#else
     private fun handleMouseInput() {
         if (!Mouse.isCreated()) return
 
@@ -106,7 +162,10 @@ object ClientListener {
         // update dragged
         this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
     }
+    //#endif
 
+    // TODO(1.16.2)
+    //#if MC==10809
     @SubscribeEvent
     fun onNetworkEvent(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
         event.manager.channel().pipeline().addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
@@ -131,6 +190,7 @@ object ClientListener {
             }
         })
     }
+    //#endif
 
     @SubscribeEvent
     fun onDrawScreenEvent(event: GuiScreenEvent.DrawScreenEvent.Post) {
@@ -144,17 +204,33 @@ object ClientListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
+        //#if MC==11602
+        //$$ event.matrixStack.push()
+        //#else
         GL11.glPushMatrix()
+        //#endif
+
         handleOverlayTriggers(event)
+
+        //#if MC==11602
+        //$$ event.matrixStack.pop()
+        //#else
         GL11.glPopMatrix()
+        //#endif
 
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
             return
 
+        //#if MC==10809
         handleMouseInput()
+        //#endif
     }
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
+        //#if MC==11602
+        //$$ Renderer.pushMatrixStack(event.matrixStack)
+        //#endif
+
         when (event.type) {
             RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RENDER_PLAYER_LIST.triggerAll(event)
             RenderGameOverlayEvent.ElementType.CROSSHAIRS -> TriggerType.RENDER_CROSSHAIR.triggerAll(event)
@@ -169,6 +245,10 @@ object ClientListener {
             RenderGameOverlayEvent.ElementType.AIR -> TriggerType.RENDER_AIR.triggerAll(event)
             RenderGameOverlayEvent.ElementType.TEXT -> TriggerType.RENDER_OVERLAY.triggerAll(event)
         }
+
+        //#if MC==11602
+        //$$ Renderer.popMatrixStack()
+        //#endif
     }
 
     @SubscribeEvent
@@ -177,8 +257,13 @@ object ClientListener {
     }
 
     @SubscribeEvent
+    //#if MC==11602
+    //$$ fun onBlockHighlight(event: DrawHighlightEvent.HighlightBlock) {
+    //$$     val position = event.target?.hitVec ?: return
+    //#else
     fun onBlockHighlight(event: DrawBlockHighlightEvent) {
-        if (event.target == null || event.target.blockPos == null) return
+        if (event.target == null)
+            return
 
         val position = Vector3f(
             event.target.blockPos.x.toFloat(),
@@ -186,26 +271,38 @@ object ClientListener {
             event.target.blockPos.z.toFloat()
         )
 
+    //#endif
         TriggerType.BLOCK_HIGHLIGHT.triggerAll(position, event)
     }
 
     @SubscribeEvent
     fun onPickupItem(event: EntityItemPickupEvent) {
-        if (event.entityPlayer !is EntityPlayerMP) return
+        //#if MC==11602
+        //$$ val player = event.entity
+        //#else
+        val player = event.entityPlayer
+        //#endif
 
-        val player = event.entityPlayer as EntityPlayerMP
+        if (player !is EntityPlayerMP)
+            return
 
         val item = event.item
 
         val position = Vector3f(
             item.posX.toFloat(),
             item.posY.toFloat(),
-            item.posZ.toFloat()
+            item.posZ.toFloat(),
         )
         val motion = Vector3f(
+            //#if MC==11602
+            //$$ item.motion.x.toFloat(),
+            //$$ item.motion.y.toFloat(),
+            //$$ item.motion.z.toFloat(),
+            //#else
             item.motionX.toFloat(),
             item.motionY.toFloat(),
-            item.motionZ.toFloat()
+            item.motionZ.toFloat(),
+        //#endif
         )
 
         TriggerType.PICKUP_ITEM.triggerAll(
@@ -217,7 +314,7 @@ object ClientListener {
             PlayerMP(player),
             position,
             motion,
-            event
+            event,
         )
     }
 
@@ -248,15 +345,28 @@ object ClientListener {
 
     @SubscribeEvent
     fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
+        //#if MC==11602
+        //$$ Renderer.pushMatrixStack(e.matrixStack)
+        //#else
         GlStateManager.pushMatrix()
+        //#endif
 
         TriggerType.GUI_RENDER.triggerAll(
+            //#if MC==11602
+            //$$ Client.getMouseX(),
+            //$$ Client.getMouseY(),
+            //#else
             e.mouseX,
             e.mouseY,
+            //#endif
             e.gui
         )
 
+        //#if MC==11602
+        //$$ Renderer.popMatrixStack()
+        //#else
         GlStateManager.popMatrix()
+        //#endif
     }
 
     //#if MC<=10809
@@ -284,8 +394,8 @@ object ClientListener {
     //$$        is PlayerInteractEvent.RightClickBlock -> PlayerInteractAction.RIGHT_CLICK_BLOCK
     //$$        is PlayerInteractEvent.RightClickItem -> PlayerInteractAction.RIGHT_CLICK_ITEM
     //$$        is PlayerInteractEvent.RightClickEmpty -> PlayerInteractAction.RIGHT_CLICK_EMPTY
-    //$$        is PlayerInteractEvent.LeftClickBlock -> PlayerInteractAction.LEFT_CLICK_BLOCK
     //$$        is PlayerInteractEvent.LeftClickEmpty -> PlayerInteractAction.LEFT_CLICK_EMPTY
+    //$$        is PlayerInteractEvent.LeftClickBlock -> return
     //$$        else -> PlayerInteractAction.UNKNOWN
     //$$    }
     //$$
@@ -305,10 +415,10 @@ object ClientListener {
         RIGHT_CLICK_BLOCK,
         RIGHT_CLICK_EMPTY,
 
-        //#if MC>10809
-        //$$RIGHT_CLICK_ENTITY,
-        //$$RIGHT_CLICK_ITEM,
-        //$$LEFT_CLICK_EMPTY,
+        //#if MC==11602
+        //$$ RIGHT_CLICK_ENTITY,
+        //$$ RIGHT_CLICK_ITEM,
+        //$$ LEFT_CLICK_EMPTY,
         //#endif
         UNKNOWN
     }
