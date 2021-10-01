@@ -8,18 +8,21 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.scoreboard.ScorePlayerTeam
-import net.minecraftforge.fml.relauncher.ReflectionHelper
 
-//#if MC>10809
-//$$ import net.minecraft.inventory.EntityEquipmentSlot
+//#if MC==11602
+//$$ import net.minecraft.inventory.EquipmentSlotType
+//#else
+import net.minecraftforge.fml.relauncher.ReflectionHelper
 //#endif
 
 @External
 class PlayerMP(val player: EntityPlayer) : Entity(player) {
+    //#if MC==10809
     val displayNameField = ReflectionHelper.findField(
             EntityPlayer::class.java,
             "displayname"
     )
+    //#endif
 
     fun isSpectator() = this.player.isSpectator
 
@@ -45,10 +48,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
         //#if MC<=10809
         return Item(player.getEquipmentInSlot(slot))
         //#else
-        //$$ return Item(player.getItemStackFromSlot(
-        //$$        EntityEquipmentSlot.values()[slot]
-        //$$     )
-        //$$ )
+        //$$ return Item(player.getItemStackFromSlot(EquipmentSlotType.values()[slot]))
         //#endif
     }
 
@@ -71,24 +71,39 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
      *
      * @param textComponent the new name to display
      */
+    // TODO(1.16.2)
+    //#if MC==10809
     fun setNametagName(textComponent: TextComponent) {
         displayNameField.set(player, textComponent.component.formattedText)
     }
+    //#endif
 
     /**
      * Draws the player in the GUI
      */
+    //#if MC==10809
     @JvmOverloads
     fun draw(x: Int, y: Int, rotate: Boolean = false) = apply {
         Renderer.drawPlayer(player, x, y, rotate)
     }
+    //#endif
 
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo?): String {
-        return networkPlayerInfoIn?.displayName?.formattedText
-            ?: ScorePlayerTeam.formatPlayerName(
-                networkPlayerInfoIn?.playerTeam,
-                networkPlayerInfoIn?.gameProfile?.name
-            ) ?: ""
+        val name = networkPlayerInfoIn?.displayName?.let { TextComponent(it).getFormattedText() }
+        if (name != null)
+            return name
+
+        //#if MC==11602
+        //$$ return TextComponent(ScorePlayerTeam.func_237500_a_(
+        //$$     networkPlayerInfoIn!!.playerTeam,
+        //$$     TextComponent(networkPlayerInfoIn.gameProfile.name).component,
+        //$$ )).getFormattedText()
+        //#else
+        return ScorePlayerTeam.formatPlayerName(
+            networkPlayerInfoIn!!.playerTeam,
+            networkPlayerInfoIn.gameProfile.name,
+        ) ?: ""
+        //#endif
     }
 
     private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(this.player.uniqueID)
@@ -100,5 +115,9 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
                 "}"
     }
 
+    //#if MC==11602
+    //$$ override fun getName(): String = TextComponent(this.player.name).getFormattedText()
+    //#else
     override fun getName(): String = this.player.name
+    //#endif
 }
