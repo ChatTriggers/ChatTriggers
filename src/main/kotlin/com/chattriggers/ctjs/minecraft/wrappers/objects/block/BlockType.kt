@@ -5,6 +5,13 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlock
 import net.minecraft.block.state.IBlockState
 
+//#if MC==11602
+//$$ import net.minecraftforge.registries.ForgeRegistries
+//$$ import net.minecraft.util.ResourceLocation
+//$$ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+//$$ import com.chattriggers.ctjs.minecraft.wrappers.World
+//#endif
+
 /**
  * An immutable wrapper around Minecraft's Block object. Note
  * that this references a block "type", and not an actual block
@@ -15,11 +22,22 @@ import net.minecraft.block.state.IBlockState
 class BlockType(val mcBlock: MCBlock) {
     constructor(block: BlockType) : this(block.mcBlock)
 
-    constructor(blockName: String) : this(MCBlock.getBlockFromName(blockName)!!)
+    //#if MC==11602
+    //$$ constructor(blockName: String) : this(ForgeRegistries.BLOCKS.getValue(ResourceLocation(blockName))!!)
+    //#else
+    constructor(blockName: String) : this(MCBlock.getBlockFromName(blockName))
+    //#endif
 
+    // TODO(1.16.2)
+    //#if MC==10809
     constructor(blockID: Int) : this(MCBlock.getBlockById(blockID))
+    //#endif
 
-    constructor(item: Item) : this(MCBlock.getBlockFromItem(item.item))
+    //#if MC==11602
+    //$$ constructor(item: Item) : this(MCBlock.getBlockFromItem(item.item))
+    //#else
+    constructor(item: Item) : this(MCBlock.getBlockFromItem(item.item) ?: MCBlock.getBlockById(0))
+    //#endif
 
     /**
      * Returns a PlacedBlock based on this block and the
@@ -30,7 +48,10 @@ class BlockType(val mcBlock: MCBlock) {
      */
     fun withBlockPos(blockPos: BlockPos) = Block(this, blockPos)
 
+    // TODO(1.16.2)
+    //#if MC==10809
     fun getID(): Int = MCBlock.getIdFromBlock(mcBlock)
+    //#endif
 
     /**
      * Gets the block's registry name.<br>
@@ -42,7 +63,7 @@ class BlockType(val mcBlock: MCBlock) {
         //#if MC<=10809
         return this.mcBlock.registryName
         //#else
-        //$$ return this.block.registryName.toString()
+        //$$ return this.mcBlock.registryName.toString()
         //#endif
     }
 
@@ -60,45 +81,20 @@ class BlockType(val mcBlock: MCBlock) {
      *
      * @return the block's localized name
      */
+    //#if MC==11602
+    //$$ fun getName(): String = TextComponent(mcBlock.translatedName).getFormattedText()
+    //#else
     fun getName(): String = mcBlock.localizedName
-
-    fun getLightValue(): Int {
-        //#if MC<=10809
-        return this.mcBlock.lightValue
-        //#else
-        //$$ return this.block.getLightValue(
-        //$$         World.getWorld()!!.getBlockState(blockPos),
-        //$$         World.getWorld(),
-        //$$         blockPos
-        //$$ )
-        //#endif
-    }
+    //#endif
 
     fun getDefaultState(): IBlockState = mcBlock.defaultState
 
+    // TODO(1.16.2)
+    //#if MC==10809
     fun getDefaultMetadata(): Int = mcBlock.getMetaFromState(getDefaultState())
-
-    fun canProvidePower(): Boolean {
-        //#if MC<=10809
-        return this.mcBlock.canProvidePower()
-        //#else
-        //$$ return this.block.canProvidePower(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
-        //#endif
-    }
+    //#endif
 
     fun getHarvestLevel(): Int = mcBlock.getHarvestLevel(getDefaultState())
-
-    fun isTranslucent(): Boolean {
-        //#if MC<=10809
-        return this.mcBlock.isTranslucent
-        //#else
-        //$$ return this.block.isTranslucent(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
-        //#endif
-    }
 
     override fun toString(): String = "BlockType{name=${mcBlock.registryName}}"
 }

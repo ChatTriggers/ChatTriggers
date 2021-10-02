@@ -138,7 +138,7 @@ object World {
      */
     @JvmStatic
     fun getBlockStateAt(pos: BlockPos): IBlockState {
-        return getWorld()!!.getBlockState(pos.toMCBlock())
+        return getWorld()!!.getBlockState(pos.toMCBlockPos())
     }
 
     /**
@@ -164,7 +164,7 @@ object World {
     @JvmStatic
     fun getPlayerByName(name: String): PlayerMP? {
         //#if MC==11602
-        //$$ return getWorld()?.allEntities?.filterIsInstance<PlayerEntity>()?.firstOrNull(::PlayerMP)
+        //$$ return getWorld()?.allEntities?.filterIsInstance<PlayerEntity>()?.firstOrNull()?.let(::PlayerMP)
         //#else
         return getWorld()?.getPlayerEntityByName(name)?.let(::PlayerMP)
         //#endif

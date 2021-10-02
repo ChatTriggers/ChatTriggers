@@ -45,5 +45,5 @@ class BlockPos(x: Number, y: Number, z: Number) : Vec3i(x, y, z) {
         return BlockPos(x + facing.getOffsetX() * n, y + facing.getOffsetY() * n, z + facing.getOffsetZ() * n)
     }
 
-    fun toMCBlock() = MCBlockPos(x, y, z)
+    fun toMCBlockPos() = MCBlockPos(x, y, z)
 }

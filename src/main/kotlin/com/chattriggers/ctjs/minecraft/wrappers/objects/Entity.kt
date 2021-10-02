@@ -5,14 +5,20 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
-import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.util.Vec3
+import net.minecraft.util.MathHelper
 import net.minecraft.world.World
 import java.util.*
+
+//#if MC==11602
+//$$ import net.minecraft.entity.MoverType
+//$$ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+//$$ import net.minecraft.util.math.vector.Vector3d
+//#else
+import net.minecraft.util.Vec3
+//#endif
 
 @External
 open class Entity(val entity: MCEntity) {
@@ -40,7 +46,7 @@ open class Entity(val entity: MCEntity) {
      */
     fun getPitch(): Double {
         //#if MC<=10809
-        return MCMathHelper.wrapAngleTo180_float(this.entity.rotationPitch).toDouble()
+        return MathHelper.wrapAngleTo180_float(this.entity.rotationPitch).toDouble()
         //#else
         //$$ return MathHelper.wrapDegrees(this.entity.rotationPitch).toDouble()
         //#endif
@@ -54,7 +60,7 @@ open class Entity(val entity: MCEntity) {
      */
     fun getYaw(): Double {
         //#if MC<=10809
-        return MCMathHelper.wrapAngleTo180_float(this.entity.rotationYaw).toDouble()
+        return MathHelper.wrapAngleTo180_float(this.entity.rotationYaw).toDouble()
         //#else
         //$$ return MathHelper.wrapDegrees(this.entity.rotationYaw).toDouble()
         //#endif
@@ -66,7 +72,11 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the player's x motion
      */
+    //#if MC==11602
+    //$$ fun getMotionX(): Double = this.entity.motion.x
+    //#else
     fun getMotionX(): Double = this.entity.motionX
+    //#endif
 
     /**
      * Gets the entity's y motion.
@@ -74,7 +84,11 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the player's y motion
      */
+    //#if MC==11602
+    //$$ fun getMotionY(): Double = this.entity.motion.y
+    //#else
     fun getMotionY(): Double = this.entity.motionY
+    //#endif
 
     /**
      * Gets the entity's z motion.
@@ -82,7 +96,11 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the player's z motion
      */
+    //#if MC==11602
+    //$$ fun getMotionZ(): Double = this.entity.motion.z
+    //#else
     fun getMotionZ(): Double = this.entity.motionZ
+    //#endif
 
     /**
      * Gets the entity's health, -1 if not a living entity
@@ -109,7 +127,7 @@ open class Entity(val entity: MCEntity) {
         //#if MC<=10809
         return entity.riddenByEntity?.let(::Entity)
         //#else
-        //$$ return riders.firstOrNull()?.let(::Entity)
+        //$$ return entity.ridingEntity?.let(::Entity)
         //#endif
     }
 
@@ -159,7 +177,11 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the (custom) name of the entity
      */
+    //#if MC==11602
+    //$$ open fun getName(): String = TextComponent(this.entity.name).getFormattedText()
+    //#else
     open fun getName(): String = this.entity.name
+    //#endif
 
     /**
      * Gets the Java class name of the entity, for example "EntityVillager"
@@ -180,21 +202,35 @@ open class Entity(val entity: MCEntity) {
 
     fun distanceTo(other: MCEntity): Float = entity.getDistanceToEntity(other)
 
-    fun distanceTo(blockPos: BlockPos): Float = entity.getDistance(
-        blockPos.x.toDouble(),
-        blockPos.y.toDouble(),
-        blockPos.z.toDouble()
-    ).toFloat()
+    fun distanceTo(blockPos: BlockPos): Float = distanceTo(
+        blockPos.x.toFloat(),
+        blockPos.y.toFloat(),
+        blockPos.z.toFloat(),
+    )
 
-    fun distanceTo(x: Float, y: Float, z: Float): Float = entity.getDistance(
-        x.toDouble(),
-        y.toDouble(),
-        z.toDouble()
-    ).toFloat()
+    fun distanceTo(x: Float, y: Float, z: Float): Float {
+        //#if MC==11602
+        //$$ return entity.getDistanceSq(
+        //#else
+        return entity.getDistance(
+        //#endif
+            x.toDouble(),
+            y.toDouble(),
+            z.toDouble()
+        ).toFloat()
+    }
 
+    //#if MC==11602
+    //$$ fun isOnGround() = entity.isOnGround
+    //#else
     fun isOnGround() = entity.onGround
+    //#endif
 
+    //#if MC==11602
+    //$$ fun isCollided() = entity.collidedVertically || entity.collidedHorizontally
+    //#else
     fun isCollided() = entity.isCollided
+    //#endif
 
     fun getDistanceWalked() = entity.distanceWalkedModified / 0.6
 
@@ -204,7 +240,10 @@ open class Entity(val entity: MCEntity) {
 
     fun getTicksExisted() = entity.ticksExisted
 
+    // TODO(1.16.2)
+    //#if MC==10809
     fun getFireResistance() = entity.fireResistance
+    //#endif
 
     fun isImmuneToFire() = entity.isImmuneToFire
 
@@ -214,15 +253,21 @@ open class Entity(val entity: MCEntity) {
 
     fun isAirborne() = entity.isAirBorne
 
+    // TODO(1.16.2)
+    //#if MC==10809
     fun getDimension() = entity.dimension
+    //#endif
 
     fun setPosition(x: Double, y: Double, z: Double) = apply {
         entity.setPosition(x, y, z)
     }
 
+    // TODO(1.16.2)
+    //#if MC==10809
     fun setAngles(yaw: Float, pitch: Float) = apply {
         entity.setAngles(yaw, pitch)
     }
+    //#endif
 
     fun getMaxInPortalTime() = entity.maxInPortalTime
 
@@ -235,7 +280,11 @@ open class Entity(val entity: MCEntity) {
     }
 
     fun move(x: Double, y: Double, z: Double) = apply {
+        //#if MC==11602
+        //$$ entity.move(MoverType.SELF, Vector3d(x, y, z))
+        //#else
         entity.moveEntity(x, y, z)
+        //#endif
     }
 
     fun isSilent() = entity.isSilent
@@ -250,15 +299,27 @@ open class Entity(val entity: MCEntity) {
         entity.addVelocity(x, y, z)
     }
 
+    //#if MC==11602
+    //$$ fun getLookVector(partialTicks: Float): Vector3d = entity.getLook(partialTicks)
+    //#else
     fun getLookVector(partialTicks: Float): Vec3 = entity.getLook(partialTicks)
+    //#endif
 
+    //#if MC==11602
+    //$$ fun getEyePosition(partialTicks: Float): Vector3d = entity.getEyePosition(partialTicks)
+    //#else
     fun getEyePosition(partialTicks: Float): Vec3 = entity.getPositionEyes(partialTicks)
+    //#endif
 
     fun canBeCollidedWith() = entity.canBeCollidedWith()
 
     fun canBePushed() = entity.canBePushed()
 
+    //#if MC==11602
+    //$$ fun dropItem(item: Item, size: Int) = entity.entityDropItem(item.item, size)
+    //#else
     fun dropItem(item: Item, size: Int) = entity.dropItem(item.item, size)
+    //#endif
 
     fun isSneaking() = entity.isSneaking
 
@@ -278,6 +339,8 @@ open class Entity(val entity: MCEntity) {
         entity.isInvisible = invisible
     }
 
+    // TODO(1.16.2)
+    //#if MC==10809
     fun isEating() = entity.isEating
 
     fun setIsEating(eating: Boolean) = apply {
@@ -289,6 +352,7 @@ open class Entity(val entity: MCEntity) {
     fun setIsOutsideBorder(outside: Boolean) = apply {
         entity.isOutsideBorder = outside
     }
+    //#endif
 
     fun getWorld(): World = entity.entityWorld
 

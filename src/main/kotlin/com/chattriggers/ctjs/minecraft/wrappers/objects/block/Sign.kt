@@ -1,9 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
 import com.chattriggers.ctjs.minecraft.objects.message.Message
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.tileentity.TileEntitySign
+import net.minecraft.util.IChatComponent
 
 /**
  * Creates a new Sign object wrapper.<br>
@@ -14,13 +16,19 @@ import net.minecraft.tileentity.TileEntitySign
  */
 @External
 class Sign(block: Block) : Block(block.type, block.pos, block.face) {
-    private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(pos.toMCBlock()) as TileEntitySign
+    private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(pos.toMCBlockPos()) as TileEntitySign
 
-    fun getLines(): List<Message> = sign.signText.map { it?.let(::Message) ?: Message("") }
+    //#if MC==11602
+    //$$ private fun getLinesImpl(): List<ITextComponent> = (0..3).map(sign::getText)
+    //#else
+    private fun getLinesImpl(): List<IChatComponent> = sign.signText.toList()
+    //#endif
 
-    fun getFormattedLines(): List<String> = sign.signText.map { it?.formattedText ?: "" }
+    fun getLines(): List<Message> = getLinesImpl().map(::Message)
 
-    fun getUnformattedLines(): List<String> = sign.signText.map { it?.unformattedText ?: "" }
+    fun getFormattedLines(): List<String> = getLinesImpl().map { TextComponent(it).getFormattedText() }
+
+    fun getUnformattedLines(): List<String> = getLinesImpl().map { TextComponent(it).getUnformattedText() }
 
     override fun toString(): String =
         "Sign{lines=${getLines()}, name=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"

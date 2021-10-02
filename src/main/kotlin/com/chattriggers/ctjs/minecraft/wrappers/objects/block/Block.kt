@@ -30,18 +30,63 @@ open class Block(
 
     fun getState() = World.getBlockStateAt(pos)
 
+    // TODO(1.16.2)
+    //#if MC==10809
     fun getMetadata(): Int = type.mcBlock.getMetaFromState(getState())
+    //#endif
 
-    fun isPowered() = World.getWorld()!!.isBlockPowered(pos.toMCBlock())
+    fun isPowered() = World.getWorld()!!.isBlockPowered(pos.toMCBlockPos())
 
-    fun getRedstoneStrength() = World.getWorld()!!.getStrongPower(pos.toMCBlock())
+    fun getRedstoneStrength() = World.getWorld()!!.getStrongPower(pos.toMCBlockPos())
+
+    fun getLightValue(): Int {
+        //#if MC==11602
+        //$$ val blockPos = pos.toMCBlockPos()
+        //$$ return this.type.mcBlock.getLightValue(
+        //$$     World.getWorld()!!.getBlockState(pos.toMCBlockPos()),
+        //$$     World.getWorld(),
+        //$$     blockPos
+        //$$ )
+        //#else
+        return this.type.mcBlock.lightValue
+        //#endif
+    }
+
+    fun canProvidePower(): Boolean {
+        //#if MC==11602
+        //$$ return this.type.mcBlock.canProvidePower(
+        //$$     World.getWorld()!!.getBlockState(pos.toMCBlockPos())
+        //$$ )
+        //#else
+        return this.type.mcBlock.canProvidePower()
+        //#endif
+    }
+
+    fun isTranslucent(): Boolean {
+        //#if MC==11602
+        //$$ return this.type.mcBlock.isTransparent(
+        //$$     World.getWorld()!!.getBlockState(pos.toMCBlockPos())
+        //$$ )
+        //#else
+        return this.type.mcBlock.isTranslucent
+        //#endif
+    }
 
     /**
      * Checks whether the block can be mined with the tool in the player's hand
      *
      * @return whether the block can be mined
      */
-    fun canBeHarvested(): Boolean = type.mcBlock.canHarvestBlock(World.getWorld(), pos.toMCBlock(), Player.getPlayer())
+    fun canBeHarvested(): Boolean {
+        return type.mcBlock.canHarvestBlock(
+            //#if MC==11602
+            //$$ World.getWorld()!!.getBlockState(pos.toMCBlockPos()),
+            //#endif
+            World.getWorld()!!,
+            pos.toMCBlockPos(),
+            Player.getPlayer()!!,
+        )
+    }
 
     fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
 

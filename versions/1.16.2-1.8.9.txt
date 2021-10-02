@@ -51,3 +51,7 @@ net.minecraftforge.event.entity.player.PlayerEvent entityPlayer entity
 net.minecraft.client.entity.player.AbstractClientPlayerEntity net.minecraft.client.entity.AbstractClientPlayer
 net.minecraft.entity.LivingEntity net.minecraft.entity.EntityLivingBase
 net.minecraft.block.BlockState net.minecraft.block.state.IBlockState
+net.minecraft.util.math.MathHelper net.minecraft.util.MathHelper
+net.minecraft.util.Vec3 net.minecraft.util.math.vector.Vector3d
+net.minecraft.potion.EffectInstance net.minecraft.potion.PotionEffect
+net.minecraft.tileentity.SignTileEntity net.minecraft.tileentity.TileEntitySign
