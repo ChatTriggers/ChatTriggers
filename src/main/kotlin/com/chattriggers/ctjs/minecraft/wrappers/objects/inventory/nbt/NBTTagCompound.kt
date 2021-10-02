@@ -7,8 +7,11 @@ import net.minecraft.nbt.NBTTagIntArray
 import org.mozilla.javascript.NativeObject
 
 class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
+    // TODO(1.16.2)
+    //#if MC==10809
     val tagMap: Map<String, MCNBTBase>
         get() = rawNBT.tagMap
+    //#endif
 
     val keySet: Set<String>
         get() = rawNBT.keySet
@@ -68,12 +71,21 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.LONG -> getLong(key)
             NBTDataType.FLOAT -> getFloat(key)
             NBTDataType.DOUBLE -> getDouble(key)
+            NBTDataType.BOOLEAN -> getBoolean(key)
+            NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
+            NBTDataType.TAG_LIST -> getTagList(
+                key,
+                tagType ?: throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument"),
+            )
+            //#if MC==11602
+            //$$ NBTDataType.STRING -> if (rawNBT.contains(key, 8)) (rawNBT.get(key) as NBTBase).toString() else null
+            //$$ NBTDataType.BYTE_ARRAY -> if (rawNBT.contains(key, 7)) (rawNBT.get(key) as ByteArrayNBT).byteArray else null
+            //$$ NBTDataType.INT_ARRAY -> if (rawNBT.contains(key, 11)) (rawNBT.get(key) as IntArrayNBT).intArray else null
+            //#else
             NBTDataType.STRING -> if (rawNBT.hasKey(key, 8)) (tagMap[key] as NBTBase).toString() else null
             NBTDataType.BYTE_ARRAY -> if (rawNBT.hasKey(key, 7)) (tagMap[key] as NBTTagByteArray).byteArray else null
             NBTDataType.INT_ARRAY -> if (rawNBT.hasKey(key, 11)) (tagMap[key] as NBTTagIntArray).intArray else null
-            NBTDataType.BOOLEAN -> getBoolean(key)
-            NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
-            NBTDataType.TAG_LIST -> if (tagType == null) throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument") else getTagList(key, tagType)
+            //#endif
         }
     }
 
@@ -81,8 +93,13 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
 
     operator fun set(key: String, value: Any) = apply {
         when (value) {
+            //#if MC==11602
+            //$$ is NBTBase -> rawNBT.put(key, value.rawNBT)
+            //$$ is MCNBTBase -> rawNBT.put(key, value)
+            //#else
             is NBTBase -> rawNBT.setTag(key, value.rawNBT)
             is MCNBTBase -> rawNBT.setTag(key, value)
+            //#endif
             is Byte -> rawNBT.setByte(key, value)
             is Short -> rawNBT.setShort(key, value)
             is Int -> rawNBT.setInteger(key, value)

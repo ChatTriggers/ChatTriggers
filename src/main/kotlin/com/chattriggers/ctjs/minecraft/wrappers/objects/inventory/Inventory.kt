@@ -32,7 +32,7 @@ class Inventory : JSONImpl {
      *
      * @return the size of the Inventory
      */
-    fun getSize(): Int = inventory?.sizeInventory ?: container!!.inventoryItemStacks.size
+    fun getSize(): Int = inventory?.sizeInventory ?: container!!.inventorySlots.size
 
     /**
      * Gets the item in any slot, starting from 0.
@@ -182,12 +182,15 @@ class Inventory : JSONImpl {
      *
      * @return the name of the inventory
      */
+    // TODO(1.16.2)
+    //#if MC==10809
     fun getName(): String {
         return when (container) {
             is ContainerChest -> container.lowerChestInventory.name
             else -> inventory?.name ?: "container"
         }
     }
+    //#endif
 
     fun getClassName(): String = inventory?.javaClass?.simpleName ?: container!!.javaClass.simpleName
 

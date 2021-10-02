@@ -3,8 +3,8 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.utils.kotlin.External
 
-//#if MC>10809
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
+//#if MC==11602
+//$$ internal typealias MCClickType = net.minecraft.inventory.container.ClickType
 //#endif
 
 @External
@@ -87,7 +87,7 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
             mode = 1
         }
         //#else
-        //$$ val mode: MCClickType = if (this.clickType == ClickType.MIDDLE) {
+        //$$ val mode = if (this.clickType == ClickType.MIDDLE) {
         //$$     MCClickType.CLONE
         //$$ } else if (slot == -999 && !this.itemInHand) {
         //$$     MCClickType.THROW

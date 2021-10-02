@@ -24,9 +24,7 @@ internal typealias MCTextComponentSerializer = net.minecraft.util.IChatComponent
 internal typealias MCMathHelper = net.minecraft.util.MathHelper
 
 // NBT
-//#if MC==10809
 internal typealias MCNBTBase = net.minecraft.nbt.NBTBase
 internal typealias MCNBTTagCompound = net.minecraft.nbt.NBTTagCompound
 internal typealias MCNBTTagList = net.minecraft.nbt.NBTTagList
 internal typealias MCNBTTagString = net.minecraft.nbt.NBTTagString
-//#endif

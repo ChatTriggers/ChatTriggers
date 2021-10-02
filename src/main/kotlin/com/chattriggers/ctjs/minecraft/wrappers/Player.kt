@@ -310,7 +310,7 @@ object Player {
     }
 
     @JvmStatic
-    fun getHeldItem(): Item = Item(getPlayer()?.inventory?.getCurrentItem())
+    fun getHeldItem(): Item? = getPlayer()?.inventory?.getCurrentItem()?.let(::Item)
 
     @JvmStatic
     fun setHeldItemIndex(index: Int) {

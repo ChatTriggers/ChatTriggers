@@ -22,9 +22,20 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     /**
      * Return whether this compound has no tags.
      */
-    fun hasNoTags() = rawNBT.hasNoTags()
+    fun hasNoTags(): Boolean {
+        //#if MC==11602
+        //$$ return when (val nbt = rawNBT) {
+        //$$     is StringNBT -> nbt.string.isEmpty()
+        //$$     is CompoundNBT -> nbt.isEmpty
+        //$$     is ListNBT -> nbt.isEmpty()
+        //$$     else -> false
+        //$$ }
+        //#else
+        return rawNBT.hasNoTags()
+        //#endif
+    }
 
-    fun hasTags() = !rawNBT.hasNoTags()
+    fun hasTags() = !hasNoTags()
 
     override fun equals(other: Any?) = rawNBT == other
 
@@ -55,7 +66,11 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
             o.expose()
 
             for (key in keySet) {
+                //#if MC==11602
+                //$$ val value = get(key)
+                //#else
                 val value = tagMap[key]
+                //#endif
                 if (value != null) {
                     o.put(key, o, value.toObject())
                 }
@@ -66,9 +81,13 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
 
         fun MCNBTTagList.toObject(): NativeArray {
             val tags = mutableListOf<Any?>()
-            for (i in 0 until tagCount()) {
+            //#if MC==11602
+            //$$ for (tag in this)
+            //$$     tags.add(tag.toObject())
+            //#else
+            for (i in 0 until tagCount())
                 tags.add(get(i).toObject())
-            }
+            //#endif
             val array = NativeArray(tags.toTypedArray())
             array.expose()
             return array

@@ -55,3 +55,17 @@ net.minecraft.util.math.MathHelper net.minecraft.util.MathHelper
 net.minecraft.util.Vec3 net.minecraft.util.math.vector.Vector3d
 net.minecraft.potion.EffectInstance net.minecraft.potion.PotionEffect
 net.minecraft.tileentity.SignTileEntity net.minecraft.tileentity.TileEntitySign
+net.minecraft.inventory.container.Container net.minecraft.inventory.Container
+net.minecraft.inventory.container.ChestContainer net.minecraft.inventory.ContainerChest
+net.minecraft.nbt.INBT net.minecraft.nbt.NBTBase
+net.minecraft.nbt.CompoundNBT net.minecraft.nbt.NBTTagCompound
+net.minecraft.nbt.StringNBT net.minecraft.nbt.NBTTagString
+net.minecraft.nbt.ListNBT net.minecraft.nbt.NBTTagList
+net.minecraft.nbt.ByteNBT net.minecraft.nbt.NBTTagByte
+net.minecraft.nbt.ShortNBT net.minecraft.nbt.NBTTagShort
+net.minecraft.nbt.IntNBT net.minecraft.nbt.NBTTagInt
+net.minecraft.nbt.LongNBT net.minecraft.nbt.NBTTagLong
+net.minecraft.nbt.FloatNBT net.minecraft.nbt.NBTTagFloat
+net.minecraft.nbt.DoubleNBT net.minecraft.nbt.NBTTagDouble
+net.minecraft.nbt.ByteArrayNBT net.minecraft.nbt.NBTTagByteArray
+net.minecraft.nbt.IntArrayNBT net.minecraft.nbt.NBTTagIntArray

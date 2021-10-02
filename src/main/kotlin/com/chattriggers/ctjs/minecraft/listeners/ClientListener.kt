@@ -329,7 +329,7 @@ object ClientListener {
         return event.isCancelled()
     }
 
-    fun onDropItem(player: EntityPlayer, item: ItemStack?): Boolean {
+    fun onDropItem(player: EntityPlayer, item: ItemStack): Boolean {
         if (player !is EntityPlayerMP) return false
 
         val event = CancellableEvent()

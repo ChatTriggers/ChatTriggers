@@ -22,6 +22,7 @@ import org.lwjgl.opengl.GL11
 //$$ import com.chattriggers.ctjs.minecraft.wrappers.World
 //$$ import net.minecraft.util.registry.Registry
 //$$ import net.minecraft.util.ResourceLocation
+//$$ import net.minecraftforge.registries.ForgeRegistries
 //#else
 import net.minecraft.enchantment.Enchantment
 //#endif
@@ -32,24 +33,14 @@ class Item {
     var itemStack: ItemStack
 
     /* Constructors */
-    constructor(itemStack: ItemStack?) {
-        //#if MC<=10809
-        if (itemStack == null) {
-            //#else
-            //$$ if (itemStack == null || itemStack == ItemStack.EMPTY) {
-            //#endif
-            this.item = ItemBlock(BlockType(0).mcBlock)
-            this.itemStack = ItemStack(item)
-        } else {
-            this.item = itemStack.item
-            this.itemStack = itemStack
-        }
+    constructor(itemStack: ItemStack) {
+        this.item = itemStack.item
+        this.itemStack = itemStack
     }
 
     constructor(itemName: String) {
         //#if MC==11602
-        // TODO(1.16.2): Verify this actually works, cause it doesn't seem right
-        //$$ item = Registry.ITEM.getOrDefault(ResourceLocation(itemName))
+        //$$ item = ForgeRegistries.ITEMS.getValue(ResourceLocation(itemName))!!
         //#else
         item = net.minecraft.item.Item.getByNameOrId(itemName)
         //#endif
@@ -233,7 +224,10 @@ class Item {
         GL11.glColor4f(1f, 1f, 1f, 1f)
 
         RenderHelper.enableStandardItemLighting()
+        // TODO(1.16.2): Is there an equivalent? Or is this no longer necessary
+        //#if MC==10809
         RenderHelper.enableGUIStandardItemLighting()
+        //#endif
 
         itemRenderer.zLevel = 200f
         itemRenderer.renderItemIntoGUI(itemStack, 0, 0)

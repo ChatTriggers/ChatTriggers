@@ -5,14 +5,26 @@ import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
 
 class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
     val tagCount: Int
+        //#if MC==11602
+        //$$ get() = rawNBT.size
+        //#else
         get() = rawNBT.tagCount()
+        //#endif
 
     fun appendTag(nbt: NBTBase) = apply {
+        //#if MC==11602
+        //$$ rawNBT.add(nbt.rawNBT)
+        //#else
         rawNBT.appendTag(nbt.rawNBT)
+        //#endif
     }
 
     fun appendTag(nbt: MCNBTBase) = apply {
+        //#if MC==11602
+        //$$ rawNBT.add(nbt)
+        //#else
         rawNBT.appendTag(nbt)
+        //#endif
     }
 
     operator fun set(id: Int, nbt: NBTBase) {
@@ -23,7 +35,13 @@ class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
         rawNBT.set(id, nbt)
     }
 
-    fun removeTag(index: Int) = rawNBT.removeTag(index)
+    fun removeTag(index: Int) {
+        //#if MC==11602
+        //$$ rawNBT.removeAt(index)
+        //#else
+        rawNBT.removeTag(index)
+        //#endif
+    }
 
     fun getCompoundTagAt(index: Int) = rawNBT.getCompoundTagAt(index)
 
