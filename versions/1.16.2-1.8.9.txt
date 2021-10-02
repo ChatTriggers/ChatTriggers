@@ -34,5 +34,20 @@ com.mojang.blaze3d.systems.RenderSystem blendFuncSeparate() tryBlendFuncSeparate
 com.mojang.blaze3d.systems.RenderSystem enableTexture() enableTexture2D()
 com.mojang.blaze3d.systems.RenderSystem disableTexture() disableTexture2D()
 com.mojang.blaze3d.systems.RenderSystem color4f() color()
+com.mojang.blaze3d.systems.RenderSystem scalef() scale()
+com.mojang.blaze3d.systems.RenderSystem rotatef() rotate()
+com.mojang.blaze3d.systems.RenderSystem translatef() translate()
 net.minecraft.client.entity.player.ClientPlayerEntity net.minecraft.client.entity.EntityPlayerSP
 net.minecraft.client.network.play.NetworkPlayerInfo net.minecraft.client.network.NetworkPlayerInfo
+net.minecraft.item.BlockItem net.minecraft.item.ItemBlock
+net.minecraft.entity.item.ItemEntity net.minecraft.entity.item.EntityItem
+net.minecraft.client.renderer.entity.EntityRendererManager net.minecraft.client.renderer.entity.RenderManager
+net.minecraftforge.eventbus.api.SubscribeEvent net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+net.minecraft.util.math.vector.Vector3f org.lwjgl.util.vector.Vector3f
+net.minecraft.entity.player.PlayerEntity net.minecraft.entity.player.EntityPlayer
+net.minecraftforge.event.TickEvent net.minecraftforge.fml.common.gameevent.TickEvent
+net.minecraft.entity.player.ServerPlayerEntity net.minecraft.entity.player.EntityPlayerMP
+net.minecraftforge.event.entity.player.PlayerEvent entityPlayer entity
+net.minecraft.client.entity.player.AbstractClientPlayerEntity net.minecraft.client.entity.AbstractClientPlayer
+net.minecraft.entity.LivingEntity net.minecraft.entity.EntityLivingBase
+net.minecraft.block.BlockState net.minecraft.block.state.IBlockState

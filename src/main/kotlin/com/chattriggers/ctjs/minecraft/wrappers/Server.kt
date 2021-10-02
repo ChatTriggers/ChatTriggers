@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.util.ChatComponentText
 
 @External
 object Server {
@@ -40,7 +42,13 @@ object Server {
     fun getMOTD(): String {
         if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
 
-        return Client.getMinecraft().currentServerData?.serverMOTD ?: ""
+        //#if MC==11602
+        //$$ return TextComponent(
+        //$$     Client.getMinecraft().currentServerData?.serverMOTD ?: StringTextComponent("")
+        //$$ ).getFormattedText()
+        //#else
+        return Client.getMinecraft().currentServerData.serverMOTD ?: ""
+        //#endif
     }
 
     /**
@@ -61,6 +69,6 @@ object Server {
         }
 
         return Client.getConnection()?.getPlayerInfo(player.uniqueID)?.responseTime?.toLong()
-            ?: Client.getMinecraft().currentServerData.pingToServer ?: -1L
+            ?: Client.getMinecraft().currentServerData?.pingToServer ?: -1L
     }
 }

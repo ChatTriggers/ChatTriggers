@@ -2,13 +2,19 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCGameType
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
 import java.util.*
+
+//#if MC==11602
+//$$ import net.minecraft.world.GameType
+//$$ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+//#else
+import net.minecraft.world.WorldSettings.GameType
+//#endif
 
 @External
 object TabList {
@@ -23,12 +29,20 @@ object TabList {
     fun getNamesByObjectives(): List<String> {
         return try {
             val scoreboard = World.getWorld()?.scoreboard ?: return emptyList()
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0)
+            @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0)!!
             val scores = scoreboard.getSortedScores(sidebarObjective)
 
             scores.map {
                 val team = scoreboard.getPlayersTeam(it.playerName)
+                //#if MC==11602
+                //$$ TextComponent(ScorePlayerTeam.func_237500_a_(
+                //$$     team,
+                //$$     TextComponent(it.playerName).component,
+                //$$ )).getFormattedText()
+                //#else
                 ScorePlayerTeam.formatPlayerName(team, it.playerName)
+                //#endif
             }
         } catch (e: Exception) {
             emptyList()
@@ -39,10 +53,16 @@ object TabList {
     fun getNames(): List<String> {
         if (Client.getTabGui() == null) return listOf()
 
-        val playerList = playerComparator.sortedCopy(Client.getMinecraft().thePlayer.sendQueue.playerInfoMap)
+        val playerList = playerComparator.sortedCopy(
+            Client.getMinecraft().thePlayer?.sendQueue?.playerInfoMap ?: return listOf()
+        )
 
         return playerList.map {
+            //#if MC==11602
+            //$$ TextComponent(Client.getTabGui()!!.getDisplayName(it)).getFormattedText()
+            //#else
             Client.getTabGui()!!.getPlayerName(it)
+            //#endif
         }
     }
 
@@ -62,11 +82,14 @@ object TabList {
         } ?: emptyList()
     }
 
+    // TODO(1.16.2): ATs?
+    //#if MC==10809
     @JvmStatic
     fun getHeaderMessage() = Client.getTabGui()?.header?.let(::Message)
 
     @JvmStatic
     fun getHeader() = Client.getTabGui()?.header?.formattedText
+    //#endif
 
     @JvmStatic
     fun setHeader(header: Any) {
@@ -77,11 +100,14 @@ object TabList {
         }
     }
 
+    // TODO(1.16.2): ATs?
+    //#if MC==10809
     @JvmStatic
     fun getFooterMessage() = Client.getTabGui()?.footer?.let(::Message)
 
     @JvmStatic
     fun getFooter() = Client.getTabGui()?.footer?.formattedText
+    //#endif
 
     @JvmStatic
     fun setFooter(footer: Any) {
@@ -100,15 +126,15 @@ object TabList {
             return ComparisonChain
                 .start()
                 .compareTrueFirst(
-                    playerOne.gameType != MCGameType.SPECTATOR,
-                    playerTwo.gameType != MCGameType.SPECTATOR
+                    playerOne.gameType != GameType.SPECTATOR,
+                    playerTwo.gameType != GameType.SPECTATOR
                 ).compare(
-                    //#if MC<=10809
-                    teamOne?.registeredName ?: "",
-                    teamTwo?.registeredName ?: ""
-                    //#else
+                    //#if MC==11602
                     //$$ teamOne?.name ?: "",
                     //$$ teamTwo?.name ?: ""
+                    //#else
+                    teamOne.registeredName,
+                    teamTwo.registeredName
                     //#endif
                 ).compare(
                     playerOne.gameProfile.name,

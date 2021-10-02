@@ -10,23 +10,25 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagComp
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
-import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import org.lwjgl.opengl.GL11
-import net.minecraft.item.Item as MCItem
 
 
 //#if MC>10809
 //$$ import net.minecraft.client.util.ITooltipFlag
 //$$ import com.chattriggers.ctjs.minecraft.wrappers.World
+//$$ import net.minecraft.util.registry.Registry
+//$$ import net.minecraft.util.ResourceLocation
+//#else
+import net.minecraft.enchantment.Enchantment
 //#endif
 
 @External
 class Item {
-    val item: MCItem
+    val item: net.minecraft.item.Item
     var itemStack: ItemStack
 
     /* Constructors */
@@ -45,17 +47,22 @@ class Item {
     }
 
     constructor(itemName: String) {
-        item = MCItem.getByNameOrId(itemName)
+        //#if MC==11602
+        // TODO(1.16.2): Verify this actually works, cause it doesn't seem right
+        //$$ item = Registry.ITEM.getOrDefault(ResourceLocation(itemName))
+        //#else
+        item = net.minecraft.item.Item.getByNameOrId(itemName)
+        //#endif
         itemStack = ItemStack(item)
     }
 
     constructor(itemID: Int) {
-        item = MCItem.getItemById(itemID)
+        item = net.minecraft.item.Item.getItemById(itemID)
         itemStack = ItemStack(item)
     }
 
     constructor(block: BlockType) {
-        item = MCItem.getItemFromBlock(block.mcBlock)
+        item = net.minecraft.item.Item.getItemFromBlock(block.mcBlock)
         itemStack = ItemStack(item)
     }
 
@@ -99,7 +106,7 @@ class Item {
     @Deprecated("Use the better-named method", ReplaceWith("getNBT"))
     fun getItemNBT(): NBTTagCompound = getNBT()
 
-    fun getID(): Int = MCItem.getIdFromItem(item)
+    fun getID(): Int = net.minecraft.item.Item.getIdFromItem(item)
 
     fun setStackSize(stackSize: Int) = apply {
         itemStack = ItemStack(item, stackSize)
@@ -141,7 +148,7 @@ class Item {
      *
      * @return the item's stack display name
      */
-    fun getName(): String = if (getID() == 0) "air" else itemStack.displayName
+    fun getName(): String = if (getID() == 0) "air" else TextComponent(itemStack.displayName).getUnformattedText()
 
     fun getEnchantments(): Map<String, Int> {
         return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
@@ -160,21 +167,24 @@ class Item {
 
     fun isEnchanted(): Boolean = itemStack.isItemEnchanted
 
+    //#if MC!=11602
+    // TODO(1.16.2)
     fun getMetadata(): Int = itemStack.metadata
 
     fun canPlaceOn(block: BlockType): Boolean = itemStack.canPlaceOn(block.mcBlock)
+    //#endif
 
     fun canHarvest(block: BlockType): Boolean {
         //#if MC<=10809
         return this.itemStack.canHarvestBlock(block.mcBlock)
         //#else
-        //$$ return this.itemStack.canHarvestBlock(
-        //$$         World.getWorld().getBlockState(block.blockPos)
-        //$$ )
+        //$$ return this.itemStack.canHarvestBlock(block.getDefaultState())
         //#endif
     }
 
+    //#if MC!=11602
     fun canDestroy(block: BlockType): Boolean = itemStack.canDestroy(block.mcBlock)
+    //#endif
 
     /**
      * Gets the items durability, i.e. the number of uses left
@@ -197,7 +207,9 @@ class Item {
         //#if MC<=10809
         return itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips)
         //#else
-        //$$ return itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED)
+        //$$ return itemStack
+        //$$     .getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED)
+        //$$     .map { TextComponent(it).getFormattedText() }
         //#endif
     }
 
@@ -210,7 +222,11 @@ class Item {
      */
     @JvmOverloads
     fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f) {
+        //#if MC==11602
+        //$$ val itemRenderer = Client.getMinecraft().itemRenderer
+        //#else
         val itemRenderer = Client.getMinecraft().renderItem
+        //#endif
 
         GlStateManager.scale(scale, scale, 1f)
         GlStateManager.translate(x / scale, y / scale, 0f)
