@@ -7,7 +7,6 @@ internal typealias MCDirection = net.minecraft.util.EnumFacing
 internal typealias MCBlock = net.minecraft.block.Block
 internal typealias MCBlockPos = net.minecraft.util.BlockPos
 internal typealias MCWorldRenderer = net.minecraft.client.renderer.WorldRenderer
-internal typealias MCSoundCategory = net.minecraft.client.audio.SoundCategory
 
 // Entity
 internal typealias MCEntity = net.minecraft.entity.Entity

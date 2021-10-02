@@ -1,10 +1,19 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.client.audio.SoundCategory
 import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.world.EnumDifficulty
+
+//#if MC==11602
+//$$ import net.minecraft.client.settings.GraphicsFanciness
+//$$ import net.minecraft.client.settings.AmbientOcclusionStatus
+//$$ import net.minecraft.client.settings.CloudOption
+//$$ import net.minecraft.client.settings.ParticleStatus
+//$$ internal typealias ChatVisibility = net.minecraft.entity.player.ChatVisibility
+//#else
+internal typealias ChatVisibility = net.minecraft.entity.player.EntityPlayer.EnumChatVisibility
+//#endif
 
 @External
 object Settings {
@@ -12,15 +21,31 @@ object Settings {
     fun getSettings() = Client.getMinecraft().gameSettings
 
     @JvmStatic
-    fun getFOV() = getSettings().fovSetting
-
-    @JvmStatic
-    fun setFOV(fov: Float) {
-        getSettings().fovSetting = fov
+    fun getFOV(): Float {
+        //#if MC==11602
+        //$$ return getSettings().fov.toFloat()
+        //#else
+        return getSettings().fovSetting
+        //#endif
     }
 
     @JvmStatic
-    fun getDifficulty() = getSettings().difficulty.difficultyId
+    fun setFOV(fov: Float) {
+        //#if MC==11602
+        //$$ getSettings().fov = fov.toDouble()
+        //#else
+        getSettings().fovSetting = fov
+        //#endif
+    }
+
+    @JvmStatic
+    fun getDifficulty(): Int {
+        //#if MC==11602
+        //$$ return getSettings().difficulty.id
+        //#else
+        return getSettings().difficulty.difficultyId
+        //#endif
+    }
 
     @JvmStatic
     fun setDifficulty(difficulty: Int) {
@@ -92,75 +117,102 @@ object Settings {
 
     object sound {
         @JvmStatic
-        fun getMasterVolume() = getSettings().getSoundLevel(MCSoundCategory.MASTER)
+        fun getMasterVolume() = getSettings().getSoundLevel(SoundCategory.MASTER)
 
         @JvmStatic
-        fun setMasterVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MASTER, level)
+        fun setMasterVolume(level: Float) = getSettings().setSoundLevel(SoundCategory.MASTER, level)
 
         @JvmStatic
-        fun getMusicVolume() = getSettings().getSoundLevel(MCSoundCategory.MUSIC)
+        fun getMusicVolume() = getSettings().getSoundLevel(SoundCategory.MUSIC)
 
         @JvmStatic
-        fun setMusicVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MUSIC, level)
+        fun setMusicVolume(level: Float) = getSettings().setSoundLevel(SoundCategory.MUSIC, level)
 
         @JvmStatic
-        fun getNoteblockVolume() = getSettings().getSoundLevel(MCSoundCategory.RECORDS)
+        fun getNoteblockVolume() = getSettings().getSoundLevel(SoundCategory.RECORDS)
 
         @JvmStatic
-        fun setNoteblockVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.RECORDS, level)
+        fun setNoteblockVolume(level: Float) = getSettings().setSoundLevel(SoundCategory.RECORDS, level)
 
         @JvmStatic
-        fun getWeather() = getSettings().getSoundLevel(MCSoundCategory.WEATHER)
+        fun getWeather() = getSettings().getSoundLevel(SoundCategory.WEATHER)
 
         @JvmStatic
-        fun setWeather(level: Float) = getSettings().setSoundLevel(MCSoundCategory.WEATHER, level)
+        fun setWeather(level: Float) = getSettings().setSoundLevel(SoundCategory.WEATHER, level)
 
         @JvmStatic
-        fun getBlocks() = getSettings().getSoundLevel(MCSoundCategory.BLOCKS)
+        fun getBlocks() = getSettings().getSoundLevel(SoundCategory.BLOCKS)
 
         @JvmStatic
-        fun setBlocks(level: Float) = getSettings().setSoundLevel(MCSoundCategory.BLOCKS, level)
+        fun setBlocks(level: Float) = getSettings().setSoundLevel(SoundCategory.BLOCKS, level)
 
-        //#if MC<=10809
-        @JvmStatic
-        fun getHostileCreatures() = getSettings().getSoundLevel(MCSoundCategory.MOBS)
-
-        @JvmStatic
-        fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MOBS, level)
-
-        @JvmStatic
-        fun getFriendlyCreatures() = getSettings().getSoundLevel(MCSoundCategory.ANIMALS)
-
-        @JvmStatic
-        fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.ANIMALS, level)
-        //#else
+        //#if MC==11602
         //$$ @JvmStatic fun getHostileCreatures() = getSettings().getSoundLevel(SoundCategory.HOSTILE)
         //$$ @JvmStatic fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.HOSTILE, level)
         //$$
         //$$ @JvmStatic fun getFriendlyCreatures() = getSettings().getSoundLevel(SoundCategory.NEUTRAL)
         //$$ @JvmStatic fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.NEUTRAL, level)
+        //#else
+        @JvmStatic
+        fun getHostileCreatures() = getSettings().getSoundLevel(SoundCategory.MOBS)
+
+        @JvmStatic
+        fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.MOBS, level)
+
+        @JvmStatic
+        fun getFriendlyCreatures() = getSettings().getSoundLevel(SoundCategory.ANIMALS)
+
+        @JvmStatic
+        fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.ANIMALS, level)
         //#endif
 
         @JvmStatic
-        fun getPlayers() = getSettings().getSoundLevel(MCSoundCategory.PLAYERS)
+        fun getPlayers() = getSettings().getSoundLevel(SoundCategory.PLAYERS)
 
         @JvmStatic
-        fun setPlayers(level: Float) = getSettings().setSoundLevel(MCSoundCategory.PLAYERS, level)
+        fun setPlayers(level: Float) = getSettings().setSoundLevel(SoundCategory.PLAYERS, level)
 
         @JvmStatic
-        fun getAmbient() = getSettings().getSoundLevel(MCSoundCategory.AMBIENT)
+        fun getAmbient() = getSettings().getSoundLevel(SoundCategory.AMBIENT)
 
         @JvmStatic
-        fun setAmbient(level: Float) = getSettings().setSoundLevel(MCSoundCategory.AMBIENT, level)
+        fun setAmbient(level: Float) = getSettings().setSoundLevel(SoundCategory.AMBIENT, level)
+    }
+
+    enum class GraphicsLevel {
+        FAST,
+        FANCY,
+        FABULOUS,
     }
 
     object video {
         @JvmStatic
-        fun getGraphics() = getSettings().fancyGraphics
+        fun getGraphics(): GraphicsLevel {
+            //#if MC==11602
+            //$$ return when (getSettings().graphicFanciness) {
+            //$$     GraphicsFanciness.FAST -> GraphicsLevel.FAST
+            //$$     GraphicsFanciness.FANCY -> GraphicsLevel.FANCY
+            //$$     GraphicsFanciness.FABULOUS -> GraphicsLevel.FABULOUS
+            //$$     null -> GraphicsLevel.FAST
+            //$$ }
+            //#else
+            return if (getSettings().fancyGraphics) {
+                GraphicsLevel.FANCY
+            } else GraphicsLevel.FAST
+            //#endif
+        }
 
         @JvmStatic
-        fun setGraphics(fancy: Boolean) {
-            getSettings().fancyGraphics = fancy
+        fun setGraphics(level: GraphicsLevel) {
+            //#if MC==11602
+            //$$ getSettings().graphicFanciness = when (level) {
+            //$$     GraphicsLevel.FAST -> GraphicsFanciness.FAST
+            //$$     GraphicsLevel.FANCY -> GraphicsFanciness.FANCY
+            //$$     GraphicsLevel.FABULOUS -> GraphicsFanciness.FABULOUS
+            //$$ }
+            //#else
+            getSettings().fancyGraphics = level != GraphicsLevel.FAST
+            //#endif
         }
 
         @JvmStatic
@@ -172,21 +224,43 @@ object Settings {
         }
 
         @JvmStatic
-        fun getSmoothLighting() = getSettings().ambientOcclusion
+        fun getSmoothLighting(): Int {
+            //#if MC==11602
+            //$$ return getSettings().ambientOcclusionStatus.ordinal
+            //#else
+            return getSettings().ambientOcclusion
+            //#endif
+        }
 
         @JvmStatic
         fun setSmoothLighting(level: Int) {
+            //#if MC==11602
+            //$$ getSettings().ambientOcclusionStatus = AmbientOcclusionStatus.values()[level]
+            //#else
             getSettings().ambientOcclusion = level
+            //#endif
         }
 
         @JvmStatic
-        fun getMaxFrameRate() = getSettings().limitFramerate
+        fun getMaxFrameRate(): Int {
+            //#if MC==11602
+            //$$ return getSettings().framerateLimit
+            //#else
+            return getSettings().limitFramerate
+            //#endif
+        }
 
         @JvmStatic
         fun setMaxFrameRate(frameRate: Int) {
+            //#if MC==11602
+            //$$ getSettings().framerateLimit = frameRate
+            //#else
             getSettings().limitFramerate = frameRate
+            //#endif
         }
 
+        // TODO(1.16.2): Remove?
+        //#if MC==10809
         @JvmStatic
         fun get3dAnaglyph() = getSettings().anaglyph
 
@@ -194,6 +268,7 @@ object Settings {
         fun set3dAnaglyph(toggled: Boolean) {
             getSettings().anaglyph = toggled
         }
+        //#endif
 
         @JvmStatic
         fun getBobbing() = getSettings().viewBobbing
@@ -212,43 +287,93 @@ object Settings {
         }
 
         @JvmStatic
-        fun getBrightness() = getSettings().gammaSetting
-
-        @JvmStatic
-        fun setBrightness(brightness: Float) {
-            getSettings().gammaSetting = brightness
+        fun getBrightness(): Double {
+            //#if MC==11602
+            //$$ return getSettings().gamma
+            //#else
+            return getSettings().gammaSetting.toDouble()
+            //#endif
         }
 
         @JvmStatic
-        fun getClouds() = getSettings().clouds
+        fun setBrightness(brightness: Double) {
+            //#if MC==11602
+            //$$ getSettings().gamma = brightness
+            //#else
+            getSettings().gammaSetting = brightness.toFloat()
+            //#endif
+        }
+
+        @JvmStatic
+        fun getClouds(): Int {
+            //#if MC==11602
+            //$$ return getSettings().cloudOption.ordinal
+            //#else
+            return getSettings().clouds
+            //#endif
+        }
 
         @JvmStatic
         fun setClouds(clouds: Int) {
+            //#if MC==11602
+            //$$ getSettings().cloudOption = CloudOption.values()[clouds]
+            //#else
             getSettings().clouds = clouds
+            //#endif
         }
 
         @JvmStatic
-        fun getParticles() = getSettings().particleSetting
+        fun getParticles(): Int {
+            //#if MC==11602
+            //$$ return getSettings().particles.ordinal
+            //#else
+            return getSettings().particleSetting
+            //#endif
+        }
 
         @JvmStatic
         fun setParticles(particles: Int) {
+            //#if MC==11602
+            //$$ getSettings().particles = ParticleStatus.values()[particles]
+            //#else
             getSettings().particleSetting = particles
+            //#endif
         }
 
         @JvmStatic
-        fun getFullscreen() = getSettings().fullScreen
+        fun getFullscreen(): Boolean {
+            //#if MC==11602
+            //$$ return getSettings().fullscreen
+            //#else
+            return getSettings().fullScreen
+            //#endif
+        }
 
         @JvmStatic
         fun setFullscreen(toggled: Boolean) {
+            //#if MC==11602
+            //$$ getSettings().fullscreen = toggled
+            //#else
             getSettings().fullScreen = toggled
+            //#endif
         }
 
         @JvmStatic
-        fun getVsync() = getSettings().enableVsync
+        fun getVsync(): Boolean {
+            //#if MC==11602
+            //$$ return getSettings().vsync
+            //#else
+            return getSettings().enableVsync
+            //#endif
+        }
 
         @JvmStatic
         fun setVsync(toggled: Boolean) {
+            //#if MC==11602
+            //$$ getSettings().vsync = toggled
+            //#else
             getSettings().enableVsync = toggled
+            //#endif
         }
 
         @JvmStatic
@@ -259,7 +384,10 @@ object Settings {
             getSettings().mipmapLevels = mipmapLevels
         }
 
-        //#if MC<=10809
+        //#if MC==11602
+        //$$ @JvmStatic fun getAlternateBlocks() = UnsupportedOperationException("1.16 has no Alternative Blocks settings")
+        //$$ @JvmStatic fun setAlternateBlocks(toggled: Boolean) = UnsupportedOperationException("1.16 has no Alternative Blocks settings")
+        //#else
         @JvmStatic
         fun getAlternateBlocks() = getSettings().allowBlockAlternatives
 
@@ -267,11 +395,10 @@ object Settings {
         fun setAlternateBlocks(toggled: Boolean) {
             getSettings().allowBlockAlternatives = toggled
         }
-        //#else
-        //$$ @JvmStatic fun getAlternateBlocks() = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
-        //$$ @JvmStatic fun setAlternateBlocks(toggled: Boolean) = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
         //#endif
 
+        // TODO(1.16.2)
+        //#if MC==10809
         @JvmStatic
         fun getVBOs() = getSettings().useVbo
 
@@ -279,6 +406,7 @@ object Settings {
         fun setVBOs(toggled: Boolean) {
             getSettings().useVbo = toggled
         }
+        //#endif
 
         @JvmStatic
         fun getEntityShadows() = getSettings().entityShadows
@@ -297,19 +425,29 @@ object Settings {
         @JvmStatic
         fun setVisibility(visibility: String) {
             when (visibility.lowercase()) {
-                "hidden" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN
-                "commands", "system" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.SYSTEM
-                else -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.FULL
+                "hidden" -> getSettings().chatVisibility = ChatVisibility.HIDDEN
+                "commands", "system" -> getSettings().chatVisibility = ChatVisibility.SYSTEM
+                else -> getSettings().chatVisibility = ChatVisibility.FULL
             }
         }
 
         // colors
         @JvmStatic
-        fun getColors() = getSettings().chatColours
+        fun getColors(): Boolean {
+            //#if MC==11602
+            //$$ return getSettings().chatColor
+            //#else
+            return getSettings().chatColours
+            //#endif
+        }
 
         @JvmStatic
         fun setColors(toggled: Boolean) {
+            //#if MC==11602
+            //$$ getSettings().chatColor = toggled
+            //#else
             getSettings().chatColours = toggled
+            //#endif
         }
 
         // web links
@@ -326,8 +464,12 @@ object Settings {
         fun getOpacity() = getSettings().chatOpacity
 
         @JvmStatic
-        fun setOpacity(opacity: Float) {
-            getSettings().chatOpacity = opacity
+        fun setOpacity(opacity: Double) {
+            //#if MC==11602
+            //$$ getSettings().chatOpacity = opacity
+            //#else
+            getSettings().chatOpacity = opacity.toFloat()
+            //#endif
         }
 
         // prompt on links
@@ -338,15 +480,5 @@ object Settings {
         fun setPromptOnWebLinks(toggled: Boolean) {
             getSettings().chatLinksPrompt = toggled
         }
-
-        // scale
-
-        // focused height
-
-        // unfocused height
-
-        // width
-
-        // reduced debug info
     }
 }
