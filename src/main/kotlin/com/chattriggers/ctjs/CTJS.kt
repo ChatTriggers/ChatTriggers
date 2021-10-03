@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
@@ -63,7 +64,7 @@ class CTJSMod {
     //#else
     //$$ fun preInit() {
     //#endif
-        listOf(WorldListener, CPS, GuiHandler, ClientListener, UpdateChecker).forEach {
+        listOf(WorldListener, CPS, GuiHandler, ClientListener, UpdateChecker, MouseListener).forEach {
             MinecraftForge.EVENT_BUS.register(it)
         }
 

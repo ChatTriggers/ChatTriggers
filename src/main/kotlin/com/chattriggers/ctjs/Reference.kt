@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
@@ -40,8 +41,8 @@ object Reference {
         isLoaded = false
 
         DisplayHandler.clearDisplays()
-        GuiHandler.clearGuis()
         ModuleManager.teardown()
+        MouseListener.clearListeners()
 
         Command.activeCommands.values.toList().forEach(Command::unregister)
 
@@ -65,6 +66,7 @@ object Reference {
         conditionalThread {
             ModuleManager.setup()
             ModuleManager.entryPass(completionListener = ::printLoadCompletionStatus)
+            MouseListener.registerTriggerListeners()
 
             Client.getMinecraft().gameSettings.loadOptions()
             ChatLib.chat("&aDone reloading scripts!")

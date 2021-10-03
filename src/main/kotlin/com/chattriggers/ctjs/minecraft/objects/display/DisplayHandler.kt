@@ -25,10 +25,6 @@ object DisplayHandler {
         GL11.glPopMatrix()
     }
 
-    internal fun handleInput() {
-
-    }
-
     enum class Background {
         NONE, FULL, PER_LINE
     }

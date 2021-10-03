@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
@@ -10,7 +11,6 @@ import com.chattriggers.ctjs.utils.kotlin.NotAbstract
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
-import org.lwjgl.input.Mouse
 
 @External
 @NotAbstract
@@ -28,6 +28,12 @@ abstract class Gui : GuiScreen() {
 
     var buttons = mutableListOf<GuiButton>()
     var doesPauseGame = false
+
+    init {
+        MouseListener.registerScrollListener { x, y, delta ->
+            onScroll?.trigger(arrayOf(x, y, delta))
+        }
+    }
 
     fun open() {
         GuiHandler.openGui(this)
@@ -188,20 +194,6 @@ abstract class Gui : GuiScreen() {
     override fun initGui() {
         super.initGui()
         buttons.forEach { this.buttonList.add(it) }
-    }
-
-    /**
-     * Internal method to run trigger. Not meant for public use
-     */
-    override fun handleMouseInput() {
-        super.handleMouseInput()
-
-        val i = Mouse.getEventDWheel()
-
-        when {
-            i > 0 -> this.onScroll?.trigger(arrayOf(this.mouseX, this.mouseY, 1))
-            i < 0 -> this.onScroll?.trigger(arrayOf(this.mouseX, this.mouseY, -1))
-        }
     }
 
     /**

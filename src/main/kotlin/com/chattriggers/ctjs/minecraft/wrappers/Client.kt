@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.minecraft.wrappers
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
 import gg.essential.universal.UKeyboard
 import net.minecraft.client.Minecraft
@@ -18,9 +17,12 @@ import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
 import net.minecraft.realms.RealmsBridge
-import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 import kotlin.math.roundToInt
+
+//#if MC==10809
+import org.lwjgl.input.Mouse
+//#endif
 
 @External
 object Client {

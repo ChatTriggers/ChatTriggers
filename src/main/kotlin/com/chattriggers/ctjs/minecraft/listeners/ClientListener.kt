@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
-import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
@@ -37,7 +36,6 @@ import net.minecraft.network.Packet
 import net.minecraftforge.client.event.DrawBlockHighlightEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import net.minecraft.client.renderer.GlStateManager
-import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 //#endif
 
@@ -46,19 +44,9 @@ object ClientListener {
     val actionBarHistory = mutableListOf<String>()
 
     private var ticksPassed: Int = 0
-    private val mouseState: MutableMap<Int, Boolean>
-    private val draggedState: MutableMap<Int, State>
-
-    class State(val x: Float, val y: Float)
 
     init {
         this.ticksPassed = 0
-
-        this.mouseState = mutableMapOf()
-        draggedState = mutableMapOf()
-
-        for (i in 0..4)
-            this.mouseState[i] = false
     }
 
     @SubscribeEvent
@@ -98,106 +86,6 @@ object ClientListener {
 
         Scoreboard.resetCache()
     }
-
-    //#if MC==11602
-    //$$ @SubscribeEvent
-    //$$ fun onMouseScroll(event: GuiScreenEvent.MouseScrollEvent) {
-    //$$     if (event is GuiScreenEvent.MouseScrollEvent.Post)
-    //$$         return
-    //$$
-    //$$     val value = if (event.scrollDelta < 0) -1 else 1
-    //$$     TriggerType.SCROLLED.triggerAll(event.mouseX, event.mouseY, value)
-    //$$ }
-    //$$
-    //$$ @SubscribeEvent
-    //$$ fun onMouseClicked(event: GuiScreenEvent.MouseClickedEvent) {
-    //$$     if (event is GuiScreenEvent.MouseClickedEvent.Post)
-    //$$         return
-    //$$
-    //$$     TriggerType.CLICKED.triggerAll(
-    //$$         event.mouseX,
-    //$$         event.mouseY,
-    //$$         event.button,
-    //$$         true,
-    //$$     )
-    //$$ }
-    //$$
-    //$$ @SubscribeEvent
-    //$$ fun onMouseRelease(event: GuiScreenEvent.MouseReleasedEvent) {
-    //$$     if (event is GuiScreenEvent.MouseReleasedEvent.Post)
-    //$$         return
-    //$$
-    //$$     TriggerType.CLICKED.triggerAll(
-    //$$         event.mouseX,
-    //$$         event.mouseY,
-    //$$         event.button,
-    //$$         false,
-    //$$     )
-    //$$ }
-    //$$
-    //$$ @SubscribeEvent
-    //$$ fun onMouseDragged(event: GuiScreenEvent.MouseDragEvent) {
-    //$$     if (event is GuiScreenEvent.MouseDragEvent.Post)
-    //$$         return
-    //$$
-    //$$     TriggerType.DRAGGED.triggerAll(
-    //$$         event.dragX,
-    //$$         event.dragY,
-    //$$         event.mouseX,
-    //$$         event.mouseY,
-    //$$         event.mouseButton,
-    //$$     )
-    //$$ }
-    //#else
-    private fun handleMouseInput() {
-        if (!Mouse.isCreated()) return
-
-        val scroll = Mouse.getEventDWheel()
-
-        when {
-            scroll > 0 -> TriggerType.SCROLLED.triggerAll(Client.getMouseX(), Client.getMouseY(), 1)
-            scroll < 0 -> TriggerType.SCROLLED.triggerAll(Client.getMouseX(), Client.getMouseY(), -1)
-        }
-
-        for (button in 0..4) {
-            handleDragged(button)
-
-            // normal clicked
-            if (Mouse.isButtonDown(button) == this.mouseState[button]) continue
-
-            TriggerType.CLICKED.triggerAll(
-                Client.getMouseX(),
-                Client.getMouseY(),
-                button,
-                Mouse.isButtonDown(button)
-            )
-
-            this.mouseState[button] = Mouse.isButtonDown(button)
-
-            // add new dragged
-            if (Mouse.isButtonDown(button))
-                this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
-            else if (this.draggedState.containsKey(button))
-                this.draggedState.remove(button)
-        }
-    }
-
-    private fun handleDragged(button: Int) {
-        if (button !in draggedState)
-            return
-
-        TriggerType.DRAGGED.triggerAll(
-            Client.getMouseX() - (this.draggedState[button]?.x ?: 0f),
-            Client.getMouseY() - (this.draggedState[button]?.y ?: 0f),
-            Client.getMouseX(),
-            Client.getMouseY(),
-            button
-        )
-
-        // update dragged
-        this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
-    }
-    //#endif
 
     // TODO(1.16.2)
     //#if MC==10809
@@ -257,7 +145,7 @@ object ClientListener {
             return
 
         //#if MC==10809
-        handleMouseInput()
+        MouseListener.process()
         //#endif
     }
 

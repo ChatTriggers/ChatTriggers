@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
+import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -8,14 +9,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 
 @External
 object GuiHandler {
-    private val GUIs: MutableMap<GuiScreen, Int> = mutableMapOf()
+    private var pendingGui: GuiScreen? = null
 
     fun openGui(gui: GuiScreen) {
-        this.GUIs[gui] = 1
-    }
-
-    fun clearGuis() {
-        this.GUIs.clear()
+        pendingGui = gui
     }
 
     @SubscribeEvent
@@ -23,17 +20,9 @@ object GuiHandler {
         if (event.phase == TickEvent.Phase.END)
             return
 
-        this.GUIs.forEach {
-            if (it.value == 0) {
-                Minecraft.getMinecraft().displayGuiScreen(it.key)
-                this.GUIs[it.key] = -1
-            } else {
-                this.GUIs[it.key] = 0
-            }
-        }
-
-        this.GUIs.entries.removeIf {
-            it.value == -1
+        if (pendingGui != null) {
+            Client.getMinecraft().displayGuiScreen(pendingGui!!)
+            pendingGui = null
         }
     }
 }
