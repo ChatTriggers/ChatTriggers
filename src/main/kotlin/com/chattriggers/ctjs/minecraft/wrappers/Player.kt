@@ -10,7 +10,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
-import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
 
@@ -21,6 +20,7 @@ import net.minecraft.client.network.NetworkPlayerInfo
 //$$ import net.minecraft.block.AbstractSignBlock
 //#else
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
+import net.minecraft.block.BlockSign
 //#endif
 
 @External
@@ -277,8 +277,8 @@ object Player {
      */
     @JvmStatic
     fun lookingAt(): Any {
-        val mop = Client.getMinecraft().objectMouseOver ?: return BlockType(0)
-        val world = World.getWorld() ?: return BlockType(0)
+        val mop = Client.getMinecraft().objectMouseOver ?: return BlockType("minecraft:air")
+        val world = World.getWorld() ?: return BlockType("minecraft:air")
 
         //#if MC==11602
         //$$ return when (mop) {
@@ -368,11 +368,14 @@ object Player {
     /**
      * Draws the player in the GUI
      */
+    // TODO(1.16.2)
+    //#if MC==10809
     @JvmStatic
     @JvmOverloads
     fun draw(x: Int, y: Int, rotate: Boolean = true) = apply {
         Renderer.drawPlayer(this, x, y, rotate)
     }
+    //#endif
 
     object armor {
         /**

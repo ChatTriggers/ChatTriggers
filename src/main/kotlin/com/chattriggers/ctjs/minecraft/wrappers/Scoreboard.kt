@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.client.GuiIngameForge
@@ -124,7 +125,7 @@ object Scoreboard {
         try {
             val scoreboard = World.getWorld()?.scoreboard ?: return
             val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
-            scoreboardTitle = sidebarObjective.displayName ?: return
+            scoreboardTitle = TextComponent(sidebarObjective.displayName).getFormattedText() ?: return
 
             val scores: Collection<net.minecraft.scoreboard.Score> = scoreboard.getSortedScores(sidebarObjective)
 
@@ -153,10 +154,19 @@ object Scoreboard {
          *
          * @return the display name
          */
-        fun getName(): String = ScorePlayerTeam.formatPlayerName(
-            World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
-            score.playerName
-        )
+        fun getName(): String {
+            //#if MC==11602
+            //$$ return TextComponent(ScorePlayerTeam.func_237500_a_(
+            //$$     World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
+            //$$     TextComponent(score.playerName).component,
+            //$$ )).getFormattedText()
+            //#else
+            return ScorePlayerTeam.formatPlayerName(
+                World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
+                score.playerName
+            )
+            //#endif
+        }
 
         override fun toString(): String = getName()
     }

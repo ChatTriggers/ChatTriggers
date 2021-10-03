@@ -2,9 +2,14 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+
+//#if MC==11602
+//$$ import net.minecraftforge.client.event.GuiScreenEvent
+//#else
+import net.minecraftforge.client.event.MouseEvent
+//#endif
 
 @External
 object CPS {
@@ -40,7 +45,11 @@ object CPS {
     }
 
     @SubscribeEvent
+    //#if MC==11602
+    //$$ fun click(event: MouseClickedEvent) {
+    //#else
     fun click(event: MouseEvent) {
+    //#endif
         if (EventLib.getButtonState(event)) {
             when (event.button) {
                 0 -> leftClicks.add(20)

@@ -72,3 +72,4 @@ net.minecraft.nbt.IntArrayNBT net.minecraft.nbt.NBTTagIntArray
 net.minecraft.world.Difficulty net.minecraft.world.EnumDifficulty
 net.minecraft.entity.player.PlayerModelPart net.minecraft.entity.player.EnumPlayerModelParts
 net.minecraft.util.SoundCategory net.minecraft.client.audio.SoundCategory
+net.minecraftforge.client.gui.ForgeIngameGui net.minecraftforge.client.GuiIngameForge

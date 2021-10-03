@@ -40,11 +40,6 @@ object ChatLib {
         }
     }
 
-    @JvmStatic
-    fun test(e: Any) {
-        println(e)
-    }
-
     /**
      * Shows text in the action bar.
      * The text can be a String, a [Message] or a [TextComponent]
@@ -97,10 +92,9 @@ object ChatLib {
             //#if MC==10809
             ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
             //#else
-            //$$ CTJS.commandDispatcher.execute("/$text", Player.getPlayer())
+            //$$ CTJS.commandDispatcher.execute("/$text", Player.getPlayer()?.commandSource ?: return)
             //#endif
-        }
-        else say("/$text")
+        } else say("/$text")
     }
 
     @JvmStatic
@@ -117,11 +111,14 @@ object ChatLib {
      *
      * @param chatLineIDs the id(s) to be cleared
      */
+    // TODO(1.16.2)
+    //#if MC==10809
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
         for (chatLineID in chatLineIDs)
             Client.getChatGUI()?.deleteChatLine(chatLineID)
     }
+    //#endif
 
     /**
      * Get a message that will be perfectly one line of chat,
@@ -200,6 +197,8 @@ object ChatLib {
         return spaceBuilder.append(text).toString()
     }
 
+    // TODO(1.16.2)
+    //#if MC==10809
     /**
      * Edits an already sent chat message by regex.
      * If the JavaScript RegExp object passed in matches a message, it will be replaced.
@@ -297,6 +296,7 @@ object ChatLib {
         editChatLineList(chatLines, toReplace, *replacements)
         editChatLineList(drawnChatLines, toReplace, *replacements)
     }
+    //#endif
 
     private fun editChatLineList(
         //#if MC==11602
