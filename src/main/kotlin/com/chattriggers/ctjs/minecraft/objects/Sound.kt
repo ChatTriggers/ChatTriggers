@@ -6,12 +6,15 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.audio.SoundCategory
-import net.minecraft.client.audio.SoundManager
-import net.minecraftforge.fml.relauncher.ReflectionHelper
 import org.mozilla.javascript.NativeObject
 import paulscode.sound.SoundSystem
 import java.io.File
 import java.net.MalformedURLException
+
+//#if MC==10809
+import net.minecraft.client.audio.SoundManager
+import net.minecraftforge.fml.relauncher.ReflectionHelper
+//#endif
 
 /**
  * <p>
@@ -44,6 +47,11 @@ import java.net.MalformedURLException
  */
 @External
 class Sound(private val config: NativeObject) {
+    // TODO(1.16.2)
+    //#if MC==11602
+    //$$ val isListening = true
+    //$$ fun onWorldLoad() {}
+    //#else
     private var sndSystem: SoundSystem? = null
     private val source: String = config["source"] as String
     var isListening = false
@@ -221,4 +229,5 @@ class Sound(private val config: NativeObject) {
     fun rewind() {
         sndSystem!!.rewind(this.source)
     }
+    //#endif
 }

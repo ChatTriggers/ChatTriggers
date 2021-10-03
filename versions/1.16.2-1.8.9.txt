@@ -75,3 +75,13 @@ net.minecraft.util.SoundCategory net.minecraft.client.audio.SoundCategory
 net.minecraftforge.client.gui.ForgeIngameGui net.minecraftforge.client.GuiIngameForge
 net.minecraft.item.Items net.minecraft.init.Items
 net.minecraft.client.gui.screen.ReadBookScreen net.minecraft.client.gui.GuiScreenBook
+net.minecraft.client.renderer.entity.PlayerRenderer net.minecraft.client.renderer.entity.RenderPlayer
+net.minecraft.client.renderer.entity.layers.BipedArmorLayer net.minecraft.client.renderer.entity.layers.LayerBipedArmor
+net.minecraft.client.renderer.entity.layers.HeldItemLayer net.minecraft.client.renderer.entity.layers.LayerHeldItem
+net.minecraft.client.renderer.entity.layers.ArrowLayer net.minecraft.client.renderer.entity.layers.LayerArrow
+net.minecraft.client.renderer.entity.layers.Deadmau5HeadLayer net.minecraft.client.renderer.entity.layers.LayerDeadmau5Head
+net.minecraft.client.renderer.entity.layers.CapeLayer net.minecraft.client.renderer.entity.layers.LayerCape
+net.minecraft.client.renderer.entity.layers.HeadLayer net.minecraft.client.renderer.entity.layers.LayerCustomHead
+net.minecraft.util.math.vector.Vector2f org.lwjgl.util.vector.Vector2f
+net.minecraft.client.audio.SoundSystem paulscode.sound.SoundSystem
+net.minecraft.client.audio.LocatableSound net.minecraft.client.audio.PositionedSound

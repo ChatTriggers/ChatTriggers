@@ -12,6 +12,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.imageio.ImageIO
 
+//#if MC==11602
+//$$ import java.io.ByteArrayInputStream
+//$$ import java.io.ByteArrayOutputStream
+//$$ import net.minecraft.client.renderer.texture.NativeImage
+//#endif
+
 @External
 class Image constructor(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
@@ -26,15 +32,15 @@ class Image constructor(var image: BufferedImage?) {
     constructor(name: String, url: String? = null) : this(getBufferedImage(name, url))
 
     fun getTextureWidth(): Int = this.textureWidth
+
     fun getTextureHeight(): Int = this.textureHeight
+
     fun getTexture(): DynamicTexture {
         if (!this::texture.isInitialized) {
             // We're trying to access the texture before initialization. Presumably, the game overlay render event
             // hasn't fired yet so we haven't loaded the texture. Let's hope this is a rendering context!
             try {
-                texture = DynamicTexture(image)
-                image = null
-
+                bindTexture()
                 MinecraftForge.EVENT_BUS.unregister(this)
             } catch (e: Exception) {
                 // Unlucky. This probably wasn't a rendering context.
@@ -50,11 +56,23 @@ class Image constructor(var image: BufferedImage?) {
     @SubscribeEvent
     fun onRender(event: RenderGameOverlayEvent.Pre) {
         if (image != null) {
-            texture = DynamicTexture(image)
-            image = null
-
+            bindTexture()
             MinecraftForge.EVENT_BUS.unregister(this)
         }
+    }
+
+    private fun bindTexture() {
+        //#if MC==11602
+        //$$ ByteArrayOutputStream().use { baos ->
+        //$$     ImageIO.write(image, "png", baos)
+        //$$     ByteArrayInputStream(baos.toByteArray()).use { bais ->
+        //$$         texture = DynamicTexture(NativeImage.read(bais))
+        //$$     }
+        //$$ }
+        //#else
+        texture = DynamicTexture(image)
+        //#endif
+        image = null
     }
 
     @JvmOverloads

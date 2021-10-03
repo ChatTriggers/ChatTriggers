@@ -60,14 +60,26 @@ class KeyBind {
      *
      * @return the integer key code
      */
-    fun getKeyCode(): Int = keyBinding.keyCode
+    fun getKeyCode(): Int {
+        //#if MC==11602
+        //$$ return keyBinding.key.keyCode
+        //#else
+        return keyBinding.keyCode
+        //#endif
+    }
 
     /**
      * Sets the state of the key.
      *
      * @param pressed True to press, False to release
      */
-    fun setState(pressed: Boolean) = KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
+    fun setState(pressed: Boolean) {
+        //#if MC==11602
+        //$$ KeyBinding.setKeyBindState(keyBinding.key, pressed)
+        //#else
+        KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
+        //#endif
+    }
 
     companion object {
         @JvmStatic

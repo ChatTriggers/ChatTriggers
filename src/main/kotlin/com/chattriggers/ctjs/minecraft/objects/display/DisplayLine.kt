@@ -9,9 +9,12 @@ import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
-import org.lwjgl.input.Mouse
+import org.lwjgl.util.vector.Vector2f
 import org.mozilla.javascript.NativeObject
-import javax.vecmath.Vector2d
+
+//#if MC==10809
+import org.lwjgl.input.Mouse
+//#endif
 
 @External
 @NotAbstract
@@ -29,7 +32,7 @@ abstract class DisplayLine {
     private var onDragged: OnTrigger? = null
 
     private var mouseState = HashMap<Int, Boolean>()
-    private var draggedState = HashMap<Int, Vector2d>()
+    private var draggedState = HashMap<Int, Vector2f>()
 
     constructor(text: String) {
         setText(text)
@@ -125,7 +128,7 @@ abstract class DisplayLine {
                 handleClicked(button)
                 this.mouseState[button] = Mouse.isButtonDown(button)
                 if (Mouse.isButtonDown(button))
-                    this.draggedState[button] = Vector2d(Client.getMouseX().toDouble(), Client.getMouseY().toDouble())
+                    this.draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
             }
         }
 
@@ -166,7 +169,7 @@ abstract class DisplayLine {
             button
         ))
 
-        this.draggedState[button] = Vector2d(Client.getMouseX().toDouble(), Client.getMouseY().toDouble())
+        this.draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
     }
 
     private fun drawFullBG(
