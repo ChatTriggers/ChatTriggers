@@ -1,12 +1,16 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
+import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
@@ -16,9 +20,6 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.network.Packet
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.client.event.GuiOpenEvent
-import net.minecraftforge.client.event.GuiScreenEvent
-import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -30,13 +31,16 @@ import org.lwjgl.util.vector.Vector3f
 //$$ import net.minecraftforge.client.event.DrawHighlightEvent
 //#else
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
-import net.minecraftforge.client.event.DrawBlockHighlightEvent
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraftforge.client.event.*
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 //#endif
 
 object ClientListener {
+    val chatHistory = mutableListOf<String>()
+    val actionBarHistory = mutableListOf<String>()
+
     private var ticksPassed: Int = 0
     private val mouseState: MutableMap<Int, Boolean>
     private val draggedState: MutableMap<Int, State>
@@ -51,6 +55,33 @@ object ClientListener {
 
         for (i in 0..4)
             this.mouseState[i] = false
+    }
+
+    @SubscribeEvent
+    fun onReceiveChat(event: ClientChatReceivedEvent) {
+        when (EventLib.getType(event)) {
+            in 0..1 -> {
+                // save to chatHistory
+                chatHistory += ChatLib.getChatMessage(event, true)
+                if (chatHistory.size > 1000) chatHistory.removeAt(0)
+
+                // normal Chat Message
+                TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event)
+
+                // print to console
+                if (Config.printChatToConsole) {
+                    "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".printToConsole()
+                }
+            }
+            2 -> {
+                // save to actionbar history
+                actionBarHistory += ChatLib.getChatMessage(event, true)
+                if (actionBarHistory.size > 1000) actionBarHistory.removeAt(0)
+
+                // action bar
+                TriggerType.ACTION_BAR.triggerAll(ChatLib.getChatMessage(event, false), event)
+            }
+        }
     }
 
     @SubscribeEvent

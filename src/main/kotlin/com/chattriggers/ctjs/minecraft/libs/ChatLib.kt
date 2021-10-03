@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
-import com.chattriggers.ctjs.minecraft.listeners.ChatListener
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -342,11 +342,7 @@ object ChatLib {
      * @return A list of the last 1000 chat lines
      */
     @JvmStatic
-    fun getChatLines(): List<String> {
-        val hist = ChatListener.chatHistory.toMutableList()
-        hist.reverse()
-        return hist
-    }
+    fun getChatLines() = ClientListener.chatHistory.asReversed()
 
     /**
      * Get the text of a chat event.

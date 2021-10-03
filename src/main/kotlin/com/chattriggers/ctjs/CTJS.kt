@@ -3,26 +3,19 @@ package com.chattriggers.ctjs
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
-import com.chattriggers.ctjs.minecraft.libs.FileLib
-import com.chattriggers.ctjs.minecraft.listeners.ChatListener
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.wrappers.CPS
-import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.chattriggers.ctjs.utils.Config
 import com.google.gson.Gson
-import com.google.gson.JsonParser
 import gg.essential.vigilance.Vigilance
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
-import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
-import java.io.FileReader
-import kotlin.concurrent.thread
 
 //#if MC==18090
 import net.minecraftforge.client.ClientCommandHandler
@@ -70,7 +63,7 @@ class CTJSMod {
     //#else
     //$$ fun preInit() {
     //#endif
-        listOf(ChatListener, WorldListener, CPS, GuiHandler, ClientListener, UpdateChecker).forEach {
+        listOf(WorldListener, CPS, GuiHandler, ClientListener, UpdateChecker).forEach {
             MinecraftForge.EVENT_BUS.register(it)
         }
 

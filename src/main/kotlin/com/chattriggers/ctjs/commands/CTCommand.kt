@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.commands
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
-import com.chattriggers.ctjs.minecraft.listeners.ChatListener
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.printTraceToConsole
@@ -169,9 +169,9 @@ object CTCommand : CommandBase() {
         }
     }
 
-    private fun dumpChat(lines: Int = 100) = dumpList(ChatListener.chatHistory, lines)
+    private fun dumpChat(lines: Int = 100) = dumpList(ClientListener.chatHistory, lines)
 
-    private fun dumpActionBar(lines: Int = 100) = dumpList(ChatListener.actionBarHistory, lines)
+    private fun dumpActionBar(lines: Int = 100) = dumpList(ClientListener.actionBarHistory, lines)
 
     private fun dumpList(messages: List<String>, lines: Int) {
         clearOldDump()

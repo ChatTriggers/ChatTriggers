@@ -46,17 +46,22 @@ object CPS {
 
     @SubscribeEvent
     //#if MC==11602
-    //$$ fun click(event: MouseClickedEvent) {
+    //$$ fun click(event: GuiScreenEvent.MouseClickedEvent) {
+    //$$     when (event.button) {
+    //$$         0 -> leftClicks.add(20)
+    //$$         1 -> rightClicks.add(20)
+    //$$     }
+    //$$ }
     //#else
     fun click(event: MouseEvent) {
-    //#endif
-        if (EventLib.getButtonState(event)) {
+        if (event.buttonstate) {
             when (event.button) {
                 0 -> leftClicks.add(20)
                 1 -> rightClicks.add(20)
             }
         }
     }
+    //#endif
 
     @JvmStatic
     fun getLeftClicksMax(): Int = leftClicksMax

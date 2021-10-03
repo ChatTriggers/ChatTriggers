@@ -4,22 +4,18 @@ import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
+
+//#if MC==11602
+//$$ import net.minecraftforge.client.event.GuiScreenEvent
+//#else
+import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.fml.client.event.ConfigChangedEvent
+//#endif
 
 //TODO: figure out what is not needed anymore after the kotlin conversion and remove
 @External
 object EventLib {
-    @JvmStatic
-    fun getButtonState(event: MouseEvent): Boolean {
-        //#if MC<=10809
-        return event.buttonstate
-        //#else
-        //$$ return event.isButtonstate
-        //#endif
-    }
-
     @JvmStatic
     fun getType(event: ClientChatReceivedEvent): Int {
         //#if MC<=10809
@@ -37,11 +33,6 @@ object EventLib {
     @JvmStatic
     fun getName(event: PlaySoundEvent): String {
         return event.name
-    }
-
-    @JvmStatic
-    fun getModId(event: ConfigChangedEvent.OnConfigChangedEvent): String {
-        return event.modID
     }
 
     /**
