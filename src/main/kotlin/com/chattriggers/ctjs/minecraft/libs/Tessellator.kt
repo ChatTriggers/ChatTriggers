@@ -364,8 +364,11 @@ object Tessellator {
         GL11.glColor4f(1f, 1f, 1f, 0.5f)
         GL11.glPushMatrix()
         GL11.glTranslatef(renderPos.x, renderPos.y, renderPos.z)
+        // TODO(1.16.2)
+        //#if MC==10809
         GL11.glRotatef(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         GL11.glRotatef(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+        //#endif
         GL11.glScalef(-lScale, -lScale, lScale)
         GL11.glDisable(GL11.GL_LIGHTING)
         GL11.glDepthMask(false)

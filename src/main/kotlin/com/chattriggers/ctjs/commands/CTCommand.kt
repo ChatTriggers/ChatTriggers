@@ -196,8 +196,14 @@ object CTCommand : CommandBase() {
 
     private fun clearOldDump() {
         if (this.idFixedOffset == -1) return
-        while (this.idFixedOffset >= idFixed)
+        while (this.idFixedOffset >= idFixed) {
+            // TODO(1.16.2)
+            //#if MC==11602
+            //$$ break
+            //#else
             ChatLib.clearChat(this.idFixedOffset--)
+            //#endif
+        }
         this.idFixedOffset = -1
     }
 

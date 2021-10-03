@@ -59,9 +59,15 @@ object WorldListener {
     @SubscribeEvent
     fun onSoundPlay(event: PlaySoundEvent) {
         val position = Vector3f(
+            //#if MC==11602
+            //$$ event.sound.x.toFloat(),
+            //$$ event.sound.y.toFloat(),
+            //$$ event.sound.z.toFloat(),
+            //#else
             event.sound.xPosF,
             event.sound.yPosF,
-            event.sound.zPosF
+            event.sound.zPosF,
+            //#endif
         )
 
         val vol = try {
@@ -158,7 +164,11 @@ object WorldListener {
     fun attackEntityEvent(event: AttackEntityEvent) {
         TriggerType.ENTITY_DAMAGE.triggerAll(
             Entity(event.target),
-            PlayerMP(event.entityPlayer)
+            //#if MC==11602
+            //$$ PlayerMP(event.player),
+            //#else
+            PlayerMP(event.entityPlayer),
+            //#endif
         )
     }
 }

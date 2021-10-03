@@ -18,8 +18,11 @@ import io.netty.channel.ChannelPromise
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
-import net.minecraft.network.Packet
 import net.minecraft.util.EnumFacing
+import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.client.event.GuiOpenEvent
+import net.minecraftforge.client.event.GuiScreenEvent
+import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -30,9 +33,10 @@ import org.lwjgl.util.vector.Vector3f
 //$$ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 //$$ import net.minecraftforge.client.event.DrawHighlightEvent
 //#else
+import net.minecraft.network.Packet
+import net.minecraftforge.client.event.DrawBlockHighlightEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraftforge.client.event.*
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 //#endif
