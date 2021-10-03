@@ -34,7 +34,7 @@ object DisplayHandler {
     }
 
     enum class Align {
-        NONE, LEFT, CENTER, RIGHT
+        LEFT, CENTER, RIGHT
     }
 
     enum class Order {

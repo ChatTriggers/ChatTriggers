@@ -20,62 +20,63 @@ import org.lwjgl.input.Mouse
 @NotAbstract
 abstract class DisplayLine {
     private lateinit var text: Text
-    private var textWidth = 0f
-    private var textColor: Long? = null
-    private var backgroundColor: Long? = null
 
-    private var background: DisplayHandler.Background? = null
-    private var align: DisplayHandler.Align? = null
+    private var textWidth = 0f
+
+    internal var textColor: Long? = null
+    internal var backgroundColor: Long? = null
+    internal var background: DisplayHandler.Background? = null
+    internal var align: DisplayHandler.Align? = null
 
     private var onClicked: OnTrigger? = null
     private var onHovered: OnTrigger? = null
     private var onDragged: OnTrigger? = null
 
-    private var mouseState = HashMap<Int, Boolean>()
-    private var draggedState = HashMap<Int, Vector2f>()
+    private var mouseState = Array(5) { false }
+    private var draggedState = mutableMapOf<Int, Vector2f>()
 
     constructor(text: String) {
         setText(text)
-        for (i in 0..5) this.mouseState[i] = false
     }
 
     constructor(text: String, config: NativeObject) {
         setText(text)
-        for (i in 0..5) this.mouseState[i] = false
 
-        this.textColor = config.getOption("textColor", null)?.toLong()
-        this.backgroundColor = config.getOption("backgroundColor", null)?.toLong()
+        textColor = config.getOption("textColor", null)?.toLong()
+        backgroundColor = config.getOption("backgroundColor", null)?.toLong()
 
-        this.setAlign(config.getOption("align", null))
-        this.setBackground(config.getOption("background", null))
+        setAlign(config.getOption("align", null))
+        setBackground(config.getOption("background", null))
     }
 
     private fun NativeObject?.getOption(key: String, default: Any?): String? {
-        if (this == null) return default?.toString()
-        return this.getOrDefault(key, default).toString()
+        return (this?.get(key) ?: default)?.toString()
     }
 
-    fun getText(): Text = this.text
+    fun getText(): Text = text
+
     fun setText(text: String) = apply {
         this.text = Text(text)
-        this.textWidth = Renderer.getStringWidth(text) * this.text.getScale()
+        textWidth = Renderer.getStringWidth(text) * this.text.getScale()
     }
 
-    fun getTextColor(): Long? = this.textColor
-    fun setTextColor(color: Long) = apply {
+    fun getTextColor(): Long? = textColor
+
+    fun setTextColor(color: Long?) = apply {
         this.textColor = color
     }
 
-    fun getTextWidth(): Float = this.textWidth
+    fun getTextWidth(): Float = textWidth
 
-    fun setShadow(shadow: Boolean) = apply { this.text.setShadow(shadow) }
+    fun setShadow(shadow: Boolean) = apply { text.setShadow(shadow) }
 
     fun setScale(scale: Float) = apply {
-        this.text.setScale(scale)
-        this.textWidth = Renderer.getStringWidth(text.getString()) * scale
+        text.setScale(scale)
+        textWidth = Renderer.getStringWidth(text.getString()) * scale
     }
 
-    fun getAlign(): DisplayHandler.Align? = this.align
+    fun getAlign(): DisplayHandler.Align? = align
+
     fun setAlign(align: Any?) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.uppercase())
@@ -84,7 +85,8 @@ abstract class DisplayLine {
         }
     }
 
-    fun getBackground(): DisplayHandler.Background? = this.background
+    fun getBackground(): DisplayHandler.Background? = background
+
     fun setBackground(background: Any?) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.uppercase().replace(" ", "_"))
@@ -93,30 +95,33 @@ abstract class DisplayLine {
         }
     }
 
-    fun getBackgroundColor(): Long? = this.backgroundColor
-    fun setBackgroundColor(color: Long) = apply {
-        this.backgroundColor = color
+    fun getBackgroundColor(): Long? = backgroundColor
+
+    fun setBackgroundColor(backgroundColor: Long?) = apply {
+        this.backgroundColor = backgroundColor
     }
 
     fun registerClicked(method: Any) = run {
-        this.onClicked = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
-        this.onClicked
+        onClicked = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onClicked
     }
 
     fun registerHovered(method: Any) = run {
-        this.onHovered = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
-        this.onHovered
+        onHovered = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onHovered
     }
 
     fun registerDragged(method: Any) = run {
-        this.onDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
-        this.onDragged
+        onDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onDragged
     }
 
     private fun handleInput(x: Float, y: Float, width: Float, height: Float) {
-        if (!Mouse.isCreated()) return
+        if (!Mouse.isCreated())
+            return
 
-        for (button in 0..5) handleDragged(button)
+        for (button in 0..5)
+            handleDragged(button)
 
         if (Client.getMouseX() > x && Client.getMouseX() < x + width
             && Client.getMouseY() > y && Client.getMouseY() < y + height
@@ -124,23 +129,27 @@ abstract class DisplayLine {
             handleHovered()
 
             for (button in 0..5) {
-                if (Mouse.isButtonDown(button) == this.mouseState[button]) continue
+                if (Mouse.isButtonDown(button) == mouseState[button])
+                    continue
+
                 handleClicked(button)
-                this.mouseState[button] = Mouse.isButtonDown(button)
+                mouseState[button] = Mouse.isButtonDown(button)
                 if (Mouse.isButtonDown(button))
-                    this.draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
+                    draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
             }
         }
 
         for (button in 0..5) {
-            if (Mouse.isButtonDown(button)) continue
-            if (!this.draggedState.containsKey(button)) continue
-            this.draggedState.remove(button)
+            if (Mouse.isButtonDown(button))
+                continue
+            if (!draggedState.containsKey(button))
+                continue
+            draggedState.remove(button)
         }
     }
 
     private fun handleClicked(button: Int) {
-        this.onClicked?.trigger(arrayOf(
+        onClicked?.trigger(arrayOf(
             Client.getMouseX(),
             Client.getMouseY(),
             button,
@@ -149,150 +158,68 @@ abstract class DisplayLine {
     }
 
     private fun handleHovered() {
-        this.onHovered?.trigger(arrayOf(
+        onHovered?.trigger(arrayOf(
             Client.getMouseX(),
             Client.getMouseY()
         ))
     }
 
     private fun handleDragged(button: Int) {
-        if (this.onDragged == null) return
-
-        if (!this.draggedState.containsKey(button))
+        if (onDragged == null)
             return
 
-        this.onDragged?.trigger(arrayOf(
-            Client.getMouseX() - this.draggedState.getValue(button).x,
-            Client.getMouseY() - this.draggedState.getValue(button).y,
+        if (!draggedState.containsKey(button))
+            return
+
+        onDragged?.trigger(arrayOf(
+            Client.getMouseX() - draggedState.getValue(button).x,
+            Client.getMouseY() - draggedState.getValue(button).y,
             Client.getMouseX(),
             Client.getMouseY(),
             button
         ))
 
-        this.draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
+        draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
     }
 
-    private fun drawFullBG(
-        bg: DisplayHandler.Background,
-        color: Long,
+    fun draw(
         x: Float,
         y: Float,
-        width: Float,
-        height: Float
+        totalWidth: Float,
+        background_: DisplayHandler.Background,
+        backgroundColor_: Long,
+        textColor_: Long,
+        align: DisplayHandler.Align,
     ) {
-        if (bg === DisplayHandler.Background.FULL)
-            Renderer.drawRect(color, x, y, width, height)
-    }
+        val background = this.background ?: background_
+        val backgroundColor = this.backgroundColor ?: backgroundColor_
+        val textColor = this.textColor ?: textColor_
 
-    private fun drawPerLineBG(
-        bg: DisplayHandler.Background,
-        color: Long,
-        x: Float,
-        y: Float,
-        width: Float,
-        height: Float
-    ) {
-        if (bg === DisplayHandler.Background.PER_LINE)
-            Renderer.drawRect(color, x, y, width, height)
-    }
-
-    fun drawLeft(
-        x: Float,
-        y: Float,
-        maxWidth: Float,
-        background: DisplayHandler.Background,
-        backgroundColor: Long,
-        textColor: Long
-    ) {
-        val bg = this.background ?: background
-        val bgColor = this.backgroundColor ?: backgroundColor
-        val textCol = this.textColor ?: textColor
-
-        // full background
-        drawFullBG(bg, bgColor, x - 1, y - 1, maxWidth + 2, 10 * this.text.getScale())
-
-        // blank line
-        if ("" == this.text.getString()) return
-
-        // text and per line background
-        var xOff = x
-
-        if (this.align === DisplayHandler.Align.RIGHT) {
-            xOff = x - this.textWidth + maxWidth
-        } else if (this.align === DisplayHandler.Align.CENTER) {
-            xOff = x - this.textWidth / 2 + maxWidth / 2
+        // X relative to the top left of the display
+        val baseX = when (align) {
+            DisplayHandler.Align.LEFT -> x
+            DisplayHandler.Align.CENTER -> x - totalWidth / 2
+            DisplayHandler.Align.RIGHT -> x - totalWidth
         }
 
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
-        this.text.setX(xOff).setY(y).setColor(textCol).draw()
+        if (background == DisplayHandler.Background.FULL)
+            Renderer.drawRect(backgroundColor, baseX - 1, y - 1, totalWidth + 2, 10 * text.getScale())
 
-        handleInput(xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
-    }
+        if (text.getString().isEmpty())
+            return
 
-    fun drawRight(
-        x: Float,
-        y: Float,
-        maxWidth: Float,
-        background: DisplayHandler.Background,
-        backgroundColor: Long,
-        textColor: Long
-    ) {
-        val bg = this.background ?: background
-        val bgColor = this.backgroundColor ?: backgroundColor
-        val textCol = this.textColor ?: textColor
-
-        // full background
-        drawFullBG(bg, bgColor, x - maxWidth - 1f, y - 1, maxWidth + 2, 10 * this.text.getScale())
-
-        // blank line
-        if ("" == this.text.getString()) return
-
-        // text and per line background\
-        var xOff = x - this.textWidth
-
-        if (this.align === DisplayHandler.Align.LEFT) {
-            xOff = x - maxWidth
-        } else if (this.align === DisplayHandler.Align.CENTER) {
-            xOff = x - (this.textWidth / 2) - maxWidth / 2
+        val xOffset = when (this.align ?: align) {
+            DisplayHandler.Align.LEFT -> baseX
+            DisplayHandler.Align.CENTER -> baseX + (totalWidth - textWidth) / 2
+            DisplayHandler.Align.RIGHT -> baseX + (totalWidth - textWidth)
         }
 
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
-        this.text.setX(xOff).setY(y).setColor(textCol).draw()
+        if (background == DisplayHandler.Background.PER_LINE)
+            Renderer.drawRect(backgroundColor, xOffset - 1, y - 1, textWidth + 2, 10 * text.getScale())
 
-        handleInput(xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
-    }
+        text.setX(xOffset).setY(y).setColor(textColor).draw()
 
-    fun drawCenter(
-        x: Float,
-        y: Float,
-        maxWidth: Float,
-        background: DisplayHandler.Background,
-        backgroundColor: Long,
-        textColor: Long
-    ) {
-        val bg = this.background ?: background
-        val bgColor = this.backgroundColor ?: backgroundColor
-        val textCol = this.textColor ?: textColor
-
-        // full background
-        drawFullBG(bg, bgColor, x - maxWidth / 2 - 1f, y - 1, maxWidth + 2, 10 * this.text.getScale())
-
-        // blank line
-        if ("" == this.text.getString()) return
-
-        // text and per line background
-        var xOff = x - this.textWidth / 2
-
-        if (this.align === DisplayHandler.Align.LEFT) {
-            xOff = x - maxWidth / 2
-        } else if (this.align === DisplayHandler.Align.RIGHT) {
-            xOff = x + maxWidth / 2 - this.textWidth
-        }
-
-        drawPerLineBG(bg, bgColor, xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
-        this.text.setX(xOff).setY(y).setColor(textCol).draw()
-
-        handleInput(xOff - 1, y - 1, (this.textWidth + 2), 10 * this.text.getScale())
+        handleInput(xOffset - 1, y - 1, textWidth + 2, 10 * text.getScale())
     }
 
     internal abstract fun getLoader(): ILoader
