@@ -11,7 +11,6 @@ net.minecraft.util.text.event.HoverEvent.Action net.minecraft.event.HoverEvent.A
 net.minecraft.util.text.Style net.minecraft.util.ChatStyle
 net.minecraft.world.GameType net.minecraft.world.WorldSettings.GameType
 net.minecraft.client.renderer.BufferBuilder net.minecraft.client.renderer.WorldRenderer
-net.minecraft.util.text.ITextComponent.Serializer net.minecraft.util.IChatComponent.Serializer
 net.minecraft.util.SoundCategory net.minecraft.client.audio.SoundCategory
 net.minecraft.client.network.play.ClientPlayNetHandler net.minecraft.client.network.NetHandlerPlayClient
 net.minecraft.util.Direction net.minecraft.util.EnumFacing
@@ -52,6 +51,7 @@ net.minecraft.client.entity.player.AbstractClientPlayerEntity net.minecraft.clie
 net.minecraft.entity.LivingEntity net.minecraft.entity.EntityLivingBase
 net.minecraft.block.BlockState net.minecraft.block.state.IBlockState
 net.minecraft.util.math.MathHelper net.minecraft.util.MathHelper
+net.minecraft.util.math.MathHelper wrapDegrees wrapAngleTo180_float
 net.minecraft.util.Vec3 net.minecraft.util.math.vector.Vector3d
 net.minecraft.potion.EffectInstance net.minecraft.potion.PotionEffect
 net.minecraft.tileentity.SignTileEntity net.minecraft.tileentity.TileEntitySign

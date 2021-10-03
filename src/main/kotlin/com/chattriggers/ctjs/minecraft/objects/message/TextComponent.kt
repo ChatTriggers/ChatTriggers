@@ -20,7 +20,7 @@ import net.minecraft.util.ChatComponentText
 
 @External
 class TextComponent {
-    lateinit var component: MCITextComponent
+    lateinit var component: IChatComponent
         private set
 
     private var text: String

@@ -2,11 +2,11 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
+import net.minecraft.util.IChatComponent
 import java.util.*
 
 //#if MC==11602
@@ -96,7 +96,7 @@ object TabList {
         when (header) {
             is String -> Client.getTabGui()?.setHeader(Message(header).getChatMessage())
             is Message -> Client.getTabGui()?.setHeader(header.getChatMessage())
-            is MCITextComponent -> Client.getTabGui()?.setHeader(header)
+            is IChatComponent -> Client.getTabGui()?.setHeader(header)
         }
     }
 
@@ -114,7 +114,7 @@ object TabList {
         when (footer) {
             is String -> Client.getTabGui()?.setFooter(Message(footer).getChatMessage())
             is Message -> Client.getTabGui()?.setFooter(footer.getChatMessage())
-            is MCITextComponent -> Client.getTabGui()?.setFooter(footer)
+            is IChatComponent -> Client.getTabGui()?.setFooter(footer)
         }
     }
 

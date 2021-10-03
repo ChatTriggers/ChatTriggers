@@ -1,8 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
+import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCTessellator
-import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.util.vector.Vector2f
@@ -95,8 +94,8 @@ class Shape(private var color: Int) {
         val g = (this.color shr 8 and 255).toFloat() / 255.0f
         val b = (this.color and 255).toFloat() / 255.0f
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        val tessellator = Tessellator.getTessellator()
+        val worldRenderer = Tessellator.getWorldRenderer()
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()

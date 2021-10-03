@@ -2,12 +2,11 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.MathLib
+import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCTessellator
-import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.renderer.GlStateManager
@@ -214,8 +213,8 @@ object Renderer {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        val tessellator = Tessellator.getTessellator()
+        val worldRenderer = Tessellator.getWorldRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
@@ -239,8 +238,8 @@ object Renderer {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        val tessellator = Tessellator.getTessellator()
+        val worldRenderer = Tessellator.getWorldRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
@@ -272,8 +271,8 @@ object Renderer {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        val tessellator = Tessellator.getTessellator()
+        val worldRenderer = Tessellator.getWorldRenderer()
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
@@ -305,8 +304,8 @@ object Renderer {
         var circleX = 1f
         var circleY = 0f
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        val tessellator = Tessellator.getTessellator()
+        val worldRenderer = Tessellator.getWorldRenderer()
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
@@ -384,8 +383,8 @@ object Renderer {
         GlStateManager.bindTexture(image.getTexture().glTextureId)
         GlStateManager.enableTexture2D()
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        val tessellator = Tessellator.getTessellator()
+        val worldRenderer = Tessellator.getWorldRenderer()
 
         worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
 

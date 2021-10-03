@@ -5,9 +5,8 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCTessellator
-import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.client.renderer.WorldRenderer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 import kotlin.math.sqrt
@@ -30,12 +29,19 @@ object Tessellator {
     var partialTicks = 0f
         internal set
 
-    private var tessellator = MCTessellator.getInstance()
-    private var worldRenderer = this.tessellator.getRenderer()
-
     private var firstVertex = true
     private var began = false
     private var colorized = false
+
+    @JvmStatic
+    fun getTessellator(): net.minecraft.client.renderer.Tessellator {
+        return net.minecraft.client.renderer.Tessellator.getInstance()
+    }
+
+    @JvmStatic
+    fun getWorldRenderer(): WorldRenderer {
+        return getTessellator().worldRenderer
+    }
 
     @JvmStatic
     fun disableAlpha() = apply {
@@ -166,7 +172,7 @@ object Tessellator {
             -Client.camera.getZ().toFloat(),
         )
 
-        this.worldRenderer.begin(
+        getWorldRenderer().begin(
             drawMode,
             if (textured) DefaultVertexFormats.POSITION_TEX else DefaultVertexFormats.POSITION
         )
@@ -259,8 +265,8 @@ object Tessellator {
         if (!this.began)
             this.begin()
         if (!this.firstVertex)
-            this.worldRenderer.endVertex()
-        this.worldRenderer.pos(x.toDouble(), y.toDouble(), z.toDouble())
+            getWorldRenderer().endVertex()
+        getWorldRenderer().pos(x.toDouble(), y.toDouble(), z.toDouble())
         this.firstVertex = false
     }
 
@@ -275,9 +281,9 @@ object Tessellator {
     @JvmStatic
     fun tex(u: Float, v: Float) = apply {
         //#if MC==11602
-        //$$ this.worldRenderer.tex(u, v)
+        //$$ Tessellator.getWorldRenderer().tex(u, v)
         //#else
-        this.worldRenderer.tex(u.toDouble(), v.toDouble())
+        getWorldRenderer().tex(u.toDouble(), v.toDouble())
         //#endif
     }
 
@@ -288,12 +294,12 @@ object Tessellator {
     fun draw() {
         if (!began) return
 
-        this.worldRenderer.endVertex()
+        getWorldRenderer().endVertex()
 
         if (!this.colorized)
             colorize(1f, 1f, 1f, 1f)
 
-        this.tessellator.draw()
+        getTessellator().draw()
         this.began = false
         this.colorized = false
 
@@ -372,12 +378,12 @@ object Tessellator {
         if (renderBlackBox) {
             val j = textWidth / 2
             GlStateManager.disableTexture2D()
-            worldRenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
-            worldRenderer.pos((-j - 1).toDouble(), (-1).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-            worldRenderer.pos((-j - 1).toDouble(), 8.toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-            worldRenderer.pos((j + 1).toDouble(), 8.toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-            worldRenderer.pos((j + 1).toDouble(), (-1).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
-            tessellator.draw()
+            getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_COLOR)
+            getWorldRenderer().pos((-j - 1).toDouble(), (-1).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            getWorldRenderer().pos((-j - 1).toDouble(), 8.toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            getWorldRenderer().pos((j + 1).toDouble(), 8.toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            getWorldRenderer().pos((j + 1).toDouble(), (-1).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            getTessellator().draw()
             GlStateManager.enableTexture2D()
         }
 

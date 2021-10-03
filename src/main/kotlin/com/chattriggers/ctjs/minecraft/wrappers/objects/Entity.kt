@@ -6,7 +6,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
@@ -19,6 +18,8 @@ import java.util.*
 //#else
 import net.minecraft.util.Vec3
 //#endif
+
+internal typealias MCEntity = net.minecraft.entity.Entity
 
 @External
 open class Entity(val entity: MCEntity) {

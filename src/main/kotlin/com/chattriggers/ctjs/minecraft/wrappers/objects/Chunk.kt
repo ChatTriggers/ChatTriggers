@@ -1,10 +1,9 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCChunk
 
 @External
-class Chunk(val chunk: MCChunk) {
+class Chunk(val chunk: net.minecraft.world.chunk.Chunk) {
     /**
      * Gets every entity in this chunk
      *

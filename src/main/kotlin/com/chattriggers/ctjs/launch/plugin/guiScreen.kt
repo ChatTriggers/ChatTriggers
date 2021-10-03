@@ -6,7 +6,6 @@ import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
@@ -14,6 +13,7 @@ import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.instructions.*
 import net.minecraft.item.ItemStack
+import net.minecraft.util.IChatComponent
 import org.lwjgl.input.Keyboard
 
 fun injectGuiScreen() {
@@ -200,7 +200,7 @@ fun injectTextComponentClick() = inject {
     methodMaps = mapOf("func_175276_a" to "handleComponentClick")
 
     codeBlock {
-        val local1 = shadowLocal<MCITextComponent?>()
+        val local1 = shadowLocal<IChatComponent?>()
 
         code {
             val event = CancellableEvent()
@@ -220,7 +220,7 @@ fun injectTextComponentHover() = inject {
     methodMaps = mapOf("func_175272_a" to "handleComponentHover")
 
     codeBlock {
-        val local1 = shadowLocal<MCITextComponent?>()
+        val local1 = shadowLocal<IChatComponent?>()
         val local2 = shadowLocal<Int>()
         val local3 = shadowLocal<Int>()
 

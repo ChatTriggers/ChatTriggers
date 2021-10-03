@@ -1,11 +1,12 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCParticle
 
 //#if MC>10809
 //$$import com.chattriggers.ctjs.minecraft.mixins.MixinParticle
 //#endif
+
+internal typealias MCParticle = net.minecraft.client.particle.EntityFX
 
 @External
 class Particle(val underlyingEntity: MCParticle) {

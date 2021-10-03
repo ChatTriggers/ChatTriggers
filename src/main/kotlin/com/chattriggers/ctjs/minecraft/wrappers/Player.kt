@@ -9,9 +9,9 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.*
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
+import net.minecraft.util.MathHelper
 
 //#if MC==11602
 //$$ import net.minecraft.util.math.RayTraceResult
@@ -120,12 +120,7 @@ object Player {
      * @return the player's camera pitch
      */
     @JvmStatic
-    fun getPitch(): Float = MCMathHelper.
-        //#if MC<=10809
-        wrapAngleTo180_float(getPlayer()?.rotationPitch ?: 0f)
-    //#else
-    //$$ wrapDegrees(getPlayer()?.rotationPitch ?: 0f)
-    //#endif
+    fun getPitch(): Float = MathHelper.wrapAngleTo180_float(getPlayer()?.rotationPitch ?: 0f)
 
     /**
      * Gets the player's camera yaw.
@@ -133,12 +128,7 @@ object Player {
      * @return the player's camera yaw
      */
     @JvmStatic
-    fun getYaw(): Float = MCMathHelper.
-        //#if MC<=10809
-        wrapAngleTo180_float(getPlayer()?.rotationYaw ?: 0f)
-    //#else
-    //$$ wrapDegrees(getPlayer()?.rotationYaw ?: 0f)
-    //#endif
+    fun getYaw(): Float = MathHelper.wrapAngleTo180_float(getPlayer()?.rotationYaw ?: 0f)
 
     /**
      * Gets the player's yaw rotation without wrapping.

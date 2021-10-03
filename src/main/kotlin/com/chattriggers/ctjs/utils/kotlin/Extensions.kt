@@ -5,20 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.client.renderer.Tessellator
 
-fun MCITextComponent.getStyling(): MCTextStyle =
-    //#if MC<=10809
-    this.chatStyle
-    //#else
-    //$$ this.style
-    //#endif
-
-fun Tessellator.getRenderer(): MCWorldRenderer =
-    //#if MC<=10809
-    worldRenderer
-    //#else
-    //$$ buffer
-    //#endif
-
 operator fun String.times(times: Number): String {
     val stringBuilder = StringBuilder()
 

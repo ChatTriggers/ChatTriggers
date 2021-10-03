@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCParticle
+import net.minecraft.client.particle.EntityFX
 
 @External
 class ParticleEffect @JvmOverloads constructor(
@@ -12,7 +12,7 @@ class ParticleEffect @JvmOverloads constructor(
     xSpeed: Double = 0.0,
     ySpeed: Double = 0.0,
     zSpeed: Double = 0.0
-) : MCParticle(World.getWorld(), x, y, z, xSpeed, ySpeed, zSpeed) {
+) : EntityFX(World.getWorld()!!, x, y, z, xSpeed, ySpeed, zSpeed) {
     fun scale(scale: Float) = apply { super.multipleParticleScaleBy(scale) }
 
     override fun multiplyVelocity(multiplier: Float) = apply { super.multiplyVelocity(multiplier) }

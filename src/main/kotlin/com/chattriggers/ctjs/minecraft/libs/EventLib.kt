@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
+import net.minecraft.util.IChatComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 
@@ -26,7 +26,7 @@ object EventLib {
     }
 
     @JvmStatic
-    fun getMessage(event: ClientChatReceivedEvent): MCITextComponent {
+    fun getMessage(event: ClientChatReceivedEvent): IChatComponent {
         return event.message
     }
 

@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
-import com.chattriggers.ctjs.utils.kotlin.MCDirection
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.IStringSerializable
 import java.util.function.Predicate
@@ -100,7 +99,7 @@ enum class BlockFace(
     }
 
     companion object {
-        fun fromMCEnumFacing(facing: MCDirection) = when (facing) {
+        fun fromMCEnumFacing(facing: EnumFacing) = when (facing) {
             EnumFacing.DOWN -> Down
             EnumFacing.UP -> Up
             EnumFacing.NORTH -> North
