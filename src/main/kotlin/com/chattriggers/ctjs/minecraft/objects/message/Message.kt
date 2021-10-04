@@ -198,9 +198,9 @@ class Message {
         }
         //#else
         //$$ if (this.recursive) {
-        //$$    Client.getConnection().handleChat(SChatPacket(chatMessage, ChatType.CHAT, Client.getMinecraft().session.profile.id))
+        //$$    Client.getConnection()?.handleChat(SChatPacket(chatMessage, ChatType.CHAT, Client.getMinecraft().session.profile.id))
         //$$ } else {
-        //$$    Player.getPlayer()?.sendMessage(chatMessage)
+        //$$    Player.getPlayer()?.sendMessage(chatMessage, Player.getUUIDObj())
         //$$ }
         //#endif
     }

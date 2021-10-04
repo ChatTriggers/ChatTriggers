@@ -12,6 +12,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.util.MathHelper
+import java.util.UUID
 
 //#if MC==11602
 //$$ import net.minecraft.util.math.RayTraceResult
@@ -147,7 +148,10 @@ object Player {
     fun getName(): String = Client.getMinecraft().session.username
 
     @JvmStatic
-    fun getUUID(): String = Client.getMinecraft().session.profile.id.toString()
+    fun getUUID(): String = getUUIDObj().toString()
+
+    @JvmStatic
+    fun getUUIDObj(): UUID = Client.getMinecraft().session.profile.id
 
     @JvmStatic
     fun getHP(): Float = getPlayer()?.health ?: 0f
