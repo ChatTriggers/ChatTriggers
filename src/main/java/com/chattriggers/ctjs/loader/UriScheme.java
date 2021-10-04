@@ -1,9 +1,12 @@
 package com.chattriggers.ctjs.loader;
 
-import com.chattriggers.ctjs.Reference;
 import com.chattriggers.ctjs.engine.module.ModuleManager;
+
+//#if MC==10809
 import net.minecraftforge.fml.common.Loader;
+import com.chattriggers.ctjs.Reference;
 import net.minecraftforge.fml.common.ModContainer;
+//#endif
 
 import java.io.*;
 import java.net.InetAddress;
@@ -45,6 +48,8 @@ public class UriScheme {
 
             regAdd(" /f /v " + quote("URL Protocol") + " /d " + quote(""));
 
+            // TODO(1.16.2)
+            //#if MC==10809
             ModContainer container = Loader.instance().getIndexedModList().get(Reference.MODID);
             String modJar = container.getSource().getAbsolutePath();
             String sep = File.separator;
@@ -54,6 +59,7 @@ public class UriScheme {
                 + "\" com.chattriggers.ctjs.loader.UriScheme " + "\"%1\"").replace("\"", "\\\"");
 
             regAdd("\\shell\\open\\command /f /ve /d " + "\"" + value + "\"");
+            //#endif
         } catch (Exception e) {
             System.err.println("Unable to install chattriggers URI scheme, disregard if OS is not Windows");
         }

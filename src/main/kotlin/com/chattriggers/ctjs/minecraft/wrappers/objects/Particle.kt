@@ -2,26 +2,21 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.utils.kotlin.External
 
-//#if MC>10809
-//$$import com.chattriggers.ctjs.minecraft.mixins.MixinParticle
-//#endif
-
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX
 
 @External
 class Particle(val underlyingEntity: MCParticle) {
-    //#if MC<=10809
+    // TODO(1.16.2)
+    //#if MC==11602
+    //$$fun getX() = 0.0
+    //$$fun getY() = 0.0
+    //$$fun getZ() = 0.0
+    //#else
     fun getX() = underlyingEntity.posX
 
     fun getY() = underlyingEntity.posY
 
     fun getZ() = underlyingEntity.posZ
-    //#else
-    //$$fun getX() = (underlyingEntity as MixinParticle).posX
-    //$$
-    //$$fun getY() = (underlyingEntity as MixinParticle).posY
-    //$$
-    //$$fun getZ() = (underlyingEntity as MixinParticle).posZ
     //#endif
 
     fun setX(x: Double) = apply {
@@ -63,7 +58,10 @@ class Particle(val underlyingEntity: MCParticle) {
     }
 
     fun setAlpha(a: Float) = apply {
+        // TODO(1.16.2)
+        //#if MC==10809
         this.underlyingEntity.setAlphaF(a)
+        //#endif
     }
 
     /**

@@ -86,3 +86,4 @@ net.minecraft.util.math.vector.Vector2f org.lwjgl.util.vector.Vector2f
 net.minecraft.client.audio.SoundSystem paulscode.sound.SoundSystem
 net.minecraft.client.audio.LocatableSound net.minecraft.client.audio.PositionedSound
 net.minecraft.client.gui.widget.button.Button net.minecraft.client.gui.GuiButton
+net.minecraftforge.fml.ModContainer net.minecraftforge.fml.common.ModContainer

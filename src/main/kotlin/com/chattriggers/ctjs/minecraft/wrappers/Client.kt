@@ -16,12 +16,14 @@ import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
-import net.minecraft.realms.RealmsBridge
-import org.lwjgl.opengl.Display
 import kotlin.math.roundToInt
 
-//#if MC==10809
+//#if MC==11602
+//$$ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+//#else
+import net.minecraft.realms.RealmsBridge
 import org.lwjgl.input.Mouse
+import org.lwjgl.opengl.Display
 //#endif
 
 @External
@@ -44,10 +46,10 @@ object Client {
      */
     @JvmStatic
     fun getConnection(): NetHandlerPlayClient? =
-        //#if MC<=10809
-        getMinecraft().netHandler
-        //#else
+        //#if MC==11602
         //$$ getMinecraft().connection
+        //#else
+        getMinecraft().netHandler
         //#endif
 
     /**
@@ -61,7 +63,10 @@ object Client {
 
         when {
             getMinecraft().isIntegratedServerRunning -> getMinecraft().displayGuiScreen(GuiMainMenu())
+            // TODO(1.16.2)
+            //#if MC==10809
             getMinecraft().isConnectedToRealms -> RealmsBridge().switchToRealms(GuiMainMenu())
+            //#endif
             else -> getMinecraft().displayGuiScreen(GuiMultiplayer(GuiMainMenu()))
         }
     }
@@ -89,8 +94,11 @@ object Client {
      *
      * @return true if the game is active, false otherwise
      */
+    // TODO(1.16.2)
+    //#if MC==10809
     @JvmStatic
     fun isTabbedIn(): Boolean = Display.isActive()
+    //#endif
 
     @JvmStatic
     fun isControlDown(): Boolean = UKeyboard.isCtrlKeyDown()
@@ -159,8 +167,11 @@ object Client {
             ?.let { KeyBind(it) }
     }
 
+    // TODO(1.16.2)
+    //#if MC==10809
     @JvmStatic
     fun getFPS(): Int = Minecraft.getDebugFPS()
+    //#endif
 
     @JvmStatic
     fun getVersion(): String = getMinecraft().version
@@ -178,7 +189,14 @@ object Client {
     fun getMemoryUsage(): Int = ((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()).roundToInt()
 
     @JvmStatic
-    fun getSystemTime(): Long = Minecraft.getSystemTime()
+    fun getSystemTime(): Long {
+        // TODO(1.16.2)
+        //#if MC==11602
+        //$$ return 0
+        //#else
+        return Minecraft.getSystemTime()
+        //#endif
+    }
 
     @JvmStatic
     fun getDisplayWidth(): Float {
@@ -223,6 +241,8 @@ object Client {
     @JvmStatic
     fun isInGui(): Boolean = currentGui.get() != null
 
+    // TODO(1.16.2)
+    //#if MC==10809
     /**
      * Gets the chat message currently typed into the chat gui.
      *
@@ -248,6 +268,7 @@ object Client {
             chatGui.inputField.text = message
         } else Client.getMinecraft().displayGuiScreen(GuiChat(message))
     }
+    //#endif
 
     @JvmStatic
     fun <T : INetHandler> sendPacket(packet: Packet<T>) {
@@ -307,7 +328,13 @@ object Client {
         }
     }
 
+    // TODO(1.16.2)
     object camera {
+        //#if MC==11602
+        //$$ fun getX() = 0.0
+        //$$ fun getY() = 0.0
+        //$$ fun getZ() = 0.0
+        //#else
         @JvmStatic
         fun getX(): Double = getMinecraft().renderManager.viewerPosX
 
@@ -316,5 +343,6 @@ object Client {
 
         @JvmStatic
         fun getZ(): Double = getMinecraft().renderManager.viewerPosZ
+        //#endif
     }
 }
