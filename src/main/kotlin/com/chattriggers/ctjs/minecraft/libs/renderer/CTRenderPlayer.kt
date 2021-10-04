@@ -17,7 +17,7 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
     private var showNametag = true
     private var showArmor = true
     private var showCape = true
-    private var showHeldItem = true
+    internal var showHeldItem = true
     private var showArrows = true
 
     fun setOptions(
@@ -56,14 +56,6 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
             //#endif
         }
     }
-
-    // TODO(1.16.2)
-    //#if MC==10809
-    override fun setModelVisibilities(clientPlayer: AbstractClientPlayer) {
-        super.setModelVisibilities(clientPlayer)
-        if (!showHeldItem) getMainModel().heldItemRight = 0
-    }
-    //#endif
 
     override fun canRenderName(entity: AbstractClientPlayer?) = showNametag
 

@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.launch.mixins.transformers.asMixinAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
@@ -87,7 +88,7 @@ class Sound(private val config: NativeObject) {
     }
 
     private fun loadSndSystem() {
-        val sndManager = Client.getMinecraft().soundHandler.sndManager
+        val sndManager = Client.getMinecraft().soundHandler.asMixinAccessor().getSndManager()
 
         sndSystem = ReflectionHelper.getPrivateValue<SoundSystem, SoundManager>(
             SoundManager::class.java,

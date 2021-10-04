@@ -1,22 +1,22 @@
 package com.chattriggers.ctjs.commands
 
-import com.chattriggers.ctjs.CTJS
-import com.chattriggers.ctjs.CTJSMod
+import com.chattriggers.ctjs.launch.mixins.transformers.asMixinAccessor
 import com.chattriggers.ctjs.triggers.OnTrigger
 
-//#if MC==10809
-import net.minecraft.command.CommandBase
-import net.minecraft.command.CommandException
-import net.minecraft.command.ICommandSender
-import net.minecraft.util.BlockPos
-import net.minecraftforge.client.ClientCommandHandler
-//#else
+//#if MC==11602
+//$$ import com.chattriggers.ctjs.CTJS
 //$$ import com.mojang.brigadier.CommandDispatcher
 //$$ import com.mojang.brigadier.arguments.StringArgumentType
 //$$ import com.mojang.brigadier.context.CommandContext
 //$$ import net.minecraft.command.CommandSource
 //$$ import net.minecraft.command.Commands
 //$$ import com.mojang.brigadier.tree.CommandNode
+//#else
+import net.minecraft.command.CommandBase
+import net.minecraft.command.CommandException
+import net.minecraft.command.ICommandSender
+import net.minecraft.util.BlockPos
+import net.minecraftforge.client.ClientCommandHandler
 //#endif
 
 class Command(
@@ -91,8 +91,8 @@ class Command(
         activeCommands.remove(name)
 
         //#if MC==10809
-        ClientCommandHandler.instance.commandSet.remove(this)
-        ClientCommandHandler.instance.commandMap.remove(name)
+        ClientCommandHandler.instance.asMixinAccessor().getCommandSet().remove(this)
+        ClientCommandHandler.instance.asMixinAccessor().getCommandMap().remove(name)
         //#else
         //$$ CTJS.commandDispatcher.root.children.removeIf { it.name == name }
         //#endif

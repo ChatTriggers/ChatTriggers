@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.transformers.asMixinAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
@@ -252,7 +253,7 @@ object Client {
     fun getCurrentChatMessage(): String {
         return if (isInChat()) {
             val chatGui = getMinecraft().currentScreen as GuiChat
-            chatGui.inputField.text
+            chatGui.asMixinAccessor().getInputField().text
         } else ""
     }
 
@@ -265,7 +266,7 @@ object Client {
     fun setCurrentChatMessage(message: String) {
         if (isInChat()) {
             val chatGui = getMinecraft().currentScreen as GuiChat
-            chatGui.inputField.text = message
+            chatGui.asMixinAccessor().getInputField().text = message
         } else Client.getMinecraft().displayGuiScreen(GuiChat(message))
     }
     //#endif

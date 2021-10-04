@@ -1,0 +1,24 @@
+{
+    "required": true,
+    //#if MC>=11700
+    //$$ "compatibilityLevel": "JAVA_16",
+    //#else
+    "compatibilityLevel": "JAVA_8",
+    //#endif
+    "package": "com.chattriggers.ctjs.launch.mixins.transformers",
+    "refmap": "mixins.chattriggers.refmap.json",
+    "plugin": "com.chattriggers.ctjs.launch.mixins.Plugin",
+    "mixins": [
+        "IEntityFXAccessor",
+        "IGuiChatAccessor",
+        "IGuiNewChatAccessor",
+        "IGuiPlayerTabOverlayAccessor",
+        "IGuiScreenBookAccessor",
+        "INBTTagCompoundAccessor",
+        "ISoundHandlerAccessor",
+        //#if MC==10809
+        "ICommandHandlerAccessor",
+        "RenderPlayerTransformer"
+        //#endif
+    ]
+}

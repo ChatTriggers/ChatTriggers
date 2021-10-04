@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.transformers.asMixinAccessor
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.google.common.collect.ComparisonChain
@@ -85,10 +86,10 @@ object TabList {
     // TODO(1.16.2): ATs?
     //#if MC==10809
     @JvmStatic
-    fun getHeaderMessage() = Client.getTabGui()?.header?.let(::Message)
+    fun getHeaderMessage() = Client.getTabGui()?.asMixinAccessor()?.getHeader()?.let(::Message)
 
     @JvmStatic
-    fun getHeader() = Client.getTabGui()?.header?.formattedText
+    fun getHeader() = Client.getTabGui()?.asMixinAccessor()?.getHeader()?.formattedText
     //#endif
 
     @JvmStatic
@@ -103,10 +104,10 @@ object TabList {
     // TODO(1.16.2): ATs?
     //#if MC==10809
     @JvmStatic
-    fun getFooterMessage() = Client.getTabGui()?.footer?.let(::Message)
+    fun getFooterMessage() = Client.getTabGui()?.asMixinAccessor()?.getFooter()?.let(::Message)
 
     @JvmStatic
-    fun getFooter() = Client.getTabGui()?.footer?.formattedText
+    fun getFooter() = Client.getTabGui()?.asMixinAccessor()?.getFooter()?.formattedText
     //#endif
 
     @JvmStatic

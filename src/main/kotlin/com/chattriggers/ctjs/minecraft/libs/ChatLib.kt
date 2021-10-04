@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
+import com.chattriggers.ctjs.launch.mixins.transformers.asMixinAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.message.Message
@@ -290,8 +291,8 @@ object ChatLib {
      */
     @JvmStatic
     private fun editChat(toReplace: (Message) -> Boolean, vararg replacements: Message) {
-        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
-        val chatLines = Client.getChatGUI()!!.chatLines
+        val drawnChatLines = Client.getChatGUI()!!.asMixinAccessor().getDrawnChatLines()
+        val chatLines = Client.getChatGUI()!!.asMixinAccessor().getChatLines()
 
         editChatLineList(chatLines, toReplace, *replacements)
         editChatLineList(drawnChatLines, toReplace, *replacements)

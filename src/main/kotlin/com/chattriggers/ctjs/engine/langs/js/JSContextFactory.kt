@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.engine.langs.js
 
-import dev.falsehonesty.asmhelper.AsmHelper
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Context.EMIT_DEBUG_OUTPUT
 import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR
@@ -40,7 +39,8 @@ object JSContextFactory : ContextFactory() {
     override fun hasFeature(cx: Context?, featureIndex: Int): Boolean {
         when (featureIndex) {
             FEATURE_LOCATION_INFORMATION_IN_ERROR -> return true
-            EMIT_DEBUG_OUTPUT -> return AsmHelper.isDeobf
+            // TODO(1.16.2)
+            EMIT_DEBUG_OUTPUT -> return false
         }
 
         return super.hasFeature(cx, featureIndex)

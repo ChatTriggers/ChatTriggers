@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.launch.mixins.transformers.asMixinAccessor
 import com.chattriggers.ctjs.utils.kotlin.External
 
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX
@@ -70,7 +71,7 @@ class Particle(val underlyingEntity: MCParticle) {
      * @param maxAge the particles max age (in ticks)
      */
     fun setMaxAge(maxAge: Int) = apply {
-        this.underlyingEntity.particleMaxAge = maxAge
+        this.underlyingEntity.asMixinAccessor().setParticleMaxAge(maxAge)
     }
 
     fun remove() = apply {

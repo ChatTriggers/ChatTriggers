@@ -87,3 +87,6 @@ net.minecraft.client.audio.SoundSystem paulscode.sound.SoundSystem
 net.minecraft.client.audio.LocatableSound net.minecraft.client.audio.PositionedSound
 net.minecraft.client.gui.widget.button.Button net.minecraft.client.gui.GuiButton
 net.minecraftforge.fml.ModContainer net.minecraftforge.fml.common.ModContainer
+org.objectweb.asm.tree.ClassNode org.spongepowered.asm.lib.tree.ClassNode
+net.minecraft.client.gui.widget.TextFieldWidget net.minecraft.client.gui.GuiTextField
+net.minecraft.client.audio.SoundEngine net.minecraft.client.audio.SoundManager

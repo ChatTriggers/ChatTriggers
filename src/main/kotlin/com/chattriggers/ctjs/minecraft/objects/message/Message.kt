@@ -46,7 +46,7 @@ class Message {
      * @param messageParts the list of TextComponents or Strings
      */
     constructor(messageParts: ArrayList<Any>) {
-        messageParts.addAll(messageParts.map {
+        this.messageParts.addAll(messageParts.map {
             when (it) {
                 is String -> TextComponent(it)
                 is TextComponent -> it

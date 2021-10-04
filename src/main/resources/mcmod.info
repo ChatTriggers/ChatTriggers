@@ -1,6 +1,6 @@
 [
   {
-    "modid": "ct.js",
+    "modid": "chattriggers",
     "name": "ChatTriggers",
     "description": "ctjs is a framework that allows for live scripting and client modification using JavaScript.",
     "version": "$version",

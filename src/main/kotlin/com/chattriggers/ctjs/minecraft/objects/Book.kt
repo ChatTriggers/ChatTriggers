@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects
 
+import com.chattriggers.ctjs.launch.mixins.transformers.asMixinAccessor
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -90,7 +91,7 @@ class Book(bookName: String) {
         //#if MC==11602
         //$$ bookScreen = ReadBookScreen(ReadBookScreen.IBookInfo.func_216917_a(book))
         //#else
-        bookScreen?.bookPages = pages.rawNBT
+        bookScreen?.asMixinAccessor()?.setBookPages(pages.rawNBT)
         //#endif
     }
 
@@ -101,7 +102,7 @@ class Book(bookName: String) {
         //$$ bookScreen!!.showPage(page)
         //#else
         bookScreen = GuiScreenBook(Player.getPlayer()!!, book, false)
-        bookScreen!!.currPage = page
+        bookScreen!!.asMixinAccessor().setCurrPage(page)
         //#endif
 
         GuiHandler.openGui(bookScreen ?: return)
@@ -114,7 +115,7 @@ class Book(bookName: String) {
     // TODO(1.16.2)
     //#if MC==10809
     fun getCurrentPage(): Int {
-        return if (!isOpen() || bookScreen == null) -1 else bookScreen!!.currPage
+        return if (!isOpen() || bookScreen == null) -1 else bookScreen!!.asMixinAccessor().getCurrPage()
     }
     //#endif
 
