@@ -8,7 +8,7 @@ import net.minecraft.util.IChatComponent
 
 //#if MC==11602
 //$$ import net.minecraft.util.text.Style
-//$$ import net.minecraft.util.ICharacterConsumer
+//$$ import com.chattriggers.ctjs.CTJS
 //$$ import net.minecraft.util.text.ITextProperties
 //$$ import net.minecraft.util.text.StringTextComponent
 //$$ import net.minecraft.util.text.IFormattableTextComponent
@@ -114,7 +114,7 @@ class TextComponent {
     fun getFormattedText(): String {
         //#if MC==11602
         //$$ val builder = StyledStringAcceptor()
-        //$$ mcComponent.getComponentWithStyle(builder, Style.EMPTY)
+        //$$ component.getComponentWithStyle(builder, Style.EMPTY)
         //$$ return builder.toString()
         //#else
         return component.formattedText
@@ -126,7 +126,7 @@ class TextComponent {
      */
     fun getUnformattedText(): String {
         //#if MC==11602
-        //$$ return mcComponent.unformattedComponentText
+        //$$ return component.unformattedComponentText
         //#else
         return component.unformattedText
         //#endif
@@ -265,7 +265,7 @@ class TextComponent {
 
         //#if MC==11602
         //$$ // TODO: Is this safe?
-        //$$ (mcComponent as IFormattableTextComponent).style = mcComponent.style.setClickEvent(event)
+        //$$ (component as IFormattableTextComponent).style = component.style.setClickEvent(event)
         //#else
         component.chatStyle.chatClickEvent = event
         //#endif
@@ -289,7 +289,7 @@ class TextComponent {
     private fun setHoverEventHelper(event: HoverEvent) {
         //#if MC==11602
         //$$ // TODO: Is this safe?
-        //$$ (mcComponent as IFormattableTextComponent).style = mcComponent.style.setHoverEvent(event)
+        //$$ (component as IFormattableTextComponent).style = component.style.setHoverEvent(event)
         //#else
         component.chatStyle.chatHoverEvent = event
         //#endif

@@ -356,7 +356,7 @@ object ChatLib {
     @JvmOverloads
     @JvmStatic
     fun getChatMessage(event: ClientChatReceivedEvent, formatted: Boolean = false): String {
-        return TextComponent(EventLib.getMessage(event)).let {
+        return TextComponent(event.message).let {
             if (formatted) replaceFormatting(it.getFormattedText()) else it.getUnformattedText()
         }
     }

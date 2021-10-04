@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.EventLib
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
@@ -184,7 +185,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     // helper method to get the proper chat message based on the presence of color codes
     private fun getChatMessage(chatEvent: ClientChatReceivedEvent, chatMessage: String) =
         if (formatted)
-            EventLib.getMessage(chatEvent).formattedText.replace("\u00a7", "&")
+            TextComponent(chatEvent.message).getFormattedText().replace("\u00a7", "&")
         else chatMessage
 
     // helper method to get the variables to pass through

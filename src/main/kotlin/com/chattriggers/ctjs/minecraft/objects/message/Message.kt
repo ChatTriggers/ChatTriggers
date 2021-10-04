@@ -168,9 +168,12 @@ class Message {
      * Edits this message (once it is already sent)
      * @param replacements the new message(s) to be put in place of the old one
      */
+    // TODO(1.16.2)
+    //#if MC==10809
     fun edit(vararg replacements: Message) {
         ChatLib.editChat(this, *replacements)
     }
+    //#endif
 
     /**
      * Outputs the Message into the client's chat.
@@ -180,7 +183,10 @@ class Message {
         if (!ChatLib.isPlayer("[CHAT]: " + getFormattedText())) return
 
         if (this.chatLineId != -1) {
+            // TODO(1.16.2)
+            //#if MC==10809
             Client.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
+            //#endif
             return
         }
 
@@ -234,7 +240,7 @@ class Message {
             //#if MC==11602
             //$$ // TODO: In 1.8.9 appendSibling does some styling stuff. Is
             //$$ // this equivalent?
-            //$$ chatMessage.siblings.add(it.mcComponent)
+            //$$ chatMessage.siblings.add(it.component)
             //#else
             chatMessage.appendSibling(it.component)
             //#endif

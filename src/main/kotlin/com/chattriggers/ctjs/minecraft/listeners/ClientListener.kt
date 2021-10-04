@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.util.vector.Vector3f
 
 //#if MC==11602
+//$$ import com.chattriggers.ctjs.minecraft.wrappers.Client
 //$$ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 //$$ import net.minecraftforge.client.event.DrawHighlightEvent
 //#else

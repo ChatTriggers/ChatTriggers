@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle as CTParticle // conflicts with remapped Particle class on 1.16
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
@@ -318,7 +318,7 @@ object World {
             xSpeed: Double,
             ySpeed: Double,
             zSpeed: Double
-        ): Particle? {
+        ): CTParticle? {
             val particleType = EnumParticleTypes.valueOf(particle)
 
             val fx = RenderGlobal::class.declaredMemberFunctions.firstOrNull {
@@ -359,7 +359,7 @@ object World {
                     x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
             ) as EntityFX */
 
-            return Particle(fx)
+            return CTParticle(fx)
         }
 
         @JvmStatic
