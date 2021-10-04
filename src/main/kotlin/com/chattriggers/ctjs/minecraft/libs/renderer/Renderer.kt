@@ -174,6 +174,16 @@ object Renderer {
     }
 
     @JvmStatic
+    fun pushMatrix() = apply {
+        GlStateManager.pushMatrix()
+    }
+
+    @JvmStatic
+    fun popMatrix() = apply {
+        GlStateManager.popMatrix()
+    }
+
+    @JvmStatic
     @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) {
         colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()))
@@ -501,8 +511,8 @@ object Renderer {
         if (!this.retainTransforms) {
             this.colorized = null
             this.drawMode = null
-            GL11.glPopMatrix()
-            GL11.glPushMatrix()
+            popMatrix()
+            pushMatrix()
         }
     }
 

@@ -75,17 +75,22 @@ object UpdateChecker {
     fun drawUpdateMessage() {
         if (!this.updateAvailable) return
 
-        GlStateManager.pushMatrix()
+        Renderer.pushMatrix()
 
         Renderer.getFontRenderer()
             .drawString(
+                //#if MC==11602
+                //$$ Renderer.getMatrixStack(),
+                //#endif
                 ChatLib.addColor("&cChatTriggers requires an update to work properly!"),
                 2f,
                 2f,
                 -0x1,
-                false
+                //#if MC==10809
+                false,
+                //#endif
             )
 
-        GlStateManager.popMatrix()
+        Renderer.popMatrix()
     }
 }
