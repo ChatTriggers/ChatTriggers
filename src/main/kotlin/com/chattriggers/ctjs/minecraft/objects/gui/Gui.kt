@@ -1,20 +1,29 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
+import gg.essential.universal.UKeyboard
+import gg.essential.universal.UMatrixStack
+import gg.essential.universal.UScreen
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 
+//#if MC==11602
+//$$ import net.minecraft.client.gui.widget.Widget
+//#endif
+
 @External
 @NotAbstract
-abstract class Gui : GuiScreen() {
+abstract class Gui : UScreen() {
     private var onDraw: OnRegularTrigger? = null
     private var onClick: OnRegularTrigger? = null
     private var onScroll: OnRegularTrigger? = null
@@ -26,8 +35,11 @@ abstract class Gui : GuiScreen() {
     private var mouseX = 0
     private var mouseY = 0
 
-    var buttons = mutableListOf<GuiButton>()
     var doesPauseGame = false
+
+    //#if MC==11602
+    //$$ private val buttonIdMap = mutableMapOf<Int, Button>()
+    //#endif
 
     init {
         MouseListener.registerScrollListener { x, y, delta ->
@@ -45,9 +57,9 @@ abstract class Gui : GuiScreen() {
 
     fun isOpen(): Boolean = Client.getMinecraft().currentScreen === this
 
-    fun isControlDown(): Boolean = GuiScreen.isCtrlKeyDown()
-    fun isShiftDown(): Boolean = GuiScreen.isShiftKeyDown()
-    fun isAltDown(): Boolean = GuiScreen.isAltKeyDown()
+    fun isControlDown(): Boolean = UKeyboard.isCtrlKeyDown()
+    fun isShiftDown(): Boolean = UKeyboard.isShiftKeyDown()
+    fun isAltDown(): Boolean = UKeyboard.isAltKeyDown()
 
     /**
      * Registers a method to be ran while gui is open.<br></br>
@@ -159,55 +171,49 @@ abstract class Gui : GuiScreen() {
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseClicked(mouseX, mouseY, button)
-        this.onClick?.trigger(arrayOf(mouseX, mouseY, button))
+    override fun onMouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int) {
+        super.onMouseClicked(mouseX, mouseY, mouseButton)
+        onClick?.trigger(arrayOf(mouseX, mouseY, mouseButton))
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun mouseReleased(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseReleased(mouseX, mouseY, button)
-        this.onMouseReleased?.trigger(arrayOf(mouseX, mouseY, button))
+    override fun onMouseReleased(mouseX: Double, mouseY: Double, state: Int) {
+        super.onMouseReleased(mouseX, mouseY, state)
+        onMouseReleased?.trigger(arrayOf(mouseX, mouseY, state))
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
+    //#if MC==10809
     override fun actionPerformed(button: GuiButton) {
         super.actionPerformed(button)
-        this.onActionPerformed?.trigger(arrayOf(button.id))
+        onActionPerformed?.trigger(arrayOf(button.id))
+    }
+    //#endif
+
+    /**
+     * Internal method to run trigger. Not meant for public use
+     */
+    override fun onMouseDragged(x: Double, y: Double, clickedButton: Int, timeSinceLastClick: Long) {
+        super.onMouseDragged(x, y, clickedButton, timeSinceLastClick)
+        onMouseDragged?.trigger(arrayOf(mouseX, mouseY, clickedButton, timeSinceLastClick))
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
-        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
-        this.onMouseDragged?.trigger(arrayOf(mouseX, mouseY, clickedMouseButton, timeSinceLastClick))
-    }
-
-    /**
-     * Internal method to run trigger. Not meant for public use
-     */
-    override fun initGui() {
-        super.initGui()
-        buttons.forEach { this.buttonList.add(it) }
-    }
-
-    /**
-     * Internal method to run trigger. Not meant for public use
-     */
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.drawScreen(mouseX, mouseY, partialTicks)
+    override fun onDrawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        super.onDrawScreen(mouseX, mouseY, partialTicks)
 
         GlStateManager.pushMatrix()
 
         this.mouseX = mouseX
         this.mouseY = mouseY
 
-        this.onDraw?.trigger(arrayOf(mouseX, mouseY, partialTicks))
+        onDraw?.trigger(arrayOf(mouseX, mouseY, partialTicks))
 
         GlStateManager.popMatrix()
     }
@@ -215,29 +221,22 @@ abstract class Gui : GuiScreen() {
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun keyTyped(typedChar: Char, keyCode: Int) {
-        super.keyTyped(typedChar, keyCode)
-
-        this.onKeyTyped?.trigger(arrayOf(typedChar, keyCode))
+    override fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
+        super.onKeyPressed(keyCode, typedChar, modifiers)
+        onKeyTyped?.trigger(arrayOf(typedChar, keyCode))
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun doesGuiPauseGame() = this.doesPauseGame
+    //#if MC==11602
+    //$$ override fun isPauseScreen() = doesPauseGame
+    //#else
+    override fun doesGuiPauseGame() = doesPauseGame
+    //#endif
 
-    fun setDoesPauseGame(doesPauseGame: Boolean) = apply { this.doesPauseGame = doesPauseGame }
-
-    /**
-     * Add a base Minecraft button to the gui
-     *
-     * @param buttonId   id for the button
-     * @param x          X position of the button
-     * @param y          Y position of the button
-     * @param buttonText the label of the button
-     */
-    fun addButton(buttonId: Int, x: Int, y: Int, buttonText: String) {
-        buttons.add(GuiButton(buttonId, x, y, buttonText))
+    fun setDoesPauseGame(doesPauseGame: Boolean) = apply {
+        this.doesPauseGame = doesPauseGame
     }
 
     /**
@@ -250,14 +249,25 @@ abstract class Gui : GuiScreen() {
      * @param height     the height of the button
      * @param buttonText the label of the button
      */
+    @JvmOverloads
     fun addButton(buttonId: Int, x: Int, y: Int, width: Int = 200, height: Int = 20, buttonText: String) {
-        buttons.add(GuiButton(buttonId, x, y, width, height, buttonText))
+        //#if MC==11602
+        //$$ val button = Button(x, y, width, height, TextComponent(buttonText).component) {
+        //$$     onActionPerformed?.trigger(arrayOf(buttonId))
+        //$$ }
+        //$$ buttonIdMap[buttonId] = button
+        //$$ getButtonList().add(button)
+        //#else
+        getButtonList().add(GuiButton(buttonId, x, y, width, height, buttonText))
+        //#endif
     }
 
     fun setButtonVisibility(buttonId: Int, visible: Boolean) {
-        buttons.firstOrNull {
-            it.id == buttonId
-        }?.visible = visible
+        //#if MC==11602
+        //$$ buttonIdMap[buttonId]?.visible = visible
+        //#else
+        getButtonList().firstOrNull { it.id == buttonId }?.visible = visible
+        //#endif
     }
 
     /**
@@ -269,7 +279,11 @@ abstract class Gui : GuiScreen() {
      * @param color color of the text
      */
     fun drawString(text: String, x: Int, y: Int, color: Int) {
-        this.drawString(this.mc.fontRendererObj, text, x, y, color)
+        //#if MC==11602
+        //$$ drawString(Renderer.getMatrixStack(), Renderer.getFontRenderer(), text, x, y, color)
+        //#else
+        drawString(Renderer.getFontRenderer(), text, x, y, color)
+        //#endif
     }
 
     /**
@@ -279,8 +293,9 @@ abstract class Gui : GuiScreen() {
      * @param mouseX X position of mouse
      * @param mouseY Y position of mouse
      */
+    @Deprecated("Does the same thing as drawHoveringString", ReplaceWith("drawHoveringString(text, mouseX, mouseY)"))
     fun drawCreativeTabHoveringString(text: String, mouseX: Int, mouseY: Int) {
-        this.drawCreativeTabHoveringText(text, mouseX, mouseY)
+        drawHoveringString(text, mouseX, mouseY)
     }
 
     /**
@@ -291,7 +306,30 @@ abstract class Gui : GuiScreen() {
      * @param y Y position of the text
      */
     fun drawHoveringString(text: List<String>, x: Int, y: Int) {
-        this.drawHoveringText(text, x, y, this.mc.fontRendererObj)
+        //#if MC==11602
+        //$$ renderToolTip(
+        //$$     Renderer.getMatrixStack(),
+        //$$     text.map { TextComponent(it).component.func_241878_f() },
+        //$$     x,
+        //$$     y,
+        //$$     Renderer.getFontRenderer(),
+        //$$ )
+        //#else
+        drawHoveringText(text, x, y, Renderer.getFontRenderer())
+        //#endif
+    }
+
+    fun drawHoveringString(text: String, x: Int, y: Int) {
+        drawHoveringString(listOf(text), x, y)
+    }
+
+    //#if MC==11602
+    //$$ private fun getButtonList(): MutableList<Widget> {
+    //$$     return buttons
+    //#else
+    private fun getButtonList(): MutableList<GuiButton> {
+        return buttonList
+    //#endif
     }
 
     internal abstract fun getLoader(): ILoader
