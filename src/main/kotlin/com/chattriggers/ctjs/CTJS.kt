@@ -42,8 +42,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
     //#endif
 )
 class CTJSMod {
-    //#if MC!=10809
-    //$$
+    //#if MC==11602
     //$$ init {
     //$$     FMLJavaModLoadingContext.get().modEventBus.addListener { e: FMLCommonSetupEvent ->
     //$$         preInit()
@@ -58,11 +57,11 @@ class CTJSMod {
     //$$ }
     //#endif
 
-    //#if MC==10809
+    //#if MC==11602
+    //$$ fun preInit() {
+    //#else
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
-    //#else
-    //$$ fun preInit() {
     //#endif
         listOf(WorldListener, CPS, GuiHandler, ClientListener, UpdateChecker, MouseListener).forEach {
             MinecraftForge.EVENT_BUS.register(it)
@@ -72,11 +71,11 @@ class CTJSMod {
         UriScheme.createSocketListener()
     }
 
-    //#if MC==10809
+    //#if MC==11602
+    //$$ fun init() {
+    //#else
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-    //#else
-    //$$ fun init() {
     //#endif
         Vigilance.initialize()
         Config.preload()
@@ -100,7 +99,7 @@ object CTJS {
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
 
-    //#if MC!=10809
+    //#if MC==11602
     //$$ lateinit var commandDispatcher: CommandDispatcher<CommandSource?>
     //#endif
 }
