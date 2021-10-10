@@ -282,7 +282,7 @@ object Player {
      * @return the player's inventory
      */
     @JvmStatic
-    fun getInventory(): Inventory = Inventory(getPlayer()!!.inventory)
+    fun getInventory(): Inventory? = getPlayer()?.let { Inventory(it.inventory) }
 
     /**
      * Gets the display name for the player,
@@ -318,15 +318,24 @@ object Player {
      * @return the currently opened inventory
      */
     @JvmStatic
-    fun getOpenedInventory(): Inventory = Inventory(getPlayer()!!.openContainer)
+    fun getOpenedInventory(): Inventory? = getPlayer()?.openContainer?.let { Inventory(it) }
 
     /**
      * Draws the player in the GUI
      */
     @JvmStatic
     @JvmOverloads
-    fun draw(x: Int, y: Int, rotate: Boolean = true) = apply {
-        Renderer.drawPlayer(this, x, y, rotate)
+    fun draw(
+        x: Int,
+        y: Int,
+        rotate: Boolean = false,
+        showNametag: Boolean = false,
+        showArmor: Boolean = true,
+        showCape: Boolean = true,
+        showHeldItem: Boolean = true,
+        showArrows: Boolean = true
+    ) = apply {
+        Renderer.drawPlayer(this, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
     }
 
     object armor {
@@ -334,24 +343,24 @@ object Player {
          * @return the item in the player's helmet slot
          */
         @JvmStatic
-        fun getHelmet(): Item = getInventory().getStackInSlot(39)
+        fun getHelmet(): Item? = getInventory()?.getStackInSlot(39)
 
         /**
          * @return the item in the player's chestplate slot
          */
         @JvmStatic
-        fun getChestplate(): Item = getInventory().getStackInSlot(38)
+        fun getChestplate(): Item? = getInventory()?.getStackInSlot(38)
 
         /**
          * @return the item in the player's leggings slot
          */
         @JvmStatic
-        fun getLeggings(): Item = getInventory().getStackInSlot(37)
+        fun getLeggings(): Item? = getInventory()?.getStackInSlot(37)
 
         /**
          * @return the item in the player's boots slot
          */
         @JvmStatic
-        fun getBoots(): Item = getInventory().getStackInSlot(36)
+        fun getBoots(): Item? = getInventory()?.getStackInSlot(36)
     }
 }
