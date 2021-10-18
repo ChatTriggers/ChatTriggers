@@ -141,7 +141,7 @@ object Player {
     fun getHunger(): Int = getPlayer()?.foodStats?.foodLevel ?: 0
 
     @JvmStatic
-    fun getSaturation(): Int = getPlayer()?.foodStats?.foodLevel ?: 0
+    fun getSaturation(): Float = getPlayer()?.foodStats?.saturationLevel ?: 0f
 
     @JvmStatic
     fun getArmorPoints(): Int = getPlayer()?.totalArmorValue ?: 0
