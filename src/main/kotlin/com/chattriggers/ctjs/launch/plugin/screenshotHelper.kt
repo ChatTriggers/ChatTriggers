@@ -37,7 +37,7 @@ fun injectScreenshotHelper() = inject {
                 astore(5)
             }
 
-            TriggerType.SCREENSHOT_TAKEN.triggerAll(local5, event)
+            TriggerType.ScreenshotTaken.triggerAll(local5, event)
             if (event.isCancelled())
                 aReturn(null)
         }

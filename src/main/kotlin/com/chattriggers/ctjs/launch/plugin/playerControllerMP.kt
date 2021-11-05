@@ -33,7 +33,7 @@ fun injectAttackEntity() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.ATTACK_ENTITY.triggerAll(Entity(local2), event)
+            TriggerType.AttackEntity.triggerAll(Entity(local2), event)
             if (event.isCancelled())
                 methodReturn()
         }
@@ -72,7 +72,7 @@ fun injectBreakBlock() = inject {
         val local2 = shadowLocal<EnumFacing>()
 
         code {
-            TriggerType.BLOCK_BREAK.triggerAll(
+            TriggerType.BlockBreak.triggerAll(
                 World.getBlockAt(local1.x, local1.y, local1.z)
                     .withFace(BlockFace.fromMCEnumFacing(local2)),
             )

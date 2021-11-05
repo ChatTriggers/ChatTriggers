@@ -38,7 +38,7 @@ fun injectSendChatMessage() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.MESSAGE_SENT.triggerAll(local1, event)
+            TriggerType.MessageSent.triggerAll(local1, event)
 
             if (event.isCancelled())
                 methodReturn()
@@ -71,7 +71,7 @@ fun injectHandleKeyboardInput() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.GUI_KEY.triggerAll(
+            TriggerType.GuiKey.triggerAll(
                 Keyboard.getEventCharacter(),
                 Keyboard.getEventKey(),
                 local0,
@@ -112,7 +112,7 @@ fun injectMouseClick() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.GUI_MOUSE_CLICK.triggerAll(local1, local2, local3, local0, event)
+            TriggerType.GuiMouseClick.triggerAll(local1, local2, local3, local0, event)
             if (event.isCancelled())
                 methodReturn()
         }
@@ -147,7 +147,7 @@ fun injectMouseRelease() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.GUI_MOUSE_RELEASE.triggerAll(local1, local2, local3, local0, event)
+            TriggerType.GuiMouseRelease.triggerAll(local1, local2, local3, local0, event)
             if (event.isCancelled())
                 methodReturn()
         }
@@ -182,7 +182,7 @@ fun injectMouseDrag() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.GUI_MOUSE_DRAG.triggerAll(local1, local2, local3, local0, event)
+            TriggerType.GuiMouseDrag.triggerAll(local1, local2, local3, local0, event)
             if (event.isCancelled())
                 methodReturn()
         }
@@ -202,7 +202,7 @@ fun injectTextComponentClick() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.CHAT_COMPONENT_CLICKED.triggerAll(local1?.let(::TextComponent), event)
+            TriggerType.ChatComponentClicked.triggerAll(local1?.let(::TextComponent), event)
             if (event.isCancelled())
                 iReturn(0)
         }
@@ -224,7 +224,7 @@ fun injectTextComponentHover() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.CHAT_COMPONENT_HOVERED.triggerAll(local1?.let(::TextComponent), local2, local3, event)
+            TriggerType.ChatComponentHovered.triggerAll(local1?.let(::TextComponent), local2, local3, event)
             if (event.isCancelled())
                 methodReturn()
         }
@@ -259,7 +259,7 @@ fun injectRenderTooltip() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.TOOLTIP.triggerAll(local4, Item(local1), event)
+            TriggerType.Tooltip.triggerAll(local4, Item(local1), event)
             if (event.isCancelled())
                 methodReturn()
         }

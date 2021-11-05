@@ -26,7 +26,7 @@ fun injectRenderManager() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.RENDER_ENTITY.triggerAll(
+            TriggerType.RenderEntity.triggerAll(
                 Entity(local1),
                 Vector3f(local2.toFloat(), local4.toFloat(), local6.toFloat()),
                 local9,

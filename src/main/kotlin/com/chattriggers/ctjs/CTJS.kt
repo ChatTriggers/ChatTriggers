@@ -61,6 +61,6 @@ object CTJS {
     private fun registerHooks() {
         ClientCommandHandler.instance.registerCommand(CTCommand)
 
-        Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GAME_UNLOAD::triggerAll))
+        Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
     }
 }

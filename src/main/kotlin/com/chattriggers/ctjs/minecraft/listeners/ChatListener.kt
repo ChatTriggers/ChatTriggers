@@ -21,7 +21,7 @@ object ChatListener {
                 if (chatHistory.size > 1000) chatHistory.removeAt(0)
 
                 // normal Chat Message
-                TriggerType.CHAT.triggerAll(ChatLib.getChatMessage(event, false), event)
+                TriggerType.Chat.triggerAll(ChatLib.getChatMessage(event, false), event)
 
                 // print to console
                 if (Config.printChatToConsole) {
@@ -34,7 +34,7 @@ object ChatListener {
                 if (actionBarHistory.size > 1000) actionBarHistory.removeAt(0)
 
                 // action bar
-                TriggerType.ACTION_BAR.triggerAll(ChatLib.getChatMessage(event, false), event)
+                TriggerType.ActionBar.triggerAll(ChatLib.getChatMessage(event, false), event)
             }
         }
     }

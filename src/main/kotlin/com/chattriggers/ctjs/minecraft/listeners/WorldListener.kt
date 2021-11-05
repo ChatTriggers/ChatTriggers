@@ -11,7 +11,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
-import net.minecraftforge.event.world.BlockEvent
 import net.minecraftforge.event.world.NoteBlockEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -33,7 +32,7 @@ object WorldListener {
         // world loadExtra trigger
         if (!shouldTriggerWorldLoad) return
 
-        TriggerType.WORLD_LOAD.triggerAll()
+        TriggerType.WorldLoad.triggerAll()
         shouldTriggerWorldLoad = false
 
         CTJS.sounds
@@ -46,12 +45,12 @@ object WorldListener {
     @SubscribeEvent
     fun onRenderWorld(event: RenderWorldLastEvent) {
         Tessellator.partialTicks = event.partialTicks
-        TriggerType.RENDER_WORLD.triggerAll(event.partialTicks)
+        TriggerType.RenderWorld.triggerAll(event.partialTicks)
     }
 
     @SubscribeEvent
     fun onWorldUnload(event: WorldEvent.Unload) {
-        TriggerType.WORLD_UNLOAD.triggerAll()
+        TriggerType.WorldUnload.triggerAll()
     }
 
     @SubscribeEvent
@@ -73,7 +72,7 @@ object WorldListener {
             1
         }
 
-        TriggerType.SOUND_PLAY.triggerAll(
+        TriggerType.SoundPlay.triggerAll(
             position,
             event.name,
             vol,
@@ -95,7 +94,7 @@ object WorldListener {
             event.pos.z.toFloat()
         )
 
-        TriggerType.NOTE_BLOCK_PLAY.triggerAll(
+        TriggerType.NoteBlockPlay.triggerAll(
             position,
             event.note.name,
             event.octave,
@@ -111,7 +110,7 @@ object WorldListener {
             event.pos.z.toFloat()
         )
 
-        TriggerType.NOTE_BLOCK_CHANGE.triggerAll(
+        TriggerType.NoteBlockChange.triggerAll(
             position,
             event.note.name,
             event.octave,
@@ -128,7 +127,7 @@ object WorldListener {
             !playerList.contains(it.getName())
         }.forEach {
             playerList.add(it.getName())
-            TriggerType.PLAYER_JOIN.triggerAll(it)
+            TriggerType.PlayerJoin.triggerAll(it)
             return@forEach
         }
 
@@ -139,7 +138,7 @@ object WorldListener {
 
             if (World.getPlayerByName(it) == null) {
                 this.playerList.remove(it)
-                TriggerType.PLAYER_LEAVE.triggerAll(it)
+                TriggerType.PlayerLeave.triggerAll(it)
                 break
             }
         }
@@ -147,14 +146,14 @@ object WorldListener {
 
     @SubscribeEvent
     fun livingDeathEvent(event: LivingDeathEvent) {
-        TriggerType.ENTITY_DEATH.triggerAll(
+        TriggerType.EntityDeath.triggerAll(
             Entity(event.entity)
         )
     }
 
     @SubscribeEvent
     fun attackEntityEvent(event: AttackEntityEvent) {
-        TriggerType.ENTITY_DAMAGE.triggerAll(
+        TriggerType.EntityDamage.triggerAll(
             Entity(event.target),
             PlayerMP(event.entityPlayer)
         )

@@ -37,7 +37,7 @@ fun injectEffectRenderer() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.SPAWN_PARTICLE.triggerAll(Particle(local16), EnumParticleTypes.getParticleFromId(local1), event)
+            TriggerType.SpawnParticle.triggerAll(Particle(local16), EnumParticleTypes.getParticleFromId(local1), event)
             if (event.isCancelled())
                 aReturn(null)
         }

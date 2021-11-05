@@ -96,17 +96,17 @@ abstract class DisplayLine {
     }
 
     fun registerClicked(method: Any) = run {
-        this.onClicked = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onClicked = OnRegularTrigger(method, TriggerType.Other, getLoader())
         this.onClicked
     }
 
     fun registerHovered(method: Any) = run {
-        this.onHovered = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onHovered = OnRegularTrigger(method, TriggerType.Other, getLoader())
         this.onHovered
     }
 
     fun registerDragged(method: Any) = run {
-        this.onDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        this.onDragged = OnRegularTrigger(method, TriggerType.Other, getLoader())
         this.onDragged
     }
 

@@ -5,7 +5,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
 
 @External
-class OnStepTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.STEP, loader) {
+class OnStepTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.Step, loader) {
     private var fps: Long = 60L
     private var delay: Long = -1
     private var systemTime: Long = Client.getSystemTime()

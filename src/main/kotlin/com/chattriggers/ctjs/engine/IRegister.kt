@@ -57,7 +57,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerChat(method: Any): OnChatTrigger {
-        return OnChatTrigger(method, TriggerType.CHAT, getImplementationLoader())
+        return OnChatTrigger(method, TriggerType.Chat, getImplementationLoader())
     }
 
     /**
@@ -77,7 +77,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerActionBar(method: Any): OnChatTrigger {
-        return OnChatTrigger(method, TriggerType.ACTION_BAR, getImplementationLoader())
+        return OnChatTrigger(method, TriggerType.ActionBar, getImplementationLoader())
     }
 
     /**
@@ -90,7 +90,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerWorldLoad(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.WORLD_LOAD, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.WorldLoad, getImplementationLoader())
     }
 
     /**
@@ -103,7 +103,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerWorldUnload(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.WORLD_UNLOAD, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.WorldUnload, getImplementationLoader())
     }
 
     /**
@@ -122,7 +122,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerClicked(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.CLICKED, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.Clicked, getImplementationLoader())
     }
 
     /**
@@ -140,7 +140,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerScrolled(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.SCROLLED, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.Scrolled, getImplementationLoader())
     }
 
     /**
@@ -160,7 +160,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerDragged(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.DRAGGED, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.Dragged, getImplementationLoader())
     }
 
     /**
@@ -201,7 +201,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerNoteBlockPlay(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.NOTE_BLOCK_PLAY, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.NoteBlockPlay, getImplementationLoader())
     }
 
     /**
@@ -220,7 +220,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerNoteBlockChange(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.NOTE_BLOCK_CHANGE, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.NoteBlockChange, getImplementationLoader())
     }
 
     /**
@@ -236,7 +236,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerTick(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.TICK, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.Tick, getImplementationLoader())
     }
 
     /**
@@ -272,7 +272,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderWorld(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RENDER_WORLD, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.RenderWorld, getImplementationLoader())
     }
 
     /**
@@ -288,7 +288,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderOverlay(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_OVERLAY, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderOverlay, getImplementationLoader())
     }
 
     /**
@@ -305,7 +305,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderPlayerList(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_PLAYER_LIST, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderPlayerList, getImplementationLoader())
     }
 
     /**
@@ -322,7 +322,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderCrosshair(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_CROSSHAIR, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderCrosshair, getImplementationLoader())
     }
 
     /**
@@ -339,7 +339,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderDebug(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_DEBUG, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderDebug, getImplementationLoader())
     }
 
     /**
@@ -356,7 +356,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderBossHealth(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_BOSS_HEALTH, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderBossHealth, getImplementationLoader())
     }
 
     /**
@@ -373,7 +373,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderHealth(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_HEALTH, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderHealth, getImplementationLoader())
     }
 
     /**
@@ -390,7 +390,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderArmor(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_ARMOR, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderArmor, getImplementationLoader())
     }
 
     /**
@@ -407,7 +407,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderFood(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_FOOD, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderFood, getImplementationLoader())
     }
 
     /**
@@ -424,7 +424,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderMountHealth(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_MOUNT_HEALTH, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderMountHealth, getImplementationLoader())
     }
 
     /**
@@ -442,7 +442,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderExperience(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_EXPERIENCE, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderExperience, getImplementationLoader())
     }
 
     /**
@@ -459,7 +459,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderHotbar(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_HOTBAR, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderHotbar, getImplementationLoader())
     }
 
     /**
@@ -476,7 +476,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderAir(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RENDER_AIR, getImplementationLoader())
+        return OnRenderTrigger(method, TriggerType.RenderAir, getImplementationLoader())
     }
 
     /**
@@ -493,7 +493,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerDrawBlockHighlight(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.BLOCK_HIGHLIGHT, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.BlockHighlight, getImplementationLoader())
     }
 
     /**
@@ -509,7 +509,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGameLoad(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GAME_LOAD, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GameLoad, getImplementationLoader())
     }
 
     /**
@@ -524,7 +524,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGameUnload(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GAME_UNLOAD, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GameUnload, getImplementationLoader())
     }
 
     /**
@@ -557,7 +557,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGuiOpened(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GUI_OPENED, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GuiOpened, getImplementationLoader())
     }
 
     /**
@@ -576,7 +576,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerPlayerJoined(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PLAYER_JOIN, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.PlayerJoin, getImplementationLoader())
     }
 
     /**
@@ -595,7 +595,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerPlayerLeft(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PLAYER_LEAVE, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.PlayerLeave, getImplementationLoader())
     }
 
     /**
@@ -615,7 +615,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerPickupItem(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PICKUP_ITEM, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.PickupItem, getImplementationLoader())
     }
 
     /**
@@ -635,7 +635,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerDropItem(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.DROP_ITEM, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.DropItem, getImplementationLoader())
     }
 
     /**
@@ -652,7 +652,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerScreenshotTaken(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.SCREENSHOT_TAKEN, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.ScreenshotTaken, getImplementationLoader())
     }
 
     /**
@@ -669,7 +669,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerMessageSent(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.MESSAGE_SENT, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.MessageSent, getImplementationLoader())
     }
 
     /**
@@ -689,7 +689,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerItemTooltip(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.TOOLTIP, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.Tooltip, getImplementationLoader())
     }
 
     /**
@@ -719,7 +719,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerPlayerInteract(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PLAYER_INTERACT, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.PlayerInteract, getImplementationLoader())
     }
 
     /**
@@ -735,7 +735,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerBlockBreak(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.BLOCK_BREAK, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.BlockBreak, getImplementationLoader())
     }
 
     /**
@@ -749,7 +749,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerEntityDamage(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ENTITY_DAMAGE, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.EntityDamage, getImplementationLoader())
     }
 
     /**
@@ -762,7 +762,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerEntityDeath(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ENTITY_DEATH, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.EntityDeath, getImplementationLoader())
     }
 
     /**
@@ -780,7 +780,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGuiRender(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GUI_RENDER, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GuiRender, getImplementationLoader())
     }
 
     /**
@@ -799,7 +799,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGuiKey(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GUI_KEY, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GuiKey, getImplementationLoader())
     }
 
     /**
@@ -820,7 +820,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGuiMouseClick(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GUI_MOUSE_CLICK, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GuiMouseClick, getImplementationLoader())
     }
 
     /**
@@ -841,7 +841,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGuiMouseRelease(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GUI_MOUSE_RELEASE, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GuiMouseRelease, getImplementationLoader())
     }
 
     /**
@@ -862,7 +862,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerGuiMouseDrag(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GUI_MOUSE_DRAG, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.GuiMouseDrag, getImplementationLoader())
     }
 
     /**
@@ -879,7 +879,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerPacketSent(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PACKET_SENT, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.PacketSent, getImplementationLoader())
     }
 
     /**
@@ -896,7 +896,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerPacketReceived(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PACKET_RECEIVED, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
     }
 
     /**
@@ -914,7 +914,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerChatComponentClicked(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.CHAT_COMPONENT_CLICKED, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.ChatComponentClicked, getImplementationLoader())
     }
 
     /**
@@ -932,7 +932,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerChatComponentHovered(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.CHAT_COMPONENT_HOVERED, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.ChatComponentHovered, getImplementationLoader())
     }
 
     /**
@@ -951,7 +951,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerRenderEntity(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RENDER_ENTITY, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
     }
 
     /**
@@ -969,7 +969,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerPostGuiRender(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.POST_GUI_RENDER, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.PostGuiRender, getImplementationLoader())
     }
 
     /**
@@ -987,7 +987,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerSpawnParticle(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.SPAWN_PARTICLE, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.SpawnParticle, getImplementationLoader())
     }
 
     /**
@@ -1004,7 +1004,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerAttackEntity(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ATTACK_ENTITY, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.AttackEntity, getImplementationLoader())
     }
 
     /**
@@ -1024,7 +1024,7 @@ interface IRegister {
      * @return The trigger for additional modification
      */
     fun registerHitBlock(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.HIT_BLOCK, getImplementationLoader())
+        return OnRegularTrigger(method, TriggerType.HitBlock, getImplementationLoader())
     }
 
     fun getImplementationLoader(): ILoader

@@ -53,7 +53,7 @@ object ClientListener {
         if (World.getWorld() == null || event.phase == TickEvent.Phase.END)
             return
 
-        TriggerType.TICK.triggerAll(this.ticksPassed)
+        TriggerType.Tick.triggerAll(this.ticksPassed)
         this.ticksPassed++
 
         Scoreboard.resetCache()
@@ -65,8 +65,8 @@ object ClientListener {
         val scroll = Mouse.getEventDWheel()
 
         when {
-            scroll > 0 -> TriggerType.SCROLLED.triggerAll(Client.getMouseX(), Client.getMouseY(), 1)
-            scroll < 0 -> TriggerType.SCROLLED.triggerAll(Client.getMouseX(), Client.getMouseY(), -1)
+            scroll > 0 -> TriggerType.Scrolled.triggerAll(Client.getMouseX(), Client.getMouseY(), 1)
+            scroll < 0 -> TriggerType.Scrolled.triggerAll(Client.getMouseX(), Client.getMouseY(), -1)
         }
 
         for (button in 0..4) {
@@ -75,7 +75,7 @@ object ClientListener {
             // normal clicked
             if (Mouse.isButtonDown(button) == this.mouseState[button]) continue
 
-            TriggerType.CLICKED.triggerAll(
+            TriggerType.Clicked.triggerAll(
                 Client.getMouseX(),
                 Client.getMouseY(),
                 button,
@@ -96,7 +96,7 @@ object ClientListener {
         if (button !in draggedState)
             return
 
-        TriggerType.DRAGGED.triggerAll(
+        TriggerType.Dragged.triggerAll(
             Client.getMouseX() - (this.draggedState[button]?.x ?: 0f),
             Client.getMouseY() - (this.draggedState[button]?.y ?: 0f),
             Client.getMouseX(),
@@ -117,7 +117,7 @@ object ClientListener {
                 if (msg is Packet<*>) {
                     Context.enter()
                     try {
-                        TriggerType.PACKET_RECEIVED.triggerAll(msg, packetReceivedEvent)
+                        TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
                     } finally {
                         Context.exit()
                     }
@@ -133,7 +133,7 @@ object ClientListener {
                 if (msg is Packet<*>) {
                     Context.enter()
                     try {
-                        TriggerType.PACKET_SENT.triggerAll(msg, packetSentEvent)
+                        TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
                     } finally {
                         Context.exit()
                     }
@@ -147,12 +147,12 @@ object ClientListener {
 
     @SubscribeEvent
     fun onDrawScreenEvent(event: GuiScreenEvent.DrawScreenEvent.Post) {
-        TriggerType.POST_GUI_RENDER.triggerAll(event.gui, event.mouseX, event.mouseY)
+        TriggerType.PostGuiRender.triggerAll(event.gui, event.mouseX, event.mouseY)
     }
 
     @SubscribeEvent
     fun onRenderTick(event: TickEvent.RenderTickEvent) {
-        TriggerType.STEP.triggerAll()
+        TriggerType.Step.triggerAll()
     }
 
     @SubscribeEvent
@@ -169,24 +169,24 @@ object ClientListener {
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
         when (event.type) {
-            RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RENDER_PLAYER_LIST.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.CROSSHAIRS -> TriggerType.RENDER_CROSSHAIR.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.DEBUG -> TriggerType.RENDER_DEBUG.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.BOSSHEALTH -> TriggerType.RENDER_BOSS_HEALTH.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.HEALTH -> TriggerType.RENDER_HEALTH.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.ARMOR -> TriggerType.RENDER_ARMOR.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.FOOD -> TriggerType.RENDER_FOOD.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.HEALTHMOUNT -> TriggerType.RENDER_MOUNT_HEALTH.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.EXPERIENCE -> TriggerType.RENDER_EXPERIENCE.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.HOTBAR -> TriggerType.RENDER_HOTBAR.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.AIR -> TriggerType.RENDER_AIR.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.TEXT -> TriggerType.RENDER_OVERLAY.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RenderPlayerList.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.CROSSHAIRS -> TriggerType.RenderCrosshair.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.DEBUG -> TriggerType.RenderDebug.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.BOSSHEALTH -> TriggerType.RenderBossHealth.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.HEALTH -> TriggerType.RenderHealth.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.ARMOR -> TriggerType.RenderArmor.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.FOOD -> TriggerType.RenderFood.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.HEALTHMOUNT -> TriggerType.RenderMountHealth.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.EXPERIENCE -> TriggerType.RenderExperience.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.HOTBAR -> TriggerType.RenderHotbar.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.AIR -> TriggerType.RenderAir.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.TEXT -> TriggerType.RenderOverlay.triggerAll(event)
         }
     }
 
     @SubscribeEvent
     fun onGuiOpened(event: GuiOpenEvent) {
-        TriggerType.GUI_OPENED.triggerAll(event)
+        TriggerType.GuiOpened.triggerAll(event)
     }
 
     @SubscribeEvent
@@ -199,7 +199,7 @@ object ClientListener {
             event.target.blockPos.z.toFloat()
         )
 
-        TriggerType.BLOCK_HIGHLIGHT.triggerAll(position, event)
+        TriggerType.BlockHighlight.triggerAll(position, event)
     }
 
     @SubscribeEvent
@@ -221,7 +221,7 @@ object ClientListener {
             item.motionZ.toFloat()
         )
 
-        TriggerType.PICKUP_ITEM.triggerAll(
+        TriggerType.PickupItem.triggerAll(
             //#if MC<=10809
             Item(item.entityItem),
             //#else
@@ -237,7 +237,7 @@ object ClientListener {
     fun onHitBlock(pos: MCBlockPos, facing: EnumFacing): Boolean {
         val event = CancellableEvent()
 
-        TriggerType.HIT_BLOCK.triggerAll(
+        TriggerType.HitBlock.triggerAll(
             World.getBlockAt(pos.x, pos.y, pos.z).withFace(BlockFace.fromMCEnumFacing(facing)),
             event
         )
@@ -250,7 +250,7 @@ object ClientListener {
 
         val event = CancellableEvent()
 
-        TriggerType.DROP_ITEM.triggerAll(
+        TriggerType.DropItem.triggerAll(
             Item(item),
             PlayerMP(player),
             event
@@ -263,7 +263,7 @@ object ClientListener {
     fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
         GlStateManager.pushMatrix()
 
-        TriggerType.GUI_RENDER.triggerAll(
+        TriggerType.GuiRender.triggerAll(
             e.mouseX,
             e.mouseY,
             e.gui
@@ -282,7 +282,7 @@ object ClientListener {
             null -> PlayerInteractAction.UNKNOWN
         }
 
-        TriggerType.PLAYER_INTERACT.triggerAll(
+        TriggerType.PlayerInteract.triggerAll(
             action,
             Vector3f((e.pos?.x ?: 0).toFloat(), (e.pos?.y ?: 0).toFloat(), (e.pos?.z ?: 0).toFloat()),
             e

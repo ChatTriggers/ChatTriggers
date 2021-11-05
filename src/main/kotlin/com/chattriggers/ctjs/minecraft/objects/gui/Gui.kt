@@ -55,7 +55,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerDraw(method: Any): OnRegularTrigger? {
-        onDraw = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onDraw = OnRegularTrigger(method, TriggerType.Other, getLoader())
         return onDraw
     }
 
@@ -71,7 +71,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerClicked(method: Any): OnRegularTrigger? {
-        onClick = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onClick = OnRegularTrigger(method, TriggerType.Other, getLoader())
         return onClick
     }
 
@@ -84,7 +84,7 @@ abstract class Gui : GuiScreen() {
      * int scroll direction
      */
     fun registerScrolled(method: Any): OnRegularTrigger? {
-        onScroll = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onScroll = OnRegularTrigger(method, TriggerType.Other, getLoader())
         return onScroll
     }
 
@@ -99,7 +99,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerKeyTyped(method: Any): OnRegularTrigger? {
-        onKeyTyped = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onKeyTyped = OnRegularTrigger(method, TriggerType.Other, getLoader())
         return onKeyTyped
     }
 
@@ -116,7 +116,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerMouseDragged(method: Any): OnRegularTrigger? {
-        onMouseDragged = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onMouseDragged = OnRegularTrigger(method, TriggerType.Other, getLoader())
         return onMouseDragged
     }
 
@@ -132,7 +132,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerMouseReleased(method: Any): OnRegularTrigger? {
-        onMouseReleased = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onMouseReleased = OnRegularTrigger(method, TriggerType.Other, getLoader())
         return onMouseReleased
     }
 
@@ -146,7 +146,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerActionPerformed(method: Any): OnRegularTrigger? {
-        onActionPerformed = OnRegularTrigger(method, TriggerType.OTHER, getLoader())
+        onActionPerformed = OnRegularTrigger(method, TriggerType.Other, getLoader())
         return onActionPerformed
     }
 
