@@ -688,8 +688,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerItemTooltip(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.Tooltip, getImplementationLoader())
+    fun registerRenderTooltip(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderTooltip, getImplementationLoader())
     }
 
     /**

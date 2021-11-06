@@ -259,7 +259,7 @@ fun injectRenderTooltip() = inject {
 
         code {
             val event = CancellableEvent()
-            TriggerType.Tooltip.triggerAll(local4, Item(local1), event)
+            TriggerType.RenderTooltip.triggerAll(local4, Item(local1), event)
             if (event.isCancelled())
                 methodReturn()
         }
