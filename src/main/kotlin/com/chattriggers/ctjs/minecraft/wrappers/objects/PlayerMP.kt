@@ -79,8 +79,18 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
      * Draws the player in the GUI
      */
     @JvmOverloads
-    fun draw(x: Int, y: Int, rotate: Boolean = false) = apply {
-        Renderer.drawPlayer(player, x, y, rotate)
+    fun draw(
+        player: Any,
+        x: Int,
+        y: Int,
+        rotate: Boolean = false,
+        showNametag: Boolean = false,
+        showArmor: Boolean = true,
+        showCape: Boolean = true,
+        showHeldItem: Boolean = true,
+        showArrows: Boolean = true
+    ) = apply {
+        Renderer.drawPlayer(player, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
     }
 
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo?): String {
