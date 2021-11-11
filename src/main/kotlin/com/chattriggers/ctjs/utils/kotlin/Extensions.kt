@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.utils.kotlin
 import com.fasterxml.jackson.core.Version
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import net.minecraft.client.renderer.Tessellator
 
 fun MCITextComponent.getStyling(): MCTextStyle =
     //#if MC<=10809
@@ -26,7 +25,7 @@ fun MCTextStyle.getHover(): MCTextHoverEvent? =
 //$$ hoverEvent
 //#endif
 
-fun Tessellator.getRenderer(): MCWorldRenderer =
+fun MCTessellator.getRenderer(): MCWorldRenderer =
     //#if MC<=10809
     worldRenderer
 //#else
