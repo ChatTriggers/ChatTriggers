@@ -111,9 +111,7 @@ object CPS {
                 if (clicks[i] == 0) toRemove.add(i)
             }
 
-            toRemove.sortedDescending().forEach {
-                clicks.removeAt(it)
-            }
+            toRemove.sortedDescending().forEach(clicks::removeAt)
         }
     }
 }

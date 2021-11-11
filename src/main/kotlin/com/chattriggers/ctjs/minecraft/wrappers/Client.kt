@@ -116,11 +116,11 @@ object Client {
      */
     @JvmOverloads
     @JvmStatic
-    fun getKeyBindFromKey(keyCode: Int, description: String, category: String  = "ChatTriggers"): KeyBind {
+    fun getKeyBindFromKey(keyCode: Int, description: String, category: String = "ChatTriggers"): KeyBind {
         return getMinecraft().gameSettings.keyBindings
-                .firstOrNull { it.keyCode == keyCode }
-                ?.let { KeyBind(it) }
-                ?: KeyBind(description, keyCode, category)
+            .firstOrNull { it.keyCode == keyCode }
+            ?.let(::KeyBind)
+            ?: KeyBind(description, keyCode, category)
     }
 
     /**

@@ -310,9 +310,7 @@ object ChatLib {
                 val lineId = if (it.getChatLineId() == -1) 0 else it.getChatLineId()
 
                 ChatLine(chatLine.updatedCounter, it.getChatMessage(), lineId)
-            }.forEach {
-                chatLineIterator.add(it)
-            }
+            }.forEach(chatLineIterator::add)
         }
     }
 

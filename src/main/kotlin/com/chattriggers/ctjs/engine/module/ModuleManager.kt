@@ -41,9 +41,7 @@ object ModuleManager {
         // Import required modules
         installedModules.asSequence().mapNotNull {
             it.metadata.requires
-        }.flatten().distinct().forEach {
-            ModuleUpdater.importModule(it)
-        }
+        }.flatten().distinct().forEach(ModuleUpdater::importModule)
 
         // Load their assets
         loadAssets(cachedModules)
