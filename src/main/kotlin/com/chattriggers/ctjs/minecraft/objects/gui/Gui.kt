@@ -187,7 +187,7 @@ abstract class Gui : GuiScreen() {
      */
     override fun initGui() {
         super.initGui()
-        buttons.forEach { this.buttonList.add(it) }
+        buttons.forEach(this.buttonList::add)
     }
 
     /**

@@ -23,9 +23,7 @@ object ModuleUpdater {
         val toDownload = File(modulesFolder, ".to_download.txt")
         if (!toDownload.exists()) return
 
-        toDownload.readText().split(",").filter(String::isBlank).forEach {
-            importModule(it)
-        }
+        toDownload.readText().split(",").filter(String::isBlank).forEach(::importModule)
 
         toDownload.delete()
     }

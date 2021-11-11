@@ -37,7 +37,7 @@ class Message {
         if (component.siblings.isEmpty()) {
             this.messageParts.add(TextComponent(component))
         } else {
-            this.messageParts.addAll(component.siblings.map { TextComponent(it) })
+            this.messageParts.addAll(component.siblings.map(::TextComponent))
         }
     }
 
