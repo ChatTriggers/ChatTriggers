@@ -5,7 +5,7 @@ import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.aReturn
 import dev.falsehonesty.asmhelper.dsl.inject
-import dev.falsehonesty.asmhelper.dsl.instructions.*
+import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.InventoryPlayer
 

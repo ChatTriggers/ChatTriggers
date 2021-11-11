@@ -8,7 +8,6 @@ import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
-import java.util.*
 
 @External
 object TabList {

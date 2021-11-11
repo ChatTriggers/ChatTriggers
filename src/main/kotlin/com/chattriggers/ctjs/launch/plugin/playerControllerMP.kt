@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
+import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
@@ -29,7 +30,7 @@ fun injectAttackEntity() = inject {
     methodMaps = mapOf("func_78764_a" to "attackEntity")
 
     codeBlock {
-        val local2 = shadowLocal<net.minecraft.entity.Entity>()
+        val local2 = shadowLocal<MCEntity>()
 
         code {
             val event = CancellableEvent()

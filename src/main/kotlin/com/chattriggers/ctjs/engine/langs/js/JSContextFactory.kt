@@ -7,7 +7,6 @@ import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR
 import org.mozilla.javascript.ContextFactory
 import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.WrapFactory
-import org.mozilla.javascript.tools.ToolErrorReporter
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader

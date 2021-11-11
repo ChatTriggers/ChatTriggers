@@ -1,7 +1,5 @@
 package com.chattriggers.ctjs.engine.module
 
-import java.util.*
-
 data class ModuleMetadata(
     val name: String? = null,
     val version: String? = null,

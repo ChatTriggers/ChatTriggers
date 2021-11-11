@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.launch.plugin
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
@@ -18,7 +19,7 @@ fun injectRenderManager() = inject {
     methodMaps = mapOf("func_147939_a" to "doRenderEntity")
 
     codeBlock {
-        val local1 = shadowLocal<net.minecraft.entity.Entity>()
+        val local1 = shadowLocal<MCEntity>()
         val local2 = shadowLocal<Double>()
         val local4 = shadowLocal<Double>()
         val local6 = shadowLocal<Double>()
