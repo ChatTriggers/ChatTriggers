@@ -202,7 +202,7 @@ object Client {
         if (isInChat()) {
             val chatGui = getMinecraft().currentScreen as GuiChat
             chatGui.inputField.text = message
-        } else Client.getMinecraft().displayGuiScreen(GuiChat(message))
+        } else getMinecraft().displayGuiScreen(GuiChat(message))
     }
 
     @JvmStatic
@@ -225,7 +225,7 @@ object Client {
      */
     @JvmStatic
     fun showTitle(title: String, subtitle: String, fadeIn: Int, time: Int, fadeOut: Int) {
-        val gui = Client.getMinecraft().ingameGUI
+        val gui = getMinecraft().ingameGUI
         gui.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut)
         gui.displayTitle(null, ChatLib.addColor(subtitle), fadeIn, time, fadeOut)
         gui.displayTitle(null, null, fadeIn, time, fadeOut)
@@ -259,12 +259,12 @@ object Client {
 
     object camera {
         @JvmStatic
-        fun getX(): Double = Client.getMinecraft().renderManager.viewerPosX
+        fun getX(): Double = getMinecraft().renderManager.viewerPosX
 
         @JvmStatic
-        fun getY(): Double = Client.getMinecraft().renderManager.viewerPosY
+        fun getY(): Double = getMinecraft().renderManager.viewerPosY
 
         @JvmStatic
-        fun getZ(): Double = Client.getMinecraft().renderManager.viewerPosZ
+        fun getZ(): Double = getMinecraft().renderManager.viewerPosZ
     }
 }
