@@ -34,11 +34,7 @@ class Message {
      * @param component the IChatComponent
      */
     constructor(component: MCITextComponent) {
-        if (component.siblings.isEmpty()) {
-            messageParts.add(TextComponent(component))
-        } else {
-            messageParts.addAll(component.siblings.map(::TextComponent))
-        }
+        messageParts.add(TextComponent(component))
     }
 
     /**
