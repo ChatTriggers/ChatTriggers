@@ -18,10 +18,7 @@ import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
 import java.util.*
-import kotlin.math.atan
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 @External
 object Renderer {
@@ -114,8 +111,8 @@ object Renderer {
     @JvmOverloads
     fun getRainbow(step: Float, speed: Float = 1f): Long {
         val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toLong()
-        val green = ((sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toLong()
-        val blue = ((sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toLong()
+        val green = ((sin(step / speed + 2 * PI / 3) + 0.75) * 170).toLong()
+        val blue = ((sin(step / speed + 4 * PI / 3) + 0.75) * 170).toLong()
         return color(red, green, blue, 255)
     }
 
@@ -123,8 +120,8 @@ object Renderer {
     @JvmOverloads
     fun getRainbowColors(step: Float, speed: Float = 1f): IntArray {
         val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toInt()
-        val green = ((sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
-        val blue = ((sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
+        val green = ((sin(step / speed + 2 * PI / 3) + 0.75) * 170).toInt()
+        val blue = ((sin(step / speed + 4 * PI / 3) + 0.75) * 170).toInt()
         return intArrayOf(red, green, blue)
     }
 
@@ -274,7 +271,7 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun drawCircle(color: Long, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
-        val theta = 2 * Math.PI / steps
+        val theta = 2 * PI / steps
         val cos = cos(theta).toFloat()
         val sin = sin(theta).toFloat()
 
