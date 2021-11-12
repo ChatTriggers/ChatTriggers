@@ -13,6 +13,7 @@ import net.minecraft.network.Packet
 import net.minecraft.realms.RealmsBridge
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
+import kotlin.math.roundToInt
 
 @External
 object Client {
@@ -153,9 +154,7 @@ object Client {
     fun getFreeMemory(): Long = Runtime.getRuntime().freeMemory()
 
     @JvmStatic
-    fun getMemoryUsage(): Int = Math.round(
-        (getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()
-    )
+    fun getMemoryUsage(): Int = ((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()).roundToInt()
 
     @JvmStatic
     fun getSystemTime(): Long = Minecraft.getSystemTime()
