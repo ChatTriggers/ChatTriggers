@@ -9,7 +9,6 @@ import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector3f
 import kotlin.math.sqrt
 
@@ -138,11 +137,11 @@ object Tessellator {
      */
     @JvmStatic
     @JvmOverloads
-    fun begin(drawMode: Int = GL11.GL_QUADS, textured: Boolean = true) = apply {
-        GL11.glPushMatrix()
+    fun begin(drawMode: Int = 7, textured: Boolean = true) = apply {
+        pushMatrix()
+        enableBlend()
+        tryBlendFuncSeparate(770, 771, 1, 0)
 
-        GlStateManager.enableBlend()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
 
         val renderManager = Client.getMinecraft().renderManager
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ)
@@ -166,7 +165,7 @@ object Tessellator {
      */
     @JvmStatic
     @JvmOverloads
-    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) = apply {
+    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) = apply {
         GlStateManager.color(red, green, blue, alpha)
         this.colorized = true
     }
@@ -183,7 +182,7 @@ object Tessellator {
      */
     @JvmStatic
     fun rotate(angle: Float, x: Float, y: Float, z: Float) = apply {
-        GL11.glRotatef(angle, x, y, z)
+        GlStateManager.rotate(angle, x, y, z)
     }
 
     /**
@@ -197,7 +196,7 @@ object Tessellator {
      */
     @JvmStatic
     fun translate(x: Float, y: Float, z: Float) = apply {
-        GL11.glTranslatef(x, y, z)
+        GlStateManager.translate(x, y, z)
     }
 
     /**
@@ -212,7 +211,7 @@ object Tessellator {
     @JvmStatic
     @JvmOverloads
     fun scale(x: Float, y: Float = x, z: Float = x) = apply {
-        GL11.glScalef(x, y, z)
+        GlStateManager.scale(x, y, z)
     }
 
     /**
@@ -262,9 +261,9 @@ object Tessellator {
         this.began = false
         this.colorized = false
 
-        GlStateManager.disableBlend()
 
-        GL11.glPopMatrix()
+        disableBlend()
+        popMatrix()
     }
 
     /**
@@ -320,37 +319,37 @@ object Tessellator {
             lScale *= 0.45f * multiplier
         }
 
-        GL11.glColor4f(1f, 1f, 1f, 0.5f)
-        GL11.glPushMatrix()
-        GL11.glTranslatef(renderPos.x, renderPos.y, renderPos.z)
-        GL11.glRotatef(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
-        GL11.glRotatef(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
-        GL11.glScalef(-lScale, -lScale, lScale)
-        GL11.glDisable(GL11.GL_LIGHTING)
-        GL11.glDepthMask(false)
-        GL11.glDisable(GL11.GL_DEPTH_TEST)
-        GL11.glEnable(GL11.GL_BLEND)
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+        GlStateManager.color(1f, 1f, 1f, 0.5f)
+        pushMatrix()
+        translate(renderPos.x, renderPos.y, renderPos.z)
+        rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+        rotate(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+        scale(-lScale, -lScale, lScale)
+        disableLighting()
+        depthMask(false)
+        disableDepth()
+        enableBlend()
+        blendFunc(770, 771)
 
         val textWidth = fontRenderer.getStringWidth(text)
 
         if (renderBlackBox) {
             val j = textWidth / 2
-            GlStateManager.disableTexture2D()
+            disableTexture2D()
             worldRenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
             worldRenderer.pos((-j - 1).toDouble(), (-1).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             worldRenderer.pos((-j - 1).toDouble(), 8.toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             worldRenderer.pos((j + 1).toDouble(), 8.toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             worldRenderer.pos((j + 1).toDouble(), (-1).toDouble(), 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
             tessellator.draw()
-            GlStateManager.enableTexture2D()
+            enableTexture2D()
         }
 
         fontRenderer.drawString(text, -textWidth / 2, 0, color)
 
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f)
-        GL11.glDepthMask(true)
-        GL11.glEnable(GL11.GL_DEPTH_TEST)
-        GL11.glPopMatrix()
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
+        depthMask(true)
+        enableDepth()
+        popMatrix()
     }
 }

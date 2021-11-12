@@ -15,7 +15,6 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
-import org.lwjgl.opengl.GL11
 import net.minecraft.item.Item as MCItem
 
 
@@ -214,7 +213,7 @@ class Item {
 
         GlStateManager.scale(scale, scale, 1f)
         GlStateManager.translate(x / scale, y / scale, 0f)
-        GL11.glColor4f(1f, 1f, 1f, 1f)
+        GlStateManager.color(1f, 1f, 1f, 1f)
 
         RenderHelper.enableStandardItemLighting()
         RenderHelper.enableGUIStandardItemLighting()

@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
-import org.lwjgl.opengl.GL11
 import java.util.*
 import kotlin.math.atan
 import kotlin.math.atan2
@@ -138,30 +137,30 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun translate(x: Float, y: Float, z: Float = 0.0F) {
-        GL11.glTranslated(x.toDouble(), y.toDouble(), z.toDouble())
+        GlStateManager.translate(x, y, z)
     }
 
     @JvmStatic
     @JvmOverloads
     fun scale(scaleX: Float, scaleY: Float = scaleX) {
-        GL11.glScalef(scaleX, scaleY, 1f)
+        GlStateManager.scale(scaleX, scaleY, 1f)
     }
 
     @JvmStatic
     fun rotate(angle: Float) {
-        GL11.glRotatef(angle, 0f, 0f, 1f)
+        GlStateManager.rotate(angle, 0f, 0f, 1f)
     }
 
     @JvmStatic
     @JvmOverloads
-    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) {
+    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) {
         colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()))
 
         GlStateManager.color(
-            MathLib.clampFloat(red, 0f, 255f),
-            MathLib.clampFloat(green, 0f, 255f),
-            MathLib.clampFloat(blue, 0f, 255f),
-            MathLib.clampFloat(alpha, 0f, 255f)
+            MathLib.clampFloat(red, 0f, 1f),
+            MathLib.clampFloat(green, 0f, 1f),
+            MathLib.clampFloat(blue, 0f, 1f),
+            MathLib.clampFloat(alpha, 0f, 1f)
         )
     }
 
@@ -395,12 +394,12 @@ object Renderer {
         val f3 = ent.prevRotationYawHead
         val f4 = ent.rotationYawHead
 
-        GlStateManager.translate(x.toFloat(), y.toFloat(), 50.0f)
+        translate(x.toFloat(), y.toFloat(), 50.0f)
         GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f)
         GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f)
         GlStateManager.rotate(-45.0f, 0.0f, 1.0f, 0.0f)
         GlStateManager.rotate(-atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f, 1.0f, 0.0f, 0.0f)
-        GlStateManager.scale(-1f, 1f, 1f)
+        scale(-1f, 1f)
         if (!rotate) {
             ent.renderYawOffset = atan((mouseX / 40.0f).toDouble()).toFloat() * 20.0f
             ent.rotationYaw = atan((mouseX / 40.0f).toDouble()).toFloat() * 40.0f
@@ -408,7 +407,6 @@ object Renderer {
             ent.rotationYawHead = ent.rotationYaw
             ent.prevRotationYawHead = ent.rotationYaw
         }
-        GlStateManager.translate(0.0f, 0.0f, 0.0f)
 
         val renderManager = Client.getMinecraft().renderManager
         renderManager.setPlayerViewY(180.0f)
@@ -456,8 +454,8 @@ object Renderer {
         if (!this.retainTransforms) {
             this.colorized = null
             this.drawMode = null
-            GL11.glPopMatrix()
-            GL11.glPushMatrix()
+            GlStateManager.popMatrix()
+            GlStateManager.pushMatrix()
         }
     }
 

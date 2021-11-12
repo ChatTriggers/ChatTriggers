@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import org.lwjgl.input.Mouse
-import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector3f
 import org.mozilla.javascript.Context
 
@@ -157,9 +156,9 @@ object ClientListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
-        GL11.glPushMatrix()
+        GlStateManager.pushMatrix()
         handleOverlayTriggers(event)
-        GL11.glPopMatrix()
+        GlStateManager.popMatrix()
 
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
             return
