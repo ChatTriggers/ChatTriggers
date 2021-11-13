@@ -116,6 +116,17 @@ global.register = function (triggerType, methodName) {
     return TriggerRegister.register(triggerType, methodName);
 };
 
+String.prototype.replaceAll = function(search,replace){
+    if (search instanceof String) {
+        return this.replace(new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),"g"),replace);
+    } else if (search instanceof RegExp) {
+        if (!search.flags.includes("g")) throw new TypeError("`.replaceAll` does not allow non-global regexes.")
+        return this.replace(search,replace)
+    } else {
+        throw new TypeError("`.replaceAll` requires a regex or string search value.")
+    }
+};
+
 // String prototypes
 String.prototype.addFormatting = function () {
     return ChatLib.addColor(this);
