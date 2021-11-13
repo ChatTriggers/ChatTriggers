@@ -6,9 +6,13 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
+import com.chattriggers.ctjs.utils.kotlin.getOrDefault
+import com.chattriggers.ctjs.utils.kotlin.getOrNull
+import com.reevajs.reeva.core.Agent
+import com.reevajs.reeva.runtime.objects.JSObject
+import com.reevajs.reeva.runtime.toJSString
 import net.minecraft.client.audio.SoundManager
 import net.minecraftforge.fml.relauncher.ReflectionHelper
-import org.mozilla.javascript.NativeObject
 import paulscode.sound.SoundSystem
 import java.io.File
 import java.net.MalformedURLException
@@ -43,9 +47,9 @@ import java.net.MalformedURLException
  * @param config the JavaScript config object
  */
 @External
-class Sound(private val config: NativeObject) {
+class Sound(private val config: JSObject) {
     private var sndSystem: SoundSystem? = null
-    private val source: String = config["source"] as String
+    private val source: String = config.get("source").toJSString(Agent.activeRealm).string
     var isListening = false
 
     init {
@@ -91,15 +95,15 @@ class Sound(private val config: NativeObject) {
 
     @Throws(MalformedURLException::class)
     private fun bootstrap() {
-        val source = config["source"]?.toString() ?: throw IllegalArgumentException("Sound source is null.")
-        val priority = config.getOrDefault("priority", false) as Boolean
-        val loop = config.getOrDefault("loop", false) as Boolean
-        val stream = config.getOrDefault("stream", false) as Boolean
+        val source = config.getOrNull<String>("source") ?: throw IllegalArgumentException("Sound source is null.")
+        val priority = config.getOrDefault("priority", false)
+        val loop = config.getOrDefault("loop", false)
+        val stream = config.getOrDefault("stream", false)
 
         val url = File(CTJS.assetsDir, source).toURI().toURL()
-        val x = (config.getOrDefault("x", Player.getX()) as Double).toFloat()
-        val y = (config.getOrDefault("y", Player.getY()) as Double).toFloat()
-        val z = (config.getOrDefault("z", Player.getZ()) as Double).toFloat()
+        val x = config.getOrDefault("x", Player.getX()).toFloat()
+        val y = config.getOrDefault("y", Player.getY()).toFloat()
+        val z = config.getOrDefault("z", Player.getZ()).toFloat()
         val attModel = config.getOrDefault("attenuation", 1) as Int
         val distOrRoll = 16
 
@@ -131,17 +135,9 @@ class Sound(private val config: NativeObject) {
             )
         }
 
-        if (config["volume"] != null) {
-            setVolume(config["volume"] as Float)
-        }
-
-        if (config["pitch"] != null) {
-            setPitch(config["pitch"] as Float)
-        }
-
-        if (config["category"] != null) {
-            setCategory(config["category"] as String)
-        }
+        config.getOrNull<Float>("volume")?.also(::setVolume)
+        config.getOrNull<Float>("pitch")?.also(::setPitch)
+        config.getOrNull<String>("category")?.also(::setCategory)
     }
 
     /**

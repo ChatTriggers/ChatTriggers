@@ -10,7 +10,6 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
 import org.lwjgl.input.Mouse
-import org.mozilla.javascript.NativeObject
 import javax.vecmath.Vector2d
 
 @External
@@ -36,22 +35,6 @@ abstract class DisplayLine {
         for (i in 0..5) this.mouseState[i] = false
     }
 
-    constructor(text: String, config: NativeObject) {
-        setText(text)
-        for (i in 0..5) this.mouseState[i] = false
-
-        this.textColor = config.getOption("textColor", null)?.toLong()
-        this.backgroundColor = config.getOption("backgroundColor", null)?.toLong()
-
-        this.setAlign(config.getOption("align", null))
-        this.setBackground(config.getOption("background", null))
-    }
-
-    private fun NativeObject?.getOption(key: String, default: Any?): String? {
-        if (this == null) return default?.toString()
-        return this.getOrDefault(key, default).toString()
-    }
-
     fun getText(): Text = this.text
     fun setText(text: String) = apply {
         this.text = Text(text)
@@ -59,7 +42,7 @@ abstract class DisplayLine {
     }
 
     fun getTextColor(): Long? = this.textColor
-    fun setTextColor(color: Long) = apply {
+    fun setTextColor(color: Long?) = apply {
         this.textColor = color
     }
 
@@ -91,7 +74,7 @@ abstract class DisplayLine {
     }
 
     fun getBackgroundColor(): Long? = this.backgroundColor
-    fun setBackgroundColor(color: Long) = apply {
+    fun setBackgroundColor(color: Long?) = apply {
         this.backgroundColor = color
     }
 

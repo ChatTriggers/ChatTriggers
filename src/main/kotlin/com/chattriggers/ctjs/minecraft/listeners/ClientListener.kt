@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
+import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
@@ -29,7 +30,6 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector3f
-import org.mozilla.javascript.Context
 
 object ClientListener {
     private var ticksPassed: Int = 0
@@ -53,8 +53,8 @@ object ClientListener {
         if (World.getWorld() == null || event.phase == TickEvent.Phase.END)
             return
 
-        TriggerType.Tick.triggerAll(this.ticksPassed)
-        this.ticksPassed++
+        TriggerType.Tick.triggerAll(ticksPassed++)
+        JSLoader.eventLoop.tick()
 
         Scoreboard.resetCache()
     }
@@ -114,14 +114,8 @@ object ClientListener {
             override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
                 val packetReceivedEvent = CancellableEvent()
 
-                if (msg is Packet<*>) {
-                    Context.enter()
-                    try {
-                        TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
-                    } finally {
-                        Context.exit()
-                    }
-                }
+                if (msg is Packet<*>)
+                    TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
 
                 if (!packetReceivedEvent.isCanceled())
                     ctx?.fireChannelRead(msg)
@@ -130,14 +124,8 @@ object ClientListener {
             override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
                 val packetSentEvent = CancellableEvent()
 
-                if (msg is Packet<*>) {
-                    Context.enter()
-                    try {
-                        TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
-                    } finally {
-                        Context.exit()
-                    }
-                }
+                if (msg is Packet<*>)
+                    TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
 
                 if (!packetSentEvent.isCanceled())
                     ctx?.write(msg, promise)

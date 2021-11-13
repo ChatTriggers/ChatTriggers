@@ -1,10 +1,10 @@
-const ASMAt = Java.type('dev.falsehonesty.asmhelper.dsl.At');
-const ASMInjectionPoint = Java.type('dev.falsehonesty.asmhelper.dsl.InjectionPoint');
-const ASMDescriptor = Java.type('dev.falsehonesty.asmhelper.dsl.instructions.Descriptor');
-const asmInjectHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmInjectHelper;
-const asmRemoveHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmRemoveHelper;
-const asmFieldHelper = Java.type('com.chattriggers.ctjs.engine.langs.js.JSLoader').INSTANCE.asmFieldHelper;
-const ASMMethodKt = Java.type('dev.falsehonesty.asmhelper.dsl.Method');
+import { At, InjectionPoint, Method } from 'jvm:dev.falsehonesty.asmhelper.dsl';
+import Descriptor from 'jvm:dev.falsehonesty.asmhelper.dsl.instructions.Descriptor';
+import JSLoader from 'jvm:com.chattriggers.ctjs.engine.langs.js.JSLoader'
+import JumpCondition from 'jvm:dev.falsehonesty.asmhelper.dsl.instructions.JumpCondition';
+import AccessType from 'jvm:dev.falsehonesty.asmhelper.dsl.writers.AccessType';
+
+const { asmInjectHelper, asmRemoveHelper, asmFieldHelper } = JSLoader.INSTANCE;
 
 const proxyInsnList = $ => {
     const proxy = new Proxy({builder: $}, {
@@ -198,9 +198,9 @@ export default class ASM {
 
     static currentModule = "";
 
-    static JumpCondition = Java.type('dev.falsehonesty.asmhelper.dsl.instructions.JumpCondition');
+    static JumpCondition = JumpCondition
 
-    static AccessType = Java.type('dev.falsehonesty.asmhelper.dsl.writers.AccessType');
+    static AccessType = AccessType
 
     static ARRAY(o) {
         return `[${o}`;
@@ -211,7 +211,7 @@ export default class ASM {
     }
 
     static At(injectionPoint, before = true, shift = 0) {
-        return new ASMAt(injectionPoint, before, shift);
+        return new At(injectionPoint, before, shift);
     }
 
     static desc(returnType, ...paramTypes) {
@@ -231,27 +231,25 @@ export default class ASM {
     }
 
     static modify(className, block) {
-        ASMMethodKt.modify(className, block);
+        Method.modify(className, block);
     }
 }
 
-ASM.At.HEAD = ASMInjectionPoint.HEAD.INSTANCE;
+ASM.At.HEAD = InjectionPoint.HEAD.INSTANCE;
 
-ASM.At.RETURN = function (ordinal = null) {
-    return new ASMInjectionPoint.RETURN(ordinal);
+ASM.At.RETURN = (ordinal = null) => new InjectionPoint.RETURN(ordinal);
+
+ASM.At.INVOKE = (owner, name, descriptor, ordinal = null) => {
+    if (owner === undefined)
+        throw new Error('ASM.At.INVOKE requires an owner parameter');
+    if (name === undefined)
+        throw new Error('ASM.At.INVOKE requires a name parameter');
+    if (descriptor === undefined)
+        throw new Error('ASM.At.INVOKE requires a descriptor parameter');
+
+    return new InjectionPoint.INVOKE(new Descriptor(owner, name, descriptor), ordinal);
 };
 
-ASM.At.INVOKE = function (
-    owner = throw new Error('ASM.At.INVOKE requires an owner parameter'),
-    name = throw new Error('ASM.At.INVOKE requires a name parameter'),
-    descriptor = throw new Error('ASM.At.INVOKE requires a descriptor parameter'),
-    ordinal = null
-) {
-    return new ASMInjectionPoint.INVOKE(new ASMDescriptor(owner, name, descriptor), ordinal)
-};
+ASM.At.TAIL = InjectionPoint.TAIL.INSTANCE;
 
-ASM.At.TAIL = ASMInjectionPoint.TAIL.INSTANCE;
-
-ASM.At.CUSTOM = function (finder = () => ([])) {
-    return new ASMInjectionPoint.CUSTOM(finder);
-};
+ASM.At.CUSTOM = (finder = () => ([])) => new InjectionPoint.CUSTOM(finder);

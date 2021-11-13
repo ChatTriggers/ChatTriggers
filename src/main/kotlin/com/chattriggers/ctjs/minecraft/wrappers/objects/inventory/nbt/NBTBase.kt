@@ -3,9 +3,12 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt
 import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
+import com.reevajs.reeva.core.Agent
+import com.reevajs.reeva.jvmcompat.JVMValueMapper
+import com.reevajs.reeva.runtime.JSValue
+import com.reevajs.reeva.runtime.arrays.JSArrayObject
+import com.reevajs.reeva.runtime.objects.JSObject
 import net.minecraft.nbt.*
-import org.mozilla.javascript.NativeArray
-import org.mozilla.javascript.NativeObject
 
 open class NBTBase(open val rawNBT: MCNBTBase) {
     /**
@@ -33,7 +36,7 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     override fun toString() = rawNBT.toString()
 
     companion object {
-        fun MCNBTBase.toObject(): Any? {
+        fun MCNBTBase.toObject(): JSValue {
             return when (this) {
                 is NBTTagString -> this.string
                 is NBTTagByte -> this.byte
@@ -42,46 +45,33 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
                 is NBTTagLong -> this.long
                 is NBTTagFloat -> this.float
                 is NBTTagDouble -> this.double
-                is MCNBTTagCompound -> this.toObject()
-                is MCNBTTagList -> this.toObject()
-                is NBTTagByteArray -> NativeArray(byteArray.toTypedArray()).expose()
-                is NBTTagIntArray -> NativeArray(intArray.toTypedArray()).expose()
+                is MCNBTTagCompound -> return this.toObject()
+                is MCNBTTagList -> return this.toObject()
+                is NBTTagByteArray -> byteArray.toTypedArray()
+                is NBTTagIntArray -> intArray.toTypedArray()
                 else -> error("Unknown tag type ${this.javaClass}")
+            }.let {
+                JVMValueMapper.jvmToJS(Agent.activeRealm, it)
             }
         }
 
-        fun MCNBTTagCompound.toObject(): NativeObject {
-            val o = NativeObject()
-            o.expose()
+        fun MCNBTTagCompound.toObject(): JSValue {
+            val obj = JSObject.create(Agent.activeRealm)
 
             for (key in keySet) {
                 val value = tagMap[key]
-                if (value != null) {
-                    o.put(key, o, value.toObject())
-                }
+                if (value != null)
+                    obj.set(key, obj, value.toObject())
             }
 
-            return o
+            return obj
         }
 
-        fun MCNBTTagList.toObject(): NativeArray {
-            val tags = mutableListOf<Any?>()
-            for (i in 0 until tagCount()) {
-                tags.add(get(i).toObject())
-            }
-            val array = NativeArray(tags.toTypedArray())
-            array.expose()
+        fun MCNBTTagList.toObject(): JSValue {
+            val array = JSArrayObject.create(Agent.activeRealm)
+            for (i in 0 until tagCount())
+                array.set(i, get(i).toObject())
             return array
-        }
-
-        private fun NativeArray.expose() = apply {
-            // Taken from the private NativeArray#init method
-            exportAsJSClass(32, this, false)
-        }
-
-        private fun NativeObject.expose() = apply {
-            // Taken from the private NativeObject#init method
-            exportAsJSClass(12, this, false)
         }
     }
 }

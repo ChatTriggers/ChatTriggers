@@ -3,8 +3,8 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
+import com.reevajs.reeva.runtime.regexp.JSRegExpObject
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import org.mozilla.javascript.regexp.NativeRegExp
 import java.util.*
 
 @External
@@ -51,16 +51,14 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
                 if ("" != chatCriteria)
                     source = replacedCriteria
             }
-            is NativeRegExp -> {
-                if (chatCriteria["ignoreCase"] as Boolean || caseInsensitive)
+            is JSRegExpObject -> {
+                if (chatCriteria.hasFlag(JSRegExpObject.Flag.IgnoreCase) || caseInsensitive)
                     flags.add(RegexOption.IGNORE_CASE)
 
-                if (chatCriteria["multiline"] as Boolean)
+                if (chatCriteria.hasFlag(JSRegExpObject.Flag.Multiline))
                     flags.add(RegexOption.MULTILINE)
 
-                source = (chatCriteria["source"] as String).let {
-                    if ("" == it) ".+" else it
-                }
+                source = chatCriteria.source.let { if ("" == it) ".+" else it }
 
                 formatted = "&" in source
             }

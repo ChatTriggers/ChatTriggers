@@ -11,19 +11,25 @@ import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowEvent
 import java.io.File
+import java.io.OutputStream
 import java.io.PrintStream
 import javax.swing.*
 import javax.swing.text.DefaultCaret
 
 class Console(val loader: ILoader?) {
     private val frame: JFrame = JFrame("ChatTriggers ${Reference.MODVERSION} ${loader?.getLanguage()?.langName ?: "Default"} Console")
-    private val taos: TextAreaOutputStream
     private val components = mutableListOf<Component>()
     private val history = mutableListOf<String>()
     private var historyOffset = 0
 
-    val out: PrintStream
-    private val textArea = JTextArea()
+    val textPane = ColoredTextPane()
+
+    val out = PrintStream(object : OutputStream() {
+        override fun write(b: Int) {
+            textPane.append(b.toChar().toString(), Color.WHITE)
+        }
+    })
+
     private val inputField = RSyntaxTextArea(5, 1).apply {
         syntaxEditingStyle = loader?.getLanguage()?.syntaxStyle ?: SyntaxConstants.SYNTAX_STYLE_NONE
         Theme.load(this::class.java.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml")).apply(this)
@@ -34,17 +40,14 @@ class Console(val loader: ILoader?) {
     init {
         this.frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 
-        this.taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
-        textArea.isEditable = false
+        textPane.isEditable = false
 
-        textArea.margin = Insets(5, 5, 5, 5)
-        textArea.autoscrolls = true
-        val caret = textArea.caret as DefaultCaret
+        textPane.margin = Insets(5, 5, 5, 5)
+        textPane.autoscrolls = true
+        val caret = textPane.caret as DefaultCaret
         caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
 
-        components.add(textArea)
-
-        out = taos.printStream
+        components.add(textPane)
 
         inputField.addKeyListener(object : KeyListener {
             override fun keyTyped(e: KeyEvent) {}
@@ -52,7 +55,8 @@ class Console(val loader: ILoader?) {
             override fun keyPressed(e: KeyEvent) {}
 
             override fun keyReleased(e: KeyEvent) {
-                if (!e.isControlDown) return
+                if (!e.isControlDown)
+                    return
 
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER -> {
@@ -61,10 +65,11 @@ class Console(val loader: ILoader?) {
                         history.add(command)
                         historyOffset = 0
 
-                        taos.println("eval> ${command.prependIndent("    > ").substring(6)}")
+                        textPane.append("eval> ", Color.GRAY)
+                        textPane.appendln(command.prependIndent("    > ").substring(6), Color.WHITE)
 
                         try {
-                            taos.println(loader?.eval(command) ?: return)
+                            textPane.appendln(loader?.eval(command) ?: return, Color.WHITE)
                         } catch (e: Throwable) {
                             printStackTrace(e)
                         }
@@ -102,23 +107,32 @@ class Console(val loader: ILoader?) {
             }
         })
 
-        frame.add(JScrollPane(textArea))
+        frame.add(JScrollPane(textPane))
         frame.add(inputField, BorderLayout.SOUTH)
         frame.pack()
         frame.isVisible = false
         frame.setSize(800, 600)
+
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
+        textPane.appendln("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Color.RED)
     }
 
     fun clearConsole() {
         SwingUtilities.invokeLater {
-            this.taos.clear()
+            textPane.clear()
         }
     }
 
     fun println(obj: Any) {
         SwingUtilities.invokeLater {
             try {
-                out.println(obj.toString())
+                textPane.appendln(obj.toString() + "\n", Color.WHITE)
             } catch (exception: Exception) {
                 println(obj.toString())
             }
@@ -240,7 +254,7 @@ class Console(val loader: ILoader?) {
 
         val chosenFont = if (Config.consoleFiraCodeFont) FIRA_FONT.deriveFont(Config.consoleFontSize.toFloat()) else Font("DejaVu Sans Mono", Font.PLAIN, 15).deriveFont(Config.consoleFontSize.toFloat())
 
-        textArea.font = chosenFont
+        textPane.font = chosenFont
         // TODO: Ligatures make everything extremely slow for some reason. Is this fixable?
 //        val attrs = FIRA_FONT.attributes.apply { (this as MutableMap<TextAttribute, Any>)[TextAttribute.LIGATURES] = TextAttribute.LIGATURES_ON }
 //        inputField.font = FIRA_FONT.deriveFont(attrs)

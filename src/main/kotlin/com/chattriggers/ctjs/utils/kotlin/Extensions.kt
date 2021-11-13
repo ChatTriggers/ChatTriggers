@@ -3,6 +3,9 @@ package com.chattriggers.ctjs.utils.kotlin
 import com.fasterxml.jackson.core.Version
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.reevajs.reeva.core.Agent
+import com.reevajs.reeva.jvmcompat.JVMValueMapper
+import com.reevajs.reeva.runtime.objects.JSObject
 import net.minecraft.client.renderer.Tessellator
 
 fun MCITextComponent.getStyling(): MCTextStyle =
@@ -48,4 +51,15 @@ inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, obje
 fun String.toVersion(): Version {
     val split = this.split(".").map(String::toInt)
     return Version(split.getOrNull(0) ?: 0, split.getOrNull(1) ?: 0, split.getOrNull(2) ?: 0, null, null, null)
+}
+
+inline fun <reified T> JSObject.getOrDefault(key: String, default: T): T {
+    val value = get(key)
+    if (value.isNullish)
+        return default
+    return JVMValueMapper.jsToJvm(Agent.activeRealm, value, T::class.java) as T
+}
+
+inline fun <reified T> JSObject.getOrNull(key: String): T? {
+    return getOrDefault(key, null)
 }

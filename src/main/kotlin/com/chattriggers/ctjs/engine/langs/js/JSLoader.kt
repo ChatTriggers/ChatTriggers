@@ -2,22 +2,28 @@ package com.chattriggers.ctjs.engine.langs.js
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.Lang
+import com.chattriggers.ctjs.engine.langs.js.impl.CTHostHooks
+import com.chattriggers.ctjs.engine.langs.js.objects.ASMGlobalObject
+import com.chattriggers.ctjs.engine.langs.js.objects.ModuleGlobalObject
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
-import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.console.Console
+import com.reevajs.reeva.core.Agent
+import com.reevajs.reeva.core.errors.DefaultErrorReporter
+import com.reevajs.reeva.core.errors.ThrowException
+import com.reevajs.reeva.core.lifecycle.*
+import com.reevajs.reeva.core.realm.Realm
+import com.reevajs.reeva.jvmcompat.JSClassInstanceObject
+import com.reevajs.reeva.jvmcompat.JVMValueMapper
+import com.reevajs.reeva.runtime.Operations
+import com.reevajs.reeva.runtime.functions.JSFunction
+import com.reevajs.reeva.runtime.primitives.JSUndefined
+import com.reevajs.reeva.runtime.toJSString
 import dev.falsehonesty.asmhelper.dsl.*
-import dev.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
 import dev.falsehonesty.asmhelper.dsl.writers.AccessType
-import org.mozilla.javascript.*
-import org.mozilla.javascript.Function
-import org.mozilla.javascript.commonjs.module.ModuleScriptProvider
-import org.mozilla.javascript.commonjs.module.Require
-import org.mozilla.javascript.commonjs.module.provider.StrongCachingModuleScriptProvider
-import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider
 import java.io.File
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.MethodHandles
@@ -28,24 +34,30 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
 object JSLoader : ILoader {
-    private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<OnTrigger>>()
-    override val console by lazy { Console(this) }
+    override val console = Console(this)
 
-    private lateinit var moduleContext: Context
-    private lateinit var evalContext: Context
-    private lateinit var scope: Scriptable
-    private lateinit var require: CTRequire
-    private lateinit var ASMLib: Any
+    private val agent = Agent().apply {
+        hostHooks = CTHostHooks()
+        errorReporter = DefaultErrorReporter(console.out)
+        Agent.setAgent(this)
+    }
+
+    val eventLoop = EventLoop(agent)
+
+    private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<OnTrigger>>()
+
+    private var asmLibInitialized = false
+    private lateinit var asmRealm: Realm
+    private lateinit var moduleRealm: Realm
+    private lateinit var evalRealm: Realm
 
     private val INVOKE_JS_CALL = MethodHandles.lookup().findStatic(
         JSLoader::class.java,
         "asmInvoke",
-        MethodType.methodType(Any::class.java, Callable::class.java, Array<Any?>::class.java)
+        MethodType.methodType(Any::class.java, JSFunction::class.java, Array<Any?>::class.java)
     )
 
     override fun exec(type: TriggerType, args: Array<out Any?>) {
@@ -67,153 +79,128 @@ object JSLoader : ILoader {
     private fun newTriggerSet() = ConcurrentSkipListSet<OnTrigger>()
 
     override fun setup(jars: List<URL>) {
+        asmLibInitialized = false
+
         instanceContexts(jars)
-
-        wrapInContext {
-            val asmProvidedLibs = saveResource(
-                "/js/asmProvidedLibs.js",
-                File(modulesFolder.parentFile, "chattriggers-asm-provided-libs.js"),
-                true
-            )
-
-            try {
-                moduleContext.evaluateString(
-                    scope,
-                    asmProvidedLibs,
-                    "asmProvided",
-                    1, null
-                )
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                e.printTraceToConsole(console)
-            }
-        }
     }
 
-    override fun asmSetup() = wrapInContext {
+    override fun asmSetup() {
         val asmLibFile = File(modulesFolder.parentFile, "chattriggers-asmLib.js")
 
         saveResource("/js/asmLib.js", asmLibFile, true)
+        asmRealm = agent.makeRealm {
+            ASMGlobalObject.create(it)
+        }
+
+        val sourceInfo = FileSourceInfo(File(asmLibFile.toURI()), isModule = true, "ASMLib")
 
         try {
-            val returned = require.loadCTModule("ASMLib", "ASMLib", asmLibFile.toURI())
+            val result = executeModule(asmRealm, sourceInfo)
+                ?: throw IllegalStateException("Unexpected error running ASMLib")
 
-            // Get the default export, the ASM Helper
-            ASMLib = ScriptableObject.getProperty(returned, "default")
+            val asmLib = result.env.getBinding(ModuleRecord.DEFAULT_SPECIFIER)
+            asmRealm.globalObject.defineOwnProperty("ASM", asmLib, 0)
+            asmLibInitialized = true
+        } catch (e: ThrowException) {
+            asmLibInitialized = false
+            agent.errorReporter.reportRuntimeError(sourceInfo, e)
         } catch (e: Throwable) {
-            e.printStackTrace()
-            e.printTraceToConsole(console)
+            asmLibInitialized = false
+            agent.errorReporter.reportInternalError(sourceInfo, e)
         }
     }
 
-    override fun asmPass(module: Module, asmURI: URI) = wrapInContext {
+    override fun asmPass(module: Module, asmURI: URI) {
+        val sourceInfo = FileSourceInfo(File(asmURI), isModule = true, module.name)
+
         try {
-            val returned = require.loadCTModule(module.name, module.metadata.asmEntry!!, asmURI)
-
-            val asmFunction = ScriptableObject.getProperty(returned, "default") as? Function
-
-            if (asmFunction == null) {
-                "Asm entry for module ${module.name} has an invalid export. " +
-                        "An Asm entry must have a default export of a function.".printToConsole(console)
-                return@wrapInContext
-            }
-
-            ScriptableObject.putProperty(ASMLib, "currentModule", module.name)
-            asmFunction.call(moduleContext, scope, scope, arrayOf(ASMLib))
+            executeModule(asmRealm, sourceInfo)
+        } catch (e: ThrowException) {
+            agent.errorReporter.reportRuntimeError(sourceInfo, e)
         } catch (e: Throwable) {
-            println("Error loading asm entry for module ${module.name}")
-            e.printStackTrace()
-            e.printTraceToConsole(console)
-            "Error loading asm entry for module ${module.name}".printToConsole(console)
+            agent.errorReporter.reportInternalError(sourceInfo, e)
         }
     }
 
-    override fun entrySetup(): Unit = wrapInContext {
-        val moduleProvidedLibs = saveResource(
-            "/js/moduleProvidedLibs.js",
-            File(modulesFolder.parentFile, "chattriggers-modules-provided-libs.js"),
-            true
-        )
+    override fun entrySetup() {
+        // This can be called in a different thread, so make sure this thread's
+        // agent is set correctly
+        Agent.setAgent(agent)
 
-        try {
-            moduleContext.evaluateString(
-                scope,
-                moduleProvidedLibs,
-                "moduleProvided",
-                1, null
-            )
-        } catch (e: Throwable) {
-            e.printStackTrace()
-            e.printTraceToConsole(console)
+        evalRealm = agent.makeRealm {
+            ModuleGlobalObject.create(it)
+        }
+
+        moduleRealm = agent.makeRealm {
+            ModuleGlobalObject.create(it)
         }
     }
 
-    override fun entryPass(module: Module, entryURI: URI): Unit = wrapInContext {
-        try {
-            require.loadCTModule(module.name, module.metadata.entry!!, entryURI)
-        } catch (e: Throwable) {
-            println("Error loading module ${module.name}")
-            e.printStackTrace()
+    override fun entryPass(module: Module, entryURI: URI) {
+        val sourceInfo = FileSourceInfo(File(entryURI), isModule = true, module.name)
 
-            "Error loading module ${module.name}".printToConsole(console)
-            e.printTraceToConsole(console)
+        try {
+            executeModule(moduleRealm, sourceInfo)
+        } catch (e: ThrowException) {
+            agent.errorReporter.reportRuntimeError(sourceInfo, e)
+        } catch (e: Throwable) {
+            agent.errorReporter.reportInternalError(sourceInfo, e)
         }
+    }
+
+    private fun executeModule(realm: Realm, sourceInfo: SourceInfo): ModuleRecord? {
+        val result = SourceTextModuleRecord.parseModule(realm, sourceInfo)
+        if (result.hasError) {
+            val error = result.error()
+            agent.errorReporter.reportParseError(sourceInfo, error.cause, error.start, error.end)
+            return null
+        }
+
+        val moduleRecord = result.value()
+        moduleRecord.execute()
+        return moduleRecord
     }
 
     override fun asmInvokeLookup(module: Module, functionURI: URI): MethodHandle {
-        return wrapInContext {
-            try {
-                val returned = require.loadCTModule(module.name, File(functionURI).name, functionURI)
-                val func = ScriptableObject.getProperty(returned, "default") as Callable
+        val sourceInfo = FileSourceInfo(File(functionURI), isModule = true, module.name)
 
-                // When a call to this function ID is made, we always want to point it
-                // to our asmInvoke method, which in turn should always call [func].
-                INVOKE_JS_CALL.bindTo(func)
-            } catch (e: Throwable) {
-                println("Error loading asm function $functionURI in module ${module.name}.")
-                e.printStackTrace()
+        try {
+            val moduleRecord = executeModule(asmRealm, sourceInfo)
+                ?: throw IllegalStateException("Unable to resolve module $module")
+            if (!moduleRecord.env.hasBinding(ModuleRecord.DEFAULT_SPECIFIER))
+                throw IllegalStateException("ASM exported function module must have a callable default export")
 
-                "Error loading asm function $functionURI in module ${module.name}.".printToConsole(console)
-                e.printTraceToConsole(console)
+            val defaultExport = moduleRecord.env.getBinding(ModuleRecord.DEFAULT_SPECIFIER)
+            if (defaultExport !is JSFunction)
+                throw IllegalStateException("ASM exported function module must have a callable default export")
 
-                // If we can't resolve the target function correctly, we will return
-                //  a no-op method handle that will always return null.
-                //  It still needs to match the method type (Object[])Object, so we drop the arguments param.
-                MethodHandles.dropArguments(
-                    MethodHandles.constant(Any::class.java, null),
-                    0,
-                    Array<Any?>::class.java,
-                )
-            }
+            // When a call to this function ID is made, we always want to point it
+            // to our asmInvoke method, which in turn should always call [func].
+            return INVOKE_JS_CALL.bindTo(defaultExport)
+        } catch (e: ThrowException) {
+            agent.errorReporter.reportRuntimeError(sourceInfo, e)
+        } catch (e: Throwable) {
+            agent.errorReporter.reportInternalError(sourceInfo, e)
         }
+
+        // If we can't resolve the target function correctly, we will return
+        //  a no-op method handle that will always return null.
+        //  It still needs to match the method type (Object[])Object, so we drop the arguments param.
+        return MethodHandles.dropArguments(
+            MethodHandles.constant(Any::class.java, null),
+            0,
+            Array<Any?>::class.java,
+        )
     }
 
     @JvmStatic
-    fun asmInvoke(func: Callable, args: Array<Any?>): Any {
-        return wrapInContext {
-            func.call(moduleContext, scope, scope, args)
-        }
-    }
-
-    private inline fun <T> wrapInContext(context: Context = moduleContext, crossinline block: () -> T): T {
-        contract {
-            callsInPlace(block, InvocationKind.EXACTLY_ONCE)
-        }
-
-        val missingContext = Context.getCurrentContext() == null
-        if (missingContext) {
-            try {
-                JSContextFactory.enterContext(context)
-            } catch (e: Throwable) {
-                JSContextFactory.enterContext()
-            }
-        }
-
-        try {
-            return block()
-        } finally {
-            if (missingContext) Context.exit()
-        }
+    fun asmInvoke(func: JSFunction, args: Array<Any?>): Any {
+        return Operations.call(
+            moduleRealm,
+            func,
+            JSUndefined,
+            args.map { JVMValueMapper.jvmToJS(moduleRealm, it) },
+        )
     }
 
     @JvmStatic
@@ -224,7 +211,7 @@ object JSLoader : ILoader {
         _methodDesc: String,
         _fieldMaps: Map<String, String>,
         _methodMaps: Map<String, String>,
-        _insnList: (Wrapper) -> Unit
+        _insnList: JSFunction,
     ) {
         inject {
             className = _className
@@ -235,9 +222,8 @@ object JSLoader : ILoader {
             methodMaps = _methodMaps
 
             insnList {
-                wrapInContext {
-                    _insnList(NativeJavaObject(scope, this, InsnListBuilder::class.java))
-                }
+                val wrappedBuilder = JSClassInstanceObject.wrap(asmRealm, this)
+                Operations.call(asmRealm, _insnList, JSUndefined, listOf(wrappedBuilder))
             }
         }
     }
@@ -278,50 +264,63 @@ object JSLoader : ILoader {
         }
     }
 
-    override fun eval(code: String): String {
-        return wrapInContext(evalContext) {
-            Context.toString(evalContext.evaluateString(scope, code, "<eval>", 1, null))
+    override fun eval(code: String): String? {
+        val sourceInfo = LiteralSourceInfo("<eval>", code, isModule = false)
+        val result = agent.compileScript(evalRealm, sourceInfo)
+        if (result.hasError) {
+            agent.errorReporter.reportParseError(sourceInfo, result.error())
+        } else {
+            try {
+                return result.value().execute().toJSString(evalRealm).string
+            } catch (e: ThrowException) {
+                agent.errorReporter.reportRuntimeError(sourceInfo, e)
+            } catch (e: Throwable) {
+                agent.errorReporter.reportInternalError(sourceInfo, e)
+            }
         }
+
+        return null
     }
 
     override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>) {
-        wrapInContext {
-            try {
-                if (method !is Function)
-                    throw IllegalArgumentException("Need to pass actual function to the register function, not the name!")
+        try {
+            if (method !is JSFunction)
+                throw IllegalArgumentException("Need to pass actual function to the register function, not the name!")
 
-                method.call(Context.getCurrentContext(), scope, scope, args)
-            } catch (e: Throwable) {
-                e.printTraceToConsole(console)
-                removeTrigger(trigger)
+            val jsArgs = args.map { JVMValueMapper.jvmToJS(moduleRealm, it) }
+
+            synchronized(moduleRealm) {
+                Operations.call(moduleRealm, method, JSUndefined, jsArgs)
             }
+        // TODO: How do we report errors here without SourceInfo?
+        // } catch (e: ThrowException) {
+        //     agent.errorReporter.reportRuntimeError()
+        } catch (e: Throwable) {
+            e.printTraceToConsole(console)
+            removeTrigger(trigger)
         }
     }
 
     private fun instanceContexts(files: List<URL>) {
-        JSContextFactory.addAllURLs(files)
+        // TODO
 
-        moduleContext = JSContextFactory.enterContext()
-        scope = ImporterTopLevel(moduleContext)
-
-        val sourceProvider = UrlModuleSourceProvider(listOf(modulesFolder.toURI()), listOf())
-        val moduleProvider = StrongCachingModuleScriptProvider(sourceProvider)
-        require = CTRequire(moduleProvider)
-        require.install(scope)
-
-        Context.exit()
-
-        JSContextFactory.optimize = false
-        evalContext = JSContextFactory.enterContext()
-        Context.exit()
-        JSContextFactory.optimize = true
-    }
-
-    class CTRequire(moduleProvider: ModuleScriptProvider) : Require(moduleContext, scope, moduleProvider, null, null, false) {
-        fun loadCTModule(name: String, entry: String, uri: URI): Scriptable {
-            return getExportedModuleInterface(moduleContext, name + File.separator + entry, uri, null, false)
-        }
+        // JSContextFactory.addAllURLs(files)
+        //
+        // moduleContext = JSContextFactory.enterContext()
+        // scope = ImporterTopLevel(moduleContext)
+        //
+        // val sourceProvider = UrlModuleSourceProvider(listOf(modulesFolder.toURI()), listOf())
+        // val moduleProvider = StrongCachingModuleScriptProvider(sourceProvider)
+        // require = CTRequire(moduleProvider)
+        // require.install(scope)
+        //
+        // Context.exit()
+        //
+        // JSContextFactory.optimize = false
+        // evalContext = JSContextFactory.enterContext()
+        // Context.exit()
+        // JSContextFactory.optimize = true
     }
 }

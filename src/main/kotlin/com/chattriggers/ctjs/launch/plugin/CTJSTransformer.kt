@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.engine.module.ModuleManager
+import com.reevajs.reeva.Reeva
 import dev.falsehonesty.asmhelper.BaseClassTransformer
 import net.minecraft.launchwrapper.LaunchClassLoader
 
@@ -24,6 +25,8 @@ class CTJSTransformer : BaseClassTransformer() {
     override fun makeTransformers() {
         if (transforming) return
         transforming = true
+
+        Reeva.setup()
 
         try {
             injectCrashReport()

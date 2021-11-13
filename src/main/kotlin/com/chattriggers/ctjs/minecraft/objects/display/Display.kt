@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.minecraft.objects.display
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
-import org.mozilla.javascript.NativeObject
 
 @External
 @NotAbstract
@@ -24,30 +23,8 @@ abstract class Display {
     private var width = 0f
     private var height = 0f
 
-    constructor() {
+    init {
         DisplayHandler.registerDisplay(this)
-    }
-
-    constructor(config: NativeObject?) {
-        this.shouldRender = config.getOption("shouldRender", true).toBoolean()
-        this.renderX = config.getOption("renderX", 0).toFloat()
-        this.renderY = config.getOption("renderY", 0).toFloat()
-
-        this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toLong()
-        this.textColor = config.getOption("textColor", 0xffffffff).toLong()
-
-        this.setBackground(config.getOption("background", DisplayHandler.Background.NONE))
-        this.setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
-        this.setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
-
-        this.minWidth = config.getOption("minWidth", 0f).toFloat()
-
-        DisplayHandler.registerDisplay(this)
-    }
-
-    private fun NativeObject?.getOption(key: String, default: Any): String {
-        if (this == null) return default.toString()
-        return this.getOrDefault(key, default).toString()
     }
 
     fun getBackgroundColor(): Long = this.backgroundColor

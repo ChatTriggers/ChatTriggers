@@ -13,6 +13,7 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.google.gson.Gson
+import com.reevajs.reeva.Reeva
 import gg.essential.vigilance.Vigilance
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge

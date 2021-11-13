@@ -106,12 +106,16 @@ repositories {
     maven {
         url = "https://repo.sk1er.club/repository/maven-public"
     }
+    maven {
+        url = "https://repo.mattco.me/snapshots"
+    }
 }
 
 dependencies {
     provided "gg.essential:loader-launchwrapper:1.1.0"
     implementation "gg.essential:essential-1.8.9-forge:1328"
 
+    provided 'com.reevajs:reeva:af44622a'
     provided("dev.falsehonesty.asmhelper:AsmHelper:1.4-$mcVersion") {
         exclude group: "org.jetbrains.kotlin"
     }
@@ -119,7 +123,6 @@ dependencies {
         exclude group: "org.jetbrains.kotlin"
     }
     provided 'com.fasterxml.jackson.core:jackson-core:2.12.4'
-    provided 'com.chattriggers:rhino:1.8.2'
     provided 'com.fifesoft:rsyntaxtextarea:3.1.3'
 }
 
