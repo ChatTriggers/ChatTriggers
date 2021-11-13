@@ -91,7 +91,7 @@ interface ILoader {
         }
 
         val parsedResourceName = resourceName.replace('\\', '/')
-        val resource = this.javaClass.getResourceAsStream(parsedResourceName)
+        val resource = javaClass.getResourceAsStream(parsedResourceName)
             ?: throw IllegalArgumentException("The embedded resource '$parsedResourceName' cannot be found.")
 
         val res = resource.bufferedReader().readText()

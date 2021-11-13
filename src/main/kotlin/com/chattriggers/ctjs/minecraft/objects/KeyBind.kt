@@ -31,8 +31,8 @@ class KeyBind {
             }
         }
 
-        this.keyBinding = KeyBinding(description, keyCode, category)
-        ClientRegistry.registerKeyBinding(this.keyBinding)
+        keyBinding = KeyBinding(description, keyCode, category)
+        ClientRegistry.registerKeyBinding(keyBinding)
 
         keyBinds.add(this)
         isCustom = true

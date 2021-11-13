@@ -79,19 +79,19 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         //#if MC<=10809
         var mode = 0
 
-        if (this.clickType == ClickType.MIDDLE) {
+        if (clickType == ClickType.MIDDLE) {
             mode = 3
-        } else if (slot == -999 && !this.itemInHand) {
+        } else if (slot == -999 && !itemInHand) {
             mode = 4
-        } else if (this.holdingShift) {
+        } else if (holdingShift) {
             mode = 1
         }
         //#else
-        //$$ val mode: MCClickType = if (this.clickType == ClickType.MIDDLE) {
+        //$$ val mode: MCClickType = if (clickType == ClickType.MIDDLE) {
         //$$     MCClickType.CLONE
-        //$$ } else if (slot == -999 && !this.itemInHand) {
+        //$$ } else if (slot == -999 && !itemInHand) {
         //$$     MCClickType.THROW
-        //$$ } else if (this.holdingShift) {
+        //$$ } else if (holdingShift) {
         //$$     MCClickType.QUICK_MOVE
         //$$ } else if (pickupAll) {
         //$$     MCClickType.PICKUP_ALL

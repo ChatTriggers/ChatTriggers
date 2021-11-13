@@ -34,9 +34,9 @@ class Console(val loader: ILoader?) {
     }
 
     init {
-        this.frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
+        frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 
-        this.taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
+        taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
         textArea.isEditable = false
 
         textArea.margin = Insets(5, 5, 5, 5)
@@ -113,7 +113,7 @@ class Console(val loader: ILoader?) {
 
     fun clearConsole() {
         SwingUtilities.invokeLater {
-            this.taos.clear()
+            taos.clear()
         }
     }
 
@@ -159,7 +159,7 @@ class Console(val loader: ILoader?) {
     }
 
     fun showConsole() {
-        this.frame.isVisible = true
+        frame.isVisible = true
 
         val bg: Color
         val fg: Color
@@ -232,13 +232,13 @@ class Console(val loader: ILoader?) {
             }
         }
 
-        for (comp in this.components) {
+        for (comp in components) {
             comp.background = bg
             comp.foreground = fg
         }
 
-        this.frame.toFront()
-        this.frame.repaint()
+        frame.toFront()
+        frame.repaint()
 
         val chosenFont =
             if (Config.consoleFiraCodeFont) FIRA_FONT.deriveFont(Config.consoleFontSize.toFloat()) else Font(
@@ -253,13 +253,13 @@ class Console(val loader: ILoader?) {
 //        inputField.font = FIRA_FONT.deriveFont(attrs)
         inputField.font = chosenFont
 
-        this.frame.toFront()
-        this.frame.repaint()
+        frame.toFront()
+        frame.repaint()
     }
 
     protected fun finalize() {
-        this.frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-        this.frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
+        frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+        frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
     }
 
     companion object {

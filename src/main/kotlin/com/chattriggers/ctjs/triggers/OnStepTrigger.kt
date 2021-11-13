@@ -19,7 +19,7 @@ class OnStepTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerTyp
      */
     fun setFps(fps: Long) = apply {
         this.fps = if (fps < 1) 1L else fps
-        this.systemTime = Client.getSystemTime() + 1000 / this.fps
+        systemTime = Client.getSystemTime() + 1000 / this.fps
     }
 
     /**
@@ -30,21 +30,21 @@ class OnStepTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerTyp
      */
     fun setDelay(delay: Long) = apply {
         this.delay = if (delay < 1) 1L else delay
-        this.systemTime = Client.getSystemTime() - this.delay * 1000
+        systemTime = Client.getSystemTime() - this.delay * 1000
     }
 
     override fun trigger(args: Array<out Any?>) {
-        if (this.delay < 0) {
+        if (delay < 0) {
             // run trigger based on set fps value (60 per second by default)
-            while (this.systemTime < Client.getSystemTime() + 1000 / this.fps) {
-                callMethod(arrayOf(++this.elapsed))
-                this.systemTime += 1000 / this.fps
+            while (systemTime < Client.getSystemTime() + 1000 / fps) {
+                callMethod(arrayOf(++elapsed))
+                systemTime += 1000 / fps
             }
         } else {
             // run trigger based on set delay in seconds
-            while (Client.getSystemTime() > this.systemTime + this.delay * 1000) {
-                callMethod(arrayOf(++this.elapsed))
-                this.systemTime += this.delay * 1000
+            while (Client.getSystemTime() > systemTime + delay * 1000) {
+                callMethod(arrayOf(++elapsed))
+                systemTime += delay * 1000
             }
         }
     }

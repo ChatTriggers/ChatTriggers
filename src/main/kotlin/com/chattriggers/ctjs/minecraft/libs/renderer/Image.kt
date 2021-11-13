@@ -25,9 +25,9 @@ class Image constructor(var image: BufferedImage?) {
     @JvmOverloads
     constructor(name: String, url: String? = null) : this(getBufferedImage(name, url))
 
-    fun getTextureWidth(): Int = this.textureWidth
+    fun getTextureWidth(): Int = textureWidth
 
-    fun getTextureHeight(): Int = this.textureHeight
+    fun getTextureHeight(): Int = textureHeight
 
     fun getTexture(): DynamicTexture {
         if (!this::texture.isInitialized) {
@@ -46,7 +46,7 @@ class Image constructor(var image: BufferedImage?) {
             }
         }
 
-        return this.texture
+        return texture
     }
 
     @SubscribeEvent
@@ -62,8 +62,8 @@ class Image constructor(var image: BufferedImage?) {
     @JvmOverloads
     fun draw(
         x: Double, y: Double,
-        width: Double = this.textureWidth.toDouble(),
-        height: Double = this.textureHeight.toDouble()
+        width: Double = textureWidth.toDouble(),
+        height: Double = textureHeight.toDouble()
     ) = apply {
         if (image != null) return@apply
 

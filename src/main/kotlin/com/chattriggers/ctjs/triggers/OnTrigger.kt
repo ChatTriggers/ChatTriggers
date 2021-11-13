@@ -33,7 +33,7 @@ abstract class OnTrigger protected constructor(
      * @return the trigger for method chaining
      */
     fun register() = apply {
-        this.loader.addTrigger(this)
+        loader.addTrigger(this)
     }
 
     /**
@@ -41,13 +41,13 @@ abstract class OnTrigger protected constructor(
      * @return the trigger for method chaining
      */
     fun unregister() = apply {
-        this.loader.removeTrigger(this)
+        loader.removeTrigger(this)
     }
 
     protected fun callMethod(args: Array<out Any?>) {
         if (!Reference.isLoaded) return
 
-        this.loader.trigger(this, this.method, args)
+        loader.trigger(this, method, args)
     }
 
     abstract fun trigger(args: Array<out Any?>)

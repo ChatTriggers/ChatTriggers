@@ -18,7 +18,7 @@ object Tessellator {
         internal set
 
     private var tessellator = MCTessellator.getInstance()
-    private var worldRenderer = this.tessellator.getRenderer()
+    private var worldRenderer = tessellator.getRenderer()
     private val renderManager = Renderer.getRenderManager()
 
     private var firstVertex = true
@@ -144,12 +144,12 @@ object Tessellator {
 
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ)
 
-        this.worldRenderer.begin(
+        worldRenderer.begin(
             drawMode,
             if (textured) DefaultVertexFormats.POSITION_TEX else DefaultVertexFormats.POSITION
         )
-        this.firstVertex = true
-        this.began = true
+        firstVertex = true
+        began = true
     }
 
     /**
@@ -165,7 +165,7 @@ object Tessellator {
     @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) = apply {
         GlStateManager.color(red, green, blue, alpha)
-        this.colorized = true
+        colorized = true
     }
 
     /**
@@ -222,12 +222,12 @@ object Tessellator {
      */
     @JvmStatic
     fun pos(x: Float, y: Float, z: Float) = apply {
-        if (!this.began)
-            this.begin()
-        if (!this.firstVertex)
-            this.worldRenderer.endVertex()
-        this.worldRenderer.pos(x.toDouble(), y.toDouble(), z.toDouble())
-        this.firstVertex = false
+        if (!began)
+            begin()
+        if (!firstVertex)
+            worldRenderer.endVertex()
+        worldRenderer.pos(x.toDouble(), y.toDouble(), z.toDouble())
+        firstVertex = false
     }
 
     /**
@@ -240,7 +240,7 @@ object Tessellator {
      */
     @JvmStatic
     fun tex(u: Float, v: Float) = apply {
-        this.worldRenderer.tex(u.toDouble(), v.toDouble())
+        worldRenderer.tex(u.toDouble(), v.toDouble())
     }
 
     /**
@@ -250,15 +250,14 @@ object Tessellator {
     fun draw() {
         if (!began) return
 
-        this.worldRenderer.endVertex()
+        worldRenderer.endVertex()
 
-        if (!this.colorized)
+        if (!colorized)
             colorize(1f, 1f, 1f, 1f)
 
-        this.tessellator.draw()
-        this.began = false
-        this.colorized = false
-
+        tessellator.draw()
+        began = false
+        colorized = false
 
         disableBlend()
         popMatrix()

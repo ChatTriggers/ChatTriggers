@@ -38,13 +38,13 @@ object ClientListener {
     class State(val x: Float, val y: Float)
 
     init {
-        this.ticksPassed = 0
+        ticksPassed = 0
 
-        this.mouseState = mutableMapOf()
+        mouseState = mutableMapOf()
         draggedState = mutableMapOf()
 
         for (i in 0..4)
-            this.mouseState[i] = false
+            mouseState[i] = false
     }
 
     @SubscribeEvent
@@ -52,8 +52,8 @@ object ClientListener {
         if (World.getWorld() == null || event.phase == TickEvent.Phase.END)
             return
 
-        TriggerType.Tick.triggerAll(this.ticksPassed)
-        this.ticksPassed++
+        TriggerType.Tick.triggerAll(ticksPassed)
+        ticksPassed++
 
         Scoreboard.resetCache()
     }
@@ -72,7 +72,7 @@ object ClientListener {
             handleDragged(button)
 
             // normal clicked
-            if (Mouse.isButtonDown(button) == this.mouseState[button]) continue
+            if (Mouse.isButtonDown(button) == mouseState[button]) continue
 
             TriggerType.Clicked.triggerAll(
                 Client.getMouseX(),
@@ -81,13 +81,13 @@ object ClientListener {
                 Mouse.isButtonDown(button)
             )
 
-            this.mouseState[button] = Mouse.isButtonDown(button)
+            mouseState[button] = Mouse.isButtonDown(button)
 
             // add new dragged
             if (Mouse.isButtonDown(button))
-                this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
-            else if (this.draggedState.containsKey(button))
-                this.draggedState.remove(button)
+                draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
+            else if (draggedState.containsKey(button))
+                draggedState.remove(button)
         }
     }
 
@@ -96,15 +96,15 @@ object ClientListener {
             return
 
         TriggerType.Dragged.triggerAll(
-            Client.getMouseX() - (this.draggedState[button]?.x ?: 0f),
-            Client.getMouseY() - (this.draggedState[button]?.y ?: 0f),
+            Client.getMouseX() - (draggedState[button]?.x ?: 0f),
+            Client.getMouseY() - (draggedState[button]?.y ?: 0f),
             Client.getMouseX(),
             Client.getMouseY(),
             button
         )
 
         // update dragged
-        this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
+        draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
     }
 
     @SubscribeEvent

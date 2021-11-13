@@ -35,18 +35,18 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     companion object {
         fun MCNBTBase.toObject(): Any? {
             return when (this) {
-                is NBTTagString -> this.string
-                is NBTTagByte -> this.byte
-                is NBTTagShort -> this.short
-                is NBTTagInt -> this.int
-                is NBTTagLong -> this.long
-                is NBTTagFloat -> this.float
-                is NBTTagDouble -> this.double
-                is MCNBTTagCompound -> this.toObject()
-                is MCNBTTagList -> this.toObject()
+                is NBTTagString -> string
+                is NBTTagByte -> byte
+                is NBTTagShort -> short
+                is NBTTagInt -> int
+                is NBTTagLong -> long
+                is NBTTagFloat -> float
+                is NBTTagDouble -> double
+                is MCNBTTagCompound -> toObject()
+                is MCNBTTagList -> toObject()
                 is NBTTagByteArray -> NativeArray(byteArray.toTypedArray()).expose()
                 is NBTTagIntArray -> NativeArray(intArray.toTypedArray()).expose()
-                else -> error("Unknown tag type ${this.javaClass}")
+                else -> error("Unknown tag type $javaClass")
             }
         }
 

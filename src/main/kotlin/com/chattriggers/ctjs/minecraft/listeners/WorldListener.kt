@@ -23,8 +23,8 @@ object WorldListener {
 
     @SubscribeEvent
     fun onWorldLoad(event: WorldEvent.Load) {
-        this.playerList.clear()
-        this.shouldTriggerWorldLoad = true
+        playerList.clear()
+        shouldTriggerWorldLoad = true
     }
 
     @SubscribeEvent
@@ -137,7 +137,7 @@ object WorldListener {
             val it = ite.next()
 
             if (World.getPlayerByName(it) == null) {
-                this.playerList.remove(it)
+                playerList.remove(it)
                 TriggerType.PlayerLeave.triggerAll(it)
                 break
             }

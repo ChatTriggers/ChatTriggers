@@ -185,7 +185,7 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getDrawMode() = this.drawMode
+    fun getDrawMode() = drawMode
 
     @JvmStatic
     fun fixAlpha(color: Long): Long {
@@ -207,7 +207,8 @@ object Renderer {
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
-        worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION)
+
+        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION)
         worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[1].toDouble(), 0.0).endVertex()
@@ -348,8 +349,7 @@ object Renderer {
         GlStateManager.bindTexture(image.getTexture().glTextureId)
         GlStateManager.enableTexture2D()
 
-
-        worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
+        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
 
         worldRenderer.pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
         worldRenderer.pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
@@ -449,9 +449,9 @@ object Renderer {
 
     @JvmStatic
     fun finishDraw() {
-        if (!this.retainTransforms) {
-            this.colorized = null
-            this.drawMode = null
+        if (!retainTransforms) {
+            colorized = null
+            drawMode = null
             GlStateManager.popMatrix()
             GlStateManager.pushMatrix()
         }
