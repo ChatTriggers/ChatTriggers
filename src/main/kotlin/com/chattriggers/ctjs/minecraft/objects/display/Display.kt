@@ -177,7 +177,7 @@ abstract class Display {
             }
         }
 
-        this.height = i
+        this.height = i * 10
     }
 
     private fun drawLine(line: DisplayLine, x: Float, y: Float, maxWidth: Float) {
