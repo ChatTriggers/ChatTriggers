@@ -26,36 +26,54 @@ object Renderer {
     private var retainTransforms = false
     private var drawMode: Int? = null
 
+    private val tessellator = MCTessellator.getInstance()
+    private val worldRenderer = tessellator.getRenderer()
+
     @JvmStatic
     val BLACK = color(0, 0, 0, 255)
+
     @JvmStatic
     val DARK_BLUE = color(0, 0, 190, 255)
+
     @JvmStatic
     val DARK_GREEN = color(0, 190, 0, 255)
+
     @JvmStatic
     val DARK_AQUA = color(0, 190, 190, 255)
+
     @JvmStatic
     val DARK_RED = color(190, 0, 0, 255)
+
     @JvmStatic
     val DARK_PURPLE = color(190, 0, 190, 255)
+
     @JvmStatic
     val GOLD = color(217, 163, 52, 255)
+
     @JvmStatic
     val GRAY = color(190, 190, 190, 255)
+
     @JvmStatic
     val DARK_GRAY = color(63, 63, 63, 255)
+
     @JvmStatic
     val BLUE = color(63, 63, 254, 255)
+
     @JvmStatic
     val GREEN = color(63, 254, 63, 255)
+
     @JvmStatic
     val AQUA = color(63, 254, 254, 255)
+
     @JvmStatic
     val RED = color(254, 63, 63, 255)
+
     @JvmStatic
     val LIGHT_PURPLE = color(254, 63, 254, 255)
+
     @JvmStatic
     val YELLOW = color(254, 254, 63, 255)
+
     @JvmStatic
     val WHITE = color(255, 255, 255, 255)
 
@@ -187,10 +205,6 @@ object Renderer {
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
-
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
         worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION)
@@ -198,9 +212,10 @@ object Renderer {
         worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[1].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[0].toDouble(), pos[1].toDouble(), 0.0).endVertex()
-        tessellator.draw()
-        GlStateManager.color(1f, 1f, 1f, 1f)
 
+        tessellator.draw()
+
+        GlStateManager.color(1f, 1f, 1f, 1f)
         GlStateManager.enableTexture2D()
         GlStateManager.disableBlend()
 
@@ -212,10 +227,6 @@ object Renderer {
     fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 7) {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
-
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
@@ -245,10 +256,6 @@ object Renderer {
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
-
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
@@ -278,9 +285,6 @@ object Renderer {
         var xHolder: Float
         var circleX = 1f
         var circleY = 0f
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
@@ -344,8 +348,6 @@ object Renderer {
         GlStateManager.bindTexture(image.getTexture().glTextureId)
         GlStateManager.enableTexture2D()
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
 
         worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
 
@@ -358,7 +360,7 @@ object Renderer {
         finishDraw()
     }
 
-    private val renderManager = Client.getMinecraft().renderManager
+    private val renderManager = getRenderManager()
     private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
     private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
 
@@ -405,8 +407,7 @@ object Renderer {
             ent.prevRotationYawHead = ent.rotationYaw
         }
 
-        val renderManager = Client.getMinecraft().renderManager
-        renderManager.setPlayerViewY(180.0f)
+        renderManager.playerViewY = 180.0f
         renderManager.isRenderShadow = false
         //#if MC<=10809
         val isSmall = (ent as AbstractClientPlayer).skinType == "slim"

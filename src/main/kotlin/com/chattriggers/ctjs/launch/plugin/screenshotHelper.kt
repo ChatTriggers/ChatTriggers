@@ -27,7 +27,11 @@ fun injectScreenshotHelper() = inject {
 
             asm {
                 // Private method
-                invokeStatic("net/minecraft/util/ScreenShotHelper", "getTimestampedPNGFileForDirectory", "(L$FILE;)L$FILE;") {
+                invokeStatic(
+                    "net/minecraft/util/ScreenShotHelper",
+                    "getTimestampedPNGFileForDirectory",
+                    "(L$FILE;)L$FILE;"
+                ) {
                     createInstance(FILE, "(L$FILE;Ljava/lang/String;)V") {
                         aload(0)
                         ldc("screenshots")

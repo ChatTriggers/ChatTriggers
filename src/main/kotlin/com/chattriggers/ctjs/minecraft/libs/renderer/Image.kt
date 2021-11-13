@@ -26,7 +26,9 @@ class Image constructor(var image: BufferedImage?) {
     constructor(name: String, url: String? = null) : this(getBufferedImage(name, url))
 
     fun getTextureWidth(): Int = this.textureWidth
+
     fun getTextureHeight(): Int = this.textureHeight
+
     fun getTexture(): DynamicTexture {
         if (!this::texture.isInitialized) {
             // We're trying to access the texture before initialization. Presumably, the game overlay render event

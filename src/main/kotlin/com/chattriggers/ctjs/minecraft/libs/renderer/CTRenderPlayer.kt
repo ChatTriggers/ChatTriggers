@@ -62,7 +62,7 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
         entityIn: AbstractClientPlayer?,
         str: String?,
         x: Double,
-        y:Double,
+        y: Double,
         z: Double,
         maxDistance: Int
     ) {

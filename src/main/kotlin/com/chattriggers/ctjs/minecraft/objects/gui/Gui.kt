@@ -26,8 +26,8 @@ abstract class Gui : GuiScreen() {
     private var mouseX = 0
     private var mouseY = 0
 
-    var buttons = mutableListOf<GuiButton>()
-    var doesPauseGame = false
+    private var buttons = mutableListOf<GuiButton>()
+    private var doesPauseGame = false
 
     fun open() {
         GuiHandler.openGui(this)
@@ -40,7 +40,9 @@ abstract class Gui : GuiScreen() {
     fun isOpen(): Boolean = Client.getMinecraft().currentScreen === this
 
     fun isControlDown(): Boolean = GuiScreen.isCtrlKeyDown()
+
     fun isShiftDown(): Boolean = GuiScreen.isShiftKeyDown()
+
     fun isAltDown(): Boolean = GuiScreen.isAltKeyDown()
 
     /**
@@ -54,9 +56,9 @@ abstract class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerDraw(method: Any): OnRegularTrigger? {
+    fun registerDraw(method: Any) = run {
         onDraw = OnRegularTrigger(method, TriggerType.Other, getLoader())
-        return onDraw
+        onDraw
     }
 
     /**
@@ -70,9 +72,9 @@ abstract class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerClicked(method: Any): OnRegularTrigger? {
+    fun registerClicked(method: Any) = run {
         onClick = OnRegularTrigger(method, TriggerType.Other, getLoader())
-        return onClick
+        onClick
     }
 
     /**
@@ -83,9 +85,9 @@ abstract class Gui : GuiScreen() {
      * int mouseY<br></br>
      * int scroll direction
      */
-    fun registerScrolled(method: Any): OnRegularTrigger? {
+    fun registerScrolled(method: Any) = run {
         onScroll = OnRegularTrigger(method, TriggerType.Other, getLoader())
-        return onScroll
+        onScroll
     }
 
     /**
@@ -98,9 +100,9 @@ abstract class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerKeyTyped(method: Any): OnRegularTrigger? {
+    fun registerKeyTyped(method: Any) = run {
         onKeyTyped = OnRegularTrigger(method, TriggerType.Other, getLoader())
-        return onKeyTyped
+        onKeyTyped
     }
 
     /**
@@ -115,9 +117,9 @@ abstract class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerMouseDragged(method: Any): OnRegularTrigger? {
+    fun registerMouseDragged(method: Any) = run {
         onMouseDragged = OnRegularTrigger(method, TriggerType.Other, getLoader())
-        return onMouseDragged
+        onMouseDragged
     }
 
     /**
@@ -131,9 +133,9 @@ abstract class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerMouseReleased(method: Any): OnRegularTrigger? {
+    fun registerMouseReleased(method: Any) = run {
         onMouseReleased = OnRegularTrigger(method, TriggerType.Other, getLoader())
-        return onMouseReleased
+        onMouseReleased
     }
 
     /**
@@ -145,9 +147,9 @@ abstract class Gui : GuiScreen() {
      * @param method the method to run
      * @return the trigger
      */
-    fun registerActionPerformed(method: Any): OnRegularTrigger? {
+    fun registerActionPerformed(method: Any) = run {
         onActionPerformed = OnRegularTrigger(method, TriggerType.Other, getLoader())
-        return onActionPerformed
+        onActionPerformed
     }
 
     /**

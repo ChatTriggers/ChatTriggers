@@ -11,8 +11,8 @@ import java.net.ServerSocket
 import java.util.stream.Collectors
 
 object UriScheme {
-    private val PORT = 21965
-    private val QUOTE = "\""
+    private const val PORT = 21965
+    private const val QUOTE = "\""
 
     fun installUriScheme() {
         try {
@@ -81,6 +81,5 @@ object UriScheme {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 }

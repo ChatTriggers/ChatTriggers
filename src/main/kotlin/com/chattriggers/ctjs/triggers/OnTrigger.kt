@@ -10,8 +10,7 @@ abstract class OnTrigger protected constructor(
     var type: TriggerType,
     protected var loader: ILoader
 ) : Comparable<OnTrigger> {
-    var priority: Priority = Priority.NORMAL
-        private set
+    private var priority: Priority = Priority.NORMAL
 
     init {
         register()

@@ -16,11 +16,6 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 @External
 class PlayerMP(val player: EntityPlayer) : Entity(player) {
-    val displayNameField = ReflectionHelper.findField(
-            EntityPlayer::class.java,
-            "displayname"
-    )
-
     fun isSpectator() = this.player.isSpectator
 
     fun getActivePotionEffects(): List<PotionEffect> {
@@ -111,4 +106,11 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     }
 
     override fun getName(): String = this.player.name
+
+    companion object {
+        private val displayNameField = ReflectionHelper.findField(
+            EntityPlayer::class.java,
+            "displayname"
+        )
+    }
 }

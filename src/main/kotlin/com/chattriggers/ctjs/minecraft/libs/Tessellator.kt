@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
-import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
@@ -20,6 +19,7 @@ object Tessellator {
 
     private var tessellator = MCTessellator.getInstance()
     private var worldRenderer = this.tessellator.getRenderer()
+    private val renderManager = Renderer.getRenderManager()
 
     private var firstVertex = true
     private var began = false
@@ -142,8 +142,6 @@ object Tessellator {
         enableBlend()
         tryBlendFuncSeparate(770, 771, 1, 0)
 
-
-        val renderManager = Client.getMinecraft().renderManager
         GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ)
 
         this.worldRenderer.begin(
@@ -308,7 +306,6 @@ object Tessellator {
     ) {
         var lScale = scale
 
-        val renderManager = Renderer.getRenderManager()
         val fontRenderer = Renderer.getFontRenderer()
 
         val renderPos = getRenderPos(x, y, z)

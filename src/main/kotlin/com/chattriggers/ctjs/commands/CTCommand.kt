@@ -92,7 +92,7 @@ object CTCommand : CommandBase() {
                 } else {
                     ChatLib.chat("&aSuccessfully imported ${module.metadata.name ?: module.name}")
                     if (Config.moduleImportHelp && module.metadata.helpMessage != null) {
-                        ChatLib.chat("${if (module.metadata.helpMessage.toString().length <= 384) module.metadata.helpMessage else module.metadata.helpMessage.toString().substring(0, 383)}")
+                        ChatLib.chat(module.metadata.helpMessage.toString().take(383))
                     }
                 }
             }

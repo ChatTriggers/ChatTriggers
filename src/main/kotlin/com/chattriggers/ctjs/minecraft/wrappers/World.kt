@@ -300,7 +300,7 @@ object World {
             xSpeed: Double,
             ySpeed: Double,
             zSpeed: Double
-        ): Particle? {
+        ): Particle {
             val particleType = EnumParticleTypes.valueOf(particle)
 
             val fx = RenderGlobal::class.declaredMemberFunctions.firstOrNull {

@@ -319,7 +319,9 @@ object JSLoader : ILoader {
         JSContextFactory.optimize = true
     }
 
-    class CTRequire(moduleProvider: ModuleScriptProvider) : Require(moduleContext, scope, moduleProvider, null, null, false) {
+    class CTRequire(
+        moduleProvider: ModuleScriptProvider,
+    ) : Require(moduleContext, scope, moduleProvider, null, null, false) {
         fun loadCTModule(name: String, entry: String, uri: URI): Scriptable {
             return getExportedModuleInterface(moduleContext, name + File.separator + entry, uri, null, false)
         }
