@@ -30,24 +30,24 @@ class TextComponent {
      * @param chatComponent the ITextComponent to convert
      */
     constructor(chatComponent: MCITextComponent) {
-        this.chatComponentText = chatComponent
-        this.text = this.chatComponentText.formattedText
+        chatComponentText = chatComponent
+        text = chatComponentText.formattedText
 
         val chatStyle = chatComponent.getStyling()
 
         val clickEvent = chatStyle.getClick()
-        this.clickAction = clickEvent?.action?.canonicalName
-        this.clickValue = clickEvent?.value
+        clickAction = clickEvent?.action?.canonicalName
+        clickValue = clickEvent?.value
 
         val hoverEvent = chatStyle.getHover()
-        this.hoverAction = hoverEvent?.action?.canonicalName
-        this.hoverValue = hoverEvent?.value?.formattedText
+        hoverAction = hoverEvent?.action?.canonicalName
+        hoverValue = hoverEvent?.value?.formattedText
     }
 
     /**
      * @return the text in the component
      */
-    fun getText(): String = this.text
+    fun getText(): String = text
 
     /**
      * Sets the components text string.
@@ -61,7 +61,7 @@ class TextComponent {
     /**
      * @return true if the component is formatted
      */
-    fun isFormatted(): Boolean = this.formatted
+    fun isFormatted(): Boolean = formatted
 
     /**
      * Sets if the component is to be formatted
@@ -79,15 +79,15 @@ class TextComponent {
      * @param value the click value
      */
     fun setClick(action: String, value: String) = apply {
-        this.clickAction = action
-        this.clickValue = value
+        clickAction = action
+        clickValue = value
         reInstanceClick()
     }
 
     /**
      * @return the current click action
      */
-    fun getClickAction(): String? = this.clickAction
+    fun getClickAction(): String? = clickAction
 
     /**
      * Sets the action to be performed when the component is clicked on.
@@ -100,14 +100,14 @@ class TextComponent {
      * @param action the click action
      */
     fun setClickAction(action: String) = apply {
-        this.clickAction = action
+        clickAction = action
         reInstanceClick()
     }
 
     /**
      * @return the current click value
      */
-    fun getClickValue(): String? = this.clickValue
+    fun getClickValue(): String? = clickValue
 
     /**
      * Sets the value to be used by the click action.
@@ -115,7 +115,7 @@ class TextComponent {
      * @param value the click value
      */
     fun setClickValue(value: String) = apply {
-        this.clickValue = value
+        clickValue = value
         reInstanceClick()
     }
 
@@ -126,15 +126,15 @@ class TextComponent {
      * @param value the hover value
      */
     fun setHover(action: String, value: String) = apply {
-        this.hoverAction = action
-        this.hoverValue = value
+        hoverAction = action
+        hoverValue = value
         reInstanceHover()
     }
 
     /**
      * @return the current hover action
      */
-    fun getHoverAction(): String? = this.hoverAction
+    fun getHoverAction(): String? = hoverAction
 
     /**
      * Sets the action to be performed when the component is hovered over.
@@ -147,14 +147,14 @@ class TextComponent {
      * @param action the hover action
      */
     fun setHoverAction(action: String) = apply {
-        this.hoverAction = action
+        hoverAction = action
         reInstanceHover()
     }
 
     /**
      * @return the current hover value
      */
-    fun getHoverValue(): String? = this.hoverValue
+    fun getHoverValue(): String? = hoverValue
 
     /**
      * Sets the value to be used by the hover action.
@@ -162,7 +162,7 @@ class TextComponent {
      * @param value the hover value
      */
     fun setHoverValue(value: String) = apply {
-        this.hoverValue = value
+        hoverValue = value
         reInstanceHover()
     }
 
@@ -187,9 +187,9 @@ class TextComponent {
                 "}"
 
     private fun reInstance() {
-        this.chatComponentText = MCBaseTextComponent(
-            if (this.formatted) ChatLib.addColor(this.text)
-            else this.text
+        chatComponentText = MCBaseTextComponent(
+            if (formatted) ChatLib.addColor(text)
+            else text
         )
 
         reInstanceClick()
@@ -197,35 +197,35 @@ class TextComponent {
     }
 
     private fun reInstanceClick() {
-        if (this.clickAction == null || this.clickValue == null) return
+        if (clickAction == null || clickValue == null) return
 
-        this.chatComponentText.getStyling()
+        chatComponentText.getStyling()
             //#if MC<=10809
             .chatClickEvent =
                 //#else
                 //$$ .clickEvent =
                 //#endif
             MCTextClickEvent(
-                MCClickEventAction.getValueByCanonicalName(this.clickAction),
-                if (this.formatted) ChatLib.addColor(this.clickValue)
-                else this.clickValue
+                MCClickEventAction.getValueByCanonicalName(clickAction),
+                if (formatted) ChatLib.addColor(clickValue)
+                else clickValue
             )
     }
 
     private fun reInstanceHover() {
-        if (this.hoverAction == null || this.hoverValue == null) return
+        if (hoverAction == null || hoverValue == null) return
 
-        this.chatComponentText.getStyling()
+        chatComponentText.getStyling()
             //#if MC<=10809
             .chatHoverEvent =
                 //#else
                 //$$ .hoverEvent =
                 //#endif
             MCTextHoverEvent(
-                MCHoverEventAction.getValueByCanonicalName(this.hoverAction),
+                MCHoverEventAction.getValueByCanonicalName(hoverAction),
                 MCBaseTextComponent(
-                    if (this.formatted) ChatLib.addColor(this.hoverValue)
-                    else this.hoverValue
+                    if (formatted) ChatLib.addColor(hoverValue)
+                    else hoverValue
                 )
             )
     }

@@ -35,10 +35,10 @@ class Item {
             //#else
             //$$ if (itemStack == null || itemStack == ItemStack.EMPTY) {
             //#endif
-            this.item = ItemBlock(BlockType(0).mcBlock)
+            item = ItemBlock(BlockType(0).mcBlock)
             this.itemStack = ItemStack(item)
         } else {
-            this.item = itemStack.item
+            item = itemStack.item
             this.itemStack = itemStack
         }
     }
@@ -60,11 +60,11 @@ class Item {
 
     constructor(entityItem: EntityItem) {
         //#if MC<=10809
-        this.item = entityItem.entityItem.item
-        this.itemStack = entityItem.entityItem
+        item = entityItem.entityItem.item
+        itemStack = entityItem.entityItem
         //#else
-        //$$ this.item = entityItem.item.item
-        //$$ this.itemStack = entityItem.item
+        //$$ item = entityItem.item.item
+        //$$ itemStack = entityItem.item
         //#endif
     }
 
@@ -77,11 +77,11 @@ class Item {
     constructor(entity: Entity) {
         if (entity.entity is EntityItem) {
             //#if MC<=10809
-            this.item = entity.entity.entityItem.item
-            this.itemStack = entity.entity.entityItem
+            item = entity.entity.entityItem.item
+            itemStack = entity.entity.entityItem
             //#else
-            //$$ this.item = entity.entity.item.item
-            //$$ this.itemStack = entity.entity.item
+            //$$ item = entity.entity.item.item
+            //$$ itemStack = entity.entity.item
             //#endif
         } else {
             throw IllegalArgumentException("Entity is not of type EntityItem")
@@ -106,9 +106,9 @@ class Item {
 
     fun getStackSize(): Int {
         //#if MC<=10809
-        return this.itemStack.stackSize
+        return itemStack.stackSize
         //#else
-        //$$ return this.itemStack.count
+        //$$ return itemStack.count
         //#endif
     }
 
@@ -128,9 +128,9 @@ class Item {
      */
     fun getRegistryName(): String {
         //#if MC<=10809
-        return this.item.registryName.toString()
+        return item.registryName.toString()
         //#else
-        //$$ return this.item.registryName.toString()
+        //$$ return item.registryName.toString()
         //#endif
     }
 
@@ -165,9 +165,9 @@ class Item {
 
     fun canHarvest(block: BlockType): Boolean {
         //#if MC<=10809
-        return this.itemStack.canHarvestBlock(block.mcBlock)
+        return itemStack.canHarvestBlock(block.mcBlock)
         //#else
-        //$$ return this.itemStack.canHarvestBlock(
+        //$$ return itemStack.canHarvestBlock(
         //$$         World.getWorld().getBlockState(block.blockPos)
         //$$ )
         //#endif

@@ -40,20 +40,20 @@ object UpdateChecker {
             entry.value.map { "${entry.key}.$it".toVersion() }
         }.maxOrNull() ?: return
 
-        this.updateAvailable = latestVersion > Reference.MODVERSION.toVersion()
+        updateAvailable = latestVersion > Reference.MODVERSION.toVersion()
     }
 
     @SubscribeEvent
     fun worldLoad(event: WorldEvent.Load) {
-        this.worldLoaded = true
+        worldLoaded = true
     }
 
     @SubscribeEvent
     fun renderOverlay(event: RenderGameOverlayEvent.Pre) {
-        if (!this.worldLoaded) return
-        this.worldLoaded = false
+        if (!worldLoaded) return
+        worldLoaded = false
 
-        if (!this.updateAvailable || this.warned) return
+        if (!updateAvailable || warned) return
 
         World.playSound("note.bass", 1000f, 1f)
         Message(
@@ -68,11 +68,11 @@ object UpdateChecker {
             "&c&m" + ChatLib.getChatBreak("-")
         ).chat()
 
-        this.warned = true
+        warned = true
     }
 
     fun drawUpdateMessage() {
-        if (!this.updateAvailable) return
+        if (!updateAvailable) return
 
         GlStateManager.pushMatrix()
 

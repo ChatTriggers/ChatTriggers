@@ -21,7 +21,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
      * @param bool Boolean to set
      * @return the trigger object for method chaining
      */
-    fun triggerIfCanceled(bool: Boolean) = apply { this.triggerIfCanceled = bool }
+    fun triggerIfCanceled(bool: Boolean) = apply { triggerIfCanceled = bool }
 
     /**
      * Sets the chat criteria for [matchesChatCriteria].<br></br>
@@ -38,7 +38,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
 
         when (chatCriteria) {
             is String -> {
-                this.formatted = "&" in chatCriteria
+                formatted = "&" in chatCriteria
 
                 val replacedCriteria = Regex.escape(chatCriteria.replace("\n", "->newLine<-"))
                     .replace(Regex("\\\$\\{[^*]+?}"), "\\\\E(.+)\\\\Q")
@@ -66,7 +66,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
             else -> throw IllegalArgumentException("Expected String or Regexp Object")
         }
 
-        this.criteriaPattern = Regex(source, flags)
+        criteriaPattern = Regex(source, flags)
     }
 
     /**
@@ -83,7 +83,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
      * @return the trigger object for method chaining
      */
     fun setParameter(parameter: String) = apply {
-        this.parameters = mutableListOf(Parameter.getParameterByName(parameter))
+        parameters = mutableListOf(Parameter.getParameterByName(parameter))
     }
 
     /**
@@ -103,7 +103,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
      * @return the trigger object for method chaining
      */
     fun addParameter(parameter: String) = apply {
-        this.parameters.add(Parameter.getParameterByName(parameter))
+        parameters.add(Parameter.getParameterByName(parameter))
     }
 
     /**
@@ -170,7 +170,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
 
         val chatEvent = args[1] as ClientChatReceivedEvent
 
-        if (!this.triggerIfCanceled && chatEvent.isCanceled) return
+        if (!triggerIfCanceled && chatEvent.isCanceled) return
 
         val chatMessage = getChatMessage(chatEvent, args[0] as String)
 
@@ -205,7 +205,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
         if (parameters.isEmpty()) {
             if (!(regex matches chat)) return null
         } else {
-            this.parameters.forEach { parameter ->
+            parameters.forEach { parameter ->
                 val first = try {
                     regex.find(chat)?.groups?.get(0)
                 } catch (e: IndexOutOfBoundsException) {

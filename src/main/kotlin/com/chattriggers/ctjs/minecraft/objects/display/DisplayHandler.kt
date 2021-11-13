@@ -15,14 +15,14 @@ object DisplayHandler {
         MinecraftForge.EVENT_BUS.register(this)
     }
 
-    fun registerDisplay(display: Display) = this.displays.add(display)
+    fun registerDisplay(display: Display) = displays.add(display)
 
-    fun clearDisplays() = this.displays.clear()
+    fun clearDisplays() = displays.clear()
 
     @SubscribeEvent
     fun renderDisplays(event: RenderGameOverlayEvent.Text) {
         GlStateManager.pushMatrix()
-        this.displays.forEach(Display::render)
+        displays.forEach(Display::render)
         GlStateManager.popMatrix()
     }
 

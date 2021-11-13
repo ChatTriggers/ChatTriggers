@@ -40,9 +40,9 @@ class BlockType(val mcBlock: MCBlock) {
      */
     fun getRegistryName(): String {
         //#if MC<=10809
-        return this.mcBlock.registryName
+        return mcBlock.registryName
         //#else
-        //$$ return this.block.registryName.toString()
+        //$$ return block.registryName.toString()
         //#endif
     }
 
@@ -64,9 +64,9 @@ class BlockType(val mcBlock: MCBlock) {
 
     fun getLightValue(): Int {
         //#if MC<=10809
-        return this.mcBlock.lightValue
+        return mcBlock.lightValue
         //#else
-        //$$ return this.block.getLightValue(
+        //$$ return block.getLightValue(
         //$$         World.getWorld()!!.getBlockState(blockPos),
         //$$         World.getWorld(),
         //$$         blockPos
@@ -80,9 +80,9 @@ class BlockType(val mcBlock: MCBlock) {
 
     fun canProvidePower(): Boolean {
         //#if MC<=10809
-        return this.mcBlock.canProvidePower()
+        return mcBlock.canProvidePower()
         //#else
-        //$$ return this.block.canProvidePower(
+        //$$ return block.canProvidePower(
         //$$         World.getWorld()!!.getBlockState(blockPos)
         //$$ )
         //#endif
@@ -92,9 +92,9 @@ class BlockType(val mcBlock: MCBlock) {
 
     fun isTranslucent(): Boolean {
         //#if MC<=10809
-        return this.mcBlock.isTranslucent
+        return mcBlock.isTranslucent
         //#else
-        //$$ return this.block.isTranslucent(
+        //$$ return block.isTranslucent(
         //$$         World.getWorld()!!.getBlockState(blockPos)
         //$$ )
         //#endif

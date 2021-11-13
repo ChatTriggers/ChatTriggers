@@ -14,7 +14,7 @@ class PotionEffect(private val effect: MCPotionEffect) {
      * Returns the translation key of the potion.
      * Ex: "potion.poison"
      */
-    fun getName(): String = this.effect.effectName
+    fun getName(): String = effect.effectName
 
     /**
      * Returns the localized name of the potion that
@@ -23,29 +23,29 @@ class PotionEffect(private val effect: MCPotionEffect) {
      */
     fun getLocalizedName(): String = I18n.format(getName(), "%s")
 
-    fun getAmplifier(): Int = this.effect.amplifier
+    fun getAmplifier(): Int = effect.amplifier
 
-    fun getDuration(): Int = this.effect.duration
+    fun getDuration(): Int = effect.duration
 
     fun getID(): Int {
         //#if MC<=10809
-        return this.effect.potionID
+        return effect.potionID
         //#else
-        //$$ return Potion.getIdFromPotion(this.effect.potion)
+        //$$ return Potion.getIdFromPotion(effect.potion)
         //#endif
     }
 
-    fun isAmbient(): Boolean = this.effect.isAmbient
+    fun isAmbient(): Boolean = effect.isAmbient
 
-    fun isDurationMax(): Boolean = this.effect.isPotionDurationMax
+    fun isDurationMax(): Boolean = effect.isPotionDurationMax
 
     fun showsParticles(): Boolean {
         //#if MC<=10809
-        return this.effect.isShowParticles
+        return effect.isShowParticles
         //#else
-        //$$ return this.effect.doesShowParticles()
+        //$$ return effect.doesShowParticles()
         //#endif
     }
 
-    override fun toString(): String = this.effect.toString()
+    override fun toString(): String = effect.toString()
 }

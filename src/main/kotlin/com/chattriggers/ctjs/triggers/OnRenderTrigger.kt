@@ -14,7 +14,7 @@ class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : 
      * @param bool Boolean to set
      * @return the trigger object for method chaining
      */
-    fun triggerIfCanceled(bool: Boolean) = apply { this.triggerIfCanceled = bool }
+    fun triggerIfCanceled(bool: Boolean) = apply { triggerIfCanceled = bool }
 
     override fun trigger(args: Array<out Any?>) {
         if (args[0] !is RenderGameOverlayEvent)
