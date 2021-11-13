@@ -82,6 +82,7 @@ abstract class DisplayLine {
     }
 
     fun getBackground(): DisplayHandler.Background? = this.background
+
     fun setBackground(background: Any?) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.uppercase().replace(" ", "_"))
@@ -91,6 +92,7 @@ abstract class DisplayLine {
     }
 
     fun getBackgroundColor(): Long? = this.backgroundColor
+
     fun setBackgroundColor(color: Long) = apply {
         this.backgroundColor = color
     }
@@ -137,19 +139,23 @@ abstract class DisplayLine {
     }
 
     private fun handleClicked(button: Int) {
-        this.onClicked?.trigger(arrayOf(
-            Client.getMouseX(),
-            Client.getMouseY(),
-            button,
-            Mouse.isButtonDown(button)
-        ))
+        onClicked?.trigger(
+            arrayOf(
+                Client.getMouseX(),
+                Client.getMouseY(),
+                button,
+                Mouse.isButtonDown(button)
+            )
+        )
     }
 
     private fun handleHovered() {
-        this.onHovered?.trigger(arrayOf(
-            Client.getMouseX(),
-            Client.getMouseY()
-        ))
+        onHovered?.trigger(
+            arrayOf(
+                Client.getMouseX(),
+                Client.getMouseY()
+            )
+        )
     }
 
     private fun handleDragged(button: Int) {
@@ -158,13 +164,15 @@ abstract class DisplayLine {
         if (!this.draggedState.containsKey(button))
             return
 
-        this.onDragged?.trigger(arrayOf(
-            Client.getMouseX() - this.draggedState.getValue(button).x,
-            Client.getMouseY() - this.draggedState.getValue(button).y,
-            Client.getMouseX(),
-            Client.getMouseY(),
-            button
-        ))
+        onDragged?.trigger(
+            arrayOf(
+                Client.getMouseX() - draggedState.getValue(button).x,
+                Client.getMouseY() - draggedState.getValue(button).y,
+                Client.getMouseX(),
+                Client.getMouseY(),
+                button
+            )
+        )
 
         this.draggedState[button] = Vector2d(Client.getMouseX().toDouble(), Client.getMouseY().toDouble())
     }

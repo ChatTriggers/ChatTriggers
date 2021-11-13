@@ -16,17 +16,23 @@ import java.util.*
 @External
 open class Entity(val entity: MCEntity) {
     fun getX() = entity.posX
+
     fun getY() = entity.posY
+
     fun getZ() = entity.posZ
 
     fun getPos() = Vec3i(getX(), getY(), getZ())
 
     fun getLastX() = entity.lastTickPosX
+
     fun getLastY() = entity.lastTickPosY
+
     fun getLastZ() = entity.lastTickPosZ
 
     fun getRenderX() = getLastX() + (getX() - getLastX()) * Tessellator.partialTicks
+
     fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
+
     fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
 
     var face: BlockFace? = null

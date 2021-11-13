@@ -37,7 +37,11 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun addPage(message: Message) = apply {
-        val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
+        val pages = NBTTagList(
+            (
+                bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
+            ) as MCNBTTagList
+        )
         pages.appendTag(
             MCNBTTagString(
                 MCTextComponentSerializer.componentToJson(
@@ -67,11 +71,15 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun setPage(pageNumber: Int, message: Message) = apply {
-        val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
+        val pages = NBTTagList(
+            (
+                bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
+            ) as MCNBTTagList
+        )
 
         pages[pageNumber] = MCNBTTagString(
             MCTextComponentSerializer.componentToJson(
-                    message.getChatMessage()
+                message.getChatMessage()
             )
         )
 

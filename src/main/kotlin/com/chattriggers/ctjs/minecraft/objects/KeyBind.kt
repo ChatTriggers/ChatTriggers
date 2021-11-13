@@ -24,7 +24,9 @@ class KeyBind {
     constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
         for (key in Client.getMinecraft().gameSettings.keyBindings) {
             if (key.keyCategory == category && key.keyDescription == description) {
-                Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, key)
+                Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(
+                    Client.getMinecraft().gameSettings.keyBindings, key
+                )
                 break
             }
         }

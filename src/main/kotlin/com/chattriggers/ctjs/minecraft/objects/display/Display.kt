@@ -51,16 +51,19 @@ abstract class Display {
     }
 
     fun getBackgroundColor(): Long = this.backgroundColor
+
     fun setBackgroundColor(backgroundColor: Long) = apply {
         this.backgroundColor = backgroundColor
     }
 
     fun getTextColor(): Long = this.textColor
+
     fun setTextColor(textColor: Long) = apply {
         this.textColor = textColor
     }
 
     fun getBackground(): DisplayHandler.Background = this.background
+
     fun setBackground(background: Any) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.uppercase().replace(" ", "_"))
@@ -70,6 +73,7 @@ abstract class Display {
     }
 
     fun getAlign(): DisplayHandler.Align = this.align
+
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.uppercase())
@@ -79,6 +83,7 @@ abstract class Display {
     }
 
     fun getOrder(): DisplayHandler.Order = this.order
+
     fun setOrder(order: Any) = apply {
         this.order = when (order) {
             is String -> DisplayHandler.Order.valueOf(order.uppercase())
@@ -98,6 +103,7 @@ abstract class Display {
 
     fun getLine(index: Int): DisplayLine = this.lines[index]
     fun getLines(): List<DisplayLine> = this.lines
+
     fun setLines(lines: MutableList<DisplayLine>) = apply {
         this.lines = lines
     }
@@ -131,11 +137,13 @@ abstract class Display {
     }
 
     fun getRenderX(): Float = this.renderX
+
     fun setRenderX(renderX: Float) = apply {
         this.renderX = renderX
     }
 
     fun getRenderY(): Float = this.renderY
+
     fun setRenderY(renderY: Float) = apply {
         this.renderY = renderY
     }
@@ -146,13 +154,17 @@ abstract class Display {
     }
 
     fun getShouldRender(): Boolean = this.shouldRender
+
     fun setShouldRender(shouldRender: Boolean) = apply {
         this.shouldRender = shouldRender
     }
 
     fun getWidth(): Float = this.width
+
     fun getHeight(): Float = this.height
+
     fun getMinWidth(): Float = this.minWidth
+
     fun setMinWidth(minWidth: Float) = apply {
         this.minWidth = minWidth
     }
@@ -206,7 +218,6 @@ abstract class Display {
                 this.backgroundColor,
                 this.textColor
             )
-            else -> return
         }
     }
 

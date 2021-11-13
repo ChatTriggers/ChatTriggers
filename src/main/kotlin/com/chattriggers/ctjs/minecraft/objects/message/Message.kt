@@ -156,6 +156,7 @@ class Message {
     }
 
     fun clone(): Message = copy()
+
     fun copy(): Message {
         val copy = Message(this.messageParts)
             .setChatLineId(this.chatLineId)

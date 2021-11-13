@@ -24,21 +24,26 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     }
 
     fun getString(): String = this.string
+
     fun setString(string: String) = apply { this.string = string }
 
     fun getColor(): Long = this.color
+
     fun setColor(color: Long) = apply { this.color = Renderer.fixAlpha(color) }
 
     fun getFormatted(): Boolean = this.formatted
+
     fun setFormatted(formatted: Boolean) = apply {
         this.formatted = formatted
         updateFormatting()
     }
 
     fun getShadow(): Boolean = this.shadow
+
     fun setShadow(shadow: Boolean) = apply { this.shadow = shadow }
 
     fun getAlign(): DisplayHandler.Align = this.align
+
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.uppercase())
@@ -48,12 +53,15 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     }
 
     fun getX(): Float = this.x
+
     fun setX(x: Float) = apply { this.x = x }
 
     fun getY(): Float = this.y
+
     fun setY(y: Float) = apply { this.y = y }
 
     fun getWidth(): Int = this.width
+
     fun setWidth(width: Int) = apply {
         this.width = width
         this.lines = Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)
@@ -62,9 +70,11 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     fun getLines(): List<String> = this.lines
 
     fun getMaxLines(): Int = this.maxLines
+
     fun setMaxLines(maxLines: Int) = apply { this.maxLines = maxLines }
 
     fun getScale(): Float = this.scale
+
     fun setScale(scale: Float) = apply { this.scale = scale }
 
     fun getMaxWidth(): Int {

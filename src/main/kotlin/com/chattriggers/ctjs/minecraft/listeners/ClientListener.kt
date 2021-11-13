@@ -109,39 +109,40 @@ object ClientListener {
 
     @SubscribeEvent
     fun onNetworkEvent(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
-        event.manager.channel().pipeline().addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
-            override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
-                val packetReceivedEvent = CancellableEvent()
+        event.manager.channel().pipeline()
+            .addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
+                override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
+                    val packetReceivedEvent = CancellableEvent()
 
-                if (msg is Packet<*>) {
-                    Context.enter()
-                    try {
-                        TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
-                    } finally {
-                        Context.exit()
+                    if (msg is Packet<*>) {
+                        Context.enter()
+                        try {
+                            TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
+                        } finally {
+                            Context.exit()
+                        }
                     }
+
+                    if (!packetReceivedEvent.isCancelled())
+                        ctx?.fireChannelRead(msg)
                 }
 
-                if (!packetReceivedEvent.isCanceled())
-                    ctx?.fireChannelRead(msg)
-            }
+                override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
+                    val packetSentEvent = CancellableEvent()
 
-            override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
-                val packetSentEvent = CancellableEvent()
-
-                if (msg is Packet<*>) {
-                    Context.enter()
-                    try {
-                        TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
-                    } finally {
-                        Context.exit()
+                    if (msg is Packet<*>) {
+                        Context.enter()
+                        try {
+                            TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
+                        } finally {
+                            Context.exit()
+                        }
                     }
-                }
 
-                if (!packetSentEvent.isCanceled())
-                    ctx?.write(msg, promise)
-            }
-        })
+                    if (!packetSentEvent.isCancelled())
+                        ctx?.write(msg, promise)
+                }
+            })
     }
 
     @SubscribeEvent

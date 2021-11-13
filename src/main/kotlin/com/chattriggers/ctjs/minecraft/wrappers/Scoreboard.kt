@@ -131,7 +131,8 @@ object Scoreboard {
             scoreboardNames = scores.map {
                 Score(it)
             }.toMutableList()
-        } catch (ignored: Exception) { }
+        } catch (ignored: Exception) {
+        }
     }
 
     @JvmStatic

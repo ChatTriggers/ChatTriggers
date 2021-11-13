@@ -16,35 +16,46 @@ class Rectangle(
     private var outline = Outline(this)
 
     fun getColor(): Long = this.color
+
     fun setColor(color: Long) = apply { this.color = color }
 
     fun getX(): Float = this.x
+
     fun setX(x: Float) = apply { this.x = x }
 
     fun getY(): Float = this.y
+
     fun setY(y: Float) = apply { this.y = y }
 
     fun getWidth(): Float = this.width
+
     fun setWidth(width: Float) = apply { this.width = width }
 
     fun getHeight(): Float = this.height
+
     fun setHeight(height: Float) = apply { this.height = height }
 
     fun isShadow(): Boolean = this.shadow.on
+
     fun setShadow(shadow: Boolean) = apply { this.shadow.on = shadow }
 
     fun getShadowOffset(): Vector2f = this.shadow.offset
+
     fun getShadowOffsetX(): Float = this.shadow.offset.x
+
     fun getShadowOffsetY(): Float = this.shadow.offset.y
+
     fun setShadowOffset(x: Float, y: Float) = apply {
         this.shadow.offset.x = x
         this.shadow.offset.y = y
     }
 
     fun setShadowOffsetX(x: Float) = apply { this.shadow.offset.x = x }
+
     fun setShadowOffsetY(y: Float) = apply { this.shadow.offset.y = y }
 
     fun getShadowColor(): Long = this.shadow.color
+
     fun setShadowColor(color: Long) = apply { this.shadow.color = color }
 
     fun setShadow(color: Long, x: Float, y: Float) = apply {
@@ -54,12 +65,15 @@ class Rectangle(
     }
 
     fun getOutline(): Boolean = this.outline.on
+
     fun setOutline(outline: Boolean) = apply { this.outline.on = outline }
 
     fun getOutlineColor(): Long = this.outline.color
+
     fun setOutlineColor(color: Long) = apply { this.outline.color = color }
 
     fun getThickness(): Float = this.outline.thickness
+
     fun setThickness(thickness: Float) = apply { this.outline.thickness = thickness }
 
     fun setOutline(color: Long, thickness: Float) = apply {

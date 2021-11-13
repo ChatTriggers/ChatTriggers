@@ -16,7 +16,9 @@ import javax.swing.*
 import javax.swing.text.DefaultCaret
 
 class Console(val loader: ILoader?) {
-    private val frame: JFrame = JFrame("ChatTriggers ${Reference.MODVERSION} ${loader?.getLanguage()?.langName ?: "Default"} Console")
+    private val frame: JFrame = JFrame(
+        "ChatTriggers ${Reference.MODVERSION} ${loader?.getLanguage()?.langName ?: "Default"} Console"
+    )
     private val taos: TextAreaOutputStream
     private val components = mutableListOf<Component>()
     private val history = mutableListOf<String>()
@@ -238,7 +240,12 @@ class Console(val loader: ILoader?) {
         this.frame.toFront()
         this.frame.repaint()
 
-        val chosenFont = if (Config.consoleFiraCodeFont) FIRA_FONT.deriveFont(Config.consoleFontSize.toFloat()) else Font("DejaVu Sans Mono", Font.PLAIN, 15).deriveFont(Config.consoleFontSize.toFloat())
+        val chosenFont =
+            if (Config.consoleFiraCodeFont) FIRA_FONT.deriveFont(Config.consoleFontSize.toFloat()) else Font(
+                "DejaVu Sans Mono",
+                Font.PLAIN,
+                15
+            ).deriveFont(Config.consoleFontSize.toFloat())
 
         textArea.font = chosenFont
         // TODO: Ligatures make everything extremely slow for some reason. Is this fixable?

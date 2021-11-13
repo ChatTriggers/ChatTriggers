@@ -8,7 +8,6 @@ import net.minecraft.util.BlockPos
 
 //#if MC==10809
 import net.minecraftforge.client.ClientCommandHandler
-//#else
 //#endif
 
 class Command(
