@@ -58,7 +58,7 @@ object ChatLib {
      * Simulates a chat message to be caught by other triggers for testing.
      * The text can be a String, a [Message] or a [TextComponent]
      *
-     * @param message The message to simulate
+     * @param text The message to simulate
      */
     @JvmStatic
     fun simulateChat(text: Any) {
@@ -135,11 +135,7 @@ object ChatLib {
      */
     @JvmStatic
     fun getChatWidth(): Int {
-        return if (Client.getChatGUI() != null) {
-            Client.getChatGUI()!!.chatWidth
-        } else {
-            0
-        }
+        return Client.getChatGUI()?.chatWidth ?: 0
     }
 
     /**
@@ -324,6 +320,22 @@ object ChatLib {
         val hist = ChatListener.chatHistory.toMutableList()
         hist.reverse()
         return hist
+    }
+
+    /**
+     * Adds a message to the player's chat history. This allows the message to
+     * show up for the player when pressing the up/down keys while in the chat gui
+     *
+     * @param index the index to insert the message
+     * @param message the message to add to chat history
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun addToSentMessageHistory(index: Int = -1, message: String) {
+        val sentMessages = Client.getChatGUI()!!.sentMessages
+
+        if (index == -1) sentMessages.add(message)
+        else sentMessages.add(index, message)
     }
 
     /**
