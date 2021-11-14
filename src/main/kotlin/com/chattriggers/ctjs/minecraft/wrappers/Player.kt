@@ -233,7 +233,7 @@ object Player {
     @JvmStatic
     fun getActivePotionEffects(): List<PotionEffect> {
         return getPlayer()?.activePotionEffects
-            ?.map { PotionEffect(it) }
+            ?.map(::PotionEffect)
             ?.toList()
             ?: listOf()
     }
@@ -282,7 +282,7 @@ object Player {
      * @return the player's inventory
      */
     @JvmStatic
-    fun getInventory(): Inventory? = getPlayer()?.let { Inventory(it.inventory) }
+    fun getInventory(): Inventory? = getPlayer()?.inventory?.let(::Inventory)
 
     /**
      * Gets the display name for the player,
@@ -318,7 +318,7 @@ object Player {
      * @return the currently opened inventory
      */
     @JvmStatic
-    fun getOpenedInventory(): Inventory? = getPlayer()?.openContainer?.let { Inventory(it) }
+    fun getOpenedInventory(): Inventory? = getPlayer()?.openContainer?.let(::Inventory)
 
     /**
      * Draws the player in the GUI

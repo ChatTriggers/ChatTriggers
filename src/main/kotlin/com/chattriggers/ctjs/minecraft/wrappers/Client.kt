@@ -104,7 +104,7 @@ object Client {
     fun getKeyBindFromKey(keyCode: Int): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
             .firstOrNull { it.keyCode == keyCode }
-            ?.let { KeyBind(it) }
+            ?.let(::KeyBind)
     }
 
     /**
@@ -135,7 +135,7 @@ object Client {
     fun getKeyBindFromDescription(description: String): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
             .firstOrNull { it.keyDescription == description }
-            ?.let { KeyBind(it) }
+            ?.let(::KeyBind)
     }
 
     @JvmStatic

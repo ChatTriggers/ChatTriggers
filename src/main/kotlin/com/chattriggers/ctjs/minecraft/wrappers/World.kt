@@ -145,9 +145,7 @@ object World {
      * @return the players
      */
     @JvmStatic
-    fun getAllPlayers(): List<PlayerMP> = getWorld()?.playerEntities?.map {
-        PlayerMP(it)
-    } ?: listOf()
+    fun getAllPlayers(): List<PlayerMP> = getWorld()?.playerEntities?.map(::PlayerMP) ?: listOf()
 
     /**
      * Gets a player by their username, must be in the currently loaded chunks!
@@ -174,9 +172,7 @@ object World {
 
     @JvmStatic
     fun getAllEntities(): List<Entity> {
-        return getWorld()?.loadedEntityList?.map {
-            Entity(it)
-        } ?: listOf()
+        return getWorld()?.loadedEntityList?.map(::Entity) ?: listOf()
     }
 
     /**
