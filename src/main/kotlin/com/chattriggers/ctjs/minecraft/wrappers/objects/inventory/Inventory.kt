@@ -74,7 +74,7 @@ class Inventory : JSONImpl {
      * @return a list of the [Item]s in an inventory
      */
     fun getItems(): List<Item> {
-        return (0 until getSize()).map { getStackInSlot(it) }
+        return (0 until getSize()).map(::getStackInSlot)
     }
 
     /**

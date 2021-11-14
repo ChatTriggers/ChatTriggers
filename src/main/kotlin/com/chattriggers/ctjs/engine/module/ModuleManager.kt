@@ -27,9 +27,7 @@ object ModuleManager {
         ModuleUpdater.importPendingModules()
 
         // Get existing modules
-        val installedModules = getFoldersInDir(modulesFolder).map {
-            parseModule(it)
-        }.distinctBy {
+        val installedModules = getFoldersInDir(modulesFolder).map(::parseModule).distinctBy {
             it.name.lowercase()
         }
 

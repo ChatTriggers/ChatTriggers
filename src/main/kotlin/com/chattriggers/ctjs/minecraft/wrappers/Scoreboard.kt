@@ -128,9 +128,7 @@ object Scoreboard {
 
             val scores: Collection<net.minecraft.scoreboard.Score> = scoreboard.getSortedScores(sidebarObjective)
 
-            scoreboardNames = scores.map {
-                Score(it)
-            }.toMutableList()
+            scoreboardNames = scores.map(::Score).toMutableList()
         } catch (ignored: Exception) {
         }
     }

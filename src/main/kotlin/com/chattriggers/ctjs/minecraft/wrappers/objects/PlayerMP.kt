@@ -19,9 +19,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     fun isSpectator() = this.player.isSpectator
 
     fun getActivePotionEffects(): List<PotionEffect> {
-        return player.activePotionEffects.map {
-            PotionEffect(it)
-        }
+        return player.activePotionEffects.map(::PotionEffect)
     }
 
     fun getPing(): Int {
