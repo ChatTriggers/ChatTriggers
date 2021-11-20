@@ -116,8 +116,8 @@ global.register = function (triggerType, methodName) {
     return TriggerRegister.register(triggerType, methodName);
 };
 
-String.prototype.replaceAll = function(search,replace){
-    if (search instanceof String) {
+String.prototype.replaceAll_ = function(search,replace){
+    if (typeof search === "string" || search instanceof String) {
         return this.replace(new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),"g"),replace);
     } else if (search instanceof RegExp) {
         if (!search.flags.includes("g")) throw new TypeError("`.replaceAll` does not allow non-global regexes.")
