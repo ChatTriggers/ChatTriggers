@@ -10,7 +10,7 @@ import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
-import dev.falsehonesty.asmhelper.dsl.instructions.*
+import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
 import net.minecraft.item.ItemStack
 import org.lwjgl.input.Keyboard
 

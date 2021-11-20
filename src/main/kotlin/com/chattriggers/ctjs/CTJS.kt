@@ -38,9 +38,14 @@ object CTJS {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
-        listOf(ChatListener, WorldListener, CPS, GuiHandler, ClientListener, UpdateChecker).forEach {
-            MinecraftForge.EVENT_BUS.register(it)
-        }
+        listOf(
+            ChatListener,
+            WorldListener,
+            CPS,
+            GuiHandler,
+            ClientListener,
+            UpdateChecker
+        ).forEach(MinecraftForge.EVENT_BUS::register)
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()

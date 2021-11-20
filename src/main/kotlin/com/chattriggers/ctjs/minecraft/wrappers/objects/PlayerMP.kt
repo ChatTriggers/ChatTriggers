@@ -16,17 +16,10 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 @External
 class PlayerMP(val player: EntityPlayer) : Entity(player) {
-    val displayNameField = ReflectionHelper.findField(
-            EntityPlayer::class.java,
-            "displayname"
-    )
-
     fun isSpectator() = this.player.isSpectator
 
     fun getActivePotionEffects(): List<PotionEffect> {
-        return player.activePotionEffects.map {
-            PotionEffect(it)
-        }
+        return player.activePotionEffects.map(::PotionEffect)
     }
 
     fun getPing(): Int {
@@ -79,8 +72,18 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
      * Draws the player in the GUI
      */
     @JvmOverloads
-    fun draw(x: Int, y: Int, rotate: Boolean = false) = apply {
-        Renderer.drawPlayer(player, x, y, rotate)
+    fun draw(
+        player: Any,
+        x: Int,
+        y: Int,
+        rotate: Boolean = false,
+        showNametag: Boolean = false,
+        showArmor: Boolean = true,
+        showCape: Boolean = true,
+        showHeldItem: Boolean = true,
+        showArrows: Boolean = true
+    ) = apply {
+        Renderer.drawPlayer(player, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
     }
 
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo?): String {
@@ -91,7 +94,7 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
             ) ?: ""
     }
 
-    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection().getPlayerInfo(this.player.uniqueID)
+    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection().getPlayerInfo(player.uniqueID)
 
     override fun toString(): String {
         return "PlayerMP{name:" + getName() +
@@ -101,4 +104,11 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     }
 
     override fun getName(): String = this.player.name
+
+    companion object {
+        private val displayNameField = ReflectionHelper.findField(
+            EntityPlayer::class.java,
+            "displayname"
+        )
+    }
 }

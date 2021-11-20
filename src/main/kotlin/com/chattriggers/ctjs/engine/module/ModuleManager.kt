@@ -2,8 +2,8 @@ package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.printTraceToConsole
@@ -12,11 +12,10 @@ import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import java.io.File
-import java.lang.IllegalArgumentException
 import java.lang.invoke.MethodHandle
 
 object ModuleManager {
-    val loaders = listOf(JSLoader)
+    private val loaders = listOf(JSLoader)
     val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
@@ -28,9 +27,7 @@ object ModuleManager {
         ModuleUpdater.importPendingModules()
 
         // Get existing modules
-        val installedModules = getFoldersInDir(modulesFolder).map {
-            parseModule(it)
-        }.distinctBy {
+        val installedModules = getFoldersInDir(modulesFolder).map(::parseModule).distinctBy {
             it.name.lowercase()
         }
 
@@ -41,9 +38,7 @@ object ModuleManager {
         // Import required modules
         installedModules.asSequence().mapNotNull {
             it.metadata.requires
-        }.flatten().distinct().forEach {
-            ModuleUpdater.importModule(it)
-        }
+        }.flatten().distinct().forEach(ModuleUpdater::importModule)
 
         // Load their assets
         loadAssets(cachedModules)

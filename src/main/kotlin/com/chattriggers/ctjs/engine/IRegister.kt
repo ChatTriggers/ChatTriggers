@@ -189,7 +189,7 @@ interface IRegister {
      * Registers a new trigger that runs before a noteblock is played.
      *
      * Passes through four arguments:
-     * - The note block play event's Vector3d position
+     * - The note block play event's Vector3f position
      * - The note block play event's note's name
      * - The note block play event's octave
      * - The note block play event, which can be cancelled
@@ -208,7 +208,7 @@ interface IRegister {
      * Registers a new trigger that runs before a noteblock is changed.
      *
      * Passes through four arguments:
-     * - The note block change event's Vector3d position
+     * - The note block change event's Vector3f position
      * - The note block change event's note's name
      * - The note block change event's octave
      * - The note block change event, which can be cancelled
@@ -709,7 +709,7 @@ interface IRegister {
      *
      * Passes through three arguments:
      * - The [ClientListener.PlayerInteractAction]
-     * - The position of the target as a Vector3d
+     * - The position of the target as a Vector3f
      * - The event, which can be cancelled
      *
      * Available modifications:
@@ -940,7 +940,7 @@ interface IRegister {
      *
      * Passes through four arguments:
      * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.Entity]
-     * - The position as a Vector3d
+     * - The position as a Vector3f
      * - The partial ticks
      * - The event, which can be cancelled
      *

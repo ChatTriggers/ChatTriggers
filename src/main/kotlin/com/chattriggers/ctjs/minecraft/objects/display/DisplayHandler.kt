@@ -1,10 +1,10 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import org.lwjgl.opengl.GL11
 import java.util.concurrent.CopyOnWriteArrayList
 
 @External
@@ -15,14 +15,15 @@ object DisplayHandler {
         MinecraftForge.EVENT_BUS.register(this)
     }
 
-    fun registerDisplay(display: Display) = this.displays.add(display)
-    fun clearDisplays() = this.displays.clear()
+    fun registerDisplay(display: Display) = displays.add(display)
+
+    fun clearDisplays() = displays.clear()
 
     @SubscribeEvent
     fun renderDisplays(event: RenderGameOverlayEvent.Text) {
-        GL11.glPushMatrix()
-        this.displays.forEach(Display::render)
-        GL11.glPopMatrix()
+        GlStateManager.pushMatrix()
+        displays.forEach(Display::render)
+        GlStateManager.popMatrix()
     }
 
     enum class Background {
@@ -30,7 +31,7 @@ object DisplayHandler {
     }
 
     enum class Align {
-        NONE, LEFT, CENTER, RIGHT
+        LEFT, CENTER, RIGHT
     }
 
     enum class Order {

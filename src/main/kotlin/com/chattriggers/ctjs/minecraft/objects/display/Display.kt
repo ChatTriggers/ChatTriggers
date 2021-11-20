@@ -29,38 +29,41 @@ abstract class Display {
     }
 
     constructor(config: NativeObject?) {
-        this.shouldRender = config.getOption("shouldRender", true).toBoolean()
-        this.renderX = config.getOption("renderX", 0).toFloat()
-        this.renderY = config.getOption("renderY", 0).toFloat()
+        shouldRender = config.getOption("shouldRender", true).toBoolean()
+        renderX = config.getOption("renderX", 0).toFloat()
+        renderY = config.getOption("renderY", 0).toFloat()
 
-        this.backgroundColor = config.getOption("backgroundColor", 0x50000000).toLong()
-        this.textColor = config.getOption("textColor", 0xffffffff).toLong()
+        backgroundColor = config.getOption("backgroundColor", 0x50000000).toLong()
+        textColor = config.getOption("textColor", 0xffffffff).toLong()
 
-        this.setBackground(config.getOption("background", DisplayHandler.Background.NONE))
-        this.setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
-        this.setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
+        setBackground(config.getOption("background", DisplayHandler.Background.NONE))
+        setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
+        setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
 
-        this.minWidth = config.getOption("minWidth", 0f).toFloat()
+        minWidth = config.getOption("minWidth", 0f).toFloat()
 
         DisplayHandler.registerDisplay(this)
     }
 
     private fun NativeObject?.getOption(key: String, default: Any): String {
         if (this == null) return default.toString()
-        return this.getOrDefault(key, default).toString()
+        return getOrDefault(key, default).toString()
     }
 
-    fun getBackgroundColor(): Long = this.backgroundColor
+    fun getBackgroundColor(): Long = backgroundColor
+
     fun setBackgroundColor(backgroundColor: Long) = apply {
         this.backgroundColor = backgroundColor
     }
 
-    fun getTextColor(): Long = this.textColor
+    fun getTextColor(): Long = textColor
+
     fun setTextColor(textColor: Long) = apply {
         this.textColor = textColor
     }
 
-    fun getBackground(): DisplayHandler.Background = this.background
+    fun getBackground(): DisplayHandler.Background = background
+
     fun setBackground(background: Any) = apply {
         this.background = when (background) {
             is String -> DisplayHandler.Background.valueOf(background.uppercase().replace(" ", "_"))
@@ -69,7 +72,8 @@ abstract class Display {
         }
     }
 
-    fun getAlign(): DisplayHandler.Align = this.align
+    fun getAlign(): DisplayHandler.Align = align
+
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.uppercase())
@@ -78,7 +82,8 @@ abstract class Display {
         }
     }
 
-    fun getOrder(): DisplayHandler.Order = this.order
+    fun getOrder(): DisplayHandler.Order = order
+
     fun setOrder(order: Any) = apply {
         this.order = when (order) {
             is String -> DisplayHandler.Order.valueOf(order.uppercase())
@@ -88,16 +93,18 @@ abstract class Display {
     }
 
     fun setLine(index: Int, line: Any) = apply {
-        while (this.lines.size - 1 < index) this.lines.add(createDisplayLine(""))
-        this.lines[index] = when (line) {
+        while (lines.size - 1 < index) lines.add(createDisplayLine(""))
+        lines[index] = when (line) {
             is String -> createDisplayLine(line)
             is DisplayLine -> line
             else -> createDisplayLine("")
         }
     }
 
-    fun getLine(index: Int): DisplayLine = this.lines[index]
-    fun getLines(): List<DisplayLine> = this.lines
+    fun getLine(index: Int): DisplayLine = lines[index]
+
+    fun getLines(): List<DisplayLine> = lines
+
     fun setLines(lines: MutableList<DisplayLine>) = apply {
         this.lines = lines
     }
@@ -110,8 +117,8 @@ abstract class Display {
             else -> createDisplayLine("")
         }
 
-        if (index == -1) this.lines.add(toAdd)
-        else this.lines.add(index, toAdd)
+        if (index == -1) lines.add(toAdd)
+        else lines.add(index, toAdd)
     }
 
     fun addLines(vararg lines: Any) = apply {
@@ -127,15 +134,17 @@ abstract class Display {
     }
 
     fun clearLines() = apply {
-        this.lines.clear()
+        lines.clear()
     }
 
-    fun getRenderX(): Float = this.renderX
+    fun getRenderX(): Float = renderX
+
     fun setRenderX(renderX: Float) = apply {
         this.renderX = renderX
     }
 
-    fun getRenderY(): Float = this.renderY
+    fun getRenderY(): Float = renderY
+
     fun setRenderY(renderY: Float) = apply {
         this.renderY = renderY
     }
@@ -145,68 +154,71 @@ abstract class Display {
         this.renderY = renderY
     }
 
-    fun getShouldRender(): Boolean = this.shouldRender
+    fun getShouldRender(): Boolean = shouldRender
+
     fun setShouldRender(shouldRender: Boolean) = apply {
         this.shouldRender = shouldRender
     }
 
-    fun getWidth(): Float = this.width
-    fun getHeight(): Float = this.height
-    fun getMinWidth(): Float = this.minWidth
+    fun getWidth(): Float = width
+
+    fun getHeight(): Float = height
+
+    fun getMinWidth(): Float = minWidth
+
     fun setMinWidth(minWidth: Float) = apply {
         this.minWidth = minWidth
     }
 
     fun render() {
-        if (!this.shouldRender) return
+        if (!shouldRender) return
 
-        var maxWidth = this.minWidth
+        var maxWidth = minWidth
         lines.forEach {
             if (it.getTextWidth() > maxWidth)
                 maxWidth = it.getTextWidth()
         }
 
-        this.width = maxWidth
+        width = maxWidth
 
         var i = 0f
         lines.forEach {
-            drawLine(it, this.renderX, this.renderY + (i * 10), maxWidth)
-            when (this.order) {
+            drawLine(it, renderX, renderY + (i * 10), maxWidth)
+            when (order) {
                 DisplayHandler.Order.DOWN -> i += it.getText().getScale()
                 DisplayHandler.Order.UP -> i -= it.getText().getScale()
             }
         }
 
-        this.height = i
+        height = i * 10
     }
 
     private fun drawLine(line: DisplayLine, x: Float, y: Float, maxWidth: Float) {
-        when (this.align) {
+        when (align) {
             DisplayHandler.Align.LEFT -> line.drawLeft(
                 x,
                 y,
                 maxWidth,
-                this.background,
-                this.backgroundColor,
-                this.textColor
+                background,
+                backgroundColor,
+                textColor
             )
             DisplayHandler.Align.RIGHT -> line.drawRight(
                 x,
                 y,
                 maxWidth,
-                this.background,
-                this.backgroundColor,
-                this.textColor
+                background,
+                backgroundColor,
+                textColor
             )
             DisplayHandler.Align.CENTER -> line.drawCenter(
                 x,
                 y,
                 maxWidth,
-                this.background,
-                this.backgroundColor,
-                this.textColor
+                background,
+                backgroundColor,
+                textColor
             )
-            else -> return
         }
     }
 

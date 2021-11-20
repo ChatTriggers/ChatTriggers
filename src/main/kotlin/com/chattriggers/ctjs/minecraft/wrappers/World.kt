@@ -7,8 +7,8 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
+import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.multiplayer.WorldClient
@@ -145,9 +145,7 @@ object World {
      * @return the players
      */
     @JvmStatic
-    fun getAllPlayers(): List<PlayerMP> = getWorld()?.playerEntities?.map {
-        PlayerMP(it)
-    } ?: listOf()
+    fun getAllPlayers(): List<PlayerMP> = getWorld()?.playerEntities?.map(::PlayerMP) ?: listOf()
 
     /**
      * Gets a player by their username, must be in the currently loaded chunks!
@@ -174,9 +172,7 @@ object World {
 
     @JvmStatic
     fun getAllEntities(): List<Entity> {
-        return getWorld()?.loadedEntityList?.map {
-            Entity(it)
-        } ?: listOf()
+        return getWorld()?.loadedEntityList?.map(::Entity) ?: listOf()
     }
 
     /**
@@ -300,7 +296,7 @@ object World {
             xSpeed: Double,
             ySpeed: Double,
             zSpeed: Double
-        ): Particle? {
+        ): Particle {
             val particleType = EnumParticleTypes.valueOf(particle)
 
             val fx = RenderGlobal::class.declaredMemberFunctions.firstOrNull {

@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import org.lwjgl.input.Mouse
-import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector3f
 import org.mozilla.javascript.Context
 
@@ -39,13 +38,13 @@ object ClientListener {
     class State(val x: Float, val y: Float)
 
     init {
-        this.ticksPassed = 0
+        ticksPassed = 0
 
-        this.mouseState = mutableMapOf()
+        mouseState = mutableMapOf()
         draggedState = mutableMapOf()
 
         for (i in 0..4)
-            this.mouseState[i] = false
+            mouseState[i] = false
     }
 
     @SubscribeEvent
@@ -53,8 +52,8 @@ object ClientListener {
         if (World.getWorld() == null || event.phase == TickEvent.Phase.END)
             return
 
-        TriggerType.Tick.triggerAll(this.ticksPassed)
-        this.ticksPassed++
+        TriggerType.Tick.triggerAll(ticksPassed)
+        ticksPassed++
 
         Scoreboard.resetCache()
     }
@@ -73,7 +72,7 @@ object ClientListener {
             handleDragged(button)
 
             // normal clicked
-            if (Mouse.isButtonDown(button) == this.mouseState[button]) continue
+            if (Mouse.isButtonDown(button) == mouseState[button]) continue
 
             TriggerType.Clicked.triggerAll(
                 Client.getMouseX(),
@@ -82,13 +81,13 @@ object ClientListener {
                 Mouse.isButtonDown(button)
             )
 
-            this.mouseState[button] = Mouse.isButtonDown(button)
+            mouseState[button] = Mouse.isButtonDown(button)
 
             // add new dragged
             if (Mouse.isButtonDown(button))
-                this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
-            else if (this.draggedState.containsKey(button))
-                this.draggedState.remove(button)
+                draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
+            else if (draggedState.containsKey(button))
+                draggedState.remove(button)
         }
     }
 
@@ -97,52 +96,53 @@ object ClientListener {
             return
 
         TriggerType.Dragged.triggerAll(
-            Client.getMouseX() - (this.draggedState[button]?.x ?: 0f),
-            Client.getMouseY() - (this.draggedState[button]?.y ?: 0f),
+            Client.getMouseX() - (draggedState[button]?.x ?: 0f),
+            Client.getMouseY() - (draggedState[button]?.y ?: 0f),
             Client.getMouseX(),
             Client.getMouseY(),
             button
         )
 
         // update dragged
-        this.draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
+        draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
     }
 
     @SubscribeEvent
     fun onNetworkEvent(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
-        event.manager.channel().pipeline().addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
-            override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
-                val packetReceivedEvent = CancellableEvent()
+        event.manager.channel().pipeline()
+            .addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
+                override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
+                    val packetReceivedEvent = CancellableEvent()
 
-                if (msg is Packet<*>) {
-                    Context.enter()
-                    try {
-                        TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
-                    } finally {
-                        Context.exit()
+                    if (msg is Packet<*>) {
+                        Context.enter()
+                        try {
+                            TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
+                        } finally {
+                            Context.exit()
+                        }
                     }
+
+                    if (!packetReceivedEvent.isCancelled())
+                        ctx?.fireChannelRead(msg)
                 }
 
-                if (!packetReceivedEvent.isCanceled())
-                    ctx?.fireChannelRead(msg)
-            }
+                override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
+                    val packetSentEvent = CancellableEvent()
 
-            override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
-                val packetSentEvent = CancellableEvent()
-
-                if (msg is Packet<*>) {
-                    Context.enter()
-                    try {
-                        TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
-                    } finally {
-                        Context.exit()
+                    if (msg is Packet<*>) {
+                        Context.enter()
+                        try {
+                            TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
+                        } finally {
+                            Context.exit()
+                        }
                     }
-                }
 
-                if (!packetSentEvent.isCanceled())
-                    ctx?.write(msg, promise)
-            }
-        })
+                    if (!packetSentEvent.isCancelled())
+                        ctx?.write(msg, promise)
+                }
+            })
     }
 
     @SubscribeEvent
@@ -157,9 +157,9 @@ object ClientListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
-        GL11.glPushMatrix()
+        GlStateManager.pushMatrix()
         handleOverlayTriggers(event)
-        GL11.glPopMatrix()
+        GlStateManager.popMatrix()
 
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
             return

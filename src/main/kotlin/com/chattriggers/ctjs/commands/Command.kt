@@ -8,7 +8,6 @@ import net.minecraft.util.BlockPos
 
 //#if MC==10809
 import net.minecraftforge.client.ClientCommandHandler
-//#else
 //#endif
 
 class Command(
@@ -20,23 +19,23 @@ class Command(
     private var triggers = mutableListOf<OnTrigger>()
 
     init {
-        this.triggers.add(trigger)
+        triggers.add(trigger)
     }
 
-    fun getTriggers() = this.triggers
+    fun getTriggers() = triggers
 
     //#if MC<=10809
-    override fun getCommandName() = this.name
+    override fun getCommandName() = name
     //#else
-    //$$ override fun getName() = this.name
+    //$$ override fun getName() = name
     //#endif
 
     override fun getRequiredPermissionLevel() = 0
 
     //#if MC<=10809
-    override fun getCommandUsage(sender: ICommandSender) = this.usage
+    override fun getCommandUsage(sender: ICommandSender) = usage
     //#else
-    //$$ override fun getUsage(sender: ICommandSender) = this.usage
+    //$$ override fun getUsage(sender: ICommandSender) = usage
     //#endif
 
     override fun addTabCompletionOptions(
@@ -44,7 +43,7 @@ class Command(
         args: Array<out String>?,
         pos: BlockPos?
     ): MutableList<String> {
-        return this.tabCompletionOptions
+        return tabCompletionOptions
     }
 
     @Throws(CommandException::class)

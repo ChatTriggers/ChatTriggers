@@ -7,9 +7,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList
 import com.chattriggers.ctjs.utils.kotlin.*
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagString
-import com.chattriggers.ctjs.utils.kotlin.MCTextComponentSerializer
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
@@ -40,7 +37,11 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun addPage(message: Message) = apply {
-        val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
+        val pages = NBTTagList(
+            (
+                bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
+            ) as MCNBTTagList
+        )
         pages.appendTag(
             MCNBTTagString(
                 MCTextComponentSerializer.componentToJson(
@@ -70,11 +71,15 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun setPage(pageNumber: Int, message: Message) = apply {
-        val pages = NBTTagList((bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply) as MCNBTTagList)
+        val pages = NBTTagList(
+            (
+                bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
+            ) as MCNBTTagList
+        )
 
         pages[pageNumber] = MCNBTTagString(
             MCTextComponentSerializer.componentToJson(
-                    message.getChatMessage()
+                message.getChatMessage()
             )
         )
 

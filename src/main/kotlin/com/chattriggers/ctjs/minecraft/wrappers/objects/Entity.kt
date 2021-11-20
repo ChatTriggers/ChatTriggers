@@ -5,7 +5,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
@@ -17,17 +16,23 @@ import java.util.*
 @External
 open class Entity(val entity: MCEntity) {
     fun getX() = entity.posX
+
     fun getY() = entity.posY
+
     fun getZ() = entity.posZ
 
     fun getPos() = Vec3i(getX(), getY(), getZ())
 
     fun getLastX() = entity.lastTickPosX
+
     fun getLastY() = entity.lastTickPosY
+
     fun getLastZ() = entity.lastTickPosZ
 
     fun getRenderX() = getLastX() + (getX() - getLastX()) * Tessellator.partialTicks
+
     fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
+
     fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
 
     var face: BlockFace? = null
@@ -40,9 +45,9 @@ open class Entity(val entity: MCEntity) {
      */
     fun getPitch(): Double {
         //#if MC<=10809
-        return MCMathHelper.wrapAngleTo180_float(this.entity.rotationPitch).toDouble()
+        return MCMathHelper.wrapAngleTo180_float(entity.rotationPitch).toDouble()
         //#else
-        //$$ return MathHelper.wrapDegrees(this.entity.rotationPitch).toDouble()
+        //$$ return MathHelper.wrapDegrees(entity.rotationPitch).toDouble()
         //#endif
     }
 
@@ -54,9 +59,9 @@ open class Entity(val entity: MCEntity) {
      */
     fun getYaw(): Double {
         //#if MC<=10809
-        return MCMathHelper.wrapAngleTo180_float(this.entity.rotationYaw).toDouble()
+        return MCMathHelper.wrapAngleTo180_float(entity.rotationYaw).toDouble()
         //#else
-        //$$ return MathHelper.wrapDegrees(this.entity.rotationYaw).toDouble()
+        //$$ return MathHelper.wrapDegrees(entity.rotationYaw).toDouble()
         //#endif
     }
 
@@ -66,7 +71,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the player's x motion
      */
-    fun getMotionX(): Double = this.entity.motionX
+    fun getMotionX(): Double = entity.motionX
 
     /**
      * Gets the entity's y motion.
@@ -74,7 +79,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the player's y motion
      */
-    fun getMotionY(): Double = this.entity.motionY
+    fun getMotionY(): Double = entity.motionY
 
     /**
      * Gets the entity's z motion.
@@ -82,7 +87,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the player's z motion
      */
-    fun getMotionZ(): Double = this.entity.motionZ
+    fun getMotionZ(): Double = entity.motionZ
 
     /**
      * Gets the entity's health, -1 if not a living entity
@@ -90,14 +95,14 @@ open class Entity(val entity: MCEntity) {
      * @return the entity's health
      */
     fun getHP(): Float {
-        return if (this.entity is EntityLivingBase) {
-            this.entity.health
+        return if (entity is EntityLivingBase) {
+            entity.health
         } else -1f
     }
 
     fun getMaxHP(): Float {
-        return if (this.entity is EntityLivingBase) {
-            this.entity.maxHealth
+        return if (entity is EntityLivingBase) {
+            entity.maxHealth
         } else -1f
     }
 
@@ -117,7 +122,7 @@ open class Entity(val entity: MCEntity) {
         //#if MC<=10809
         return emptyList()
         //#elseif
-        //$$ return this.entity.passengers.map(::Entity)
+        //$$ return entity.passengers.map(::Entity)
         //#endif
     }
 
@@ -128,21 +133,21 @@ open class Entity(val entity: MCEntity) {
      *
      * @return whether or not an entity is dead
      */
-    fun isDead(): Boolean = this.entity.isDead
+    fun isDead(): Boolean = entity.isDead
 
     /**
      * Gets the entire width of the entity's hitbox
      *
      * @return the entity's width
      */
-    fun getWidth(): Float = this.entity.width
+    fun getWidth(): Float = entity.width
 
     /**
      * Gets the entire height of the entity's hitbox
      *
      * @return the entity's height
      */
-    fun getHeight(): Float = this.entity.height
+    fun getHeight(): Float = entity.height
 
     /**
      * Gets the height of the eyes on the entity,
@@ -151,7 +156,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the height of the entity's eyes
      */
-    fun getEyeHeight(): Float = this.entity.eyeHeight
+    fun getEyeHeight(): Float = entity.eyeHeight
 
     /**
      * Gets the name of the entity, could be "Villager",
@@ -159,14 +164,14 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the (custom) name of the entity
      */
-    open fun getName(): String = this.entity.name
+    open fun getName(): String = entity.name
 
     /**
      * Gets the Java class name of the entity, for example "EntityVillager"
      *
      * @return the entity's class name
      */
-    fun getClassName(): String = this.entity.javaClass.simpleName
+    fun getClassName(): String = entity.javaClass.simpleName
 
     /**
      * Gets the Java UUID object of this entity.
@@ -174,7 +179,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's uuid
      */
-    fun getUUID(): UUID = this.entity.uniqueID
+    fun getUUID(): UUID = entity.uniqueID
 
     fun distanceTo(other: Entity): Float = distanceTo(other.entity)
 

@@ -17,12 +17,8 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.entity.EntityLivingBase
-import org.lwjgl.opengl.GL11
 import java.util.*
-import kotlin.math.atan
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 @External
 object Renderer {
@@ -30,36 +26,54 @@ object Renderer {
     private var retainTransforms = false
     private var drawMode: Int? = null
 
+    private val tessellator = MCTessellator.getInstance()
+    private val worldRenderer = tessellator.getRenderer()
+
     @JvmStatic
     val BLACK = color(0, 0, 0, 255)
+
     @JvmStatic
     val DARK_BLUE = color(0, 0, 190, 255)
+
     @JvmStatic
     val DARK_GREEN = color(0, 190, 0, 255)
+
     @JvmStatic
     val DARK_AQUA = color(0, 190, 190, 255)
+
     @JvmStatic
     val DARK_RED = color(190, 0, 0, 255)
+
     @JvmStatic
     val DARK_PURPLE = color(190, 0, 190, 255)
+
     @JvmStatic
     val GOLD = color(217, 163, 52, 255)
+
     @JvmStatic
     val GRAY = color(190, 190, 190, 255)
+
     @JvmStatic
     val DARK_GRAY = color(63, 63, 63, 255)
+
     @JvmStatic
     val BLUE = color(63, 63, 254, 255)
+
     @JvmStatic
     val GREEN = color(63, 254, 63, 255)
+
     @JvmStatic
     val AQUA = color(63, 254, 254, 255)
+
     @JvmStatic
     val RED = color(254, 63, 63, 255)
+
     @JvmStatic
     val LIGHT_PURPLE = color(254, 63, 254, 255)
+
     @JvmStatic
     val YELLOW = color(254, 254, 63, 255)
+
     @JvmStatic
     val WHITE = color(255, 255, 255, 255)
 
@@ -115,8 +129,8 @@ object Renderer {
     @JvmOverloads
     fun getRainbow(step: Float, speed: Float = 1f): Long {
         val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toLong()
-        val green = ((sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toLong()
-        val blue = ((sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toLong()
+        val green = ((sin(step / speed + 2 * PI / 3) + 0.75) * 170).toLong()
+        val blue = ((sin(step / speed + 4 * PI / 3) + 0.75) * 170).toLong()
         return color(red, green, blue, 255)
     }
 
@@ -124,8 +138,8 @@ object Renderer {
     @JvmOverloads
     fun getRainbowColors(step: Float, speed: Float = 1f): IntArray {
         val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toInt()
-        val green = ((sin(step / speed + 2 * Math.PI / 3) + 0.75) * 170).toInt()
-        val blue = ((sin(step / speed + 4 * Math.PI / 3) + 0.75) * 170).toInt()
+        val green = ((sin(step / speed + 2 * PI / 3) + 0.75) * 170).toInt()
+        val blue = ((sin(step / speed + 4 * PI / 3) + 0.75) * 170).toInt()
         return intArrayOf(red, green, blue)
     }
 
@@ -138,30 +152,30 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun translate(x: Float, y: Float, z: Float = 0.0F) {
-        GL11.glTranslated(x.toDouble(), y.toDouble(), z.toDouble())
+        GlStateManager.translate(x, y, z)
     }
 
     @JvmStatic
     @JvmOverloads
     fun scale(scaleX: Float, scaleY: Float = scaleX) {
-        GL11.glScalef(scaleX, scaleY, 1f)
+        GlStateManager.scale(scaleX, scaleY, 1f)
     }
 
     @JvmStatic
     fun rotate(angle: Float) {
-        GL11.glRotatef(angle, 0f, 0f, 1f)
+        GlStateManager.rotate(angle, 0f, 0f, 1f)
     }
 
     @JvmStatic
     @JvmOverloads
-    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 255f) {
+    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) {
         colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()))
 
         GlStateManager.color(
-            MathLib.clampFloat(red, 0f, 255f),
-            MathLib.clampFloat(green, 0f, 255f),
-            MathLib.clampFloat(blue, 0f, 255f),
-            MathLib.clampFloat(alpha, 0f, 255f)
+            MathLib.clampFloat(red, 0f, 1f),
+            MathLib.clampFloat(green, 0f, 1f),
+            MathLib.clampFloat(blue, 0f, 1f),
+            MathLib.clampFloat(alpha, 0f, 1f)
         )
     }
 
@@ -171,7 +185,7 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getDrawMode() = this.drawMode
+    fun getDrawMode() = drawMode
 
     @JvmStatic
     fun fixAlpha(color: Long): Long {
@@ -191,20 +205,18 @@ object Renderer {
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
-
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
-        worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION)
+
+        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION)
         worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[2].toDouble(), pos[1].toDouble(), 0.0).endVertex()
         worldRenderer.pos(pos[0].toDouble(), pos[1].toDouble(), 0.0).endVertex()
-        tessellator.draw()
-        GlStateManager.color(1f, 1f, 1f, 1f)
 
+        tessellator.draw()
+
+        GlStateManager.color(1f, 1f, 1f, 1f)
         GlStateManager.enableTexture2D()
         GlStateManager.disableBlend()
 
@@ -216,10 +228,6 @@ object Renderer {
     fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 7) {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
-
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
@@ -249,10 +257,6 @@ object Renderer {
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
-
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
@@ -275,16 +279,13 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun drawCircle(color: Long, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
-        val theta = 2 * Math.PI / steps
+        val theta = 2 * PI / steps
         val cos = cos(theta).toFloat()
         val sin = sin(theta).toFloat()
 
         var xHolder: Float
         var circleX = 1f
         var circleY = 0f
-
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
@@ -348,10 +349,7 @@ object Renderer {
         GlStateManager.bindTexture(image.getTexture().glTextureId)
         GlStateManager.enableTexture2D()
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
-
-        worldRenderer.begin(this.drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
+        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
 
         worldRenderer.pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
         worldRenderer.pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
@@ -362,7 +360,7 @@ object Renderer {
         finishDraw()
     }
 
-    private val renderManager = Client.getMinecraft().renderManager
+    private val renderManager = getRenderManager()
     private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
     private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
 
@@ -395,12 +393,12 @@ object Renderer {
         val f3 = ent.prevRotationYawHead
         val f4 = ent.rotationYawHead
 
-        GlStateManager.translate(x.toFloat(), y.toFloat(), 50.0f)
+        translate(x.toFloat(), y.toFloat(), 50.0f)
         GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f)
         GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f)
         GlStateManager.rotate(-45.0f, 0.0f, 1.0f, 0.0f)
         GlStateManager.rotate(-atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f, 1.0f, 0.0f, 0.0f)
-        GlStateManager.scale(-1f, 1f, 1f)
+        scale(-1f, 1f)
         if (!rotate) {
             ent.renderYawOffset = atan((mouseX / 40.0f).toDouble()).toFloat() * 20.0f
             ent.rotationYaw = atan((mouseX / 40.0f).toDouble()).toFloat() * 40.0f
@@ -408,10 +406,8 @@ object Renderer {
             ent.rotationYawHead = ent.rotationYaw
             ent.prevRotationYawHead = ent.rotationYaw
         }
-        GlStateManager.translate(0.0f, 0.0f, 0.0f)
 
-        val renderManager = Client.getMinecraft().renderManager
-        renderManager.setPlayerViewY(180.0f)
+        renderManager.playerViewY = 180.0f
         renderManager.isRenderShadow = false
         //#if MC<=10809
         val isSmall = (ent as AbstractClientPlayer).skinType == "slim"
@@ -453,11 +449,11 @@ object Renderer {
 
     @JvmStatic
     fun finishDraw() {
-        if (!this.retainTransforms) {
-            this.colorized = null
-            this.drawMode = null
-            GL11.glPopMatrix()
-            GL11.glPushMatrix()
+        if (!retainTransforms) {
+            colorized = null
+            drawMode = null
+            GlStateManager.popMatrix()
+            GlStateManager.pushMatrix()
         }
     }
 

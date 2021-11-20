@@ -13,6 +13,7 @@ import net.minecraft.network.Packet
 import net.minecraft.realms.RealmsBridge
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
+import kotlin.math.roundToInt
 
 @External
 object Client {
@@ -103,7 +104,7 @@ object Client {
     fun getKeyBindFromKey(keyCode: Int): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
             .firstOrNull { it.keyCode == keyCode }
-            ?.let { KeyBind(it) }
+            ?.let(::KeyBind)
     }
 
     /**
@@ -116,11 +117,11 @@ object Client {
      */
     @JvmOverloads
     @JvmStatic
-    fun getKeyBindFromKey(keyCode: Int, description: String, category: String  = "ChatTriggers"): KeyBind {
+    fun getKeyBindFromKey(keyCode: Int, description: String, category: String = "ChatTriggers"): KeyBind {
         return getMinecraft().gameSettings.keyBindings
-                .firstOrNull { it.keyCode == keyCode }
-                ?.let { KeyBind(it) }
-                ?: KeyBind(description, keyCode, category)
+            .firstOrNull { it.keyCode == keyCode }
+            ?.let(::KeyBind)
+            ?: KeyBind(description, keyCode, category)
     }
 
     /**
@@ -134,7 +135,7 @@ object Client {
     fun getKeyBindFromDescription(description: String): KeyBind? {
         return getMinecraft().gameSettings.keyBindings
             .firstOrNull { it.keyDescription == description }
-            ?.let { KeyBind(it) }
+            ?.let(::KeyBind)
     }
 
     @JvmStatic
@@ -153,9 +154,7 @@ object Client {
     fun getFreeMemory(): Long = Runtime.getRuntime().freeMemory()
 
     @JvmStatic
-    fun getMemoryUsage(): Int = Math.round(
-        (getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()
-    )
+    fun getMemoryUsage(): Int = ((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()).roundToInt()
 
     @JvmStatic
     fun getSystemTime(): Long = Minecraft.getSystemTime()
@@ -202,7 +201,7 @@ object Client {
         if (isInChat()) {
             val chatGui = getMinecraft().currentScreen as GuiChat
             chatGui.inputField.text = message
-        } else Client.getMinecraft().displayGuiScreen(GuiChat(message))
+        } else getMinecraft().displayGuiScreen(GuiChat(message))
     }
 
     @JvmStatic
@@ -225,7 +224,7 @@ object Client {
      */
     @JvmStatic
     fun showTitle(title: String, subtitle: String, fadeIn: Int, time: Int, fadeOut: Int) {
-        val gui = Client.getMinecraft().ingameGUI
+        val gui = getMinecraft().ingameGUI
         gui.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut)
         gui.displayTitle(null, ChatLib.addColor(subtitle), fadeIn, time, fadeOut)
         gui.displayTitle(null, null, fadeIn, time, fadeOut)
@@ -259,12 +258,12 @@ object Client {
 
     object camera {
         @JvmStatic
-        fun getX(): Double = Client.getMinecraft().renderManager.viewerPosX
+        fun getX(): Double = getMinecraft().renderManager.viewerPosX
 
         @JvmStatic
-        fun getY(): Double = Client.getMinecraft().renderManager.viewerPosY
+        fun getY(): Double = getMinecraft().renderManager.viewerPosY
 
         @JvmStatic
-        fun getZ(): Double = Client.getMinecraft().renderManager.viewerPosZ
+        fun getZ(): Double = getMinecraft().renderManager.viewerPosZ
     }
 }

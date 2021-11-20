@@ -9,7 +9,6 @@ import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
-import com.google.gson.Gson
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.net.URL
@@ -23,9 +22,7 @@ object ModuleUpdater {
         val toDownload = File(modulesFolder, ".to_download.txt")
         if (!toDownload.exists()) return
 
-        toDownload.readText().split(",").filter(String::isBlank).forEach {
-            importModule(it)
-        }
+        toDownload.readText().split(",").filter(String::isBlank).forEach(::importModule)
 
         toDownload.delete()
     }

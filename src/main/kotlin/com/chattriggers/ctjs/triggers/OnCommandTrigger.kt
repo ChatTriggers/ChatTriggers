@@ -23,7 +23,7 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      * @param args all the tab completion options.
      */
     fun setTabCompletions(vararg args: String) = apply {
-        this.tabCompletions = args.toMutableList()
+        tabCompletions = args.toMutableList()
     }
 
     /**

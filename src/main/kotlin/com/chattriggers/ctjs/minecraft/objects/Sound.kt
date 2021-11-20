@@ -161,9 +161,9 @@ class Sound(private val config: NativeObject) {
      *
      * @param volume New volume, float value ( 0.0f - 1.0f ).
      */
-    fun setVolume(volume: Float) = apply { sndSystem!!.setVolume(this.source, volume) }
+    fun setVolume(volume: Float) = apply { sndSystem!!.setVolume(source, volume) }
 
-    fun getVolume() = sndSystem!!.getVolume(this.source)
+    fun getVolume() = sndSystem!!.getVolume(source)
 
     /**
      * Updates the position of this sound
@@ -172,16 +172,16 @@ class Sound(private val config: NativeObject) {
      * @param y the y coordinate
      * @param z the z coordinate
      */
-    fun setPosition(x: Float, y: Float, z: Float) = apply { sndSystem!!.setPosition(this.source, x, y, z) }
+    fun setPosition(x: Float, y: Float, z: Float) = apply { sndSystem!!.setPosition(source, x, y, z) }
 
     /**
      * Sets this sound's pitch.
      *
      * @param pitch A float value ( 0.5f - 2.0f ).
      */
-    fun setPitch(pitch: Float) = apply { sndSystem!!.setPitch(this.source, pitch) }
+    fun setPitch(pitch: Float) = apply { sndSystem!!.setPitch(source, pitch) }
 
-    fun getPitch() = sndSystem!!.getPitch(this.source)
+    fun getPitch() = sndSystem!!.getPitch(source)
 
     /**
      * Sets the attenuation (fade out over space) of the song.
@@ -192,33 +192,33 @@ class Sound(private val config: NativeObject) {
      *
      * @param model the model
      */
-    fun setAttenuation(model: Int) = apply { sndSystem!!.setAttenuation(this.source, model) }
+    fun setAttenuation(model: Int) = apply { sndSystem!!.setAttenuation(source, model) }
 
     /**
      * Plays/resumes the sound
      */
     fun play() {
-        sndSystem!!.play(this.source)
+        sndSystem!!.play(source)
     }
 
     /**
      * Pauses the sound, to be resumed later
      */
     fun pause() {
-        sndSystem!!.pause(this.source)
+        sndSystem!!.pause(source)
     }
 
     /**
      * Completely stops the song
      */
     fun stop() {
-        sndSystem!!.stop(this.source)
+        sndSystem!!.stop(source)
     }
 
     /**
      * I really don't know what this does
      */
     fun rewind() {
-        sndSystem!!.rewind(this.source)
+        sndSystem!!.rewind(source)
     }
 }

@@ -6,6 +6,10 @@ import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.util.vector.Vector2f
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 @External
 class Shape(private var color: Int) {
@@ -13,17 +17,20 @@ class Shape(private var color: Int) {
     private var drawMode = 9
 
     fun copy(): Shape = clone()
+
     fun clone(): Shape {
-        val clone = Shape(this.color)
-        clone.vertexes.addAll(this.vertexes)
-        clone.setDrawMode(this.drawMode)
+        val clone = Shape(color)
+        clone.vertexes.addAll(vertexes)
+        clone.setDrawMode(drawMode)
         return clone
     }
 
-    fun getColor(): Int = this.color
+    fun getColor(): Int = color
+
     fun setColor(color: Int) = apply { this.color = color }
 
-    fun getDrawMode(): Int = this.drawMode
+    fun getDrawMode(): Int = drawMode
+
     /**
      * Sets the GL draw mode of the shape. Possible draw modes are:<br>
      * 0 = points<br>
@@ -39,27 +46,30 @@ class Shape(private var color: Int) {
      */
     fun setDrawMode(drawMode: Int) = apply { this.drawMode = drawMode }
 
-    fun getVertexes(): List<Vector2f> = this.vertexes
-    fun addVertex(x: Float, y: Float) = apply { this.vertexes.add(Vector2f(x, y)) }
-    fun insertVertex(index: Int, x: Float, y: Float) = apply { this.vertexes.add(index, Vector2f(x, y)) }
-    fun removeVertex(index: Int) = apply { this.vertexes.removeAt(index) }
+    fun getVertexes(): List<Vector2f> = vertexes
+
+    fun addVertex(x: Float, y: Float) = apply { vertexes.add(Vector2f(x, y)) }
+
+    fun insertVertex(index: Int, x: Float, y: Float) = apply { vertexes.add(index, Vector2f(x, y)) }
+
+    fun removeVertex(index: Int) = apply { vertexes.removeAt(index) }
 
     /**
      * Sets the shape as a line pointing from [x1, y1] to [x2, y2] with a thickness
      */
     fun setLine(x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float) = apply {
-        this.vertexes.clear()
+        vertexes.clear()
 
-        val theta = -Math.atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
-        val i = Math.sin(theta).toFloat() * (thickness / 2)
-        val j = Math.cos(theta).toFloat() * (thickness / 2)
+        val theta = -atan2(y2 - y1, x2 - x1)
+        val i = sin(theta) * (thickness / 2)
+        val j = cos(theta) * (thickness / 2)
 
-        this.vertexes.add(Vector2f(x1 + i, y1 + j))
-        this.vertexes.add(Vector2f(x2 + i, y2 + j))
-        this.vertexes.add(Vector2f(x2 - i, y2 - j))
-        this.vertexes.add(Vector2f(x1 - i, y1 - j))
+        vertexes.add(Vector2f(x1 + i, y1 + j))
+        vertexes.add(Vector2f(x2 + i, y2 + j))
+        vertexes.add(Vector2f(x2 - i, y2 - j))
+        vertexes.add(Vector2f(x1 - i, y1 - j))
 
-        this.drawMode = 9
+        drawMode = 9
     }
 
     /**
@@ -67,33 +77,33 @@ class Shape(private var color: Int) {
      * with radius and number of steps around the circle
      */
     fun setCircle(x: Float, y: Float, radius: Float, steps: Int) = apply {
-        this.vertexes.clear()
+        vertexes.clear()
 
-        val theta = 2 * Math.PI / steps
-        val cos = Math.cos(theta).toFloat()
-        val sin = Math.sin(theta).toFloat()
+        val theta = 2 * PI / steps
+        val cos = cos(theta).toFloat()
+        val sin = sin(theta).toFloat()
 
         var xHolder: Float
         var circleX = 1f
         var circleY = 0f
 
         for (i in 0..steps) {
-            this.vertexes.add(Vector2f(x, y))
-            this.vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
+            vertexes.add(Vector2f(x, y))
+            vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
             xHolder = circleX
             circleX = cos * circleX - sin * circleY
             circleY = sin * xHolder + cos * circleY
-            this.vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
+            vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
         }
 
-        this.drawMode = 5
+        drawMode = 5
     }
 
     fun draw() = apply {
-        val a = (this.color shr 24 and 255).toFloat() / 255.0f
-        val r = (this.color shr 16 and 255).toFloat() / 255.0f
-        val g = (this.color shr 8 and 255).toFloat() / 255.0f
-        val b = (this.color and 255).toFloat() / 255.0f
+        val a = (color shr 24 and 255).toFloat() / 255.0f
+        val r = (color shr 16 and 255).toFloat() / 255.0f
+        val g = (color shr 8 and 255).toFloat() / 255.0f
+        val b = (color and 255).toFloat() / 255.0f
 
         val tessellator = MCTessellator.getInstance()
         val worldRenderer = tessellator.getRenderer()
@@ -104,9 +114,9 @@ class Shape(private var color: Int) {
         if (Renderer.colorized == null)
             GlStateManager.color(r, g, b, a)
 
-        worldRenderer.begin(this.drawMode, DefaultVertexFormats.POSITION)
+        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
 
-        for (vertex in this.vertexes)
+        for (vertex in vertexes)
             worldRenderer.pos(vertex.x.toDouble(), vertex.y.toDouble(), 0.0).endVertex()
 
         tessellator.draw()
@@ -115,7 +125,5 @@ class Shape(private var color: Int) {
         GlStateManager.disableBlend()
 
         Renderer.finishDraw()
-
-        return this
     }
 }

@@ -73,7 +73,10 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.INT_ARRAY -> if (rawNBT.hasKey(key, 11)) (tagMap[key] as NBTTagIntArray).intArray else null
             NBTDataType.BOOLEAN -> getBoolean(key)
             NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
-            NBTDataType.TAG_LIST -> if (tagType == null) throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument") else getTagList(key, tagType)
+            NBTDataType.TAG_LIST -> if (tagType == null) throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument") else getTagList(
+                key,
+                tagType
+            )
         }
     }
 

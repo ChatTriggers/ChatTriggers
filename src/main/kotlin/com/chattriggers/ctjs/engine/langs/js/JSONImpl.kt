@@ -8,7 +8,7 @@ interface JSONImpl {
         val sb = StringBuilder()
         sb.append("{")
 
-        sb.append(this.javaClass.kotlin.memberProperties
+        sb.append(javaClass.kotlin.memberProperties
             .filter { it.visibility == KVisibility.PUBLIC }
             .joinToString(separator = ",\n") { """"${it.name}": "${it.get(this)}"""" })
 

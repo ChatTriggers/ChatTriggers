@@ -3,12 +3,12 @@ package com.chattriggers.ctjs.launch.plugin
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.aReturn
 import dev.falsehonesty.asmhelper.dsl.inject
-import dev.falsehonesty.asmhelper.dsl.instructions.*
-import net.minecraft.client.particle.EntityFX
+import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
 import net.minecraft.util.EnumParticleTypes
 
 fun injectEffectRenderer() = inject {
@@ -33,7 +33,7 @@ fun injectEffectRenderer() = inject {
 
     codeBlock {
         val local1 = shadowLocal<Int>()
-        val local16 = shadowLocal<EntityFX>()
+        val local16 = shadowLocal<MCParticle>()
 
         code {
             val event = CancellableEvent()

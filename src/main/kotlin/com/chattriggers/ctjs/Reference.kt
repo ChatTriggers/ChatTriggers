@@ -98,7 +98,7 @@ object Reference {
     @JvmStatic
     fun conditionalThread(block: () -> Unit) {
         if (Config.threadedLoading) {
-            thread { 
+            thread {
                 try {
                     block()
                 } catch (e: Throwable) {

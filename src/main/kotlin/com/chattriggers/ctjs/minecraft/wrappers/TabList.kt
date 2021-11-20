@@ -8,7 +8,6 @@ import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
-import java.util.*
 
 @External
 object TabList {
@@ -39,11 +38,9 @@ object TabList {
     fun getNames(): List<String> {
         if (Client.getTabGui() == null) return listOf()
 
-        val playerList = playerComparator.sortedCopy(Client.getMinecraft().thePlayer.sendQueue.playerInfoMap)
+        val playerList = playerComparator.sortedCopy(Player.getPlayer()!!.sendQueue.playerInfoMap)
 
-        return playerList.map {
-            Client.getTabGui()!!.getPlayerName(it)
-        }
+        return playerList.map(Client.getTabGui()!!::getPlayerName)
     }
 
     /**

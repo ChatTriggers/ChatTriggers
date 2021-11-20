@@ -4,9 +4,9 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBaseTextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCChatPacket
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 
@@ -35,9 +35,9 @@ class Message {
      */
     constructor(component: MCITextComponent) {
         if (component.siblings.isEmpty()) {
-            this.messageParts.add(TextComponent(component))
+            messageParts.add(TextComponent(component))
         } else {
-            this.messageParts.addAll(component.siblings.map { TextComponent(it) })
+            messageParts.addAll(component.siblings.map(::TextComponent))
         }
     }
 
@@ -67,7 +67,7 @@ class Message {
      */
     fun getChatMessage(): MCITextComponent {
         parseMessage()
-        return this.chatMessage
+        return chatMessage
     }
 
     /**
@@ -83,22 +83,22 @@ class Message {
     /**
      * @return the message [TextComponent] parts as a list.
      */
-    fun getMessageParts(): List<TextComponent> = this.messageParts
+    fun getMessageParts(): List<TextComponent> = messageParts
 
     /**
      * @return the chat line ID of the message
      */
-    fun getChatLineId(): Int = this.chatLineId
+    fun getChatLineId(): Int = chatLineId
 
     /**
      * Sets the chat line ID of the message. Useful for updating an already sent chat message.
      */
-    fun setChatLineId(id: Int) = apply { this.chatLineId = id }
+    fun setChatLineId(id: Int) = apply { chatLineId = id }
 
     /**
      * @return true if the message can trip other triggers.
      */
-    fun isRecursive(): Boolean = this.recursive
+    fun isRecursive(): Boolean = recursive
 
     /**
      * Sets whether or not the message can trip other triggers.
@@ -109,7 +109,7 @@ class Message {
     /**
      * @return true if the message is formatted
      */
-    fun isFormatted(): Boolean = this.formatted
+    fun isFormatted(): Boolean = formatted
 
     /**
      * Sets if the message is to be formatted
@@ -125,8 +125,8 @@ class Message {
      */
     fun setTextComponent(index: Int, component: Any) = apply {
         when (component) {
-            is String -> this.messageParts[index] = TextComponent(component)
-            is TextComponent -> this.messageParts[index] = component
+            is String -> messageParts[index] = TextComponent(component)
+            is TextComponent -> messageParts[index] = component
         }
     }
 
@@ -137,8 +137,8 @@ class Message {
      */
     fun addTextComponent(component: Any) = apply {
         when (component) {
-            is String -> this.messageParts.add(TextComponent(component))
-            is TextComponent -> this.messageParts.add(component)
+            is String -> messageParts.add(TextComponent(component))
+            is TextComponent -> messageParts.add(component)
         }
     }
 
@@ -150,17 +150,18 @@ class Message {
      */
     fun addTextComponent(index: Int, component: Any) = apply {
         when (component) {
-            is String -> this.messageParts.add(index, TextComponent(component))
-            is TextComponent -> this.messageParts.add(index, component)
+            is String -> messageParts.add(index, TextComponent(component))
+            is TextComponent -> messageParts.add(index, component)
         }
     }
 
     fun clone(): Message = copy()
+
     fun copy(): Message {
-        val copy = Message(this.messageParts)
-            .setChatLineId(this.chatLineId)
-        copy.recursive = this.recursive
-        copy.formatted = this.formatted
+        val copy = Message(messageParts)
+            .setChatLineId(chatLineId)
+        copy.recursive = recursive
+        copy.formatted = formatted
         return copy
     }
 
@@ -177,24 +178,24 @@ class Message {
      */
     fun chat() {
         parseMessage()
-        if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.formattedText)) return
+        if (!ChatLib.isPlayer("[CHAT]: " + chatMessage.formattedText)) return
 
-        if (this.chatLineId != -1) {
-            Client.getChatGUI()?.printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId)
+        if (chatLineId != -1) {
+            Client.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
             return
         }
 
         //#if MC<=10809
-        if (this.recursive) {
-            Client.getConnection().handleChat(MCChatPacket(this.chatMessage, 0))
+        if (recursive) {
+            Client.getConnection().handleChat(MCChatPacket(chatMessage, 0))
         } else {
-            Player.getPlayer()?.addChatMessage(this.chatMessage)
+            Player.getPlayer()?.addChatMessage(chatMessage)
         }
         //#else
-        //$$ if (this.recursive) {
-        //$$    Client.getConnection().handleChat(ChatPacket(this.chatMessage, ChatType.CHAT))
+        //$$ if (recursive) {
+        //$$    Client.getConnection().handleChat(ChatPacket(chatMessage, ChatType.CHAT))
         //$$ } else {
-        //$$    Player.getPlayer()?.sendMessage(this.chatMessage)
+        //$$    Player.getPlayer()?.sendMessage(chatMessage)
         //$$ }
         //#endif
     }
@@ -204,11 +205,11 @@ class Message {
      */
     fun actionBar() {
         parseMessage()
-        if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.formattedText)) return
+        if (!ChatLib.isPlayer("[ACTION BAR]: " + chatMessage.formattedText)) return
 
         Client.getConnection().handleChat(
             MCChatPacket(
-                this.chatMessage,
+                chatMessage,
                 //#if MC<=10809
                 2
                 //#else
@@ -227,10 +228,10 @@ class Message {
                 "}"
 
     private fun parseMessage() {
-        this.chatMessage = MCBaseTextComponent("")
+        chatMessage = MCBaseTextComponent("")
 
-        this.messageParts.map {
-            this.chatMessage.appendSibling(it.chatComponentText)
+        messageParts.map {
+            chatMessage.appendSibling(it.chatComponentText)
         }
     }
 }

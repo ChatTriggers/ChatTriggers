@@ -14,7 +14,11 @@ fun injectCrashReport() = inject {
     methodMaps = mapOf("func_71504_g" to "populateEnvironment")
 
     insnList {
-        invokeKObjectFunction("com/chattriggers/ctjs/launch/AsmUtils", "addCrashSectionCallable", "(L$CRASH_REPORT_CATEGORY;)V") {
+        invokeKObjectFunction(
+            "com/chattriggers/ctjs/launch/AsmUtils",
+            "addCrashSectionCallable",
+            "(L$CRASH_REPORT_CATEGORY;)V"
+        ) {
             getLocalField(className, "theReportCategory", "L$CRASH_REPORT_CATEGORY;")
         }
     }

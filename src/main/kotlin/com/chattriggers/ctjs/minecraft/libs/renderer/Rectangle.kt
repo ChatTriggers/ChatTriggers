@@ -15,37 +15,48 @@ class Rectangle(
     private var shadow = Shadow(this)
     private var outline = Outline(this)
 
-    fun getColor(): Long = this.color
+    fun getColor(): Long = color
+
     fun setColor(color: Long) = apply { this.color = color }
 
-    fun getX(): Float = this.x
+    fun getX(): Float = x
+
     fun setX(x: Float) = apply { this.x = x }
 
-    fun getY(): Float = this.y
+    fun getY(): Float = y
+
     fun setY(y: Float) = apply { this.y = y }
 
-    fun getWidth(): Float = this.width
+    fun getWidth(): Float = width
+
     fun setWidth(width: Float) = apply { this.width = width }
 
-    fun getHeight(): Float = this.height
+    fun getHeight(): Float = height
+
     fun setHeight(height: Float) = apply { this.height = height }
 
-    fun isShadow(): Boolean = this.shadow.on
+    fun isShadow(): Boolean = shadow.on
+
     fun setShadow(shadow: Boolean) = apply { this.shadow.on = shadow }
 
-    fun getShadowOffset(): Vector2f = this.shadow.offset
-    fun getShadowOffsetX(): Float = this.shadow.offset.x
-    fun getShadowOffsetY(): Float = this.shadow.offset.y
+    fun getShadowOffset(): Vector2f = shadow.offset
+
+    fun getShadowOffsetX(): Float = shadow.offset.x
+
+    fun getShadowOffsetY(): Float = shadow.offset.y
+
     fun setShadowOffset(x: Float, y: Float) = apply {
-        this.shadow.offset.x = x
-        this.shadow.offset.y = y
+        shadow.offset.x = x
+        shadow.offset.y = y
     }
 
-    fun setShadowOffsetX(x: Float) = apply { this.shadow.offset.x = x }
-    fun setShadowOffsetY(y: Float) = apply { this.shadow.offset.y = y }
+    fun setShadowOffsetX(x: Float) = apply { shadow.offset.x = x }
 
-    fun getShadowColor(): Long = this.shadow.color
-    fun setShadowColor(color: Long) = apply { this.shadow.color = color }
+    fun setShadowOffsetY(y: Float) = apply { shadow.offset.y = y }
+
+    fun getShadowColor(): Long = shadow.color
+
+    fun setShadowColor(color: Long) = apply { shadow.color = color }
 
     fun setShadow(color: Long, x: Float, y: Float) = apply {
         setShadow(true)
@@ -53,14 +64,17 @@ class Rectangle(
         setShadowOffset(x, y)
     }
 
-    fun getOutline(): Boolean = this.outline.on
+    fun getOutline(): Boolean = outline.on
+
     fun setOutline(outline: Boolean) = apply { this.outline.on = outline }
 
-    fun getOutlineColor(): Long = this.outline.color
-    fun setOutlineColor(color: Long) = apply { this.outline.color = color }
+    fun getOutlineColor(): Long = outline.color
 
-    fun getThickness(): Float = this.outline.thickness
-    fun setThickness(thickness: Float) = apply { this.outline.thickness = thickness }
+    fun setOutlineColor(color: Long) = apply { outline.color = color }
+
+    fun getThickness(): Float = outline.thickness
+
+    fun setThickness(thickness: Float) = apply { outline.thickness = thickness }
 
     fun setOutline(color: Long, thickness: Float) = apply {
         setOutline(true)
@@ -69,9 +83,9 @@ class Rectangle(
     }
 
     fun draw() = apply {
-        this.shadow.draw()
-        this.outline.draw()
-        Renderer.drawRect(this.color, this.x, this.y, this.width, this.height)
+        shadow.draw()
+        outline.draw()
+        Renderer.drawRect(color, x, y, width, height)
     }
 
     private class Shadow(
@@ -81,20 +95,20 @@ class Rectangle(
         var offset: Vector2f = Vector2f(5f, 5f)
     ) {
         fun draw() {
-            if (!this.on) return
+            if (!on) return
             Renderer.drawRect(
-                this.color,
-                this.rect.x + this.offset.x,
-                this.rect.y + this.rect.height,
-                this.rect.width,
-                this.offset.y
+                color,
+                rect.x + offset.x,
+                rect.y + rect.height,
+                rect.width,
+                offset.y
             )
             Renderer.drawRect(
-                this.color,
-                this.rect.x + this.rect.width,
-                this.rect.y + this.offset.y,
-                this.offset.x,
-                this.rect.height - this.offset.y
+                color,
+                rect.x + rect.width,
+                rect.y + offset.y,
+                offset.x,
+                rect.height - offset.y
             )
         }
     }
@@ -106,13 +120,13 @@ class Rectangle(
         var thickness: Float = 5f
     ) {
         fun draw() {
-            if (!this.on) return
+            if (!on) return
             Renderer.drawRect(
-                this.color,
-                this.rect.x - this.thickness,
-                this.rect.y - this.thickness,
-                this.rect.width + this.thickness * 2,
-                this.rect.height + this.thickness * 2
+                color,
+                rect.x - thickness,
+                rect.y - thickness,
+                rect.width + thickness * 2,
+                rect.height + thickness * 2
             )
         }
     }

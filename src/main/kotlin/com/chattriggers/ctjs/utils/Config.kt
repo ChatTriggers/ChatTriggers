@@ -2,7 +2,8 @@ package com.chattriggers.ctjs.utils
 
 import com.chattriggers.ctjs.CTJS
 import gg.essential.vigilance.Vigilant
-import gg.essential.vigilance.data.*
+import gg.essential.vigilance.data.Property
+import gg.essential.vigilance.data.PropertyType
 import java.awt.Color
 import java.io.File
 

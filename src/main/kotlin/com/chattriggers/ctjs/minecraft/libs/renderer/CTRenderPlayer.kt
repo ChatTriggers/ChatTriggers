@@ -32,7 +32,7 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
         if (showArrows) addLayer(LayerArrow(this))
         addLayer(LayerDeadmau5Head(this))
         if (showCape) addLayer(LayerCape(this))
-        if (showArmor) addLayer(LayerCustomHead(this.getMainModel().bipedHead))
+        if (showArmor) addLayer(LayerCustomHead(getMainModel().bipedHead))
     }
 
     override fun setModelVisibilities(clientPlayer: AbstractClientPlayer) {
@@ -62,7 +62,7 @@ class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : Ren
         entityIn: AbstractClientPlayer?,
         str: String?,
         x: Double,
-        y:Double,
+        y: Double,
         z: Double,
         maxDistance: Int
     ) {

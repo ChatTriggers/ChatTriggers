@@ -17,12 +17,12 @@ class Inventory : JSONImpl {
 
     constructor(inventory: IInventory) {
         this.inventory = inventory
-        this.container = null
+        container = null
     }
 
     constructor(container: Container) {
         this.container = container
-        this.inventory = null
+        inventory = null
     }
 
     /**
@@ -41,7 +41,7 @@ class Inventory : JSONImpl {
      * @return the Item in that slot
      */
     fun getStackInSlot(slot: Int): Item {
-        return if (this.inventory == null)
+        return if (inventory == null)
             Item(container!!.getSlot(slot).stack)
         else Item(inventory.getStackInSlot(slot))
     }
@@ -74,7 +74,7 @@ class Inventory : JSONImpl {
      * @return a list of the [Item]s in an inventory
      */
     fun getItems(): List<Item> {
-        return (0 until getSize()).map { getStackInSlot(it) }
+        return (0 until getSize()).map(::getStackInSlot)
     }
 
     /**
@@ -135,7 +135,8 @@ class Inventory : JSONImpl {
      * @param shift whether shift is being held. False by default
      * @return this inventory for method chaining
      */
-    @JvmOverloads fun click(slot: Int, shift: Boolean = false, button: String = "LEFT") = apply {
+    @JvmOverloads
+    fun click(slot: Int, shift: Boolean = false, button: String = "LEFT") = apply {
         ClickAction(slot, getWindowId())
             .setClickString(button)
             .setHoldingShift(shift)

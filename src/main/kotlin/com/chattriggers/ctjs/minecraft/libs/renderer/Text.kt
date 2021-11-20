@@ -19,26 +19,31 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     private var scale = 1f
 
     init {
-        this.lines.add(this.string)
+        lines.add(string)
         updateFormatting()
     }
 
-    fun getString(): String = this.string
+    fun getString(): String = string
+
     fun setString(string: String) = apply { this.string = string }
 
-    fun getColor(): Long = this.color
+    fun getColor(): Long = color
+
     fun setColor(color: Long) = apply { this.color = Renderer.fixAlpha(color) }
 
-    fun getFormatted(): Boolean = this.formatted
+    fun getFormatted(): Boolean = formatted
+
     fun setFormatted(formatted: Boolean) = apply {
         this.formatted = formatted
         updateFormatting()
     }
 
-    fun getShadow(): Boolean = this.shadow
+    fun getShadow(): Boolean = shadow
+
     fun setShadow(shadow: Boolean) = apply { this.shadow = shadow }
 
-    fun getAlign(): DisplayHandler.Align = this.align
+    fun getAlign(): DisplayHandler.Align = align
+
     fun setAlign(align: Any) = apply {
         this.align = when (align) {
             is String -> DisplayHandler.Align.valueOf(align.uppercase())
@@ -47,32 +52,37 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
         }
     }
 
-    fun getX(): Float = this.x
+    fun getX(): Float = x
+
     fun setX(x: Float) = apply { this.x = x }
 
-    fun getY(): Float = this.y
+    fun getY(): Float = y
+
     fun setY(y: Float) = apply { this.y = y }
 
-    fun getWidth(): Int = this.width
+    fun getWidth(): Int = width
+
     fun setWidth(width: Int) = apply {
         this.width = width
-        this.lines = Renderer.getFontRenderer().listFormattedStringToWidth(this.string, this.width)
+        lines = Renderer.getFontRenderer().listFormattedStringToWidth(string, this.width)
     }
 
-    fun getLines(): List<String> = this.lines
+    fun getLines(): List<String> = lines
 
-    fun getMaxLines(): Int = this.maxLines
+    fun getMaxLines(): Int = maxLines
+
     fun setMaxLines(maxLines: Int) = apply { this.maxLines = maxLines }
 
-    fun getScale(): Float = this.scale
+    fun getScale(): Float = scale
+
     fun setScale(scale: Float) = apply { this.scale = scale }
 
     fun getMaxWidth(): Int {
-        return if (this.width == 0) {
-            Renderer.getStringWidth(this.string)
+        return if (width == 0) {
+            Renderer.getStringWidth(string)
         } else {
             var maxWidth = 0
-            this.lines.forEach {
+            lines.forEach {
                 if (Renderer.getStringWidth(it) > maxWidth)
                     maxWidth = Renderer.getStringWidth(it)
             }
@@ -81,37 +91,37 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     }
 
     fun getHeight(): Float {
-        return if (this.width == 0)
-            this.scale * 9
-        else this.lines.size * this.scale * 9
+        return if (width == 0)
+            scale * 9
+        else lines.size * scale * 9
     }
 
     fun exceedsMaxLines(): Boolean {
-        return this.width != 0 && this.lines.size > this.maxLines
+        return width != 0 && lines.size > maxLines
     }
 
     @JvmOverloads
     fun draw(x: Float? = null, y: Float? = null) = apply {
         GlStateManager.enableBlend()
-        GlStateManager.scale(this.scale, this.scale, this.scale)
-        if (this.width > 0) {
-            var maxLinesHolder = this.maxLines
+        GlStateManager.scale(scale, scale, scale)
+        if (width > 0) {
+            var maxLinesHolder = maxLines
             var yHolder = y ?: this.y
-            this.lines.forEach {
+            lines.forEach {
                 Renderer.getFontRenderer()
-                    .drawString(it, getXAlign(it, x ?: this.x), yHolder / this.scale, this.color.toInt(), this.shadow)
-                yHolder += this.scale * 9
+                    .drawString(it, getXAlign(it, x ?: this.x), yHolder / scale, color.toInt(), shadow)
+                yHolder += scale * 9
                 maxLinesHolder--
                 if (maxLinesHolder == 0)
                     return@forEach
             }
         } else {
             Renderer.getFontRenderer().drawString(
-                this.string,
-                getXAlign(this.string, x ?: this.x),
-                (y ?: this.y) / this.scale,
-                this.color.toInt(),
-                this.shadow
+                string,
+                getXAlign(string, x ?: this.x),
+                (y ?: this.y) / scale,
+                color.toInt(),
+                shadow
             )
         }
         GlStateManager.disableBlend()
@@ -119,14 +129,14 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     }
 
     private fun updateFormatting() {
-        this.string =
-            if (this.formatted) ChatLib.addColor(this.string)
-            else ChatLib.replaceFormatting(this.string)
+        string =
+            if (formatted) ChatLib.addColor(string)
+            else ChatLib.replaceFormatting(string)
     }
 
     private fun getXAlign(string: String, x: Float): Float {
-        val newX = x / this.scale
-        return when (this.align) {
+        val newX = x / scale
+        return when (align) {
             DisplayHandler.Align.CENTER -> newX - Renderer.getStringWidth(string) / 2
             DisplayHandler.Align.RIGHT -> newX - Renderer.getStringWidth(string)
             else -> newX
