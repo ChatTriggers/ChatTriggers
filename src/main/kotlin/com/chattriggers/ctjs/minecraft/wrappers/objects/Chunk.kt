@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCChunk
 

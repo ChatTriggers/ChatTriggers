@@ -3,8 +3,8 @@ package com.chattriggers.ctjs.launch.plugin
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCEntity

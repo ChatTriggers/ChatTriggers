@@ -1,48 +1,20 @@
-package com.chattriggers.ctjs.minecraft.wrappers.objects
+package com.chattriggers.ctjs.minecraft.wrappers.objects.entity
 
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.fml.relauncher.ReflectionHelper
 
-//#if MC>10809
-//$$ import net.minecraft.inventory.EntityEquipmentSlot
-//#endif
-
 @External
-class PlayerMP(val player: EntityPlayer) : Entity(player) {
-    fun isSpectator() = this.player.isSpectator
-
-    fun getActivePotionEffects(): List<PotionEffect> {
-        return player.activePotionEffects.map(::PotionEffect)
-    }
+class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
+    fun isSpectator() = player.isSpectator
 
     fun getPing(): Int {
         return getPlayerInfo()?.responseTime ?: -1
-    }
-
-    /**
-     * Gets the item currently in the player's specified inventory slot.
-     * 0 for main hand, 1-4 for armor
-     * (2 for offhand in 1.12.2, and everything else shifted over).
-     *
-     * @param slot the slot to access
-     * @return the item in said slot
-     */
-    fun getItemInSlot(slot: Int): Item {
-        //#if MC<=10809
-        return Item(player.getEquipmentInSlot(slot))
-        //#else
-        //$$ return Item(player.getItemStackFromSlot(
-        //$$        EntityEquipmentSlot.values()[slot]
-        //$$     )
-        //$$ )
-        //#endif
     }
 
     /**
@@ -99,11 +71,11 @@ class PlayerMP(val player: EntityPlayer) : Entity(player) {
     override fun toString(): String {
         return "PlayerMP{name:" + getName() +
                 ",ping:" + getPing() +
-                ",entity:" + super.toString() +
+                ",entityLivingBase:" + super.toString() +
                 "}"
     }
 
-    override fun getName(): String = this.player.name
+    override fun getName(): String = player.name
 
     companion object {
         private val displayNameField = ReflectionHelper.findField(

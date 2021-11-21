@@ -3,8 +3,8 @@ package com.chattriggers.ctjs.minecraft.listeners
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos

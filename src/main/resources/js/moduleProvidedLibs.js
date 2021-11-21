@@ -40,7 +40,6 @@ global.Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
 global.KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
 global.Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
 global.Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
-global.PlayerMP = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP");
 
 // Wrappers
 global.Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
@@ -61,7 +60,8 @@ global.BlockPos = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.bl
 global.BlockType = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType");
 global.Sign = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign");
 global.Vec3i = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i");
-global.Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Entity");
+global.Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity");
+global.PlayerMP = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP");
 global.Action = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action");
 global.ClickAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction");
 global.DragAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction");
