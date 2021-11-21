@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 
 class BlockPos(x: Number, y: Number, z: Number) : Vec3i(x, y, z) {

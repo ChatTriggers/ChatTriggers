@@ -1,14 +1,12 @@
-package com.chattriggers.ctjs.minecraft.wrappers.objects
+package com.chattriggers.ctjs.minecraft.wrappers.objects.entity
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
-import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.Vec3
 import net.minecraft.world.World
 import java.util.*
@@ -34,8 +32,6 @@ open class Entity(val entity: MCEntity) {
     fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
 
     fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
-
-    var face: BlockFace? = null
 
     /**
      * Gets the pitch, the horizontal direction the entity is facing towards.
@@ -69,7 +65,7 @@ open class Entity(val entity: MCEntity) {
      * Gets the entity's x motion.
      * This is the amount the entity will move in the x direction next tick.
      *
-     * @return the player's x motion
+     * @return the entity's x motion
      */
     fun getMotionX(): Double = entity.motionX
 
@@ -77,7 +73,7 @@ open class Entity(val entity: MCEntity) {
      * Gets the entity's y motion.
      * This is the amount the entity will move in the y direction next tick.
      *
-     * @return the player's y motion
+     * @return the entity's y motion
      */
     fun getMotionY(): Double = entity.motionY
 
@@ -85,26 +81,9 @@ open class Entity(val entity: MCEntity) {
      * Gets the entity's z motion.
      * This is the amount the entity will move in the z direction next tick.
      *
-     * @return the player's z motion
+     * @return the entity's z motion
      */
     fun getMotionZ(): Double = entity.motionZ
-
-    /**
-     * Gets the entity's health, -1 if not a living entity
-     *
-     * @return the entity's health
-     */
-    fun getHP(): Float {
-        return if (entity is EntityLivingBase) {
-            entity.health
-        } else -1f
-    }
-
-    fun getMaxHP(): Float {
-        return if (entity is EntityLivingBase) {
-            entity.maxHealth
-        } else -1f
-    }
 
     fun getRiding(): Entity? {
         return entity.ridingEntity?.let(::Entity)
@@ -181,6 +160,21 @@ open class Entity(val entity: MCEntity) {
      */
     fun getUUID(): UUID = entity.uniqueID
 
+    /**
+     * Gets the entity's air level.<br></br>
+     *
+     * The returned value will be an integer. If the player is not taking damage, it
+     * will be between 300 (not in water) and 0. If the player is taking damage, it
+     * will be between -20 and 0, getting reset to 0 every time the player takes damage.
+     *
+     * @return the entity's air level
+     */
+    fun getAir(): Int = entity.air
+
+    fun setAir(air: Int) = apply {
+        entity.air = air
+    }
+
     fun distanceTo(other: Entity): Float = distanceTo(other.entity)
 
     fun distanceTo(other: MCEntity): Float = entity.getDistanceToEntity(other)
@@ -201,7 +195,7 @@ open class Entity(val entity: MCEntity) {
 
     fun isCollided() = entity.isCollided
 
-    fun getDistanceWalked() = entity.distanceWalkedModified / 0.6
+    fun getDistanceWalked() = entity.distanceWalkedModified / 0.6f
 
     fun getStepHeight() = entity.stepHeight
 
@@ -294,6 +288,8 @@ open class Entity(val entity: MCEntity) {
     fun setIsOutsideBorder(outside: Boolean) = apply {
         entity.isOutsideBorder = outside
     }
+
+    fun isBurning(): Boolean = entity.isBurning
 
     fun getWorld(): World = entity.entityWorld
 

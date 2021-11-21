@@ -3,9 +3,10 @@ package com.chattriggers.ctjs.minecraft.wrappers
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.*
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -33,7 +34,7 @@ object Player {
     }
 
     @JvmStatic
-    fun asEntity() = getPlayer()?.let(::Entity)
+    fun asPlayerMP() = getPlayer()?.let(::PlayerMP)
 
     @JvmStatic
     fun getX(): Double = getPlayer()?.posX ?: 0.0
@@ -234,7 +235,6 @@ object Player {
     fun getActivePotionEffects(): List<PotionEffect> {
         return getPlayer()?.activePotionEffects
             ?.map(::PotionEffect)
-            ?.toList()
             ?: listOf()
     }
 

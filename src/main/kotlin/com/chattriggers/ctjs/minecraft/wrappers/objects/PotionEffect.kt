@@ -9,7 +9,7 @@ import net.minecraft.client.resources.I18n
 //#endif
 
 @External
-class PotionEffect(private val effect: MCPotionEffect) {
+class PotionEffect(val effect: MCPotionEffect) {
     /**
      * Returns the translation key of the potion.
      * Ex: "potion.poison"

@@ -3,8 +3,8 @@ package com.chattriggers.ctjs.minecraft.listeners
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Entity
-import com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
+import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
 import com.chattriggers.ctjs.triggers.TriggerType
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
