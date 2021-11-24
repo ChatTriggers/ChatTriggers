@@ -46,7 +46,7 @@ object JSContextFactory : ContextFactory() {
         return super.hasFeature(cx, featureIndex)
     }
 
-    private class ModifiedURLClassLoader : URLClassLoader(arrayOf(), this::class.java.classLoader) {
+    private class ModifiedURLClassLoader : URLClassLoader(arrayOf(), javaClass.classLoader) {
         val sources = mutableListOf<URL>()
 
         fun addAllURLs(urls: List<URL>) {

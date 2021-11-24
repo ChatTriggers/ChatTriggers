@@ -7,6 +7,7 @@ internal typealias MCPotionEffect = net.minecraft.potion.PotionEffect
 internal typealias MCTessellator = net.minecraft.client.renderer.Tessellator
 internal typealias MCEnumFacing = net.minecraft.util.EnumFacing
 internal typealias MCBlock = net.minecraft.block.Block
+internal typealias MCScore = net.minecraft.scoreboard.Score
 
 //#if MC<=10809
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX

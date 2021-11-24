@@ -19,7 +19,7 @@ import org.lwjgl.util.vector.Vector3f
 
 object WorldListener {
     private var shouldTriggerWorldLoad: Boolean = false
-    private var playerList: MutableList<String> = mutableListOf()
+    private var playerList = mutableListOf<String>()
 
     @SubscribeEvent
     fun onWorldLoad(event: WorldEvent.Load) {

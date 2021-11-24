@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.External
+import com.chattriggers.ctjs.utils.kotlin.MCScore
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.client.GuiIngameForge
 
@@ -138,7 +139,7 @@ object Scoreboard {
         needsUpdate = true
     }
 
-    class Score(val score: net.minecraft.scoreboard.Score) {
+    class Score(val score: MCScore) {
         /**
          * Gets the score point value for this score,
          * i.e. the number on the right of the board
