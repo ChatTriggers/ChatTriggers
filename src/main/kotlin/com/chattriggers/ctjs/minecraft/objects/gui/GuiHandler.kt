@@ -1,14 +1,14 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
+import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 
 @External
 object GuiHandler {
-    private val GUIs: MutableMap<GuiScreen, Int> = mutableMapOf()
+    private val GUIs = mutableMapOf<GuiScreen, Int>()
 
     fun openGui(gui: GuiScreen) {
         GUIs[gui] = 1
@@ -25,7 +25,7 @@ object GuiHandler {
 
         GUIs.forEach {
             if (it.value == 0) {
-                Minecraft.getMinecraft().displayGuiScreen(it.key)
+                Client.getMinecraft().displayGuiScreen(it.key)
                 GUIs[it.key] = -1
             } else {
                 GUIs[it.key] = 0

@@ -7,7 +7,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 @External
 class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.Command, loader) {
     private lateinit var commandName: String
-    private var tabCompletions: MutableList<String> = mutableListOf()
+    private var tabCompletions = mutableListOf<String>()
     private var command: Command? = null
 
     override fun trigger(args: Array<out Any?>) {
