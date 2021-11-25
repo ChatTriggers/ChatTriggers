@@ -7,79 +7,60 @@ import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.world.EnumDifficulty
 
 @External
-object Settings {
-    @JvmStatic
+class Settings {
     fun getSettings() = Client.getMinecraft().gameSettings
 
-    @JvmStatic
     fun getFOV() = getSettings().fovSetting
 
-    @JvmStatic
     fun setFOV(fov: Float) {
         getSettings().fovSetting = fov
     }
 
-    @JvmStatic
     fun getDifficulty() = getSettings().difficulty.difficultyId
 
-    @JvmStatic
     fun setDifficulty(difficulty: Int) {
         getSettings().difficulty = EnumDifficulty.getDifficultyEnum(difficulty)
     }
 
-    object skin {
-        @JvmStatic
+    val skin = object {
         fun getCape() = getSettings().modelParts.contains(EnumPlayerModelParts.CAPE)
 
-        @JvmStatic
         fun setCape(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.CAPE)
         }
 
-        @JvmStatic
         fun getJacket() = getSettings().modelParts.contains(EnumPlayerModelParts.JACKET)
 
-        @JvmStatic
         fun setJacket(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.JACKET)
         }
 
-        @JvmStatic
         fun getLeftSleeve() = getSettings().modelParts.contains(EnumPlayerModelParts.LEFT_SLEEVE)
 
-        @JvmStatic
         fun setLeftSleeve(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.LEFT_SLEEVE)
         }
 
-        @JvmStatic
         fun getRightSleeve() = getSettings().modelParts.contains(EnumPlayerModelParts.RIGHT_SLEEVE)
 
-        @JvmStatic
         fun setRightSleeve(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.RIGHT_SLEEVE)
         }
 
-        @JvmStatic
         fun getLeftPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.LEFT_PANTS_LEG)
 
-        @JvmStatic
         fun setLeftPantsLeg(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.LEFT_PANTS_LEG)
         }
 
-        @JvmStatic
         fun getRightPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.RIGHT_PANTS_LEG)
 
-        @JvmStatic
         fun setRightPantsLeg(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.RIGHT_PANTS_LEG)
         }
 
-        @JvmStatic
         fun getHat() = getSettings().modelParts.contains(EnumPlayerModelParts.HAT)
 
-        @JvmStatic
         fun setHat(toggled: Boolean) {
             setModelPart(toggled, EnumPlayerModelParts.HAT)
         }
@@ -90,263 +71,218 @@ object Settings {
         }
     }
 
-    object sound {
-        @JvmStatic
+    val sound = object {
         fun getMasterVolume() = getSettings().getSoundLevel(MCSoundCategory.MASTER)
 
-        @JvmStatic
         fun setMasterVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MASTER, level)
 
-        @JvmStatic
         fun getMusicVolume() = getSettings().getSoundLevel(MCSoundCategory.MUSIC)
 
-        @JvmStatic
         fun setMusicVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MUSIC, level)
 
-        @JvmStatic
         fun getNoteblockVolume() = getSettings().getSoundLevel(MCSoundCategory.RECORDS)
 
-        @JvmStatic
         fun setNoteblockVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.RECORDS, level)
 
-        @JvmStatic
         fun getWeather() = getSettings().getSoundLevel(MCSoundCategory.WEATHER)
 
-        @JvmStatic
         fun setWeather(level: Float) = getSettings().setSoundLevel(MCSoundCategory.WEATHER, level)
 
-        @JvmStatic
         fun getBlocks() = getSettings().getSoundLevel(MCSoundCategory.BLOCKS)
 
-        @JvmStatic
         fun setBlocks(level: Float) = getSettings().setSoundLevel(MCSoundCategory.BLOCKS, level)
 
         //#if MC<=10809
-        @JvmStatic
         fun getHostileCreatures() = getSettings().getSoundLevel(MCSoundCategory.MOBS)
 
-        @JvmStatic
         fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MOBS, level)
 
-        @JvmStatic
         fun getFriendlyCreatures() = getSettings().getSoundLevel(MCSoundCategory.ANIMALS)
 
-        @JvmStatic
         fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.ANIMALS, level)
         //#else
-        //$$ @JvmStatic fun getHostileCreatures() = getSettings().getSoundLevel(SoundCategory.HOSTILE)
-        //$$ @JvmStatic fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.HOSTILE, level)
+        //$$ fun getHostileCreatures() = getSettings().getSoundLevel(MCSoundCategory.HOSTILE)
+        //$$ fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.HOSTILE, level)
         //$$
-        //$$ @JvmStatic fun getFriendlyCreatures() = getSettings().getSoundLevel(SoundCategory.NEUTRAL)
-        //$$ @JvmStatic fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(SoundCategory.NEUTRAL, level)
+        //$$ fun getFriendlyCreatures() = getSettings().getSoundLevel(MCSoundCategory.NEUTRAL)
+        //$$ fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.NEUTRAL, level)
         //#endif
 
-        @JvmStatic
         fun getPlayers() = getSettings().getSoundLevel(MCSoundCategory.PLAYERS)
 
-        @JvmStatic
         fun setPlayers(level: Float) = getSettings().setSoundLevel(MCSoundCategory.PLAYERS, level)
 
-        @JvmStatic
         fun getAmbient() = getSettings().getSoundLevel(MCSoundCategory.AMBIENT)
 
-        @JvmStatic
         fun setAmbient(level: Float) = getSettings().setSoundLevel(MCSoundCategory.AMBIENT, level)
     }
 
-    object video {
-        @JvmStatic
+    val video = object {
         fun getGraphics() = getSettings().fancyGraphics
 
-        @JvmStatic
         fun setGraphics(fancy: Boolean) {
             getSettings().fancyGraphics = fancy
         }
 
-        @JvmStatic
         fun getRenderDistance() = getSettings().renderDistanceChunks
 
-        @JvmStatic
         fun setRenderDistance(distance: Int) {
             getSettings().renderDistanceChunks = distance
         }
 
-        @JvmStatic
         fun getSmoothLighting() = getSettings().ambientOcclusion
 
-        @JvmStatic
         fun setSmoothLighting(level: Int) {
             getSettings().ambientOcclusion = level
         }
 
-        @JvmStatic
         fun getMaxFrameRate() = getSettings().limitFramerate
 
-        @JvmStatic
         fun setMaxFrameRate(frameRate: Int) {
             getSettings().limitFramerate = frameRate
         }
 
-        @JvmStatic
         fun get3dAnaglyph() = getSettings().anaglyph
 
-        @JvmStatic
         fun set3dAnaglyph(toggled: Boolean) {
             getSettings().anaglyph = toggled
         }
 
-        @JvmStatic
         fun getBobbing() = getSettings().viewBobbing
 
-        @JvmStatic
         fun setBobbing(toggled: Boolean) {
             getSettings().viewBobbing = toggled
         }
 
-        @JvmStatic
         fun getGuiScale() = getSettings().guiScale
 
-        @JvmStatic
         fun setGuiScale(scale: Int) {
             getSettings().guiScale = scale
         }
 
-        @JvmStatic
         fun getBrightness() = getSettings().gammaSetting
 
-        @JvmStatic
         fun setBrightness(brightness: Float) {
             getSettings().gammaSetting = brightness
         }
 
-        @JvmStatic
         fun getClouds() = getSettings().clouds
 
-        @JvmStatic
         fun setClouds(clouds: Int) {
             getSettings().clouds = clouds
         }
 
-        @JvmStatic
         fun getParticles() = getSettings().particleSetting
 
-        @JvmStatic
         fun setParticles(particles: Int) {
             getSettings().particleSetting = particles
         }
 
-        @JvmStatic
         fun getFullscreen() = getSettings().fullScreen
 
-        @JvmStatic
         fun setFullscreen(toggled: Boolean) {
             getSettings().fullScreen = toggled
         }
 
-        @JvmStatic
         fun getVsync() = getSettings().enableVsync
 
-        @JvmStatic
         fun setVsync(toggled: Boolean) {
             getSettings().enableVsync = toggled
         }
 
-        @JvmStatic
         fun getMipmapLevels() = getSettings().mipmapLevels
 
-        @JvmStatic
         fun setMipmapLevels(mipmapLevels: Int) {
             getSettings().mipmapLevels = mipmapLevels
         }
 
         //#if MC<=10809
-        @JvmStatic
         fun getAlternateBlocks() = getSettings().allowBlockAlternatives
 
-        @JvmStatic
         fun setAlternateBlocks(toggled: Boolean) {
             getSettings().allowBlockAlternatives = toggled
         }
         //#else
-        //$$ @JvmStatic fun getAlternateBlocks() = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
-        //$$ @JvmStatic fun setAlternateBlocks(toggled: Boolean) = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
+        //$$ fun getAlternateBlocks() = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
+        //$$ fun setAlternateBlocks(toggled: Boolean) = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
         //#endif
 
-        @JvmStatic
         fun getVBOs() = getSettings().useVbo
 
-        @JvmStatic
         fun setVBOs(toggled: Boolean) {
             getSettings().useVbo = toggled
         }
 
-        @JvmStatic
         fun getEntityShadows() = getSettings().entityShadows
 
-        @JvmStatic
         fun setEntityShadows(toggled: Boolean) {
             getSettings().entityShadows = toggled
         }
     }
 
-    object chat {
-        // show chat
-        @JvmStatic
+    val chat = object {
         fun getVisibility() = getSettings().chatVisibility
 
-        @JvmStatic
         fun setVisibility(visibility: String) {
-            when (visibility.lowercase()) {
-                "hidden" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN
-                "commands", "system" -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.SYSTEM
-                else -> getSettings().chatVisibility = EntityPlayer.EnumChatVisibility.FULL
+            getSettings().chatVisibility = when (visibility.lowercase()) {
+                "hidden" -> EntityPlayer.EnumChatVisibility.HIDDEN
+                "commands", "system" -> EntityPlayer.EnumChatVisibility.SYSTEM
+                else -> EntityPlayer.EnumChatVisibility.FULL
             }
         }
 
-        // colors
-        @JvmStatic
         fun getColors() = getSettings().chatColours
 
-        @JvmStatic
         fun setColors(toggled: Boolean) {
             getSettings().chatColours = toggled
         }
 
-        // web links
-        @JvmStatic
         fun getWebLinks() = getSettings().chatLinks
 
-        @JvmStatic
         fun setWebLinks(toggled: Boolean) {
             getSettings().chatLinks = toggled
         }
 
-        // opacity
-        @JvmStatic
         fun getOpacity() = getSettings().chatOpacity
 
-        @JvmStatic
         fun setOpacity(opacity: Float) {
             getSettings().chatOpacity = opacity
         }
 
-        // prompt on links
-        @JvmStatic
         fun getPromptOnWebLinks() = getSettings().chatLinksPrompt
 
-        @JvmStatic
         fun setPromptOnWebLinks(toggled: Boolean) {
             getSettings().chatLinksPrompt = toggled
         }
 
-        // scale
+        fun getScale() = getSettings().chatScale
 
-        // focused height
+        fun setScale(scale: Float) {
+            getSettings().chatScale = scale
+        }
 
-        // unfocused height
+        fun getFocusedHeight() = getSettings().chatHeightFocused
 
-        // width
+        fun setFocusedHeight(height: Float) {
+            getSettings().chatHeightFocused = height
+        }
 
-        // reduced debug info
+        fun getUnfocusedHeight() = getSettings().chatHeightUnfocused
+
+        fun setUnfocusedHeight(height: Float) {
+            getSettings().chatHeightUnfocused = height
+        }
+
+        fun getWidth() = getSettings().chatWidth
+
+        fun setWidth(width: Float) {
+            getSettings().chatWidth = width
+        }
+
+        fun getReducedDebugInfo() = getSettings().reducedDebugInfo
+
+        fun setReducedDebugInfo(toggled: Boolean) {
+            getSettings().reducedDebugInfo = toggled
+        }
     }
 }
