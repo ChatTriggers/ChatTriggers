@@ -147,7 +147,7 @@ object ClientListener {
 
     @SubscribeEvent
     fun onDrawScreenEvent(event: GuiScreenEvent.DrawScreenEvent.Post) {
-        TriggerType.PostGuiRender.triggerAll(event.gui, event.mouseX, event.mouseY)
+        TriggerType.PostGuiRender.triggerAll(event.mouseX, event.mouseY, event.gui)
     }
 
     @SubscribeEvent

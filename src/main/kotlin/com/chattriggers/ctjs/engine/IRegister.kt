@@ -958,9 +958,9 @@ interface IRegister {
      * Registers a new trigger that runs after the current screen is rendered
      *
      * Passes through three arguments:
-     * - The GuiScreen
      * - The mouseX
      * - The mouseY
+     * - The GuiScreen
      *
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
@@ -970,6 +970,46 @@ interface IRegister {
      */
     fun registerPostGuiRender(method: Any): OnRegularTrigger {
         return OnRegularTrigger(method, TriggerType.PostGuiRender, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before the items in the gui are drawn
+     *
+     * Passes through five arguments:
+     * - The mouseX position
+     * - The mouseY position
+     * - The Slot
+     * - The GuiContainer
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerPreItemRender(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.PreItemRender, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before the hovered slot square is drawn.
+     *
+     * Passes through six arguments:
+     * - The mouseX position
+     * - The mouseY position
+     * - The Slot
+     * - The GuiContainer
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderSlotHighlight(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderSlotHighlight, getImplementationLoader())
     }
 
     /**
