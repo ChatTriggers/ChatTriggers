@@ -67,14 +67,24 @@ object TabList {
     @JvmStatic
     fun getHeader() = Client.getTabGui()?.header?.formattedText
 
+    /**
+     * Sets the header text for the TabList.
+     * If [header] is null, it will remove the header entirely
+     *
+     * @param header the header to set, or null to clear
+     */
     @JvmStatic
-    fun setHeader(header: Any) {
+    fun setHeader(header: Any?) {
         when (header) {
-            is String -> Client.getTabGui()?.setHeader(Message(header).getChatMessage())
-            is Message -> Client.getTabGui()?.setHeader(header.getChatMessage())
-            is MCITextComponent -> Client.getTabGui()?.setHeader(header)
+            is String -> Client.getTabGui()?.header = Message(header).getChatMessage()
+            is Message -> Client.getTabGui()?.header = header.getChatMessage()
+            is MCITextComponent -> Client.getTabGui()?.header = header
+            null -> Client.getTabGui()?.header = header
         }
     }
+
+    @JvmStatic
+    fun clearHeader() = setHeader(null)
 
     @JvmStatic
     fun getFooterMessage() = Client.getTabGui()?.footer?.let(::Message)
@@ -82,14 +92,24 @@ object TabList {
     @JvmStatic
     fun getFooter() = Client.getTabGui()?.footer?.formattedText
 
+    /**
+     * Sets the footer text for the TabList.
+     * If [footer] is null, it will remove the footer entirely
+     *
+     * @param footer the footer to set, or null to clear
+     */
     @JvmStatic
-    fun setFooter(footer: Any) {
+    fun setFooter(footer: Any?) {
         when (footer) {
-            is String -> Client.getTabGui()?.setFooter(Message(footer).getChatMessage())
-            is Message -> Client.getTabGui()?.setFooter(footer.getChatMessage())
-            is MCITextComponent -> Client.getTabGui()?.setFooter(footer)
+            is String -> Client.getTabGui()?.footer = Message(footer).getChatMessage()
+            is Message -> Client.getTabGui()?.footer = footer.getChatMessage()
+            is MCITextComponent -> Client.getTabGui()?.footer = footer
+            null -> Client.getTabGui()?.footer = footer
         }
     }
+
+    @JvmStatic
+    fun clearFooter() = setFooter(null)
 
     internal class PlayerComparator internal constructor() : Comparator<NetworkPlayerInfo> {
         override fun compare(playerOne: NetworkPlayerInfo, playerTwo: NetworkPlayerInfo): Int {
