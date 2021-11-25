@@ -49,6 +49,8 @@ enum class TriggerType {
     RenderAir,
     RenderEntity,
     PostGuiRender,
+    PreItemRender,
+    RenderSlotHighlight,
 
     // world
     PlayerJoin,
