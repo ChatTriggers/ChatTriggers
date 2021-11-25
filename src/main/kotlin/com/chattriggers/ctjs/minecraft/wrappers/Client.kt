@@ -18,7 +18,7 @@ import kotlin.math.roundToInt
 @External
 object Client {
     @JvmStatic
-    val settings = Settings
+    val settings = Settings()
 
     /**
      * Gets Minecraft's Minecraft object
