@@ -26,7 +26,7 @@ abstract class Gui : GuiScreen() {
     private var mouseX = 0
     private var mouseY = 0
 
-    private var buttons = mutableListOf<GuiButton>()
+    private val buttons = mutableListOf<GuiButton>()
     private var doesPauseGame = false
 
     fun open() {
@@ -189,7 +189,7 @@ abstract class Gui : GuiScreen() {
      */
     override fun initGui() {
         super.initGui()
-        buttons.forEach(buttonList::add)
+        buttonList.addAll(buttons)
     }
 
     /**
@@ -241,33 +241,132 @@ abstract class Gui : GuiScreen() {
     /**
      * Add a base Minecraft button to the gui
      *
-     * @param buttonId   id for the button
-     * @param x          X position of the button
-     * @param y          Y position of the button
-     * @param buttonText the label of the button
+     * @param button the button to add
+     * @return the Gui for method chaining
      */
-    fun addButton(buttonId: Int, x: Int, y: Int, buttonText: String) {
-        buttons.add(GuiButton(buttonId, x, y, buttonText))
-    }
+    fun addButton(button: GuiButton) = apply { buttons.add(button) }
 
     /**
      * Add a base Minecraft button to the gui
      *
-     * @param buttonId   id for the button
-     * @param x          X position of the button
-     * @param y          Y position of the button
-     * @param width      the width of the button
-     * @param height     the height of the button
+     * @param buttonId id for the button
+     * @param x the x position of the button
+     * @param y the y position of the button
+     * @param width the width of the button
+     * @param height the height of the button
      * @param buttonText the label of the button
+     * @return the Gui for method chaining
      */
-    fun addButton(buttonId: Int, x: Int, y: Int, width: Int = 200, height: Int = 20, buttonText: String) {
-        buttons.add(GuiButton(buttonId, x, y, width, height, buttonText))
+    @JvmOverloads
+    fun addButton(buttonId: Int, x: Int, y: Int, width: Int = 200, height: Int = 20, buttonText: String) = apply {
+        addButton(GuiButton(buttonId, x, y, width, height, buttonText))
     }
 
-    fun setButtonVisibility(buttonId: Int, visible: Boolean) {
-        buttons.firstOrNull {
-            it.id == buttonId
-        }?.visible = visible
+    /**
+     * Removes a button from the gui with the given id
+     *
+     * @param buttonId the id of the button to remove
+     * @return the Gui for method chaining
+     */
+    fun removeButton(buttonId: Int) = apply {
+        buttons.removeIf { it.id == buttonId }
+    }
+
+    fun clearButtons() = apply { buttons.clear() }
+
+    fun getButton(buttonId: Int): GuiButton? = buttons.firstOrNull { it.id == buttonId }
+
+    fun getButtonVisibility(buttonId: Int): Boolean = getButton(buttonId)?.visible ?: false
+
+    /**
+     * Sets the visibility of a button
+     *
+     * @param buttonId the id of the button to change
+     * @param visible the new visibility of the button
+     * @return the Gui for method chaining
+     */
+    fun setButtonVisibility(buttonId: Int, visible: Boolean) = apply {
+        getButton(buttonId)?.visible = visible
+    }
+
+    fun getButtonEnabled(buttonId: Int): Boolean = getButton(buttonId)?.enabled ?: false
+
+    /**
+     * Sets the enabled state of a button
+     *
+     * @param buttonId the id of the button to set
+     * @param enabled the enabled state of the button
+     * @return the Gui for method chaining
+     */
+    fun setButtonEnabled(buttonId: Int, enabled: Boolean) = apply {
+        getButton(buttonId)?.enabled = enabled
+    }
+
+    fun getButtonWidth(buttonId: Int): Int = getButton(buttonId)?.width ?: 0
+
+    /**
+     * Sets the button's width. Button textures break if the width is greater than 200
+     *
+     * @param buttonId id of the button
+     * @param width the new width
+     * @return the Gui for method chaining
+     */
+    fun setButtonWidth(buttonId: Int, width: Int) = apply {
+        getButton(buttonId)?.width = width
+    }
+
+    fun getButtonHeight(buttonId: Int): Int = getButton(buttonId)?.height ?: 0
+
+    /**
+     * Sets the button's height. Button textures break if the height is not 20
+     *
+     * @param buttonId id of the button
+     * @param height the new height
+     * @return the Gui for method chaining
+     */
+    fun setButtonHeight(buttonId: Int, height: Int) = apply {
+        getButton(buttonId)?.height = height
+    }
+
+    fun getButtonX(buttonId: Int): Int = getButton(buttonId)?.xPosition ?: 0
+
+    /**
+     * Sets the button's x position
+     *
+     * @param buttonId id of the button
+     * @param x the new x position
+     * @return the Gui for method chaining
+     */
+    fun setButtonX(buttonId: Int, x: Int) = apply {
+        getButton(buttonId)?.xPosition = x
+    }
+
+    fun getButtonY(buttonId: Int): Int = getButton(buttonId)?.yPosition ?: 0
+
+    /**
+     * Sets the button's y position
+     *
+     * @param buttonId id of the button
+     * @param y the new y position
+     * @return the Gui for method chaining
+     */
+    fun setButtonY(buttonId: Int, y: Int) = apply {
+        getButton(buttonId)?.yPosition = y
+    }
+
+    /**
+     * Sets the button's position
+     *
+     * @param buttonId id of the button
+     * @param x the new x position
+     * @param y the new y position
+     * @return the Gui for method chaining
+     */
+    fun setButtonLoc(buttonId: Int, x: Int, y: Int) = apply {
+        getButton(buttonId)?.apply {
+            xPosition = x
+            yPosition = y
+        }
     }
 
     /**
