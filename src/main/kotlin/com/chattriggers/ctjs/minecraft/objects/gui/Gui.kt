@@ -244,7 +244,10 @@ abstract class Gui : GuiScreen() {
      * @param button the button to add
      * @return the Gui for method chaining
      */
-    fun addButton(button: GuiButton) = apply { buttons.add(button) }
+    fun addButton(button: GuiButton) = apply {
+        buttons.add(button)
+        onResize(mc, width, height)
+    }
 
     /**
      * Add a base Minecraft button to the gui
@@ -270,9 +273,13 @@ abstract class Gui : GuiScreen() {
      */
     fun removeButton(buttonId: Int) = apply {
         buttons.removeIf { it.id == buttonId }
+        onResize(mc, width, height)
     }
 
-    fun clearButtons() = apply { buttons.clear() }
+    fun clearButtons() = apply {
+        buttons.clear()
+        onResize(mc, width, height)
+    }
 
     fun getButton(buttonId: Int): GuiButton? = buttons.firstOrNull { it.id == buttonId }
 
