@@ -91,22 +91,21 @@ object ChatLib {
         else say("/$text")
     }
 
-    @JvmStatic
-    fun clearChat() {
-        //#if MC<=10809
-        Client.getChatGUI()?.clearChatMessages()
-        //#else
-        //$$ Client.getChatGUI()?.clearChatMessages(false)
-        //#endif
-    }
-
     /**
-     * Clear chat messages with the specified message ID
+     * Clear chat messages with the specified message ID, or all chat messages if no ID is specified
      *
      * @param chatLineIDs the id(s) to be cleared
      */
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
+        if (chatLineIDs.isEmpty()) {
+            //#if MC<=10809
+            Client.getChatGUI()?.clearChatMessages()
+            //#else
+            //$$ Client.getChatGUI()?.clearChatMessages(false)
+            //#endif
+            return
+        }
         for (chatLineID in chatLineIDs)
             Client.getChatGUI()?.deleteChatLine(chatLineID)
     }
@@ -146,7 +145,7 @@ object ChatLib {
      */
     @JvmStatic
     fun removeFormatting(text: String): String {
-        return text.replace("[\\u00a7&][0-9a-fklmnor]".toRegex(), "")
+        return text.replace("[\u00a7&][0-9a-fk-or]".toRegex(), "")
     }
 
     /**
@@ -157,7 +156,7 @@ object ChatLib {
      */
     @JvmStatic
     fun replaceFormatting(text: String): String {
-        return text.replace("\\u00a7(?![^0-9a-fklmnor]|$)".toRegex(), "&")
+        return text.replace("\u00a7(?![^0-9a-fk-or]|$)".toRegex(), "&")
     }
 
     /**
@@ -238,7 +237,7 @@ object ChatLib {
         editChat(
             {
                 toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
-                    "\\u00a7r".toRegex(),
+                    "\u00a7r".toRegex(),
                     ""
                 )
             },
@@ -365,7 +364,7 @@ object ChatLib {
      */
     @JvmStatic
     fun addColor(message: String?): String {
-        return message.toString().replace("(?:(?<!\\\\))&(?![^0-9a-fklmnor]|$)".toRegex(), "\u00a7")
+        return message.toString().replace("(?<!\\\\)&(?![^0-9a-fk-or]|$)".toRegex(), "\u00a7")
     }
 
     // helper method to make sure player exists before putting something in chat
