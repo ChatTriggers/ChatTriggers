@@ -1,20 +1,19 @@
 package com.chattriggers.ctjs.utils.console
 
 import java.io.File
+import java.io.FileOutputStream
 import java.io.OutputStream
 import java.io.PrintStream
 import javax.swing.JTextArea
 
 class TextAreaOutputStream(private val textArea: JTextArea, lang: String) : OutputStream() {
     private val buffer = StringBuilder(128)
+    private val file = File("./logs/ctjs-$lang.log")
 
     init {
-        val file = File("./logs/ctjs-$lang.log")
         file.delete()
         file.createNewFile()
     }
-
-    private val logger = File("./logs/ctjs-$lang.log").bufferedWriter()
 
     val printStream = PrintStream(this)
 
@@ -26,7 +25,7 @@ class TextAreaOutputStream(private val textArea: JTextArea, lang: String) : Outp
             val line = buffer.toString()
 
             textArea.append(line)
-            logger.append(line)
+            FileOutputStream(file, true).bufferedWriter().use { it.append(line) }
             textArea.caretPosition = textArea.document.length
 
             buffer.delete(0, buffer.length)

@@ -270,7 +270,6 @@ class Console(val loader: ILoader?) {
         ).deriveFont(9f)
 
         init {
-
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(FIRA_FONT)
         }
     }
