@@ -29,8 +29,8 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
     }
 
     fun getTag(key: String) = when (val tag = rawNBT.getTag(key)) {
-        is MCNBTBase -> NBTBase(tag)
         is MCNBTTagCompound -> NBTTagCompound(tag)
+        is MCNBTBase -> NBTBase(tag)
         else -> null
     }
 
@@ -68,14 +68,14 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.LONG -> getLong(key)
             NBTDataType.FLOAT -> getFloat(key)
             NBTDataType.DOUBLE -> getDouble(key)
-            NBTDataType.STRING -> if (rawNBT.hasKey(key, 8)) (tagMap[key] as NBTBase).toString() else null
+            NBTDataType.STRING -> if (rawNBT.hasKey(key, 8)) tagMap[key]?.let { NBTBase(it).toString() } else null
             NBTDataType.BYTE_ARRAY -> if (rawNBT.hasKey(key, 7)) (tagMap[key] as NBTTagByteArray).byteArray else null
             NBTDataType.INT_ARRAY -> if (rawNBT.hasKey(key, 11)) (tagMap[key] as NBTTagIntArray).intArray else null
             NBTDataType.BOOLEAN -> getBoolean(key)
             NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
-            NBTDataType.TAG_LIST -> if (tagType == null) throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument") else getTagList(
+            NBTDataType.TAG_LIST -> getTagList(
                 key,
-                tagType
+                tagType ?: throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument")
             )
         }
     }
