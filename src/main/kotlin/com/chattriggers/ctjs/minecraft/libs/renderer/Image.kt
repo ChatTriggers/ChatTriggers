@@ -30,7 +30,7 @@ class Image constructor(var image: BufferedImage?) {
     fun getTextureHeight(): Int = textureHeight
 
     fun getTexture(): DynamicTexture {
-        if (!this::texture.isInitialized) {
+        if (!::texture.isInitialized) {
             // We're trying to access the texture before initialization. Presumably, the game overlay render event
             // hasn't fired yet so we haven't loaded the texture. Let's hope this is a rendering context!
             try {

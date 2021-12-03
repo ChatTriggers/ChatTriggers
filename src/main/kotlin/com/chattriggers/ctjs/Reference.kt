@@ -111,7 +111,7 @@ object Reference {
     }
 
     internal fun generateBindings() {
-        val classpath = ClassPath.from(this::class.java.classLoader)
+        val classpath = ClassPath.from(javaClass.classLoader)
         val externalClasses = classpath.getTopLevelClassesRecursive("com.chattriggers.ctjs").map {
             it.load()
         }.filter { it.isAnnotationPresent(External::class.java) }.map { it.kotlin }
