@@ -315,22 +315,13 @@ object Renderer {
     @JvmStatic
     fun drawString(text: String, x: Float, y: Float) {
         val fr = getFontRenderer()
+        var newY = y
 
-        //TODO: THIS DEF AIN'T THE RIGHT PLACE FOR THIS BUT THAT'S @kerbybit's JOB!
-        //      THIS IS JUST A POC >:(
-        if (text.contains("\n")) {
-            var newY = y
+        ChatLib.addColor(text).split("\n").forEach {
+            fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
 
-            ChatLib.addColor(text).split("\n").forEach {
-                fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
-
-                newY += fr.FONT_HEIGHT
-            }
-            finishDraw()
-            return
+            newY += fr.FONT_HEIGHT
         }
-
-        fr.drawString(ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt(), false)
         finishDraw()
     }
 

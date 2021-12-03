@@ -17,14 +17,13 @@ abstract class OnTrigger protected constructor(
     }
 
     /**
-     * Sets a triggers priority using [Priority].
+     * Sets a trigger's priority using [Priority].
      * Highest runs first.
      * @param priority the priority of the trigger
      * @return the trigger for method chaining
      */
-    fun setPriority(priority: Priority): OnTrigger {
+    fun setPriority(priority: Priority) = apply {
         this.priority = priority
-        return this
     }
 
     /**
@@ -62,6 +61,9 @@ abstract class OnTrigger protected constructor(
     enum class Priority {
         //LOWEST IS RAN LAST
         HIGHEST,
-        HIGH, NORMAL, LOW, LOWEST
+        HIGH,
+        NORMAL,
+        LOW,
+        LOWEST
     }
 }
