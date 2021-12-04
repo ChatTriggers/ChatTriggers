@@ -14,11 +14,12 @@ class CTJSTransformer : BaseClassTransformer() {
         classLoader.addTransformerExclusion("com.chattriggers.ctjs.")
         classLoader.addTransformerExclusion("file__") // for rhino generated classes
         classLoader.addTransformerExclusion("com.google.gson.")
-        classLoader.addTransformerExclusion("org.mozilla.javascript")
-        classLoader.addTransformerExclusion("org.mozilla.classfile")
         classLoader.addTransformerExclusion("com.fasterxml.jackson.core.Version")
         classLoader.addTransformerExclusion("dev.falsehonesty.asmhelper.")
         classLoader.addTransformerExclusion("org.fife.")
+        // Prevent transforming the JS engine
+        classLoader.addTransformerExclusion("org.oracle.truffle.")
+        classLoader.addTransformerExclusion("org.graalvm.")
     }
 
     override fun makeTransformers() {
