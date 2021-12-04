@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.contracts.ExperimentalContracts
 
-@OptIn(ExperimentalContracts::class)
 object JSLoader : ILoader {
     private val classLoader = ModifiedURLClassLoader()
     private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<Trigger>>()
@@ -76,7 +75,21 @@ object JSLoader : ILoader {
             }
             .hostClassLoader(classLoader)
             .fileSystem(JSFileSystem)
+            .option("js.bigint", "true")
+            .option("js.class-fields", "true")
+            .option("js.console", "true")
+            .option("js.ecmascript-version", "latest")
+            .option("js.error-cause", "true")
             .option("js.esm-eval-returns-exports", "true")
+            .option("js.global-property", "true")
+            .option("js.import-assertions", "true")
+            .option("js.intl-402", "true")
+            .option("js.java-package-globals", "true")
+            .option("js.json-modules", "true")
+            .option("js.load", "false")
+            .option("js.new-set-methods", "true")
+            .option("js.top-level-await", "true")
+            .option("js.unhandled-rejections", "warn")
             .build()
     }
 
