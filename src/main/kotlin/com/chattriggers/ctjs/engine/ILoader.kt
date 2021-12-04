@@ -63,6 +63,25 @@ interface ILoader {
     fun eval(code: String): String
 
     /**
+     * If the engine needs to perform a context switch when executing code on
+     * a different thread, the context should be entered here.
+     */
+    fun enterContext()
+
+    /**
+     * If the engine needs to perform a context switch when executing code on
+     * a different thread, the context should be exited here.
+     */
+    fun exitContext()
+
+    fun <T> wrapInContext(block: () -> T): T = try {
+        enterContext()
+        block()
+    } finally {
+        exitContext()
+    }
+
+    /**
      * Adds a trigger to this loader to be activated during the game
      */
     fun addTrigger(trigger: Trigger)

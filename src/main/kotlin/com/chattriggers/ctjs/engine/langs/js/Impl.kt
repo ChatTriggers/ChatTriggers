@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.objects.gui.Gui
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBindHandler
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.minecraft.wrappers.utils.WrappedThread
 import com.chattriggers.ctjs.triggers.Trigger
 import net.minecraft.client.settings.KeyBinding
 import org.graalvm.polyglot.Value
@@ -93,4 +94,8 @@ object JSClient : Client() {
 
     val currentGui = Client.Companion.currentGui
     val camera = Client.Companion.camera
+}
+
+class JSWrappedThread(task: Runnable) : WrappedThread(task) {
+    override fun getLoader() = JSLoader
 }

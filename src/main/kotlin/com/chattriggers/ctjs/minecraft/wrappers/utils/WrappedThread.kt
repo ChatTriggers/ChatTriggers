@@ -1,19 +1,18 @@
 package com.chattriggers.ctjs.minecraft.wrappers.utils
 
-import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
+import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.printTraceToConsole
-import org.mozilla.javascript.Context
 import java.util.concurrent.ForkJoinPool
 
 @Suppress("unused")
-class WrappedThread(private val task: Runnable) {
+abstract class WrappedThread(private val task: Runnable) {
     fun start() {
         ForkJoinPool.commonPool().execute {
             try {
-                JSContextFactory.enterContext()
+                getLoader().enterContext()
                 task.run()
-                Context.exit()
+                getLoader().exitContext()
             } catch (e: Throwable) {
                 e.printTraceToConsole(JSLoader.console)
             }
@@ -31,6 +30,8 @@ class WrappedThread(private val task: Runnable) {
     fun suspend() {}
     fun resume() {}
     fun getId() = 0L
+
+    abstract fun getLoader(): ILoader
 
     companion object {
         @JvmStatic

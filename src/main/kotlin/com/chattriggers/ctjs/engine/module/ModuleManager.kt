@@ -237,6 +237,14 @@ object ModuleManager {
         }
     }
 
+    fun triggerWithContextSwitch(type: TriggerType, arguments: Array<out Any?>) {
+        loaders.forEach {
+            it.enterContext()
+            it.exec(type, arguments)
+            it.exitContext()
+        }
+    }
+
     fun getConsole(language: String): Console {
         return loaders.firstOrNull {
             it.getLanguage().langName == language

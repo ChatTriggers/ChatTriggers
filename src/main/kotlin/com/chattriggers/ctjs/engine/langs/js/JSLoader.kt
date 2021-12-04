@@ -275,6 +275,14 @@ object JSLoader : ILoader {
         return evalContext.eval(source).toString()
     }
 
+    override fun enterContext() {
+        moduleContext.enter()
+    }
+
+    override fun exitContext() {
+        moduleContext.leave()
+    }
+
     override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: Trigger, method: Any, args: Array<out Any?>) {
