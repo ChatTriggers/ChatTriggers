@@ -221,9 +221,10 @@ object ModuleManager {
         loaders.forEach {
             it.clearTriggers()
 
-            if (Config.clearConsoleOnLoad) {
+            if (Config.clearConsoleOnLoad)
                 it.console.clearConsole()
-            }
+
+            it.teardown()
         }
 
         if (Config.clearConsoleOnLoad)

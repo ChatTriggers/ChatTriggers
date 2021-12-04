@@ -23,6 +23,11 @@ interface ILoader {
      */
     fun setup(jars: List<URL>)
 
+    /**
+     * Performs final engine teardown
+     */
+    fun teardown()
+
     fun asmSetup()
 
     fun asmPass(module: Module, asmURI: URI)
@@ -81,24 +86,4 @@ interface ILoader {
      * Removes a trigger from the current pool
      */
     fun removeTrigger(trigger: Trigger)
-
-    /**
-     * Save a resource to the OS's filesystem from inside the jar
-     * @param resourceName name of the file inside the jar
-     * @param outputFile file to save to
-     * @param replace whether to replace the file being saved to
-     */
-    fun saveResource(resourceName: String?, outputFile: File, replace: Boolean): String {
-        if (resourceName == null || resourceName == "") {
-            throw IllegalArgumentException("ResourcePath cannot be null or empty")
-        }
-
-        val parsedResourceName = resourceName.replace('\\', '/')
-        val resource = javaClass.getResourceAsStream(parsedResourceName)
-            ?: throw IllegalArgumentException("The embedded resource '$parsedResourceName' cannot be found.")
-
-        val res = resource.bufferedReader().readText()
-        FileUtils.write(outputFile, res)
-        return res
-    }
 }

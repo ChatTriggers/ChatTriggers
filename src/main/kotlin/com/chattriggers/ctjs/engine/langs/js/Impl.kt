@@ -28,14 +28,14 @@ class JSGui : Gui() {
 
 class JSDisplayLine : DisplayLine {
     constructor(text: String) : super(text)
-    constructor(text: String, config: NativeObject) : super(text, config)
+    constructor(text: String, config: Value) : super(text, config)
 
     override fun getLoader(): ILoader = JSLoader
 }
 
 class JSDisplay : Display {
     constructor() : super()
-    constructor(config: NativeObject?) : super(config)
+    constructor(config: Value) : super(config)
 
     override fun createDisplayLine(text: String): DisplayLine {
         return JSDisplayLine(text)
