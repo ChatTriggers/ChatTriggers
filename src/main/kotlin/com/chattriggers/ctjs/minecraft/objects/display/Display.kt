@@ -1,8 +1,9 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
-import com.chattriggers.ctjs.utils.kotlin.getOption
-import org.mozilla.javascript.NativeObject
+import com.oracle.truffle.js.runtime.JSRuntime
+import org.graalvm.polyglot.Value
 import java.util.concurrent.CopyOnWriteArrayList
+
 
 abstract class Display() {
     private var lines = CopyOnWriteArrayList<DisplayLine>()
@@ -28,17 +29,17 @@ abstract class Display() {
         DisplayHandler.registerDisplay(this)
     }
 
-    constructor(config: NativeObject?) : this() {
-        setBackgroundColor(config.getOption("backgroundColor", 0x50000000).toLong())
-        setTextColor(config.getOption("textColor", 0xffffffff).toLong())
-        setBackground(config.getOption("background", DisplayHandler.Background.NONE))
-        setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
-        setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
-        setRenderX(config.getOption("renderX", 0f).toFloat())
-        setRenderY(config.getOption("renderY", 0f).toFloat())
-        setShouldRender(config.getOption("shouldRender", true).toBoolean())
-        setMinWidth(config.getOption("minWidth", 0f).toFloat())
-        setRegisterType(config.getOption("registerType", DisplayHandler.RegisterType.RENDER_OVERLAY))
+    constructor(config: Value) : this() {
+        setBackgroundColor(config.getMember("backgroundColor")?.let(JSRuntime::toNumber)?.toLong() ?: 0x50000000)
+        setTextColor(config.getMember("textColor")?.let(JSRuntime::toNumber)?.toLong() ?: 0xffffffffL)
+        setBackground(config.getMember("background") ?: DisplayHandler.Background.NONE)
+        setAlign(config.getMember("align") ?: DisplayHandler.Align.LEFT)
+        setOrder(config.getMember("order") ?: DisplayHandler.Order.DOWN)
+        setRenderX(config.getMember("renderX")?.let(JSRuntime::toNumber)?.toFloat() ?: 0f)
+        setRenderY(config.getMember("renderY")?.let(JSRuntime::toNumber)?.toFloat() ?: 0f)
+        setShouldRender(config.getMember("shouldRender")?.let(JSRuntime::toBoolean) ?: true)
+        setMinWidth(config.getMember("minWidth")?.let(JSRuntime::toNumber)?.toFloat() ?: 0f)
+        setRegisterType(config.getMember("registerType") ?: DisplayHandler.RegisterType.RENDER_OVERLAY)
     }
 
     fun getBackgroundColor(): Long = backgroundColor

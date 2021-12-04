@@ -8,7 +8,8 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.RegularTrigger
 import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.triggers.TriggerType
-import org.mozilla.javascript.NativeObject
+import com.oracle.truffle.js.runtime.JSRuntime
+import org.graalvm.polyglot.Value
 
 abstract class DisplayLine {
     private lateinit var text: Text
@@ -37,18 +38,14 @@ abstract class DisplayLine {
         setText(text)
     }
 
-    constructor(text: String, config: NativeObject) {
+    constructor(text: String, config: Value) {
         setText(text)
 
-        textColor = config.getOption("textColor", null)?.toLong()
-        backgroundColor = config.getOption("backgroundColor", null)?.toLong()
+        textColor = config.getMember("textColor")?.let(JSRuntime::toNumber)?.toLong()
+        backgroundColor = config.getMember("backgroundColor")?.let(JSRuntime::toNumber)?.toLong()
 
-        setAlign(config.getOption("align", null))
-        setBackground(config.getOption("background", null))
-    }
-
-    private fun NativeObject?.getOption(key: String, default: Any?): String? {
-        return (this?.get(key) ?: default)?.toString()
+        setAlign(config.getMember("align"))
+        setBackground(config.getMember("background"))
     }
 
     init {

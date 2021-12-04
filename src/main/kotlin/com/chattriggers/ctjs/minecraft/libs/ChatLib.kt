@@ -7,11 +7,12 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.printToConsole
+import com.chattriggers.ctjs.utils.kotlin.getMemberAs
 import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.ChatLine
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import org.mozilla.javascript.regexp.NativeRegExp
+import org.graalvm.polyglot.Value
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
 
@@ -185,13 +186,13 @@ object ChatLib {
      * @param replacements the new message(s) to be put in replace of the old one
      */
     @JvmStatic
-    fun editChat(regexp: NativeRegExp, vararg replacements: Message) {
-        val global = regexp["global"] as Boolean
-        val ignoreCase = regexp["ignoreCase"] as Boolean
-        val multiline = regexp["multiline"] as Boolean
+    fun editChat(regexp: Value, vararg replacements: Message) {
+        val global = regexp.getMemberAs<Boolean>("global")!!
+        val ignoreCase = regexp.getMemberAs<Boolean>("ignoreCase")!!
+        val multiline = regexp.getMemberAs<Boolean>("multiline")!!
 
         val flags = (if (ignoreCase) Pattern.CASE_INSENSITIVE else 0) or if (multiline) Pattern.MULTILINE else 0
-        val pattern = Pattern.compile(regexp["source"] as String, flags)
+        val pattern = Pattern.compile(regexp.getMemberAs("source")!!, flags)
 
         editChat(
             {
@@ -292,13 +293,13 @@ object ChatLib {
      * @param regexp the regex object to match to the message
      */
     @JvmStatic
-    fun deleteChat(regexp: NativeRegExp) {
-        val global = regexp["global"] as Boolean
-        val ignoreCase = regexp["ignoreCase"] as Boolean
-        val multiline = regexp["multiline"] as Boolean
+    fun deleteChat(regexp: Value) {
+        val global = regexp.getMemberAs<Boolean>("global")!!
+        val ignoreCase = regexp.getMemberAs<Boolean>("ignoreCase")!!
+        val multiline = regexp.getMemberAs<Boolean>("multiline")!!
 
         val flags = (if (ignoreCase) Pattern.CASE_INSENSITIVE else 0) or if (multiline) Pattern.MULTILINE else 0
-        val pattern = Pattern.compile(regexp["source"] as String, flags)
+        val pattern = Pattern.compile(regexp.getMemberAs("source")!!, flags)
 
         deleteChat {
             val matcher = pattern.matcher(it.getChatMessage().unformattedText)
