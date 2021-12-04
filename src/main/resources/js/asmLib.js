@@ -242,12 +242,13 @@ ASM.At.RETURN = function (ordinal = null) {
     return new ASMInjectionPoint.RETURN(ordinal);
 };
 
-ASM.At.INVOKE = function (
-    owner = throw new Error('ASM.At.INVOKE requires an owner parameter'),
-    name = throw new Error('ASM.At.INVOKE requires a name parameter'),
-    descriptor = throw new Error('ASM.At.INVOKE requires a descriptor parameter'),
-    ordinal = null
-) {
+ASM.At.INVOKE = function (owner, name, descriptor, ordinal = null) {
+    if (owner === undefined)
+        throw new Error('ASM.At.INVOKE requires an owner parameter');
+    if (name === undefined)
+        throw new Error('ASM.At.INVOKE requires a name parameter')
+    if (descriptor === undefined)
+        throw new Error('ASM.At.INVOKE requires a descriptor parameter')
     return new ASMInjectionPoint.INVOKE(new ASMDescriptor(owner, name, descriptor), ordinal)
 };
 
