@@ -111,7 +111,6 @@ jar {
     }
 
     manifest.attributes(
-        "FMLCorePlugin": "com.chattriggers.ctjs.launch.plugin.CTJSLoadingPlugin",
         "FMLCorePluginContainsFMLMod": "true",
         "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
         "FMLAT": "ctjs_at.cfg"
