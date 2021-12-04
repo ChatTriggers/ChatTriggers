@@ -4,8 +4,7 @@ import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
 import net.minecraft.nbt.*
-import org.mozilla.javascript.NativeArray
-import org.mozilla.javascript.NativeObject
+import org.graalvm.polyglot.Value
 
 open class NBTBase(open val rawNBT: MCNBTBase) {
     /**
@@ -33,55 +32,40 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     override fun toString() = rawNBT.toString()
 
     companion object {
-        fun MCNBTBase.toObject(): Any? {
+        fun MCNBTBase.toObject(): Value {
             return when (this) {
-                is NBTTagString -> string
-                is NBTTagByte -> byte
-                is NBTTagShort -> short
-                is NBTTagInt -> int
-                is NBTTagLong -> long
-                is NBTTagFloat -> float
-                is NBTTagDouble -> double
+                is NBTTagString -> Value.asValue(string)
+                is NBTTagByte -> Value.asValue(byte)
+                is NBTTagShort -> Value.asValue(short)
+                is NBTTagInt -> Value.asValue(int)
+                is NBTTagLong -> Value.asValue(long)
+                is NBTTagFloat -> Value.asValue(float)
+                is NBTTagDouble -> Value.asValue(double)
                 is MCNBTTagCompound -> toObject()
                 is MCNBTTagList -> toObject()
-                is NBTTagByteArray -> NativeArray(byteArray.toTypedArray()).expose()
-                is NBTTagIntArray -> NativeArray(intArray.toTypedArray()).expose()
+                is NBTTagByteArray -> Value.asValue(byteArray.toTypedArray())
+                is NBTTagIntArray -> Value.asValue(intArray.toTypedArray())
                 else -> error("Unknown tag type $javaClass")
             }
         }
 
-        fun MCNBTTagCompound.toObject(): NativeObject {
-            val o = NativeObject()
-            o.expose()
+        fun MCNBTTagCompound.toObject(): Value {
+            val map = mutableMapOf<String, Value>()
 
             for (key in keySet) {
                 val value = tagMap[key]
-                if (value != null) {
-                    o.put(key, o, value.toObject())
-                }
+                if (value != null)
+                    map[key] = value.toObject()
             }
 
-            return o
+            return Value.asValue(map)
         }
 
-        fun MCNBTTagList.toObject(): NativeArray {
-            val tags = mutableListOf<Any?>()
-            for (i in 0 until tagCount()) {
+        fun MCNBTTagList.toObject(): Value {
+            val tags = mutableListOf<Value>()
+            for (i in 0 until tagCount())
                 tags.add(get(i).toObject())
-            }
-            val array = NativeArray(tags.toTypedArray())
-            array.expose()
-            return array
-        }
-
-        private fun NativeArray.expose() = apply {
-            // Taken from the private NativeArray#init method
-            exportAsJSClass(32, this, false)
-        }
-
-        private fun NativeObject.expose() = apply {
-            // Taken from the private NativeObject#init method
-            exportAsJSClass(12, this, false)
+            return Value.asValue(tags)
         }
     }
 }
