@@ -8,19 +8,13 @@ import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.console.Console
-<<<<<<< HEAD
 import com.chattriggers.ctjs.utils.console.LogType
-import dev.falsehonesty.asmhelper.dsl.*
-import dev.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
-=======
-import com.oracle.truffle.regex.RegexObject
-import com.oracle.truffle.regex.dead.DeadRegexExecNode
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.applyField
 import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.remove
->>>>>>> 14f0e35d (Engine: Convert JSLoader to GraalJS)
 import dev.falsehonesty.asmhelper.dsl.writers.AccessType
+import org.apache.commons.io.output.WriterOutputStream
 import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.Source
 import org.graalvm.polyglot.Value
@@ -68,18 +62,22 @@ object JSLoader : ILoader {
 
     private fun newTriggerSet() = ConcurrentSkipListSet<Trigger>()
 
-    private fun buildContext() = Context
-        .newBuilder("js")
-        .out(console.out)
-        .err(console.out)
-        .allowAllAccess(true) // TODO: Per-module permissions?
-        .allowHostClassLookup {
-            // TODO: Prevent access to CT-internal classes
-            true
-        }
-        .hostClassLoader(classLoader)
-        .option("js.esm-eval-returns-exports", "true")
-        .build()
+    private fun buildContext(): Context {
+        val out = WriterOutputStream(console.writer)
+
+        return Context
+            .newBuilder("js")
+            .out(out)
+            .err(out)
+            .allowAllAccess(true) // TODO: Per-module permissions?
+            .allowHostClassLookup {
+                // TODO: Prevent access to CT-internal classes
+                true
+            }
+            .hostClassLoader(classLoader)
+            .option("js.esm-eval-returns-exports", "true")
+            .build()
+    }
 
     override fun setup(jars: List<URL>) {
         classLoader.addAllURLs(jars)

@@ -8,9 +8,9 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.full.memberFunctions
 
 @Suppress("unused")
-interface IRegister {
+interface IRegister<T> {
     companion object {
-        private val methodMap = mutableMapOf<String, KFunction<*>>()
+        val methodMap = mutableMapOf<String, KFunction<*>>()
     }
 
     /**
@@ -24,20 +24,7 @@ interface IRegister {
      * @param method The name of the method or the actual method to callback when the event is fired
      * @return The trigger for additional modification
      */
-    fun register(triggerType: String, method: Any): Trigger {
-        val name = triggerType.lowercase()
-
-        var func = methodMap[name]
-
-        if (func == null) {
-            func = this::class.memberFunctions.firstOrNull {
-                it.name.lowercase() == "register$name"
-            } ?: throw NoSuchMethodException("No trigger type named '$triggerType'")
-            methodMap[name] = func
-        }
-
-        return func.call(this, method) as Trigger
-    }
+    abstract fun register(triggerType: String, method: T): Trigger
 
     /**
      * Registers a new trigger that runs before a chat message is received.
