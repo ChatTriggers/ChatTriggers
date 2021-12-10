@@ -184,10 +184,7 @@ object ChatLib {
     }
 
     /**
-     * Edits an already sent chat message by regex.
-     * If the JavaScript RegExp object passed in matches a message, it will be replaced.
-     * The regex object will be created by the {@code new RegExp()} constructor,
-     * or the {@code //} regex literal. All flags will be respected.
+     * Edits an already sent chat message matched by [regexp].
      *
      * @param regexp the regex object to match to the message
      * @param replacements the new message(s) to be put in replace of the old one
@@ -261,17 +258,6 @@ object ChatLib {
         )
     }
 
-    /**
-     * Edits an already sent chat message.
-     * Whether each specific message is edited or not is up to the first parameter, the "comparator" function.
-     * This function will be passed a {@link Message} object and has to return a boolean for whether or not
-     * that specific message should be edited. (true for yes, false for no). There are overrides of this function
-     * that already implement different versions of this method and those should be used in place of this one
-     * if there is already a suitable replacement. Otherwise, create one and use this method.
-     *
-     * @param toReplace the "comparator" function
-     * @param replacements the replacement messages
-     */
     @JvmStatic
     private fun editChat(toReplace: (Message) -> Boolean, vararg replacements: Message) {
         val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
@@ -306,6 +292,88 @@ object ChatLib {
 
                 ChatLine(chatLine.updatedCounter, it.getChatMessage(), lineId)
             }.forEach(chatLineIterator::add)
+        }
+    }
+
+    /**
+     * Deletes an already sent chat message matching [regexp].
+     *
+     * @param regexp the regex object to match to the message
+     */
+    @JvmStatic
+    fun deleteChat(regexp: NativeObject) {
+        val global = regexp["global"] as Boolean
+        val ignoreCase = regexp["ignoreCase"] as Boolean
+        val multiline = regexp["multiline"] as Boolean
+
+        val flags = (if (ignoreCase) Pattern.CASE_INSENSITIVE else 0) or if (multiline) Pattern.MULTILINE else 0
+        val pattern = Pattern.compile(regexp["source"] as String, flags)
+
+        deleteChat {
+            val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+            if (global) matcher.find() else matcher.matches()
+        }
+    }
+
+    /**
+     * Deletes an already sent chat message by the text of the chat
+     *
+     * @param toDelete the unformatted text of the message to be replaced
+     */
+    @JvmStatic
+    fun deleteChat(toDelete: String) {
+        deleteChat {
+            removeFormatting(it.getChatMessage().unformattedText) == toDelete
+        }
+    }
+
+    /**
+     * Deletes an already sent chat message by the [Message]
+     *
+     * @param toDelete the message to be replaced
+     */
+    @JvmStatic
+    fun deleteChat(toDelete: Message) {
+        deleteChat{
+            toDelete.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
+                "\u00a7r".toRegex(),
+                ""
+            )
+        }
+    }
+
+    /**
+     * Deletes an already sent chat message by its chat line id
+     *
+     * @param chatLineId the chat line id of the message to be replaced
+     */
+    @JvmStatic
+    fun deleteChat(chatLineId: Int) {
+        deleteChat {
+            it.getChatLineId() == chatLineId
+        }
+    }
+
+    @JvmStatic
+    private fun deleteChat(toDelete: (Message) -> Boolean) {
+        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
+        val chatLines = Client.getChatGUI()!!.chatLines
+
+        deleteChatLineList(chatLines, toDelete)
+        deleteChatLineList(drawnChatLines, toDelete)
+    }
+
+    private fun deleteChatLineList(
+        lineList: MutableList<ChatLine>,
+        toDelete: (Message) -> Boolean,
+    ) {
+        val chatLineIterator = lineList.listIterator()
+
+        while (chatLineIterator.hasNext()) {
+            val chatLine = chatLineIterator.next()
+
+            if (toDelete(Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)))
+                chatLineIterator.remove()
         }
     }
 
