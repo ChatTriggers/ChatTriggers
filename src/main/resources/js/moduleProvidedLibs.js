@@ -79,7 +79,7 @@ global.OnStepTrigger = Java.type("com.chattriggers.ctjs.triggers.OnStepTrigger")
 global.OnTrigger = Java.type("com.chattriggers.ctjs.triggers.OnTrigger");
 
 // Misc
-global.Config = Java.type("com.chattriggers.ctjs.utils.config.Config").INSTANCE;
+global.Config = Java.type("com.chattriggers.ctjs.utils.Config").INSTANCE;
 global.ChatTriggers = Java.type("com.chattriggers.ctjs.Reference");
 /*End Built in Vars */
 
