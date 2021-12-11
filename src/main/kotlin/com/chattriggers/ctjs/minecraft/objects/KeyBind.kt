@@ -34,7 +34,6 @@ class KeyBind {
         keyBinding = KeyBinding(description, keyCode, category)
         ClientRegistry.registerKeyBinding(keyBinding)
 
-        keyBinds.add(this)
         isCustom = true
     }
 
@@ -70,18 +69,4 @@ class KeyBind {
      * @param pressed True to press, False to release
      */
     fun setState(pressed: Boolean) = KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
-
-    companion object {
-        @JvmStatic
-        private val keyBinds = ArrayList<KeyBind>()
-
-        @JvmStatic
-        fun clearKeyBinds() {
-            keyBinds.forEach {
-                if (!it.isCustom) return
-                Client.getMinecraft().gameSettings.keyBindings =
-                    ArrayUtils.removeElement(Client.getMinecraft().gameSettings.keyBindings, it.keyBinding)
-            }
-        }
-    }
 }
