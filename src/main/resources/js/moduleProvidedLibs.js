@@ -3,73 +3,77 @@ let global = this;
 // Extra libs
 global.ArrayList = Java.type("java.util.ArrayList");
 global.HashMap = Java.type("java.util.HashMap");
-global.Keyboard = Java.type("org.lwjgl.input.Keyboard");
 global.ReflectionHelper = Java.type("net.minecraftforge.fml.relauncher.ReflectionHelper");
-
-// Triggers
-global.TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
-global.Priority = Java.type("com.chattriggers.ctjs.triggers.OnTrigger").Priority;
-//#if MC<=10809
-global.InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent").Action;
-//#else
-//$$ global.InteractAction = Java.type("com.chattriggers.ctjs.minecraft.listeners.ClientListener").INSTANCE.PlayerInteractAction;
-//#endif
+global.Keyboard = Java.type("org.lwjgl.input.Keyboard");
 
 // Libraries
 global.ChatLib = Java.type("com.chattriggers.ctjs.minecraft.libs.ChatLib");
 global.EventLib = Java.type("com.chattriggers.ctjs.minecraft.libs.EventLib");
-
-global.Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
-global.Shape = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Shape");
-global.Rectangle = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle");
-global.Text = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Text");
-global.Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
-
-global.Tessellator = Java.type("com.chattriggers.ctjs.minecraft.libs.Tessellator");
 global.FileLib = Java.type("com.chattriggers.ctjs.minecraft.libs.FileLib");
 global.MathLib = Java.type("com.chattriggers.ctjs.minecraft.libs.MathLib");
+global.Tessellator = Java.type("com.chattriggers.ctjs.minecraft.libs.Tessellator");
+
+global.Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
+global.Rectangle = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle");
+global.Renderer = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
+global.Shape = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Shape");
+global.Text = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Text");
 
 // Objects
+global.Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
+global.KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
+global.Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
+
 global.Display = Java.type("com.chattriggers.ctjs.engine.langs.js.JSDisplay");
 global.DisplayLine = Java.type("com.chattriggers.ctjs.engine.langs.js.JSDisplayLine");
 global.DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler");
+
 global.Gui = Java.type("com.chattriggers.ctjs.engine.langs.js.JSGui");
+global.GuiHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler");
+
 global.Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Message");
 global.TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.TextComponent");
-global.Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
-global.KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
-global.Image = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
-global.Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
 
 // Wrappers
 global.Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
-global.Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
-global.World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
-global.Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");
-global.Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory");
-global.TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
-global.Scoreboard = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Scoreboard");
 global.CPS = Java.type("com.chattriggers.ctjs.minecraft.wrappers.CPS");
-global.Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item");
-global.NBTBase = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTBase");
-global.NBTTagCompound = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound");
-global.NBTTagList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList");
+global.Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
+global.Scoreboard = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Scoreboard");
+global.Server = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Server");
+global.TabList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.TabList");
+global.World = Java.type("com.chattriggers.ctjs.minecraft.wrappers.World");
+
+global.Chunk = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk");
+global.Particle = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Particle");
+global.PotionEffect = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect");
+
 global.Block = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block");
 global.BlockFace = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace");
 global.BlockPos = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos");
 global.BlockType = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType");
 global.Sign = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Sign");
 global.Vec3i = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i");
+
 global.Entity = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity");
+global.EntityLivingBase = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.entity.EntityLivingBase");
 global.PlayerMP = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP");
+
+global.Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory");
+global.Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item");
+
 global.Action = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action");
 global.ClickAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction");
 global.DragAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction");
 global.DropAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction");
 global.KeyAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.KeyAction");
-global.Particle = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.Particle");
+
+global.NBTBase = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTBase");
+global.NBTTagCompound = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound");
+global.NBTTagList = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList");
 
 // Triggers
+global.TriggerRegister = Java.type("com.chattriggers.ctjs.engine.langs.js.JSRegister").INSTANCE;
+
 global.OnChatTrigger = Java.type("com.chattriggers.ctjs.triggers.OnChatTrigger");
 global.OnCommandTrigger = Java.type("com.chattriggers.ctjs.triggers.OnCommandTrigger");
 global.OnRegularTrigger = Java.type("com.chattriggers.ctjs.triggers.OnRegularTrigger");
@@ -77,6 +81,12 @@ global.OnRenderTrigger = Java.type("com.chattriggers.ctjs.triggers.OnRenderTrigg
 global.OnSoundPlayTrigger = Java.type("com.chattriggers.ctjs.triggers.OnSoundPlayTrigger");
 global.OnStepTrigger = Java.type("com.chattriggers.ctjs.triggers.OnStepTrigger");
 global.OnTrigger = Java.type("com.chattriggers.ctjs.triggers.OnTrigger");
+global.Priority = OnTrigger.Priority;
+//#if MC<=10809
+global.InteractAction = Java.type("net.minecraftforge.event.entity.player.PlayerInteractEvent").Action;
+//#else
+//$$ global.InteractAction = Java.type("com.chattriggers.ctjs.minecraft.listeners.ClientListener").INSTANCE.PlayerInteractAction;
+//#endif
 
 // Misc
 global.Config = Java.type("com.chattriggers.ctjs.utils.Config").INSTANCE;

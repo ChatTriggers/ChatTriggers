@@ -273,9 +273,9 @@ object Tessellator {
     @JvmStatic
     fun getRenderPos(x: Float, y: Float, z: Float): Vector3f {
         return Vector3f(
-            x - (Player.getPlayer()!!.lastTickPosX + (Player.getPlayer()!!.posX - Player.getPlayer()!!.lastTickPosX) * partialTicks).toFloat(),
-            y - (Player.getPlayer()!!.lastTickPosY + (Player.getPlayer()!!.posY - Player.getPlayer()!!.lastTickPosY) * partialTicks).toFloat(),
-            z - (Player.getPlayer()!!.lastTickPosZ + (Player.getPlayer()!!.posZ - Player.getPlayer()!!.lastTickPosZ) * partialTicks).toFloat()
+            x - Player.getRenderX().toFloat(),
+            y - Player.getRenderY().toFloat(),
+            z - Player.getRenderZ().toFloat()
         )
     }
 
