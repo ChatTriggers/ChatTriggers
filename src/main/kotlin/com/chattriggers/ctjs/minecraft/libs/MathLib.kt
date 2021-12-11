@@ -29,7 +29,7 @@ object MathLib {
      */
     @JvmStatic
     fun clampFloat(number: Float, min: Float, max: Float): Float {
-        return if (number < min) min else if (number > max) max else number
+        return number.coerceIn(min, max)
     }
 
     /**
@@ -42,6 +42,6 @@ object MathLib {
      */
     @JvmStatic
     fun clamp(number: Int, min: Int, max: Int): Int {
-        return if (number < min) min else if (number > max) max else number
+        return number.coerceIn(min, max)
     }
 }
