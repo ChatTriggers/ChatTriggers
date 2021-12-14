@@ -71,8 +71,8 @@ open class EntityLivingBase(val entityLivingBase: MCEntityLivingBase) : Entity(e
     fun isPotionActive(potion: Potion) = entityLivingBase.isPotionActive(potion)
 
     override fun toString(): String {
-        return "EntityLivingBase{name:" + getName() +
-                ",entity:" + super.toString() +
+        return "EntityLivingBase{name=" + getName() +
+                ", entity=" + super.toString() +
                 "}"
     }
 }
