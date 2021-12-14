@@ -12,15 +12,14 @@ import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.item.ItemStack
 import net.minecraft.network.Packet
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.event.DrawBlockHighlightEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.client.event.GuiScreenEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.event.entity.item.ItemTossEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -245,18 +244,32 @@ object ClientListener {
         return event.isCancelled()
     }
 
-    fun onDropItem(player: EntityPlayer, item: ItemStack?): Boolean {
-        if (player !is EntityPlayerMP) return false
+    @SubscribeEvent
+    fun onDropItem(event: ItemTossEvent) {
+        val item = event.entityItem
 
-        val event = CancellableEvent()
-
-        TriggerType.DropItem.triggerAll(
-            Item(item),
-            PlayerMP(player),
-            event
+        val position = Vector3f(
+            item.posX.toFloat(),
+            item.posY.toFloat(),
+            item.posZ.toFloat()
+        )
+        val motion = Vector3f(
+            item.motionX.toFloat(),
+            item.motionY.toFloat(),
+            item.motionZ.toFloat()
         )
 
-        return event.isCancelled()
+        TriggerType.DropItem.triggerAll(
+            //#if MC<=10809
+            Item(item),
+            //#else
+            //$$ Item(item.item),
+            //#endif
+            PlayerMP(event.player),
+            position,
+            motion,
+            event
+        )
     }
 
     @SubscribeEvent

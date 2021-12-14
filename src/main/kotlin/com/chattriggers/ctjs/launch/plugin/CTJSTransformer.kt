@@ -27,7 +27,6 @@ class CTJSTransformer : BaseClassTransformer() {
 
         try {
             injectCrashReport()
-            injectEntityPlayer()
             injectGuiMainMenu()
             injectMinecraft()
             injectScreenshotHelper()
