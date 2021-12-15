@@ -111,6 +111,7 @@ jar {
     }
 
     manifest.attributes(
+        "FMLCorePlugin": "dev.falsehonesty.asmhelper.core.AsmHelperLoadingPlugin",
         "FMLCorePluginContainsFMLMod": "true",
         "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
         "FMLAT": "ctjs_at.cfg"
