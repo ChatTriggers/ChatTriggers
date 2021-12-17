@@ -63,12 +63,24 @@ class Console(val loader: ILoader?) {
                         history.add(command)
                         historyOffset = 0
 
-                        taos.println("eval> ${command.prependIndent("    > ").substring(6)}")
+                        if (command == "help") {
+                            taos.println("""
+                                -------------- ChatTriggers Console Help --------------
+                                 Shortcuts:
+                                  Control + Enter: Run code in the textbox
+                                  Control + UP / DOWN: Cycle between ran code history
+                                  Control + L: Clear console
+                                  Control + R: Reload ChatTriggers
+                                -------------------------------------------------------
+                            """.trimIndent())
+                        } else {
+                            taos.println("eval> ${command.prependIndent("    > ").substring(6)}")
 
-                        try {
-                            taos.println(loader?.eval(command) ?: return)
-                        } catch (e: Throwable) {
-                            printStackTrace(e)
+                            try {
+                                taos.println(loader?.eval(command) ?: return)
+                            } catch (e: Throwable) {
+                                printStackTrace(e)
+                            }
                         }
                     }
 
@@ -99,6 +111,10 @@ class Console(val loader: ILoader?) {
 
                     KeyEvent.VK_L -> {
                         clearConsole()
+                    }
+
+                    KeyEvent.VK_R -> {
+                        Reference.loadCT()
                     }
                 }
             }
