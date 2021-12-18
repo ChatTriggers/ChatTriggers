@@ -2,8 +2,6 @@ package com.chattriggers.ctjs.engine.module
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
-import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
@@ -17,24 +15,25 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
-object ModuleUpdater {
+object ModuleImporter {
+    val installedModules = mutableListOf<Module>()
+
     fun importPendingModules() {
-        val toDownload = File(modulesFolder, ".to_download.txt")
-        if (!toDownload.exists()) return
+        if (!Config.pendingDownloadFile.exists()) return
 
-        toDownload.readText().split(",").filter(String::isBlank).forEach(::importModule)
+        Config.pendingDownloadFile.readText().split(",").filter(String::isBlank).forEach(::importModule)
 
-        toDownload.delete()
+        Config.pendingDownloadFile.delete()
     }
 
     fun updateModule(module: Module) {
-        if (!Config.autoUpdateModules) return
-
         val metadata = module.metadata
 
-        try {
-            if (metadata.name == null) return
+        if (!Config.autoUpdateModules || metadata.name == null)
+            return
 
+
+        try {
             "Checking for update in ${metadata.name}".printToConsole()
 
             val url = "${CTJS.WEBSITE_ROOT}/api/modules/${metadata.name}/metadata?modVersion=${Reference.MODVERSION}"
@@ -70,36 +69,34 @@ object ModuleUpdater {
     }
 
     fun importModule(moduleName: String): List<Module> {
-        if (cachedModules.any { it.name == moduleName }) return emptyList()
+        if (installedModules.any { it.name == moduleName }) return emptyList()
 
         val realName = downloadModule(moduleName) ?: return emptyList()
 
-        val moduleDir = File(modulesFolder, realName)
+        val moduleDir = File(Config.modulesFolder, realName)
         val module = ModuleManager.parseModule(moduleDir)
 
-        cachedModules.add(module)
+        installedModules.add(module)
 
-        return listOf(module) + (module.metadata.requires?.map(ModuleUpdater::importModule)?.flatten() ?: emptyList())
+        return listOf(module) + (module.metadata.requires?.map(ModuleImporter::importModule)?.flatten() ?: emptyList())
     }
 
     private fun downloadModule(name: String): String? {
-        val downloadZip = File(modulesFolder, "currDownload.zip")
-
         try {
             val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
             val connection = URL(url).openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
-            FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
-            FileSystems.newFileSystem(downloadZip.toPath(), null).use {
+            FileUtils.copyInputStreamToFile(connection.getInputStream(), Config.pendingDownloadZip)
+            FileSystems.newFileSystem(Config.pendingDownloadZip.toPath(), null).use {
                 val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
                 if (!rootFolder.hasNext()) throw Exception("Too small")
                 val moduleFolder = rootFolder.next()
                 if (rootFolder.hasNext()) throw Exception("Too big")
 
                 val realName = moduleFolder.fileName.toString().trimEnd(File.separatorChar)
-                File(modulesFolder, realName).apply { mkdir() }
+                File(Config.modulesFolder, realName).apply { mkdir() }
                 Files.walk(moduleFolder).forEach { path ->
-                    val resolvedPath = Paths.get(modulesFolder.toString(), path.toString())
+                    val resolvedPath = Paths.get(Config.modulesFolder.toString(), path.toString())
                     if (Files.isDirectory(resolvedPath)) {
                         return@forEach
                     }
@@ -110,7 +107,7 @@ object ModuleUpdater {
         } catch (exception: Exception) {
             exception.printTraceToConsole()
         } finally {
-            downloadZip.delete()
+            Config.pendingDownloadZip.delete()
         }
 
         return null

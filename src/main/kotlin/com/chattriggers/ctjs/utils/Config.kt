@@ -4,8 +4,12 @@ import com.chattriggers.ctjs.CTJS
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.awt.Color
 import java.io.File
+import java.nio.file.Files
+import kotlin.reflect.jvm.javaField
 
 object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml")) {
     @Property(
@@ -14,7 +18,7 @@ object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml")) {
         category = "General",
         description = "Folder where CT modules are stored",
     )
-    var modulesFolder: String = "./config/ChatTriggers/modules"
+    var modulesFolderPath: String = "./config/ChatTriggers/modules"
 
     @Property(
         PropertyType.SWITCH,
@@ -122,4 +126,18 @@ object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml")) {
         category = "Console",
     )
     var consoleBackgroundColor = Color(21, 21, 21)
+
+    var modulesFolder = File(modulesFolderPath)
+    var pendingDownloadFile = File(modulesFolder, ".to_download.txt")
+    var pendingDownloadZip = File(modulesFolder, "currDownload.zip")
+
+    init {
+        registerListener(::modulesFolderPath.javaField!!) { path: String ->
+            Files.move(modulesFolder.toPath(), File(path).toPath())
+
+            modulesFolder = File(path)
+            pendingDownloadFile = File(modulesFolder, ".to_download.txt")
+            pendingDownloadZip = File(modulesFolder, "currDownload.zip")
+        }
+    }
 }

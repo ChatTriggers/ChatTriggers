@@ -17,39 +17,37 @@ import java.lang.invoke.MethodHandle
 object ModuleManager {
     private val loaders = listOf(JSLoader)
     val generalConsole = Console(null)
-    val cachedModules = mutableListOf<Module>()
-    val modulesFolder = File(Config.modulesFolder)
 
     fun setup() {
-        modulesFolder.mkdirs()
+        Config.modulesFolder.mkdirs()
 
         // Download pending modules
-        ModuleUpdater.importPendingModules()
+        ModuleImporter.importPendingModules()
 
         // Get existing modules
-        val installedModules = getFoldersInDir(modulesFolder).map(::parseModule).distinctBy {
+        val installedModules = getFoldersInDir(Config.modulesFolder).map(::parseModule).distinctBy {
             it.name.lowercase()
         }
 
         // Check if those modules have updates
-        installedModules.forEach(ModuleUpdater::updateModule)
-        cachedModules.addAll(installedModules)
+        installedModules.forEach(ModuleImporter::updateModule)
+        ModuleImporter.installedModules.addAll(installedModules)
 
         // Import required modules
         installedModules.asSequence().mapNotNull {
             it.metadata.requires
-        }.flatten().distinct().forEach(ModuleUpdater::importModule)
+        }.flatten().distinct().forEach(ModuleImporter::importModule)
 
         // Load their assets
-        loadAssets(cachedModules)
+        loadAssets(ModuleImporter.installedModules)
 
         // Normalize all metadata
-        cachedModules.forEach {
+        ModuleImporter.installedModules.forEach {
             it.metadata.entry = it.metadata.entry?.replace('/', File.separatorChar)?.replace('\\', File.separatorChar)
         }
 
         // Get all jars
-        val jars = cachedModules.map { module ->
+        val jars = ModuleImporter.installedModules.map { module ->
             module.folder.walk().filter {
                 it.isFile && it.extension == "jar"
             }.map {
@@ -72,7 +70,7 @@ object ModuleManager {
 
         // Load the modules
         loaders.forEach { loader ->
-            cachedModules.filter {
+            ModuleImporter.installedModules.filter {
                 File(it.folder, it.metadata.asmEntry ?: return@filter false).extension == loader.getLanguage().extension
             }.forEach {
                 loader.asmPass(it, File(it.folder, it.metadata.asmEntry!!).toURI())
@@ -80,7 +78,7 @@ object ModuleManager {
         }
     }
 
-    fun entryPass(modules: List<Module> = cachedModules, completionListener: (percentComplete: Float) -> Unit = {}) {
+    fun entryPass(modules: List<Module> = ModuleImporter.installedModules, completionListener: (percentComplete: Float) -> Unit = {}) {
         loaders.forEach(ILoader::entrySetup)
 
         val total = modules.count { it.metadata.entry != null }
@@ -101,7 +99,7 @@ object ModuleManager {
 
     fun asmInvokeLookup(moduleName: String, functionID: String): MethodHandle {
         // Find the targeted module
-        val module = cachedModules.first { it.name == moduleName }
+        val module = ModuleImporter.installedModules.first { it.name == moduleName }
 
         // Get the target function file from the metadata lookup table
         val funcPath = module.metadata.asmExposedFunctions?.get(functionID) ?: throw IllegalArgumentException(
@@ -139,7 +137,7 @@ object ModuleManager {
     }
 
     fun importModule(moduleName: String): Module? {
-        val newModules = ModuleUpdater.importModule(moduleName)
+        val newModules = ModuleImporter.importModule(moduleName)
 
         // Load their assets
         loadAssets(newModules)
@@ -157,9 +155,9 @@ object ModuleManager {
     }
 
     fun deleteModule(name: String): Boolean {
-        val module = cachedModules.find { it.name.lowercase() == name.lowercase() } ?: return false
+        val module = ModuleImporter.installedModules.find { it.name.lowercase() == name.lowercase() } ?: return false
 
-        val file = File(modulesFolder, module.name)
+        val file = File(Config.modulesFolder, module.name)
         if (!file.exists()) throw IllegalStateException("Expected module to have an existing folder!")
 
         if (file.deleteRecursively()) {
@@ -182,7 +180,7 @@ object ModuleManager {
     }
 
     fun teardown() {
-        cachedModules.clear()
+        ModuleImporter.installedModules.clear()
 
         loaders.forEach {
             it.clearTriggers()
