@@ -955,6 +955,24 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs after an entity is rendered
+     *
+     * Passes through three arguments:
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.Entity]
+     * - The position as a Vector3f
+     * - The partial ticks
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerPostRenderEntity(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs after the current screen is rendered
      *
      * Passes through three arguments:
