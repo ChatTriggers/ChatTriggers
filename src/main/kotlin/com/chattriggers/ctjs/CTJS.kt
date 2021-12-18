@@ -27,7 +27,7 @@ import java.io.File
     version = Reference.MODVERSION,
     clientSideOnly = true,
     modLanguage = "Kotlin",
-    modLanguageAdapter = "com.chattriggers.ctjs.utils.kotlin.KotlinAdapter"
+    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
 object CTJS {
     const val WEBSITE_ROOT = "https://www.chattriggers.com"
