@@ -11,7 +11,7 @@ jobs:
     name: Deploy Javadocs
     runs-on: "ubuntu-latest"
     if:
-      ${{ github.repository == 'ChatTrigers/ChatTriggers' }}
+      ${{ github.repository == 'ChatTriggers/ChatTriggers' }}
 
     steps:
       - uses: actions/checkout@v2
