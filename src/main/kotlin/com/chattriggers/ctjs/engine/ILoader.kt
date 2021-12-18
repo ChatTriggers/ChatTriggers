@@ -11,6 +11,9 @@ import java.lang.invoke.MethodHandle
 import java.net.URI
 import java.net.URL
 
+/**
+ * @suppress This is internal and should not show in userdocs
+ */
 interface ILoader {
     val console: Console
 
