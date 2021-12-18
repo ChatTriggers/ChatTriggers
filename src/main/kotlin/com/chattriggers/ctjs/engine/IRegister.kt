@@ -900,6 +900,38 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs whenever the player connects to a server
+     *
+     * Passes through one argument:
+     * - The event, which cannot be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerServerConnect(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs whenever the player disconnects from a server
+     *
+     * Passes through two arguments:
+     * - The event, which cannot be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerServerDisconnect(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.ServerDisconnect, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs whenever the user clicks on a clickable
      * chat component
      *

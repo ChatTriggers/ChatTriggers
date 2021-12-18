@@ -107,7 +107,14 @@ object ClientListener {
     }
 
     @SubscribeEvent
+    fun onClientDisconnect(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
+        TriggerType.ServerDisconnect.triggerAll(event)
+    }
+
+    @SubscribeEvent
     fun onNetworkEvent(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
+        TriggerType.ServerConnect.triggerAll(event)
+
         event.manager.channel().pipeline()
             .addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
                 override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {

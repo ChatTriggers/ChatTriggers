@@ -31,6 +31,8 @@ enum class TriggerType {
     ChatComponentHovered,
     PacketSent,
     PacketReceived,
+    ServerConnect,
+    ServerDisconnect,
 
     // rendering
     RenderWorld,
