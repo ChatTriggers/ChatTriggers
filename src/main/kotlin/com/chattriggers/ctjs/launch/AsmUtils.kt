@@ -5,7 +5,7 @@ import net.minecraft.crash.CrashReportCategory
 
 object AsmUtils {
     fun addCrashSectionCallable(crashReport: CrashReportCategory) {
-        crashReport.addCrashSectionCallable("ct.js modules") {
+        crashReport.addCrashSectionCallable("ChatTriggers modules") {
             ModuleManager.cachedModules.toString()
         }
     }

@@ -1,12 +1,12 @@
 # Migrating to 1.0.0
 
-1.0.0 is the newest version of ct.js, and with it comes a new JavaScript engine with a whole host of
+1.0.0 is the newest version of ChatTriggers, and with it comes a new JavaScript engine with a whole host of
 new features. Modules that were built in 0.18.4 will no longer work, so this file will answer
 any questions you might have about updating your modules from 0.18.4 to 1.0.0.
 
 ### What changed?
 
-0.18.4, as well as all previous versions of ct.js, used a JavaScript engine called 
+0.18.4, as well as all previous versions of ChatTriggers, used a JavaScript engine called 
 [Nashorn](https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)). Nashorn was built and maintained 
 by Oracle. This was fine initially, however with the release of Java 11, Nashorn has been officially
 deprecated and will be removed from the JDK at some point. Nashorn implements ES5, and considering 
@@ -15,7 +15,7 @@ the deprecation, will not support any of the newer ES6/ESNEXT features.
 In 1.0.0, we replaced Nashorn with an engine called 
 [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino). Created by Mozilla, Rhino
 has been fully open-source since its creation, and is still being maintained, albeit very slowly.
-In fact, ct.js actually contains our own custom build of Rhino, which supports most of the new
+In fact, ChatTriggers actually contains our own custom build of Rhino, which supports most of the new
 ES6 features, as well as many ESNEXT features. These features will all be discussed in a later section.
 Our custom build can be found [here](https://github.com/ChatTriggers/rhino/).
 
@@ -78,7 +78,7 @@ Take a look at the guide posted above for a complete list of all possible syntax
 
 ##### CT Changes
 
-There have also been a few changes with built in libraries that ct.js provides:
+There have also been a few changes with built in libraries that ChatTriggers provides:
 
 - Removed `XMLHttpRequest`; see the `request` module
 - Commands can trigger other client-side commands using a new optional parameter in `ChatLib.command`

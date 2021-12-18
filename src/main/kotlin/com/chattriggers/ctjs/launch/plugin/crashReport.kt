@@ -27,7 +27,7 @@ fun injectCrashReport() = inject {
 //        val theReportCategory = shadowField<CrashReportCategory>()
 //
 //        code {
-//            theReportCategory.addCrashSectionCallable("ct.js modules") {
+//            theReportCategory.addCrashSectionCallable("ChatTriggers modules") {
 //                ModuleManager.cachedModules.toString()
 //            }
 //        }
