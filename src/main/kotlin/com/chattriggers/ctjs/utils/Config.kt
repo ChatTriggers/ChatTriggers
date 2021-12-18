@@ -11,7 +11,7 @@ import java.io.File
 import java.nio.file.Files
 import kotlin.reflect.jvm.javaField
 
-object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml")) {
+object Config : Vigilant(File("./config/ChatTriggers.toml")) {
     @Property(
         PropertyType.TEXT,
         name = "Modules Folders",
@@ -128,16 +128,12 @@ object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml")) {
     var consoleBackgroundColor = Color(21, 21, 21)
 
     var modulesFolder = File(modulesFolderPath)
-    var pendingDownloadFile = File(modulesFolder, ".to_download.txt")
-    var pendingDownloadZip = File(modulesFolder, "currDownload.zip")
 
     init {
         registerListener(::modulesFolderPath.javaField!!) { path: String ->
             Files.move(modulesFolder.toPath(), File(path).toPath())
 
             modulesFolder = File(path)
-            pendingDownloadFile = File(modulesFolder, ".to_download.txt")
-            pendingDownloadZip = File(modulesFolder, "currDownload.zip")
         }
     }
 }

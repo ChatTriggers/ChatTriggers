@@ -32,8 +32,9 @@ import java.io.File
 object CTJS {
     const val WEBSITE_ROOT = "https://www.chattriggers.com"
     val gson = Gson()
-    val configLocation = File("./config")
-    val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
+    val configLocation = File("./config/ChatTriggers")
+    val tempDirectory = File(configLocation, "temp").apply { mkdirs() }
+    val assetsDir = File(configLocation, "images").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
 
     @Mod.EventHandler

@@ -78,38 +78,83 @@ object ModuleImporter {
 
         installedModules.add(module)
 
-        return listOf(module) + (module.metadata.requires?.map(ModuleImporter::importModule)?.flatten() ?: emptyList())
+        return listOf(module) + (module.metadata.requires?.flatMap(ModuleImporter::importModule) ?: emptyList())
     }
 
     private fun downloadModule(name: String): String? {
-        try {
-            val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
-            val connection = URL(url).openConnection()
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0")
-            FileUtils.copyInputStreamToFile(connection.getInputStream(), Config.pendingDownloadZip)
-            FileSystems.newFileSystem(Config.pendingDownloadZip.toPath(), null).use {
-                val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
-                if (!rootFolder.hasNext()) throw Exception("Too small")
-                val moduleFolder = rootFolder.next()
-                if (rootFolder.hasNext()) throw Exception("Too big")
-
-                val realName = moduleFolder.fileName.toString().trimEnd(File.separatorChar)
-                File(Config.modulesFolder, realName).apply { mkdir() }
-                Files.walk(moduleFolder).forEach { path ->
-                    val resolvedPath = Paths.get(Config.modulesFolder.toString(), path.toString())
-                    if (Files.isDirectory(resolvedPath)) {
-                        return@forEach
-                    }
-                    Files.copy(path, resolvedPath, StandardCopyOption.REPLACE_EXISTING)
-                }
-                return realName
-            }
-        } catch (exception: Exception) {
-            exception.printTraceToConsole()
-        } finally {
-            Config.pendingDownloadZip.delete()
-        }
+        // try {
+        //     val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
+        //     val connection = URL(url).openConnection()
+        //     connection.setRequestProperty("User-Agent", "Mozilla/5.0")
+        //     FileUtils.copyInputStreamToFile(connection.getInputStream(), Config.pendingDownloadZip)
+        //     FileSystems.newFileSystem(Config.pendingDownloadZip.toPath(), null).use {
+        //         val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
+        //         if (!rootFolder.hasNext()) throw Exception("Too small")
+        //         val moduleFolder = rootFolder.next()
+        //         if (rootFolder.hasNext()) throw Exception("Too big")
+        //
+        //         val realName = moduleFolder.fileName.toString().trimEnd(File.separatorChar)
+        //         File(Config.modulesFolder, realName).apply { mkdir() }
+        //         Files.walk(moduleFolder).forEach { path ->
+        //             val resolvedPath = Paths.get(Config.modulesFolder.toString(), path.toString())
+        //             if (Files.isDirectory(resolvedPath)) {
+        //                 return@forEach
+        //             }
+        //             Files.copy(path, resolvedPath, StandardCopyOption.REPLACE_EXISTING)
+        //         }
+        //         return realName
+        //     }
+        // } catch (exception: Exception) {
+        //     exception.printTraceToConsole()
+        // } finally {
+        //     Config.pendingDownloadZip.delete()
+        // }
 
         return null
     }
+
+    private val forcedImports = mutableSetOf<String>()
+    private var zipFile: File? = null
+    private var dependencies: MutableList<>
+
+    fun addForcedImport(name: String) {
+        forcedImports.add(name)
+    }
+
+
+    // fun import(name: String): List<Module> {
+    //     if (installedModules.any { it.name == name })
+    //         return emptyList()
+    //
+    //     try {
+    //         val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
+    //         val connection = URL(url).openConnection()
+    //         connection.setRequestProperty("User-Agent", "Mozilla/5.0")
+    //         FileUtils.copyInputStreamToFile(connection.getInputStream(), pendingDownloadZip)
+    //         FileSystems.newFileSystem(pendingDownloadZip.toPath(), null).use {
+    //             val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
+    //             if (!rootFolder.hasNext()) throw Exception("Too small")
+    //             val moduleFolder = rootFolder.next()
+    //             if (rootFolder.hasNext()) throw Exception("Too big")
+    //
+    //             val realName = moduleFolder.fileName.toString().trimEnd(File.separatorChar)
+    //             File(Config.modulesFolder, realName).apply { mkdir() }
+    //             Files.walk(moduleFolder).forEach { path ->
+    //                 val resolvedPath = Paths.get(Config.modulesFolder.toString(), path.toString())
+    //                 if (Files.isDirectory(resolvedPath)) {
+    //                     return@forEach
+    //                 }
+    //                 Files.copy(path, resolvedPath, StandardCopyOption.REPLACE_EXISTING)
+    //             }
+    //             return realName
+    //         }
+    //     } catch (exception: Exception) {
+    //         exception.printTraceToConsole()
+    //     } finally {
+    //         pendingDownloadZip.delete()
+    //     }
+    //
+    //     return null
+    // }
+
 }
