@@ -6,7 +6,7 @@ buildscript {
 
     project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
     ext.kotlin_version = "1.6.0"
-    ext.dokka_version = "0.10.1"
+    ext.dokka_version = "1.6.0"
 
     repositories {
         mavenCentral()
@@ -141,16 +141,28 @@ task userdocs(type: DokkaTask) {
     description = "Generate the docs to be used by scripters, excludes internal classes"
     group = "documentation"
 
-    outputFormat = "javadoc"
-    outputDirectory = "$buildDir/javadoc"
+    outputDirectory.set(file("$buildDir/javadoc"))
 
-    configuration {
-        jdkVersion = 8
+    suppressInheritedMembers.set(true)
 
-        for (def pkg : ["engine.langs", "engine.loader", "engine.module", "utils", "listeners", "loader", "launch", "commands", "minecraft.wrappers.objects.threading"]) {
-            perPackageOption {
-                prefix = "com.chattriggers.ctjs.$pkg"
-                suppress = true
+    configure {
+        dokkaSourceSets {
+            main {
+                jdkVersion.set(8)
+
+                for (def pkg : ["engine.langs", "engine.loader", "engine.module", "utils", "listeners", "loader", "launch", "commands", "minecraft.wrappers.objects.threading"]) {
+                    perPackageOption {
+                        matchingRegex.set("${"com.chattriggers.ctjs.$pkg".replace(".", "\\.")}(\$|\\.).*")
+                        suppress.set(true)
+                    }
+                }
+
+                sourceLink {
+                    localDirectory.set(file("src/main/kotlin"))
+                    remoteUrl.set(new URL(
+                        "https://github.com/ChatTriggers/ChatTriggers/tree/master/src/main/kotlin"))
+                    remoteLineSuffix.set("#L")
+                }
             }
         }
     }
