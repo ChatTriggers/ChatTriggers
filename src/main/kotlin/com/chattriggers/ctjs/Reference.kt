@@ -23,7 +23,7 @@ import kotlin.math.roundToInt
 
 @External
 object Reference {
-    const val MODID = "ct.js"
+    const val MODID = "chattriggers"
     const val MODNAME = "ChatTriggers"
     const val MODVERSION = "2.0.0"
 
@@ -59,7 +59,7 @@ object Reference {
         Client.getMinecraft().gameSettings.saveOptions()
         unloadCT(false)
 
-        ChatLib.chat("&cReloading ct.js scripts...")
+        ChatLib.chat("&cReloading ChatTriggers scripts...")
 
         printLoadCompletionStatus(0f)
 

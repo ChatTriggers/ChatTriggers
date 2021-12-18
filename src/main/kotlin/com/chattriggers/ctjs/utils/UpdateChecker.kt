@@ -63,7 +63,7 @@ object UpdateChecker {
             "\n",
             TextComponent("&a[Download]").setClick("open_url", "${CTJS.WEBSITE_ROOT}/#download"),
             " ",
-            TextComponent("&e[Changelog]").setClick("open_url", "https://github.com/ChatTriggers/ct.js/releases"),
+            TextComponent("&e[Changelog]").setClick("open_url", "https://github.com/ChatTriggers/ChatTriggers/releases"),
             "\n",
             "&c&m" + ChatLib.getChatBreak("-")
         ).chat()

@@ -63,7 +63,7 @@ The [ChatTriggers website](https://www.chattriggers.com/) will always be kept up
 Any major features are moved to separate branches before being merged into master. This will avoid the issue of waiting after a release to fix bugs when we want to be working on new features. Any contributors will have to abide by the same standard. New features get their own branch and bug fixes require a pull request on the master branch.
 
 # Issues
-Any issue can be opened using the normal [GitHub issue page](https://github.com/ChatTriggers/ct.js/issues). Issues can be anything from bug reports to feature requests. For us to consider an issue to be valid, it needs a simple but effective title that conveys the problem in a few words and a well thought out and well written description.
+Any issue can be opened using the normal [GitHub issue page](https://github.com/ChatTriggers/ChatTriggers/issues). Issues can be anything from bug reports to feature requests. For us to consider an issue to be valid, it needs a simple but effective title that conveys the problem in a few words and a well thought out and well written description.
 ### Bug Report
 - Should be reproducible
 - Needs a step by step guide on how to reproduce
