@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 @External
 object DisplayHandler {
-    private var displays = CopyOnWriteArrayList<Display>()
+    private val displays = CopyOnWriteArrayList<Display>()
 
     init {
         MinecraftForge.EVENT_BUS.register(this)
