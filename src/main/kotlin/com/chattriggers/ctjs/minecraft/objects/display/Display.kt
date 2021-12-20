@@ -12,19 +12,19 @@ abstract class Display {
     private var renderX = 0f
     private var renderY = 0f
     private var shouldRender = true
+    private var order = DisplayHandler.Order.DOWN
 
     private var backgroundColor: Long = 0x50000000
     private var textColor: Long = 0xffffffff
-
     private var background = DisplayHandler.Background.NONE
     private var align = DisplayHandler.Align.LEFT
-    private var order = DisplayHandler.Order.DOWN
 
     private var minWidth = 0f
     private var width = 0f
     private var height = 0f
 
     constructor() {
+        @Suppress("LeakingThis")
         DisplayHandler.registerDisplay(this)
     }
 
@@ -33,21 +33,20 @@ abstract class Display {
         renderX = config.getOption("renderX", 0).toFloat()
         renderY = config.getOption("renderY", 0).toFloat()
 
-        backgroundColor = config.getOption("backgroundColor", 0x50000000).toLong()
-        textColor = config.getOption("textColor", 0xffffffff).toLong()
-
+        setBackgroundColor(config.getOption("backgroundColor", 0x50000000).toLong())
         setBackground(config.getOption("background", DisplayHandler.Background.NONE))
+        setTextColor(config.getOption("textColor", 0xffffffff).toLong())
         setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
         setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
 
         minWidth = config.getOption("minWidth", 0f).toFloat()
 
+        @Suppress("LeakingThis")
         DisplayHandler.registerDisplay(this)
     }
 
     private fun NativeObject?.getOption(key: String, default: Any): String {
-        if (this == null) return default.toString()
-        return getOrDefault(key, default).toString()
+        return (this?.get(key) ?: default).toString()
     }
 
     fun getBackgroundColor(): Long = backgroundColor
@@ -93,7 +92,9 @@ abstract class Display {
     }
 
     fun setLine(index: Int, line: Any) = apply {
-        while (lines.size - 1 < index) lines.add(createDisplayLine(""))
+        while (lines.size - 1 < index)
+            lines.add(createDisplayLine(""))
+
         lines[index] = when (line) {
             is String -> createDisplayLine(line)
             is DisplayLine -> line
@@ -117,20 +118,19 @@ abstract class Display {
             else -> createDisplayLine("")
         }
 
-        if (index == -1) lines.add(toAdd)
-        else lines.add(index, toAdd)
+        if (index == -1) {
+            lines.add(toAdd)
+        } else lines.add(index, toAdd)
     }
 
     fun addLines(vararg lines: Any) = apply {
-        lines.forEach {
-            this.lines.add(
-                when (it) {
-                    is String -> createDisplayLine(it)
-                    is DisplayLine -> it
-                    else -> createDisplayLine("")
-                }
-            )
-        }
+        this.lines.addAll(lines.map {
+            when (it) {
+                is String -> createDisplayLine(it)
+                is DisplayLine -> it
+                else -> createDisplayLine("")
+            }
+        })
     }
 
     fun clearLines() = apply {
@@ -171,19 +171,15 @@ abstract class Display {
     }
 
     fun render() {
-        if (!shouldRender) return
+        if (!shouldRender)
+            return
 
-        var maxWidth = minWidth
-        lines.forEach {
-            if (it.getTextWidth() > maxWidth)
-                maxWidth = it.getTextWidth()
-        }
-
-        width = maxWidth
+        width = lines.maxOfOrNull { it.getTextWidth() }?.coerceAtLeast(minWidth) ?: minWidth
 
         var i = 0f
         lines.forEach {
-            drawLine(it, renderX, renderY + (i * 10), maxWidth)
+            it.draw(renderX, renderY + (i * 10), width, background, backgroundColor, textColor, align)
+
             when (order) {
                 DisplayHandler.Order.DOWN -> i += it.getText().getScale()
                 DisplayHandler.Order.UP -> i -= it.getText().getScale()
@@ -191,35 +187,6 @@ abstract class Display {
         }
 
         height = i * 10
-    }
-
-    private fun drawLine(line: DisplayLine, x: Float, y: Float, maxWidth: Float) {
-        when (align) {
-            DisplayHandler.Align.LEFT -> line.drawLeft(
-                x,
-                y,
-                maxWidth,
-                background,
-                backgroundColor,
-                textColor
-            )
-            DisplayHandler.Align.RIGHT -> line.drawRight(
-                x,
-                y,
-                maxWidth,
-                background,
-                backgroundColor,
-                textColor
-            )
-            DisplayHandler.Align.CENTER -> line.drawCenter(
-                x,
-                y,
-                maxWidth,
-                background,
-                backgroundColor,
-                textColor
-            )
-        }
     }
 
     internal abstract fun createDisplayLine(text: String): DisplayLine
