@@ -3,14 +3,13 @@ package com.chattriggers.ctjs.minecraft.objects.display
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
+import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
-import org.lwjgl.input.Mouse
-import org.lwjgl.util.vector.Vector2f
 import org.mozilla.javascript.NativeObject
 
 @External
@@ -29,8 +28,10 @@ abstract class DisplayLine {
     private var onHovered: OnTrigger? = null
     private var onDragged: OnTrigger? = null
 
-    private val mouseState = Array(5) { false }
-    private val draggedState = mutableMapOf<Int, Vector2f>()
+    private var cachedX = 0.0
+    private var cachedY = 0.0
+    private var cachedWidth = 0.0
+    private var cachedHeight = 0.0
 
     constructor(text: String) {
         setText(text)
@@ -48,6 +49,17 @@ abstract class DisplayLine {
 
     private fun NativeObject?.getOption(key: String, default: Any?): String? {
         return (this?.get(key) ?: default)?.toString()
+    }
+
+    init {
+        MouseListener.registerClickListener { x, y, button, pressed ->
+            if (x in cachedX..cachedX + cachedWidth && y in cachedY..cachedY + cachedHeight)
+                onClicked?.trigger(arrayOf(x, y, button, pressed))
+        }
+
+        MouseListener.registerDraggedListener { deltaX, deltaY, x, y, button ->
+            onDragged?.trigger(arrayOf(deltaX, deltaY, x, y, button))
+        }
     }
 
     fun getText(): Text = text
@@ -113,72 +125,6 @@ abstract class DisplayLine {
         onDragged
     }
 
-    private fun handleInput(x: Float, y: Float, width: Float, height: Float) {
-        if (!Mouse.isCreated())
-            return
-
-        for (button in 0..5)
-            handleDragged(button)
-
-        if (Client.getMouseX() > x && Client.getMouseX() < x + width
-            && Client.getMouseY() > y && Client.getMouseY() < y + height
-        ) {
-            handleHovered()
-
-            for (button in 0..5) {
-                if (Mouse.isButtonDown(button) == mouseState[button])
-                    continue
-
-                handleClicked(button)
-                mouseState[button] = Mouse.isButtonDown(button)
-                if (Mouse.isButtonDown(button))
-                    draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
-            }
-        }
-
-        for (button in 0..5) {
-            if (Mouse.isButtonDown(button))
-                continue
-            if (!draggedState.containsKey(button))
-                continue
-            draggedState.remove(button)
-        }
-    }
-
-    private fun handleClicked(button: Int) {
-        onClicked?.trigger(arrayOf(
-            Client.getMouseX(),
-            Client.getMouseY(),
-            button,
-            Mouse.isButtonDown(button)
-        ))
-    }
-
-    private fun handleHovered() {
-        onHovered?.trigger(arrayOf(
-            Client.getMouseX(),
-            Client.getMouseY()
-        ))
-    }
-
-    private fun handleDragged(button: Int) {
-        if (onDragged == null)
-            return
-
-        if (!draggedState.containsKey(button))
-            return
-
-        onDragged?.trigger(arrayOf(
-            Client.getMouseX() - draggedState.getValue(button).x,
-            Client.getMouseY() - draggedState.getValue(button).y,
-            Client.getMouseX(),
-            Client.getMouseY(),
-            button
-        ))
-
-        draggedState[button] = Vector2f(Client.getMouseX(), Client.getMouseY())
-    }
-
     fun draw(
         x: Float,
         y: Float,
@@ -216,7 +162,19 @@ abstract class DisplayLine {
 
         text.setX(xOffset).setY(y).setColor(textColor).draw()
 
-        handleInput(xOffset - 1, y - 1, textWidth + 2, 10 * text.getScale())
+        cachedX = xOffset - 1.0
+        cachedY = y - 1.0
+        cachedWidth = textWidth + 2.0
+        cachedHeight = 10.0 * text.getScale()
+
+        if (Client.getMouseX() > x && Client.getMouseX() < x + cachedWidth
+            && Client.getMouseY() > y && Client.getMouseY() < y + cachedHeight
+        ) {
+            onHovered?.trigger(arrayOf(
+                Client.getMouseX(),
+                Client.getMouseY()
+            ))
+        }
     }
 
     internal abstract fun getLoader(): ILoader

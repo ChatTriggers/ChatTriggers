@@ -8,14 +8,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 
 @External
 object GuiHandler {
-    private val GUIs = mutableMapOf<GuiScreen, Int>()
+    private var pendingGui: GuiScreen? = null
 
     fun openGui(gui: GuiScreen) {
-        GUIs[gui] = 1
-    }
-
-    fun clearGuis() {
-        GUIs.clear()
+        pendingGui = gui
     }
 
     @SubscribeEvent
@@ -23,17 +19,9 @@ object GuiHandler {
         if (event.phase == TickEvent.Phase.END)
             return
 
-        GUIs.forEach {
-            if (it.value == 0) {
-                Client.getMinecraft().displayGuiScreen(it.key)
-                GUIs[it.key] = -1
-            } else {
-                GUIs[it.key] = 0
-            }
-        }
-
-        GUIs.entries.removeIf {
-            it.value == -1
+        if (pendingGui != null) {
+            Client.getMinecraft().displayGuiScreen(pendingGui!!)
+            pendingGui = null
         }
     }
 }

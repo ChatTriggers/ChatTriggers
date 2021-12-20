@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
-import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
@@ -25,25 +24,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
-import org.lwjgl.input.Mouse
 import org.lwjgl.util.vector.Vector3f
 import org.mozilla.javascript.Context
 
 object ClientListener {
     private var ticksPassed: Int = 0
-    private val mouseState: MutableMap<Int, Boolean>
-    private val draggedState: MutableMap<Int, State>
-
-    class State(val x: Float, val y: Float)
 
     init {
         ticksPassed = 0
-
-        mouseState = mutableMapOf()
-        draggedState = mutableMapOf()
-
-        for (i in 0..4)
-            mouseState[i] = false
     }
 
     @SubscribeEvent
@@ -55,55 +43,6 @@ object ClientListener {
         ticksPassed++
 
         Scoreboard.resetCache()
-    }
-
-    private fun handleMouseInput() {
-        if (!Mouse.isCreated()) return
-
-        val scroll = Mouse.getEventDWheel()
-
-        when {
-            scroll > 0 -> TriggerType.Scrolled.triggerAll(Client.getMouseX(), Client.getMouseY(), 1)
-            scroll < 0 -> TriggerType.Scrolled.triggerAll(Client.getMouseX(), Client.getMouseY(), -1)
-        }
-
-        for (button in 0..4) {
-            handleDragged(button)
-
-            // normal clicked
-            if (Mouse.isButtonDown(button) == mouseState[button]) continue
-
-            TriggerType.Clicked.triggerAll(
-                Client.getMouseX(),
-                Client.getMouseY(),
-                button,
-                Mouse.isButtonDown(button)
-            )
-
-            mouseState[button] = Mouse.isButtonDown(button)
-
-            // add new dragged
-            if (Mouse.isButtonDown(button))
-                draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
-            else if (draggedState.containsKey(button))
-                draggedState.remove(button)
-        }
-    }
-
-    private fun handleDragged(button: Int) {
-        if (button !in draggedState)
-            return
-
-        TriggerType.Dragged.triggerAll(
-            Client.getMouseX() - (draggedState[button]?.x ?: 0f),
-            Client.getMouseY() - (draggedState[button]?.y ?: 0f),
-            Client.getMouseX(),
-            Client.getMouseY(),
-            button
-        )
-
-        // update dragged
-        draggedState[button] = State(Client.getMouseX(), Client.getMouseY())
     }
 
     @SubscribeEvent
@@ -170,7 +109,7 @@ object ClientListener {
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
             return
 
-        handleMouseInput()
+        MouseListener.process()
     }
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
