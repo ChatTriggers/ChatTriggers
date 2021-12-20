@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
@@ -42,7 +41,7 @@ object CPS {
 
     @SubscribeEvent
     fun click(event: MouseEvent) {
-        if (EventLib.getButtonState(event)) {
+        if (event.buttonstate) {
             when (event.button) {
                 0 -> leftClicks.add(20)
                 1 -> rightClicks.add(20)

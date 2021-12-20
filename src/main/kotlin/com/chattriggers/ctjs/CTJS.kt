@@ -3,7 +3,6 @@ package com.chattriggers.ctjs
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
-import com.chattriggers.ctjs.minecraft.listeners.ChatListener
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
@@ -40,7 +39,6 @@ object CTJS {
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
         listOf(
-            ChatListener,
             WorldListener,
             CPS,
             GuiHandler,

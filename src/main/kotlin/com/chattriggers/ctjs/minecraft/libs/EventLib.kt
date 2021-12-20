@@ -12,15 +12,6 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent
 @External
 object EventLib {
     @JvmStatic
-    fun getButtonState(event: MouseEvent): Boolean {
-        //#if MC<=10809
-        return event.buttonstate
-        //#else
-        //$$ return event.isButtonstate
-        //#endif
-    }
-
-    @JvmStatic
     fun getType(event: ClientChatReceivedEvent): Int {
         //#if MC<=10809
         return event.type.toInt()
@@ -37,11 +28,6 @@ object EventLib {
     @JvmStatic
     fun getName(event: PlaySoundEvent): String {
         return event.name
-    }
-
-    @JvmStatic
-    fun getModId(event: ConfigChangedEvent.OnConfigChangedEvent): String {
-        return event.modID
     }
 
     /**
