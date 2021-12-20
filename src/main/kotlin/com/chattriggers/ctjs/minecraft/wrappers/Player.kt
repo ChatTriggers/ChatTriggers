@@ -266,7 +266,7 @@ object Player {
     }
 
     @JvmStatic
-    fun getHeldItem(): Item = Item(getPlayer()?.inventory?.getCurrentItem())
+    fun getHeldItem(): Item? = getPlayer()?.inventory?.getCurrentItem()?.let(::Item)
 
     @JvmStatic
     fun setHeldItemIndex(index: Int) {
@@ -290,7 +290,9 @@ object Player {
      * @return the display name
      */
     @JvmStatic
-    fun getDisplayName(): TextComponent = TextComponent(getPlayerName(getPlayerInfo()))
+    fun getDisplayName(): TextComponent = getPlayerInfo()?.let {
+        TextComponent(getPlayerName(it))
+    } ?: TextComponent(getName())
 
     /**
      * Sets the name for this player shown in tab list
@@ -299,7 +301,7 @@ object Player {
      */
     @JvmStatic
     fun setTabDisplayName(textComponent: TextComponent) {
-        getPlayerInfo().displayName = textComponent.chatComponentText
+        getPlayerInfo()?.displayName = textComponent.chatComponentText
     }
 
     @JvmStatic
@@ -310,7 +312,7 @@ object Player {
             ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.playerTeam, networkPlayerInfoIn.gameProfile.name)
     }
 
-    private fun getPlayerInfo(): NetworkPlayerInfo = Client.getConnection().getPlayerInfo(getPlayer()!!.uniqueID)
+    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(getPlayer()!!.uniqueID)
 
     /**
      * Gets the inventory the user currently has open, i.e. a chest.
