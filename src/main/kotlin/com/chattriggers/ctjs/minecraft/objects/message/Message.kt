@@ -183,13 +183,13 @@ class Message {
 
         //#if MC<=10809
         if (recursive) {
-            Client.getConnection().handleChat(MCChatPacket(chatMessage, 0))
+            Client.getConnection()?.handleChat(MCChatPacket(chatMessage, 0))
         } else {
             Player.getPlayer()?.addChatMessage(chatMessage)
         }
         //#else
         //$$ if (recursive) {
-        //$$    Client.getConnection().handleChat(ChatPacket(chatMessage, ChatType.CHAT))
+        //$$    Client.getConnection()?.handleChat(ChatPacket(chatMessage, ChatType.CHAT))
         //$$ } else {
         //$$    Player.getPlayer()?.sendMessage(chatMessage)
         //$$ }
@@ -203,7 +203,7 @@ class Message {
         parseMessage()
         if (!ChatLib.isPlayer("[ACTION BAR]: " + chatMessage.formattedText)) return
 
-        Client.getConnection().handleChat(
+        Client.getConnection()?.handleChat(
             MCChatPacket(
                 chatMessage,
                 //#if MC<=10809

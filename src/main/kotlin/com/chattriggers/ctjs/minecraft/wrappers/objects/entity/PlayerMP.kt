@@ -66,7 +66,7 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
             ) ?: ""
     }
 
-    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection().getPlayerInfo(player.uniqueID)
+    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(player.uniqueID)
 
     override fun toString(): String {
         return "PlayerMP{name=" + getName() +

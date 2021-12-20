@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Item as MCItem
 
@@ -28,19 +27,9 @@ class Item {
     val item: MCItem
     var itemStack: ItemStack
 
-    /* Constructors */
-    constructor(itemStack: ItemStack?) {
-        //#if MC<=10809
-        if (itemStack == null) {
-            //#else
-            //$$ if (itemStack == null || itemStack == ItemStack.EMPTY) {
-            //#endif
-            item = ItemBlock(BlockType(0).mcBlock)
-            this.itemStack = ItemStack(item)
-        } else {
-            item = itemStack.item
-            this.itemStack = itemStack
-        }
+    constructor(itemStack: ItemStack) {
+        item = itemStack.item
+        this.itemStack = itemStack
     }
 
     constructor(itemName: String) {

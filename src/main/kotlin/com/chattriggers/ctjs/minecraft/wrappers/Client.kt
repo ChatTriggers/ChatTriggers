@@ -34,7 +34,7 @@ object Client {
      * @return The NetHandlerPlayClient object
      */
     @JvmStatic
-    fun getConnection(): NetHandlerPlayClient =
+    fun getConnection(): NetHandlerPlayClient? =
         //#if MC<=10809
         getMinecraft().netHandler
     //#else
