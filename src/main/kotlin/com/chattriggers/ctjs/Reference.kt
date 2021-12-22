@@ -46,6 +46,11 @@ object Reference {
 
         Command.activeCommands.values.toList().forEach(Command::unregister)
 
+        Client.getMinecraft().addScheduledTask { 
+            CTJS.images.forEach { it.getTexture().deleteGlTexture() }
+            CTJS.images.clear()
+        }
+
         if (asCommand) {
             ChatLib.chat("&7Unloaded all of ChatTriggers")
             isLoaded = false

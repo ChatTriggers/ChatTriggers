@@ -20,6 +20,7 @@ class Image constructor(var image: BufferedImage?) {
 
     init {
         MinecraftForge.EVENT_BUS.register(this)
+        CTJS.images.add(this)
     }
 
     @JvmOverloads

@@ -3,6 +3,7 @@ package com.chattriggers.ctjs
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
+import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
@@ -35,6 +36,7 @@ object CTJS {
     val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
+    val images = mutableListOf<Image>()
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
