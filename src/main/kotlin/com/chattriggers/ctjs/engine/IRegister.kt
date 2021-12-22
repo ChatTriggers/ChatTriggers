@@ -564,7 +564,7 @@ interface IRegister {
      * Registers a new trigger that runs when a gui is closed.
      *
      * Passes through one argument:
-     * - The gui opened event
+     * - The gui that was closed
      *
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority

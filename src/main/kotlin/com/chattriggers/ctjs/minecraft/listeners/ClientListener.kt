@@ -192,8 +192,7 @@ object ClientListener {
 
     @SubscribeEvent
     fun onGuiOpened(event: GuiOpenEvent) {
-        if (event.gui == null) return TriggerType.GuiClosed.triggerAll(event)
-        TriggerType.GuiOpened.triggerAll(event)
+        if (event.gui != null) TriggerType.GuiOpened.triggerAll(event)
     }
 
     @SubscribeEvent

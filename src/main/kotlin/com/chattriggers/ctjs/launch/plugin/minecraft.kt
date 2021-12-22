@@ -1,16 +1,23 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+import com.chattriggers.ctjs.triggers.TriggerType
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
+import net.minecraft.client.Minecraft
 import net.minecraft.client.shader.Framebuffer
 import net.minecraft.util.ScreenShotHelper
 import java.io.File
 
-fun injectMinecraft() = inject {
+fun injectMinecraft() {
+    injectDispatchKeypresses()
+    injectDisplayGuiScreen()
+}
+
+fun injectDispatchKeypresses() = inject {
     className = "net/minecraft/client/Minecraft"
     methodName = "dispatchKeypresses"
     methodDesc = "()V"
@@ -74,4 +81,31 @@ fun injectMinecraft() = inject {
 //
 //        methodReturn()
 //    }
+}
+
+fun injectDisplayGuiScreen() = inject {
+    className = "net/minecraft/client/Minecraft"
+    methodName = "displayGuiScreen"
+    methodDesc = "(Lnet/minecraft/client/gui/GuiScreen;)V"
+
+    at = At(
+        InjectionPoint.INVOKE(
+            Descriptor(
+                "net/minecraft/client/gui/GuiScreen",
+                "onGuiClosed",
+                "()V"
+            )
+        )
+    )
+
+    methodMaps = mapOf(
+        "func_147108_a" to "displayGuiScreen",
+        "onGuiClosed" to "func_146281_b"
+    )
+
+    codeBlock {
+        code {
+            TriggerType.GuiClosed.triggerAll(Minecraft.getMinecraft().currentScreen)
+        }
+    }
 }
