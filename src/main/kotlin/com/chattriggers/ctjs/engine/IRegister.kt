@@ -561,6 +561,22 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs when a gui is closed.
+     *
+     * Passes through one argument:
+     * - The gui opened event
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerGuiClosed(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.GuiClosed, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs when a player joins the world.
      *
      * Maximum is one per tick. Any extras will queue and run in later ticks.
