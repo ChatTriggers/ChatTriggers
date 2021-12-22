@@ -33,6 +33,7 @@ enum class TriggerType {
     PacketReceived,
     ServerConnect,
     ServerDisconnect,
+    GuiClosed,
 
     // rendering
     RenderWorld,
