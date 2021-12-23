@@ -48,7 +48,7 @@ class Inventory : JSONImpl {
 
     /**
      * Returns the window identifier number of this Inventory.
-     * This Inventory must be backed by a Container {@link #isContainer()}
+     * This Inventory must be backed by a Container [isContainer]
      *
      * @return the window id
      */
@@ -59,11 +59,11 @@ class Inventory : JSONImpl {
     }
 
     /**
-     * Checks if an item can be shift clicked into a certain slot, i.e coal into the bottom of a furnace.
+     * Checks if an item can be shift clicked into a certain slot, i.e. coal into the bottom of a furnace.
      *
      * @param slot the slot index
      * @param item the item for checking
-     * @return whether or not it can be shift clicked in
+     * @return whether it can be shift clicked in
      */
     fun isItemValidForSlot(slot: Int, item: Item): Boolean {
         return inventory == null
@@ -81,7 +81,7 @@ class Inventory : JSONImpl {
      * Checks whether the inventory contains the given item.
      *
      * @param item the item to check for
-     * @return whether or not the inventory contains the item
+     * @return whether the inventory contains the item
      */
     fun contains(item: Item): Boolean {
         return getItems().contains(item)
@@ -91,7 +91,7 @@ class Inventory : JSONImpl {
      * Checks whether the inventory contains an item with ID.
      *
      * @param id the ID of the item to match
-     * @retun whether or not the inventory contains an item with ID
+     * @retun whether the inventory contains an item with ID
      */
     fun contains(id: Int): Boolean {
         return getItems().any { it.getID() == id }
@@ -128,7 +128,7 @@ class Inventory : JSONImpl {
     fun isContainer(): Boolean = container != null
 
     /**
-     * Shorthand for {@link ClickAction}
+     * Shorthand for [ClickAction]
      *
      * @param slot the slot to click on
      * @param button the mouse button to use. "LEFT" by default.
@@ -144,7 +144,7 @@ class Inventory : JSONImpl {
     }
 
     /**
-     * Shorthand for {@link DropAction}
+     * Shorthand for [DropAction]
      *
      * @param slot the slot to drop
      * @param ctrl whether control should be held (drops whole stack)
@@ -157,7 +157,7 @@ class Inventory : JSONImpl {
     }
 
     /**
-     * Shorthand for {@link DragAction}
+     * Shorthand for [DragAction]
      *
      * @param type what click type this should be: LEFT, MIDDLE, RIGHT
      * @param slots all of the slots to drag onto

@@ -52,12 +52,12 @@ abstract class Gui : GuiScreen() {
     fun isAltDown(): Boolean = isAltKeyDown()
 
     /**
-     * Registers a method to be ran while gui is open.<br></br>
-     * Registered method runs on draw.<br></br>
-     * Arguments passed through to method:<br></br>
-     * int mouseX<br></br>
-     * int mouseY<br></br>
-     * float partialTicks
+     * Registers a method to be run while gui is open.
+     * Registered method runs on draw.
+     * Arguments passed through to method:
+     * - int mouseX
+     * - int mouseY
+     * - float partialTicks
      *
      * @param method the method to run
      * @return the trigger
@@ -68,12 +68,12 @@ abstract class Gui : GuiScreen() {
     }
 
     /**
-     * Registers a method to be ran while gui is open.<br></br>
-     * Registered method runs on mouse click.<br></br>
-     * Arguments passed through to method:<br></br>
-     * int mouseX<br></br>
-     * int mouseY<br></br>
-     * int button
+     * Registers a method to be run while gui is open.
+     * Registered method runs on mouse click.
+     * Arguments passed through to method:
+     * - int mouseX
+     * - int mouseY
+     * - int button
      *
      * @param method the method to run
      * @return the trigger
@@ -84,12 +84,12 @@ abstract class Gui : GuiScreen() {
     }
 
     /**
-     * Registers a method to be ran while the gui is open.<br></br>
-     * Registered method runs on mouse scroll.<br></br>
-     * Arguments passed through to method:<br></br>
-     * int mouseX<br></br>
-     * int mouseY<br></br>
-     * int scroll direction
+     * Registers a method to be run while the gui is open.
+     * Registered method runs on mouse scroll.
+     * Arguments passed through to method:
+     * - int mouseX
+     * - int mouseY
+     * - int scroll direction
      */
     fun registerScrolled(method: Any) = run {
         onScroll = OnRegularTrigger(method, TriggerType.Other, getLoader())
@@ -97,11 +97,11 @@ abstract class Gui : GuiScreen() {
     }
 
     /**
-     * Registers a method to be ran while gui is open.<br></br>
-     * Registered method runs on key input.<br></br>
-     * Arguments passed through to method:<br></br>
-     * char typed character<br></br>
-     * int key code
+     * Registers a method to be run while gui is open.
+     * Registered method runs on key input.
+     * Arguments passed through to method:
+     * - char typed character
+     * - int key code
      *
      * @param method the method to run
      * @return the trigger
@@ -112,13 +112,13 @@ abstract class Gui : GuiScreen() {
     }
 
     /**
-     * Registers a method to be ran while gui is open.<br></br>
-     * Registered method runs on key input.<br></br>
-     * Arguments passed through to method:<br></br>
-     * mouseX<br></br>
-     * mouseY<br></br>
-     * clickedMouseButton<br></br>
-     * timeSinceLastClick
+     * Registers a method to be run while gui is open.
+     * Registered method runs on key input.
+     * Arguments passed through to method:
+     * - int mouseX
+     * - int mouseY
+     * - int clickedMouseButton
+     * - long timeSinceLastClick
      *
      * @param method the method to run
      * @return the trigger
@@ -129,12 +129,12 @@ abstract class Gui : GuiScreen() {
     }
 
     /**
-     * Registers a method to be ran while gui is open.<br></br>
-     * Registered method runs on mouse release.<br></br>
-     * Arguments passed through to method:<br></br>
-     * mouseX<br></br>
-     * mouseY<br></br>
-     * button
+     * Registers a method to be run while gui is open.
+     * Registered method runs on mouse release.
+     * Arguments passed through to method:
+     * - int mouseX
+     * - int mouseY
+     * - int button
      *
      * @param method the method to run
      * @return the trigger
@@ -145,10 +145,10 @@ abstract class Gui : GuiScreen() {
     }
 
     /**
-     * Registers a method to be ran while gui is open.<br></br>
-     * Registered method runs when an action is performed (clicking a button)<br></br>
-     * Arguments passed through to method:<br></br>
-     * the button that is clicked
+     * Registers a method to be run while gui is open.
+     * Registered method runs when an action is performed (clicking a button)
+     * Arguments passed through to method:
+     * - the button that is clicked
      *
      * @param method the method to run
      * @return the trigger

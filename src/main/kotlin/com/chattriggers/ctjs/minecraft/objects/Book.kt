@@ -67,7 +67,7 @@ class Book(bookName: String) {
      * Sets a page of the book to the specified message.
      *
      * @param pageNumber the number of the page to set
-     * @param message    the message to set the page to
+     * @param message the message to set the page to
      * @return the current book to allow method chaining
      */
     fun setPage(pageNumber: Int, message: Message) = apply {

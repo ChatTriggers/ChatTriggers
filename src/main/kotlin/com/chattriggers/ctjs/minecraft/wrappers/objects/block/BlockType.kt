@@ -9,7 +9,7 @@ import net.minecraft.block.state.IBlockState
  * An immutable wrapper around Minecraft's Block object. Note
  * that this references a block "type", and not an actual block
  * in the world. If a reference to a particular block is needed,
- * use {@link Block}
+ * use [Block]
  */
 @External
 class BlockType(val mcBlock: MCBlock) {
@@ -33,8 +33,8 @@ class BlockType(val mcBlock: MCBlock) {
     fun getID(): Int = MCBlock.getIdFromBlock(mcBlock)
 
     /**
-     * Gets the block's registry name.<br>
-     * Example: <code>minecraft:planks</code>
+     * Gets the block's registry name.
+     * Example: minecraft:planks
      *
      * @return the block's registry name
      */
@@ -47,16 +47,16 @@ class BlockType(val mcBlock: MCBlock) {
     }
 
     /**
-     * Gets the block's unlocalized name.<br>
-     * Example: <code>tile.wood</code>
+     * Gets the block's unlocalized name.
+     * Example: tile.wood
      *
      * @return the block's unlocalized name
      */
     fun getUnlocalizedName(): String = mcBlock.unlocalizedName
 
     /**
-     * Gets the block's localized name.<br>
-     * Example: <code>Wooden Planks</code>
+     * Gets the block's localized name.
+     * Example: Wooden Planks
      *
      * @return the block's localized name
      */

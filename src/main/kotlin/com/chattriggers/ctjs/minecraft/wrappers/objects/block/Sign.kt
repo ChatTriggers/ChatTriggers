@@ -6,11 +6,11 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.tileentity.TileEntitySign
 
 /**
- * Creates a new Sign object wrapper.<br>
- * Returned with {@link Player#lookingAt()} when looking at a sign.<br>
- * Extends {@link Block}.
+ * Creates a new Sign object wrapper.
+ * Returned with [com.chattriggers.ctjs.minecraft.wrappers.Player.lookingAt] when looking at a sign.
+ * Extends [Block].
  *
- * @param block the {@link Block} to convert to a Sign
+ * @param block the [Block] to convert to a Sign
  */
 @External
 class Sign(block: Block) : Block(block.type, block.pos, block.face) {

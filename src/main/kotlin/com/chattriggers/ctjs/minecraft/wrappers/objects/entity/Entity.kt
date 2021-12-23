@@ -106,11 +106,11 @@ open class Entity(val entity: MCEntity) {
     }
 
     /**
-     * Checks whether or not the entity is dead.
+     * Checks whether the entity is dead.
      * This is a fairly loose term, dead for a particle could mean it has faded,
      * while dead for an entity means it has no health.
      *
-     * @return whether or not an entity is dead
+     * @return whether an entity is dead
      */
     fun isDead(): Boolean = entity.isDead
 
@@ -161,7 +161,7 @@ open class Entity(val entity: MCEntity) {
     fun getUUID(): UUID = entity.uniqueID
 
     /**
-     * Gets the entity's air level.<br></br>
+     * Gets the entity's air level.
      *
      * The returned value will be an integer. If the player is not taking damage, it
      * will be between 300 (not in water) and 0. If the player is taking damage, it

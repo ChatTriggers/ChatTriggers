@@ -32,16 +32,16 @@ class Shape(private var color: Int) {
     fun getDrawMode(): Int = drawMode
 
     /**
-     * Sets the GL draw mode of the shape. Possible draw modes are:<br>
-     * 0 = points<br>
-     * 1 = lines<br>
-     * 2 = line loop<br>
-     * 3 = line strip<br>
-     * 5 = triangles<br>
-     * 5 = triangle strip<br>
-     * 6 = triangle fan<br>
-     * 7 = quads<br>
-     * 8 = quad strip<br>
+     * Sets the GL draw mode of the shape. Possible draw modes are:
+     * 0 = points
+     * 1 = lines
+     * 2 = line loop
+     * 3 = line strip
+     * 5 = triangles
+     * 5 = triangle strip
+     * 6 = triangle fan
+     * 7 = quads
+     * 8 = quad strip
      * 9 = polygon
      */
     fun setDrawMode(drawMode: Int) = apply { this.drawMode = drawMode }

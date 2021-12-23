@@ -15,8 +15,8 @@ object FileLib {
      * Writes a file to folder in modules.
      *
      * @param importName name of the import
-     * @param fileName   name of the file
-     * @param toWrite    string to write in file
+     * @param fileName name of the file
+     * @param toWrite string to write in file
      */
     @JvmStatic
     fun write(importName: String, fileName: String, toWrite: String) {
@@ -24,11 +24,11 @@ object FileLib {
     }
 
     /**
-     * Writes a file to anywhere on the system.<br></br>
+     * Writes a file to anywhere on the system.
      * Use "./" for the ".minecraft" folder.
      *
      * @param fileLocation the location and file name
-     * @param toWrite      string to write in file
+     * @param toWrite string to write in file
      */
     @JvmStatic
     fun write(fileLocation: String, toWrite: String) {
@@ -39,8 +39,8 @@ object FileLib {
      * Writes a file to folder in modules.
      *
      * @param importName name of the import
-     * @param fileName   name of the file
-     * @param toAppend    string to append in file
+     * @param fileName name of the file
+     * @param toAppend string to append in file
      */
     @JvmStatic
     fun append(importName: String, fileName: String, toAppend: String) {
@@ -48,11 +48,11 @@ object FileLib {
     }
 
     /**
-     * Writes a file to anywhere on the system.<br></br>
+     * Writes a file to anywhere on the system.
      * Use "./" for the ".minecraft" folder.
      *
      * @param fileLocation the location and file name
-     * @param toAppend      string to append in file
+     * @param toAppend string to append in file
      */
     @JvmStatic
     fun append(fileLocation: String, toAppend: String) {
@@ -60,11 +60,11 @@ object FileLib {
     }
 
     /**
-     * Reads a file from folder in modules.<br></br>
+     * Reads a file from folder in modules.
      * Returns an empty string if file is not found.
      *
      * @param importName name of the import
-     * @param fileName   name of the file
+     * @param fileName name of the file
      * @return the string in the file
      */
     @JvmStatic
@@ -73,8 +73,8 @@ object FileLib {
     }
 
     /**
-     * Reads a file from anywhere on the system.<br></br>
-     * Use "./" for the ".minecraft" folder.<br></br>
+     * Reads a file from anywhere on the system.
+     * Use "./" for the ".minecraft" folder.
      * Returns an empty string if file is not found.
      *
      * @param fileLocation the location and file name
@@ -88,7 +88,7 @@ object FileLib {
     /**
      * Reads a file from anywhere on the system using java.io.File.
      *
-     * @param file the java.io.File to loadExtra
+     * @param file the java.io.File to read
      * @return the string in the file
      */
     @JvmStatic
@@ -104,7 +104,7 @@ object FileLib {
      * Determines if a file or directory exists at the specified location
      *
      * @param importName name of the import
-     * @param fileName   name of the file
+     * @param fileName name of the file
      * @return if the file exists
      */
     @JvmStatic
@@ -127,14 +127,13 @@ object FileLib {
      * Determines if a file or directory exists at the specified location
      *
      * @param importName name of the import
-     * @param fileName   name of the file
+     * @param fileName name of the file
      * @return if the location is a directory
      */
     @JvmStatic
     fun isDirectory(importName: String, fileName: String): Boolean {
         return isDirectory(absoluteLocation(importName, fileName))
     }
-
 
     /**
      * Determines if a file or directory exists at the specified location
@@ -173,7 +172,7 @@ object FileLib {
 
     /**
      * Extracts a zip file specified by the zipFilePath to a directory specified by
-     * destDirectory (will be created if does not exists).
+     * destDirectory (will be created if does not exist).
      * @param zipFilePath the zip file path
      * @param destDirectory the destination directory
      * @throws IOException IOException

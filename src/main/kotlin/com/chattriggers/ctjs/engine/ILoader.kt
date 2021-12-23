@@ -32,7 +32,7 @@ interface ILoader {
     /**
      * Loads a list of modules into the loader. This method will only
      * ever be called with modules that have an entry point corresponding
-     * to this loader's languages's extension
+     * to this loader's language's extension
      */
     fun entryPass(module: Module, entryURI: URI)
 
@@ -86,7 +86,7 @@ interface ILoader {
      * Save a resource to the OS's filesystem from inside the jar
      * @param resourceName name of the file inside the jar
      * @param outputFile file to save to
-     * @param replace whether or not to replace the file being saved to
+     * @param replace whether to replace the file being saved to
      */
     fun saveResource(resourceName: String?, outputFile: File, replace: Boolean): String {
         if (resourceName == null || resourceName == "") {

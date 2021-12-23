@@ -8,8 +8,7 @@ class OnSoundPlayTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigg
     private var soundNameCriteria = ""
 
     /**
-     * Sets the sound name criteria.<br></br>
-     * Short hand for [OnSoundPlayTrigger.setSoundNameCriteria].
+     * Sets the sound name criteria.
      *
      * @param soundNameCriteria the sound name
      * @return the trigger for method chaining

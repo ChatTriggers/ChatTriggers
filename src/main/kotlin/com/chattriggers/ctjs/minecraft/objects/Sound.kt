@@ -14,31 +14,23 @@ import java.io.File
 import java.net.MalformedURLException
 
 /**
- * <p>
- *     Instances a new Sound with certain properties. These properties
- *     should be passed through as a normal JavaScript object.
- * </p>
+ * Instances a new Sound with certain properties. These properties
+ * should be passed through as a normal JavaScript object.
  *
- * <p>
- *     REQUIRED:<br>
- *     &emsp;source (String) - filename, relative to ChatTriggers assets directory
- * </p>
+ * REQUIRED:
+ * - source (String) - filename, relative to ChatTriggers assets directory
  *
- * <p>
- *     OPTIONAL:<br>
- *     &emsp;priority (boolean) - whether or not this sound should be prioritized, defaults to false<br>
- *     &emsp;loop (boolean) - whether or not to loop this sound over and over, defaults to false<br>
- *     &emsp;stream (boolean) - whether or not to stream this sound rather than preload it (should be true for large files), defaults to false
- * </p>
+ * OPTIONAL:
+ * - priority (boolean) - whether this sound should be prioritized, defaults to false
+ * - loop (boolean) - whether to loop this sound over and over, defaults to false
+ * - stream (boolean) - whether to stream this sound rather than preload it (should be true for large files), defaults to false
  *
- * <p>
- *     CONFIGURABLE (can be set in config object, or changed later, but MAKE SURE THE WORLD HAS LOADED)<br>
- *     &emsp;category (String) - which category this sound should be a part of, see {@link #setCategory(String)}.<br>
- *     &emsp;volume (float) - volume of the sound, see {@link #setVolume(float)}<br>
- *     &emsp;pitch (float) - pitch of the sound, see {@link #setPitch(float)}<br>
- *     &emsp;x, y, z (float) - location of the sound, see {@link #setPosition(float, float, float)}. Defaults to the players position.<br>
- *     &emsp;attenuation (int) - fade out model of the sound, see {@link #setAttenuation(int)}<br>
- * </p>
+ * CONFIGURABLE (can be set in config object, or changed later, but MAKE SURE THE WORLD HAS LOADED)
+ * - category (String) - which category this sound should be a part of, see [setCategory].
+ * - volume (float) - volume of the sound, see [setVolume]
+ * - pitch (float) - pitch of the sound, see [setPitch]
+ * - x, y, z (float) - location of the sound, see [setPosition]. Defaults to the players position.
+ * - attenuation (int) - fade out model of the sound, see [setAttenuation]
  *
  * @param config the JavaScript config object
  */

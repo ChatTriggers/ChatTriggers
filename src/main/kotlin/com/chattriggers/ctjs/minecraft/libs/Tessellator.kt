@@ -155,9 +155,9 @@ object Tessellator {
     /**
      * Colorize the Tessellator.
      *
-     * @param red   the red value between 0 and 1
+     * @param red the red value between 0 and 1
      * @param green the green value between 0 and 1
-     * @param blue  the blue value between 0 and 1
+     * @param blue the blue value between 0 and 1
      * @param alpha the alpha value between 0 and 1
      * @return the Tessellator to allow for method chaining
      */
@@ -170,12 +170,12 @@ object Tessellator {
 
     /**
      * Rotates the Tessellator in 3d space.
-     * Similar to {@link com.chattriggers.ctjs.minecraft.libs.renderer.Renderer#rotate(float)}
+     * Similar to [com.chattriggers.ctjs.minecraft.libs.renderer.Renderer.rotate]
      *
      * @param angle the angle to rotate
-     * @param x     if the rotation is around the x axis
-     * @param y     if the rotation is around the y axis
-     * @param z     if the rotation is around the z axis
+     * @param x if the rotation is around the x axis
+     * @param y if the rotation is around the y axis
+     * @param z if the rotation is around the z axis
      * @return the Tessellator to allow for method chaining
      */
     @JvmStatic
@@ -282,14 +282,14 @@ object Tessellator {
     /**
      * Renders floating lines of text in the 3D world at a specific position.
      *
-     * @param text           The string array of text to render
-     * @param x              X coordinate in the game world
-     * @param y              Y coordinate in the game world
-     * @param z              Z coordinate in the game world
-     * @param color          the color of the text
+     * @param text The string array of text to render
+     * @param x X coordinate in the game world
+     * @param y Y coordinate in the game world
+     * @param z Z coordinate in the game world
+     * @param color the color of the text
      * @param renderBlackBox render a pretty black border behind the text
-     * @param scale          the scale of the text
-     * @param increase       whether or not to scale the text up as the player moves away
+     * @param scale the scale of the text
+     * @param increase whether to scale the text up as the player moves away
      */
     @JvmStatic
     @JvmOverloads

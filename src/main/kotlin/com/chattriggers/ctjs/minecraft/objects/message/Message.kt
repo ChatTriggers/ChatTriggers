@@ -97,7 +97,7 @@ class Message {
     fun isRecursive(): Boolean = recursive
 
     /**
-     * Sets whether or not the message can trip other triggers.
+     * Sets whether the message can trip other triggers.
      * @param recursive true if message can trip other triggers.
      */
     fun setRecursive(recursive: Boolean) = apply { this.recursive = recursive }
@@ -115,7 +115,7 @@ class Message {
 
     /**
      * Sets the TextComponent or String in the Message at index.
-     * @param index    the index of the TextComponent or String to change
+     * @param index the index of the TextComponent or String to change
      * @param component the new TextComponent or String to replace with
      * @return the Message for method chaining
      */

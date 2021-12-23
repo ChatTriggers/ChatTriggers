@@ -17,7 +17,7 @@ class KeyBind {
      *
      * @param category the keybind category the keybind will be in
      * @param description what the key bind does
-     * @param keyCode     the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
+     * @param keyCode the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
      * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
     @JvmOverloads
@@ -45,14 +45,14 @@ class KeyBind {
     /**
      * Returns true if the key is pressed (used for continuous querying).
      *
-     * @return whether or not the key is pressed
+     * @return whether the key is pressed
      */
     fun isKeyDown(): Boolean = keyBinding.isKeyDown
 
     /**
      * Returns true on the initial key press. For continuous querying use [isKeyDown].
      *
-     * @return whether or not the key has just been pressed
+     * @return whether the key has just been pressed
      */
     fun isPressed(): Boolean = keyBinding.isPressed
 

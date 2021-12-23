@@ -68,7 +68,7 @@ class Particle(val underlyingEntity: MCParticle) {
     /**
      * Sets the amount of ticks this particle will live for
      *
-     * @param maxAge the particles max age (in ticks)
+     * @param maxAge the particle's max age (in ticks)
      */
     fun setMaxAge(maxAge: Int) = apply {
         underlyingEntity.particleMaxAge = maxAge

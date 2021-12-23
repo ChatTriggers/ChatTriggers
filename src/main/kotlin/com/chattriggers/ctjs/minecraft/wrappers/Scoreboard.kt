@@ -20,7 +20,7 @@ object Scoreboard {
     fun getScoreboardTitle(): String = getTitle()
 
     /**
-     * Gets the top-most string which is displayed on the scoreboard. (doesn't have a score on the side).<br></br>
+     * Gets the top-most string which is displayed on the scoreboard. (doesn't have a score on the side).
      * Be aware that this can contain color codes.
      *
      * @return the scoreboard title
@@ -36,7 +36,7 @@ object Scoreboard {
     }
 
     /**
-     * Get all currently visible strings on the scoreboard. (excluding title)<br></br>
+     * Get all currently visible strings on the scoreboard. (excluding title)
      * Be aware that this can contain color codes.
      *
      * @return the list of lines
@@ -80,7 +80,7 @@ object Scoreboard {
      *
      * @param score the score value for this item
      * @param line the string to display on said line
-     * @param override whether or not to remove old lines with the same score
+     * @param override whether to remove old lines with the same score
      */
     @JvmStatic
     fun setLine(score: Int, line: String, override: Boolean) {

@@ -25,9 +25,9 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
     }
 
     /**
-     * Sets the command name.<br></br>
-     * Example:<br></br>
-     * OnCommandTrigger.setCommandName("test")<br></br>
+     * Sets the command name.
+     * Example:
+     * OnCommandTrigger.setCommandName("test")
      * would result in the command being /test
      *
      * @param commandName The command name
