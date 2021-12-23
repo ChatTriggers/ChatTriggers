@@ -1021,6 +1021,43 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs whenever a tile entity is rendered
+     *
+     * Passes through four arguments:
+     * - The TileEntity
+     * - The position as a Vector3f
+     * - The partial ticks
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderTileEntity(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs after a tile entity is rendered
+     *
+     * Passes through three arguments:
+     * - The TileEntity
+     * - The position as a Vector3f
+     * - The partial ticks
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerPostRenderTileEntity(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs after the current screen is rendered
      *
      * Passes through three arguments:
