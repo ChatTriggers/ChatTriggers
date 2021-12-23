@@ -35,6 +35,7 @@ class CTJSTransformer : BaseClassTransformer() {
             injectGuiScreen()
             injectPlayerControllerMP()
             injectGuiContainer()
+            injectTileEntityRendererDispatcher()
 
             ModuleManager.setup()
             ModuleManager.asmPass()
