@@ -38,7 +38,7 @@ abstract class Action(var slot: Int, var windowId: Int) {
     companion object {
         /**
          * Creates a new action.
-         * The Inventory must be a container, see {@link Inventory#isContainer()}.
+         * The Inventory must be a container, see [Inventory.isContainer].
          * The slot can be -999 for outside of the gui
          *
          * @param inventory the inventory to complete the action on

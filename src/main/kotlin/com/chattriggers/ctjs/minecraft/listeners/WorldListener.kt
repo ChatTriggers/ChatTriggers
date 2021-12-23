@@ -29,7 +29,6 @@ object WorldListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
-        // world loadExtra trigger
         if (!shouldTriggerWorldLoad) return
 
         TriggerType.WorldLoad.triggerAll()

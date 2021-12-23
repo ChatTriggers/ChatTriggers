@@ -23,7 +23,7 @@ open class Block(
 
     /**
      * Narrows this block to reference a certain face. Used by
-     * {@link Player#lookingAt()} to specify the block face
+     * [Player.lookingAt] to specify the block face
      * being looked at.
      */
     fun withFace(face: BlockFace) = Block(type, pos, face)

@@ -49,7 +49,7 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
 
     /**
      * Sets the stage of this drag.
-     * Possible values are: BEGIN, SLOT, END {@link #stage}
+     * Possible values are: BEGIN, SLOT, END [stage]
      *
      * @param stage the stage
      * @return the current Action for method chaining

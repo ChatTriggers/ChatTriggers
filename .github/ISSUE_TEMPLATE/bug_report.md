@@ -25,9 +25,9 @@ If applicable, add screenshots to help explain your problem.
 
 **Setup (please complete the following information):**
  - OS: [e.g. Windows/Mac/Ubuntu]
- - ChatTriggers Version: [eg. 0.18.4]
- - Minecraft Version: [eg. 1.8.9]
-- Java Version: [eg 1.8.0_231]
+ - ChatTriggers Version: [e.g. 0.18.4]
+ - Minecraft Version: [e.g. 1.8.9]
+- Java Version: [e.g. 1.8.0_231]
 
 **Additional context**
 Add any other context about the problem here.

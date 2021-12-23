@@ -16,7 +16,6 @@ import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Item as MCItem
 
-
 //#if MC>10809
 //$$ import net.minecraft.client.util.ITooltipFlag
 //$$ import com.chattriggers.ctjs.minecraft.wrappers.World
@@ -58,7 +57,7 @@ class Item {
     }
 
     /**
-     * Created an Item object from an Entity.
+     * Create an Item object from an Entity.
      * Has to be wrapping an EntityItem.
      *
      * @param entity the Entity
@@ -76,7 +75,6 @@ class Item {
             throw IllegalArgumentException("Entity is not of type EntityItem")
         }
     }
-    /* End of constructors */
 
     fun getTextComponent() = TextComponent(itemStack.chatComponent)
 
@@ -102,16 +100,16 @@ class Item {
     }
 
     /**
-     * Gets the item's unlocalized name.<br>
-     * Example: <code>tile.wood</code>
+     * Gets the item's unlocalized name.
+     * Example: tile.wood
      *
      * @return the item's unlocalized name
      */
     fun getUnlocalizedName(): String = item.unlocalizedName
 
     /**
-     * Gets the item's registry name.<br>
-     * Example: <code>minecraft:planks</code>
+     * Gets the item's registry name.
+     * Example: minecraft:planks
      *
      * @return the item's registry name
      */
@@ -124,8 +122,8 @@ class Item {
     }
 
     /**
-     * Gets the item's stack display name.<br>
-     * Example: <code>Oak Wood Planks</code>
+     * Gets the item's stack display name.
+     * Example: Oak Wood Planks
      *
      * @return the item's stack display name
      */
@@ -165,9 +163,9 @@ class Item {
     fun canDestroy(block: BlockType): Boolean = itemStack.canDestroy(block.mcBlock)
 
     /**
-     * Gets the items durability, i.e. the number of uses left
+     * Gets the item's durability, i.e. the number of uses left
      *
-     * @return the items durability
+     * @return the item's durability
      */
     fun getDurability(): Int = getMaxDamage() - getDamage()
 

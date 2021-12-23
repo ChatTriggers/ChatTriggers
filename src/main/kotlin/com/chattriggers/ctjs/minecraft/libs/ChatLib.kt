@@ -409,7 +409,7 @@ object ChatLib {
      * Get the text of a chat event.
      * Defaults to the unformatted version.
      *
-     * @param event     The chat event passed in by a chat trigger
+     * @param event The chat event passed in by a chat trigger
      * @param formatted If true, returns formatted text. Otherwise, returns
      * unformatted text
      * @return The text of the event

@@ -24,9 +24,9 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     fun triggerIfCanceled(bool: Boolean) = apply { triggerIfCanceled = bool }
 
     /**
-     * Sets the chat criteria for [matchesChatCriteria].<br></br>
-     * Arguments for the trigger's method can be passed in using ${variable}.<br></br>
-     * Example: `OnChatTrigger.setChatCriteria("<${name}> ${message}");`<br></br>
+     * Sets the chat criteria for [matchesChatCriteria].
+     * Arguments for the trigger's method can be passed in using ${variable}.
+     * Example: `OnChatTrigger.setChatCriteria("<${name}> ${message}");`
      * Use ${*} to match a chat message but ignore the pass through.
      * @param chatCriteria the chat criteria to set
      * @return the trigger object for method chaining
@@ -193,7 +193,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
         else ArrayList()
 
     /**
-     * A method to check whether or not a received chat message
+     * A method to check whether a received chat message
      * matches this trigger's definition criteria.
      * Ex. "FalseHonesty joined Cops vs Crims" would match `${playername} joined ${gamejoined}`
      * @param chat the chat message to compare against
@@ -225,11 +225,11 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     }
 
     /**
-     * The parameter to match chat criteria to.<br></br>
-     * Location parameters<br></br>
-     * **contains**<br></br>
-     * **start**<br></br>
-     * **end**<br></br>
+     * The parameter to match chat criteria to.
+     * Location parameters
+     * - contains
+     * - start
+     * - end
      */
     enum class Parameter constructor(vararg names: String) {
         CONTAINS("<c>", "<contains>", "c", "contains"),

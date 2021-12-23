@@ -57,7 +57,7 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     //$$  * Whether the click should try to pick up all items of said type in the inventory (essentially double clicking)
     //$$  * (defaults to whether there actually is an item in the hand)
     //$$  *
-    //$$  * @param pickupAll to pickup all items of the same type
+    //$$  * @param pickupAll to pick up all items of the same type
     //$$  */
     //$$ fun setPickupAll(pickupAll: Boolean) = apply {
     //$$     this.pickupAll = pickupAll

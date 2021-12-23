@@ -246,9 +246,9 @@ interface IRegister {
      * - Steps elapsed
      *
      * Available modifications:
-     * - [OnStepTrigger.setFps] Sets the fps, ie. how many times this trigger will fire
+     * - [OnStepTrigger.setFps] Sets the fps, i.e. how many times this trigger will fire
      *      per second
-     * - [OnStepTrigger.setDelay] Sets the delay in seconds, ie how many seconds it take
+     * - [OnStepTrigger.setDelay] Sets the delay in seconds, i.e. how many seconds it takes
      *      to fire. Overrides [OnStepTrigger.setFps].
      * - [OnTrigger.setPriority] Sets the priority
      *
@@ -500,7 +500,7 @@ interface IRegister {
      * Registers a new trigger that runs after the game loads.
      *
      * This runs after the initial loading of the game directly after scripts are
-     * loaded and after "/ct loadExtra" happens.
+     * loaded and after "/ct load" happens.
      *
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
@@ -515,7 +515,7 @@ interface IRegister {
     /**
      * Registers a new trigger that runs before the game unloads.
      *
-     * This runs before shutdown of the JVM and before "/ct loadExtra" happens.
+     * This runs before shutdown of the JVM and before "/ct load" happens.
      *
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
@@ -803,8 +803,8 @@ interface IRegister {
      * Registers a new trigger that runs whenever a key is typed with a gui open
      *
      * Passes through four arguments:
-     * - The character pressed (eg. 'd')
-     * - The key code pressed (eg. 41)
+     * - The character pressed (e.g. 'd')
+     * - The key code pressed (e.g. 41)
      * - The gui
      * - The event, which can be cancelled
      *

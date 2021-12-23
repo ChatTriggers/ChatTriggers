@@ -7,9 +7,9 @@ object MathLib {
     /**
      * Maps a number from one range to another.
      *
-     * @param number  the number to map
-     * @param in_min  the original range min
-     * @param in_max  the original range max
+     * @param number the number to map
+     * @param in_min the original range min
+     * @param in_max the original range max
      * @param out_min the final range min
      * @param out_max the final range max
      * @return the re-mapped number
@@ -23,8 +23,8 @@ object MathLib {
      * Clamps a floating number between two values.
      *
      * @param number the number to clamp
-     * @param min    the minimum
-     * @param max    the maximum
+     * @param min the minimum
+     * @param max the maximum
      * @return the clamped number
      */
     @JvmStatic
@@ -36,8 +36,8 @@ object MathLib {
      * Clamps an integer number between two values.
      *
      * @param number the number to clamp
-     * @param min    the minimum
-     * @param max    the maximum
+     * @param min the minimum
+     * @param max the maximum
      * @return the clamped number
      */
     @JvmStatic

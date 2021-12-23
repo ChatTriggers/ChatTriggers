@@ -46,9 +46,9 @@ object World {
     /**
      * Play a sound at the player location.
      *
-     * @param name   the name of the sound
+     * @param name the name of the sound
      * @param volume the volume of the sound
-     * @param pitch  the pitch of the sound
+     * @param pitch the pitch of the sound
      */
     @JvmStatic
     fun playSound(name: String, volume: Float, pitch: Float) {
@@ -61,13 +61,13 @@ object World {
     }
 
     /**
-     * Play a record at location x, y, and z.<br></br>
+     * Play a record at location x, y, and z.
      * Use "null" as name in the same location to stop record.
      *
-     * @param name  the name of the sound/record
-     * @param x     the x location
-     * @param y     the y location
-     * @param z     the z location
+     * @param name the name of the sound/record
+     * @param x the x location
+     * @param y the y location
+     * @param z the z location
      */
     @JvmStatic
     fun playRecord(name: String, x: Double, y: Double, z: Double) {
@@ -151,7 +151,7 @@ object World {
      * Gets a player by their username, must be in the currently loaded chunks!
      *
      * @param name the username
-     * @return the player with said username, or null if they dont exist.
+     * @return the player with said username, or null if they don't exist.
      */
     @JvmStatic
     fun getPlayerByName(name: String): PlayerMP? {

@@ -75,7 +75,7 @@ object Client {
     fun isInTab(): Boolean = getMinecraft().gameSettings.keyBindPlayerList.isKeyDown
 
     /**
-     * Gets whether or not the Minecraft window is active
+     * Gets whether the Minecraft window is active
      * and in the foreground of the user's screen.
      *
      * @return true if the game is active, false otherwise
@@ -216,11 +216,11 @@ object Client {
     /**
      * Display a title.
      *
-     * @param title    title text
+     * @param title title text
      * @param subtitle subtitle text
-     * @param fadeIn   time to fade in
-     * @param time     time to stay on screen
-     * @param fadeOut  time to fade out
+     * @param fadeIn time to fade in
+     * @param time time to stay on screen
+     * @param fadeOut time to fade out
      */
     @JvmStatic
     fun showTitle(title: String, subtitle: String, fadeIn: Int, time: Int, fadeOut: Int) {
