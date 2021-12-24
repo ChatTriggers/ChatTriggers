@@ -44,3 +44,12 @@ jobs:
           target: /srv/www/static/home/javadocs
           strip_components: 2
           rm: true
+
+      - name: Set File Permissions
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: chmod -R g+w /srv/www/static/home/javadocs
