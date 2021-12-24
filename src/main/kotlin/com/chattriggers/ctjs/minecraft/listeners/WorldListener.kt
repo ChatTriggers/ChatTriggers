@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
@@ -33,6 +34,8 @@ object WorldListener {
         if (!shouldTriggerWorldLoad) return
 
         TriggerType.WorldLoad.triggerAll()
+        ModuleManager.pendingOldModules.forEach(ModuleManager::reportOldVersion)
+        ModuleManager.pendingOldModules.clear()
         shouldTriggerWorldLoad = false
 
         CTJS.sounds

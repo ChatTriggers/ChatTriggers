@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.commands
 
+import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
+import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.module.ModulesGui
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
@@ -10,6 +12,7 @@ import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.Config
+import com.chattriggers.ctjs.utils.kotlin.toVersion
 import gg.essential.api.utils.GuiUtil
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
@@ -86,14 +89,23 @@ object CTCommand : CommandBase() {
         } else {
             ChatLib.chat("&cImporting ${moduleName}...")
             Reference.conditionalThread {
-                val module = ModuleManager.importModule(moduleName)
+                val (module, dependencies) = ModuleManager.importModule(moduleName)
                 if (module == null) {
                     ChatLib.chat("&cUnable to import module $moduleName")
-                } else {
-                    ChatLib.chat("&aSuccessfully imported ${module.metadata.name ?: module.name}")
-                    if (Config.moduleImportHelp && module.metadata.helpMessage != null) {
-                        ChatLib.chat(module.metadata.helpMessage.toString().take(383))
-                    }
+                    return@conditionalThread
+                }
+
+                val allModules = listOf(module) + dependencies
+                val modVersion = Reference.MODVERSION.toVersion()
+                allModules.forEach {
+                    val version = it.metadata.version?.toVersion() ?: return@forEach
+                    if (version.majorVersion < modVersion.majorVersion)
+                        ModuleManager.tryReportOldVersion(it)
+                }
+
+                ChatLib.chat("&aSuccessfully imported ${module.metadata.name ?: module.name}")
+                if (Config.moduleImportHelp && module.metadata.helpMessage != null) {
+                    ChatLib.chat(module.metadata.helpMessage.toString().take(383))
                 }
             }
         }

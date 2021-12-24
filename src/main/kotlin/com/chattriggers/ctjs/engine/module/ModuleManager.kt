@@ -5,7 +5,9 @@ import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.launch.IndySupport
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
+import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
@@ -19,6 +21,7 @@ object ModuleManager {
     val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
+    val pendingOldModules = mutableListOf<Module>()
 
     fun setup() {
         modulesFolder.mkdirs()
@@ -138,7 +141,9 @@ object ModuleManager {
         return Module(directory.name, metadata, directory)
     }
 
-    fun importModule(moduleName: String): Module? {
+    data class ImportedModule(val module: Module?, val dependencies: List<Module>)
+
+    fun importModule(moduleName: String): ImportedModule {
         val newModules = ModuleUpdater.importModule(moduleName)
 
         // Load their assets
@@ -153,7 +158,7 @@ object ModuleManager {
 
         entryPass(newModules)
 
-        return newModules.getOrNull(0)
+        return ImportedModule(newModules.getOrNull(0), newModules.drop(1))
     }
 
     fun deleteModule(name: String): Boolean {
@@ -167,6 +172,19 @@ object ModuleManager {
             return true
         }
         return false
+    }
+
+    fun tryReportOldVersion(module: Module) {
+        if (World.isLoaded()) {
+            reportOldVersion(module)
+        } else {
+            pendingOldModules.add(module)
+        }
+    }
+
+    fun reportOldVersion(module: Module) {
+        ChatLib.chat("&cWarning: the module \"${module.name}\" was made for an older version of CT, " +
+            "so it may not work correctly.")
     }
 
     private fun loadAssets(modules: List<Module>) {
