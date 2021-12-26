@@ -48,6 +48,13 @@ configurations {
     compile.extendsFrom(provided)
 }
 
+minecraft {
+    refmapName = 'mixins.chattriggers.refmap.json'
+    runConfigs.all {
+        ideConfigGenerated = true
+    }
+}
+
 repositories {
     mavenCentral()
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
@@ -66,9 +73,6 @@ dependencies {
     modImplementation(include("gg.essential:loader-fabric:1.0.0"))
     modCompileOnly("gg.essential:essential-1.17.1-fabric:1720")
 
-    provided("dev.falsehonesty.asmhelper:AsmHelper:1.5.1-$mcVersion") {
-        exclude group: "org.jetbrains.kotlin"
-    }
     provided("com.github.falsehonesty:ts-generator:adfb57a8f6") {
         exclude group: "org.jetbrains.kotlin"
     }
