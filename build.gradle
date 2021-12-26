@@ -11,27 +11,25 @@ buildscript {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven { url "https://maven.minecraftforge.net/" }
         maven { url "https://repo.spongepowered.org/repository/maven-public/" }
         maven { url "https://jitpack.io" }
         flatDir dirs: 'libs'
     }
 
     dependencies {
-        classpath(
-            mcVersion >= 11200
-                ? "com.github.ReplayMod.ForgeGradle:541e1485-all"
-                : "com.github.asbyth:ForgeGradle:ddb1eb01"
-        )
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath ':proguard:'
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+plugins {
+    id 'fabric-loom' version '0.10-SNAPSHOT'
+}
+
 apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'java'
 
 version = "2.0.0-BETA-" + (
     mcVersion.toString().substring(0, 1) + "." +
@@ -41,38 +39,13 @@ version = "2.0.0-BETA-" + (
 group = "com.chattriggers.ctjs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ctjs"
 
-apply plugin: "java"
-
-sourceCompatibility = targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 configurations {
     provided
     // Make compile extend from our provided configuration so that things added to bundled end up on the compile classpath
     compile.extendsFrom(provided)
-}
-
-minecraft {
-    version = [
-        11202: '1.12.2-14.23.0.2486',
-        11201: '1.12.1-14.22.0.2444',
-        11200: '1.12-14.21.1.2387',
-        10809: '1.8.9-11.15.1.1722'
-    ][mcVersion]
-    mappings = [
-        11202: "snapshot_20170615",
-        11201: "snapshot_20170615",
-        11200: "snapshot_20170615",
-        10809: "stable_22"
-    ][mcVersion]
-
-    runDir = "run"
-
-    makeObfSourceJar = true
-}
-
-afterEvaluate {
-    tasks.sourceMainJava.replace '@MOD_VERSION@', project.version
-    tasks.sourceMainJava.replace '@MC_VERSION@', "[ ${project.minecraft.version} ]"
 }
 
 repositories {
@@ -83,8 +56,15 @@ repositories {
 }
 
 dependencies {
-    provided "gg.essential:loader-launchwrapper:1.1.2"
-    implementation "gg.essential:essential-1.8.9-forge:1570+release-launch"
+    minecraft "com.mojang:minecraft:1.17.1"
+    mappings "net.fabricmc:yarn:1.17.1+build.65:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.12.12"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.45.0+1.17"
+
+    modImplementation(include("gg.essential:loader-fabric:1.0.0"))
+    modCompileOnly("gg.essential:essential-1.17.1-fabric:1720")
 
     provided("dev.falsehonesty.asmhelper:AsmHelper:1.5.1-$mcVersion") {
         exclude group: "org.jetbrains.kotlin"
@@ -92,49 +72,35 @@ dependencies {
     provided("com.github.falsehonesty:ts-generator:adfb57a8f6") {
         exclude group: "org.jetbrains.kotlin"
     }
-    provided 'com.fasterxml.jackson.core:jackson-core:2.13.0'
+    provided 'com.fasterxml.jackson.core:jackson-core:2.13.1'
     provided 'com.chattriggers:rhino:1.8.2'
-    provided 'com.fifesoft:rsyntaxtextarea:3.1.3'
+    provided 'com.fifesoft:rsyntaxtextarea:3.1.4'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+    it.options.release = 17
+}
+
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
 }
 
 jar {
-    // Include all of the jars from the bundled configuration in our jar
-    from configurations.provided.collect {
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude "**/module-info.class"
-        exclude 'META-INF/versions/9/**'
-        it.isDirectory() ? it : zipTree(it)
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
     }
-
-    manifest.attributes(
-        "FMLCorePlugin": "dev.falsehonesty.asmhelper.core.AsmHelperLoadingPlugin",
-        "FMLCorePluginContainsFMLMod": "true",
-        "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
-        "FMLAT": "ctjs_at.cfg"
-    )
 }
 
 processResources {
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-
-        // replace version and mcversion
-        expand "version": project.version, "mcversion": project.minecraft.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
     }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
-    }
-
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 task userdocs(type: DokkaTask) {
@@ -196,15 +162,15 @@ task changeMcVersion() {
 }
 
 
-task proguard(type: ProGuardTask) {
-    configuration 'configuration.pro'
-
-    // dontobfuscate()
-
-    libraryjars files(configurations.runtimeClasspath.collect())
-
-    injars "build/libs/ctjs-${version}.jar"
-    outjars "build/libs/ctjs-${version}-RELEASE.jar"
-}
-
-proguard.dependsOn build
+//task proguard(type: ProGuardTask) {
+//    configuration 'configuration.pro'
+//
+//    // dontobfuscate()
+//
+//    libraryjars files(configurations.runtimeClasspath.collect())
+//
+//    injars "build/libs/ctjs-${version}.jar"
+//    outjars "build/libs/ctjs-${version}-RELEASE.jar"
+//}
+//
+//proguard.dependsOn build
