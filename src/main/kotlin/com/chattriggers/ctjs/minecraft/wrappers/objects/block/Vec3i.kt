@@ -1,9 +1,12 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
+import com.chattriggers.ctjs.utils.kotlin.MCVec3i
 import kotlin.math.sqrt
 
 open class Vec3i(val x: Int, val y: Int, val z: Int) : Comparable<Vec3i> {
     constructor(x: Number, y: Number, z: Number) : this(x.toInt(), y.toInt(), z.toInt())
+
+    fun toMCVec3i() = MCVec3i(x, y, z)
 
     fun crossProduct(other: Vec3i): Vec3i {
         return Vec3i(

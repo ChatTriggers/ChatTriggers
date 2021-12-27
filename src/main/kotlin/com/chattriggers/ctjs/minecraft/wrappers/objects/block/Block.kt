@@ -3,6 +3,8 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import net.minecraft.item.MiningToolItem
+import net.minecraft.item.ToolItem
 
 /**
  * An immutable reference to a placed block in the world. It
@@ -30,20 +32,21 @@ open class Block(
 
     fun getState() = World.getBlockStateAt(pos)
 
-    fun getMetadata(): Int = type.mcBlock.getMetaFromState(getState())
+    // TODO("fabric")
+    // fun getMetadata(): Int = type.mcBlock.getMetaFromState(getState())
 
-    fun isPowered() = World.getWorld()!!.isBlockPowered(pos.toMCBlock())
+    fun isPowered() = World.getWorld()?.isReceivingRedstonePower(pos.toMCBlockPos())
 
-    fun getRedstoneStrength() = World.getWorld()!!.getStrongPower(pos.toMCBlock())
+    fun getRedstoneStrength() = World.getWorld()?.getReceivedRedstonePower(pos.toMCBlockPos())
 
     /**
      * Checks whether the block can be mined with the tool in the player's hand
      *
      * @return whether the block can be mined
      */
-    fun canBeHarvested(): Boolean = type.mcBlock.canHarvestBlock(World.getWorld(), pos.toMCBlock(), Player.getPlayer())
+    fun canBeHarvested() = (Player.getHeldItem()?.item as? MiningToolItem)?.isSuitableFor(getState()) ?: false
 
     fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
 
-    override fun toString() = "Block{type=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"
+    override fun toString() = "Block{type=${type.getRegistryName()}, x=$x, y=$y, z=$z}"
 }

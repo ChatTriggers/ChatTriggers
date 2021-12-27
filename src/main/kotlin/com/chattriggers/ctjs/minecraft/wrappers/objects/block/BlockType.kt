@@ -1,9 +1,15 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.AbstractBlockAccessor
+import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlock
-import net.minecraft.block.state.IBlockState
+import com.chattriggers.ctjs.utils.kotlin.toIdentifier
+import net.minecraft.block.BlockState
+import net.minecraft.tag.BlockTags
+import net.minecraft.util.registry.Registry
 
 /**
  * An immutable wrapper around Minecraft's Block object. Note
@@ -15,9 +21,9 @@ import net.minecraft.block.state.IBlockState
 class BlockType(val mcBlock: MCBlock) {
     constructor(block: BlockType) : this(block.mcBlock)
 
-    constructor(blockName: String) : this(MCBlock.getBlockFromName(blockName)!!)
+    constructor(blockName: String) : this(Registry.BLOCK[blockName.toIdentifier()])
 
-    constructor(blockID: Int) : this(MCBlock.getBlockById(blockID))
+    constructor(blockID: Int) : this(Registry.BLOCK.get(blockID))
 
     constructor(item: Item) : this(MCBlock.getBlockFromItem(item.item))
 
@@ -30,7 +36,7 @@ class BlockType(val mcBlock: MCBlock) {
      */
     fun withBlockPos(blockPos: BlockPos) = Block(this, blockPos)
 
-    fun getID(): Int = MCBlock.getIdFromBlock(mcBlock)
+    fun getID(): Int = Registry.BLOCK.getRawId(mcBlock)
 
     /**
      * Gets the block's registry name.
@@ -38,13 +44,7 @@ class BlockType(val mcBlock: MCBlock) {
      *
      * @return the block's registry name
      */
-    fun getRegistryName(): String {
-        //#if MC<=10809
-        return mcBlock.registryName
-        //#else
-        //$$ return block.registryName.toString()
-        //#endif
-    }
+    fun getRegistryName() = Registry.BLOCK.getId(mcBlock).toString()
 
     /**
      * Gets the block's unlocalized name.
@@ -52,7 +52,7 @@ class BlockType(val mcBlock: MCBlock) {
      *
      * @return the block's unlocalized name
      */
-    fun getUnlocalizedName(): String = mcBlock.unlocalizedName
+    fun getUnlocalizedName(): String = mcBlock.translationKey
 
     /**
      * Gets the block's localized name.
@@ -60,45 +60,37 @@ class BlockType(val mcBlock: MCBlock) {
      *
      * @return the block's localized name
      */
-    fun getName(): String = mcBlock.localizedName
+    fun getName(): String = mcBlock.name.toString()
 
-    fun getLightValue(): Int {
-        //#if MC<=10809
-        return mcBlock.lightValue
-        //#else
-        //$$ return block.getLightValue(
-        //$$         World.getWorld()!!.getBlockState(blockPos),
-        //$$         World.getWorld(),
-        //$$         blockPos
-        //$$ )
-        //#endif
-    }
+    // TODO("fabric")
+    // fun getLightValue(): Int {
+    //     return mcBlock.getLightValue(
+    //             World.getWorld()!!.getBlockState(blockPos),
+    //             World.getWorld(),
+    //             blockPos
+    //     )
+    // }
 
-    fun getDefaultState(): IBlockState = mcBlock.defaultState
+    fun getDefaultState() = mcBlock.defaultState
 
-    fun getDefaultMetadata(): Int = mcBlock.getMetaFromState(getDefaultState())
+    // TODO("fabric")
+    // fun getDefaultMetadata(): Int = mcBlock.getMetaFromState(getDefaultState())
 
     fun canProvidePower(): Boolean {
-        //#if MC<=10809
-        return mcBlock.canProvidePower()
-        //#else
-        //$$ return block.canProvidePower(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
-        //#endif
+        // It seems like no blocks actually use the argument
+        return mcBlock.emitsRedstonePower(null)
     }
 
-    fun getHarvestLevel(): Int = mcBlock.getHarvestLevel(getDefaultState())
-
-    fun isTranslucent(): Boolean {
-        //#if MC<=10809
-        return mcBlock.isTranslucent
-        //#else
-        //$$ return block.isTranslucent(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
-        //#endif
+    // TODO(VERIFY): Compatibility with previous version
+    // TODO: No item needs netherite tools to break, right?
+    fun getHarvestLevel(): Int = when {
+        getDefaultState().isIn(BlockTags.NEEDS_DIAMOND_TOOL) -> 3
+        getDefaultState().isIn(BlockTags.NEEDS_IRON_TOOL) -> 2
+        getDefaultState().isIn(BlockTags.NEEDS_STONE_TOOL) -> 1
+        else -> 0
     }
 
-    override fun toString(): String = "BlockType{name=${mcBlock.registryName}}"
+    fun isTranslucent() = !mcBlock.asMixin<AbstractBlockAccessor>().getMaterial().blocksLight()
+
+    override fun toString(): String = "BlockType{name=${getRegistryName()}}"
 }

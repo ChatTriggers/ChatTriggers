@@ -1,8 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
-import com.chattriggers.ctjs.utils.kotlin.MCEnumFacing
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.IStringSerializable
+import net.minecraft.util.math.Direction
 import java.util.function.Predicate
 
 enum class BlockFace(
@@ -10,7 +8,7 @@ enum class BlockFace(
     val axisDirection: AxisDirection,
     val axis: Axis,
     val directionVec: Vec3i
-) : IStringSerializable {
+) {
     Down(1, AxisDirection.Negative, Axis.Y, Vec3i(0, -1, 0)),
     Up(0, AxisDirection.Positive, Axis.Y, Vec3i(0, 1, 0)),
     North(3, AxisDirection.Negative, Axis.Z, Vec3i(0, 0, -1)),
@@ -58,8 +56,6 @@ enum class BlockFace(
         else -> throw IllegalStateException("Cannot rotate $this around z-axis")
     }
 
-    override fun getName() = name.lowercase()
-
     enum class Plane : Predicate<BlockFace>, Iterable<BlockFace> {
         Horizontal,
         Vertical;
@@ -81,7 +77,7 @@ enum class BlockFace(
         Negative(-1),
     }
 
-    enum class Axis(val plane: Plane) : Predicate<BlockFace>, IStringSerializable {
+    enum class Axis(val plane: Plane) : Predicate<BlockFace> {
         X(Plane.Horizontal),
         Y(Plane.Vertical),
         Z(Plane.Horizontal);
@@ -93,20 +89,16 @@ enum class BlockFace(
         override fun test(t: BlockFace): Boolean {
             return t.axis == this
         }
-
-        override fun getName(): String {
-            return name.lowercase()
-        }
     }
 
     companion object {
-        fun fromMCEnumFacing(facing: MCEnumFacing) = when (facing) {
-            EnumFacing.DOWN -> Down
-            EnumFacing.UP -> Up
-            EnumFacing.NORTH -> North
-            EnumFacing.SOUTH -> South
-            EnumFacing.WEST -> West
-            EnumFacing.EAST -> East
+        fun fromDirection(direction: Direction) = when (direction) {
+            Direction.DOWN -> Down
+            Direction.UP -> Up
+            Direction.NORTH -> North
+            Direction.SOUTH -> South
+            Direction.WEST -> West
+            Direction.EAST -> East
         }
     }
 }

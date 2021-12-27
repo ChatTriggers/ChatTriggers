@@ -1,9 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.SignBlockEntityAccessor
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.tileentity.TileEntitySign
+import net.minecraft.block.entity.SignBlockEntity
 
 /**
  * Creates a new Sign object wrapper.
@@ -14,14 +16,18 @@ import net.minecraft.tileentity.TileEntitySign
  */
 @External
 class Sign(block: Block) : Block(block.type, block.pos, block.face) {
-    private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(pos.toMCBlock()) as TileEntitySign
+    private val sign = World.getWorld()!!.getBlockEntity(pos.toMCBlockPos()) as SignBlockEntity
 
-    fun getLines(): List<Message> = sign.signText.map { it?.let(::Message) ?: Message("") }
+    fun getLines(): List<Message> = sign
+        .asMixin<SignBlockEntityAccessor>()
+        .getTexts(false) // TODO("fabric"): What does the filtered parameter do?
+        .map(::Message) // TODO("fabric"): Is the text nullable? If not, perhaps make
+                        //                 blank entries null?
 
-    fun getFormattedLines(): List<String> = sign.signText.map { it?.formattedText ?: "" }
+    fun getFormattedLines(): List<String> = getLines().map { it.getFormattedText() }
 
-    fun getUnformattedLines(): List<String> = sign.signText.map { it?.unformattedText ?: "" }
+    fun getUnformattedLines(): List<String> = getLines().map { it.getUnformattedText() }
 
     override fun toString(): String =
-        "Sign{lines=${getLines()}, name=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"
+        "Sign{lines=${getLines()}, name=${type.getRegistryName()}, x=$x, y=$y, z=$z}"
 }
