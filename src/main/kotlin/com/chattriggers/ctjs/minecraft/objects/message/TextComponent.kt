@@ -183,7 +183,7 @@ class TextComponent {
                 "hoverAction:$hoverAction, " +
                 "hoverValue:$hoverValue, " +
                 "clickAction:$clickAction, " +
-                "clickValue:$clickValue, " +
+                "clickValue:$clickValue" +
                 "}"
 
     private fun reInstance() {
