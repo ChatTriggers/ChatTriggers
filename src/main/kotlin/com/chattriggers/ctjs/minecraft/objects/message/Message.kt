@@ -1,26 +1,32 @@
 package com.chattriggers.ctjs.minecraft.objects.message
 
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 
 @External
 class Message {
-    private lateinit var chatMessage: Text
+    private lateinit var text: Text
+    private lateinit var textComponent: TextComponent
 
     private var messageParts = mutableListOf<TextComponent>()
     private var chatLineId = -1
     private var recursive = false
     private var formatted = true
 
-    /**
-     * Creates a new Message object from a chat event.
-     * @param event the chat event
-     */
-    constructor(event: ClientChatReceivedEvent) : this(event.message)
+    // TODO("fabric")
+    // /**
+    //  * Creates a new Message object from a chat event.
+    //  * @param event the chat event
+    //  */
+    // constructor(event: ClientChatReceivedEvent) : this(event.message)
 
     /**
      * Creates a new Message object from a Text object.
@@ -38,7 +44,7 @@ class Message {
      * Creates a new Message object in parts of TextComponents or Strings.
      * @param messageParts the list of TextComponents or Strings
      */
-    constructor(messageParts: ArrayList<Any>) {
+    constructor(messageParts: Collection<Any>) {
         this.messageParts.addAll(messageParts.map {
             when (it) {
                 is String -> TextComponent(it)
@@ -53,64 +59,45 @@ class Message {
      * Creates a new Message object in parts of TextComponents or Strings.
      * @param components the TextComponents or Strings
      */
-    constructor(vararg components: Any) : this(ArrayList(components.asList()))
-
-    //#if MC==11604
-    //$$ internal constructor(processor: IReorderingProcessor) {
-    //$$     val consumer = TextComponent.StyledCharacterConsumer()
-    //$$     processor.accept(consumer)
-    //$$     messageParts.add(TextComponent(consumer.toString()))
-    //$$ }
-    //$$
-    //$$ fun getReorderingProcessor() = IReorderingProcessor { consumer ->
-    //$$     // TODO: This almost certainly does not work
-    //$$     var index = 0
-    //$$     for (part in getMessageParts()) {
-    //$$         part.unformattedText.forEach {
-    //$$             consumer.accept(index++, part.style, it.toInt())
-    //$$         }
-    //$$     }
-    //$$     true
-    //$$ }
-    //#endif
+    constructor(vararg components: Any) : this(components.toList())
 
     /**
-     * @return the parsed message as an _root_ide_package_.com.chattriggers.ctjs.utils.kotlin.MCITextComponent
+     * @return the parsed message as a Text object
      */
-    fun getChatMessage(): MCITextComponent {
+    fun getChatMessage(): Text {
         parseMessage()
-        return this.chatMessage
+        return text
     }
 
     /**
      * @return the formatted text of the parsed message
      */
-    fun getFormattedText(): String = getChatMessage().formattedText
+    fun getFormattedText(): String = textComponent.getFormattedText()
 
     /**
      * @return the unformatted text of the parsed message
      */
-    fun getUnformattedText(): String = getChatMessage().unformattedText
+    fun getUnformattedText(): String = textComponent.getUnformattedText()
 
     /**
      * @return the message [TextComponent] parts as a list.
      */
-    fun getMessageParts(): List<TextComponent> = this.messageParts
+    fun getMessageParts(): List<TextComponent> = messageParts
 
     /**
      * @return the chat line ID of the message
      */
-    fun getChatLineId(): Int = this.chatLineId
+    fun getChatLineId(): Int = chatLineId
 
     /**
      * Sets the chat line ID of the message. Useful for updating an already sent chat message.
      */
-    fun setChatLineId(id: Int) = apply { this.chatLineId = id }
+    fun setChatLineId(id: Int) = apply { chatLineId = id }
 
     /**
-     * @return true if the message can trip other triggers.
+     * @return true if the message can activate other triggers.
      */
-    fun isRecursive(): Boolean = this.recursive
+    fun isRecursive() = recursive
 
     /**
      * Sets whether or not the message can trip other triggers.
@@ -121,7 +108,7 @@ class Message {
     /**
      * @return true if the message is formatted
      */
-    fun isFormatted(): Boolean = this.formatted
+    fun isFormatted() = formatted
 
     /**
      * Sets if the message is to be formatted
@@ -137,8 +124,8 @@ class Message {
      */
     fun setTextComponent(index: Int, component: Any) = apply {
         when (component) {
-            is String -> this.messageParts[index] = TextComponent(component)
-            is TextComponent -> this.messageParts[index] = component
+            is String -> messageParts[index] = TextComponent(component)
+            is TextComponent -> messageParts[index] = component
         }
     }
 
@@ -149,8 +136,8 @@ class Message {
      */
     fun addTextComponent(component: Any) = apply {
         when (component) {
-            is String -> this.messageParts.add(TextComponent(component))
-            is TextComponent -> this.messageParts.add(component)
+            is String -> messageParts.add(TextComponent(component))
+            is TextComponent -> messageParts.add(component)
         }
     }
 
@@ -162,18 +149,18 @@ class Message {
      */
     fun addTextComponent(index: Int, component: Any) = apply {
         when (component) {
-            is String -> this.messageParts.add(index, TextComponent(component))
-            is TextComponent -> this.messageParts.add(index, component)
+            is String -> messageParts.add(index, TextComponent(component))
+            is TextComponent -> messageParts.add(index, component)
         }
     }
 
     fun clone(): Message = copy()
+
     fun copy(): Message {
-        val copy = Message(this.messageParts)
-            .setChatLineId(this.chatLineId)
-        copy.recursive = this.recursive
-        copy.formatted = this.formatted
-        return copy
+        return Message(messageParts).setChatLineId(chatLineId).also {
+            it.recursive = recursive
+            it.formatted = formatted
+        }
     }
 
     /**
@@ -189,26 +176,21 @@ class Message {
      */
     fun chat() {
         parseMessage()
-        if (!ChatLib.isPlayer("[CHAT]: " + this.chatMessage.formattedText)) return
+        if (!ChatLib.isPlayer("[CHAT]: " + getFormattedText())) return
 
-        if (this.chatLineId != -1) {
-            Client.getChatGUI()?.printChatMessageWithOptionalDeletion(this.chatMessage, this.chatLineId)
+        if (chatLineId != -1) {
+            Client.getChatGUI()?.asMixin<ChatHudAccessor>()?.addMessage(text, chatLineId)
             return
         }
 
-        //#if MC<=10809
-        if (this.recursive) {
-            Client.getConnection().handleChat(MCChatPacket(this.chatMessage, 0))
-        } else {
-            Player.getPlayer()?.addChatMessage(this.chatMessage)
-        }
-        //#else
-        //$$ if (this.recursive) {
-        //$$    Client.getConnection().handleChat(MCChatPacket(this.chatMessage, ChatType.CHAT))
-        //$$ } else {
-        //$$    Player.getPlayer()?.sendMessage(this.chatMessage)
-        //$$ }
-        //#endif
+        // TODO("fabric")
+        // if (recursive) {
+        //     Client.getConnection()?.sendPacket(ChatMessageC2SPacket(getFormattedText()))
+        // } else {
+        //     Player.getPlayer()?.sendMessage(text, false)
+        // }
+
+        Player.getPlayer()?.sendMessage(text, false)
     }
 
     /**
@@ -216,18 +198,8 @@ class Message {
      */
     fun actionBar() {
         parseMessage()
-        if (!ChatLib.isPlayer("[ACTION BAR]: " + this.chatMessage.formattedText)) return
-
-        Client.getConnection().handleChat(
-            MCChatPacket(
-                this.chatMessage,
-                //#if MC<=10809
-                2
-                //#else
-                //$$ ChatType.GAME_INFO
-                //#endif
-            )
-        )
+        if (ChatLib.isPlayer("[ACTION BAR]: " + getFormattedText()))
+            Player.getPlayer()?.sendMessage(text, true)
     }
 
     override fun toString() =
@@ -239,10 +211,10 @@ class Message {
             "}"
 
     private fun parseMessage() {
-        this.chatMessage = MCStringTextComponent("")
+        text = LiteralText("")
 
-        this.messageParts.map {
-            this.chatMessage.appendSibling(it.component)
+        messageParts.forEach {
+            text.siblings.add(it.component)
         }
     }
 }
