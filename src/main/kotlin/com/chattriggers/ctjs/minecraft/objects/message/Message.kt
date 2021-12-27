@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBaseTextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCChatPacket
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
+import net.minecraft.util.ChatComponentTranslation
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 
 //#if MC>=11202
@@ -18,7 +19,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 class Message {
     private lateinit var chatMessage: MCITextComponent
 
-    private var messageParts = mutableListOf<TextComponent>()
+    private val messageParts = mutableListOf<TextComponent>()
     private var chatLineId = -1
     private var recursive = false
     private var formatted = true
@@ -34,7 +35,27 @@ class Message {
      * @param component the IChatComponent
      */
     constructor(component: MCITextComponent) {
-        messageParts.add(TextComponent(component))
+        if (component.siblings.isEmpty()) {
+            if (component !is ChatComponentTranslation) {
+                messageParts.add(TextComponent(component))
+                return
+            }
+
+            component.forEach {
+                if (it.siblings.isEmpty()) {
+                    messageParts.add(TextComponent(it))
+                }
+            }
+        } else {
+            val formattedText = component.formattedText
+
+            val firstComponent = MCBaseTextComponent(
+                formattedText.substring(0, formattedText.indexOf(component.siblings[0].formattedText))
+            ).apply { chatStyle = component.chatStyle }
+
+            messageParts.add(TextComponent(firstComponent))
+            messageParts.addAll(component.siblings.map(::TextComponent))
+        }
     }
 
     /**
@@ -226,7 +247,7 @@ class Message {
     private fun parseMessage() {
         chatMessage = MCBaseTextComponent("")
 
-        messageParts.map {
+        messageParts.forEach {
             chatMessage.appendSibling(it.chatComponentText)
         }
     }
