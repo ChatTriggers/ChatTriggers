@@ -69,6 +69,7 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.45.0+1.17"
+    modImplementation "net.fabricmc:fabric-language-kotlin:1.7.1+kotlin.1.6.10"
 
     modImplementation(include("gg.essential:loader-fabric:1.0.0"))
     modCompileOnly("gg.essential:essential-1.17.1-fabric:1720")
@@ -77,7 +78,7 @@ dependencies {
         exclude group: "org.jetbrains.kotlin"
     }
     provided 'com.fasterxml.jackson.core:jackson-core:2.13.1'
-    provided 'com.chattriggers:rhino:1.8.2'
+    implementation 'com.chattriggers:rhino:1.8.2'
     provided 'com.fifesoft:rsyntaxtextarea:3.1.4'
 }
 

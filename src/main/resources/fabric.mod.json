@@ -1,0 +1,30 @@
+{
+    "schemaVersion": 1,
+    "id": "chattriggers",
+    "name": "ChatTriggers",
+    "version": "2.0.0",
+    "environment": "client",
+    "authors": ["Ecolsson", "FalseHonesty", "kerbybit"],
+    "contributors": ["Squagward", "Debuggings", "DJtheRedstoner"],
+    "license": ["MIT"],
+    "contact": {
+        "homepage": "https://chattriggers.com",
+        "sources": "https://github.com/ChatTriggers/ChatTriggers",
+        "issues": "https://github.com/ChatTriggers/ChatTriggers/issues"
+    },
+    "entrypoints": {
+        "client": [
+            {
+                "adapter": "kotlin",
+                "value": "com.chattriggers.ctjs.CTJS"
+            }
+        ]
+    },
+    "languageAdapters": {
+        "kotlin": "net.fabricmc.language.kotlin.KotlinAdapter"
+    },
+    "depends": {
+        "fabric-language-kotlin": ">=1.7.1+kotlin.1.6.10"
+    },
+    "mixins": ["chattriggers.mixins.json"]
+}

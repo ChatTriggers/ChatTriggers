@@ -4,55 +4,44 @@ import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
-import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.wrappers.CPS
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
+import com.chattriggers.ctjs.utils.Initializer
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.google.gson.Gson
+import com.mojang.brigadier.CommandDispatcher
 import gg.essential.vigilance.Vigilance
-import net.minecraftforge.client.ClientCommandHandler
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.minecraft.server.command.ServerCommandSource
 import java.io.File
 
-@Mod(
-    modid = Reference.MODID,
-    name = Reference.MODNAME,
-    version = Reference.MODVERSION,
-    clientSideOnly = true,
-    modLanguage = "Kotlin",
-    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
-)
-object CTJS {
+object CTJS : ClientModInitializer {
     const val WEBSITE_ROOT = "https://www.chattriggers.com"
     val gson = Gson()
     val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
 
-    @Mod.EventHandler
-    fun preInit(event: FMLPreInitializationEvent) {
+    internal lateinit var commandDispatcher: CommandDispatcher<ServerCommandSource>
+
+    override fun onInitializeClient() {
         listOf(
             WorldListener,
             CPS,
             GuiHandler,
             ClientListener,
             UpdateChecker,
-            MouseListener
-        ).forEach(MinecraftForge.EVENT_BUS::register)
+        ).forEach(Initializer::onInitialize)
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
-    }
 
-    @Mod.EventHandler
-    fun init(event: FMLInitializationEvent) {
         Vigilance.initialize()
         Config.preload()
 
@@ -60,11 +49,10 @@ object CTJS {
             ModuleManager.entryPass()
         }
 
-        registerHooks()
-    }
-
-    private fun registerHooks() {
-        ClientCommandHandler.instance.registerCommand(CTCommand)
+        CommandRegistrationCallback.EVENT.register { dispatcher, _ ->
+            commandDispatcher = dispatcher
+            CTCommand.register(dispatcher)
+        }
 
         Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
     }
