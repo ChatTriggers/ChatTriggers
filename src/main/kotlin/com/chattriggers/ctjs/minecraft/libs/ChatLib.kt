@@ -258,7 +258,6 @@ object ChatLib {
         )
     }
 
-    @JvmStatic
     private fun editChat(toReplace: (Message) -> Boolean, vararg replacements: Message) {
         val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
         val chatLines = Client.getChatGUI()!!.chatLines
@@ -318,7 +317,7 @@ object ChatLib {
     /**
      * Deletes an already sent chat message by the text of the chat
      *
-     * @param toDelete the unformatted text of the message to be replaced
+     * @param toDelete the unformatted text of the message to be deleted
      */
     @JvmStatic
     fun deleteChat(toDelete: String) {
@@ -330,7 +329,7 @@ object ChatLib {
     /**
      * Deletes an already sent chat message by the [Message]
      *
-     * @param toDelete the message to be replaced
+     * @param toDelete the message to be deleted
      */
     @JvmStatic
     fun deleteChat(toDelete: Message) {
@@ -345,7 +344,7 @@ object ChatLib {
     /**
      * Deletes an already sent chat message by its chat line id
      *
-     * @param chatLineId the chat line id of the message to be replaced
+     * @param chatLineId the chat line id of the message to be deleted
      */
     @JvmStatic
     fun deleteChat(chatLineId: Int) {
@@ -354,7 +353,6 @@ object ChatLib {
         }
     }
 
-    @JvmStatic
     private fun deleteChat(toDelete: (Message) -> Boolean) {
         val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
         val chatLines = Client.getChatGUI()!!.chatLines

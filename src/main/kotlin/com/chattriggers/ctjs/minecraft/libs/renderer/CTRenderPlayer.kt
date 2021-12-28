@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.entity.RenderPlayer
 import net.minecraft.client.renderer.entity.layers.*
 
-class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : RenderPlayer(renderManager, useSmallArms) {
+internal class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : RenderPlayer(renderManager, useSmallArms) {
     private var showNametag = true
     private var showArmor = true
     private var showCape = true

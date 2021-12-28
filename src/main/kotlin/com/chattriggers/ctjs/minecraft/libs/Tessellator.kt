@@ -133,7 +133,7 @@ object Tessellator {
      * @param drawMode the GL draw mode
      * @param textured if the Tessellator is textured
      * @return the Tessellator to allow for method chaining
-     * @see com.chattriggers.ctjs.minecraft.libs.renderer.Shape#setDrawMode(int)
+     * @see com.chattriggers.ctjs.minecraft.libs.renderer.Shape.setDrawMode
      */
     @JvmStatic
     @JvmOverloads
