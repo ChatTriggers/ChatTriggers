@@ -1,51 +1,38 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
-import net.minecraft.client.resources.I18n
-
-//#if MC>=11202
-//$$ import net.minecraft.potion.Potion
-//#endif
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.text.TranslatableText
+import net.minecraft.util.registry.Registry
 
 @External
-class PotionEffect(val effect: MCPotionEffect) {
+class PotionEffect(val effect: StatusEffectInstance) {
     /**
      * Returns the translation key of the potion.
      * Ex: "potion.poison"
      */
-    fun getName(): String = effect.effectName
+    fun getName(): String = effect.translationKey
 
     /**
      * Returns the localized name of the potion that
      * is displayed in the player's inventory.
      * Ex: "Poison"
      */
-    fun getLocalizedName(): String = I18n.format(getName(), "%s")
+    fun getLocalizedName(): String = TextComponent(TranslatableText(getName())).getFormattedText()
 
     fun getAmplifier(): Int = effect.amplifier
 
     fun getDuration(): Int = effect.duration
 
-    fun getID(): Int {
-        //#if MC<=10809
-        return effect.potionID
-        //#else
-        //$$ return Potion.getIdFromPotion(effect.potion)
-        //#endif
-    }
+    fun getID() = Registry.STATUS_EFFECT.getRawId(effect.effectType)
 
     fun isAmbient(): Boolean = effect.isAmbient
 
-    fun isDurationMax(): Boolean = effect.isPotionDurationMax
+    // TODO("fabric")
+    // fun isDurationMax(): Boolean = effect.isPotionDurationMax
 
-    fun showsParticles(): Boolean {
-        //#if MC<=10809
-        return effect.isShowParticles
-        //#else
-        //$$ return effect.doesShowParticles()
-        //#endif
-    }
+    fun showsParticles() = effect.shouldShowParticles()
 
     override fun toString(): String = effect.toString()
 }
