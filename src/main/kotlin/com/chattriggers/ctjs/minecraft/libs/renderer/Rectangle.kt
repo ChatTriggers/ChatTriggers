@@ -12,12 +12,12 @@ class Rectangle(
     private var height: Float
 ) {
 
-    private var shadow = Shadow(this)
-    private var outline = Outline(this)
+    private val shadow = Shadow(this)
+    private val outline = Outline(this)
 
     fun getColor(): Long = color
 
-    fun setColor(color: Long) = apply { this.color = color }
+    fun setColor(color: Long) = apply { this.color = Renderer.fixAlpha(color) }
 
     fun getX(): Float = x
 

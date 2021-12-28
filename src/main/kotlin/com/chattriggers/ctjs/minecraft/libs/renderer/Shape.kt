@@ -12,9 +12,11 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @External
-class Shape(private var color: Int) {
-    private var vertexes = mutableListOf<Vector2f>()
+class Shape(private var color: Long) {
+    private val vertexes = mutableListOf<Vector2f>()
+    private val reversedVertexes = vertexes.asReversed()
     private var drawMode = 9
+    private var area = 0f
 
     fun copy(): Shape = clone()
 
@@ -25,9 +27,9 @@ class Shape(private var color: Int) {
         return clone
     }
 
-    fun getColor(): Int = color
+    fun getColor(): Long = color
 
-    fun setColor(color: Int) = apply { this.color = color }
+    fun setColor(color: Long) = apply { this.color = Renderer.fixAlpha(color) }
 
     fun getDrawMode(): Int = drawMode
 
@@ -48,17 +50,27 @@ class Shape(private var color: Int) {
 
     fun getVertexes(): List<Vector2f> = vertexes
 
-    fun addVertex(x: Float, y: Float) = apply { vertexes.add(Vector2f(x, y)) }
+    fun addVertex(x: Float, y: Float) = apply {
+        vertexes.add(Vector2f(x, y))
+        updateArea()
+    }
 
-    fun insertVertex(index: Int, x: Float, y: Float) = apply { vertexes.add(index, Vector2f(x, y)) }
+    fun insertVertex(index: Int, x: Float, y: Float) = apply {
+        vertexes.add(index, Vector2f(x, y))
+        updateArea()
+    }
 
-    fun removeVertex(index: Int) = apply { vertexes.removeAt(index) }
+    fun removeVertex(index: Int) = apply {
+        vertexes.removeAt(index)
+        updateArea()
+    }
 
     /**
      * Sets the shape as a line pointing from [x1, y1] to [x2, y2] with a thickness
      */
     fun setLine(x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float) = apply {
         vertexes.clear()
+        area = 0f
 
         val theta = -atan2(y2 - y1, x2 - x1)
         val i = sin(theta) * (thickness / 2)
@@ -69,7 +81,7 @@ class Shape(private var color: Int) {
         vertexes.add(Vector2f(x2 - i, y2 - j))
         vertexes.add(Vector2f(x1 - i, y1 - j))
 
-        drawMode = 9
+        drawMode = 7
     }
 
     /**
@@ -78,6 +90,7 @@ class Shape(private var color: Int) {
      */
     fun setCircle(x: Float, y: Float, radius: Float, steps: Int) = apply {
         vertexes.clear()
+        area = 0f
 
         val theta = 2 * PI / steps
         val cos = cos(theta).toFloat()
@@ -100,24 +113,25 @@ class Shape(private var color: Int) {
     }
 
     fun draw() = apply {
-        val a = (color shr 24 and 255).toFloat() / 255.0f
-        val r = (color shr 16 and 255).toFloat() / 255.0f
-        val g = (color shr 8 and 255).toFloat() / 255.0f
-        val b = (color and 255).toFloat() / 255.0f
-
         val tessellator = MCTessellator.getInstance()
         val worldRenderer = tessellator.getRenderer()
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        if (Renderer.colorized == null)
-            GlStateManager.color(r, g, b, a)
+        Renderer.doColor(color)
 
         worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
 
-        for (vertex in vertexes)
-            worldRenderer.pos(vertex.x.toDouble(), vertex.y.toDouble(), 0.0).endVertex()
+        if (area < 0) {
+            vertexes.forEach {
+                worldRenderer.pos(it.x.toDouble(), it.y.toDouble(), 0.0).endVertex()
+            }
+        } else {
+            reversedVertexes.forEach {
+                worldRenderer.pos(it.x.toDouble(), it.y.toDouble(), 0.0).endVertex()
+            }
+        }
 
         tessellator.draw()
         GlStateManager.color(1f, 1f, 1f, 1f)
@@ -125,5 +139,18 @@ class Shape(private var color: Int) {
         GlStateManager.disableBlend()
 
         Renderer.finishDraw()
+    }
+
+    private fun updateArea() {
+        area = 0f
+
+        for (i in vertexes.indices) {
+            val p1 = vertexes[i]
+            val p2 = vertexes[(i + 1) % vertexes.size]
+
+            area += p1.x * p2.y - p2.x * p1.y
+        }
+
+        area /= 2
     }
 }

@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.entity.EntityLivingBase
+import org.lwjgl.util.vector.Vector2f
 import java.util.*
 import kotlin.math.*
 
@@ -225,7 +225,7 @@ object Renderer {
 
     @JvmStatic
     @JvmOverloads
-    fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 7) {
+    fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 9) {
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
@@ -233,10 +233,11 @@ object Renderer {
 
         worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
 
+        if (area(vertexes) >= 0)
+            vertexes.reverse()
+
         vertexes.forEach {
-            if (it.size == 2) {
-                worldRenderer.pos(it[0].toDouble(), it[1].toDouble(), 0.0).endVertex()
-            }
+            worldRenderer.pos(it[0].toDouble(), it[1].toDouble(), 0.0).endVertex()
         }
 
         tessellator.draw()
@@ -250,7 +251,7 @@ object Renderer {
 
     @JvmStatic
     @JvmOverloads
-    fun drawLine(color: Long, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 9) {
+    fun drawLine(color: Long, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 7) {
         val theta = -atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
         val i = sin(theta).toFloat() * (thickness / 2)
         val j = cos(theta).toFloat() * (thickness / 2)
@@ -371,9 +372,7 @@ object Renderer {
         val mouseX = -30f
         val mouseY = 0f
 
-        var ent: EntityLivingBase = Player.getPlayer()!!
-        if (player is PlayerMP)
-            ent = player.player
+        val ent = if (player is PlayerMP) player.player else Player.getPlayer()!!
 
         GlStateManager.enableColorMaterial()
         RenderHelper.enableStandardItemLighting()
@@ -426,7 +425,7 @@ object Renderer {
         finishDraw()
     }
 
-    private fun doColor(longColor: Long) {
+    internal fun doColor(longColor: Long) {
         val color = longColor.toInt()
 
         if (colorized == null) {
@@ -446,6 +445,19 @@ object Renderer {
             GlStateManager.popMatrix()
             GlStateManager.pushMatrix()
         }
+    }
+
+    private fun area(points: Array<out List<Float>>): Float {
+        var area = 0f
+
+        for (i in points.indices) {
+            val (x1, y1) = points[i]
+            val (x2, y2) = points[(i + 1) % points.size]
+
+            area += x1 * y2 - x2 * y1
+        }
+
+        return area / 2
     }
 
     object screen {
