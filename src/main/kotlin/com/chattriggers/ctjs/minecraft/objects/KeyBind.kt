@@ -2,15 +2,14 @@ package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.client.resources.I18n
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
-import org.apache.commons.lang3.ArrayUtils
 import java.util.*
 
 @External
 class KeyBind {
-    private var keyBinding: KeyBinding
-    private var isCustom: Boolean = false
+    private val keyBinding: KeyBinding
 
     /**
      * Creates a new key bind, editable in the user's controls.
@@ -22,24 +21,27 @@ class KeyBind {
      */
     @JvmOverloads
     constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
-        for (key in Client.getMinecraft().gameSettings.keyBindings) {
-            if (key.keyCategory == category && key.keyDescription == description) {
-                Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(
-                    Client.getMinecraft().gameSettings.keyBindings, key
-                )
-                break
-            }
+        val possibleDuplicate = Client.getMinecraft().gameSettings.keyBindings.find {
+            I18n.format(it.keyDescription) == I18n.format(description) &&
+            I18n.format(it.keyCategory) == I18n.format(category)
         }
 
-        keyBinding = KeyBinding(description, keyCode, category)
-        ClientRegistry.registerKeyBinding(keyBinding)
-
-        isCustom = true
+        if (possibleDuplicate != null) {
+            if (possibleDuplicate in keyBinds)
+                keyBinding = possibleDuplicate
+            else throw IllegalArgumentException(
+                "KeyBind already exists! To get a KeyBind from an existing Minecraft KeyBinding, " +
+                        "use the other KeyBind constructor or Client.getKeyBindFromKey."
+            )
+        } else {
+            keyBinding = KeyBinding(description, keyCode, category)
+            ClientRegistry.registerKeyBinding(keyBinding)
+            keyBinds.add(keyBinding)
+        }
     }
 
     constructor(keyBinding: KeyBinding) {
         this.keyBinding = keyBinding
-        isCustom = false
     }
 
     /**
@@ -69,4 +71,8 @@ class KeyBind {
      * @param pressed True to press, False to release
      */
     fun setState(pressed: Boolean) = KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
+
+    companion object {
+        private val keyBinds = mutableListOf<KeyBinding>()
+    }
 }
