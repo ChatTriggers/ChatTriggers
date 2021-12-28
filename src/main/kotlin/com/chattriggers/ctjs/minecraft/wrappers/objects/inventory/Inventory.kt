@@ -6,24 +6,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAc
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DragAction
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.DropAction
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.inventory.Container
-import net.minecraft.inventory.ContainerChest
-import net.minecraft.inventory.IInventory
+import com.chattriggers.ctjs.utils.kotlin.MCInventory
+import net.minecraft.entity.player.PlayerInventory
 
 @External
-class Inventory : JSONImpl {
-    val inventory: IInventory?
-    val container: Container?
-
-    constructor(inventory: IInventory) {
-        this.inventory = inventory
-        container = null
-    }
-
-    constructor(container: Container) {
-        this.container = container
-        inventory = null
-    }
+class Inventory(private val mcInventory: MCInventory) : JSONImpl {
+    fun getInventory() = mcInventory
 
     /**
      * Gets the total size of the Inventory.
@@ -32,7 +20,7 @@ class Inventory : JSONImpl {
      *
      * @return the size of the Inventory
      */
-    fun getSize(): Int = inventory?.sizeInventory ?: container!!.inventoryItemStacks.size
+    fun getSize() = mcInventory.size()
 
     /**
      * Gets the item in any slot, starting from 0.
@@ -40,19 +28,7 @@ class Inventory : JSONImpl {
      * @param slot the slot index
      * @return the Item in that slot
      */
-    fun getStackInSlot(slot: Int): Item {
-        return if (inventory == null)
-            Item(container!!.getSlot(slot).stack)
-        else Item(inventory.getStackInSlot(slot))
-    }
-
-    /**
-     * Returns the window identifier number of this Inventory.
-     * This Inventory must be backed by a Container [isContainer]
-     *
-     * @return the window id
-     */
-    fun getWindowId(): Int = container?.windowId ?: -1
+    fun getStackInSlot(slot: Int) = Item(mcInventory.getStack(slot))
 
     fun doAction(action: Action) {
         action.complete()
@@ -65,17 +41,12 @@ class Inventory : JSONImpl {
      * @param item the item for checking
      * @return whether it can be shift clicked in
      */
-    fun isItemValidForSlot(slot: Int, item: Item): Boolean {
-        return inventory == null
-                || inventory.isItemValidForSlot(slot, item.itemStack)
-    }
+    fun isItemValidForSlot(slot: Int, item: Item) = mcInventory.isValid(slot, item.itemStack)
 
     /**
      * @return a list of the [Item]s in an inventory
      */
-    fun getItems(): List<Item> {
-        return (0 until getSize()).map(::getStackInSlot)
-    }
+    fun getItems(): List<Item> = (0 until getSize()).map(::getStackInSlot)
 
     /**
      * Checks whether the inventory contains the given item.
@@ -83,9 +54,7 @@ class Inventory : JSONImpl {
      * @param item the item to check for
      * @return whether the inventory contains the item
      */
-    fun contains(item: Item): Boolean {
-        return getItems().contains(item)
-    }
+    fun contains(item: Item): Boolean = getItems().contains(item)
 
     /**
      * Checks whether the inventory contains an item with ID.
@@ -93,9 +62,7 @@ class Inventory : JSONImpl {
      * @param id the ID of the item to match
      * @retun whether the inventory contains an item with ID
      */
-    fun contains(id: Int): Boolean {
-        return getItems().any { it.getID() == id }
-    }
+    fun contains(id: Int): Boolean = getItems().any { it.getID() == id }
 
     /**
      * Gets the index of any item in the inventory, and returns the slot number.
@@ -104,9 +71,7 @@ class Inventory : JSONImpl {
      * @param item the item to check for
      * @return the index of the given item
      */
-    fun indexOf(item: Item): Int {
-        return getItems().indexOf(item)
-    }
+    fun indexOf(item: Item) = getItems().indexOf(item)
 
     /**
      * Gets the index of any item in the inventory with matching ID, and returns the slot number.
@@ -115,17 +80,7 @@ class Inventory : JSONImpl {
      * @param id the item ID to check for
      * @return the index of the given item with ID
      */
-    fun indexOf(id: Int): Int {
-        return getItems().indexOfFirst { it.getID() == id }
-    }
-
-    /**
-     * Returns true if this Inventory wraps a Container object
-     * rather than an IInventory object
-     *
-     * @return if this is a container
-     */
-    fun isContainer(): Boolean = container != null
+    fun indexOf(id: Int) = getItems().indexOfFirst { it.getID() == id }
 
     /**
      * Shorthand for [ClickAction]
@@ -137,7 +92,7 @@ class Inventory : JSONImpl {
      */
     @JvmOverloads
     fun click(slot: Int, shift: Boolean = false, button: String = "LEFT") = apply {
-        ClickAction(slot, getWindowId())
+        ClickAction(slot)
             .setClickString(button)
             .setHoldingShift(shift)
             .complete()
@@ -151,7 +106,7 @@ class Inventory : JSONImpl {
      * @return this inventory for method chaining
      */
     fun drop(slot: Int, ctrl: Boolean) = apply {
-        DropAction(slot, getWindowId())
+        DropAction(slot)
             .setHoldingCtrl(ctrl)
             .complete()
     }
@@ -164,9 +119,9 @@ class Inventory : JSONImpl {
      * @return this inventory for method chaining
      */
     fun drag(type: String, vararg slots: Int) = apply {
-        DragAction(-999, getWindowId()).run {
+        DragAction(-999).run {
             setStage(DragAction.Stage.BEGIN)
-                .setClickType(DragAction.ClickType.valueOf(type.uppercase()))
+                .setClickType(Action.ClickType.valueOf(type.uppercase()))
                 .complete()
 
             setStage(DragAction.Stage.SLOT)
@@ -178,19 +133,20 @@ class Inventory : JSONImpl {
         }
     }
 
-    /**
-     * Gets the name of the inventory, simply "container" for most chest-like blocks.
-     *
-     * @return the name of the inventory
-     */
-    fun getName(): String {
-        return when (container) {
-            is ContainerChest -> container.lowerChestInventory.name
-            else -> inventory?.name ?: "container"
-        }
-    }
+    // TODO(BREAKING): Remove this
+    // /**
+    //  * Gets the name of the inventory, simply "container" for most chest-like blocks.
+    //  *
+    //  * @return the name of the inventory
+    //  */
+    // fun getName(): String {
+    //     return when (container) {
+    //         is ContainerChest -> container.lowerChestInventory.name
+    //         else -> inventory?.name ?: "container"
+    //     }
+    // }
 
-    fun getClassName(): String = inventory?.javaClass?.simpleName ?: container!!.javaClass.simpleName
+    fun getClassName(): String = mcInventory.javaClass.simpleName
 
     override fun toString(): String = "Inventory{${getClassName()}}"
 }

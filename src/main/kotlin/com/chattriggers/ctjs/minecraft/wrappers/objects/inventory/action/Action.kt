@@ -4,34 +4,23 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory
 import com.chattriggers.ctjs.utils.kotlin.External
-
-//#if MC>10809
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
-//#endif
+import net.minecraft.screen.slot.SlotActionType
 
 @External
-abstract class Action(var slot: Int, var windowId: Int) {
+abstract class Action(var slot: Int) {
     fun setSlot(slot: Int) = apply {
         this.slot = slot
     }
 
-    fun setWindowId(windowId: Int) = apply {
-        this.windowId = windowId
-    }
-
     abstract fun complete()
 
-    //#if MC<=10809
-    protected fun doClick(button: Int, mode: Int) {
-        //#else
-        //$$ protected fun doClick(button: Int, mode: MCClickType) {
-        //#endif
-        Client.getMinecraft().playerController.windowClick(
-            windowId,
+    protected fun doClick(button: Int, mode: SlotActionType) {
+        Client.getMinecraft().interactionManager?.clickSlot(
+            Player.getPlayer()?.playerScreenHandler?.syncId ?: return,
             slot,
             button,
             mode,
-            Player.getPlayer()
+            Player.getPlayer(),
         )
     }
 
@@ -47,16 +36,23 @@ abstract class Action(var slot: Int, var windowId: Int) {
          * @return the new action
          */
         @JvmStatic
-        fun of(inventory: Inventory, slot: Int, typeString: String) =
-            when (Type.valueOf(typeString.uppercase())) {
-                Type.CLICK -> ClickAction(slot, inventory.getWindowId())
-                Type.DRAG -> DragAction(slot, inventory.getWindowId())
-                Type.KEY -> KeyAction(slot, inventory.getWindowId())
-                Type.DROP -> DropAction(slot, inventory.getWindowId())
+        fun of(inventory: Inventory, slot: Int, typeString: String): Action {
+            return when (Type.valueOf(typeString.uppercase())) {
+                Type.CLICK -> ClickAction(slot)
+                Type.DRAG -> DragAction(slot)
+                Type.KEY -> KeyAction(slot)
+                Type.DROP -> DropAction(slot)
             }
+        }
     }
 
     enum class Type {
         CLICK, DRAG, KEY, DROP
+    }
+
+    enum class ClickType(val button: Int) {
+        LEFT(0),
+        RIGHT(1),
+        MIDDLE(2)
     }
 }

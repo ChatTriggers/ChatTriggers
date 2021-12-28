@@ -4,22 +4,30 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.RenderHelper
+import com.chattriggers.ctjs.utils.kotlin.MCBlock
+import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
+import com.chattriggers.ctjs.utils.kotlin.toIdentifier
+import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.blaze3d.systems.RenderSystem
+import net.fabricmc.fabric.api.renderer.v1.RendererAccess
+import net.minecraft.block.BlockState
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.pattern.CachedBlockPosition
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.entity.item.EntityItem
+import net.minecraft.entity.ItemEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.registry.Registry
+import net.minecraft.world.WorldView
 import net.minecraft.item.Item as MCItem
-
-//#if MC>10809
-//$$ import net.minecraft.client.util.ITooltipFlag
-//$$ import com.chattriggers.ctjs.minecraft.wrappers.World
-//#endif
 
 @External
 class Item {
@@ -32,72 +40,65 @@ class Item {
     }
 
     constructor(itemName: String) {
-        item = MCItem.getByNameOrId(itemName)
+        item = Registry.ITEM[itemName.toIdentifier()]
         itemStack = ItemStack(item)
     }
 
     constructor(itemID: Int) {
-        item = MCItem.getItemById(itemID)
+        item = MCItem.byRawId(itemID)
         itemStack = ItemStack(item)
     }
 
     constructor(block: BlockType) {
-        item = MCItem.getItemFromBlock(block.mcBlock)
+        item = block.mcBlock.asItem()
         itemStack = ItemStack(item)
     }
 
-    constructor(entityItem: EntityItem) {
-        //#if MC<=10809
-        item = entityItem.entityItem.item
-        itemStack = entityItem.entityItem
-        //#else
-        //$$ item = entityItem.item.item
-        //$$ itemStack = entityItem.item
-        //#endif
-    }
+    // TODO("fabric")
+    // constructor(entityItem: ItemEntity) {
+    //     item = entityItem.entityItem.item
+    //     itemStack = entityItem.entityItem
+    // }
 
-    /**
-     * Create an Item object from an Entity.
-     * Has to be wrapping an EntityItem.
-     *
-     * @param entity the Entity
-     */
-    constructor(entity: Entity) {
-        if (entity.entity is EntityItem) {
-            //#if MC<=10809
-            item = entity.entity.entityItem.item
-            itemStack = entity.entity.entityItem
-            //#else
-            //$$ item = entity.entity.item.item
-            //$$ itemStack = entity.entity.item
-            //#endif
-        } else {
-            throw IllegalArgumentException("Entity is not of type EntityItem")
-        }
-    }
+    // TODO("fabric")
+    // /**
+    //  * Create an Item object from an Entity.
+    //  * Has to be wrapping an EntityItem.
+    //  *
+    //  * @param entity the Entity
+    //  */
+    // constructor(entity: Entity) {
+    //     if (entity.entity is EntityItem) {
+    //         //#if MC<=10809
+    //         item = entity.entity.entityItem.item
+    //         itemStack = entity.entity.entityItem
+    //         //#else
+    //         //$$ item = entity.entity.item.item
+    //         //$$ itemStack = entity.entity.item
+    //         //#endif
+    //     } else {
+    //         throw IllegalArgumentException("Entity is not of type EntityItem")
+    //     }
+    // }
 
-    fun getTextComponent() = TextComponent(itemStack.chatComponent)
+    // TODO(VERIFY)
+    fun getTextComponent() = TextComponent(itemStack.name)
 
-    fun getRawNBT() = itemStack.serializeNBT().toString()
+    fun getRawNBT() = itemStack.orCreateNbt.toString()
 
-    fun getNBT() = NBTTagCompound(itemStack.serializeNBT())
+    fun getNBT() = NBTTagCompound(itemStack.orCreateNbt)
 
-    @Deprecated("Use the better-named method", ReplaceWith("getNBT"))
-    fun getItemNBT(): NBTTagCompound = getNBT()
+    // TODO(BREAKING): remove this
+    // @Deprecated("Use the better-named method", ReplaceWith("getNBT"))
+    // fun getItemNBT(): NBTTagCompound = getNBT()
 
-    fun getID(): Int = MCItem.getIdFromItem(item)
+    fun getID(): Int = MCItem.getRawId(item)
 
     fun setStackSize(stackSize: Int) = apply {
         itemStack = ItemStack(item, stackSize)
     }
 
-    fun getStackSize(): Int {
-        //#if MC<=10809
-        return itemStack.stackSize
-        //#else
-        //$$ return itemStack.count
-        //#endif
-    }
+    fun getStackSize(): Int = itemStack.maxCount
 
     /**
      * Gets the item's unlocalized name.
@@ -105,7 +106,8 @@ class Item {
      *
      * @return the item's unlocalized name
      */
-    fun getUnlocalizedName(): String = item.unlocalizedName
+    // TODO(VERIFY)
+    fun getUnlocalizedName(): String = item.name.toString()
 
     /**
      * Gets the item's registry name.
@@ -113,13 +115,7 @@ class Item {
      *
      * @return the item's registry name
      */
-    fun getRegistryName(): String {
-        //#if MC<=10809
-        return item.registryName.toString()
-        //#else
-        //$$ return item.registryName.toString()
-        //#endif
-    }
+    fun getRegistryName(): String = Registry.ITEM.getId(item).toString()
 
     /**
      * Gets the item's stack display name.
@@ -127,40 +123,44 @@ class Item {
      *
      * @return the item's stack display name
      */
-    fun getName(): String = if (getID() == 0) "air" else itemStack.displayName
+    // TODO(VERIFY)
+    fun getName(): String = if (getID() == 0) "air" else item.getName(itemStack).toString()
 
+    // TODO(BREAKING): Keys now have namespaces
     fun getEnchantments(): Map<String, Int> {
-        return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
-            //#if MC<=10809
-            Enchantment.getEnchantmentById(
-                it.key
-            )
-                //#else
-                //$$ it.key
-                //#endif
-                .name.replace("enchantment.", "")
+        return EnchantmentHelper.get(itemStack).mapKeys {
+            Registry.ENCHANTMENT.getId(it.key).toString()
         }
     }
 
-    fun isEnchantable(): Boolean = itemStack.isItemEnchantable
+    fun isEnchantable(): Boolean = itemStack.isEnchantable
 
-    fun isEnchanted(): Boolean = itemStack.isItemEnchanted
+    fun isEnchanted(): Boolean = itemStack.hasEnchantments()
 
-    fun getMetadata(): Int = itemStack.metadata
+    // TODO("fabric")
+    // fun getMetadata(): Int = itemStack.
 
-    fun canPlaceOn(block: BlockType): Boolean = itemStack.canPlaceOn(block.mcBlock)
-
-    fun canHarvest(block: BlockType): Boolean {
-        //#if MC<=10809
-        return itemStack.canHarvestBlock(block.mcBlock)
-        //#else
-        //$$ return itemStack.canHarvestBlock(
-        //$$         World.getWorld().getBlockState(block.blockPos)
-        //$$ )
-        //#endif
+    // TODO("fabric"): Verify this actually does what I want in the methods below
+    class CachedBlockType(view: WorldView, val type: BlockType) : CachedBlockPosition(view, BlockPos.ORIGIN, false) {
+        override fun getBlockState(): BlockState {
+            return type.getDefaultState()
+        }
     }
 
-    fun canDestroy(block: BlockType): Boolean = itemStack.canDestroy(block.mcBlock)
+    fun canPlaceOn(block: BlockType): Boolean {
+        val world = World.getWorld() ?: return false
+        return itemStack.canPlaceOn(world.tagManager, CachedBlockType(world, block))
+    }
+
+    // TODO(BREAKING): Remove this method
+    // fun canHarvest(block: BlockType): Boolean {
+    //     return itemStack.canHarvestBlock(block.mcBlock)
+    // }
+
+    fun canDestroy(block: BlockType): Boolean {
+        val world = World.getWorld() ?: return false
+        return itemStack.canDestroy(world.tagManager, CachedBlockType(world, block))
+    }
 
     /**
      * Gets the item's durability, i.e. the number of uses left
@@ -169,47 +169,48 @@ class Item {
      */
     fun getDurability(): Int = getMaxDamage() - getDamage()
 
-    fun getDamage(): Int = itemStack.itemDamage
+    fun getDamage(): Int = itemStack.damage
 
     fun setDamage(damage: Int) = apply {
-        itemStack.itemDamage = damage
+        itemStack.damage = damage
     }
 
     fun getMaxDamage(): Int = itemStack.maxDamage
 
-    fun isDamagable(): Boolean = itemStack.isItemStackDamageable
+    fun isDamagable(): Boolean = itemStack.isDamageable
 
     fun getLore(): List<String> {
-        //#if MC<=10809
-        return itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips)
-        //#else
-        //$$ return itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED)
-        //#endif
+        val context = if (Client.getMinecraft().options.advancedItemTooltips) {
+            TooltipContext.Default.ADVANCED
+        } else TooltipContext.Default.NORMAL
+
+        return itemStack.getTooltip(Player.getPlayer(), context).map { TextComponent(it).getFormattedText() }
     }
 
-    /**
-     * Renders the item icon to the client's overlay.
-     *
-     * @param x the x location
-     * @param y the y location
-     * @param scale the scale
-     */
-    @JvmOverloads
-    fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f) {
-        val itemRenderer = Client.getMinecraft().renderItem
-
-        GlStateManager.scale(scale, scale, 1f)
-        GlStateManager.translate(x / scale, y / scale, 0f)
-        GlStateManager.color(1f, 1f, 1f, 1f)
-
-        RenderHelper.enableStandardItemLighting()
-        RenderHelper.enableGUIStandardItemLighting()
-
-        itemRenderer.zLevel = 200f
-        itemRenderer.renderItemIntoGUI(itemStack, 0, 0)
-
-        Renderer.finishDraw()
-    }
+    // TODO("fabric")
+    // /**
+    //  * Renders the item icon to the client's overlay.
+    //  *
+    //  * @param x the x location
+    //  * @param y the y location
+    //  * @param scale the scale
+    //  */
+    // @JvmOverloads
+    // fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f) {
+    //     val itemRenderer = Client.getMinecraft().renderItem
+    //
+    //     GlStateManager.scale(scale, scale, 1f)
+    //     GlStateManager.translate(x / scale, y / scale, 0f)
+    //     GlStateManager.color(1f, 1f, 1f, 1f)
+    //
+    //     RenderHelper.enableStandardItemLighting()
+    //     RenderHelper.enableGUIStandardItemLighting()
+    //
+    //     itemRenderer.zLevel = 200f
+    //     itemRenderer.renderItemIntoGUI(itemStack, 0, 0)
+    //
+    //     Renderer.finishDraw()
+    // }
 
     /**
      * Checks whether another Item is the same as this one.

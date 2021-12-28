@@ -1,13 +1,14 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action
 
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.screen.slot.SlotActionType
 
 //#if MC>10809
 //$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
 //#endif
 
 @External
-class KeyAction(slot: Int, windowId: Int) : Action(slot, windowId) {
+class KeyAction(slot: Int) : Action(slot) {
     private var key: Int = -1
 
     fun getKey(): Int = key
@@ -19,14 +20,12 @@ class KeyAction(slot: Int, windowId: Int) : Action(slot, windowId) {
      * @param key which key to "click"
      */
     fun setKey(key: Int) = apply {
+        if (key !in 0..8)
+            throw IllegalArgumentException("KeyAction key must be between 0 and 8 inclusive")
         this.key = key
     }
 
     override fun complete() {
-        //#if MC<=10809
-        doClick(key, 2)
-        //#else
-        //$$ doClick(key, MCClickType.SWAP)
-        //#endif
+        doClick(key, SlotActionType.SWAP)
     }
 }

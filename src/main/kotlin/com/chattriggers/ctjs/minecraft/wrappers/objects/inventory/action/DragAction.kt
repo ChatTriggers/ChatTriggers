@@ -1,20 +1,21 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action
 
 import com.chattriggers.ctjs.utils.kotlin.External
+import net.minecraft.screen.slot.SlotActionType
 
 //#if MC>10809
 //$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
 //#endif
 
 @External
-class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
-    private lateinit var clickType: ClickType
-    private lateinit var stage: Stage
+class DragAction(slot: Int) : Action(slot) {
+    private var clickType = ClickType.LEFT
+    private var stage = Stage.BEGIN
 
     fun getClickType(): ClickType = clickType
 
     /**
-     * The type of click (REQUIRED)
+     * The type of click
      *
      * @param clickType the new click type
      */
@@ -25,7 +26,7 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     fun getStage(): Stage = stage
 
     /**
-     * The stage of this drag (REQUIRED)
+     * The stage of this drag
      * BEGIN is when beginning the drag
      * SLOT is for each slot being dragged into
      * END is for ending the drag
@@ -49,7 +50,7 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
 
     /**
      * Sets the stage of this drag.
-     * Possible values are: BEGIN, SLOT, END [stage]
+     * Possible values are: BEGIN, SLOT, END
      *
      * @param stage the stage
      * @return the current Action for method chaining
@@ -61,20 +62,10 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     override fun complete() {
         val button = stage.stage and 3 or (clickType.button and 3) shl 2
 
-        if (stage != Stage.SLOT) {
+        if (stage != Stage.SLOT)
             slot = -999
-            println("Enforcing slot of -999")
-        }
 
-        //#if MC<=10809
-        doClick(button, 5)
-        //#else
-        //$$ doClick(button, MCClickType.QUICK_CRAFT)
-        //#endif
-    }
-
-    enum class ClickType(val button: Int) {
-        LEFT(0), RIGHT(1), MIDDLE(2)
+        doClick(button, SlotActionType.QUICK_MOVE)
     }
 
     enum class Stage(val stage: Int) {

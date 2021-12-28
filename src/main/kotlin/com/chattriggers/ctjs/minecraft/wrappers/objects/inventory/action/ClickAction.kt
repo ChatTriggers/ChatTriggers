@@ -2,24 +2,18 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action
 
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.utils.kotlin.External
-
-//#if MC>10809
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
-//#endif
+import net.minecraft.screen.slot.SlotActionType
 
 @External
-class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
-    private lateinit var clickType: ClickType
+class ClickAction(slot: Int) : Action(slot) {
+    private var clickType = ClickType.LEFT
     private var holdingShift = false
-    private var itemInHand = Player.getPlayer()?.inventory?.currentItem == null
-    //#if MC>10809
-    //$$ private var pickupAll = false
-    //#endif
+    private var itemInHand = Player.getHeldItem() == null
 
     fun getClickType(): ClickType = clickType
 
     /**
-     * The type of click (REQUIRED)
+     * The type of click
      *
      * @param clickType the new click type
      */
@@ -50,20 +44,6 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         this.itemInHand = itemInHand
     }
 
-    //#if MC>10809
-    //$$ fun getPickupAll() = pickupAll
-    //$$
-    //$$ /**
-    //$$  * Whether the click should try to pick up all items of said type in the inventory (essentially double clicking)
-    //$$  * (defaults to whether there actually is an item in the hand)
-    //$$  *
-    //$$  * @param pickupAll to pick up all items of the same type
-    //$$  */
-    //$$ fun setPickupAll(pickupAll: Boolean) = apply {
-    //$$     this.pickupAll = pickupAll
-    //$$ }
-    //#endif
-
     /**
      * Sets the type of click.
      * Possible values are: LEFT, RIGHT, MIDDLE
@@ -76,34 +56,13 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     }
 
     override fun complete() {
-        //#if MC<=10809
-        var mode = 0
-
-        if (clickType == ClickType.MIDDLE) {
-            mode = 3
-        } else if (slot == -999 && !itemInHand) {
-            mode = 4
-        } else if (holdingShift) {
-            mode = 1
+        val mode = when {
+            clickType == ClickType.MIDDLE -> SlotActionType.CLONE
+            slot == -999 && itemInHand -> SlotActionType.THROW
+            holdingShift -> SlotActionType.QUICK_MOVE
+            else -> SlotActionType.PICKUP
         }
-        //#else
-        //$$ val mode: MCClickType = if (clickType == ClickType.MIDDLE) {
-        //$$     MCClickType.CLONE
-        //$$ } else if (slot == -999 && !itemInHand) {
-        //$$     MCClickType.THROW
-        //$$ } else if (holdingShift) {
-        //$$     MCClickType.QUICK_MOVE
-        //$$ } else if (pickupAll) {
-        //$$     MCClickType.PICKUP_ALL
-        //$$ } else {
-        //$$     MCClickType.PICKUP
-        //$$ }
-        //#endif
 
         doClick(clickType.button, mode)
-    }
-
-    enum class ClickType(val button: Int) {
-        LEFT(0), RIGHT(1), MIDDLE(2)
     }
 }
