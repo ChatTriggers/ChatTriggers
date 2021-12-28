@@ -304,7 +304,6 @@ object Player {
         getPlayerInfo()?.displayName = textComponent.chatComponentText
     }
 
-    @JvmStatic
     private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
         return if (networkPlayerInfoIn.displayName != null)
             networkPlayerInfoIn.displayName?.formattedText.toString()
