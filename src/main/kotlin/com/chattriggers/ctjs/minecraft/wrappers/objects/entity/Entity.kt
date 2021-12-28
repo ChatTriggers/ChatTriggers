@@ -1,31 +1,36 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.entity
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
+import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
-import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
-import net.minecraft.util.Vec3
-import net.minecraft.world.World
+import gg.essential.universal.utils.MCWorld
+import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.MovementType
+import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec3d
 import java.util.*
+import kotlin.math.sqrt
 
 @External
-open class Entity(val entity: MCEntity) {
-    fun getX() = entity.posX
+open class Entity(val entity: MCEntity?) {
+    fun getX() = entity?.pos?.x ?: 0.0
 
-    fun getY() = entity.posY
+    fun getY() = entity?.pos?.y ?: 0.0
 
-    fun getZ() = entity.posZ
+    fun getZ() = entity?.pos?.z ?: 0.0
 
     fun getPos() = Vec3i(getX(), getY(), getZ())
 
-    fun getLastX() = entity.lastTickPosX
+    fun getLastX() = entity?.lastRenderX ?: 0.0
 
-    fun getLastY() = entity.lastTickPosY
+    fun getLastY() = entity?.lastRenderY ?: 0.0
 
-    fun getLastZ() = entity.lastTickPosZ
+    fun getLastZ() = entity?.lastRenderZ ?: 0.0
 
     fun getRenderX() = getLastX() + (getX() - getLastX()) * Tessellator.partialTicks
 
@@ -39,13 +44,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's pitch
      */
-    fun getPitch(): Double {
-        //#if MC<=10809
-        return MCMathHelper.wrapAngleTo180_float(entity.rotationPitch).toDouble()
-        //#else
-        //$$ return MathHelper.wrapDegrees(entity.rotationPitch).toDouble()
-        //#endif
-    }
+    fun getPitch() = MathHelper.wrapDegrees(entity?.pitch ?: 0f).toDouble()
 
     /**
      * Gets the yaw, the vertical direction the entity is facing towards.
@@ -53,13 +52,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's yaw
      */
-    fun getYaw(): Double {
-        //#if MC<=10809
-        return MCMathHelper.wrapAngleTo180_float(entity.rotationYaw).toDouble()
-        //#else
-        //$$ return MathHelper.wrapDegrees(entity.rotationYaw).toDouble()
-        //#endif
-    }
+    fun getYaw() = MathHelper.wrapDegrees(entity?.yaw ?: 0f).toDouble()
 
     /**
      * Gets the entity's x motion.
@@ -67,7 +60,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's x motion
      */
-    fun getMotionX(): Double = entity.motionX
+    fun getMotionX(): Double = entity?.velocity?.x ?: 0.0
 
     /**
      * Gets the entity's y motion.
@@ -75,7 +68,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's y motion
      */
-    fun getMotionY(): Double = entity.motionY
+    fun getMotionY(): Double = entity?.velocity?.y ?: 0.0
 
     /**
      * Gets the entity's z motion.
@@ -83,27 +76,13 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's z motion
      */
-    fun getMotionZ(): Double = entity.motionZ
+    fun getMotionZ(): Double = entity?.velocity?.z ?: 0.0
 
-    fun getRiding(): Entity? {
-        return entity.ridingEntity?.let(::Entity)
-    }
+    fun getRiding(): Entity? = entity?.rootVehicle?.let(::Entity)
 
-    fun getRider(): Entity? {
-        //#if MC<=10809
-        return entity.riddenByEntity?.let(::Entity)
-        //#else
-        //$$ return riders.firstOrNull()?.let(::Entity)
-        //#endif
-    }
+    fun getRider(): Entity? = entity?.firstPassenger?.let(::Entity)
 
-    fun getRiders(): List<Entity> {
-        //#if MC<=10809
-        return emptyList()
-        //#elseif
-        //$$ return entity.passengers.map(::Entity)
-        //#endif
-    }
+    fun getRiders(): List<Entity> = entity?.passengerList?.map(::Entity) ?: emptyList()
 
     /**
      * Checks whether the entity is dead.
@@ -112,30 +91,29 @@ open class Entity(val entity: MCEntity) {
      *
      * @return whether an entity is dead
      */
-    fun isDead(): Boolean = entity.isDead
+    fun isDead() = entity?.isAlive?.not() ?: false
 
     /**
      * Gets the entire width of the entity's hitbox
      *
      * @return the entity's width
      */
-    fun getWidth(): Float = entity.width
+    fun getWidth() = entity?.width ?: 0f
 
     /**
      * Gets the entire height of the entity's hitbox
      *
      * @return the entity's height
      */
-    fun getHeight(): Float = entity.height
+    fun getHeight() = entity?.height ?: 0f
 
     /**
      * Gets the height of the eyes on the entity,
      * can be added to its Y coordinate to get the actual Y location of the eyes.
-     * This value defaults to 85% of an entity's height, however is different for some entities.
      *
      * @return the height of the entity's eyes
      */
-    fun getEyeHeight(): Float = entity.eyeHeight
+    fun getEyeHeight() = entity?.pose?.let { entity.getEyeHeight(it) } ?: 0f
 
     /**
      * Gets the name of the entity, could be "Villager",
@@ -143,14 +121,14 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the (custom) name of the entity
      */
-    open fun getName(): String = entity.name
+    fun getName(): String = entity?.name?.let { TextComponent(it).getFormattedText() } ?: ""
 
     /**
      * Gets the Java class name of the entity, for example "EntityVillager"
      *
      * @return the entity's class name
      */
-    fun getClassName(): String = entity.javaClass.simpleName
+    fun getClassName(): String = entity?.javaClass?.simpleName ?: ""
 
     /**
      * Gets the Java UUID object of this entity.
@@ -158,7 +136,7 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's uuid
      */
-    fun getUUID(): UUID = entity.uniqueID
+    fun getUUID(): UUID? = entity?.uuid
 
     /**
      * Gets the entity's air level.
@@ -169,129 +147,142 @@ open class Entity(val entity: MCEntity) {
      *
      * @return the entity's air level
      */
-    fun getAir(): Int = entity.air
+    fun getAir(): Int = entity?.air ?: 300
 
     fun setAir(air: Int) = apply {
-        entity.air = air
+        entity?.air = air
     }
 
-    fun distanceTo(other: Entity): Float = distanceTo(other.entity)
+    fun distanceTo(other: Entity): Float = other.entity?.let(::distanceTo) ?: 0f
 
-    fun distanceTo(other: MCEntity): Float = entity.getDistanceToEntity(other)
+    fun distanceTo(other: MCEntity): Float = entity?.distanceTo(other) ?: 0f
 
-    fun distanceTo(blockPos: BlockPos): Float = entity.getDistance(
+    fun distanceTo(blockPos: BlockPos): Float = sqrt(entity?.squaredDistanceTo(
         blockPos.x.toDouble(),
         blockPos.y.toDouble(),
         blockPos.z.toDouble()
-    ).toFloat()
+    ) ?: 0.0).toFloat()
 
-    fun distanceTo(x: Float, y: Float, z: Float): Float = entity.getDistance(
+    fun distanceTo(x: Float, y: Float, z: Float): Float = sqrt(entity?.squaredDistanceTo(
         x.toDouble(),
         y.toDouble(),
         z.toDouble()
-    ).toFloat()
+    ) ?: 0.0).toFloat()
 
-    fun isOnGround() = entity.onGround
+    fun isOnGround() = entity?.isOnGround ?: true
 
-    fun isCollided() = entity.isCollided
+    fun isAirborne() = !isOnGround()
 
-    fun getDistanceWalked() = entity.distanceWalkedModified / 0.6f
+    // TODO(VERIFY)
+    fun isCollided() = entity?.let { it.horizontalCollision || it.verticalCollision } ?: false
 
-    fun getStepHeight() = entity.stepHeight
+    fun getDistanceWalked() = (entity?.distanceTraveled ?: 0f) / 0.6f
 
-    fun hasNoClip() = entity.noClip
+    fun getStepHeight() = entity?.stepHeight ?: 0f
 
-    fun getTicksExisted() = entity.ticksExisted
+    fun hasNoClip() = entity?.noClip ?: false
 
-    fun getFireResistance() = entity.fireResistance
+    fun getTicksExisted() = entity?.age ?: 0
 
-    fun isImmuneToFire() = entity.isImmuneToFire
+    // TODO("fabric")
+    // fun getFireResistance() = entity.fireResistance
 
-    fun isInWater() = entity.isInWater
+    fun isImmuneToFire() = entity?.isFireImmune ?: false
 
-    fun isWet() = entity.isWet
+    fun isInWater() = entity?.isTouchingWater ?: false
 
-    fun isAirborne() = entity.isAirBorne
+    fun isWet() = entity?.isWet ?: false
 
-    fun getDimension() = entity.dimension
+    // TODO("fabric"): What exactly does this do?
+    // fun getDimension() = entity.dimension
 
     fun setPosition(x: Double, y: Double, z: Double) = apply {
-        entity.setPosition(x, y, z)
+        entity?.setPosition(x, y, z)
     }
 
     fun setAngles(yaw: Float, pitch: Float) = apply {
-        entity.setAngles(yaw, pitch)
+        entity?.yaw = yaw
+        entity?.pitch = pitch
     }
 
-    fun getMaxInPortalTime() = entity.maxInPortalTime
+    fun getMaxInPortalTime() = entity?.maxNetherPortalTime ?: 0
 
-    fun setOnFire(seconds: Int) = apply {
-        entity.setFire(seconds)
+    // TODO(BREAKING): Changed from seconds to ticks
+    fun setOnFire(ticks: Int) = apply {
+        entity?.isOnFire = true
+        entity?.fireTicks = ticks
     }
 
     fun extinguish() = apply {
-        entity.extinguish()
+        entity?.extinguish()
     }
 
     fun move(x: Double, y: Double, z: Double) = apply {
-        entity.moveEntity(x, y, z)
+        entity?.move(MovementType.SELF, Vec3d(x, y, z))
     }
 
-    fun isSilent() = entity.isSilent
+    fun isSilent() = entity?.isSilent ?: false
 
     fun setIsSilent(silent: Boolean) = apply {
-        entity.isSilent = silent
+        entity?.isSilent = silent
     }
 
-    fun isInLava() = entity.isInLava
+    fun isInLava() = entity?.isInLava ?: false
 
     fun addVelocity(x: Double, y: Double, z: Double) = apply {
-        entity.addVelocity(x, y, z)
+        entity?.addVelocity(x, y, z)
     }
 
-    fun getLookVector(partialTicks: Float): Vec3 = entity.getLook(partialTicks)
+    fun getLookVector(partialTicks: Float) = entity?.getRotationVec(partialTicks) ?: Vec3d.ZERO
 
-    fun getEyePosition(partialTicks: Float): Vec3 = entity.getPositionEyes(partialTicks)
+    // TODO(BREAKING): Removed partialTicks argument
+    fun getEyePosition() = entity?.eyePos ?: 0
 
-    fun canBeCollidedWith() = entity.canBeCollidedWith()
+    fun canBeCollidedWith() = entity?.collides() ?: false
 
-    fun canBePushed() = entity.canBePushed()
+    fun canBePushed() = entity?.isPushable ?: false
 
-    fun dropItem(item: Item, size: Int) = entity.dropItem(item.item, size)
+    // TODO("fabric"): Add ItemEntity wrapper?
+    fun dropItem(item: Item, size: Int): ItemEntity? = entity?.dropItem(item.item, size)
 
-    fun isSneaking() = entity.isSneaking
+    fun isSneaking() = entity?.isSneaking ?: false
 
     fun setIsSneaking(sneaking: Boolean) = apply {
-        entity.isSneaking = sneaking
+        entity?.isSneaking = sneaking
     }
 
-    fun isSprinting() = entity.isSprinting
+    fun isSprinting() = entity?.isSprinting ?: false
 
     fun setIsSprinting(sprinting: Boolean) = apply {
-        entity.isSprinting = sprinting
+        entity?.isSprinting = sprinting
     }
 
-    fun isInvisible() = entity.isInvisible
+    fun isInvisible() = entity?.isInvisible ?: false
 
     fun setIsInvisible(invisible: Boolean) = apply {
-        entity.isInvisible = invisible
+        entity?.isInvisible = invisible
     }
 
-    fun isEating() = entity.isEating
+    // TODO(BREAKING): Remove these methods, as it seems like only player entities have
+    //                 the concept of eating
+    // fun isEating() = entity.isEating
+    //
+    // fun setIsEating(eating: Boolean) = apply {
+    //     entity.isEating = eating
+    // }
 
-    fun setIsEating(eating: Boolean) = apply {
-        entity.isEating = eating
-    }
+    fun isOutsideBorder() = entity?.boundingBox?.let {
+        World.getWorld()?.worldBorder?.contains(it)
+    } ?: false
 
-    fun isOutsideBorder() = entity.isOutsideBorder
+    // TODO(BREAKING): Remove this
+    // fun setIsOutsideBorder(outside: Boolean) = apply {
+    //     entity.isOutsideBorder = outside
+    // }
 
-    fun setIsOutsideBorder(outside: Boolean) = apply {
-        entity.isOutsideBorder = outside
-    }
+    fun isBurning(): Boolean = entity?.let { (it.isInLava || it.isOnFire) && !it.isFireImmune } ?: false
 
-    fun isBurning(): Boolean = entity.isBurning
-
-    fun getWorld(): World = entity.entityWorld
+    fun getWorld(): net.minecraft.world.World? = entity?.entityWorld
 
     override fun toString(): String {
         return "Entity{name=${getName()}, x=${getX()}, y=${getY()}, z=${getZ()}}"
