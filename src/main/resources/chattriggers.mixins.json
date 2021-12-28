@@ -1,0 +1,15 @@
+{
+    "required": true,
+    "compatibilityLevel": "JAVA_16",
+    "package": "com.chattriggers.ctjs.launch.mixins.transformers",
+    "refmap": "mixins.chattriggers.refmap.json",
+    "plugin": "com.chattriggers.ctjs.launch.mixins.Plugin",
+    "mixins": [
+        "BiomeAccessAccessor",
+        "ChatScreenAccessor",
+        "GameOptionsMixin",
+        "MinecraftClientAccessor",
+        "ParticleAccessor",
+        "PlayerListHudAccessor"
+    ]
+}
