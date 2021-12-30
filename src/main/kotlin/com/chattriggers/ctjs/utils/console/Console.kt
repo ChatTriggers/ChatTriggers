@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.event.WindowEvent
 import java.io.File
-import java.io.PrintStream
 import javax.swing.*
 import javax.swing.text.DefaultCaret
 
@@ -19,12 +18,7 @@ class Console(val loader: ILoader?) {
     private val frame: JFrame = JFrame(
         "ChatTriggers ${Reference.MODVERSION} ${loader?.getLanguage()?.langName ?: "Default"} Console"
     )
-    private val taos: TextAreaOutputStream
-    private val components = mutableListOf<Component>()
-    private val history = mutableListOf<String>()
-    private var historyOffset = 0
 
-    val out: PrintStream
     private val textArea = JTextArea()
     private val inputField = RSyntaxTextArea(5, 1).apply {
         syntaxEditingStyle = loader?.getLanguage()?.syntaxStyle ?: SyntaxConstants.SYNTAX_STYLE_NONE
@@ -33,20 +27,21 @@ class Console(val loader: ILoader?) {
         isCodeFoldingEnabled = true
     }
 
+    private val components = mutableSetOf<Component>(textArea)
+    private val history = mutableListOf<String>()
+    private var historyOffset = 0
+
+    val writer = TextAreaWriter(textArea)
+
     init {
         frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 
-        taos = TextAreaOutputStream(textArea, loader?.getLanguage()?.langName ?: "default")
         textArea.isEditable = false
 
         textArea.margin = Insets(5, 5, 5, 5)
         textArea.autoscrolls = true
         val caret = textArea.caret as DefaultCaret
         caret.updatePolicy = DefaultCaret.ALWAYS_UPDATE
-
-        components.add(textArea)
-
-        out = taos.printStream
 
         inputField.addKeyListener(object : KeyListener {
             override fun keyTyped(e: KeyEvent) {}
@@ -64,7 +59,7 @@ class Console(val loader: ILoader?) {
                         historyOffset = 0
 
                         if (command == "help") {
-                            taos.println("""
+                            writer.println("""
                                 -------------- ChatTriggers Console Help --------------
                                  Shortcuts:
                                   Control + Enter: Run code in the textbox
@@ -74,10 +69,10 @@ class Console(val loader: ILoader?) {
                                 -------------------------------------------------------
                             """.trimIndent())
                         } else {
-                            taos.println("eval> ${command.prependIndent("    > ").substring(6)}")
+                            writer.println("eval> ${command.prependIndent("    > ").substring(6)}")
 
                             try {
-                                taos.println(loader?.eval(command) ?: return)
+                                writer.println(loader?.eval(command) ?: return)
                             } catch (e: Throwable) {
                                 printStackTrace(e)
                             }
@@ -129,14 +124,14 @@ class Console(val loader: ILoader?) {
 
     fun clearConsole() {
         SwingUtilities.invokeLater {
-            taos.clear()
+            writer.clear()
         }
     }
 
     fun println(obj: Any) {
         SwingUtilities.invokeLater {
             try {
-                out.println(obj.toString())
+                writer.println(obj.toString())
             } catch (exception: Exception) {
                 println(obj.toString())
             }
@@ -167,7 +162,7 @@ class Console(val loader: ILoader?) {
                     } else it
                 }.toTypedArray()
 
-                error.printStackTrace(out)
+                error.printStackTrace(writer.printWriter)
             } catch (ignored: Throwable) {
                 error.printStackTrace()
             }
