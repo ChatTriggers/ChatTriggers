@@ -33,7 +33,7 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
 
             15f
         } else {
-            gui.description.setWidth(width.toInt() - 5)
+            gui.description.setMaxWidth(width.toInt() - 5)
 
             Renderer.drawRect(0x50000000, x, y + 13, width, gui.description.getHeight() + 12)
             Renderer.drawString("^", x + width - 10, y + 5)

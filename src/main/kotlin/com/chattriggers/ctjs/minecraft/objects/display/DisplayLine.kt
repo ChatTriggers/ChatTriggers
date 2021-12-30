@@ -146,7 +146,7 @@ abstract class DisplayLine {
         }
 
         if (background == DisplayHandler.Background.FULL)
-            Renderer.drawRect(backgroundColor, baseX - 1, y - 1, totalWidth + 2, 10 * text.getScale())
+            Renderer.drawRect(backgroundColor, baseX - 1, y - 1, totalWidth + 1, text.getHeight())
 
         if (text.getString().isEmpty())
             return
@@ -158,14 +158,14 @@ abstract class DisplayLine {
         }
 
         if (background == DisplayHandler.Background.PER_LINE)
-            Renderer.drawRect(backgroundColor, xOffset - 1, y - 1, textWidth + 2, 10 * text.getScale())
+            Renderer.drawRect(backgroundColor, xOffset - 1, y - 1, textWidth + 1,  text.getHeight())
 
         text.setX(xOffset).setY(y).setColor(textColor).draw()
 
         cachedX = xOffset - 1.0
         cachedY = y - 1.0
         cachedWidth = textWidth + 2.0
-        cachedHeight = 10.0 * text.getScale()
+        cachedHeight = text.getHeight().toDouble()
 
         if (Client.getMouseX() > x && Client.getMouseX() < x + cachedWidth
             && Client.getMouseY() > y && Client.getMouseY() < y + cachedHeight
@@ -182,6 +182,6 @@ abstract class DisplayLine {
     override fun toString() =
         "DisplayLine{" +
                 "text=$text, textColor=$textColor, align=$align, " +
-                "background=$background, backgroundColor=$backgroundColor, " +
+                "background=$background, backgroundColor=$backgroundColor" +
                 "}"
 }

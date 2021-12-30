@@ -7,25 +7,28 @@ import net.minecraft.client.renderer.GlStateManager
 
 @External
 class Text @JvmOverloads constructor(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
-    private var lines = mutableListOf<String>()
+    private val lines = mutableListOf<String>()
 
     private var color = 0xffffffff
     private var formatted = true
     private var shadow = false
     private var align = DisplayHandler.Align.LEFT
 
-    private var width = 0
-    private var maxLines = 0
+    private var width = 0f
+    private var maxWidth = 0
+    private var maxLines = 1
     private var scale = 1f
 
     init {
-        lines.add(string)
         updateFormatting()
     }
 
     fun getString(): String = string
 
-    fun setString(string: String) = apply { this.string = string }
+    fun setString(string: String) = apply {
+        this.string = string
+        updateFormatting()
+    }
 
     fun getColor(): Long = color
 
@@ -60,12 +63,13 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
     fun setY(y: Float) = apply { this.y = y }
 
-    fun getWidth(): Int = width
-
-    fun setWidth(width: Int) = apply {
-        this.width = width
-        lines = Renderer.getFontRenderer().listFormattedStringToWidth(string, this.width)
-    }
+    /**
+     * Gets the width of the text
+     * This is automatically updated when the text is drawn.
+     *
+     * @return the width of the text
+     */
+    fun getWidth(): Float = width
 
     fun getLines(): List<String> = lines
 
@@ -77,52 +81,46 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
     fun setScale(scale: Float) = apply { this.scale = scale }
 
-    fun getMaxWidth(): Int {
-        return if (width == 0) {
-            Renderer.getStringWidth(string)
-        } else {
-            var maxWidth = 0
-            lines.forEach {
-                if (Renderer.getStringWidth(it) > maxWidth)
-                    maxWidth = Renderer.getStringWidth(it)
-            }
-            maxWidth
-        }
+    /**
+     * Sets the maximum width of the text, splitting it into multiple lines if necessary.
+     *
+     * @param maxWidth the maximum width of the text
+     * @return the Text object for method chaining
+     */
+    fun setMaxWidth(maxWidth: Int) = apply {
+        this.maxWidth = maxWidth
+        updateFormatting()
     }
 
+    fun getMaxWidth(): Int = maxWidth
+
     fun getHeight(): Float {
-        return if (width == 0)
-            scale * 9
-        else lines.size * scale * 9
+        return if (lines.size > 1)
+             lines.size.coerceAtMost(maxLines) * scale * 9
+        else scale * 9
     }
 
     fun exceedsMaxLines(): Boolean {
-        return width != 0 && lines.size > maxLines
+        return lines.size > maxLines
     }
 
     @JvmOverloads
     fun draw(x: Float? = null, y: Float? = null) = apply {
         GlStateManager.enableBlend()
         GlStateManager.scale(scale, scale, scale)
-        if (width > 0) {
-            var maxLinesHolder = maxLines
-            var yHolder = y ?: this.y
-            lines.forEach {
-                Renderer.getFontRenderer()
-                    .drawString(it, getXAlign(it, x ?: this.x), yHolder / scale, color.toInt(), shadow)
-                yHolder += scale * 9
-                maxLinesHolder--
-                if (maxLinesHolder == 0)
-                    return@forEach
-            }
-        } else {
-            Renderer.getFontRenderer().drawString(
-                string,
-                getXAlign(string, x ?: this.x),
-                (y ?: this.y) / scale,
-                color.toInt(),
-                shadow
-            )
+
+        var longestLine = lines.maxOf { Renderer.getStringWidth(it) * scale }
+        if (maxWidth != 0)
+            longestLine = longestLine.coerceAtMost(maxWidth.toFloat())
+        width = longestLine
+
+        var yHolder = y ?: this.y
+
+        for (i in 0 until maxLines) {
+            if (i >= lines.size) break
+            Renderer.getFontRenderer()
+                .drawString(lines[i], getXAlign(lines[i], x ?: this.x), yHolder / scale, color.toInt(), shadow)
+            yHolder += scale * 9
         }
         GlStateManager.disableBlend()
         Renderer.finishDraw()
@@ -132,6 +130,14 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
         string =
             if (formatted) ChatLib.addColor(string)
             else ChatLib.replaceFormatting(string)
+
+        lines.clear()
+
+        if (maxWidth > 0) {
+            lines.addAll(Renderer.getFontRenderer().listFormattedStringToWidth(string, maxWidth))
+        } else {
+            lines.add(string)
+        }
     }
 
     private fun getXAlign(string: String, x: Float): Float {
@@ -148,6 +154,6 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
                 "string=$string, x=$x, y=$y, " +
                 "lines=$lines, color=$color, scale=$scale" +
                 "formatted=$formatted, shadow=$shadow, align=$align, " +
-                "width=$width, maxLines=$maxLines" +
+                "width=$width, maxWidth=$maxWidth, maxLines=$maxLines" +
                 "}"
 }

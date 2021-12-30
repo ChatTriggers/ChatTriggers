@@ -1,13 +1,15 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
 import org.mozilla.javascript.NativeObject
+import java.util.concurrent.CopyOnWriteArrayList
 
 @External
 @NotAbstract
 abstract class Display {
-    private var lines = mutableListOf<DisplayLine>()
+    private var lines = CopyOnWriteArrayList<DisplayLine>()
 
     private var renderX = 0f
     private var renderY = 0f
@@ -107,7 +109,7 @@ abstract class Display {
     fun getLines(): List<DisplayLine> = lines
 
     fun setLines(lines: MutableList<DisplayLine>) = apply {
-        this.lines = lines
+        this.lines = CopyOnWriteArrayList(lines)
     }
 
     @JvmOverloads
@@ -178,15 +180,20 @@ abstract class Display {
 
         var i = 0f
         lines.forEach {
-            it.draw(renderX, renderY + (i * 10), width, background, backgroundColor, textColor, align)
+            it.draw(renderX, renderY + i, width, background, backgroundColor, textColor, align)
 
             when (order) {
-                DisplayHandler.Order.DOWN -> i += it.getText().getScale()
-                DisplayHandler.Order.UP -> i -= it.getText().getScale()
+                DisplayHandler.Order.DOWN -> i += it.getText().getHeight()
+                DisplayHandler.Order.UP -> i -= it.getText().getHeight()
             }
         }
 
-        height = i * 10
+        if (background == DisplayHandler.Background.FULL)
+            Renderer.drawRect(backgroundColor, renderX - 1, renderY + height - 1, width + 1, 1f)
+        else if (background == DisplayHandler.Background.PER_LINE)
+            Renderer.drawRect(backgroundColor, renderX - 1, renderY + height - 1, lines.last().getTextWidth() + 1, 1f)
+
+        height = i
     }
 
     internal abstract fun createDisplayLine(text: String): DisplayLine
