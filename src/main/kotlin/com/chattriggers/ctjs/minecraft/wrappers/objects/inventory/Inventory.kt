@@ -40,10 +40,10 @@ class Inventory : JSONImpl {
      * @param slot the slot index
      * @return the Item in that slot
      */
-    fun getStackInSlot(slot: Int): Item {
+    fun getStackInSlot(slot: Int): Item? {
         return if (inventory == null)
-            Item(container!!.getSlot(slot).stack)
-        else Item(inventory.getStackInSlot(slot))
+            container!!.getSlot(slot).stack?.let(::Item)
+        else inventory.getStackInSlot(slot)?.let(::Item)
     }
 
     /**
@@ -73,7 +73,7 @@ class Inventory : JSONImpl {
     /**
      * @return a list of the [Item]s in an inventory
      */
-    fun getItems(): List<Item> {
+    fun getItems(): List<Item?> {
         return (0 until getSize()).map(::getStackInSlot)
     }
 
@@ -94,7 +94,7 @@ class Inventory : JSONImpl {
      * @retun whether the inventory contains an item with ID
      */
     fun contains(id: Int): Boolean {
-        return getItems().any { it.getID() == id }
+        return getItems().any { it?.getID() == id }
     }
 
     /**
@@ -116,7 +116,7 @@ class Inventory : JSONImpl {
      * @return the index of the given item with ID
      */
     fun indexOf(id: Int): Int {
-        return getItems().indexOfFirst { it.getID() == id }
+        return getItems().indexOfFirst { it?.getID() == id }
     }
 
     /**
