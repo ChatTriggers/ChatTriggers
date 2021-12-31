@@ -1,5 +1,5 @@
 import org.jetbrains.dokka.gradle.DokkaTask
-import proguard.gradle.ProGuardTask
+//import proguard.gradle.ProGuardTask
 
 buildscript {
     def f = file("gradle/mcversion.txt")
@@ -25,6 +25,7 @@ buildscript {
 
 plugins {
     id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
 }
 
 apply plugin: 'kotlin'
@@ -74,12 +75,12 @@ dependencies {
     modImplementation(include("gg.essential:loader-fabric:1.0.0"))
     modCompileOnly("gg.essential:essential-1.17.1-fabric:1720")
 
-    provided("com.github.falsehonesty:ts-generator:adfb57a8f6") {
+    implementation("com.github.falsehonesty:ts-generator:adfb57a8f6") {
         exclude group: "org.jetbrains.kotlin"
     }
-    provided 'com.fasterxml.jackson.core:jackson-core:2.13.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
     implementation 'com.chattriggers:rhino:1.8.2'
-    provided 'com.fifesoft:rsyntaxtextarea:3.1.4'
+    implementation 'com.fifesoft:rsyntaxtextarea:3.1.4'
 }
 
 tasks.withType(JavaCompile).configureEach {
