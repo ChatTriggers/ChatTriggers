@@ -1,17 +1,16 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt
 
-import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
-import net.minecraft.nbt.NBTTagByteArray
-import net.minecraft.nbt.NBTTagIntArray
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.NbtCompoundAccessor
+import net.minecraft.nbt.*
 import org.mozilla.javascript.NativeObject
 
-class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
-    val tagMap: Map<String, MCNBTBase>
-        get() = rawNBT.tagMap
+class NBTTagCompound(override val rawNBT: NbtCompound) : NBTBase(rawNBT) {
+    val tagMap: MutableMap<String, NbtElement>
+        get() = rawNBT.asMixin<NbtCompoundAccessor>().getEntries()
 
     val keySet: Set<String>
-        get() = rawNBT.keySet
+        get() = rawNBT.keys
 
     enum class NBTDataType {
         BYTE,
@@ -28,19 +27,21 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
         TAG_LIST,
     }
 
-    fun getTag(key: String) = when (val tag = rawNBT.getTag(key)) {
-        is MCNBTTagCompound -> NBTTagCompound(tag)
-        is MCNBTBase -> NBTBase(tag)
-        else -> null
+    fun getTag(key: String) = when (val tag = rawNBT[key]) {
+        is NbtCompound -> NBTTagCompound(tag)
+        is NbtList -> NBTTagList(tag)
+        is NbtElement -> NBTBase(tag)
+        null -> null
+        else -> throw IllegalStateException("Unknown nbt class ${tag::class.simpleName}")
     }
 
-    fun getTagId(key: String) = rawNBT.getTagId(key)
+    fun getTagId(key: String) = rawNBT.getType(key)
 
     fun getByte(key: String) = rawNBT.getByte(key)
 
     fun getShort(key: String) = rawNBT.getShort(key)
 
-    fun getInteger(key: String) = rawNBT.getInteger(key)
+    fun getInteger(key: String) = rawNBT.getInt(key)
 
     fun getLong(key: String) = rawNBT.getLong(key)
 
@@ -56,9 +57,9 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
 
     fun getBoolean(key: String) = rawNBT.getBoolean(key)
 
-    fun getCompoundTag(key: String) = NBTTagCompound(rawNBT.getCompoundTag(key))
+    fun getCompoundTag(key: String) = NBTTagCompound(rawNBT.getCompound(key))
 
-    fun getTagList(key: String, type: Int) = rawNBT.getTagList(key, type)
+    fun getTagList(key: String, type: Int) = rawNBT.getList(key, type)
 
     fun get(key: String, type: NBTDataType, tagType: Int?): Any? {
         return when (type) {
@@ -68,9 +69,9 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.LONG -> getLong(key)
             NBTDataType.FLOAT -> getFloat(key)
             NBTDataType.DOUBLE -> getDouble(key)
-            NBTDataType.STRING -> if (rawNBT.hasKey(key, 8)) tagMap[key]?.let { NBTBase(it).toString() } else null
-            NBTDataType.BYTE_ARRAY -> if (rawNBT.hasKey(key, 7)) (tagMap[key] as NBTTagByteArray).byteArray else null
-            NBTDataType.INT_ARRAY -> if (rawNBT.hasKey(key, 11)) (tagMap[key] as NBTTagIntArray).intArray else null
+            NBTDataType.STRING -> if (rawNBT.contains(key, 8)) tagMap[key]?.let { NBTBase(it).toString() } else null
+            NBTDataType.BYTE_ARRAY -> if (rawNBT.contains(key, 7)) (tagMap[key] as NbtByteArray).byteArray else null
+            NBTDataType.INT_ARRAY -> if (rawNBT.contains(key, 11)) (tagMap[key] as NbtIntArray).intArray else null
             NBTDataType.BOOLEAN -> getBoolean(key)
             NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
             NBTDataType.TAG_LIST -> getTagList(
@@ -84,24 +85,23 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
 
     operator fun set(key: String, value: Any) = apply {
         when (value) {
-            is NBTBase -> rawNBT.setTag(key, value.rawNBT)
-            is MCNBTBase -> rawNBT.setTag(key, value)
-            is Byte -> rawNBT.setByte(key, value)
-            is Short -> rawNBT.setShort(key, value)
-            is Int -> rawNBT.setInteger(key, value)
-            is Long -> rawNBT.setLong(key, value)
-            is Float -> rawNBT.setFloat(key, value)
-            is Double -> rawNBT.setDouble(key, value)
-            is String -> rawNBT.setString(key, value)
-            is ByteArray -> rawNBT.setByteArray(key, value)
-            is IntArray -> rawNBT.setIntArray(key, value)
-            is Boolean -> rawNBT.setBoolean(key, value)
+            is NBTBase -> rawNBT.put(key, value.rawNBT)
+            is Byte -> rawNBT.putByte(key, value)
+            is Short -> rawNBT.putShort(key, value)
+            is Int -> rawNBT.putInt(key, value)
+            is Long -> rawNBT.putLong(key, value)
+            is Float -> rawNBT.putFloat(key, value)
+            is Double -> rawNBT.putDouble(key, value)
+            is String -> rawNBT.putString(key, value)
+            is ByteArray -> rawNBT.putByteArray(key, value)
+            is IntArray -> rawNBT.putIntArray(key, value)
+            is Boolean -> rawNBT.putBoolean(key, value)
             else -> throw IllegalArgumentException("Unsupported NBT type: ${value.javaClass.simpleName}")
         }
     }
 
     fun removeTag(key: String) = apply {
-        rawNBT.removeTag(key)
+        rawNBT.remove(key)
     }
 
     fun toObject(): NativeObject {

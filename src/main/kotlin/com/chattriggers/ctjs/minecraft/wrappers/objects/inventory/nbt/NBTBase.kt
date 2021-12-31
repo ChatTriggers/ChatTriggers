@@ -1,30 +1,30 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt
 
-import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTBase.Companion.toObject
 import net.minecraft.nbt.*
 import org.mozilla.javascript.NativeArray
 import org.mozilla.javascript.NativeObject
 
-open class NBTBase(open val rawNBT: MCNBTBase) {
+open class NBTBase(open val rawNBT: NbtElement) {
+    // TODO(BREAKING): change name from id to type
     /**
      * Gets the type byte for the tag.
      */
-    val id: Byte
-        get() = rawNBT.id
+    val type: Byte
+        get() = rawNBT.type
 
     /**
      * Creates a clone of the tag.
      */
     fun copy() = rawNBT.copy()
 
-    /**
-     * Return whether this compound has no tags.
-     */
-    fun hasNoTags() = rawNBT.hasNoTags()
-
-    fun hasTags() = !rawNBT.hasNoTags()
+    // TODO(BREAKING): Remove these
+    // /**
+    //  * Return whether this compound has no tags.
+    //  */
+    // fun hasNoTags() = rawNBT.hasNoTags()
+    //
+    // fun hasTags() = !rawNBT.hasNoTags()
 
     override fun equals(other: Any?) = rawNBT == other
 
@@ -33,43 +33,37 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     override fun toString() = rawNBT.toString()
 
     companion object {
-        fun MCNBTBase.toObject(): Any? {
+        fun NbtElement.toObject(): Any? {
             return when (this) {
-                is NBTTagString -> string
-                is NBTTagByte -> byte
-                is NBTTagShort -> short
-                is NBTTagInt -> int
-                is NBTTagLong -> long
-                is NBTTagFloat -> float
-                is NBTTagDouble -> double
-                is MCNBTTagCompound -> toObject()
-                is MCNBTTagList -> toObject()
-                is NBTTagByteArray -> NativeArray(byteArray.toTypedArray()).expose()
-                is NBTTagIntArray -> NativeArray(intArray.toTypedArray()).expose()
+                is NbtString -> this.asString()
+                is NbtByte -> this.byteValue()
+                is NbtShort -> this.shortValue()
+                is NbtInt -> this.intValue()
+                is NbtLong -> this.longValue()
+                is NbtFloat -> this.floatValue()
+                is NbtDouble -> this.doubleValue()
+                is NbtCompound -> this.toObject()
+                is NbtByteArray -> NativeArray(this.byteArray.toTypedArray()).expose()
+                is NbtIntArray -> NativeArray(this.intArray.toTypedArray()).expose()
+                is NbtList -> this.toObject()
                 else -> error("Unknown tag type $javaClass")
             }
         }
 
-        fun MCNBTTagCompound.toObject(): NativeObject {
+        fun NbtCompound.toObject(): NativeObject {
             val o = NativeObject()
             o.expose()
 
-            for (key in keySet) {
-                val value = tagMap[key]
-                if (value != null) {
-                    o.put(key, o, value.toObject())
-                }
-            }
+            this.keys
+                .map { it to this[it] }
+                .filter { it.second != null }
+                .forEach { (key, value) -> o.put(key, o, value!!.toObject()) }
 
             return o
         }
 
-        fun MCNBTTagList.toObject(): NativeArray {
-            val tags = mutableListOf<Any?>()
-            for (i in 0 until tagCount()) {
-                tags.add(get(i).toObject())
-            }
-            val array = NativeArray(tags.toTypedArray())
+        fun NbtList.toObject(): NativeArray {
+            val array = NativeArray(this.map { it.toObject() }.toTypedArray())
             array.expose()
             return array
         }

@@ -1,39 +1,39 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt
 
-import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
+import net.minecraft.nbt.NbtElement
+import net.minecraft.nbt.NbtList
 
-class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
+class NBTTagList(override val rawNBT: NbtList) : NBTBase(rawNBT) {
     val tagCount: Int
-        get() = rawNBT.tagCount()
+        get() = rawNBT.size
 
     fun appendTag(nbt: NBTBase) = apply {
-        rawNBT.appendTag(nbt.rawNBT)
+        rawNBT.add(nbt.rawNBT)
     }
 
-    fun appendTag(nbt: MCNBTBase) = apply {
-        rawNBT.appendTag(nbt)
+    fun appendTag(nbt: NbtElement) = apply {
+        rawNBT.add(nbt)
     }
 
     operator fun set(id: Int, nbt: NBTBase) {
-        rawNBT.set(id, nbt.rawNBT)
+        rawNBT[id] = nbt.rawNBT
     }
 
-    operator fun set(id: Int, nbt: MCNBTBase) {
-        rawNBT.set(id, nbt)
+    operator fun set(id: Int, nbt: NbtElement) {
+        rawNBT[id] = nbt
     }
 
-    fun removeTag(index: Int) = rawNBT.removeTag(index)
+    fun removeTag(index: Int) = rawNBT.removeAt(index)
 
-    fun getCompoundTagAt(index: Int) = rawNBT.getCompoundTagAt(index)
+    fun getCompoundTagAt(index: Int) = rawNBT.getCompound(index)
 
-    fun getIntArrayAt(index: Int) = rawNBT.getIntArrayAt(index)
+    fun getIntArrayAt(index: Int) = rawNBT.getIntArray(index)
 
-    fun getDoubleAt(index: Int) = rawNBT.getDoubleAt(index)
+    fun getDoubleAt(index: Int) = rawNBT.getDouble(index)
 
-    fun getFloatAt(index: Int) = rawNBT.getFloatAt(index)
+    fun getFloatAt(index: Int) = rawNBT.getFloat(index)
 
-    fun getStringTagAt(index: Int) = rawNBT.getStringTagAt(index)
+    fun getStringTagAt(index: Int) = rawNBT.getString(index)
 
     operator fun get(index: Int) = rawNBT[index]
 
