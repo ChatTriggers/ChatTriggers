@@ -2,6 +2,7 @@ package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
+import com.chattriggers.ctjs.launch.mixins.transformers.MouseMixin
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
@@ -38,6 +39,8 @@ object CTJS : ClientModInitializer {
             ClientListener,
             UpdateChecker,
         ).forEach(Initializer::onInitialize)
+
+        MouseMixin.registerTriggerListeners()
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
