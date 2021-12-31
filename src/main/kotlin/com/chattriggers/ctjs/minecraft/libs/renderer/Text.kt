@@ -3,7 +3,9 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.client.renderer.GlStateManager
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.text.StringVisitable
+import net.minecraft.text.Style
 
 @External
 class Text @JvmOverloads constructor(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
@@ -64,7 +66,10 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
     fun setWidth(width: Int) = apply {
         this.width = width
-        lines = Renderer.getFontRenderer().listFormattedStringToWidth(string, this.width)
+        lines = Renderer.getFontRenderer().textHandler
+            .wrapLines(string, this.width, Style.EMPTY)
+            .map(StringVisitable::getString)
+            .toMutableList()
     }
 
     fun getLines(): List<String> = lines
@@ -102,29 +107,33 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
     @JvmOverloads
     fun draw(x: Float? = null, y: Float? = null) = apply {
-        GlStateManager.enableBlend()
-        GlStateManager.scale(scale, scale, scale)
+        RenderSystem.enableBlend()
+        Renderer.scale(scale, scale, scale)
+        Renderer.colorize(color.toInt())
         if (width > 0) {
             var maxLinesHolder = maxLines
             var yHolder = y ?: this.y
             lines.forEach {
-                Renderer.getFontRenderer()
-                    .drawString(it, getXAlign(it, x ?: this.x), yHolder / scale, color.toInt(), shadow)
+                Renderer.drawString(
+                    it,
+                    getXAlign(it, x ?: this.x),
+                    yHolder / scale,
+                    shadow,
+                )
                 yHolder += scale * 9
                 maxLinesHolder--
                 if (maxLinesHolder == 0)
                     return@forEach
             }
         } else {
-            Renderer.getFontRenderer().drawString(
+            Renderer.drawString(
                 string,
                 getXAlign(string, x ?: this.x),
                 (y ?: this.y) / scale,
-                color.toInt(),
-                shadow
+                shadow,
             )
         }
-        GlStateManager.disableBlend()
+        RenderSystem.disableBlend()
         Renderer.finishDraw()
     }
 

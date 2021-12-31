@@ -1,33 +1,38 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.EntityRenderDispatcherMixin
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.MathLib
+import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.minecraft.wrappers.Player
-import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
-import com.chattriggers.ctjs.utils.kotlin.getRenderer
-import net.minecraft.client.entity.AbstractClientPlayer
-import net.minecraft.client.gui.FontRenderer
-import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.OpenGlHelper
-import net.minecraft.client.renderer.RenderHelper
-import net.minecraft.client.renderer.entity.RenderManager
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.entity.EntityLivingBase
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.font.TextRenderer
+import net.minecraft.client.network.AbstractClientPlayerEntity
+import net.minecraft.client.render.*
+import net.minecraft.client.render.entity.EntityRendererFactory
+import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.util.math.Quaternion
+import net.minecraft.util.math.Vec3f
 import java.util.*
 import kotlin.math.*
 
 @External
 object Renderer {
+    internal lateinit var boundMatrixStack: MatrixStack
+
     var colorized: Long? = null
     private var retainTransforms = false
     private var drawMode: Int? = null
 
     private val tessellator = MCTessellator.getInstance()
-    private val worldRenderer = tessellator.getRenderer()
+    private val worldRenderer = Client.getMinecraft().worldRenderer
+
+    private val slimPlayerRenderer: CTPlayerEntityRenderer
+    private val normalPlayerRenderer: CTPlayerEntityRenderer
 
     @JvmStatic
     val BLACK = color(0, 0, 0, 255)
@@ -77,6 +82,19 @@ object Renderer {
     @JvmStatic
     val WHITE = color(255, 255, 255, 255)
 
+    init {
+        val context = EntityRendererFactory.Context(
+            Client.getMinecraft().entityRenderDispatcher,
+            Client.getMinecraft().itemRenderer,
+            Client.getMinecraft().resourceManager,
+            Client.getMinecraft().entityModelLoader,
+            Client.getMinecraft().textRenderer,
+        )
+
+        slimPlayerRenderer = CTPlayerEntityRenderer(context, true)
+        normalPlayerRenderer = CTPlayerEntityRenderer(context, false)
+    }
+
     @JvmStatic
     fun getColor(color: Int): Long {
         return when (color) {
@@ -100,29 +118,24 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getFontRenderer(): FontRenderer {
-        //#if MC<=10809
-        return Client.getMinecraft().fontRendererObj
-        //#else
-        //$$ return Client.getMinecraft().fontRenderer
-        //#endif
-    }
+    fun getFontRenderer(): TextRenderer = Client.getMinecraft().textRenderer
+
+    // TODO(BREAKING): Remove this
+    // @JvmStatic
+    // fun getRenderManager(): RenderManager {
+    //     return Client.getMinecraft().renderManager
+    // }
 
     @JvmStatic
-    fun getRenderManager(): RenderManager {
-        return Client.getMinecraft().renderManager
-    }
-
-    @JvmStatic
-    fun getStringWidth(text: String) = getFontRenderer().getStringWidth(ChatLib.addColor(text))
+    fun getStringWidth(text: String) = getFontRenderer().getWidth(ChatLib.addColor(text))
 
     @JvmStatic
     @JvmOverloads
     fun color(red: Long, green: Long, blue: Long, alpha: Long = 255): Long {
-        return (MathLib.clamp(alpha.toInt(), 0, 255) * 0x1000000
-                + MathLib.clamp(red.toInt(), 0, 255) * 0x10000
-                + MathLib.clamp(green.toInt(), 0, 255) * 0x100
-                + MathLib.clamp(blue.toInt(), 0, 255)).toLong()
+        return ((alpha.toInt().coerceIn(0..255) shl 24)
+            or (red.toInt().coerceIn(0..255) shl 16)
+            or (green.toInt().coerceIn(0..255) shl 8)
+            or blue.toInt().coerceIn(0..255)).toLong()
     }
 
     @JvmStatic
@@ -151,19 +164,26 @@ object Renderer {
 
     @JvmStatic
     @JvmOverloads
-    fun translate(x: Float, y: Float, z: Float = 0.0F) {
-        GlStateManager.translate(x, y, z)
+    fun translate(x: Double, y: Double, z: Double = 0.0) {
+        boundMatrixStack.translate(x, y, z)
     }
 
     @JvmStatic
     @JvmOverloads
-    fun scale(scaleX: Float, scaleY: Float = scaleX) {
-        GlStateManager.scale(scaleX, scaleY, 1f)
+    fun scale(scaleX: Float, scaleY: Float = scaleX, scaleZ: Float = 1f) {
+        boundMatrixStack.scale(scaleX, scaleY, scaleZ)
     }
 
     @JvmStatic
     fun rotate(angle: Float) {
-        GlStateManager.rotate(angle, 0f, 0f, 1f)
+        // TODO("fabric"): Verify this works properly
+        boundMatrixStack.multiply(Quaternion(angle, 0f, 0f, 1f))
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun colorize(red: Int, green: Int, blue: Int, alpha: Int = 255) {
+        colorize(red.toFloat() / 255f, green.toFloat() / 255f, blue.toFloat() / 255f, alpha.toFloat() / 255f)
     }
 
     @JvmStatic
@@ -171,13 +191,21 @@ object Renderer {
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) {
         colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()))
 
-        GlStateManager.color(
-            MathLib.clampFloat(red, 0f, 1f),
-            MathLib.clampFloat(green, 0f, 1f),
-            MathLib.clampFloat(blue, 0f, 1f),
-            MathLib.clampFloat(alpha, 0f, 1f)
+        RenderSystem.setShaderColor(
+            red.coerceIn(0f..1f),
+            green.coerceIn(0f..1f),
+            blue.coerceIn(0f..1f),
+            alpha.coerceIn(0f..1f),
         )
     }
+
+    @JvmStatic
+    fun colorize(color: Int) = colorize(
+        (color shr 16) and 0xff,
+        (color shr 8) and 0xff,
+        color and 0xff,
+        (color shr 24) and 0xff,
+    )
 
     @JvmStatic
     fun setDrawMode(drawMode: Int) = apply {
@@ -203,22 +231,24 @@ object Renderer {
         if (pos[1] > pos[3])
             Collections.swap(pos, 1, 3)
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        RenderSystem.enableBlend()
+        RenderSystem.disableTexture()
+        RenderSystem.blendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
-        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION)
-        worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
-        worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
-        worldRenderer.pos(pos[2].toDouble(), pos[1].toDouble(), 0.0).endVertex()
-        worldRenderer.pos(pos[0].toDouble(), pos[1].toDouble(), 0.0).endVertex()
+        val buffer = MCTessellator.getInstance().buffer
+        buffer.begin(VertexFormat.DrawMode.values()[drawMode ?: 7], VertexFormats.POSITION)
+        buffer.vertex(pos[0].toDouble(), pos[3].toDouble(), 0.0).next()
+        buffer.vertex(pos[2].toDouble(), pos[3].toDouble(), 0.0).next()
+        buffer.vertex(pos[2].toDouble(), pos[1].toDouble(), 0.0).next()
+        buffer.vertex(pos[0].toDouble(), pos[1].toDouble(), 0.0).next()
+        buffer.end()
 
         tessellator.draw()
 
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
+        colorize(1f, 1f, 1f, 1f)
+        RenderSystem.enableTexture()
+        RenderSystem.disableBlend()
 
         finishDraw()
     }
@@ -226,24 +256,26 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 7) {
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        RenderSystem.enableBlend()
+        RenderSystem.disableTexture()
+        RenderSystem.blendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
-        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
+        val buffer = MCTessellator.getInstance().buffer
+        buffer.begin(VertexFormat.DrawMode.values()[this.drawMode ?: drawMode], VertexFormats.POSITION)
 
         vertexes.forEach {
             if (it.size == 2) {
-                worldRenderer.pos(it[0].toDouble(), it[1].toDouble(), 0.0).endVertex()
+                buffer.vertex(it[0].toDouble(), it[1].toDouble(), 0.0).next()
             }
         }
 
+        buffer.end()
         tessellator.draw()
 
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
+        colorize(1f, 1f, 1f, 1f)
+        RenderSystem.enableTexture()
+        RenderSystem.disableBlend()
 
         finishDraw()
     }
@@ -255,23 +287,24 @@ object Renderer {
         val i = sin(theta).toFloat() * (thickness / 2)
         val j = cos(theta).toFloat() * (thickness / 2)
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        RenderSystem.enableBlend()
+        RenderSystem.disableTexture()
+        RenderSystem.blendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
-        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
-
-        worldRenderer.pos((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).endVertex()
-        worldRenderer.pos((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).endVertex()
-        worldRenderer.pos((x2 - i).toDouble(), (y2 - j).toDouble(), 0.0).endVertex()
-        worldRenderer.pos((x1 - i).toDouble(), (y1 - j).toDouble(), 0.0).endVertex()
+        val buffer = MCTessellator.getInstance().buffer
+        buffer.begin(VertexFormat.DrawMode.values()[this.drawMode ?: drawMode], VertexFormats.POSITION)
+        buffer.vertex((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).next()
+        buffer.vertex((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).next()
+        buffer.vertex((x2 - i).toDouble(), (y2 - j).toDouble(), 0.0).next()
+        buffer.vertex((x1 - i).toDouble(), (y1 - j).toDouble(), 0.0).next()
+        buffer.end()
 
         tessellator.draw()
 
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
+        colorize(1f, 1f, 1f, 1f)
+        RenderSystem.enableTexture()
+        RenderSystem.disableBlend()
 
         finishDraw()
     }
@@ -287,29 +320,39 @@ object Renderer {
         var circleX = 1f
         var circleY = 0f
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        RenderSystem.enableBlend()
+        RenderSystem.disableTexture()
+        RenderSystem.blendFuncSeparate(770, 771, 1, 0)
         doColor(color)
 
-        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
+        val buffer = MCTessellator.getInstance().buffer
+        buffer.begin(VertexFormat.DrawMode.values()[this.drawMode ?: drawMode], VertexFormats.POSITION)
 
         for (i in 0..steps) {
-            worldRenderer.pos(x.toDouble(), y.toDouble(), 0.0).endVertex()
-            worldRenderer.pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+            buffer.vertex(x.toDouble(), y.toDouble(), 0.0).next()
+            buffer.vertex((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).next()
             xHolder = circleX
             circleX = cos * circleX - sin * circleY
             circleY = sin * xHolder + cos * circleY
-            worldRenderer.pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+            buffer.vertex((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).next()
         }
 
+        buffer.end()
         tessellator.draw()
 
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
+        colorize(1f, 1f, 1f, 1f)
+        RenderSystem.enableTexture()
+        RenderSystem.disableBlend()
 
         finishDraw()
+    }
+
+    fun drawString(text: String, x: Float, y: Float, shadow: Boolean) {
+        if (shadow) {
+            drawStringWithShadow(text, x, y)
+        } else {
+            drawString(text, x, y)
+        }
     }
 
     @JvmStatic
@@ -318,47 +361,44 @@ object Renderer {
         var newY = y
 
         ChatLib.addColor(text).split("\n").forEach {
-            fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
-
-            newY += fr.FONT_HEIGHT
+            fr.draw(boundMatrixStack, it, x, newY, colorized?.toInt() ?: WHITE.toInt())
+            newY += fr.fontHeight
         }
         finishDraw()
     }
 
     @JvmStatic
     fun drawStringWithShadow(text: String, x: Float, y: Float) {
-        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt(), true)
+        getFontRenderer().drawWithShadow(boundMatrixStack, ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt())
         finishDraw()
     }
 
     @JvmStatic
     fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) {
         if (colorized == null)
-            GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableBlend()
-        GlStateManager.scale(1f, 1f, 50f)
-        GlStateManager.bindTexture(image.getTexture().glTextureId)
-        GlStateManager.enableTexture2D()
+            colorize(1f, 1f, 1f, 1f)
+        RenderSystem.enableBlend()
+        boundMatrixStack.scale(1f, 1f, 50f)
+        RenderSystem.bindTexture(image.getTexture().glTextureId)
+        RenderSystem.enableTexture()
 
-        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
-
-        worldRenderer.pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
-        worldRenderer.pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
-        worldRenderer.pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex()
-        worldRenderer.pos(x, y, 0.0).tex(0.0, 0.0).endVertex()
+        val buffer = MCTessellator.getInstance().buffer
+        buffer.begin(VertexFormat.DrawMode.values()[drawMode ?: 7], VertexFormats.POSITION_TEXTURE)
+        buffer.vertex(x, y + height, 0.0).texture(0f, 1f).next()
+        buffer.vertex(x + width, y + height, 0.0).texture(1f, 1f).next()
+        buffer.vertex(x + width, y, 0.0).texture(1f, 0f).next()
+        buffer.vertex(x, y, 0.0).texture(0f, 0f).next()
+        buffer.end()
         tessellator.draw()
 
         finishDraw()
     }
 
-    private val renderManager = getRenderManager()
-    private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
-    private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
-
+    // TODO(BREAKING): Takes PlayerEntity instead of Any
     @JvmStatic
     @JvmOverloads
-    fun drawPlayer(
-        player: Any,
+    fun drawEntity(
+        entity: AbstractClientPlayerEntity,
         x: Int,
         y: Int,
         rotate: Boolean = false,
@@ -368,62 +408,58 @@ object Renderer {
         showHeldItem: Boolean = true,
         showArrows: Boolean = true
     ) {
+        val size = 40
         val mouseX = -30f
-        val mouseY = 0f
+        val mouseY = 0
 
-        var ent: EntityLivingBase = Player.getPlayer()!!
-        if (player is PlayerMP)
-            ent = player.player
-
-        GlStateManager.enableColorMaterial()
-        RenderHelper.enableStandardItemLighting()
-
-        val f = ent.renderYawOffset
-        val f1 = ent.rotationYaw
-        val f2 = ent.rotationPitch
-        val f3 = ent.prevRotationYawHead
-        val f4 = ent.rotationYawHead
-
-        translate(x.toFloat(), y.toFloat(), 50.0f)
-        GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f)
-        GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f)
-        GlStateManager.rotate(-45.0f, 0.0f, 1.0f, 0.0f)
-        GlStateManager.rotate(-atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f, 1.0f, 0.0f, 0.0f)
-        scale(-1f, 1f)
-        if (!rotate) {
-            ent.renderYawOffset = atan((mouseX / 40.0f).toDouble()).toFloat() * 20.0f
-            ent.rotationYaw = atan((mouseX / 40.0f).toDouble()).toFloat() * 40.0f
-            ent.rotationPitch = -atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f
-            ent.rotationYawHead = ent.rotationYaw
-            ent.prevRotationYawHead = ent.rotationYaw
+        // Taken from InventoryScreen::drawEntity
+        val f = atan((mouseX / 40.0f).toDouble()).toFloat()
+        val g = atan((mouseY / 40.0f).toDouble()).toFloat()
+        val matrixStack = RenderSystem.getModelViewStack()
+        matrixStack.push()
+        matrixStack.translate(x.toDouble(), y.toDouble(), 1050.0)
+        matrixStack.scale(1.0f, 1.0f, -1.0f)
+        RenderSystem.applyModelViewMatrix()
+        val matrixStack2 = MatrixStack()
+        matrixStack2.translate(0.0, 0.0, 1000.0)
+        matrixStack2.scale(size.toFloat(), size.toFloat(), size.toFloat())
+        val quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0f)
+        val quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0f)
+        quaternion.hamiltonProduct(quaternion2)
+        matrixStack2.multiply(quaternion)
+        val h = entity.bodyYaw
+        val i = entity.yaw
+        val j = entity.pitch
+        val k = entity.prevHeadYaw
+        val l = entity.headYaw
+        entity.bodyYaw = 180.0f + f * 20.0f
+        entity.yaw = 180.0f + f * 40.0f
+        entity.pitch = -g * 20.0f
+        entity.headYaw = entity.yaw
+        entity.prevHeadYaw = entity.yaw
+        DiffuseLighting.method_34742()
+        val entityRenderDispatcher = MinecraftClient.getInstance().entityRenderDispatcher
+        quaternion2.conjugate()
+        entityRenderDispatcher.rotation = quaternion2
+        entityRenderDispatcher.setRenderShadows(false)
+        val immediate = MinecraftClient.getInstance().bufferBuilders.entityVertexConsumers
+        RenderSystem.runAsFancy {
+            val dispatcher = Client.getMinecraft().entityRenderDispatcher.asMixin<EntityRenderDispatcherMixin>()
+            dispatcher.customEntityRenderer = if (entity.model == "slim") slimPlayerRenderer else normalPlayerRenderer
+            Client.getMinecraft().entityRenderDispatcher.render(
+                entity, 0.0, 0.0, 0.0, 0f, 1f, matrixStack2, immediate, 15278880,
+            )
         }
-
-        renderManager.playerViewY = 180.0f
-        renderManager.isRenderShadow = false
-        //#if MC<=10809
-        val isSmall = (ent as AbstractClientPlayer).skinType == "slim"
-        val ctRenderPlayer = if (isSmall) slimCTRenderPlayer else normalCTRenderPlayer
-
-        ctRenderPlayer.setOptions(showNametag, showArmor, showCape, showHeldItem, showArrows)
-        ctRenderPlayer.doRender(ent, 0.0, 0.0, 0.0, 0.0f, 1.0f)
-        //#else
-        //$$ renderManager.doRenderEntity(ent, 0.0, 0.0, 0.0, 0.0F, 1.0F, false)
-        //#endif
-        renderManager.isRenderShadow = true
-
-        ent.renderYawOffset = f
-        ent.rotationYaw = f1
-        ent.rotationPitch = f2
-        ent.prevRotationYawHead = f3
-        ent.rotationYawHead = f4
-
-        RenderHelper.disableStandardItemLighting()
-        GlStateManager.disableRescaleNormal()
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit)
-        GlStateManager.disableTexture2D()
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit)
-
-        finishDraw()
+        immediate.draw()
+        entityRenderDispatcher.setRenderShadows(true)
+        entity.bodyYaw = h
+        entity.yaw = i
+        entity.pitch = j
+        entity.prevHeadYaw = k
+        entity.headYaw = l
+        matrixStack.pop()
+        RenderSystem.applyModelViewMatrix()
+        DiffuseLighting.enableGuiDepthLighting()
     }
 
     private fun doColor(longColor: Long) {
@@ -434,7 +470,7 @@ object Renderer {
             val r = (color shr 16 and 255).toFloat() / 255.0f
             val g = (color shr 8 and 255).toFloat() / 255.0f
             val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
+            RenderSystem.setShaderColor(r, g, b, a)
         }
     }
 
@@ -443,19 +479,19 @@ object Renderer {
         if (!retainTransforms) {
             colorized = null
             drawMode = null
-            GlStateManager.popMatrix()
-            GlStateManager.pushMatrix()
+            boundMatrixStack.pop()
+            boundMatrixStack.push()
         }
     }
 
     object screen {
         @JvmStatic
-        fun getWidth(): Int = ScaledResolution(Client.getMinecraft()).scaledWidth
+        fun getWidth(): Int = Client.getMinecraft().window.scaledWidth
 
         @JvmStatic
-        fun getHeight(): Int = ScaledResolution(Client.getMinecraft()).scaledHeight
+        fun getHeight(): Int = Client.getMinecraft().window.scaledHeight
 
         @JvmStatic
-        fun getScale(): Int = ScaledResolution(Client.getMinecraft()).scaleFactor
+        fun getScale(): Double = Client.getMinecraft().window.scaleFactor
     }
 }

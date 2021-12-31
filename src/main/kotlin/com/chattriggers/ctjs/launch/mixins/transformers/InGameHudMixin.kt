@@ -129,6 +129,5 @@ class InGameHudMixin {
     fun injectRender(hud: InGameHud, matrices: MatrixStack, partialTicks: Float) {
         Renderer.boundMatrixStack = matrices
         TriggerType.RenderOverlay.triggerAll()
-        MouseHandler.process()
     }
 }

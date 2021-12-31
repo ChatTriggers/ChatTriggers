@@ -1,11 +1,12 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
+import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
-import com.chattriggers.ctjs.utils.kotlin.getRenderer
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import org.lwjgl.util.vector.Vector2f
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.render.VertexFormat
+import net.minecraft.client.render.VertexFormats
+import net.minecraft.util.math.Vec2f
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -13,7 +14,7 @@ import kotlin.math.sin
 
 @External
 class Shape(private var color: Int) {
-    private var vertexes = mutableListOf<Vector2f>()
+    private var vertexes = mutableListOf<Vec2f>()
     private var drawMode = 9
 
     fun copy(): Shape = clone()
@@ -46,11 +47,11 @@ class Shape(private var color: Int) {
      */
     fun setDrawMode(drawMode: Int) = apply { this.drawMode = drawMode }
 
-    fun getVertexes(): List<Vector2f> = vertexes
+    fun getVertexes(): List<Vec2f> = vertexes
 
-    fun addVertex(x: Float, y: Float) = apply { vertexes.add(Vector2f(x, y)) }
+    fun addVertex(x: Float, y: Float) = apply { vertexes.add(Vec2f(x, y)) }
 
-    fun insertVertex(index: Int, x: Float, y: Float) = apply { vertexes.add(index, Vector2f(x, y)) }
+    fun insertVertex(index: Int, x: Float, y: Float) = apply { vertexes.add(index, Vec2f(x, y)) }
 
     fun removeVertex(index: Int) = apply { vertexes.removeAt(index) }
 
@@ -64,10 +65,10 @@ class Shape(private var color: Int) {
         val i = sin(theta) * (thickness / 2)
         val j = cos(theta) * (thickness / 2)
 
-        vertexes.add(Vector2f(x1 + i, y1 + j))
-        vertexes.add(Vector2f(x2 + i, y2 + j))
-        vertexes.add(Vector2f(x2 - i, y2 - j))
-        vertexes.add(Vector2f(x1 - i, y1 - j))
+        vertexes.add(Vec2f(x1 + i, y1 + j))
+        vertexes.add(Vec2f(x2 + i, y2 + j))
+        vertexes.add(Vec2f(x2 - i, y2 - j))
+        vertexes.add(Vec2f(x1 - i, y1 - j))
 
         drawMode = 9
     }
@@ -88,12 +89,12 @@ class Shape(private var color: Int) {
         var circleY = 0f
 
         for (i in 0..steps) {
-            vertexes.add(Vector2f(x, y))
-            vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
+            vertexes.add(Vec2f(x, y))
+            vertexes.add(Vec2f(circleX * radius + x, circleY * radius + y))
             xHolder = circleX
             circleX = cos * circleX - sin * circleY
             circleY = sin * xHolder + cos * circleY
-            vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
+            vertexes.add(Vec2f(circleX * radius + x, circleY * radius + y))
         }
 
         drawMode = 5
@@ -105,24 +106,25 @@ class Shape(private var color: Int) {
         val g = (color shr 8 and 255).toFloat() / 255.0f
         val b = (color and 255).toFloat() / 255.0f
 
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        val tessellator = MCTessellator.getInstance().buffer
+        val worldRenderer = Client.getMinecraft().worldRenderer
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        RenderSystem.enableBlend()
+        RenderSystem.disableTexture()
+        RenderSystem.blendFuncSeparate(770, 771, 1, 0)
         if (Renderer.colorized == null)
-            GlStateManager.color(r, g, b, a)
+            RenderSystem.setShaderColor(r, g, b, a)
 
-        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
+
+        tessellator.begin(VertexFormat.DrawMode.values()[drawMode], VertexFormats.POSITION)
 
         for (vertex in vertexes)
-            worldRenderer.pos(vertex.x.toDouble(), vertex.y.toDouble(), 0.0).endVertex()
+            tessellator.vertex(vertex.x.toDouble(), vertex.y.toDouble(), 0.0).next()
 
-        tessellator.draw()
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
+        MCTessellator.getInstance().draw()
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+        RenderSystem.enableTexture()
+        RenderSystem.disableBlend()
 
         Renderer.finishDraw()
     }
