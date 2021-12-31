@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.SignBlockEntityAccessor
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External

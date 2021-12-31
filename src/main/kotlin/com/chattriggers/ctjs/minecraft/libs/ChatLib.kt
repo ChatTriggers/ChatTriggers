@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudMixin
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.message.Message
@@ -13,8 +12,6 @@ import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.hud.ChatHudLine
-import net.minecraft.server.command.CommandManager
-import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.LiteralText
 import net.minecraft.text.OrderedText
 import net.minecraft.text.Text

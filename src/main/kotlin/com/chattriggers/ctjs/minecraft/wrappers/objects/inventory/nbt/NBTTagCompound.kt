@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.NbtCompoundAccessor
 import net.minecraft.nbt.*
 import org.mozilla.javascript.NativeObject
 

@@ -15,7 +15,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
 
 object WorldListener : Initializer {
+    @JvmStatic
     var shouldTriggerWorldLoad: Boolean = false
+
+    @JvmStatic
     var playerList = mutableListOf<String>()
 
     override fun onInitialize() {
@@ -36,6 +39,7 @@ object WorldListener : Initializer {
         }
     }
 
+    @JvmStatic
     fun onPreOverlayRender() {
         if (!shouldTriggerWorldLoad)
             return

@@ -2,7 +2,6 @@ package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import com.chattriggers.ctjs.launch.mixins.transformers.MouseMixin
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
@@ -17,7 +16,6 @@ import com.google.gson.Gson
 import com.mojang.brigadier.CommandDispatcher
 import gg.essential.vigilance.Vigilance
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.minecraft.server.command.ServerCommandSource
 import java.io.File

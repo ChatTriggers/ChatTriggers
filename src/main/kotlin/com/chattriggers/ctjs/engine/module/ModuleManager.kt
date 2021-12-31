@@ -18,10 +18,12 @@ import java.lang.invoke.MethodHandle
 
 object ModuleManager {
     private val loaders = listOf(JSLoader)
-    val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
     val modulesFolder = File(Config.modulesFolder)
     val pendingOldModules = mutableListOf<Module>()
+
+    @JvmStatic
+    val generalConsole = Console(null)
 
     fun setup() {
         modulesFolder.mkdirs()

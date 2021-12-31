@@ -1,10 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.EntityRenderDispatcherMixin
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
-import com.chattriggers.ctjs.minecraft.libs.MathLib
-import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
@@ -13,6 +10,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.render.*
+import net.minecraft.client.render.entity.EntityRenderer
 import net.minecraft.client.render.entity.EntityRendererFactory
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Quaternion
@@ -22,7 +20,11 @@ import kotlin.math.*
 
 @External
 object Renderer {
-    internal lateinit var boundMatrixStack: MatrixStack
+    @JvmStatic
+    lateinit var boundMatrixStack: MatrixStack
+
+    @JvmStatic
+    var customEntityRenderer: EntityRenderer<*>? = null
 
     var colorized: Long? = null
     private var retainTransforms = false

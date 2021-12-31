@@ -2,7 +2,6 @@ package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import com.chattriggers.ctjs.launch.mixins.transformers.MouseMixin
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler

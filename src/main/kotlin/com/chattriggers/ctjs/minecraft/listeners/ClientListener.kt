@@ -17,10 +17,18 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.event.player.UseItemCallback
 import net.minecraft.util.ActionResult
 import net.minecraft.util.TypedActionResult
+import org.spongepowered.asm.mixin.Unique
 
 object ClientListener : Initializer {
     private var ticksPassed: Int = 0
+    private val scrollListeners = mutableListOf<(x: Double, y: Double, delta: Double) -> Unit>()
+    private val clickListeners = mutableListOf<(x: Double, y: Double, button: Int, pressed: Boolean) -> Unit>()
+    private val draggedListeners = mutableListOf<(deltaX: Double, deltaY: Double, x: Double, y: Double, button: Int) -> Unit>()
+
+    @JvmStatic
     val chatHistory = mutableListOf<String>()
+
+    @JvmStatic
     val actionBarHistory = mutableListOf<String>()
 
     override fun onInitialize() {
@@ -79,6 +87,45 @@ object ClientListener : Initializer {
             )
             event.actionResult()
         }
+    }
+
+    fun registerScrollListener(listener: (x: Double, y: Double, delta: Double) -> Unit) {
+        scrollListeners.add(listener)
+    }
+
+    fun registerClickListener(listener: (x: Double, y: Double, button: Int, pressed: Boolean) -> Unit) {
+        clickListeners.add(listener)
+    }
+
+    fun registerDraggedListener(listener: (deltaX: Double, deltaY: Double, x: Double, y: Double, button: Int) -> Unit) {
+        draggedListeners.add(listener)
+    }
+
+    @JvmStatic
+    fun onScroll(x: Double, y: Double, delta: Double) {
+        scrollListeners.forEach { it(x, y, delta) }
+    }
+
+    @JvmStatic
+    fun onClick(mouseX: Double, mouseY: Double, button: Int, pressed: Boolean) {
+        clickListeners.forEach { it(mouseX, mouseY, button, pressed) }
+    }
+
+    @JvmStatic
+    fun onDragged(deltaX: Double, deltaY: Double, mouseX: Double, mouseY: Double, button: Int) {
+        draggedListeners.forEach { it(deltaX, deltaY, mouseX, mouseY, button) }
+    }
+
+    fun registerTriggerListeners() {
+        registerScrollListener(TriggerType.Scrolled::triggerAll)
+        registerClickListener(TriggerType.Clicked::triggerAll)
+        registerDraggedListener(TriggerType.Dragged::triggerAll)
+    }
+
+    fun clearListeners() {
+        scrollListeners.clear()
+        clickListeners.clear()
+        draggedListeners.clear()
     }
 
     // TODO(BREAKING): Remove left click and unknown (interact should be right-click only)

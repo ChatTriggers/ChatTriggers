@@ -1,11 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.ChatScreenAccessor
-import com.chattriggers.ctjs.launch.mixins.transformers.GameOptionsMixin
 import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftClientAccessor
-import com.chattriggers.ctjs.launch.mixins.transformers.PlayerListHudAccessor
-import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -13,7 +9,6 @@ import gg.essential.universal.UKeyboard
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.impl.client.keybinding.KeyBindingRegistryImpl
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.Mouse
 import net.minecraft.client.gui.*
 import net.minecraft.client.gui.hud.ChatHud
 import net.minecraft.client.gui.hud.PlayerListHud

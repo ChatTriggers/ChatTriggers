@@ -1,8 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.BiomeAccessAccessor
-import com.chattriggers.ctjs.launch.mixins.transformers.WorldRendererAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
@@ -10,7 +8,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerEntity
-import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle

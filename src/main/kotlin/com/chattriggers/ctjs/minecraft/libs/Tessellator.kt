@@ -8,11 +8,15 @@ import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraft.client.util.math.MatrixStack
 import org.lwjgl.util.vector.Vector3f
 import kotlin.math.sqrt
 
 @External
 object Tessellator {
+    @JvmStatic
+    lateinit var boundMatrixStack: MatrixStack
+
     @JvmStatic
     var partialTicks = 0f
         internal set
