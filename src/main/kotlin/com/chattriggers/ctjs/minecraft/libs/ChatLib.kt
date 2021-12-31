@@ -1,5 +1,8 @@
 package com.chattriggers.ctjs.minecraft.libs
 
+import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudMixin
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.message.Message
@@ -9,9 +12,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
-import net.minecraft.client.gui.ChatLine
-import net.minecraftforge.client.ClientCommandHandler
-import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraft.client.gui.hud.ChatHudLine
+import net.minecraft.server.command.CommandManager
+import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.text.LiteralText
+import net.minecraft.text.OrderedText
+import net.minecraft.text.Text
 import org.mozilla.javascript.NativeObject
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
@@ -32,11 +38,6 @@ object ChatLib {
             is TextComponent -> text.chat()
             else -> Message(text.toString()).chat()
         }
-    }
-
-    @JvmStatic
-    fun test(e: Any) {
-        println(e)
     }
 
     /**
@@ -76,7 +77,7 @@ object ChatLib {
      * @param text the message to be sent
      */
     @JvmStatic
-    fun say(text: String) = Player.getPlayer()?.sendChatMessage(text)
+    fun say(text: String) = Player.getPlayer()?.sendMessage(LiteralText(addColor(text)), false)
 
     /**
      * Runs a command.
@@ -87,8 +88,10 @@ object ChatLib {
     @JvmOverloads
     @JvmStatic
     fun command(text: String, clientSide: Boolean = false) {
-        if (clientSide) ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
-        else say("/$text")
+        if (clientSide) {
+            // TODO("fabric"): Does the text need a leading slash?
+            Player.getPlayer()?.commandSource?.let { CTJS.commandDispatcher.execute(text, it) }
+        } else say("/$text")
     }
 
     /**
@@ -99,15 +102,13 @@ object ChatLib {
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
         if (chatLineIDs.isEmpty()) {
-            //#if MC<=10809
-            Client.getChatGUI()?.clearChatMessages()
-            //#else
-            //$$ Client.getChatGUI()?.clearChatMessages(false)
-            //#endif
+            // TODO("fabric"): Did the old behavior clear history?
+            Client.getChatGUI()?.clear(false)
             return
         }
+
         for (chatLineID in chatLineIDs)
-            Client.getChatGUI()?.deleteChatLine(chatLineID)
+            Client.getChatGUI()?.asMixin<ChatHudMixin>()?.removeMessage(chatLineID)
     }
 
     /**
@@ -134,7 +135,7 @@ object ChatLib {
      */
     @JvmStatic
     fun getChatWidth(): Int {
-        return Client.getChatGUI()?.chatWidth ?: 0
+        return Client.getChatGUI()?.width ?: 0
     }
 
     /**
@@ -200,7 +201,7 @@ object ChatLib {
 
         editChat(
             {
-                val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+                val matcher = pattern.matcher(it.getUnformattedText())
                 if (global) matcher.find() else matcher.matches()
             },
             *replacements
@@ -217,7 +218,7 @@ object ChatLib {
     fun editChat(toReplace: String, vararg replacements: Message) {
         editChat(
             {
-                removeFormatting(it.getChatMessage().unformattedText) == toReplace
+                removeFormatting(it.getUnformattedText()) == toReplace
             },
             *replacements
         )
@@ -233,7 +234,7 @@ object ChatLib {
     fun editChat(toReplace: Message, vararg replacements: Message) {
         editChat(
             {
-                toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
+                toReplace.getFormattedText() == it.getFormattedText().replaceFirst(
                     "\u00a7r".toRegex(),
                     ""
                 )
@@ -260,15 +261,13 @@ object ChatLib {
 
     @JvmStatic
     private fun editChat(toReplace: (Message) -> Boolean, vararg replacements: Message) {
-        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
-        val chatLines = Client.getChatGUI()!!.chatLines
-
-        editChatLineList(chatLines, toReplace, *replacements)
-        editChatLineList(drawnChatLines, toReplace, *replacements)
+        val hud = Client.getChatGUI()?.asMixin<ChatHudMixin>() ?: return
+        editChatLineList(hud.getMessages(), toReplace, *replacements)
+        editChatLineList(hud.getVisibleMessages(), toReplace, *replacements)
     }
 
-    private fun editChatLineList(
-        lineList: MutableList<ChatLine>,
+    private fun <T> editChatLineList(
+        lineList: MutableList<ChatHudLine<T>>,
         toReplace: (Message) -> Boolean,
         vararg replacements: Message
     ) {
@@ -276,10 +275,13 @@ object ChatLib {
 
         while (chatLineIterator.hasNext()) {
             val chatLine = chatLineIterator.next()
+            val textComponent = when (val v = chatLine.text) {
+                is Text -> TextComponent(v)
+                is OrderedText -> TextComponent(v)
+                else -> throw IllegalStateException()
+            }
 
-            val result = toReplace(
-                Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)
-            )
+            val result = toReplace(Message(textComponent).setChatLineId(chatLine.id))
 
             if (!result) {
                 continue
@@ -290,10 +292,15 @@ object ChatLib {
             replacements.map {
                 val lineId = if (it.getChatLineId() == -1) 0 else it.getChatLineId()
 
-                ChatLine(chatLine.updatedCounter, it.getChatMessage(), lineId)
-            }.forEach(chatLineIterator::add)
+                ChatHudLine(chatLine.creationTick, it.getChatMessage(), lineId)
+            }.forEach {
+                chatLineIterator.add(castChatHudLine(it))
+            }
         }
     }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> castChatHudLine(hudLine: ChatHudLine<*>) = hudLine as ChatHudLine<T>
 
     /**
      * Deletes an already sent chat message matching [regexp].
@@ -310,7 +317,7 @@ object ChatLib {
         val pattern = Pattern.compile(regexp["source"] as String, flags)
 
         deleteChat {
-            val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+            val matcher = pattern.matcher(it.getUnformattedText())
             if (global) matcher.find() else matcher.matches()
         }
     }
@@ -323,7 +330,7 @@ object ChatLib {
     @JvmStatic
     fun deleteChat(toDelete: String) {
         deleteChat {
-            removeFormatting(it.getChatMessage().unformattedText) == toDelete
+            removeFormatting(it.getUnformattedText()) == toDelete
         }
     }
 
@@ -335,7 +342,7 @@ object ChatLib {
     @JvmStatic
     fun deleteChat(toDelete: Message) {
         deleteChat{
-            toDelete.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
+            toDelete.getFormattedText() == it.getFormattedText().replaceFirst(
                 "\u00a7r".toRegex(),
                 ""
             )
@@ -356,23 +363,26 @@ object ChatLib {
 
     @JvmStatic
     private fun deleteChat(toDelete: (Message) -> Boolean) {
-        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
-        val chatLines = Client.getChatGUI()!!.chatLines
-
-        deleteChatLineList(chatLines, toDelete)
-        deleteChatLineList(drawnChatLines, toDelete)
+        val hud = Client.getChatGUI()?.asMixin<ChatHudMixin>() ?: return
+        deleteChatLineList(hud.getMessages(), toDelete)
+        deleteChatLineList(hud.getVisibleMessages(), toDelete)
     }
 
-    private fun deleteChatLineList(
-        lineList: MutableList<ChatLine>,
+    private fun <T> deleteChatLineList(
+        lineList: MutableList<ChatHudLine<T>>,
         toDelete: (Message) -> Boolean,
     ) {
         val chatLineIterator = lineList.listIterator()
 
         while (chatLineIterator.hasNext()) {
             val chatLine = chatLineIterator.next()
+            val textComponent = when (val v = chatLine.text) {
+                is Text -> TextComponent(v)
+                is OrderedText -> TextComponent(v)
+                else -> throw IllegalStateException()
+            }
 
-            if (toDelete(Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)))
+            if (toDelete(Message(textComponent).setChatLineId(chatLine.id)))
                 chatLineIterator.remove()
         }
     }
@@ -399,7 +409,7 @@ object ChatLib {
     @JvmOverloads
     @JvmStatic
     fun addToSentMessageHistory(index: Int = -1, message: String) {
-        val sentMessages = Client.getChatGUI()!!.sentMessages
+        val sentMessages = Client.getChatGUI()?.asMixin<ChatHudMixin>()?.getMessageHistory() ?: return
 
         if (index == -1) sentMessages.add(message)
         else sentMessages.add(index, message)
@@ -414,15 +424,16 @@ object ChatLib {
      * unformatted text
      * @return The text of the event
      */
-    @JvmOverloads
-    @JvmStatic
-    fun getChatMessage(event: ClientChatReceivedEvent, formatted: Boolean = false): String {
-        return if (formatted) {
-            replaceFormatting(EventLib.getMessage(event).formattedText)
-        } else {
-            EventLib.getMessage(event).unformattedText
-        }
-    }
+    // TODO("fabric")
+    // @JvmOverloads
+    // @JvmStatic
+    // fun getChatMessage(event: ClientChatReceivedEvent, formatted: Boolean = false): String {
+    //     return if (formatted) {
+    //         replaceFormatting(EventLib.getMessage(event).formattedText)
+    //     } else {
+    //         EventLib.getMessage(event).unformattedText
+    //     }
+    // }
 
     /**
      * Replaces the easier to type '&' color codes with proper color codes in a string.

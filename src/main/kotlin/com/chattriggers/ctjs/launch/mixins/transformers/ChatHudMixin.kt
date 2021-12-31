@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor
 import org.spongepowered.asm.mixin.gen.Invoker
 
 @Mixin(ChatHud::class)
-interface ChatHudAccessor {
+interface ChatHudMixin {
     @Accessor
     fun getMessageHistory(): MutableList<String>
 

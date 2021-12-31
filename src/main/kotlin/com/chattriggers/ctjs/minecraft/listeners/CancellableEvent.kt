@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
+import net.minecraft.util.ActionResult
+
 class CancellableEvent {
     private var cancelled = false
 
@@ -18,4 +20,6 @@ class CancellableEvent {
 
     fun isCancelled() = cancelled
     fun isCanceled() = cancelled
+
+    fun actionResult() = if (isCanceled()) ActionResult.FAIL else ActionResult.PASS
 }
