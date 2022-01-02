@@ -1,12 +1,13 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.minecraft.wrappers.objects.TileEntity
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.MCTileEntity
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
-import net.minecraft.tileentity.TileEntity
 import org.lwjgl.util.vector.Vector3f
 
 fun injectTileEntityRendererDispatcher() {
@@ -23,7 +24,7 @@ fun injectRenderTileEntity() = inject {
     methodMaps = mapOf("func_178469_a" to "renderTileEntityAt")
 
     codeBlock {
-        val local1 = shadowLocal<TileEntity>()
+        val local1 = shadowLocal<MCTileEntity>()
         val local2 = shadowLocal<Double>()
         val local4 = shadowLocal<Double>()
         val local6 = shadowLocal<Double>()
@@ -32,7 +33,7 @@ fun injectRenderTileEntity() = inject {
         code {
             val event = CancellableEvent()
             TriggerType.RenderTileEntity.triggerAll(
-                local1,
+                TileEntity(local1),
                 Vector3f(local2.toFloat(), local4.toFloat(), local6.toFloat()),
                 local8,
                 event
@@ -53,7 +54,7 @@ fun injectRenderTileEntityPost() = inject {
     methodMaps = mapOf("func_178469_a" to "renderTileEntityAt")
 
     codeBlock {
-        val local1 = shadowLocal<TileEntity>()
+        val local1 = shadowLocal<MCTileEntity>()
         val local2 = shadowLocal<Double>()
         val local4 = shadowLocal<Double>()
         val local6 = shadowLocal<Double>()
@@ -61,7 +62,7 @@ fun injectRenderTileEntityPost() = inject {
 
         code {
             TriggerType.PostRenderTileEntity.triggerAll(
-                local1,
+                TileEntity(local1),
                 Vector3f(local2.toFloat(), local4.toFloat(), local6.toFloat()),
                 local8
             )
