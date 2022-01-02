@@ -23,7 +23,6 @@ object Tessellator {
 
     private var firstVertex = true
     private var began = false
-    private var colorized = false
 
     @JvmStatic
     fun disableAlpha() = apply {
@@ -165,7 +164,6 @@ object Tessellator {
     @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) = apply {
         GlStateManager.color(red, green, blue, alpha)
-        colorized = true
     }
 
     /**
@@ -252,12 +250,11 @@ object Tessellator {
 
         worldRenderer.endVertex()
 
-        if (!colorized)
-            colorize(1f, 1f, 1f, 1f)
-
         tessellator.draw()
+
+        colorize(1f, 1f, 1f, 1f)
+
         began = false
-        colorized = false
 
         disableBlend()
         popMatrix()
@@ -315,11 +312,13 @@ object Tessellator {
             lScale *= 0.45f * multiplier
         }
 
+        val xMultiplier = if (renderManager.options.thirdPersonView == 2) -1 else 1
+
         GlStateManager.color(1f, 1f, 1f, 0.5f)
         pushMatrix()
         translate(renderPos.x, renderPos.y, renderPos.z)
         rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
-        rotate(renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+        rotate(renderManager.playerViewX * xMultiplier, 1.0f, 0.0f, 0.0f)
         scale(-lScale, -lScale, lScale)
         disableLighting()
         depthMask(false)
