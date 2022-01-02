@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
+import com.chattriggers.ctjs.minecraft.wrappers.objects.TileEntity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType
@@ -185,6 +186,18 @@ object World {
     fun getAllEntitiesOfType(clazz: Class<*>): List<Entity> {
         return getAllEntities().filter {
             it.entity.javaClass == clazz
+        }
+    }
+
+    @JvmStatic
+    fun getAllTileEntities(): List<TileEntity> {
+        return getWorld()?.loadedTileEntityList?.map(::TileEntity) ?: listOf()
+    }
+
+    @JvmStatic
+    fun getAllTileEntitiesOfType(clazz: Class<*>): List<TileEntity> {
+        return getAllTileEntities().filter {
+            it.tileEntity.javaClass == clazz
         }
     }
 
