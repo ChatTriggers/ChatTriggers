@@ -26,6 +26,7 @@ const proxyInsnList = $ => {
                     );
 
                     target.builder.invokeDynamic.bind(target.builder)(
+                        "",
                         "invokeJSFunction",
                         "([Ljava/lang/Object;)Ljava/lang/Object;",
                         handle,
@@ -106,12 +107,12 @@ class RemoveBuilder extends ASMBuilder {
     }
 
     numberToRemove(numberToRemove) {
-        this.numberToRemove = numberToRemove;
+        this._numberToRemove = numberToRemove;
         return this;
     }
 
     execute() {
-        asmRemoveHelper(this.className, this.at, this.methodName, this.descriptor, this._methodMaps, this.numberToRemove);
+        asmRemoveHelper(this.className, this.at, this.methodName, this.descriptor, this._methodMaps, this._numberToRemove);
     }
 }
 
