@@ -29,7 +29,8 @@ global.DisplayLine = Java.type("com.chattriggers.ctjs.engine.langs.js.JSDisplayL
 global.DisplayHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler");
 
 global.Gui = Java.type("com.chattriggers.ctjs.engine.langs.js.JSGui");
-global.GuiHandler = Java.type("com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler").INSTANCE;
+global.GuiUtil = Java.type("gg.essential.api.utils.GuiUtil");
+global.GuiHandler = { openGui: GuiUtil.open };
 
 global.Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Message");
 global.TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.TextComponent");
