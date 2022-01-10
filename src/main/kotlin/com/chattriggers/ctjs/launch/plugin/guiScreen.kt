@@ -11,6 +11,7 @@ import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.iReturn
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.item.ItemStack
 import org.lwjgl.input.Keyboard
 
@@ -23,6 +24,7 @@ fun injectGuiScreen() {
     injectTextComponentClick()
     injectTextComponentHover()
     injectRenderTooltip()
+    injectPreBackground()
 }
 
 fun injectSendChatMessage() = inject {
@@ -67,7 +69,7 @@ fun injectHandleKeyboardInput() = inject {
     )
 
     codeBlock {
-        val local0 = shadowLocal<Any>()
+        val local0 = shadowLocal<GuiScreen>()
 
         code {
             val event = CancellableEvent()
@@ -105,7 +107,7 @@ fun injectMouseClick() = inject {
     )
 
     codeBlock {
-        val local0 = shadowLocal<Any>()
+        val local0 = shadowLocal<GuiScreen>()
         val local1 = shadowLocal<Int>()
         val local2 = shadowLocal<Int>()
         val local3 = shadowLocal<Int>()
@@ -140,7 +142,7 @@ fun injectMouseRelease() = inject {
     )
 
     codeBlock {
-        val local0 = shadowLocal<Any>()
+        val local0 = shadowLocal<GuiScreen>()
         val local1 = shadowLocal<Int>()
         val local2 = shadowLocal<Int>()
         val local3 = shadowLocal<Int>()
@@ -175,7 +177,7 @@ fun injectMouseDrag() = inject {
     )
 
     codeBlock {
-        val local0 = shadowLocal<Any>()
+        val local0 = shadowLocal<GuiScreen>()
         val local1 = shadowLocal<Int>()
         val local2 = shadowLocal<Int>()
         val local3 = shadowLocal<Int>()
@@ -260,6 +262,25 @@ fun injectRenderTooltip() = inject {
         code {
             val event = CancellableEvent()
             TriggerType.Tooltip.triggerAll(local4, Item(local1), event)
+            if (event.isCancelled())
+                methodReturn()
+        }
+    }
+}
+
+fun injectPreBackground() = inject {
+    className = "net/minecraft/client/gui/GuiScreen"
+    methodName = "drawDefaultBackground"
+    methodDesc = "()V"
+    at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf("func_146276_q_" to "drawDefaultBackground")
+
+    codeBlock {
+        val local0 = shadowLocal<GuiScreen>()
+        code {
+            val event = CancellableEvent()
+            TriggerType.GuiDrawBackground.triggerAll(local0, event)
             if (event.isCancelled())
                 methodReturn()
         }

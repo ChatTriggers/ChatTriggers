@@ -782,6 +782,18 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs before the gui background is drawn
+     * This is useful for drawing custom backgrounds.
+     *
+     * Passes through one argument:
+     * - The [GuiScreen] that is being drawn
+     *
+     */
+    fun registerGuiDrawBackground(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.GuiDrawBackground, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs as a gui is rendered
      *
      * Passes through three arguments:
