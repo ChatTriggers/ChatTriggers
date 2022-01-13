@@ -15,7 +15,4 @@ data class ModuleMetadata(
     val changelog: String? = null,
     val ignored: ArrayList<String>? = null,
     var isRequired: Boolean = false
-) {
-    val isDefault: Boolean
-        get() = name == null
-}
+)

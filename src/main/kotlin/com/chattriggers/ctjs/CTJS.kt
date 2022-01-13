@@ -2,6 +2,7 @@ package com.chattriggers.ctjs
 
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
+import com.chattriggers.ctjs.engine.module.ModuleUpdater
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
@@ -51,7 +52,8 @@ object CTJS {
             GuiHandler,
             ClientListener,
             UpdateChecker,
-            MouseListener
+            MouseListener,
+            ModuleUpdater
         ).forEach(MinecraftForge.EVENT_BUS::register)
 
         UriScheme.installUriScheme()
