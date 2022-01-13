@@ -9,6 +9,9 @@ import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
+import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.net.URL
@@ -18,6 +21,34 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 object ModuleUpdater {
+    private val changelogs = mutableListOf<ModuleMetadata>()
+    private var shouldReportChangelog = false
+
+    @SubscribeEvent
+    fun onWorldLoad(event: WorldEvent.Load) {
+        shouldReportChangelog = true
+    }
+
+    @SubscribeEvent
+    fun onRenderGameOverlay(event: RenderGameOverlayEvent.Text) {
+        if (!shouldReportChangelog) return
+        changelogs.forEach(::reportChangelog)
+        changelogs.clear()
+    }
+
+    private fun tryReportChangelog(module: ModuleMetadata) {
+        if (shouldReportChangelog) {
+            reportChangelog(module)
+        } else {
+            changelogs.add(module)
+        }
+    }
+
+    private fun reportChangelog(module: ModuleMetadata) {
+        ChatLib.chat("&a[ChatTriggers] ${module.name} has updated to version ${module.version}")
+        ChatLib.chat("&aChangelog: &r${module.changelog}")
+    }
+
     fun importPendingModules() {
         val toDownload = File(modulesFolder, ".to_download.txt")
         if (!toDownload.exists()) return
@@ -56,13 +87,12 @@ object ModuleUpdater {
             downloadModule(metadata.name)
             "Updated module ${metadata.name}".printToConsole()
 
-            if (Config.moduleChangelog && newMetadata.changelog != null) {
-                ChatLib.chat("&a[ChatTriggers] ${metadata.name} has updated to version ${newMetadata.version}")
-                ChatLib.chat("&aChangelog: &r${newMetadata.changelog}")
-            }
-
             module.metadata = File(module.folder, "metadata.json").let {
                 CTJS.gson.fromJson(it.readText(), ModuleMetadata::class.java)
+            }
+
+            if (Config.moduleChangelog && module.metadata.changelog != null) {
+                tryReportChangelog(module.metadata)
             }
         } catch (e: Exception) {
             "Can't find page for ${metadata.name}".printToConsole()
@@ -80,7 +110,7 @@ object ModuleUpdater {
 
         cachedModules.add(module)
 
-        return listOf(module) + (module.metadata.requires?.map(ModuleUpdater::importModule)?.flatten() ?: emptyList())
+        return listOf(module) + (module.metadata.requires?.map(::importModule)?.flatten() ?: emptyList())
     }
 
     data class DownloadResult(val name: String, val modVersion: String)
