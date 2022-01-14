@@ -84,9 +84,9 @@ repositories {
 
 dependencies {
     provided "gg.essential:loader-launchwrapper:1.1.2"
-    implementation "gg.essential:essential-1.8.9-forge:1570+release-launch"
+    implementation "gg.essential:essential-1.8.9-forge:1788"
 
-    provided("dev.falsehonesty.asmhelper:AsmHelper:1.5.1-$mcVersion") {
+    provided("dev.falsehonesty.asmhelper:AsmHelper:1.5.2-$mcVersion") {
         exclude group: "org.jetbrains.kotlin"
     }
     provided("com.github.falsehonesty:ts-generator:adfb57a8f6") {
