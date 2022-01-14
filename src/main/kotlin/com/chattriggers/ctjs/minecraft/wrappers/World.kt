@@ -185,7 +185,7 @@ object World {
     @JvmStatic
     fun getAllEntitiesOfType(clazz: Class<*>): List<Entity> {
         return getAllEntities().filter {
-            it.entity.javaClass == clazz
+            clazz.isInstance(it.entity)
         }
     }
 
@@ -197,7 +197,7 @@ object World {
     @JvmStatic
     fun getAllTileEntitiesOfType(clazz: Class<*>): List<TileEntity> {
         return getAllTileEntities().filter {
-            it.tileEntity.javaClass == clazz
+            clazz.isInstance(it.tileEntity)
         }
     }
 
