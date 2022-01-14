@@ -20,7 +20,10 @@ object ModuleManager {
     private val loaders = listOf(JSLoader)
     val generalConsole = Console(null)
     val cachedModules = mutableListOf<Module>()
-    val modulesFolder = File(Config.modulesFolder)
+    val modulesFolder = run {
+        Config.loadData()
+        File(Config.modulesFolder)
+    }
     val pendingOldModules = mutableListOf<Module>()
 
     fun setup() {
