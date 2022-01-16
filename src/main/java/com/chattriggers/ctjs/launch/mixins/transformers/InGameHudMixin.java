@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.launch.mixins.transformers;
 
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
+import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
@@ -138,7 +139,10 @@ public class InGameHudMixin {
     @Inject(method = "render", at = @At("HEAD"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void injectRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         Renderer.setBoundMatrixStack(matrices);
+
         // OnRenderTrigger expects a CancellableEvent as the first parameter
         TriggerType.RenderOverlay.triggerAll(new CancellableEvent());
+
+        DisplayHandler.INSTANCE.renderDisplays();
     }
 }

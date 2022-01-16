@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.minecraft.objects.display
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
-import com.chattriggers.ctjs.minecraft.listeners.MouseListener
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.OnTrigger
@@ -52,12 +52,12 @@ abstract class DisplayLine {
     }
 
     init {
-        MouseListener.registerClickListener { x, y, button, pressed ->
+        ClientListener.registerClickListener { x, y, button, pressed ->
             if (x in cachedX..cachedX + cachedWidth && y in cachedY..cachedY + cachedHeight)
                 onClicked?.trigger(arrayOf(x, y, button, pressed))
         }
 
-        MouseListener.registerDraggedListener { deltaX, deltaY, x, y, button ->
+        ClientListener.registerDraggedListener { deltaX, deltaY, x, y, button ->
             onDragged?.trigger(arrayOf(deltaX, deltaY, x, y, button))
         }
     }

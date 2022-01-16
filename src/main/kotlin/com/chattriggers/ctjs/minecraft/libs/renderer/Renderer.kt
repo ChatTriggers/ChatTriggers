@@ -98,6 +98,16 @@ object Renderer {
     }
 
     @JvmStatic
+    fun pushMatrix() = apply {
+        boundMatrixStack.push()
+    }
+
+    @JvmStatic
+    fun popMatrix() = apply {
+        boundMatrixStack.pop()
+    }
+
+    @JvmStatic
     fun getColor(color: Int): Long {
         return when (color) {
             0 -> BLACK

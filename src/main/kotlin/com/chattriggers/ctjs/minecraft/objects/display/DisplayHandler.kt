@@ -1,29 +1,21 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.util.concurrent.CopyOnWriteArrayList
 
 @External
 object DisplayHandler {
     private val displays = CopyOnWriteArrayList<Display>()
 
-    init {
-        MinecraftForge.EVENT_BUS.register(this)
-    }
-
     fun registerDisplay(display: Display) = displays.add(display)
 
     fun clearDisplays() = displays.clear()
 
-    @SubscribeEvent
-    fun renderDisplays(event: RenderGameOverlayEvent.Text) {
-        GlStateManager.pushMatrix()
+    fun renderDisplays() {
+        Renderer.pushMatrix()
         displays.forEach(Display::render)
-        GlStateManager.popMatrix()
+        Renderer.popMatrix()
     }
 
     enum class Background {
