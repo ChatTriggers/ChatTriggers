@@ -90,7 +90,7 @@ object ModuleUpdater {
             val connection = URL(url).openConnection()
             connection.setRequestProperty("User-Agent", "Mozilla/5.0")
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
-            FileSystems.newFileSystem(downloadZip.toPath(), null).use {
+            FileSystems.newFileSystem(downloadZip.toPath()).use {
                 val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
                 if (!rootFolder.hasNext()) throw Exception("Too small")
                 val moduleFolder = rootFolder.next()

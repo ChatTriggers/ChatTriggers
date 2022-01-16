@@ -3,12 +3,12 @@ package com.chattriggers.ctjs.engine.module
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
-import com.chattriggers.ctjs.minecraft.wrappers.Player
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.renderer.GlStateManager
-import org.lwjgl.input.Mouse
+import com.chattriggers.ctjs.minecraft.wrappers.Client
+import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.LiteralText
 
-object ModulesGui : GuiScreen() {
+object ModulesGui : Screen(LiteralText("Modules GUI")) {
     private val window = object {
         var title = Text("Modules").setScale(2f).setShadow(true)
         var exit = Text(ChatLib.addColor("&cx")).setScale(2f)
@@ -16,12 +16,12 @@ object ModulesGui : GuiScreen() {
         var scroll = 0f
     }
 
-    override fun doesGuiPauseGame() = false
+    override fun isPauseScreen() = false
 
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.drawScreen(mouseX, mouseY, partialTicks)
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(matrices, mouseX, mouseY, delta)
 
-        GlStateManager.pushMatrix()
+         matrices.push()
 
         val middle = Renderer.screen.getWidth() / 2f
         var width = Renderer.screen.getWidth() - 100f
@@ -55,36 +55,37 @@ object ModulesGui : GuiScreen() {
             window.height += it.draw(middle - width / 2f, window.scroll + window.height, width)
         }
 
-        GlStateManager.popMatrix()
+        matrices.pop()
     }
 
-    override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (!super.mouseClicked(mouseX, mouseY, button))
+            return false
 
         var width = Renderer.screen.getWidth() - 100f
         if (width > 500) width = 500f
 
         if (mouseX > Renderer.screen.getWidth() - 20 && mouseY > Renderer.screen.getHeight() - 20) {
             window.scroll = 0f
-            return
+            return true
         }
 
         if (mouseX > Renderer.screen.getWidth() / 2f + width / 2f - 25 && mouseX < Renderer.screen.getWidth() / 2f + width / 2f
             && mouseY > window.scroll + 95 && mouseY < window.scroll + 120
         ) {
-            Player.getPlayer()?.closeScreen()
-            return
+            Client.getMinecraft().currentScreen = null
+            return true
         }
 
         ModuleManager.cachedModules.toList().forEach {
             it.click(mouseX, mouseY, width)
         }
+
+        return true
     }
 
-    override fun handleMouseInput() {
-        super.handleMouseInput()
-
-        val i = Mouse.getEventDWheel()
-        window.scroll += i / 10
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        window.scroll += amount.toFloat() / 10f
+        return super.mouseScrolled(mouseX, mouseY, amount)
     }
 }
