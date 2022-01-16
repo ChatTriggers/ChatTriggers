@@ -1,20 +1,29 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.minecraft.listeners.MouseListener
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ClickableWidgetAccessor
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
-import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.renderer.GlStateManager
+import gg.essential.api.utils.GuiUtil
+import gg.essential.universal.UKeyboard
+import net.minecraft.client.gui.Element
+import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.widget.ButtonWidget
+import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.LiteralText
 
 @External
 @NotAbstract
-abstract class Gui : GuiScreen() {
+abstract class Gui : Screen(LiteralText("CT GUI")) {
     private var onDraw: OnRegularTrigger? = null
     private var onClick: OnRegularTrigger? = null
     private var onScroll: OnRegularTrigger? = null
@@ -26,30 +35,33 @@ abstract class Gui : GuiScreen() {
     private var mouseX = 0
     private var mouseY = 0
 
-    private val buttons = mutableListOf<GuiButton>()
+    private val buttons = mutableMapOf<Int, ButtonWidget>()
     private var doesPauseGame = false
 
+    private var nextButtonId = 0
+
     init {
-        MouseListener.registerScrollListener { x, y, delta ->
+        ClientListener.registerScrollListener { x, y, delta ->
             onScroll?.trigger(arrayOf(x, y, delta))
         }
     }
 
     fun open() {
-        GuiHandler.openGui(this)
+        GuiUtil.open(this)
     }
 
     fun close() {
-        if (isOpen()) Player.getPlayer()?.closeScreen()
+        if (isOpen())
+            Client.getMinecraft().currentScreen = null
     }
 
     fun isOpen(): Boolean = Client.getMinecraft().currentScreen === this
 
-    fun isControlDown(): Boolean = isCtrlKeyDown()
+    fun isControlDown(): Boolean = Client.isControlDown()
 
-    fun isShiftDown(): Boolean = isShiftKeyDown()
+    fun isShiftDown(): Boolean = Client.isShiftDown()
 
-    fun isAltDown(): Boolean = isAltKeyDown()
+    fun isAltDown(): Boolean = Client.isAltDown()
 
     /**
      * Registers a method to be run while gui is open.
@@ -161,72 +173,83 @@ abstract class Gui : GuiScreen() {
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (!super.mouseClicked(mouseX, mouseY, button))
+            return false
         onClick?.trigger(arrayOf(mouseX, mouseY, button))
+        return true
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun mouseReleased(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseReleased(mouseX, mouseY, button)
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (!super.mouseReleased(mouseX, mouseY, button))
+            return false
         onMouseReleased?.trigger(arrayOf(mouseX, mouseY, button))
+        return true
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun actionPerformed(button: GuiButton) {
-        super.actionPerformed(button)
-        onActionPerformed?.trigger(arrayOf(button.id))
+    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        if (!super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY))
+            return false
+        // TODO(BREAKING): Remove timeSinceLastClick
+        onMouseDragged?.trigger(arrayOf(mouseX, mouseY, button))
+        return true
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
-        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
-        onMouseDragged?.trigger(arrayOf(mouseX, mouseY, clickedMouseButton, timeSinceLastClick))
+    override fun init() {
+        super.init()
+        buttons.values.forEach(::addElement)
+    }
+
+    private fun addElement(element: Element) {
+        @Suppress("UNCHECKED_CAST")
+        (children() as MutableList<Element>).add(element)
+    }
+
+    private fun removeElement(element: Element) {
+        @Suppress("UNCHECKED_CAST")
+        (children() as MutableList<Element>).remove(element)
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun initGui() {
-        super.initGui()
-        buttonList.addAll(buttons)
-    }
 
-    /**
-     * Internal method to run trigger. Not meant for public use
-     */
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.drawScreen(mouseX, mouseY, partialTicks)
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(matrices, mouseX, mouseY, delta)
 
-        GlStateManager.pushMatrix()
+        matrices.push()
 
         this.mouseX = mouseX
         this.mouseY = mouseY
 
-        onDraw?.trigger(arrayOf(mouseX, mouseY, partialTicks))
+        onDraw?.trigger(arrayOf(mouseX, mouseY, delta))
 
-        GlStateManager.popMatrix()
+        matrices.pop()
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun keyTyped(typedChar: Char, keyCode: Int) {
-        super.keyTyped(typedChar, keyCode)
-
-        onKeyTyped?.trigger(arrayOf(typedChar, keyCode))
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (!super.keyPressed(keyCode, scanCode, modifiers))
+            return false
+        onKeyTyped?.trigger(arrayOf(keyCode, scanCode))
+        return true
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    override fun doesGuiPauseGame() = doesPauseGame
+    override fun isPauseScreen() = doesPauseGame
 
     fun setDoesPauseGame(doesPauseGame: Boolean) = apply { this.doesPauseGame = doesPauseGame }
 
@@ -236,15 +259,17 @@ abstract class Gui : GuiScreen() {
      * @param button the button to add
      * @return the Gui for method chaining
      */
-    fun addButton(button: GuiButton) = apply {
-        buttons.add(button)
-        onResize(mc, width, height)
+    // TODO(BREAKING): returns the button id
+    fun addButton(button: ButtonWidget): Int {
+        val id = nextButtonId++
+        buttons[id] = button
+        addElement(button)
+        return id
     }
 
     /**
      * Add a base Minecraft button to the gui
      *
-     * @param buttonId id for the button
      * @param x the x position of the button
      * @param y the y position of the button
      * @param width the width of the button
@@ -252,9 +277,15 @@ abstract class Gui : GuiScreen() {
      * @param buttonText the label of the button
      * @return the Gui for method chaining
      */
+    // TODO(BREAKING): Remove ID argument; returns the button ID
     @JvmOverloads
-    fun addButton(buttonId: Int, x: Int, y: Int, width: Int = 200, height: Int = 20, buttonText: String) = apply {
-        addButton(GuiButton(buttonId, x, y, width, height, buttonText))
+    fun addButton(x: Int, y: Int, width: Int = 200, height: Int = 20, buttonText: String): Int {
+        val id = nextButtonId++
+        val button = ButtonWidget(x, y, width, height, LiteralText(ChatLib.addColor(buttonText))) {
+            onActionPerformed?.trigger(arrayOf(id))
+        }
+        buttons[id] = button
+        return id
     }
 
     /**
@@ -264,16 +295,15 @@ abstract class Gui : GuiScreen() {
      * @return the Gui for method chaining
      */
     fun removeButton(buttonId: Int) = apply {
-        buttons.removeIf { it.id == buttonId }
-        onResize(mc, width, height)
+        buttons.remove(buttonId)?.also(::removeElement)
     }
 
     fun clearButtons() = apply {
+        buttons.values.forEach(::removeElement)
         buttons.clear()
-        onResize(mc, width, height)
     }
 
-    fun getButton(buttonId: Int): GuiButton? = buttons.firstOrNull { it.id == buttonId }
+    fun getButton(buttonId: Int) = buttons[buttonId]
 
     fun getButtonVisibility(buttonId: Int): Boolean = getButton(buttonId)?.visible ?: false
 
@@ -288,7 +318,7 @@ abstract class Gui : GuiScreen() {
         getButton(buttonId)?.visible = visible
     }
 
-    fun getButtonEnabled(buttonId: Int): Boolean = getButton(buttonId)?.enabled ?: false
+    fun getButtonEnabled(buttonId: Int): Boolean = getButton(buttonId)?.active ?: false
 
     /**
      * Sets the enabled state of a button
@@ -298,7 +328,7 @@ abstract class Gui : GuiScreen() {
      * @return the Gui for method chaining
      */
     fun setButtonEnabled(buttonId: Int, enabled: Boolean) = apply {
-        getButton(buttonId)?.enabled = enabled
+        getButton(buttonId)?.active = enabled
     }
 
     fun getButtonWidth(buttonId: Int): Int = getButton(buttonId)?.width ?: 0
@@ -324,10 +354,10 @@ abstract class Gui : GuiScreen() {
      * @return the Gui for method chaining
      */
     fun setButtonHeight(buttonId: Int, height: Int) = apply {
-        getButton(buttonId)?.height = height
+        getButton(buttonId)?.asMixin<ClickableWidgetAccessor>()?.setHeight(height)
     }
 
-    fun getButtonX(buttonId: Int): Int = getButton(buttonId)?.xPosition ?: 0
+    fun getButtonX(buttonId: Int): Int = getButton(buttonId)?.x ?: 0
 
     /**
      * Sets the button's x position
@@ -337,10 +367,10 @@ abstract class Gui : GuiScreen() {
      * @return the Gui for method chaining
      */
     fun setButtonX(buttonId: Int, x: Int) = apply {
-        getButton(buttonId)?.xPosition = x
+        getButton(buttonId)?.x = x
     }
 
-    fun getButtonY(buttonId: Int): Int = getButton(buttonId)?.yPosition ?: 0
+    fun getButtonY(buttonId: Int): Int = getButton(buttonId)?.y ?: 0
 
     /**
      * Sets the button's y position
@@ -350,7 +380,7 @@ abstract class Gui : GuiScreen() {
      * @return the Gui for method chaining
      */
     fun setButtonY(buttonId: Int, y: Int) = apply {
-        getButton(buttonId)?.yPosition = y
+        getButton(buttonId)?.y = y
     }
 
     /**
@@ -362,9 +392,9 @@ abstract class Gui : GuiScreen() {
      * @return the Gui for method chaining
      */
     fun setButtonLoc(buttonId: Int, x: Int, y: Int) = apply {
-        getButton(buttonId)?.apply {
-            xPosition = x
-            yPosition = y
+        getButton(buttonId)?.also {
+            it.x = x
+            it.y = y
         }
     }
 
@@ -376,8 +406,8 @@ abstract class Gui : GuiScreen() {
      * @param y Y position of the text
      * @param color color of the text
      */
-    fun drawString(text: String, x: Int, y: Int, color: Int) {
-        drawString(mc.fontRendererObj, text, x, y, color)
+    fun drawString(text: String, x: Float, y: Float, color: Int) {
+        TODO("fabric")
     }
 
     /**
@@ -388,7 +418,7 @@ abstract class Gui : GuiScreen() {
      * @param mouseY Y position of mouse
      */
     fun drawCreativeTabHoveringString(text: String, mouseX: Int, mouseY: Int) {
-        drawCreativeTabHoveringText(text, mouseX, mouseY)
+        TODO("fabric")
     }
 
     /**
@@ -399,7 +429,7 @@ abstract class Gui : GuiScreen() {
      * @param y Y position of the text
      */
     fun drawHoveringString(text: List<String>, x: Int, y: Int) {
-        drawHoveringText(text, x, y, mc.fontRendererObj)
+        TODO("fabric")
     }
 
     internal abstract fun getLoader(): ILoader

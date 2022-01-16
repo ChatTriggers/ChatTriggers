@@ -4,20 +4,15 @@ import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
-import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Initializer
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.event.player.UseItemCallback
-import net.minecraft.util.ActionResult
 import net.minecraft.util.TypedActionResult
-import org.spongepowered.asm.mixin.Unique
 
 object ClientListener : Initializer {
     private var ticksPassed: Int = 0
