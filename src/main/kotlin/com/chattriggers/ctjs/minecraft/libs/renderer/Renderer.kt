@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
-import com.chattriggers.ctjs.launch.mixins.asMixin
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -8,6 +7,7 @@ import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
+import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.render.*
 import net.minecraft.client.render.entity.EntityRenderer
@@ -377,21 +377,27 @@ object Renderer {
 
     @JvmStatic
     fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) {
+        if (image.textureIdentifier == null)
+            return
+
         if (colorized == null)
             colorize(1f, 1f, 1f, 1f)
+
         RenderSystem.enableBlend()
         boundMatrixStack.scale(1f, 1f, 50f)
-        RenderSystem.bindTexture(image.getTexture().glTextureId)
-        RenderSystem.enableTexture()
 
-        val buffer = MCTessellator.getInstance().buffer
-        buffer.begin(VertexFormat.DrawMode.values()[drawMode ?: 7], VertexFormats.POSITION_TEXTURE)
-        buffer.vertex(x, y + height, 0.0).texture(0f, 1f).next()
-        buffer.vertex(x + width, y + height, 0.0).texture(1f, 1f).next()
-        buffer.vertex(x + width, y, 0.0).texture(1f, 0f).next()
-        buffer.vertex(x, y, 0.0).texture(0f, 0f).next()
-        buffer.end()
-        tessellator.draw()
+        RenderSystem.setShaderTexture(0, image.textureIdentifier)
+        DrawableHelper.drawTexture(
+            boundMatrixStack,
+            x.toInt(),
+            y.toInt(),
+            0f,
+            0f,
+            width.toInt(),
+            height.toInt(),
+            1,
+            1,
+        )
 
         finishDraw()
     }
@@ -446,8 +452,7 @@ object Renderer {
         entityRenderDispatcher.setRenderShadows(false)
         val immediate = MinecraftClient.getInstance().bufferBuilders.entityVertexConsumers
         RenderSystem.runAsFancy {
-            val dispatcher = Client.getMinecraft().entityRenderDispatcher.asMixin<EntityRenderDispatcherMixin>()
-            dispatcher.customEntityRenderer = if (entity.model == "slim") slimPlayerRenderer else normalPlayerRenderer
+            customEntityRenderer = if (entity.model == "slim") slimPlayerRenderer else normalPlayerRenderer
             Client.getMinecraft().entityRenderDispatcher.render(
                 entity, 0.0, 0.0, 0.0, 0f, 1f, matrixStack2, immediate, 15278880,
             )

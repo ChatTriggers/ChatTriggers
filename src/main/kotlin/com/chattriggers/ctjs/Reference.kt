@@ -42,6 +42,9 @@ object Reference {
         ModuleManager.teardown()
         MouseMixin.clearListeners()
 
+        CTJS.images.forEach { it.destroy() }
+        CTJS.images.clear()
+
         Command.activeCommands.values.toList().forEach(Command::unregister)
 
         if (asCommand) {

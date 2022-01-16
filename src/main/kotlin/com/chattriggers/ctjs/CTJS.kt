@@ -3,15 +3,14 @@ package com.chattriggers.ctjs
 import com.chattriggers.ctjs.commands.CTCommand
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.loader.UriScheme
+import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
-import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.wrappers.CPS
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.Initializer
-import com.chattriggers.ctjs.utils.UpdateChecker
 import com.google.gson.Gson
 import com.mojang.brigadier.CommandDispatcher
 import gg.essential.vigilance.Vigilance
@@ -26,6 +25,7 @@ object CTJS : ClientModInitializer {
     val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
+    val images = mutableListOf<Image>()
 
     internal lateinit var commandDispatcher: CommandDispatcher<ServerCommandSource>
 
