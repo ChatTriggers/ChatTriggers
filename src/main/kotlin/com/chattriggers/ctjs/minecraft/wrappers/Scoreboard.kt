@@ -1,15 +1,20 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ScoreboardAccessor
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCScore
-import net.minecraft.scoreboard.ScorePlayerTeam
-import net.minecraftforge.client.GuiIngameForge
+import net.minecraft.scoreboard.Team
+import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 
 @External
 object Scoreboard {
     private var needsUpdate = true
     private var scoreboardNames = mutableListOf<Score>()
-    private var scoreboardTitle = ""
+    private var scoreboardTitle = TextComponent("")
+    var shouldRender = true
 
     /**
      * Alias for [Scoreboard.getTitle].
@@ -32,7 +37,7 @@ object Scoreboard {
             needsUpdate = false
         }
 
-        return scoreboardTitle
+        return scoreboardTitle.getFormattedText()
     }
 
     /**
@@ -86,48 +91,36 @@ object Scoreboard {
     fun setLine(score: Int, line: String, override: Boolean) {
         try {
             val scoreboard = World.getWorld()?.scoreboard ?: return
-
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
-
-            val scores = scoreboard.getSortedScores(sidebarObjective)
+            val sidebarObjective = scoreboard.getObjectiveForSlot(1)
+            val scores = scoreboard.getAllPlayerScores(sidebarObjective)
 
             if (override) {
+                val playerObjectives = scoreboard.asMixin<ScoreboardAccessor>().playerObjectives
+
                 scores.filter {
-                    it.scorePoints == score
+                    it.score == score
                 }.forEach {
-                    scoreboard.removeObjectiveFromEntity(it.playerName, sidebarObjective)
+                    playerObjectives.remove(it.playerName)
                 }
             }
 
-            //#if MC<=10809
-            val theScore = scoreboard.getValueFromObjective(line, sidebarObjective)
-            //#else
-            //$$ val theScore = scoreboard.getOrCreateScore(line, sidebarObjective)
-            //#endif
-
-            theScore.scorePoints = score
+            val theScore = scoreboard.getPlayerScore(line, sidebarObjective)
+            theScore.score = score
         } catch (ignored: Exception) {
         }
     }
 
-    @JvmStatic
-    fun setShouldRender(shouldRender: Boolean) {
-        GuiIngameForge.renderObjective = shouldRender
-    }
-
-    @JvmStatic
-    fun getShouldRender() = GuiIngameForge.renderObjective
-
     private fun updateNames() {
         scoreboardNames.clear()
-        scoreboardTitle = ""
+        scoreboardTitle = TextComponent("")
 
         try {
             val scoreboard = World.getWorld()?.scoreboard ?: return
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
-            scoreboardTitle = sidebarObjective.displayName ?: return
+            val sidebarObjective = scoreboard.getObjectiveForSlot(1) ?: return
+            // val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
+            scoreboardTitle = sidebarObjective.displayName?.let(::TextComponent) ?: return
 
-            val scores: Collection<net.minecraft.scoreboard.Score> = scoreboard.getSortedScores(sidebarObjective)
+            val scores = scoreboard.getAllPlayerScores(sidebarObjective)
 
             scoreboardNames = scores.map(::Score).toMutableList()
         } catch (ignored: Exception) {
@@ -146,18 +139,19 @@ object Scoreboard {
          *
          * @return the actual point value
          */
-        fun getPoints(): Int = score.scorePoints
+        fun getPoints(): Int = score.score
 
         /**
          * Gets the display string of this score
          *
          * @return the display name
          */
-        fun getName(): String = ScorePlayerTeam.formatPlayerName(
-            World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
-            score.playerName
-        )
+        // TODO(BREAKING): Return TextComponent instead of String
+        fun getName() = TextComponent(Team.decorateName(
+            World.getWorld()!!.scoreboard.getPlayerTeam(score.playerName),
+            LiteralText(score.playerName),
+        ))
 
-        override fun toString(): String = getName()
+        override fun toString(): String = getName().getFormattedText()
     }
 }

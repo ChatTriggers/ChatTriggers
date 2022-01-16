@@ -10,3 +10,4 @@ internal typealias MCVec3i = net.minecraft.util.math.Vec3i
 internal typealias MCLivingEntity = net.minecraft.entity.LivingEntity
 internal typealias MCPotion = net.minecraft.potion.Potion
 internal typealias MCTessellator = net.minecraft.client.render.Tessellator
+internal typealias MCScore = net.minecraft.scoreboard.ScoreboardPlayerScore

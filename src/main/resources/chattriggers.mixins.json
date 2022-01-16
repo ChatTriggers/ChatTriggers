@@ -31,6 +31,7 @@
         "ParticleAccessor",
         "PlayerEntityMixin",
         "PlayerListHudMixin",
+        "ScoreboardAccessor",
         "SignBlockEntityAccessor",
         "SoundManagerAccessor",
         "SoundSystemMixin",

@@ -3,11 +3,14 @@ package com.chattriggers.ctjs.launch.mixins.transformers;
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer;
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler;
+import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -17,6 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
+    @Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
+    public void injectRenderScoreboardSidebar(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
+        if (!Scoreboard.INSTANCE.getShouldRender())
+            ci.cancel();
+    }
+
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
     public void injectRenderCrosshair(MatrixStack matrices, CallbackInfo ci) {
         Renderer.setBoundMatrixStack(matrices);
