@@ -27,13 +27,13 @@ public class ClientPlayerEntityMixin {
             ClientListener.getActionBarHistory().add(ChatLib.replaceFormatting(message.getFormattedText()));
             if (ClientListener.getActionBarHistory().size() > 1000)
                 ClientListener.getActionBarHistory().remove(0);
-            TriggerType.ActionBar.triggerAll(message.getUnformattedText(), ci);
+            TriggerType.ActionBar.triggerAll(message, ci);
         } else {
             String newMessage = ChatLib.replaceFormatting(message.getFormattedText());
             ClientListener.getChatHistory().add(newMessage);
             if (ClientListener.getChatHistory().size() > 1000)
                 ClientListener.getChatHistory().remove(0);
-            TriggerType.Chat.triggerAll(message.getUnformattedText(), ci);
+            TriggerType.Chat.triggerAll(message, ci);
 
             if (Config.INSTANCE.getPrintChatToConsole())
                 ReferenceKt.printToConsole("[CHAT] " + newMessage, ModuleManager.getGeneralConsole());

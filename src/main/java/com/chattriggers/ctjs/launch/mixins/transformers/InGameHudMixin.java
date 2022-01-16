@@ -138,6 +138,7 @@ public class InGameHudMixin {
     @Inject(method = "render", at = @At("HEAD"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void injectRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         Renderer.setBoundMatrixStack(matrices);
-        TriggerType.RenderOverlay.triggerAll();
+        // OnRenderTrigger expects a CancellableEvent as the first parameter
+        TriggerType.RenderOverlay.triggerAll(new CancellableEvent());
     }
 }

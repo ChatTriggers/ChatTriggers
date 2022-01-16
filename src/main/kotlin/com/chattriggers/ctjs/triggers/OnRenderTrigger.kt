@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraftforge.client.event.RenderGameOverlayEvent
 
 @External
 class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : OnTrigger(method, triggerType, loader) {
@@ -17,11 +17,12 @@ class OnRenderTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : 
     fun triggerIfCanceled(bool: Boolean) = apply { triggerIfCanceled = bool }
 
     override fun trigger(args: Array<out Any?>) {
-        if (args[0] !is RenderGameOverlayEvent)
+        if (args[0] !is CancellableEvent)
             throw IllegalArgumentException("Argument 0 must be a RenderGameOverlayEvent")
 
-        val event = args[0] as RenderGameOverlayEvent
-        if (!triggerIfCanceled && event.isCanceled) return
+        val event = args[0] as CancellableEvent
+        if (!triggerIfCanceled && event.isCanceled())
+            return
 
         callMethod(args)
     }
