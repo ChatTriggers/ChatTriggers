@@ -1,13 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.utils.Initializer
 import com.chattriggers.ctjs.utils.kotlin.External
-import net.minecraftforge.client.event.MouseEvent
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import kotlin.math.roundToInt
 
 @External
-object CPS {
+object CPS : Initializer {
     private var sysTime = Client.getSystemTime()
 
     private var leftClicks = mutableListOf<Int>()
@@ -18,33 +18,33 @@ object CPS {
     private var leftClicksMax = 0
     private var rightClicksMax = 0
 
-    @SubscribeEvent
-    fun update(event: RenderGameOverlayEvent.Pre) {
-        while (Client.getSystemTime() > sysTime + 50L) {
-            sysTime += 50L
+    override fun onInitialize() {
+        ClientTickEvents.START_CLIENT_TICK.register {
+            while (Client.getSystemTime() > sysTime + 50L) {
+                sysTime += 50L
 
-            decreaseClicks(leftClicks)
-            decreaseClicks(rightClicks)
+                decreaseClicks(leftClicks)
+                decreaseClicks(rightClicks)
 
-            leftClicksAverage.add(leftClicks.size.toDouble())
-            rightClicksAverage.add(rightClicks.size.toDouble())
+                leftClicksAverage.add(leftClicks.size.toDouble())
+                rightClicksAverage.add(rightClicks.size.toDouble())
 
-            limitAverage(leftClicksAverage)
-            limitAverage(rightClicksAverage)
+                limitAverage(leftClicksAverage)
+                limitAverage(rightClicksAverage)
 
-            clearOldLeft()
-            clearOldRight()
+                clearOldLeft()
+                clearOldRight()
 
-            findMax()
+                findMax()
+            }
         }
-    }
 
-    @SubscribeEvent
-    fun click(event: MouseEvent) {
-        if (event.buttonstate) {
-            when (event.button) {
-                0 -> leftClicks.add(20)
-                1 -> rightClicks.add(20)
+        ClientListener.registerClickListener { _, _, button, pressed ->
+            if (pressed) {
+                when (button) {
+                    0 -> leftClicks.add(20)
+                    1 -> rightClicks.add(20)
+                }
             }
         }
     }
