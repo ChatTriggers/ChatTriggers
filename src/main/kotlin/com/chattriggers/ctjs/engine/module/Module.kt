@@ -3,9 +3,12 @@ package com.chattriggers.ctjs.engine.module
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
+import com.fasterxml.jackson.core.Version
 import java.io.File
 
 class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
+    var targetModVersion: Version? = null
+
     private val gui = object {
         var collapsed = true
         var x = 0f

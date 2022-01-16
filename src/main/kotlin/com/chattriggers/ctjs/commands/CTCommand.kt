@@ -98,7 +98,7 @@ object CTCommand : CommandBase() {
                 val allModules = listOf(module) + dependencies
                 val modVersion = Reference.MODVERSION.toVersion()
                 allModules.forEach {
-                    val version = it.metadata.version?.toVersion() ?: return@forEach
+                    val version = it.targetModVersion ?: return@forEach
                     if (version.majorVersion < modVersion.majorVersion)
                         ModuleManager.tryReportOldVersion(it)
                 }

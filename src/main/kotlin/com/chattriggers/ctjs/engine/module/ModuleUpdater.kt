@@ -72,17 +72,20 @@ object ModuleUpdater {
     fun importModule(moduleName: String): List<Module> {
         if (cachedModules.any { it.name == moduleName }) return emptyList()
 
-        val realName = downloadModule(moduleName) ?: return emptyList()
+        val (realName, modVersion) = downloadModule(moduleName) ?: return emptyList()
 
         val moduleDir = File(modulesFolder, realName)
         val module = ModuleManager.parseModule(moduleDir)
+        module.targetModVersion = modVersion.toVersion()
 
         cachedModules.add(module)
 
         return listOf(module) + (module.metadata.requires?.map(ModuleUpdater::importModule)?.flatten() ?: emptyList())
     }
 
-    private fun downloadModule(name: String): String? {
+    data class DownloadResult(val name: String, val modVersion: String)
+
+    private fun downloadModule(name: String): DownloadResult? {
         val downloadZip = File(modulesFolder, "currDownload.zip")
 
         try {
@@ -105,7 +108,7 @@ object ModuleUpdater {
                     }
                     Files.copy(path, resolvedPath, StandardCopyOption.REPLACE_EXISTING)
                 }
-                return realName
+                return DownloadResult(realName, connection.getHeaderField("CT-Version"))
             }
         } catch (exception: Exception) {
             exception.printTraceToConsole()
