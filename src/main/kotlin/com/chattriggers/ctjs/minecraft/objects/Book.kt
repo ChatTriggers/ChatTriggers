@@ -1,33 +1,33 @@
 package com.chattriggers.ctjs.minecraft.objects
 
-import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.BookScreenAccessor
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList
 import com.chattriggers.ctjs.utils.kotlin.*
-import net.minecraft.client.gui.GuiScreenBook
-import net.minecraft.init.Items
+import gg.essential.api.utils.GuiUtil
+import net.minecraft.client.gui.screen.ingame.BookScreen
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtList
+import net.minecraft.nbt.NbtString
 
 @External
 class Book(bookName: String) {
-    private var bookScreen: GuiScreenBook? = null
-    private val book: ItemStack
-    //#if MC<=10809
-            = ItemStack(Items.written_book)
-    //#else
-    //$$ = ItemStack(Items.WRITTEN_BOOK)
-    //#endif
-    private val bookData: NBTTagCompound = NBTTagCompound(MCNBTTagCompound())
+    private var bookScreen: BookScreen? = null
+    private val book: ItemStack = ItemStack(Items.WRITTEN_BOOK)
+    private val bookData: NBTTagCompound = NBTTagCompound(NbtCompound())
 
     init {
-        bookData["author"] = MCNBTTagString(Player.getName())
-        bookData["title"] = MCNBTTagString("CT-$bookName")
-        bookData["pages"] = MCNBTTagList()
+        bookData["author"] = NbtString.of(Player.getName())
+        bookData["title"] = NbtString.of("CT-$bookName")
+        bookData["pages"] = NbtList()
 
-        book.tagCompound = bookData.rawNBT
+        book.nbt = bookData.rawNBT
     }
 
     /**
@@ -37,19 +37,11 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun addPage(message: Message) = apply {
-        val pages = NBTTagList(
-            (
-                bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
-            ) as MCNBTTagList
-        )
-        pages.appendTag(
-            MCNBTTagString(
-                MCTextComponentSerializer.componentToJson(
-                    message.getChatMessage()
-                )
-            )
-        )
+        val pages = bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8)?.let {
+            NBTTagList(it as NbtList)
+        } ?: return@apply
 
+        pages.appendTag(NbtString.of(message.getFormattedText()))
         updateBookScreen(pages)
     }
 
@@ -71,34 +63,26 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun setPage(pageNumber: Int, message: Message) = apply {
-        val pages = NBTTagList(
-            (
-                bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
-            ) as MCNBTTagList
-        )
+        val pages = bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8)?.let {
+            NBTTagList(it as NbtList)
+        } ?: return@apply
 
-        pages[pageNumber] = MCNBTTagString(
-            MCTextComponentSerializer.componentToJson(
-                message.getChatMessage()
-            )
-        )
-
+        pages[pageNumber] = NbtString.of(message.getFormattedText())
         updateBookScreen(pages)
     }
 
     fun updateBookScreen(pages: NBTTagList) {
         bookData.removeTag("pages")
         bookData["pages"] = pages
-        book.tagCompound = bookData.rawNBT
-        bookScreen?.bookPages = pages.rawNBT
+        book.nbt = bookData.rawNBT
+        bookScreen?.setPageProvider(BookScreen.Contents.create(book))
     }
 
     @JvmOverloads
     fun display(page: Int = 0) {
-        bookScreen = GuiScreenBook(Player.getPlayer(), book, false)
-
-        bookScreen!!.currPage = page
-        GuiHandler.openGui(bookScreen ?: return)
+        bookScreen = BookScreen(BookScreen.Contents.create(book))
+        bookScreen!!.setPage(page)
+        GuiUtil.open(bookScreen ?: return)
     }
 
     fun isOpen(): Boolean {
@@ -106,6 +90,6 @@ class Book(bookName: String) {
     }
 
     fun getCurrentPage(): Int {
-        return if (!isOpen() || bookScreen == null) -1 else bookScreen!!.currPage
+        return if (!isOpen() || bookScreen == null) -1 else bookScreen!!.asMixin<BookScreenAccessor>().pageIndex
     }
 }

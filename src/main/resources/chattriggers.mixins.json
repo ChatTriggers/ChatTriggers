@@ -7,9 +7,11 @@
     "mixins": [
         "AbstractBlockAccessor",
         "BiomeAccessAccessor",
+        "BookScreenAccessor",
         "BossBarHudMixin",
         "ChatHudMixin",
         "ChatScreenAccessor",
+        "ClickableWidgetAccessor",
         "ClientConnectionMixin",
         "ClientPlayerEntityMixin",
         "ClientPlayerNetworkHandlerMixin",
@@ -30,6 +32,7 @@
         "PlayerEntityMixin",
         "PlayerListHudMixin",
         "SignBlockEntityAccessor",
+        "SoundManagerAccessor",
         "SoundSystemMixin",
         "WorldRendererAccessor"
     ]

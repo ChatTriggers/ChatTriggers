@@ -1,15 +1,20 @@
 package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.SoundManagerAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
-import net.minecraft.client.audio.SoundManager
-import net.minecraftforge.fml.relauncher.ReflectionHelper
+import net.minecraft.client.sound.Sound
+import net.minecraft.client.sound.SoundInstance
+import net.minecraft.client.sound.SoundManager
+import net.minecraft.client.sound.SoundSystem
+import net.minecraft.client.sound.WeightedSoundSet
+import net.minecraft.sound.SoundCategory
+import net.minecraft.util.Identifier
 import org.mozilla.javascript.NativeObject
-import paulscode.sound.SoundSystem
 import java.io.File
 import java.net.MalformedURLException
 
@@ -34,16 +39,16 @@ import java.net.MalformedURLException
  *
  * @param config the JavaScript config object
  */
+// TODO("fabric"): Implement this class when the game can be debugged
 @External
 class Sound(private val config: NativeObject) {
-    private var sndSystem: SoundSystem? = null
+    private var soundSystem: SoundSystem = Client.getMinecraft().soundManager.asMixin<SoundManagerAccessor>().soundSystem
     private val source: String = config["source"] as String
+    private var soundInstance: SoundInstance? = null
     var isListening = false
 
     init {
         if (World.isLoaded()) {
-            loadSndSystem()
-
             try {
                 bootstrap()
             } catch (e: MalformedURLException) {
@@ -60,80 +65,66 @@ class Sound(private val config: NativeObject) {
     fun onWorldLoad() {
         isListening = false
 
-        loadSndSystem()
-
         try {
             bootstrap()
         } catch (exc: MalformedURLException) {
             exc.printStackTrace()
         }
-
-    }
-
-    private fun loadSndSystem() {
-        val sndManager = Client.getMinecraft().soundHandler.sndManager
-
-        sndSystem = ReflectionHelper.getPrivateValue<SoundSystem, SoundManager>(
-            SoundManager::class.java,
-            sndManager,
-            "sndSystem",
-            "field_148620_e"
-        )
     }
 
     @Throws(MalformedURLException::class)
     private fun bootstrap() {
-        val source = config["source"]?.toString() ?: throw IllegalArgumentException("Sound source is null.")
-        val priority = config.getOrDefault("priority", false) as Boolean
-        val loop = config.getOrDefault("loop", false) as Boolean
-        val stream = config.getOrDefault("stream", false) as Boolean
-
-        val url = File(CTJS.assetsDir, source).toURI().toURL()
-        val x = (config.getOrDefault("x", Player.getX()) as Double).toFloat()
-        val y = (config.getOrDefault("y", Player.getY()) as Double).toFloat()
-        val z = (config.getOrDefault("z", Player.getZ()) as Double).toFloat()
-        val attModel = config.getOrDefault("attenuation", 1) as Int
-        val distOrRoll = 16
-
-        if (stream) {
-            sndSystem!!.newStreamingSource(
-                priority,
-                source,
-                url,
-                source,
-                loop,
-                x,
-                y,
-                z,
-                attModel,
-                distOrRoll.toFloat()
-            )
-        } else {
-            sndSystem!!.newSource(
-                priority,
-                source,
-                url,
-                source,
-                loop,
-                x,
-                y,
-                z,
-                attModel,
-                distOrRoll.toFloat()
-            )
-        }
-
-        if (config["volume"] != null) {
-            setVolume(config["volume"] as Float)
-        }
-
-        if (config["pitch"] != null) {
-            setPitch(config["pitch"] as Float)
-        }
-
-        if (config["category"] != null) {
-            setCategory(config["category"] as String)
-        }
+        // val source = config["source"]?.toString() ?: throw IllegalArgumentException("Sound source is null.")
+        // val priority = config.getOrDefault("priority", false) as Boolean
+        // val loop = config.getOrDefault("loop", false) as Boolean
+        // val stream = config.getOrDefault("stream", false) as Boolean
+        //
+        // val url = File(CTJS.assetsDir, source).toURI().toURL()
+        // val x = (config.getOrDefault("x", Player.getX()) as Double).toFloat()
+        // val y = (config.getOrDefault("y", Player.getY()) as Double).toFloat()
+        // val z = (config.getOrDefault("z", Player.getZ()) as Double).toFloat()
+        // val attModel = config.getOrDefault("attenuation", 1) as Int
+        // val distOrRoll = 16
+        //
+        // if (stream) {
+        //     soundSystem.newStreamingSource(
+        //         priority,
+        //         source,
+        //         url,
+        //         source,
+        //         loop,
+        //         x,
+        //         y,
+        //         z,
+        //         attModel,
+        //         distOrRoll.toFloat()
+        //     )
+        // } else {
+        //     soundSystem.newSource(
+        //         priority,
+        //         source,
+        //         url,
+        //         source,
+        //         loop,
+        //         x,
+        //         y,
+        //         z,
+        //         attModel,
+        //         distOrRoll.toFloat()
+        //     )
+        // }
+        //
+        // if (config["volume"] != null) {
+        //     setVolume(config["volume"] as Float)
+        // }
+        //
+        // if (config["pitch"] != null) {
+        //     setPitch(config["pitch"] as Float)
+        // }
+        //
+        // if (config["category"] != null) {
+        //     setCategory(config["category"] as String)
+        // }
     }
 
     /**
@@ -143,8 +134,8 @@ class Sound(private val config: NativeObject) {
      * @param category the category
      */
     fun setCategory(category: String) = apply {
-        val category1 = MCSoundCategory.getCategory(category.lowercase())
-        setVolume(Client.getMinecraft().gameSettings.getSoundLevel(category1))
+        // val category1 = MCSoundCategory.getCategory(category.lowercase())
+        // setVolume(Client.getMinecraft().gameSettings.getSoundLevel(category1))
     }
 
     /**
@@ -153,9 +144,9 @@ class Sound(private val config: NativeObject) {
      *
      * @param volume New volume, float value ( 0.0f - 1.0f ).
      */
-    fun setVolume(volume: Float) = apply { sndSystem!!.setVolume(source, volume) }
+    fun setVolume(volume: Float) = apply { /*soundSystem!!.setVolume(source, volume)*/ }
 
-    fun getVolume() = sndSystem!!.getVolume(source)
+    fun getVolume(): Float = TODO("fabric") /*soundSystem!!.getVolume(source)*/
 
     /**
      * Updates the position of this sound
@@ -164,16 +155,16 @@ class Sound(private val config: NativeObject) {
      * @param y the y coordinate
      * @param z the z coordinate
      */
-    fun setPosition(x: Float, y: Float, z: Float) = apply { sndSystem!!.setPosition(source, x, y, z) }
+    fun setPosition(x: Float, y: Float, z: Float) = apply { /*soundSystem!!.setPosition(source, x, y, z)*/ }
 
     /**
      * Sets this sound's pitch.
      *
      * @param pitch A float value ( 0.5f - 2.0f ).
      */
-    fun setPitch(pitch: Float) = apply { sndSystem!!.setPitch(source, pitch) }
+    fun setPitch(pitch: Float) = apply { /*soundSystem!!.setPitch(source, pitch)*/ }
 
-    fun getPitch() = sndSystem!!.getPitch(source)
+    fun getPitch(): Float = TODO("fabric") /*soundSystem!!.getPitch(source)*/
 
     /**
      * Sets the attenuation (fade out over space) of the song.
@@ -184,33 +175,33 @@ class Sound(private val config: NativeObject) {
      *
      * @param model the model
      */
-    fun setAttenuation(model: Int) = apply { sndSystem!!.setAttenuation(source, model) }
+    fun setAttenuation(model: Int) = apply { /*soundSystem!!.setAttenuation(source, model)*/ }
 
     /**
      * Plays/resumes the sound
      */
     fun play() {
-        sndSystem!!.play(source)
+        /*soundSystem!!.play(source)*/
     }
 
     /**
      * Pauses the sound, to be resumed later
      */
     fun pause() {
-        sndSystem!!.pause(source)
+        /*soundSystem!!.pause(source)*/
     }
 
     /**
      * Completely stops the song
      */
     fun stop() {
-        sndSystem!!.stop(source)
+        /*soundSystem!!.stop(source)*/
     }
 
     /**
      * I really don't know what this does
      */
     fun rewind() {
-        sndSystem!!.rewind(source)
+        /*soundSystem!!.rewind(source)*/
     }
 }
