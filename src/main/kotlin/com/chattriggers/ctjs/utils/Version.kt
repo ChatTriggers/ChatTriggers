@@ -4,8 +4,8 @@ data class Version(
     val major: Int,
     val minor: Int,
     val patch: Int,
-) {
-    operator fun compareTo(other: Version): Int {
+) : Comparable<Version> {
+    override operator fun compareTo(other: Version): Int {
         major.compareTo(other.major).let {
             if (it != 0)
                 return it

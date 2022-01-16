@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Initializer
+import com.chattriggers.ctjs.utils.UpdateChecker
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
@@ -47,6 +48,7 @@ object WorldListener : Initializer {
         TriggerType.WorldLoad.triggerAll()
         ModuleManager.pendingOldModules.forEach(ModuleManager::reportOldVersion)
         ModuleManager.pendingOldModules.clear()
+        UpdateChecker.check()
         shouldTriggerWorldLoad = false
 
         CTJS.sounds

@@ -22,8 +22,8 @@ public interface ChatHudMixin {
     List<ChatHudLine<OrderedText>> getVisibleMessages();
 
     @Invoker
-    void callAddMessage(Text message, int messageId);
+    void invokeAddMessage(Text message, int messageId);
 
     @Invoker
-    void callRemoveMessage(int messageId);
+    void invokeRemoveMessage(int messageId);
 }

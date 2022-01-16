@@ -4,34 +4,6 @@ import com.chattriggers.ctjs.utils.Version
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-fun MCITextComponent.getStyling(): MCTextStyle =
-    //#if MC<=10809
-    this.chatStyle
-
-//#else
-//$$ this.style
-//#endif
-fun MCTextStyle.getClick(): MCTextClickEvent? =
-    //#if MC<=10809
-    chatClickEvent
-//#else
-//$$ clickEvent
-//#endif
-
-fun MCTextStyle.getHover(): MCTextHoverEvent? =
-    //#if MC<=10809
-    chatHoverEvent
-//#else
-//$$ hoverEvent
-//#endif
-
-fun MCTessellator.getRenderer(): MCWorldRenderer =
-    //#if MC<=10809
-    worldRenderer
-//#else
-//$$ buffer
-//#endif
-
 operator fun String.times(times: Number): String {
     val stringBuilder = StringBuilder()
 
@@ -48,3 +20,5 @@ fun String.toVersion(): Version {
     val split = this.split(".").map(String::toInt)
     return Version(split.getOrNull(0) ?: 0, split.getOrNull(1) ?: 0, split.getOrNull(2) ?: 0)
 }
+
+fun <T> runGlobal(block: () -> T) = block()

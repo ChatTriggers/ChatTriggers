@@ -11,10 +11,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import com.google.gson.reflect.TypeToken
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.event.world.WorldEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraft.client.util.math.MatrixStack
 
 object UpdateChecker {
     private var worldLoaded = false
@@ -43,17 +40,9 @@ object UpdateChecker {
         updateAvailable = latestVersion > Reference.MODVERSION.toVersion()
     }
 
-    @SubscribeEvent
-    fun worldLoad(event: WorldEvent.Load) {
-        worldLoaded = true
-    }
-
-    @SubscribeEvent
-    fun renderOverlay(event: RenderGameOverlayEvent.Pre) {
-        if (!worldLoaded) return
-        worldLoaded = false
-
-        if (!updateAvailable || warned) return
+    fun check() {
+        if (!updateAvailable || warned)
+            return
 
         World.playSound("note.bass", 1000f, 1f)
         Message(
@@ -71,20 +60,20 @@ object UpdateChecker {
         warned = true
     }
 
-    fun drawUpdateMessage() {
-        if (!updateAvailable) return
+    fun drawUpdateMessage(matrixStack: MatrixStack) {
+        if (!updateAvailable)
+            return
 
-        GlStateManager.pushMatrix()
+        matrixStack.push()
 
-        Renderer.getFontRenderer()
-            .drawString(
-                ChatLib.addColor("&cChatTriggers requires an update to work properly!"),
-                2f,
-                2f,
-                -0x1,
-                false
-            )
+        Renderer.getFontRenderer().draw(
+            matrixStack,
+            ChatLib.addColor("&cChatTriggers requires an update to work properly!"),
+            2f,
+            2f,
+            -0x1,
+        )
 
-        GlStateManager.popMatrix()
+        matrixStack.pop()
     }
 }

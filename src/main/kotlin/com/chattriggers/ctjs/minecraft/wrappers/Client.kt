@@ -1,7 +1,10 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftClientAccessor
+import com.chattriggers.ctjs.launch.mixins.transformers.ChatScreenAccessor
+import com.chattriggers.ctjs.launch.mixins.transformers.GameOptionsAccessor
+import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftClientMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.PlayerListHudMixin
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.KeyBind
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -61,7 +64,7 @@ object Client {
     fun getTabGui(): PlayerListHud? = getMinecraft().inGameHud?.playerListHud
 
     @JvmStatic
-    fun isInTab(): Boolean = getTabGui()?.asMixin<PlayerListHudAccessor>()?.isVisible() ?: false
+    fun isInTab(): Boolean = getTabGui()?.asMixin<PlayerListHudMixin>()?.isVisible ?: false
 
     /**
      * Gets whether the Minecraft window is active
@@ -91,7 +94,7 @@ object Client {
      */
     @JvmStatic
     fun getKeyBindFromKey(keyCode: Int): KeyBind? {
-        val options = getMinecraft().options.asMixin<GameOptionsMixin>()
+        val options = getMinecraft().options.asMixin<GameOptionsAccessor>()
         val keybinds = KeyBindingRegistryImpl.process(options.keysAll)
         return keybinds.firstOrNull {
             KeyBindingHelper.getBoundKeyOf(it).code == keyCode
@@ -109,7 +112,7 @@ object Client {
     @JvmOverloads
     @JvmStatic
     fun getKeyBindFromKey(keyCode: Int, description: String, category: String = "ChatTriggers"): KeyBind {
-        val options = getMinecraft().options.asMixin<GameOptionsMixin>()
+        val options = getMinecraft().options.asMixin<GameOptionsAccessor>()
         val keybinds = KeyBindingRegistryImpl.process(options.keysAll)
         return keybinds.firstOrNull {
             KeyBindingHelper.getBoundKeyOf(it).code == keyCode
@@ -125,7 +128,7 @@ object Client {
      */
     @JvmStatic
     fun getKeyBindFromDescription(description: String): KeyBind? {
-        val options = getMinecraft().options.asMixin<GameOptionsMixin>()
+        val options = getMinecraft().options.asMixin<GameOptionsAccessor>()
         val keybinds = KeyBindingRegistryImpl.process(options.keysAll)
         return keybinds.firstOrNull {
             KeyBindingHelper.getBoundKeyOf(it).translationKey == description
@@ -133,7 +136,7 @@ object Client {
     }
 
     @JvmStatic
-    fun getFPS(): Int = getMinecraft().asMixin<MinecraftClientAccessor>().getCurrentFps()
+    fun getFPS(): Int = getMinecraft().asMixin<MinecraftClientMixin>().currentFps
 
     @JvmStatic
     fun getVersion(): String = getMinecraft().gameVersion
@@ -181,7 +184,7 @@ object Client {
     fun getCurrentChatMessage(): String {
         return if (isInChat()) {
             val chatGui = getMinecraft().currentScreen as ChatScreen
-            chatGui.asMixin<ChatScreenAccessor>().getChatField().text
+            chatGui.asMixin<ChatScreenAccessor>().chatField.text
         } else ""
     }
 
@@ -194,7 +197,7 @@ object Client {
     fun setCurrentChatMessage(message: String) {
         if (isInChat()) {
             val chatGui = getMinecraft().currentScreen as ChatScreen
-            chatGui.asMixin<ChatScreenAccessor>().getChatField().text = message
+            chatGui.asMixin<ChatScreenAccessor>().chatField.text = message
         }
     }
 

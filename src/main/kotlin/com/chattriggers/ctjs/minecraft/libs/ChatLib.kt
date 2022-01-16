@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudMixin
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.message.Message
@@ -105,7 +106,7 @@ object ChatLib {
         }
 
         for (chatLineID in chatLineIDs)
-            Client.getChatGUI()?.asMixin<ChatHudMixin>()?.removeMessage(chatLineID)
+            Client.getChatGUI()?.asMixin<ChatHudMixin>()?.invokeRemoveMessage(chatLineID)
     }
 
     /**
@@ -297,7 +298,7 @@ object ChatLib {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> castChatHudLine(hudLine: ChatHudLine<*>) = hudLine as ChatHudLine<T>
+    private fun <T> castChatHudLine(hudLine: ChatHudLine<*>) = hudLine as ChatHudLine<T>
 
     /**
      * Deletes an already sent chat message matching [regexp].

@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -40,7 +41,7 @@ object Reference {
 
         DisplayHandler.clearDisplays()
         ModuleManager.teardown()
-        MouseMixin.clearListeners()
+        ClientListener.clearListeners()
 
         CTJS.images.forEach { it.destroy() }
         CTJS.images.clear()
@@ -57,7 +58,7 @@ object Reference {
     fun loadCT() {
         if (!isLoaded) return
 
-        Client.getMinecraft().gameSettings.saveOptions()
+        Client.getMinecraft().options.write()
         unloadCT(false)
 
         ChatLib.chat("&cReloading ChatTriggers scripts...")
@@ -67,9 +68,9 @@ object Reference {
         conditionalThread {
             ModuleManager.setup()
             ModuleManager.entryPass(completionListener = ::printLoadCompletionStatus)
-            MouseMixin.registerTriggerListeners()
+            ClientListener.registerTriggerListeners()
 
-            Client.getMinecraft().gameSettings.loadOptions()
+            Client.getMinecraft().options.load()
             ChatLib.chat("&aDone reloading scripts!")
             isLoaded = true
 

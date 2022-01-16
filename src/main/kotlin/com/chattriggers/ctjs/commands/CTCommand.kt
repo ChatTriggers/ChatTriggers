@@ -1,25 +1,17 @@
 package com.chattriggers.ctjs.commands
 
-import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
-import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager
 import com.chattriggers.ctjs.engine.module.ModulesGui
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
-import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
-import gg.essential.api.utils.GuiUtil
-import net.minecraft.command.CommandException
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.StringArgumentType
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.context.CommandContext
-import net.minecraft.command.CommandSource
+import gg.essential.api.utils.GuiUtil
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import java.awt.Desktop
@@ -48,13 +40,13 @@ object CTCommand {
                 else -> ChatLib.chat("&cFailed to delete ${it[0]}")
             }
         },
-        subcommand("modules") { GuiHandler.openGui(ModulesGui) },
+        subcommand("modules") { GuiUtil.open(ModulesGui) },
         subcommand("console") {
             if (it.isEmpty()) {
                 ModuleManager.generalConsole.showConsole()
             } else ModuleManager.getConsole(it[0]).showConsole()
         },
-        subcommand("config", "settings", "setting") { GuiHandler.openGui(Config.gui()!!) },
+        subcommand("config", "settings", "setting") { GuiUtil.open(Config.gui()!!) },
         subcommand("sim", "simulate") { ChatLib.simulateChat(it.joinToString(" ")) },
         subcommand("dump") { dump(it) },
         subcommand("copy") { copyArgsToClipboard(it) },

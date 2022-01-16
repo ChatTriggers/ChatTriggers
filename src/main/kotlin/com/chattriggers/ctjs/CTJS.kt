@@ -33,12 +33,8 @@ object CTJS : ClientModInitializer {
         listOf(
             WorldListener,
             CPS,
-            GuiHandler,
             ClientListener,
-            UpdateChecker,
         ).forEach(Initializer::onInitialize)
-
-        MouseMixin.registerTriggerListeners()
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
