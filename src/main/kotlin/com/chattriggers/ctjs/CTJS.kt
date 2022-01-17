@@ -99,7 +99,7 @@ object CTJS {
         val hashedUUID = md.digest(uuid)
         val hash = Base64.getUrlEncoder().encodeToString(hashedUUID)
 
-        val url = "${WEBSITE_ROOT}/api/statistics/track?hash=$hash"
+        val url = "${WEBSITE_ROOT}/api/statistics/track?hash=$hash&version=${Reference.MODVERSION}"
         val connection = URL(url).openConnection().apply {
             setRequestProperty("User-Agent", "Mozilla/5.0")
             connectTimeout = 5000
