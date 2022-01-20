@@ -25,9 +25,9 @@ open class EntityLivingBase(val entityLivingBase: MCEntityLivingBase) : Entity(e
         return entityLivingBase.activePotionEffects.map(::PotionEffect)
     }
 
-    fun canSeeEntity(other: Entity) = canSeeEntity(other.entity)
-
     fun canSeeEntity(other: MCEntity) = entityLivingBase.canEntityBeSeen(other)
+
+    fun canSeeEntity(other: Entity) = canSeeEntity(other.entity)
 
     /**
      * Gets the item currently in the entity's specified inventory slot.
@@ -37,14 +37,11 @@ open class EntityLivingBase(val entityLivingBase: MCEntityLivingBase) : Entity(e
      * @param slot the slot to access
      * @return the item in said slot
      */
-    fun getItemInSlot(slot: Int): Item {
+    fun getItemInSlot(slot: Int): Item? {
         //#if MC<=10809
-        return Item(entityLivingBase.getEquipmentInSlot(slot))
+        return entityLivingBase.getEquipmentInSlot(slot)?.let(::Item)
         //#else
-        //$$ return Item(entityLivingBase.getItemStackFromSlot(
-        //$$        EntityEquipmentSlot.values()[slot]
-        //$$     )
-        //$$ )
+        //$$ return entityLivingBase.getItemStackFromSlot(EntityEquipmentSlot.values()[slot])?.let(::Item)
         //#endif
     }
 
@@ -68,7 +65,9 @@ open class EntityLivingBase(val entityLivingBase: MCEntityLivingBase) : Entity(e
 
     fun isPotionActive(id: Int) = entityLivingBase.isPotionActive(id)
 
-    fun isPotionActive(potion: Potion) = entityLivingBase.isPotionActive(potion)
+    fun isPotionActive(potion: Potion) = isPotionActive(potion.id)
+
+    fun isPotionActive(potionEffect: PotionEffect) = isPotionActive(potionEffect.effect.potionID)
 
     override fun toString(): String {
         return "EntityLivingBase{name=" + getName() +
