@@ -73,7 +73,28 @@ class Chunk(val chunk: MCChunk) {
      */
     fun getAllEntitiesOfType(clazz: Class<*>): List<Entity> {
         return getAllEntities().filter {
-            it.entity.javaClass == clazz
+            clazz.isInstance(it.entity)
+        }
+    }
+
+    /**
+     * Gets every tile entity in this chunk
+     *
+     * @return the tile entity list
+     */
+    fun getAllTileEntities(): List<TileEntity> {
+        return chunk.tileEntityMap.values.map(::TileEntity)
+    }
+
+    /**
+     * Gets every tile entity in this chunk of a certain class
+     *
+     * @param clazz the class to filter for (Use `Java.type().class` to get this)
+     * @return the tile entity list
+     */
+    fun getAllTileEntitiesOfType(clazz: Class<*>): List<TileEntity> {
+        return getAllTileEntities().filter {
+            clazz.isInstance(it.tileEntity)
         }
     }
 }

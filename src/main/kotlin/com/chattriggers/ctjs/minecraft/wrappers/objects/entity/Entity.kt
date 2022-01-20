@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.entity
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
@@ -292,6 +293,10 @@ open class Entity(val entity: MCEntity) {
     fun isBurning(): Boolean = entity.isBurning
 
     fun getWorld(): World = entity.entityWorld
+
+    fun getChunk(): Chunk = Chunk(
+        getWorld().getChunkFromChunkCoords(entity.chunkCoordX, entity.chunkCoordZ)
+    )
 
     override fun toString(): String {
         return "Entity{name=${getName()}, x=${getX()}, y=${getY()}, z=${getZ()}}"
