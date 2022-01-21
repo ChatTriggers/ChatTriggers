@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import org.lwjgl.util.vector.Vector2f
 import java.util.*
 import kotlin.math.*
 

@@ -53,7 +53,7 @@ object TabList {
         if (Player.getPlayer() == null) return listOf()
 
         return Client.getConnection()?.playerInfoMap?.let {
-            Ordering.from(PlayerComparator()).sortedCopy(it)
+            playerComparator.sortedCopy(it)
         }?.map {
             it.gameProfile.name
         } ?: emptyList()
