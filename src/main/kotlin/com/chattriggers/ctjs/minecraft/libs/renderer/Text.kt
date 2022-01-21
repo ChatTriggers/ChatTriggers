@@ -96,7 +96,7 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
     fun getHeight(): Float {
         return if (lines.size > 1)
-             lines.size.coerceAtMost(maxLines) * scale * 9
+            lines.size.coerceAtMost(maxLines) * scale * 9
         else scale * 9
     }
 

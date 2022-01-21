@@ -4,9 +4,7 @@ import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.client.event.MouseEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
-import net.minecraftforge.fml.client.event.ConfigChangedEvent
 
 //TODO: figure out what is not needed anymore after the kotlin conversion and remove
 @External

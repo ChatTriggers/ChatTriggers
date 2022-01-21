@@ -158,7 +158,7 @@ abstract class DisplayLine {
         }
 
         if (background == DisplayHandler.Background.PER_LINE)
-            Renderer.drawRect(backgroundColor, xOffset - 1, y - 1, textWidth + 1,  text.getHeight())
+            Renderer.drawRect(backgroundColor, xOffset - 1, y - 1, textWidth + 1, text.getHeight())
 
         text.setX(xOffset).setY(y).setColor(textColor).draw()
 
@@ -170,10 +170,12 @@ abstract class DisplayLine {
         if (Client.getMouseX() > x && Client.getMouseX() < x + cachedWidth
             && Client.getMouseY() > y && Client.getMouseY() < y + cachedHeight
         ) {
-            onHovered?.trigger(arrayOf(
-                Client.getMouseX(),
-                Client.getMouseY()
-            ))
+            onHovered?.trigger(
+                arrayOf(
+                    Client.getMouseX(),
+                    Client.getMouseY()
+                )
+            )
         }
     }
 

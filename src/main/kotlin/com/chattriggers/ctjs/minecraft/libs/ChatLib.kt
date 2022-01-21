@@ -333,7 +333,7 @@ object ChatLib {
      */
     @JvmStatic
     fun deleteChat(toDelete: Message) {
-        deleteChat{
+        deleteChat {
             toDelete.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
                 "\u00a7r".toRegex(),
                 ""
