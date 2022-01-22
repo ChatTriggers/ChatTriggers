@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import java.util.List;
 
 @Mixin(ChatHud.class)
-public interface ChatHudMixin {
+public interface ChatHudAccessor {
     @Accessor
     List<String> getMessageHistory();
 

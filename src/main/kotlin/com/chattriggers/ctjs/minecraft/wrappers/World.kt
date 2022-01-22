@@ -285,7 +285,7 @@ object World {
                 particleType
             } else TODO("fabric")
 
-            return getWorldRenderer()?.asMixin<WorldRendererAccessor>()?.spawnParticle(
+            return getWorldRenderer()?.asMixin<WorldRendererAccessor>()?.invokeSpawnParticle(
                 effect,
                 false,
                 showOnMinimal,

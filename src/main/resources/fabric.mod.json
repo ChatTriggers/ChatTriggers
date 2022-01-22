@@ -20,9 +20,6 @@
             }
         ]
     },
-    "languageAdapters": {
-        "kotlin": "net.fabricmc.language.kotlin.KotlinAdapter"
-    },
     "depends": {
         "fabric-language-kotlin": ">=1.7.1+kotlin.1.6.10"
     },

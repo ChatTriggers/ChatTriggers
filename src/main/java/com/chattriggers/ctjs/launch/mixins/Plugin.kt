@@ -13,8 +13,8 @@ class Plugin : IMixinConfigPlugin {
         // TODO: It'd be better to call these functions after our mixins have applied
         //       so that all of the CT module asm injections happen after the builtin
         //       injections
-        ModuleManager.setup()
-        ModuleManager.asmPass()
+        // ModuleManager.setup()
+        // ModuleManager.asmPass()
     }
 
     override fun getRefMapperConfig(): String? = null

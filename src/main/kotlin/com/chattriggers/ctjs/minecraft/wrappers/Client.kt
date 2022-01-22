@@ -19,6 +19,7 @@ import net.minecraft.client.gui.screen.ChatScreen
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.Packet
+import net.minecraft.util.Util
 import kotlin.math.roundToInt
 
 @External
@@ -154,7 +155,7 @@ object Client {
     fun getMemoryUsage(): Int = ((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()).roundToInt()
 
     @JvmStatic
-    fun getSystemTime(): Long = TODO()
+    fun getSystemTime(): Long = Util.getMeasuringTimeNano()
 
     @JvmStatic
     fun getMouseX(): Float {

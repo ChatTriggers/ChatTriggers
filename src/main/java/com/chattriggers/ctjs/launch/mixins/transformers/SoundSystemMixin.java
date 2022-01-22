@@ -19,13 +19,12 @@ public class SoundSystemMixin {
             target = "Lnet/minecraft/client/sound/SoundInstance;getSoundSet(Lnet/minecraft/client/sound/SoundManager;)Lnet/minecraft/client/sound/WeightedSoundSet;",
             shift = At.Shift.BEFORE
         ),
-        cancellable = true,
-        locals = LocalCapture.CAPTURE_FAILHARD
+        cancellable = true
     )
-    public void injectPlay(
-        SoundInstance sound,
-        CallbackInfo ci
-    ) {
+    public void injectPlay(SoundInstance sound, CallbackInfo ci) {
+        if (sound.getSound() == null)
+            return;
+
         TriggerType.SoundPlay.triggerAll(
             new Vec3f((float) sound.getX(), (float) sound.getY(), (float) sound.getZ()),
             sound.getId().toString(),

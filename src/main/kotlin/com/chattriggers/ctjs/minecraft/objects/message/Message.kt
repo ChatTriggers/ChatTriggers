@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects.message
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
@@ -178,7 +178,7 @@ class Message {
         if (!ChatLib.isPlayer("[CHAT]: " + getFormattedText())) return
 
         if (chatLineId != -1) {
-            Client.getChatGUI()?.asMixin<ChatHudMixin>()?.invokeAddMessage(text, chatLineId)
+            Client.getChatGUI()?.asMixin<ChatHudAccessor>()?.invokeAddMessage(text, chatLineId)
             return
         }
 

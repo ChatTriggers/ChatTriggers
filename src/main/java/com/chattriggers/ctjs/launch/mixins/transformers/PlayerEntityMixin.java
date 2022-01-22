@@ -18,14 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class PlayerEntityMixin {
     @Inject(
         method = "dropItem(Lnet/minecraft/item/ItemStack;ZZ)Lnet/minecraft/entity/ItemEntity;",
-        at = @At(value = "RETURN", slice = "default"),
-        slice = @Slice(
-            id = "default",
-            from = @At(
-                value = "NEW",
-                target = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V"
-            )
-        ),
+        at = @At(value = "RETURN", ordinal = 1),
         cancellable = true,
         locals = LocalCapture.CAPTURE_FAILHARD
     )

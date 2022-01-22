@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
@@ -21,8 +22,7 @@ public class NoteBlockMixin {
     @Inject(
         method = "onUse",
         at = @At("HEAD"),
-        cancellable = true,
-        locals = LocalCapture.CAPTURE_FAILHARD
+        cancellable = true
     )
     public void injectOnUse(
         BlockState state,
@@ -33,18 +33,24 @@ public class NoteBlockMixin {
         BlockHitResult hit,
         CallbackInfoReturnable<ActionResult> cir
     ) {
+        CancellableEvent event = new CancellableEvent();
+
         TriggerType.NoteBlockChange.triggerAll(
             new Vec3f((float) pos.getX(), (float) pos.getY(), (float) pos.getZ()),
             // TODO("fabric"): Note name and octave?
-            cir
+            event
         );
+
+        if (event.isCancelled()) {
+            cir.setReturnValue(ActionResult.PASS);
+            cir.cancel();
+        }
     }
 
     @Inject(
         method = "onSyncedBlockEvent",
         at = @At("HEAD"),
-        cancellable = true,
-        locals = LocalCapture.CAPTURE_FAILHARD
+        cancellable = true
     )
     public void injectOnSyncedBlockEvent(
         BlockState state,
@@ -54,10 +60,17 @@ public class NoteBlockMixin {
         int data,
         CallbackInfoReturnable<Boolean> cir
     ) {
+        CancellableEvent event = new CancellableEvent();
+
         TriggerType.NoteBlockPlay.triggerAll(
             new Vec3f((float) pos.getX(), (float) pos.getY(), (float) pos.getZ()),
             // TODO("fabric"): Note name and octave?
-            cir
+            event
         );
+
+        if (event.isCancelled()) {
+            cir.setReturnValue(false);
+            cir.cancel();
+        }
     }
 }

@@ -9,7 +9,7 @@
         "BiomeAccessAccessor",
         "BookScreenAccessor",
         "BossBarHudMixin",
-        "ChatHudMixin",
+        "ChatHudAccessor",
         "ChatScreenAccessor",
         "ClickableWidgetAccessor",
         "ClientConnectionMixin",

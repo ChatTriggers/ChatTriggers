@@ -20,8 +20,7 @@ public abstract class LivingEntityMixin {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/damage/DamageSource;getAttacker()Lnet/minecraft/entity/Entity;"
-        ),
-        locals = LocalCapture.CAPTURE_FAILHARD
+        )
     )
     public void injectSetHealth(DamageSource source, CallbackInfo ci) {
         TriggerType.EntityDeath.triggerAll(this);
@@ -29,10 +28,9 @@ public abstract class LivingEntityMixin {
 
     @Inject(
         method = "damage",
-        at = @At("TAIL"),
-        locals = LocalCapture.CAPTURE_FAILHARD
+        at = @At("TAIL")
     )
-    public void injectDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir, float f, boolean bl, float g, boolean entity, Entity entity2, boolean wolfEntity) {
+    public void injectDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         TriggerType.EntityDamage.triggerAll(this);
     }
 }

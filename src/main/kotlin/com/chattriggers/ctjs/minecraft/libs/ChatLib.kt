@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.launch.mixins.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ChatHudAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.message.Message
@@ -106,7 +106,7 @@ object ChatLib {
         }
 
         for (chatLineID in chatLineIDs)
-            Client.getChatGUI()?.asMixin<ChatHudMixin>()?.invokeRemoveMessage(chatLineID)
+            Client.getChatGUI()?.asMixin<ChatHudAccessor>()?.invokeRemoveMessage(chatLineID)
     }
 
     /**
@@ -259,7 +259,7 @@ object ChatLib {
 
     @JvmStatic
     private fun editChat(toReplace: (Message) -> Boolean, vararg replacements: Message) {
-        val hud = Client.getChatGUI()?.asMixin<ChatHudMixin>() ?: return
+        val hud = Client.getChatGUI()?.asMixin<ChatHudAccessor>() ?: return
         editChatLineList(hud.getMessages(), toReplace, *replacements)
         editChatLineList(hud.getVisibleMessages(), toReplace, *replacements)
     }
@@ -361,7 +361,7 @@ object ChatLib {
 
     @JvmStatic
     private fun deleteChat(toDelete: (Message) -> Boolean) {
-        val hud = Client.getChatGUI()?.asMixin<ChatHudMixin>() ?: return
+        val hud = Client.getChatGUI()?.asMixin<ChatHudAccessor>() ?: return
         deleteChatLineList(hud.getMessages(), toDelete)
         deleteChatLineList(hud.getVisibleMessages(), toDelete)
     }
@@ -407,7 +407,7 @@ object ChatLib {
     @JvmOverloads
     @JvmStatic
     fun addToSentMessageHistory(index: Int = -1, message: String) {
-        val sentMessages = Client.getChatGUI()?.asMixin<ChatHudMixin>()?.getMessageHistory() ?: return
+        val sentMessages = Client.getChatGUI()?.asMixin<ChatHudAccessor>()?.getMessageHistory() ?: return
 
         if (index == -1) sentMessages.add(message)
         else sentMessages.add(index, message)

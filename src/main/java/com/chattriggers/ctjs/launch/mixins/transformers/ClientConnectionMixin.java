@@ -1,10 +1,12 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
 import com.chattriggers.ctjs.triggers.TriggerType;
+import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.PacketListener;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Desc;
@@ -24,15 +26,13 @@ public class ClientConnectionMixin {
     }
 
     @Inject(
-        target = { @Desc(value = "send", args = { Packet.class, GenericFutureListener.class }) },
-        at = { @At("HEAD") },
-        cancellable = true,
-        locals = LocalCapture.CAPTURE_FAILHARD
+        method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V",
+        at = @At("HEAD"),
+        cancellable = true
     )
     public void injectSend(
-        ClientConnection connection,
         Packet<?> packet,
-        GenericFutureListener<?> listener,
+        @Nullable GenericFutureListener<? extends Future<? super Void>> callback,
         CallbackInfo ci
     ) {
         TriggerType.PacketSent.triggerAll(packet, ci);

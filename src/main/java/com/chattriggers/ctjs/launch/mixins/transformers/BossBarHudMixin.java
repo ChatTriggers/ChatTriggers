@@ -15,8 +15,7 @@ public class BossBarHudMixin {
     @Inject(
         method = "render",
         at = @At("HEAD"),
-        cancellable = true,
-        locals = LocalCapture.CAPTURE_FAILHARD
+        cancellable = true
     )
     public void injectRender(MatrixStack matrices, CallbackInfo ci) {
         Renderer.setBoundMatrixStack(matrices);

@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -19,82 +20,70 @@ public abstract class MouseMixin {
     @Accessor
     public abstract int getActiveButton();
 
-    @Inject(
+    @ModifyArg(
         method = "onMouseScroll",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDD)Z"
         ),
-        locals = LocalCapture.CAPTURE_FAILHARD
+        index = 0
     )
-    public void injectOnMouseScroll(
-        long window,
-        double horizontal,
-        double vertical,
-        CallbackInfo ci,
-        double vertical2,
+    public double injectOnMouseScroll(
         double amount,
         double mouseX,
         double mouseY
     ) {
         ClientListener.onScroll(mouseX, mouseY, amount);
+        return amount;
     }
 
-    @Inject(
+    @ModifyArg(
         method = "method_1611",
-        at = @At("HEAD"),
-        locals = LocalCapture.CAPTURE_FAILHARD
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseClicked(DDI)Z"),
+        index = 0
     )
-    private static void inject_method_1611(
-        boolean[] bls,
-        Screen screen,
+    private static double inject_method_1611(
         double mouseX,
         double mouseY,
-        int button,
-        CallbackInfo ci,
-        int arg4
+        int button
     ) {
         ClientListener.onClick(mouseX, mouseY, button, /* pressed = */ true);
+        return mouseX;
     }
 
-    @Inject(
+    @ModifyArg(
         method = "method_1605",
-        at = @At("HEAD"),
-        locals = LocalCapture.CAPTURE_FAILHARD
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseReleased(DDI)Z"),
+        index = 0
     )
-    private static void inject_method_1605(
-        boolean[] bls,
-        Screen screen,
+    private static double inject_method_1605(
+        double mouseX,
+        double mouseY,
+        int button
+    ) {
+        ClientListener.onClick(mouseX, mouseY, button, /* pressed = */ false);
+        return mouseX;
+    }
+
+    @ModifyArg(
+        method = "method_1602",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseDragged(DDIDD)Z"),
+        index = 0
+    )
+    private double inject_method_1602(
         double mouseX,
         double mouseY,
         int button,
-        CallbackInfo ci,
-        int arg4
-    ) {
-        ClientListener.onClick(mouseX, mouseY, button, /* pressed = */ false);
-    }
-
-    @Inject(
-        method = "method_1602",
-        at = @At("HEAD"),
-        locals = LocalCapture.CAPTURE_FAILHARD
-    )
-    private static void inject_method_1602(
-        Screen screen,
-        double mouseX,
-        double mouseY,
         double deltaX,
-        double deltaY,
-        CallbackInfo ci,
-        double arg3,
-        double arg4
+        double deltaY
     ) {
         ClientListener.onDragged(
             deltaX,
             deltaY,
             mouseX,
             mouseY,
-            ((MouseMixin) (Object) Client.getMinecraft().mouse).getActiveButton()
+            button
         );
+        return mouseX;
     }
 }
