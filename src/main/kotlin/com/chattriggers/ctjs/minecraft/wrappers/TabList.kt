@@ -1,13 +1,17 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.PlayerListHudMixin
 import com.chattriggers.ctjs.minecraft.objects.message.Message
+import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCGameType
-import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
-import net.minecraft.client.network.NetworkPlayerInfo
-import net.minecraft.scoreboard.ScorePlayerTeam
+import net.minecraft.client.network.PlayerListEntry
+import net.minecraft.scoreboard.Team
+import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 
 @External
 object TabList {
@@ -18,29 +22,32 @@ object TabList {
      *
      * @return The formatted names
      */
+    // TODO(BREAKING): Return List<TextComponent> instead of List<String>
     @JvmStatic
-    fun getNamesByObjectives(): List<String> {
+    fun getNamesByObjectives(): List<TextComponent> {
         return try {
             val scoreboard = World.getWorld()?.scoreboard ?: return emptyList()
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0)
-            val scores = scoreboard.getSortedScores(sidebarObjective)
+            val sidebarObjective = scoreboard.getObjectiveForSlot(0)
+            val scores = scoreboard.getAllPlayerScores(sidebarObjective)
 
             scores.map {
-                val team = scoreboard.getPlayersTeam(it.playerName)
-                ScorePlayerTeam.formatPlayerName(team, it.playerName)
+                val team = scoreboard.getTeam(it.playerName)
+                TextComponent(Team.decorateName(team, LiteralText(it.playerName)))
             }
         } catch (e: Exception) {
             emptyList()
         }
     }
 
+    // TODO(BREAKING): Return List<TextComponent> instead of List<String>
     @JvmStatic
-    fun getNames(): List<String> {
-        if (Client.getTabGui() == null) return listOf()
+    fun getNames(): List<TextComponent> {
+        if (Client.getTabGui() == null)
+            return emptyList()
 
-        val playerList = playerComparator.sortedCopy(Player.getPlayer()!!.sendQueue.playerInfoMap)
+        val playerList = playerComparator.sortedCopy(Client.getConnection()?.playerList ?: return emptyList())
 
-        return playerList.map(Client.getTabGui()!!::getPlayerName)
+        return playerList.map(Client.getTabGui()!!::getPlayerName).map(::TextComponent)
     }
 
     /**
@@ -52,18 +59,20 @@ object TabList {
     fun getUnformattedNames(): List<String> {
         if (Player.getPlayer() == null) return listOf()
 
-        return Client.getConnection()?.playerInfoMap?.let {
+        return Client.getConnection()?.playerList?.let {
             Ordering.from(PlayerComparator()).sortedCopy(it)
         }?.map {
-            it.gameProfile.name
+            it.profile.name
         } ?: emptyList()
     }
 
-    @JvmStatic
-    fun getHeaderMessage() = Client.getTabGui()?.header?.let(::Message)
+    // TODO(BREAKING): Remove this
+    // @JvmStatic
+    // fun getHeaderMessage() = Client.getTabGui()?.header?.let(::Message)
 
+    // TODO(BREAKING): Return TextComponent? instead of String?
     @JvmStatic
-    fun getHeader() = Client.getTabGui()?.header?.formattedText
+    fun getHeader() = Client.getTabGui()?.asMixin<PlayerListHudMixin>()?.header?.let(::TextComponent)
 
     /**
      * Sets the header text for the TabList.
@@ -74,21 +83,23 @@ object TabList {
     @JvmStatic
     fun setHeader(header: Any?) {
         when (header) {
-            is String -> Client.getTabGui()?.header = Message(header).getChatMessage()
-            is Message -> Client.getTabGui()?.header = header.getChatMessage()
-            is MCITextComponent -> Client.getTabGui()?.header = header
-            null -> Client.getTabGui()?.header = header
+            is String -> Client.getTabGui()?.setHeader(TextComponent(header).component)
+            is Message -> Client.getTabGui()?.setHeader(header.getChatMessage())
+            is Text -> Client.getTabGui()?.setHeader(header)
+            null -> Client.getTabGui()?.setHeader(null)
         }
     }
 
     @JvmStatic
     fun clearHeader() = setHeader(null)
 
-    @JvmStatic
-    fun getFooterMessage() = Client.getTabGui()?.footer?.let(::Message)
+    // TODO(BREAKING): Remove this
+    // @JvmStatic
+    // fun getFooterMessage() = Client.getTabGui()?.footer?.let(::Message)
 
+    // TODO(BREAKING): Return TextComponent? instead of String?
     @JvmStatic
-    fun getFooter() = Client.getTabGui()?.footer?.formattedText
+    fun getFooter() = Client.getTabGui()?.asMixin<PlayerListHudMixin>()?.footer?.let(::TextComponent)
 
     /**
      * Sets the footer text for the TabList.
@@ -99,37 +110,37 @@ object TabList {
     @JvmStatic
     fun setFooter(footer: Any?) {
         when (footer) {
-            is String -> Client.getTabGui()?.footer = Message(footer).getChatMessage()
-            is Message -> Client.getTabGui()?.footer = footer.getChatMessage()
-            is MCITextComponent -> Client.getTabGui()?.footer = footer
-            null -> Client.getTabGui()?.footer = footer
+            is String -> Client.getTabGui()?.setFooter(TextComponent(footer).component)
+            is Message -> Client.getTabGui()?.setFooter(footer.getChatMessage())
+            is Text -> Client.getTabGui()?.setFooter(footer)
+            null -> Client.getTabGui()?.setFooter(null)
         }
     }
 
     @JvmStatic
     fun clearFooter() = setFooter(null)
 
-    internal class PlayerComparator internal constructor() : Comparator<NetworkPlayerInfo> {
-        override fun compare(playerOne: NetworkPlayerInfo, playerTwo: NetworkPlayerInfo): Int {
-            val teamOne = playerOne.playerTeam
-            val teamTwo = playerTwo.playerTeam
+    internal class PlayerComparator internal constructor() : Comparator<PlayerListEntry> {
+        override fun compare(playerOne: PlayerListEntry, playerTwo: PlayerListEntry): Int {
+            val teamOne = playerOne.scoreboardTeam
+            val teamTwo = playerTwo.scoreboardTeam
 
             return ComparisonChain
                 .start()
                 .compareTrueFirst(
-                    playerOne.gameType != MCGameType.SPECTATOR,
-                    playerTwo.gameType != MCGameType.SPECTATOR
+                    playerOne.gameMode != MCGameType.SPECTATOR,
+                    playerTwo.gameMode != MCGameType.SPECTATOR
                 ).compare(
                     //#if MC<=10809
-                    teamOne?.registeredName ?: "",
-                    teamTwo?.registeredName ?: ""
+                    teamOne?.name ?: "",
+                    teamTwo?.name ?: ""
                     //#else
                     //$$ teamOne?.name ?: "",
                     //$$ teamTwo?.name ?: ""
                     //#endif
                 ).compare(
-                    playerOne.gameProfile.name,
-                    playerTwo.gameProfile.name
+                    playerOne.profile.name,
+                    playerTwo.profile.name
                 ).result()
         }
     }

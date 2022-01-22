@@ -19,7 +19,7 @@ public class BossBarHudMixin {
         locals = LocalCapture.CAPTURE_FAILHARD
     )
     public void injectRender(MatrixStack matrices, CallbackInfo ci) {
-        Renderer.setBoundMatrixStack$ctjs(matrices);
+        Renderer.setBoundMatrixStack(matrices);
         TriggerType.RenderBossHealth.triggerAll(ci);
     }
 }

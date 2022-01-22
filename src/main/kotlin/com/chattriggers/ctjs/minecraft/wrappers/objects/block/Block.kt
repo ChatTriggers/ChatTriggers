@@ -46,7 +46,7 @@ open class Block(
      */
     fun canBeHarvested() = (Player.getHeldItem()?.item as? MiningToolItem)?.isSuitableFor(getState()) ?: false
 
-    fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
+    fun canBeHarvestedWith(item: Item): Boolean = item.canDestroy(type)
 
     override fun toString() = "Block{type=${type.getRegistryName()}, x=$x, y=$y, z=$z}"
 }

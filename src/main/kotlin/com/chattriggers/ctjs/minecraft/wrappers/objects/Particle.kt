@@ -1,5 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.ParticleAccessor
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 
@@ -9,42 +11,39 @@ import com.chattriggers.ctjs.utils.kotlin.MCParticle
 
 @External
 class Particle(val underlyingEntity: MCParticle) {
-    //#if MC<=10809
-    fun getX() = underlyingEntity.posX
+    fun getX() = underlyingEntity.asMixin<ParticleAccessor>().x
 
-    fun getY() = underlyingEntity.posY
+    fun getY() = underlyingEntity.asMixin<ParticleAccessor>().y
 
-    fun getZ() = underlyingEntity.posZ
-    //#else
-    //$$fun getX() = (underlyingEntity as MixinParticle).posX
-    //$$
-    //$$fun getY() = (underlyingEntity as MixinParticle).posY
-    //$$
-    //$$fun getZ() = (underlyingEntity as MixinParticle).posZ
-    //#endif
+    fun getZ() = underlyingEntity.asMixin<ParticleAccessor>().z
 
     fun setX(x: Double) = apply {
-        underlyingEntity.setPosition(x, getY(), getZ())
+        underlyingEntity.setPos(x, getY(), getZ())
     }
 
     fun setY(y: Double) = apply {
-        underlyingEntity.setPosition(getX(), y, getZ())
+        underlyingEntity.setPos(getX(), y, getZ())
     }
 
     fun setZ(z: Double) = apply {
-        underlyingEntity.setPosition(getX(), getY(), z)
+        underlyingEntity.setPos(getX(), getY(), z)
     }
 
     fun scale(scale: Float) = apply {
-        underlyingEntity.multipleParticleScaleBy(scale)
+        underlyingEntity.scale(scale)
     }
 
     fun multiplyVelocity(multiplier: Float) = apply {
-        underlyingEntity.multiplyVelocity(multiplier)
+        val accessor = underlyingEntity.asMixin<ParticleAccessor>()
+        underlyingEntity.setVelocity(
+            accessor.velocityX * multiplier,
+            accessor.velocityY * multiplier,
+            accessor.velocityZ * multiplier,
+        )
     }
 
     fun setColor(r: Float, g: Float, b: Float) = apply {
-        underlyingEntity.setRBGColorF(r, g, b)
+        underlyingEntity.setColor(r, g, b)
     }
 
     fun setColor(r: Float, g: Float, b: Float, a: Float) = apply {
@@ -62,7 +61,7 @@ class Particle(val underlyingEntity: MCParticle) {
     }
 
     fun setAlpha(a: Float) = apply {
-        underlyingEntity.setAlphaF(a)
+        underlyingEntity.asMixin<ParticleAccessor>().invokeSetColorAlpha(a)
     }
 
     /**
@@ -71,15 +70,11 @@ class Particle(val underlyingEntity: MCParticle) {
      * @param maxAge the particle's max age (in ticks)
      */
     fun setMaxAge(maxAge: Int) = apply {
-        underlyingEntity.particleMaxAge = maxAge
+        underlyingEntity.maxAge = maxAge
     }
 
     fun remove() = apply {
-        //#if MC<=10809
-        underlyingEntity.setDead()
-        //#else
-        //$$ underlyingEntity.setExpired()
-        //#endif
+        underlyingEntity.markDead()
     }
 
     override fun toString(): String {

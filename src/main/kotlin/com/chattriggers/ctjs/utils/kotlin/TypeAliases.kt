@@ -15,3 +15,4 @@ internal typealias MCGraphicsMode = net.minecraft.client.option.GraphicsMode
 internal typealias MCCloudMode = net.minecraft.client.option.CloudRenderMode
 internal typealias MCParticleMode = net.minecraft.client.option.ParticlesMode
 internal typealias MCChatVisibility = net.minecraft.client.option.ChatVisibility
+internal typealias MCGameType = net.minecraft.world.GameMode

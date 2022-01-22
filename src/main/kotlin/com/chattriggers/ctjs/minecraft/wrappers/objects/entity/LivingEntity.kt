@@ -72,23 +72,6 @@ open class LivingEntity(entity: MCLivingEntity?) : Entity(entity) {
 
     fun isPotionActive(potion: PotionEffect) = livingEntity?.hasStatusEffect(potion.effect.effectType) ?: false
 
-    /**
-     * Draws the player in the GUI
-     */
-    @JvmOverloads
-    fun draw(
-        x: Int,
-        y: Int,
-        rotate: Boolean = false,
-        showNametag: Boolean = false,
-        showArmor: Boolean = true,
-        showCape: Boolean = true,
-        showHeldItem: Boolean = true,
-        showArrows: Boolean = true
-    ) = apply {
-        Renderer.drawEntity(this, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
-    }
-
     override fun toString(): String {
         return "EntityLivingBase{name=${getName()}, entity=${super.toString()}}"
     }

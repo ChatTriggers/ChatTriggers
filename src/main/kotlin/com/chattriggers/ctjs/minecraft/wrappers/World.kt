@@ -1,6 +1,8 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.BiomeAccessAccessor
+import com.chattriggers.ctjs.launch.mixins.transformers.WorldRendererAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block

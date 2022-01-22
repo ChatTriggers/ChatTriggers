@@ -123,6 +123,23 @@ open class PlayerEntity(player: AbstractClientPlayerEntity?) : LivingEntity(play
         getPlayerInfo()?.displayName = textComponent.component
     }
 
+    /**
+     * Draws the player in the GUI
+     */
+    @JvmOverloads
+    fun draw(
+        x: Int,
+        y: Int,
+        rotate: Boolean = false,
+        showNametag: Boolean = false,
+        showArmor: Boolean = true,
+        showCape: Boolean = true,
+        showHeldItem: Boolean = true,
+        showArrows: Boolean = true
+    ) = apply {
+        Renderer.drawEntity(player ?: return@apply, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
+    }
+
     private fun getPlayerName(entry: PlayerListEntry): String {
         return entry.displayName?.let {
             TextComponent(it).getFormattedText()

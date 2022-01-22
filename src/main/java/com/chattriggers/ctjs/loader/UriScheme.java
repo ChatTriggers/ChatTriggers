@@ -2,13 +2,14 @@ package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.Reference;
 import com.chattriggers.ctjs.engine.module.ModuleManager;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class UriScheme {
@@ -45,8 +46,10 @@ public class UriScheme {
 
             regAdd(" /f /v " + quote("URL Protocol") + " /d " + quote(""));
 
-            ModContainer container = Loader.instance().getIndexedModList().get(Reference.MODID);
-            String modJar = container.getSource().getAbsolutePath();
+            Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(Reference.MODID);
+            if (container.isEmpty())
+                return;
+            String modJar = container.get().getRootPath().toAbsolutePath().toString();
             String sep = File.separator;
             String javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "javaw.exe";
 

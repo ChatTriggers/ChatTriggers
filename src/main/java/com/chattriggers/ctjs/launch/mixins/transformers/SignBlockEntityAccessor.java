@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(SignBlockEntity.class)
 public interface SignBlockEntityAccessor {
     @Invoker
-    Text[] callGetTexts(boolean filtered);
+    Text[] invokeGetTexts(boolean filtered);
 }

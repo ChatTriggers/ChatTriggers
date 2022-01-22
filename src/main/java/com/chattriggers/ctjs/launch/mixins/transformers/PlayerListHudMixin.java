@@ -5,6 +5,7 @@ import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PlayerListHudMixin {
     @Accessor
     public abstract boolean isVisible();
+
+    @Accessor
+    public abstract Text getHeader();
+
+    @Accessor
+    public abstract Text getFooter();
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void injectRender(

@@ -17,7 +17,7 @@ public class DebugHudMixin {
         cancellable = true
     )
     public void injectRender(MatrixStack matrices, CallbackInfo ci) {
-        Renderer.setBoundMatrixStack$ctjs(matrices);
+        Renderer.setBoundMatrixStack(matrices);
         TriggerType.RenderDebug.triggerAll(ci);
     }
 }

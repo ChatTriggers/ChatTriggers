@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.AbstractBlockAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlock

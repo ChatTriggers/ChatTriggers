@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects.block
 
 import com.chattriggers.ctjs.launch.mixins.asMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.SignBlockEntityAccessor
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.External
@@ -19,7 +20,7 @@ class Sign(block: Block) : Block(block.type, block.pos, block.face) {
 
     fun getLines(): List<Message> = sign
         .asMixin<SignBlockEntityAccessor>()
-        .getTexts(false) // TODO("fabric"): What does the filtered parameter do?
+        .invokeGetTexts(false) // TODO("fabric"): What does the filtered parameter do?
         .map(::Message) // TODO("fabric"): Is the text nullable? If not, perhaps make
                         //                 blank entries null?
 

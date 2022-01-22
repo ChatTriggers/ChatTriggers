@@ -1,22 +1,23 @@
 package com.chattriggers.ctjs.minecraft.wrappers.objects
 
+import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCChunk
-import net.minecraft.world.EnumSkyBlock
 
 @External
 class Chunk(val chunk: MCChunk) {
     /**
      * Gets the x position of the chunk
      */
-    fun getX() = chunk.xPosition
+    fun getX() = chunk.pos.x
 
     /**
      * Gets the z position of the chunk
      */
-    fun getZ() = chunk.zPosition
+    fun getZ() = chunk.pos.z
 
     /**
      * Gets the minimum x coordinate of a block in the chunk
@@ -41,7 +42,7 @@ class Chunk(val chunk: MCChunk) {
      * @return the skylight level at the location
      */
     fun getSkyLightLevel(x: Int, y: Int, z: Int): Int {
-        return chunk.getLightFor(EnumSkyBlock.SKY, MCBlockPos(x, y, z))
+        TODO("fabric")
     }
 
     /**
@@ -53,7 +54,8 @@ class Chunk(val chunk: MCChunk) {
      * @return the block light level at the location
      */
     fun getBlockLightLevel(x: Int, y: Int, z: Int): Int {
-        return chunk.getLightFor(EnumSkyBlock.BLOCK, MCBlockPos(x, y, z))
+        // TODO("fabric"): Verify this is correct?
+        return World.getBlockStateAt(BlockPos(x, y, z)).luminance
     }
 
     /**
@@ -62,7 +64,13 @@ class Chunk(val chunk: MCChunk) {
      * @return the entity list
      */
     fun getAllEntities(): List<Entity> {
-        return chunk.entityLists.toList().flatten().map(::Entity)
+        val xRange = chunk.pos.startX..chunk.pos.endX
+        val zRange = chunk.pos.startZ..chunk.pos.endZ
+
+        // TODO: Is there a better way to do this?
+        return World.getAllEntities().filter {
+            it.getX().toInt() in xRange && it.getZ().toInt() in zRange
+        }
     }
 
     /**
@@ -73,7 +81,7 @@ class Chunk(val chunk: MCChunk) {
      */
     fun getAllEntitiesOfType(clazz: Class<*>): List<Entity> {
         return getAllEntities().filter {
-            it.entity.javaClass == clazz
+            clazz.isInstance(it.entity)
         }
     }
 }
