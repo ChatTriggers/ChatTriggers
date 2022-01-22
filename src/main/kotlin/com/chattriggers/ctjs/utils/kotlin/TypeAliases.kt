@@ -11,3 +11,7 @@ internal typealias MCLivingEntity = net.minecraft.entity.LivingEntity
 internal typealias MCPotion = net.minecraft.potion.Potion
 internal typealias MCTessellator = net.minecraft.client.render.Tessellator
 internal typealias MCScore = net.minecraft.scoreboard.ScoreboardPlayerScore
+internal typealias MCGraphicsMode = net.minecraft.client.option.GraphicsMode
+internal typealias MCCloudMode = net.minecraft.client.option.CloudRenderMode
+internal typealias MCParticleMode = net.minecraft.client.option.ParticlesMode
+internal typealias MCChatVisibility = net.minecraft.client.option.ChatVisibility

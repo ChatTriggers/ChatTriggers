@@ -12,9 +12,9 @@ object Server {
      */
     @JvmStatic
     fun getIP(): String {
-        if (Client.getMinecraft().isSingleplayer) return "localhost"
+        if (Client.getMinecraft().isInSingleplayer) return "localhost"
 
-        return Client.getMinecraft().currentServerData?.serverIP ?: ""
+        return Client.getMinecraft().server?.serverIp ?: ""
     }
 
     /**
@@ -25,9 +25,9 @@ object Server {
      */
     @JvmStatic
     fun getName(): String {
-        if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
+        if (Client.getMinecraft().isInSingleplayer) return "SinglePlayer"
 
-        return Client.getMinecraft().currentServerData?.serverName ?: ""
+        return Client.getMinecraft().server?.name ?: ""
     }
 
     /**
@@ -38,9 +38,9 @@ object Server {
      */
     @JvmStatic
     fun getMOTD(): String {
-        if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
+        if (Client.getMinecraft().isInSingleplayer) return "SinglePlayer"
 
-        return Client.getMinecraft().currentServerData?.serverMOTD ?: ""
+        return Client.getMinecraft().server?.serverMotd ?: ""
     }
 
     /**
@@ -54,13 +54,12 @@ object Server {
         val player = Player.getPlayer()
 
         if (player == null
-            || Client.getMinecraft().isSingleplayer
-            || Client.getMinecraft().currentServerData == null
+            || Client.getMinecraft().isInSingleplayer
+            || Client.getMinecraft().server == null
         ) {
             return 5L
         }
 
-        return Client.getConnection()?.getPlayerInfo(player.uniqueID)?.responseTime?.toLong()
-            ?: Client.getMinecraft().currentServerData?.pingToServer ?: -1L
+        return Client.getConnection()?.getPlayerListEntry(player.uuid)?.latency?.toLong() ?: 5L
     }
 }
