@@ -11,8 +11,13 @@ import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
+import com.mojang.brigadier.context.CommandContext
 import gg.essential.api.utils.GuiUtil
 import net.minecraft.server.command.CommandManager
+import net.minecraft.server.command.CommandManager.literal
+import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.ServerCommandSource
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -24,53 +29,84 @@ object CTCommand {
     private const val idFixed = 90123 // ID for dumped chat
     private var idFixedOffset = -1 // ID offset (increments)
 
-    private val commands = listOf(
-        subcommand("load", "reload") { Reference.loadCT() },
-        subcommand("unload") { Reference.unloadCT() },
-        subcommand("files", "file") { openFileLocation() },
-        subcommand("import") {
-            if (it.isEmpty()) {
-                ChatLib.chat("&c/ct import [module name]")
-            } else import(it[0])
-        },
-        subcommand("delete") {
-            when {
-                it.isEmpty() -> ChatLib.chat("&c/ct delete [module name]")
-                ModuleManager.deleteModule(it[0]) -> ChatLib.chat("&aDeleted")
-                else -> ChatLib.chat("&cFailed to delete ${it[0]}")
-            }
-        },
-        subcommand("modules") { GuiUtil.open(ModulesGui) },
-        subcommand("console") {
-            if (it.isEmpty()) {
-                ModuleManager.generalConsole.showConsole()
-            } else ModuleManager.getConsole(it[0]).showConsole()
-        },
-        subcommand("config", "settings", "setting") { GuiUtil.open(Config.gui()!!) },
-        subcommand("sim", "simulate") { ChatLib.simulateChat(it.joinToString(" ")) },
-        subcommand("dump") { dump(it) },
-        subcommand("copy") { copyArgsToClipboard(it) },
-        subcommand("generatebindings") { Reference.generateBindings() }
-    )
-
     fun register(dispatcher: CommandDispatcher<ServerCommandSource>) {
-        var command = CommandManager.literal("ct")
-
-        for ((aliases, action) in commands) {
-            for (alias in aliases) {
-                command = command.then(CommandManager.literal(alias).executes { ctx ->
-                    action(ctx.nodes.map {
-                        ctx.input.substring(it.range.start, it.range.end)
-                    })
-                    1
-                })
-            }
-        }
-
-        dispatcher.register(command)
+        dispatcher.register(literal("ct")
+            .then(literal("load").executes { Reference.loadCT(); 1 })
+            .then(literal("reload").executes { Reference.loadCT(); 1 })
+            .then(literal("unload").executes { Reference.unloadCT(); 1 })
+            .then(literal("file").executes { openFileLocation(); 1 })
+            .then(literal("files").executes { openFileLocation(); 1 })
+            .then(literal("import")
+                .then(argument("moduleName", StringArgumentType.word())
+                    .executes {
+                        import(StringArgumentType.getString(it, "moduleName"))
+                        1
+                    }
+            ))
+            .then(literal("delete")
+                .then(argument("moduleName", StringArgumentType.word())
+                    .executes {
+                        val moduleName = StringArgumentType.getString(it, "moduleName")
+                        if (ModuleManager.deleteModule(moduleName)) {
+                            ChatLib.chat("&aDelete module $moduleName")
+                            1
+                        } else {
+                            ChatLib.chat("&cFailed to delete module $moduleName")
+                            0
+                        }
+                    }
+            ))
+            .then(literal("modules").executes { GuiUtil.open(ModulesGui); 1 })
+            .then(literal("console")
+                .executes { ModuleManager.generalConsole.showConsole(); 1 }
+                .then(argument("consoleType", StringArgumentType.word())
+                    .executes {
+                        ModuleManager.getConsole(StringArgumentType.getString(it, "consoleType")).showConsole()
+                        1
+                    }
+            ))
+            .then(literal("config").executes { GuiUtil.open(Config.gui()!!); 1 })
+            .then(literal("settings").executes { GuiUtil.open(Config.gui()!!); 1 })
+            .then(literal("setting").executes { GuiUtil.open(Config.gui()!!); 1 })
+            .then(literal("sim")
+                .then(argument("text", StringArgumentType.greedyString())
+                    .executes { ChatLib.simulateChat(StringArgumentType.getString(it, "text")); 1 }
+                )
+            )
+            .then(literal("simulate")
+                .then(argument("text", StringArgumentType.greedyString())
+                    .executes { ChatLib.simulateChat(StringArgumentType.getString(it, "text")); 1 }
+                )
+            )
+            .then(literal("dump")
+                .executes { dump(isActionBar = false); 1 }
+                .then(literal("chat")
+                    .executes { dump(isActionBar = false); 1 }
+                    .then(argument("amount", IntegerArgumentType.integer(1, 1000))
+                        .executes {
+                            dump(isActionBar = false, IntegerArgumentType.getInteger(it, "amount"))
+                            1
+                        }
+                    )
+                )
+                .then(literal("actionbar")
+                    .executes { dump(isActionBar = true); 1 }
+                    .then(argument("amount", IntegerArgumentType.integer(1, 1000))
+                        .executes {
+                            dump(isActionBar = true, IntegerArgumentType.getInteger(it, "amount"))
+                            1
+                        }
+                    )
+                )
+            )
+            .then(literal("copy")
+                .then(argument("text", StringArgumentType.greedyString())
+                    .executes { copyTextToClipboard(StringArgumentType.getString(it, "text")); 1 }
+                )
+            )
+            .then(literal("generatebindings").executes { Reference.generateBindings(); 1 })
+        )
     }
-
-    private fun subcommand(vararg aliases: String, executor: (List<String>) -> Unit) = Pair(aliases.toList(), executor)
 
     private fun import(moduleName: String) {
         if (ModuleManager.cachedModules.any { it.name.equals(moduleName, ignoreCase = true) }) {
@@ -100,20 +136,20 @@ object CTCommand {
         }
     }
 
-    private fun getUsage() = """
-        &b&m${ChatLib.getChatBreak()}
-        &c/ct load &7- &oReloads all of the ChatTriggers modules.
-        &c/ct import [module] &7- &oImports a module.
-        &c/ct delete [module] &7- &oDeletes a module.
-        &c/ct files &7- &oOpens the ChatTriggers folder.
-        &c/ct modules &7- &oOpens the modules GUI.
-        &c/ct console [language] &7- &oOpens the ChatTriggers console.
-        &c/ct simulate [message] &7- &oSimulates a received chat message.
-        &c/ct dump &7- &oDumps previous chat messages into chat.
-        &c/ct settings &7- &oOpens the ChatTriggers settings.
-        &c/ct &7- &oDisplays this help dialog.
-        &b&m${ChatLib.getChatBreak()}
-    """.trimIndent()
+    // private fun getUsage() = """
+    //     &b&m${ChatLib.getChatBreak()}
+    //     &c/ct load &7- &oReloads all of the ChatTriggers modules.
+    //     &c/ct import [module] &7- &oImports a module.
+    //     &c/ct delete [module] &7- &oDeletes a module.
+    //     &c/ct files &7- &oOpens the ChatTriggers folder.
+    //     &c/ct modules &7- &oOpens the modules GUI.
+    //     &c/ct console [language] &7- &oOpens the ChatTriggers console.
+    //     &c/ct simulate [message] &7- &oSimulates a received chat message.
+    //     &c/ct dump &7- &oDumps previous chat messages into chat.
+    //     &c/ct settings &7- &oOpens the ChatTriggers settings.
+    //     &c/ct &7- &oDisplays this help dialog.
+    //     &b&m${ChatLib.getChatBreak()}
+    // """.trimIndent()
 
     private fun openFileLocation() {
         try {
@@ -124,25 +160,14 @@ object CTCommand {
         }
     }
 
-    private fun dump(args: List<String>) {
-        if (args.size == 1) {
-            dumpChat()
-            return
-        }
-        when (args[1].lowercase()) {
-            "chat" -> {
-                if (args.size == 2) dumpChat()
-                else dumpChat(args[2].toInt())
-            }
-            "actionbar" -> {
-                if (args.size == 2) dumpActionBar()
-                else dumpActionBar(args[2].toInt())
-            }
-        }
+    private fun dump(isActionBar: Boolean, amount: Int = 100) {
+        if (isActionBar) {
+            dumpActionBar(amount)
+        } else dumpChat(amount)
     }
 
-    private fun dumpChat(lines: Int = 100) = dumpList(ClientListener.chatHistory, lines)
-    private fun dumpActionBar(lines: Int = 100) = dumpList(ClientListener.actionBarHistory, lines)
+    private fun dumpChat(lines: Int) = dumpList(ClientListener.chatHistory, lines)
+    private fun dumpActionBar(lines: Int) = dumpList(ClientListener.actionBarHistory, lines)
     private fun dumpList(messages: List<String>, lines: Int) {
         clearOldDump()
 
@@ -173,9 +198,8 @@ object CTCommand {
         idFixedOffset = -1
     }
 
-    private fun copyArgsToClipboard(args: List<String>) {
+    private fun copyTextToClipboard(text: String) {
         clearOldDump()
-        val toCopy = args.drop(1).joinToString(" ")
-        Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(toCopy), null)
+        Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(text), null)
     }
 }

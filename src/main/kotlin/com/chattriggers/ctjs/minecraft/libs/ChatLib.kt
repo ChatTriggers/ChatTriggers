@@ -88,7 +88,7 @@ object ChatLib {
     fun command(text: String, clientSide: Boolean = false) {
         if (clientSide) {
             // TODO("fabric"): Does the text need a leading slash?
-            Player.getPlayer()?.commandSource?.let { CTJS.commandDispatcher.execute(text, it) }
+            Player.getPlayer()?.commandSource?.let { CTJS.commandDispatcher?.execute(text, it) }
         } else say("/$text")
     }
 

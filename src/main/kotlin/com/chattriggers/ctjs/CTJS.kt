@@ -13,7 +13,8 @@ import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.Initializer
 import com.google.gson.Gson
 import com.mojang.brigadier.CommandDispatcher
-import gg.essential.vigilance.Vigilance
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import com.mojang.brigadier.tree.CommandNode
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.minecraft.server.command.ServerCommandSource
@@ -27,7 +28,9 @@ object CTJS : ClientModInitializer {
     val sounds = mutableListOf<Sound>()
     val images = mutableListOf<Image>()
 
-    internal lateinit var commandDispatcher: CommandDispatcher<ServerCommandSource>
+    private val commandsPendingRegistration = mutableListOf<CommandNode<ServerCommandSource>>()
+
+    internal var commandDispatcher: CommandDispatcher<ServerCommandSource>? = null
 
     override fun onInitializeClient() {
         listOf(
@@ -39,8 +42,10 @@ object CTJS : ClientModInitializer {
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
 
-        Vigilance.initialize()
-        Config.preload()
+        Config.initialize()
+
+        // TODO: Ideally we would do this earlier, right before ASM injection
+        ModuleManager.setup()
 
         Reference.conditionalThread {
             ModuleManager.entryPass()
@@ -49,8 +54,24 @@ object CTJS : ClientModInitializer {
         CommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             commandDispatcher = dispatcher
             CTCommand.register(dispatcher)
+
+            commandsPendingRegistration.forEach(dispatcher.root::addChild)
+            commandsPendingRegistration.clear()
         }
 
         Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
+    }
+
+    fun registerCommand(command: CommandNode<ServerCommandSource>) {
+        commandDispatcher?.root?.addChild(command) ?: commandsPendingRegistration.add(command)
+    }
+
+    fun unregisterCommand(command: CommandNode<ServerCommandSource>) {
+        val dispatcher = commandDispatcher
+        if (dispatcher == null) {
+            commandsPendingRegistration.remove(command)
+        } else if (!dispatcher.root.children.remove(command)) {
+            throw IllegalArgumentException("Encountered an error while removing command ${command.name}")
+        }
     }
 }

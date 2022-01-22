@@ -5,7 +5,7 @@ import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.CTJS
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
-import net.minecraft.command.CommandSource
+import com.mojang.brigadier.tree.CommandNode
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 
@@ -15,6 +15,7 @@ class Command(
     private val usage: String,
     private val tabCompletionOptions: MutableList<String>
 ) {
+    private var commandNode: CommandNode<ServerCommandSource>? = null
     var triggers = mutableListOf(trigger)
 
     private fun trigger(args: Array<String>) {
@@ -41,13 +42,16 @@ class Command(
             )).executes(::execute)
         }
 
-        CTJS.commandDispatcher.register(command.executes(::execute))
+        CTJS.registerCommand(command.executes(::execute).build().also {
+            this.commandNode = it
+        })
     }
 
     fun unregister() {
-        activeCommands.remove(name)
-
-        CTJS.commandDispatcher.root.children.removeIf { it.name == name }
+        commandNode?.also {
+            activeCommands.remove(name)
+            CTJS.unregisterCommand(it)
+        }
     }
 
     companion object {
