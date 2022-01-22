@@ -290,7 +290,7 @@ object ChatLib {
             replacements.map {
                 val lineId = if (it.getChatLineId() == -1) 0 else it.getChatLineId()
 
-                ChatHudLine(chatLine.creationTick, it.getChatMessage(), lineId)
+                ChatHudLine(chatLine.creationTick, it.getTextComponent(), lineId)
             }.forEach {
                 chatLineIterator.add(castChatHudLine(it))
             }

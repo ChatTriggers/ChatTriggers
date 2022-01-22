@@ -45,12 +45,10 @@ class TextComponent {
      * @param textComponent the ITextComponent to convert
      */
     constructor(textComponent: Text) {
-        component = if (textComponent !is BaseText) {
-            val builder = StyledStringVisitor()
-            textComponent.visit(builder, Style.EMPTY)
-            LiteralText(builder.toString())
-        } else textComponent
-        text = getFormattedText()
+        val builder = StyledStringVisitor()
+        textComponent.visit(builder, Style.EMPTY)
+        text = builder.toString()
+        component = if (textComponent is BaseText) textComponent else LiteralText(text)
 
         val clickEvent = textComponent.style.clickEvent
 

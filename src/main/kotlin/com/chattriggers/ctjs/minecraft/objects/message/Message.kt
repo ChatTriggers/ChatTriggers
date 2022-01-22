@@ -9,10 +9,10 @@ import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 
 @External
 class Message {
-    private lateinit var text: Text
     private lateinit var textComponent: TextComponent
 
     private var messageParts = mutableListOf<TextComponent>()
@@ -32,11 +32,7 @@ class Message {
      * @param component the IChatComponent
      */
     constructor(component: Text) {
-        if (component.siblings.isEmpty()) {
-            this.messageParts.add(TextComponent(component))
-        } else {
-            this.messageParts.addAll(component.siblings.map { TextComponent(it) })
-        }
+        messageParts.add(TextComponent(component))
     }
 
     /**
@@ -65,18 +61,33 @@ class Message {
      */
     fun getChatMessage(): Text {
         parseMessage()
-        return text
+        return textComponent.component
+    }
+
+    /**
+     * @return the parsed message as a TextComponent object
+     */
+    // TODO(FEATURE)
+    fun getTextComponent(): TextComponent {
+        parseMessage()
+        return textComponent
     }
 
     /**
      * @return the formatted text of the parsed message
      */
-    fun getFormattedText(): String = textComponent.getFormattedText()
+    fun getFormattedText(): String {
+        parseMessage()
+        return textComponent.getFormattedText()
+    }
 
     /**
      * @return the unformatted text of the parsed message
      */
-    fun getUnformattedText(): String = textComponent.getUnformattedText()
+    fun getUnformattedText(): String {
+        parseMessage()
+        return textComponent.getUnformattedText()
+    }
 
     /**
      * @return the message [TextComponent] parts as a list.
@@ -178,7 +189,7 @@ class Message {
         if (!ChatLib.isPlayer("[CHAT]: " + getFormattedText())) return
 
         if (chatLineId != -1) {
-            Client.getChatGUI()?.asMixin<ChatHudAccessor>()?.invokeAddMessage(text, chatLineId)
+            Client.getChatGUI()?.asMixin<ChatHudAccessor>()?.invokeAddMessage(textComponent.component, chatLineId)
             return
         }
 
@@ -189,7 +200,7 @@ class Message {
         //     Player.getPlayer()?.sendMessage(text, false)
         // }
 
-        Player.getPlayer()?.sendMessage(text, false)
+        Player.getPlayer()?.sendMessage(textComponent.component, false)
     }
 
     /**
@@ -198,7 +209,7 @@ class Message {
     fun actionBar() {
         parseMessage()
         if (ChatLib.isPlayer("[ACTION BAR]: " + getFormattedText()))
-            Player.getPlayer()?.sendMessage(text, true)
+            Player.getPlayer()?.sendMessage(textComponent.component, true)
     }
 
     override fun toString() =
@@ -210,10 +221,12 @@ class Message {
             "}"
 
     private fun parseMessage() {
-        text = LiteralText("")
+        val text = LiteralText("")
 
         messageParts.forEach {
             text.siblings.add(it.component)
         }
+
+        textComponent = TextComponent(text)
     }
 }
