@@ -1,7 +1,11 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
+import net.minecraftforge.client.event.GuiScreenEvent
+import net.minecraftforge.client.event.MouseEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.lwjgl.input.Mouse
 
 object MouseListener {
@@ -54,63 +58,81 @@ object MouseListener {
         registerDraggedListener(TriggerType.Dragged::triggerAll)
     }
 
-    internal fun process() {
-        if (!Mouse.isCreated())
-            return
-
-        val scroll = Mouse.getEventDWheel()
-        if (scroll != 0) {
+    private fun process(button: Int, dWheel: Int) {
+        if (dWheel != 0) {
             scrolled(
                 Client.getMouseX().toDouble(),
                 Client.getMouseY().toDouble(),
-                if (scroll < 0) -1 else 1,
+                if (dWheel < 0) -1 else 1,
             )
         }
 
-        for (button in 0..4) {
-            handleDragged(button)
+        if (button == -1)
+            return
 
-            // normal clicked
-            if (Mouse.isButtonDown(button) == mouseState[button])
-                continue
-
-            val x = Client.getMouseX().toDouble()
-            val y = Client.getMouseY().toDouble()
-
-            clicked(
-                x,
-                y,
-                button,
-                Mouse.isButtonDown(button),
-            )
-
-            mouseState[button] = Mouse.isButtonDown(button)
-
-            // add new dragged
-            if (Mouse.isButtonDown(button)) {
-                draggedState[button] = State(x, y)
-            } else if (draggedState.containsKey(button)) {
-                draggedState.remove(button)
-            }
-        }
-    }
-
-    private fun handleDragged(button: Int) {
-        if (button !in draggedState)
+        // normal clicked
+        if (Mouse.isButtonDown(button) == mouseState[button])
             return
 
         val x = Client.getMouseX().toDouble()
         val y = Client.getMouseY().toDouble()
 
-        dragged(
-            x - (draggedState[button]?.x ?: 0.0),
-            y - (draggedState[button]?.y ?: 0.0),
+        clicked(
             x,
             y,
-            button
+            button,
+            Mouse.isButtonDown(button),
         )
 
-        // update dragged
-        draggedState[button] = State(x, y)
+        mouseState[button] = Mouse.isButtonDown(button)
+
+        // add new dragged
+        if (Mouse.isButtonDown(button)) {
+            draggedState[button] = State(x, y)
+        } else if (draggedState.containsKey(button)) {
+            draggedState.remove(button)
+        }
+    }
+
+    @SubscribeEvent
+    fun onMouseInput(event: MouseEvent) {
+        process(event.button, event.dwheel)
+    }
+
+    @SubscribeEvent
+    fun onGuiMouseInput(event: GuiScreenEvent.MouseInputEvent.Pre) {
+        if (!World.isLoaded()) {
+            mouseState.clear()
+            draggedState.clear()
+            return
+        }
+
+        val button = Mouse.getEventButton()
+        val dWheel = Mouse.getEventDWheel()
+        process(button, dWheel)
+    }
+
+    internal fun handleDragged() {
+        for (button in 0..4) {
+            if (button !in draggedState)
+                continue
+
+            val x = Client.getMouseX().toDouble()
+            val y = Client.getMouseY().toDouble()
+
+            if (x == draggedState[button]?.x && y == draggedState[button]?.y)
+                continue
+
+            dragged(
+                x - (draggedState[button]?.x ?: 0.0),
+                y - (draggedState[button]?.y ?: 0.0),
+                x,
+                y,
+                button,
+            )
+
+            // update dragged
+            draggedState[button] = State(x, y)
+        }
     }
 }
