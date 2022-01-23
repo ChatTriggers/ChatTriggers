@@ -128,6 +128,9 @@ object ClientListener {
     @SubscribeEvent
     fun onRenderTick(event: TickEvent.RenderTickEvent) {
         TriggerType.Step.triggerAll()
+        if (World.isLoaded()) {
+            MouseListener.handleDragged()
+        }
     }
 
     @SubscribeEvent
@@ -135,11 +138,6 @@ object ClientListener {
         GlStateManager.pushMatrix()
         handleOverlayTriggers(event)
         GlStateManager.popMatrix()
-
-        if (event.type != RenderGameOverlayEvent.ElementType.TEXT)
-            return
-
-        MouseListener.process()
     }
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
