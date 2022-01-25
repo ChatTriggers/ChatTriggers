@@ -7,7 +7,8 @@ import com.chattriggers.ctjs.utils.kotlin.External
 @External
 class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.Command, loader) {
     private lateinit var commandName: String
-    private var tabCompletions = mutableListOf<String>()
+    private val tabCompletions = mutableListOf<String>()
+    private val aliases = mutableListOf<String>()
     private var command: Command? = null
 
     override fun trigger(args: Array<out Any?>) {
@@ -21,7 +22,21 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      * @param args all the tab completion options.
      */
     fun setTabCompletions(vararg args: String) = apply {
-        tabCompletions = args.toMutableList()
+        tabCompletions.addAll(args)
+    }
+
+    /**
+     * Sets the aliases for the command.
+     *
+     * @param args all the aliases.
+     */
+    fun setAliases(vararg args: String) = apply {
+        if (!::commandName.isInitialized) {
+            throw IllegalStateException("Command name must be set before aliases!")
+        }
+
+        aliases.addAll(args)
+        reInstance()
     }
 
     /**
@@ -35,10 +50,7 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      */
     fun setCommandName(commandName: String) = apply {
         this.commandName = commandName
-
-        command?.unregister()
-        command = Command(this, commandName, "/$commandName", tabCompletions)
-        command!!.register()
+        reInstance()
     }
 
     /**
@@ -48,4 +60,10 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      * @return the trigger for additional modification
      */
     fun setName(commandName: String) = setCommandName(commandName)
+
+    private fun reInstance() {
+        command?.unregister()
+        command = Command(this, commandName, "/$commandName", tabCompletions, aliases)
+        command!!.register()
+    }
 }

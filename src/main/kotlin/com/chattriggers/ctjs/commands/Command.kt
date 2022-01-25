@@ -14,7 +14,8 @@ class Command(
     trigger: OnTrigger,
     private val name: String,
     private val usage: String,
-    private val tabCompletionOptions: MutableList<String>
+    private val tabCompletionOptions: MutableList<String>,
+    private var aliases: MutableList<String>,
 ) : CommandBase() {
     private var triggers = mutableListOf<OnTrigger>()
 
@@ -28,6 +29,12 @@ class Command(
     override fun getCommandName() = name
     //#else
     //$$ override fun getName() = name
+    //#endif
+
+    //#if MC<=10809
+    override fun getCommandAliases() = aliases
+    //#else
+    //$$ override fun getAliases() = aliases
     //#endif
 
     override fun getRequiredPermissionLevel() = 0
@@ -58,6 +65,10 @@ class Command(
     }
 
     fun register() {
+        if (name in ClientCommandHandler.instance.commandMap.keys) {
+            throw IllegalArgumentException("Command with name $name already exists!")
+        }
+
         ClientCommandHandler.instance.registerCommand(this)
         activeCommands[name] = this
     }
