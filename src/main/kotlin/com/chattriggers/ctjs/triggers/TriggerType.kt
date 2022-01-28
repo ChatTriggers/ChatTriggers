@@ -35,6 +35,10 @@ enum class TriggerType {
     ServerDisconnect,
     GuiClosed,
     GuiDrawBackground,
+    KeyBindPress,
+    KeyBindDown,
+    KeyPress,
+    KeyDown,
 
     // rendering
     RenderWorld,

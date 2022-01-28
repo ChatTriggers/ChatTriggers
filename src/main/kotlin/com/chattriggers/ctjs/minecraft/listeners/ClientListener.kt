@@ -2,6 +2,8 @@ package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
+import com.chattriggers.ctjs.minecraft.objects.KeyBind
+import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
@@ -23,8 +25,10 @@ import net.minecraftforge.event.entity.item.ItemTossEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.InputEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
+import org.lwjgl.input.Keyboard
 import org.lwjgl.util.vector.Vector3f
 import org.mozilla.javascript.Context
 
@@ -73,6 +77,24 @@ object ClientListener {
         ticksPassed++
 
         Scoreboard.resetCache()
+
+        if (Keyboard.getEventKeyState() && Client.currentGui.get() == null) {
+            val key = Keyboard.getEventKey()
+            TriggerType.KeyDown.triggerAll(key)
+        }
+
+        KeyBind.ctKeyBinds.forEach {
+            if (it.isPressed()) TriggerType.KeyBindPress.triggerAll(it, it.getKeyCode())
+            else if (it.isKeyDown()) TriggerType.KeyBindDown.triggerAll(it, it.getKeyCode())
+        }
+    }
+
+    @SubscribeEvent
+    fun onKeyInput(event: InputEvent.KeyInputEvent) {
+        if (Keyboard.getEventKeyState()) {
+            val key = Keyboard.getEventKey()
+            TriggerType.KeyPress.triggerAll(key)
+        }
     }
 
     @SubscribeEvent

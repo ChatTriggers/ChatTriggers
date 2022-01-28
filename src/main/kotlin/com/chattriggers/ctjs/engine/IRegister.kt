@@ -794,6 +794,52 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs when a [KeyBind] is pressed
+     *
+     * Passes through two arguments:
+     * - The [KeyBind] that has been pressed
+     * - The keycode of the KeyBind
+     *
+     */
+    fun registerKeyBindPress(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.KeyBindPress, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs when a [KeyBind] is being held down
+     *
+     * Passes through two arguments:
+     * - The [KeyBind] that is held down
+     * - The keycode of the KeyBind
+     *
+     */
+    fun registerKeyBindDown(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.KeyBindDown, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs when a key is pressed
+     *
+     * Passes through one argument:
+     * - The keycode of the KeyBind
+     *
+     */
+    fun registerKeyPress(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.KeyPress, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs when a key is being held down
+     *
+     * Passes through one argument:
+     * - The keycode of the KeyBind
+     *
+     */
+    fun registerKeyDown(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.KeyDown, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs as a gui is rendered
      *
      * Passes through three arguments:

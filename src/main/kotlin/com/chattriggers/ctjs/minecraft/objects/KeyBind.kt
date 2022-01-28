@@ -37,6 +37,7 @@ class KeyBind {
             keyBinding = KeyBinding(description, keyCode, category)
             ClientRegistry.registerKeyBinding(keyBinding)
             keyBinds.add(keyBinding)
+            ctKeyBinds.add(this)
         }
     }
 
@@ -72,7 +73,27 @@ class KeyBind {
      */
     fun setState(pressed: Boolean) = KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
 
+    override fun equals(other: Any?): Boolean {
+        return if (other is KeyBind) {
+            other.keyBinding == keyBinding &&
+            other.keyBinding.keyCode == keyBinding.keyCode &&
+            other.keyBinding.keyCategory == keyBinding.keyCategory &&
+            other.keyBinding.keyDescription == keyBinding.keyDescription
+        } else false
+    }
+
+    override fun toString(): String {
+        return "KeyBind{description=${keyBinding.keyDescription}, " +
+            "keyCode=${keyBinding.keyCode}, " +
+            "category=${keyBinding.keyCategory}}"
+    }
+
+    override fun hashCode(): Int {
+        return keyBinding.hashCode()
+    }
+
     companion object {
         private val keyBinds = mutableListOf<KeyBinding>()
+        val ctKeyBinds = mutableListOf<KeyBind>()
     }
 }
