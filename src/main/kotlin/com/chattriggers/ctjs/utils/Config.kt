@@ -7,7 +7,7 @@ import gg.essential.vigilance.data.PropertyType
 import java.awt.Color
 import java.io.File
 
-object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml")) {
+object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml"), sortingBehavior = CategorySorting) {
     @Property(
         PropertyType.TEXT,
         name = "Modules Folders",
