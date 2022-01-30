@@ -8,6 +8,7 @@ import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.asm
 import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
 import net.minecraft.client.gui.inventory.GuiContainer
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.inventory.Slot
 
 fun injectGuiContainer() {
@@ -23,7 +24,7 @@ fun injectDrawForeground() = inject {
     at = At(
         InjectionPoint.INVOKE(
             Descriptor(
-                "net/minecraft/client/gui/inventory/GuiContainer",
+                GUI_CONTAINER,
                 "drawGuiContainerForegroundLayer",
                 "(II)V"
             )
@@ -32,7 +33,7 @@ fun injectDrawForeground() = inject {
     )
 
     methodMaps = mapOf(
-        "func_148128_a" to "drawScreen",
+        "func_73863_a" to "drawScreen",
         "func_146979_b" to "drawGuiContainerForegroundLayer"
     )
 
@@ -47,21 +48,23 @@ fun injectDrawForeground() = inject {
 
         code {
             if (theSlot != null) {
+                GlStateManager.pushMatrix()
                 TriggerType.PreItemRender.triggerAll(local1, local2, theSlot, local0)
+                GlStateManager.popMatrix()
             }
         }
     }
 }
 
 fun injectDrawSlotHighlight() = inject {
-    className = "net/minecraft/client/gui/inventory/GuiContainer"
+    className = GUI_CONTAINER
     methodName = "drawScreen"
     methodDesc = "(IIF)V"
 
     at = At(
         InjectionPoint.INVOKE(
             Descriptor(
-                "net/minecraft/client/gui/inventory/GuiContainer",
+                GUI_CONTAINER,
                 "drawGradientRect",
                 "(IIIIII)V"
             )
@@ -69,7 +72,7 @@ fun injectDrawSlotHighlight() = inject {
     )
 
     methodMaps = mapOf(
-        "func_148128_a" to "drawScreen",
+        "func_73863_a" to "drawScreen",
         "func_73733_a" to "drawGradientRect"
     )
 
@@ -86,7 +89,9 @@ fun injectDrawSlotHighlight() = inject {
             if (theSlot != null) {
                 val event = CancellableEvent()
 
+                GlStateManager.pushMatrix()
                 TriggerType.RenderSlotHighlight.triggerAll(local1, local2, theSlot, local0, event)
+                GlStateManager.popMatrix()
 
                 if (event.isCancelled()) {
                     asm {
