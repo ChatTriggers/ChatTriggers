@@ -21,7 +21,7 @@ global.Text = Java.type("com.chattriggers.ctjs.minecraft.libs.renderer.Text");
 
 // Objects
 global.Book = Java.type("com.chattriggers.ctjs.minecraft.objects.Book");
-global.KeyBind = Java.type("com.chattriggers.ctjs.minecraft.objects.KeyBind");
+global.KeyBind = Java.type("com.chattriggers.ctjs.engine.langs.js.JSKeyBind");
 global.Sound = Java.type("com.chattriggers.ctjs.minecraft.objects.Sound");
 
 global.Display = Java.type("com.chattriggers.ctjs.engine.langs.js.JSDisplay");
@@ -35,7 +35,7 @@ global.Message = Java.type("com.chattriggers.ctjs.minecraft.objects.message.Mess
 global.TextComponent = Java.type("com.chattriggers.ctjs.minecraft.objects.message.TextComponent");
 
 // Wrappers
-global.Client = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Client");
+global.Client = Java.type("com.chattriggers.ctjs.engine.langs.js.JSClient").INSTANCE;
 global.CPS = Java.type("com.chattriggers.ctjs.minecraft.wrappers.CPS");
 global.Player = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Player");
 global.Scoreboard = Java.type("com.chattriggers.ctjs.minecraft.wrappers.Scoreboard");
