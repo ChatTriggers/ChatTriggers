@@ -17,10 +17,12 @@ object FileLib {
      * @param importName name of the import
      * @param fileName name of the file
      * @param toWrite string to write in file
+     * @param recursive whether to create folders to the file location if they don't exist
      */
+    @JvmOverloads
     @JvmStatic
-    fun write(importName: String, fileName: String, toWrite: String) {
-        write(absoluteLocation(importName, fileName), toWrite)
+    fun write(importName: String, fileName: String, toWrite: String, recursive: Boolean = false) {
+        write(absoluteLocation(importName, fileName), toWrite, recursive)
     }
 
     /**
@@ -29,10 +31,16 @@ object FileLib {
      *
      * @param fileLocation the location and file name
      * @param toWrite string to write in file
+     * @param recursive whether to create folders to the file location if they don't exist
      */
+    @JvmOverloads
     @JvmStatic
-    fun write(fileLocation: String, toWrite: String) {
-        File(fileLocation).writeText(toWrite)
+    fun write(fileLocation: String, toWrite: String, recursive: Boolean = false) {
+        File(fileLocation).apply {
+             if (recursive && !exists()) {
+                 parentFile.mkdirs()
+             }
+        }.writeText(toWrite)
     }
 
     /**
