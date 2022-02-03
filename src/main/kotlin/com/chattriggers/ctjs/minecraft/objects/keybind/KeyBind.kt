@@ -1,15 +1,56 @@
-package com.chattriggers.ctjs.minecraft.objects
+package com.chattriggers.ctjs.minecraft.objects.keybind
 
+import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.triggers.OnRegularTrigger
+import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
+import com.chattriggers.ctjs.utils.kotlin.NotAbstract
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
-import java.util.*
+import org.lwjgl.input.Keyboard
 
+@Suppress("LeakingThis")
+@NotAbstract
 @External
-class KeyBind {
+abstract class KeyBind {
     private val keyBinding: KeyBinding
+    private var onKeyPress: OnRegularTrigger? = null
+    private var onKeyRelease: OnRegularTrigger? = null
+    private var onKeyDown: OnRegularTrigger? = null
+
+    fun registerKeyPress(method: Any) = run {
+        onKeyPress = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onKeyPress
+    }
+
+    fun registerKeyRelease(method: Any) = run {
+        onKeyRelease = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onKeyRelease
+    }
+
+    fun registerKeyDown(method: Any) = run {
+        onKeyDown = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onKeyDown
+    }
+
+    internal fun onTick() {
+        if (isKeyDown()) {
+            onKeyDown?.trigger(arrayOf())
+        }
+    }
+
+    internal fun onKeyInput() {
+        if (Keyboard.getEventKey() != getKeyCode())
+            return
+
+        if (Keyboard.getEventKeyState()) {
+            onKeyPress?.trigger(arrayOf())
+        } else {
+            onKeyRelease?.trigger(arrayOf())
+        }
+    }
 
     /**
      * Creates a new key bind, editable in the user's controls.
@@ -38,10 +79,12 @@ class KeyBind {
             ClientRegistry.registerKeyBinding(keyBinding)
             keyBinds.add(keyBinding)
         }
+        KeyBindHandler.registerKeyBind(this)
     }
 
     constructor(keyBinding: KeyBinding) {
         this.keyBinding = keyBinding
+        KeyBindHandler.registerKeyBind(this)
     }
 
     /**
@@ -71,6 +114,8 @@ class KeyBind {
      * @param pressed True to press, False to release
      */
     fun setState(pressed: Boolean) = KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
+
+    internal abstract fun getLoader(): ILoader
 
     companion object {
         private val keyBinds = mutableListOf<KeyBinding>()
