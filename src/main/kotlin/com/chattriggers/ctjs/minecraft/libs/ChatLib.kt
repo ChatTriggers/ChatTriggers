@@ -12,7 +12,7 @@ import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.ChatLine
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import org.mozilla.javascript.NativeObject
+import org.mozilla.javascript.regexp.NativeRegExp
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
 
@@ -51,6 +51,7 @@ object ChatLib {
             is String -> Message(text).actionBar()
             is Message -> text.actionBar()
             is TextComponent -> text.actionBar()
+            else -> Message(text.toString()).actionBar()
         }
     }
 
@@ -66,6 +67,7 @@ object ChatLib {
             is String -> Message(text).setRecursive(true).chat()
             is Message -> text.setRecursive(true).chat()
             is TextComponent -> Message(text).setRecursive(true).chat()
+            else -> Message(text.toString()).setRecursive(true).chat()
         }
     }
 
@@ -190,7 +192,7 @@ object ChatLib {
      * @param replacements the new message(s) to be put in replace of the old one
      */
     @JvmStatic
-    fun editChat(regexp: NativeObject, vararg replacements: Message) {
+    fun editChat(regexp: NativeRegExp, vararg replacements: Message) {
         val global = regexp["global"] as Boolean
         val ignoreCase = regexp["ignoreCase"] as Boolean
         val multiline = regexp["multiline"] as Boolean
@@ -233,10 +235,7 @@ object ChatLib {
     fun editChat(toReplace: Message, vararg replacements: Message) {
         editChat(
             {
-                toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
-                    "\u00a7r".toRegex(),
-                    ""
-                )
+                toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.substring(4)
             },
             *replacements
         )
@@ -300,7 +299,7 @@ object ChatLib {
      * @param regexp the regex object to match to the message
      */
     @JvmStatic
-    fun deleteChat(regexp: NativeObject) {
+    fun deleteChat(regexp: NativeRegExp) {
         val global = regexp["global"] as Boolean
         val ignoreCase = regexp["ignoreCase"] as Boolean
         val multiline = regexp["multiline"] as Boolean
@@ -334,10 +333,7 @@ object ChatLib {
     @JvmStatic
     fun deleteChat(toDelete: Message) {
         deleteChat {
-            toDelete.getChatMessage().formattedText == it.getChatMessage().formattedText.replaceFirst(
-                "\u00a7r".toRegex(),
-                ""
-            )
+            toDelete.getChatMessage().formattedText == it.getChatMessage().formattedText.substring(4)
         }
     }
 
