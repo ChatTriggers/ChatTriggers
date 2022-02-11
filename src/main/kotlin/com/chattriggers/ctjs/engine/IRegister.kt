@@ -480,6 +480,75 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs before the portal effect is drawn.
+     *
+     * Passes through one argument:
+     * - The render event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderPortal(method: Any): OnRenderTrigger {
+        return OnRenderTrigger(method, TriggerType.RenderPortal, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before the jump bar is drawn.
+     *
+     * Passes through one argument:
+     * - The render event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderJumpBar(method: Any): OnRenderTrigger {
+        return OnRenderTrigger(method, TriggerType.RenderJumpBar, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before the chat is drawn.
+     *
+     * Passes through one argument:
+     * - The render event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderChat(method: Any): OnRenderTrigger {
+        return OnRenderTrigger(method, TriggerType.RenderChat, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before the player's helmet overlay is drawn.
+     * This triggers when a pumpkin is on the player's head
+     *
+     * Passes through one argument:
+     * - The render event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderHelmet(method: Any): OnRenderTrigger {
+        return OnRenderTrigger(method, TriggerType.RenderHelmet, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs before the block highlight box is drawn.
      *
      * Passes through two arguments:
