@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 @External
 class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.Command, loader) {
     private lateinit var commandName: String
+    private var overrideExisting: Boolean = false
     private val tabCompletions = mutableListOf<String>()
     private val aliases = mutableListOf<String>()
     private var command: Command? = null
@@ -46,10 +47,13 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      * would result in the command being /test
      *
      * @param commandName The command name
+     * @param overrideExisting Whether existing commands with the same name should be overridden
      * @return the trigger for additional modification
      */
-    fun setCommandName(commandName: String) = apply {
+    @JvmOverloads
+    fun setCommandName(commandName: String, overrideExisting: Boolean = false) = apply {
         this.commandName = commandName
+        this.overrideExisting = overrideExisting
         reInstance()
     }
 
@@ -57,13 +61,15 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
      * Alias for [setCommandName]
      *
      * @param commandName The command name
+     * @param overrideExisting Whether existing commands with the same name should be overridden
      * @return the trigger for additional modification
      */
-    fun setName(commandName: String) = setCommandName(commandName)
+    @JvmOverloads
+    fun setName(commandName: String, overrideExisting: Boolean = false) = setCommandName(commandName, overrideExisting)
 
     private fun reInstance() {
         command?.unregister()
-        command = Command(this, commandName, "/$commandName", tabCompletions, aliases)
+        command = Command(this, commandName, "/$commandName", tabCompletions, aliases, overrideExisting)
         command!!.register()
     }
 }
