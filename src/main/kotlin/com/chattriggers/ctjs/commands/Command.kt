@@ -16,6 +16,7 @@ class Command(
     private val usage: String,
     private val tabCompletionOptions: MutableList<String>,
     private var aliases: MutableList<String>,
+    private val overrideExisting: Boolean = false
 ) : CommandBase() {
     private var triggers = mutableListOf<OnTrigger>()
 
@@ -65,7 +66,7 @@ class Command(
     }
 
     fun register() {
-        if (name in ClientCommandHandler.instance.commandMap.keys) {
+        if (name in ClientCommandHandler.instance.commandMap.keys && !overrideExisting) {
             throw IllegalArgumentException("Command with name $name already exists!")
         }
 
