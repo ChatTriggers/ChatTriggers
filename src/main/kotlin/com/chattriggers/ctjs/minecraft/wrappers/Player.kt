@@ -16,6 +16,7 @@ import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
+import java.util.*
 
 @External
 object Player {
@@ -133,7 +134,10 @@ object Player {
     fun getName(): String = Client.getMinecraft().session.username
 
     @JvmStatic
-    fun getUUID(): String = Client.getMinecraft().session.profile.id.toString()
+    fun getUUID(): String = getUUIDObj().toString()
+
+    @JvmStatic
+    fun getUUIDObj(): UUID = Client.getMinecraft().session.profile.id
 
     @JvmStatic
     fun getHP(): Float = getPlayer()?.health ?: 0f
@@ -313,13 +317,17 @@ object Player {
 
     private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(getPlayer()!!.uniqueID)
 
+    @Deprecated("Use the better named method", ReplaceWith("getContainer()"))
+    @JvmStatic
+    fun getOpenedInventory(): Inventory? = getContainer()
+
     /**
-     * Gets the inventory the user currently has open, i.e. a chest.
+     * Gets the container the user currently has open, i.e. a chest.
      *
-     * @return the currently opened inventory
+     * @return the currently opened container
      */
     @JvmStatic
-    fun getOpenedInventory(): Inventory? = getPlayer()?.openContainer?.let(::Inventory)
+    fun getContainer(): Inventory? = getPlayer()?.openContainer?.let(::Inventory)
 
     /**
      * Draws the player in the GUI
