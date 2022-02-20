@@ -70,16 +70,15 @@ class Shape(private var color: Long) {
      */
     fun setLine(x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float) = apply {
         vertexes.clear()
-        area = 0f
 
         val theta = -atan2(y2 - y1, x2 - x1)
         val i = sin(theta) * (thickness / 2)
         val j = cos(theta) * (thickness / 2)
 
-        vertexes.add(Vector2f(x1 + i, y1 + j))
-        vertexes.add(Vector2f(x2 + i, y2 + j))
-        vertexes.add(Vector2f(x2 - i, y2 - j))
-        vertexes.add(Vector2f(x1 - i, y1 - j))
+        addVertex(x1 + i, y1 + j)
+        addVertex(x2 + i, y2 + j)
+        addVertex(x2 - i, y2 - j)
+        addVertex(x1 - i, y1 - j)
 
         drawMode = 7
     }
@@ -90,7 +89,6 @@ class Shape(private var color: Long) {
      */
     fun setCircle(x: Float, y: Float, radius: Float, steps: Int) = apply {
         vertexes.clear()
-        area = 0f
 
         val theta = 2 * PI / steps
         val cos = cos(theta).toFloat()
@@ -101,12 +99,12 @@ class Shape(private var color: Long) {
         var circleY = 0f
 
         for (i in 0..steps) {
-            vertexes.add(Vector2f(x, y))
-            vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
+            addVertex(x, y)
+            addVertex(circleX * radius + x, circleY * radius + y)
             xHolder = circleX
             circleX = cos * circleX - sin * circleY
             circleY = sin * xHolder + cos * circleY
-            vertexes.add(Vector2f(circleX * radius + x, circleY * radius + y))
+            addVertex(circleX * radius + x, circleY * radius + y)
         }
 
         drawMode = 5
