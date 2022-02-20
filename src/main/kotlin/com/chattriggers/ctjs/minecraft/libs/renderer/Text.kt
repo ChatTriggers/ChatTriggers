@@ -16,7 +16,7 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
     private var width = 0f
     private var maxWidth = 0
-    private var maxLines = 1
+    private var maxLines = Int.MAX_VALUE
     private var scale = 1f
 
     init {
@@ -133,10 +133,12 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
         lines.clear()
 
-        if (maxWidth > 0) {
-            lines.addAll(Renderer.getFontRenderer().listFormattedStringToWidth(string, maxWidth))
-        } else {
-            lines.add(string)
+        string.split("\n").forEach {
+            if (maxWidth > 0) {
+                lines.addAll(Renderer.getFontRenderer().listFormattedStringToWidth(it, maxWidth))
+            } else {
+                lines.add(it)
+            }
         }
     }
 
@@ -152,7 +154,7 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     override fun toString() =
         "Text{" +
                 "string=$string, x=$x, y=$y, " +
-                "lines=$lines, color=$color, scale=$scale" +
+                "lines=$lines, color=$color, scale=$scale, " +
                 "formatted=$formatted, shadow=$shadow, align=$align, " +
                 "width=$width, maxWidth=$maxWidth, maxLines=$maxLines" +
                 "}"

@@ -19,10 +19,10 @@ abstract class DisplayLine {
 
     private var textWidth = 0f
 
-    internal var textColor: Long? = null
-    internal var backgroundColor: Long? = null
-    internal var background: DisplayHandler.Background? = null
-    internal var align: DisplayHandler.Align? = null
+    private var textColor: Long? = null
+    private var backgroundColor: Long? = null
+    private var background: DisplayHandler.Background? = null
+    private var align: DisplayHandler.Align? = null
 
     private var onClicked: OnTrigger? = null
     private var onHovered: OnTrigger? = null
