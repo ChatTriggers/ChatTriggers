@@ -127,7 +127,7 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun getRainbow(step: Float, speed: Float = 1f): Long {
-        val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toLong()
+        val red = ((sin(step / speed) + 0.75) * 170).toLong()
         val green = ((sin(step / speed + 2 * PI / 3) + 0.75) * 170).toLong()
         val blue = ((sin(step / speed + 4 * PI / 3) + 0.75) * 170).toLong()
         return color(red, green, blue, 255)
@@ -136,7 +136,7 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun getRainbowColors(step: Float, speed: Float = 1f): IntArray {
-        val red = ((sin((step / speed).toDouble()) + 0.75) * 170).toInt()
+        val red = ((sin(step / speed) + 0.75) * 170).toInt()
         val green = ((sin(step / speed + 2 * PI / 3) + 0.75) * 170).toInt()
         val blue = ((sin(step / speed + 4 * PI / 3) + 0.75) * 170).toInt()
         return intArrayOf(red, green, blue)
@@ -251,9 +251,9 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun drawLine(color: Long, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 7) {
-        val theta = -atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())
-        val i = sin(theta).toFloat() * (thickness / 2)
-        val j = cos(theta).toFloat() * (thickness / 2)
+        val theta = -atan2(y2 - y1, x2 - x1)
+        val i = sin(theta) * (thickness / 2)
+        val j = cos(theta) * (thickness / 2)
 
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
@@ -386,12 +386,12 @@ object Renderer {
         GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f)
         GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f)
         GlStateManager.rotate(-45.0f, 0.0f, 1.0f, 0.0f)
-        GlStateManager.rotate(-atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f, 1.0f, 0.0f, 0.0f)
+        GlStateManager.rotate(-atan(mouseY / 40.0f) * 20.0f, 1.0f, 0.0f, 0.0f)
         scale(-1f, 1f)
         if (!rotate) {
-            ent.renderYawOffset = atan((mouseX / 40.0f).toDouble()).toFloat() * 20.0f
-            ent.rotationYaw = atan((mouseX / 40.0f).toDouble()).toFloat() * 40.0f
-            ent.rotationPitch = -atan((mouseY / 40.0f).toDouble()).toFloat() * 20.0f
+            ent.renderYawOffset = atan(mouseX / 40.0f) * 20.0f
+            ent.rotationYaw = atan(mouseX / 40.0f) * 40.0f
+            ent.rotationPitch = -atan(mouseY / 40.0f) * 20.0f
             ent.rotationYawHead = ent.rotationYaw
             ent.prevRotationYawHead = ent.rotationYaw
         }
