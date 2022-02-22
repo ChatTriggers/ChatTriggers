@@ -30,8 +30,10 @@ abstract class Gui : GuiScreen() {
     private var doesPauseGame = false
 
     init {
+        mc = Client.getMinecraft()
         MouseListener.registerScrollListener { x, y, delta ->
-            onScroll?.trigger(arrayOf(x, y, delta))
+            if (isOpen())
+                onScroll?.trigger(arrayOf(x, y, delta))
         }
     }
 
@@ -392,7 +394,7 @@ abstract class Gui : GuiScreen() {
     }
 
     /**
-     * Draws hovering tex that doesn't follow the mouse
+     * Draws hovering text that doesn't follow the mouse
      *
      * @param text the text's to draw
      * @param x X position of the text
