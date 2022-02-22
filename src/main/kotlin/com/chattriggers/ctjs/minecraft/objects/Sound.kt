@@ -89,9 +89,9 @@ class Sound(private val config: NativeObject) {
         val stream = config.getOrDefault("stream", false) as Boolean
 
         val url = File(CTJS.assetsDir, source).toURI().toURL()
-        val x = (config.getOrDefault("x", Player.getX()) as Double).toFloat()
-        val y = (config.getOrDefault("y", Player.getY()) as Double).toFloat()
-        val z = (config.getOrDefault("z", Player.getZ()) as Double).toFloat()
+        val x = (config.getOrDefault("x", Player.getX()) as Number).toFloat()
+        val y = (config.getOrDefault("y", Player.getY()) as Number).toFloat()
+        val z = (config.getOrDefault("z", Player.getZ()) as Number).toFloat()
         val attModel = config.getOrDefault("attenuation", 1) as Int
         val distOrRoll = 16
 
@@ -124,11 +124,11 @@ class Sound(private val config: NativeObject) {
         }
 
         if (config["volume"] != null) {
-            setVolume(config["volume"] as Float)
+            setVolume((config["volume"] as Number).toFloat())
         }
 
         if (config["pitch"] != null) {
-            setPitch(config["pitch"] as Float)
+            setPitch((config["pitch"] as Number).toFloat())
         }
 
         if (config["category"] != null) {
@@ -201,14 +201,14 @@ class Sound(private val config: NativeObject) {
     }
 
     /**
-     * Completely stops the song
+     * Completely stops the sound
      */
     fun stop() {
         sndSystem!!.stop(source)
     }
 
     /**
-     * I really don't know what this does
+     * Immediately restarts the sound
      */
     fun rewind() {
         sndSystem!!.rewind(source)
