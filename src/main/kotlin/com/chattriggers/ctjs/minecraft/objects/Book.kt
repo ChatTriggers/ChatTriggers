@@ -66,18 +66,21 @@ class Book(bookName: String) {
     /**
      * Sets a page of the book to the specified message.
      *
-     * @param pageNumber the number of the page to set
+     * @param pageIndex the index of the page to set
      * @param message the message to set the page to
      * @return the current book to allow method chaining
      */
-    fun setPage(pageNumber: Int, message: Message) = apply {
+    fun setPage(pageIndex: Int, message: Message) = apply {
         val pages = NBTTagList(
             (
                 bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
             ) as MCNBTTagList
         )
 
-        pages[pageNumber] = MCNBTTagString(
+        for (i in pages.tagCount..pageIndex)
+            addPage("")
+
+        pages[pageIndex] = MCNBTTagString(
             MCTextComponentSerializer.componentToJson(
                 message.getChatMessage()
             )
@@ -94,10 +97,10 @@ class Book(bookName: String) {
     }
 
     @JvmOverloads
-    fun display(page: Int = 0) {
+    fun display(pageIndex: Int = 0) {
         bookScreen = GuiScreenBook(Player.getPlayer(), book, false)
 
-        bookScreen!!.currPage = page
+        bookScreen!!.currPage = pageIndex
         GuiHandler.openGui(bookScreen ?: return)
     }
 
