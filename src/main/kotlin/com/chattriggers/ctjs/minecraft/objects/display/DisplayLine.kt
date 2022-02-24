@@ -27,7 +27,11 @@ abstract class DisplayLine {
     private var onClicked: OnTrigger? = null
     private var onHovered: OnTrigger? = null
     private var onDragged: OnTrigger? = null
+    private var onMouseLeave: OnTrigger? = null
 
+    internal var shouldRender: Boolean = true
+
+    private var hovered: Boolean = false
     private var cachedX = 0.0
     private var cachedY = 0.0
     private var cachedWidth = 0.0
@@ -53,12 +57,18 @@ abstract class DisplayLine {
 
     init {
         MouseListener.registerClickListener { x, y, button, pressed ->
-            if (x in cachedX..cachedX + cachedWidth && y in cachedY..cachedY + cachedHeight)
+            if (
+                shouldRender &&
+                x in cachedX..cachedX + cachedWidth &&
+                y in cachedY..cachedY + cachedHeight
+            ) {
                 onClicked?.trigger(arrayOf(x, y, button, pressed))
+            }
         }
 
         MouseListener.registerDraggedListener { deltaX, deltaY, x, y, button ->
-            onDragged?.trigger(arrayOf(deltaX, deltaY, x, y, button))
+            if (shouldRender)
+                onDragged?.trigger(arrayOf(deltaX, deltaY, x, y, button))
         }
     }
 
@@ -120,6 +130,11 @@ abstract class DisplayLine {
         onHovered
     }
 
+    fun registerMouseLeave(method: Any) = run {
+        onMouseLeave = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onMouseLeave
+    }
+
     fun registerDragged(method: Any) = run {
         onDragged = OnRegularTrigger(method, TriggerType.Other, getLoader())
         onDragged
@@ -162,20 +177,36 @@ abstract class DisplayLine {
 
         text.setX(xOffset).setY(y).setColor(textColor).draw()
 
-        cachedX = xOffset - 1.0
-        cachedY = y - 1.0
-        cachedWidth = textWidth + 2.0
-        cachedHeight = text.getHeight().toDouble()
+        cachedX = baseX - 1.0
+        cachedY = y - 2.0
+        cachedWidth = totalWidth + 1.0
+        cachedHeight = text.getHeight() + 1.0
 
-        if (Client.getMouseX() > x && Client.getMouseX() < x + cachedWidth
-            && Client.getMouseY() > y && Client.getMouseY() < y + cachedHeight
+        if (!shouldRender)
+            return
+
+        if (
+            Client.getMouseX() in cachedX..cachedX + cachedWidth &&
+            Client.getMouseY() in cachedY..cachedY + cachedHeight
         ) {
+            hovered = true
             onHovered?.trigger(
                 arrayOf(
                     Client.getMouseX(),
                     Client.getMouseY()
                 )
             )
+        } else {
+            if (hovered) {
+                onMouseLeave?.trigger(
+                    arrayOf(
+                        Client.getMouseX(),
+                        Client.getMouseY()
+                    )
+                )
+            }
+
+            hovered = false
         }
     }
 
