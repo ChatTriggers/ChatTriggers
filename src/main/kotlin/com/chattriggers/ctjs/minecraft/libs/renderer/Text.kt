@@ -96,8 +96,8 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
 
     fun getHeight(): Float {
         return if (lines.size > 1)
-            lines.size.coerceAtMost(maxLines) * scale * 9
-        else scale * 9
+            lines.size.coerceAtMost(maxLines) * scale * 10
+        else scale * 10
     }
 
     fun exceedsMaxLines(): Boolean {
@@ -120,7 +120,7 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
             if (i >= lines.size) break
             Renderer.getFontRenderer()
                 .drawString(lines[i], getXAlign(lines[i], x ?: this.x), yHolder / scale, color.toInt(), shadow)
-            yHolder += scale * 9
+            yHolder += scale * 10
         }
         GlStateManager.disableBlend()
         Renderer.finishDraw()

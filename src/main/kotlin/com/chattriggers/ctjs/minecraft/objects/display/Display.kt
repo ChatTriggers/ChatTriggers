@@ -188,11 +188,6 @@ abstract class Display {
             }
         }
 
-        if (background == DisplayHandler.Background.FULL)
-            Renderer.drawRect(backgroundColor, renderX - 1, renderY + height - 1, width + 1, 1f)
-        else if (background == DisplayHandler.Background.PER_LINE)
-            Renderer.drawRect(backgroundColor, renderX - 1, renderY + height - 1, lines.last().getTextWidth() + 1, 1f)
-
         height = i
     }
 
