@@ -160,6 +160,7 @@ abstract class Display {
 
     fun setShouldRender(shouldRender: Boolean) = apply {
         this.shouldRender = shouldRender
+        lines.forEach { it.shouldRender = shouldRender }
     }
 
     fun getWidth(): Float = width
