@@ -36,6 +36,19 @@ object Scoreboard {
     }
 
     /**
+     * Sets the scoreboard title.
+     *
+     * @param title the new title
+     * @return the scoreboard title
+     */
+    @JvmStatic
+    fun setTitle(title: String) {
+        val scoreboard = World.getWorld()?.scoreboard ?: return
+        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
+        sidebarObjective.displayName = title
+    }
+
+    /**
      * Get all currently visible strings on the scoreboard. (excluding title)
      * Be aware that this can contain color codes.
      *
@@ -84,30 +97,26 @@ object Scoreboard {
      */
     @JvmStatic
     fun setLine(score: Int, line: String, override: Boolean) {
-        try {
-            val scoreboard = World.getWorld()?.scoreboard ?: return
+        val scoreboard = World.getWorld()?.scoreboard ?: return
+        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
 
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1)
+        val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
 
-            val scores = scoreboard.getSortedScores(sidebarObjective)
-
-            if (override) {
-                scores.filter {
-                    it.scorePoints == score
-                }.forEach {
-                    scoreboard.removeObjectiveFromEntity(it.playerName, sidebarObjective)
-                }
+        if (override) {
+            scores.filter {
+                it.scorePoints == score
+            }.forEach {
+                scoreboard.removeObjectiveFromEntity(it.playerName, sidebarObjective)
             }
-
-            //#if MC<=10809
-            val theScore = scoreboard.getValueFromObjective(line, sidebarObjective)
-            //#else
-            //$$ val theScore = scoreboard.getOrCreateScore(line, sidebarObjective)
-            //#endif
-
-            theScore.scorePoints = score
-        } catch (ignored: Exception) {
         }
+
+        //#if MC<=10809
+        val theScore = scoreboard.getValueFromObjective(line, sidebarObjective)!!
+        //#else
+        //$$ val theScore = scoreboard.getOrCreateScore(line, sidebarObjective)
+        //#endif
+
+        theScore.scorePoints = score
     }
 
     @JvmStatic
@@ -122,16 +131,13 @@ object Scoreboard {
         scoreboardNames.clear()
         scoreboardTitle = ""
 
-        try {
-            val scoreboard = World.getWorld()?.scoreboard ?: return
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
-            scoreboardTitle = sidebarObjective.displayName ?: return
+        val scoreboard = World.getWorld()?.scoreboard ?: return
+        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
+        scoreboardTitle = sidebarObjective.displayName
 
-            val scores: Collection<net.minecraft.scoreboard.Score> = scoreboard.getSortedScores(sidebarObjective)
+        val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
 
-            scoreboardNames = scores.map(::Score).toMutableList()
-        } catch (ignored: Exception) {
-        }
+        scoreboardNames = scores.map(::Score).toMutableList()
     }
 
     @JvmStatic

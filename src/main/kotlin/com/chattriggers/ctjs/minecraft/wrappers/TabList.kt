@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCGameType
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
+import com.chattriggers.ctjs.utils.kotlin.MCScore
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
@@ -20,17 +21,14 @@ object TabList {
      */
     @JvmStatic
     fun getNamesByObjectives(): List<String> {
-        return try {
-            val scoreboard = World.getWorld()?.scoreboard ?: return emptyList()
-            val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0)
-            val scores = scoreboard.getSortedScores(sidebarObjective)
+        val scoreboard = World.getWorld()?.scoreboard ?: return emptyList()
+        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0) ?: return emptyList()
 
-            scores.map {
-                val team = scoreboard.getPlayersTeam(it.playerName)
-                ScorePlayerTeam.formatPlayerName(team, it.playerName)
-            }
-        } catch (e: Exception) {
-            emptyList()
+        val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
+
+        return scores.map {
+            val team = scoreboard.getPlayersTeam(it.playerName)
+            ScorePlayerTeam.formatPlayerName(team, it.playerName)
         }
     }
 
