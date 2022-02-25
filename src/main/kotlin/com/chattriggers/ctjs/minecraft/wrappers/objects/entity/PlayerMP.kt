@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects.entity
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Team
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
@@ -15,6 +16,10 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
 
     fun getPing(): Int {
         return getPlayerInfo()?.responseTime ?: -1
+    }
+
+    fun getTeam(): Team? {
+        return getPlayerInfo()?.playerTeam?.let(::Team)
     }
 
     /**
