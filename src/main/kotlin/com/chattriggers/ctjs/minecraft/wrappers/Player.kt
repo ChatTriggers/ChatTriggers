@@ -1,9 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.objects.PotionEffect
+import com.chattriggers.ctjs.minecraft.wrappers.objects.Team
 import com.chattriggers.ctjs.minecraft.wrappers.objects.block.*
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
@@ -32,6 +34,11 @@ object Player {
         //#else
         //$$ return Client.getMinecraft().player
         //#endif
+    }
+
+    @JvmStatic
+    fun getTeam(): Team? {
+        return World.getWorld()?.scoreboard?.getPlayersTeam(getName())?.let(::Team)
     }
 
     @JvmStatic
@@ -294,9 +301,9 @@ object Player {
      * @return the display name
      */
     @JvmStatic
-    fun getDisplayName(): TextComponent = getPlayerInfo()?.let {
-        TextComponent(getPlayerName(it))
-    } ?: TextComponent(getName())
+    fun getDisplayName(): TextComponent {
+        return asPlayerMP()?.getDisplayName() ?: TextComponent("")
+    }
 
     /**
      * Sets the name for this player shown in tab list
@@ -305,17 +312,19 @@ object Player {
      */
     @JvmStatic
     fun setTabDisplayName(textComponent: TextComponent) {
-        getPlayerInfo()?.displayName = textComponent.chatComponentText
+        asPlayerMP()?.setTabDisplayName(textComponent)
     }
 
-    private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo): String {
-        return if (networkPlayerInfoIn.displayName != null)
-            networkPlayerInfoIn.displayName?.formattedText.toString()
-        else
-            ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.playerTeam, networkPlayerInfoIn.gameProfile.name)
+    /**
+     * Sets the name for this player shown above their head,
+     * in their name tag
+     *
+     * @param textComponent the new name to display
+     */
+    @JvmStatic
+    fun setNametagName(textComponent: TextComponent) {
+        asPlayerMP()?.setNametagName(textComponent)
     }
-
-    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(getPlayer()!!.uniqueID)
 
     @Deprecated("Use the better named method", ReplaceWith("getContainer()"))
     @JvmStatic
