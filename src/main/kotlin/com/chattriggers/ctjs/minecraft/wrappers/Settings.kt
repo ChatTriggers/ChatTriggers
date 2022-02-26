@@ -26,48 +26,43 @@ class Settings {
         fun getCape() = getSettings().modelParts.contains(EnumPlayerModelParts.CAPE)
 
         fun setCape(toggled: Boolean) {
-            setModelPart(toggled, EnumPlayerModelParts.CAPE)
+            getSettings().setModelPartEnabled(EnumPlayerModelParts.CAPE, toggled)
         }
 
         fun getJacket() = getSettings().modelParts.contains(EnumPlayerModelParts.JACKET)
 
         fun setJacket(toggled: Boolean) {
-            setModelPart(toggled, EnumPlayerModelParts.JACKET)
+            getSettings().setModelPartEnabled(EnumPlayerModelParts.JACKET, toggled)
         }
 
         fun getLeftSleeve() = getSettings().modelParts.contains(EnumPlayerModelParts.LEFT_SLEEVE)
 
         fun setLeftSleeve(toggled: Boolean) {
-            setModelPart(toggled, EnumPlayerModelParts.LEFT_SLEEVE)
+            getSettings().setModelPartEnabled(EnumPlayerModelParts.LEFT_SLEEVE, toggled)
         }
 
         fun getRightSleeve() = getSettings().modelParts.contains(EnumPlayerModelParts.RIGHT_SLEEVE)
 
         fun setRightSleeve(toggled: Boolean) {
-            setModelPart(toggled, EnumPlayerModelParts.RIGHT_SLEEVE)
+            getSettings().setModelPartEnabled(EnumPlayerModelParts.RIGHT_SLEEVE, toggled)
         }
 
         fun getLeftPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.LEFT_PANTS_LEG)
 
         fun setLeftPantsLeg(toggled: Boolean) {
-            setModelPart(toggled, EnumPlayerModelParts.LEFT_PANTS_LEG)
+            getSettings().setModelPartEnabled(EnumPlayerModelParts.LEFT_PANTS_LEG, toggled)
         }
 
         fun getRightPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.RIGHT_PANTS_LEG)
 
         fun setRightPantsLeg(toggled: Boolean) {
-            setModelPart(toggled, EnumPlayerModelParts.RIGHT_PANTS_LEG)
+            getSettings().setModelPartEnabled(EnumPlayerModelParts.RIGHT_PANTS_LEG, toggled)
         }
 
         fun getHat() = getSettings().modelParts.contains(EnumPlayerModelParts.HAT)
 
         fun setHat(toggled: Boolean) {
-            setModelPart(toggled, EnumPlayerModelParts.HAT)
-        }
-
-        private fun setModelPart(toggled: Boolean, modelPart: EnumPlayerModelParts) {
-            if (toggled) getSettings().modelParts.add(modelPart)
-            else getSettings().modelParts.remove(modelPart)
+            getSettings().setModelPartEnabled(EnumPlayerModelParts.HAT, toggled)
         }
     }
 
