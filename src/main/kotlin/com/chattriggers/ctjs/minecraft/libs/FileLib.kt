@@ -37,9 +37,9 @@ object FileLib {
     @JvmStatic
     fun write(fileLocation: String, toWrite: String, recursive: Boolean = false) {
         File(fileLocation).apply {
-             if (recursive && !exists()) {
-                 parentFile.mkdirs()
-             }
+            if (recursive && !exists()) {
+                parentFile.mkdirs()
+            }
         }.writeText(toWrite)
     }
 
