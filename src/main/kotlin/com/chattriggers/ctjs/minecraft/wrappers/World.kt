@@ -81,6 +81,11 @@ object World {
     }
 
     @JvmStatic
+    fun stopAllSounds() {
+        Client.getMinecraft().soundHandler.stopSounds()
+    }
+
+    @JvmStatic
     fun isRaining(): Boolean = getWorld()?.worldInfo?.isRaining ?: false
 
     @JvmStatic

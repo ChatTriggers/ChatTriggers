@@ -91,7 +91,7 @@ class Inventory : JSONImpl {
      * Checks whether the inventory contains an item with ID.
      *
      * @param id the ID of the item to match
-     * @retun whether the inventory contains an item with ID
+     * @return whether the inventory contains an item with ID
      */
     fun contains(id: Int): Boolean {
         return getItems().any { it?.getID() == id }
