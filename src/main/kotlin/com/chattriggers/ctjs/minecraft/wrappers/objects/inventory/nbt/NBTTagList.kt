@@ -7,20 +7,22 @@ class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
     val tagCount: Int
         get() = rawNBT.tagCount()
 
-    fun appendTag(nbt: NBTBase) = apply {
-        rawNBT.appendTag(nbt.rawNBT)
-    }
+    fun appendTag(nbt: NBTBase) = appendTag(nbt.rawNBT)
 
     fun appendTag(nbt: MCNBTBase) = apply {
         rawNBT.appendTag(nbt)
     }
 
-    operator fun set(id: Int, nbt: NBTBase) {
-        rawNBT.set(id, nbt.rawNBT)
+    operator fun set(id: Int, nbt: NBTBase) = set(id, nbt.rawNBT)
+
+    operator fun set(id: Int, nbt: MCNBTBase) = apply {
+        rawNBT.set(id, nbt)
     }
 
-    operator fun set(id: Int, nbt: MCNBTBase) {
-        rawNBT.set(id, nbt)
+    fun insertTag(index: Int, nbt: NBTBase) = insertTag(index, nbt.rawNBT)
+
+    fun insertTag(index: Int, nbt: MCNBTBase) = apply {
+        rawNBT.tagList.add(index, nbt)
     }
 
     fun removeTag(index: Int) = rawNBT.removeTag(index)
