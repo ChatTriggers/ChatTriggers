@@ -11,7 +11,7 @@ import com.chattriggers.ctjs.utils.kotlin.External
 class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     private lateinit var clickType: ClickType
     private var holdingShift = false
-    private var itemInHand = Player.getPlayer()?.inventory?.currentItem == null
+    private var itemInHand = Player.getHeldItem() != null
     //#if MC>10809
     //$$ private var pickupAll = false
     //#endif
@@ -77,26 +77,17 @@ class ClickAction(slot: Int, windowId: Int) : Action(slot, windowId) {
 
     override fun complete() {
         //#if MC<=10809
-        var mode = 0
-
-        if (clickType == ClickType.MIDDLE) {
-            mode = 3
-        } else if (slot == -999 && !itemInHand) {
-            mode = 4
-        } else if (holdingShift) {
-            mode = 1
+        val mode = when {
+            clickType == ClickType.MIDDLE -> 3
+            holdingShift -> 1
+            else -> 0
         }
         //#else
-        //$$ val mode: MCClickType = if (clickType == ClickType.MIDDLE) {
-        //$$     MCClickType.CLONE
-        //$$ } else if (slot == -999 && !itemInHand) {
-        //$$     MCClickType.THROW
-        //$$ } else if (holdingShift) {
-        //$$     MCClickType.QUICK_MOVE
-        //$$ } else if (pickupAll) {
-        //$$     MCClickType.PICKUP_ALL
-        //$$ } else {
-        //$$     MCClickType.PICKUP
+        //$$ val mode = when {
+        //$$     clickType == ClickType.MIDDLE -> MCClickType.CLONE
+        //$$     holdingShift -> MCClickType.QUICK_MOVE
+        //$$     pickupAll -> MCClickType.PICKUP_ALL
+        //$$     else -> MCClickType.PICKUP
         //$$ }
         //#endif
 
