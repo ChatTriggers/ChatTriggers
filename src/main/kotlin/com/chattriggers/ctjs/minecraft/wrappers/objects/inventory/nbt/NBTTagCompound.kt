@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
 import net.minecraft.nbt.NBTTagByteArray
 import net.minecraft.nbt.NBTTagIntArray
+import net.minecraftforge.common.util.Constants
 import org.mozilla.javascript.NativeObject
 
 class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
@@ -68,34 +69,93 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.LONG -> getLong(key)
             NBTDataType.FLOAT -> getFloat(key)
             NBTDataType.DOUBLE -> getDouble(key)
-            NBTDataType.STRING -> if (rawNBT.hasKey(key, 8)) tagMap[key]?.let { NBTBase(it).toString() } else null
-            NBTDataType.BYTE_ARRAY -> if (rawNBT.hasKey(key, 7)) (tagMap[key] as NBTTagByteArray).byteArray else null
-            NBTDataType.INT_ARRAY -> if (rawNBT.hasKey(key, 11)) (tagMap[key] as NBTTagIntArray).intArray else null
+            NBTDataType.STRING -> {
+                if (rawNBT.hasKey(key, Constants.NBT.TAG_STRING))
+                    tagMap[key]?.let { NBTBase(it).toString() }
+                else null
+            }
+            NBTDataType.BYTE_ARRAY -> {
+                if (rawNBT.hasKey(key, Constants.NBT.TAG_BYTE_ARRAY))
+                        (tagMap[key] as NBTTagByteArray).byteArray
+                else null
+            }
+            NBTDataType.INT_ARRAY -> {
+                if (rawNBT.hasKey(key, Constants.NBT.TAG_INT_ARRAY))
+                        (tagMap[key] as NBTTagIntArray).intArray
+                else null
+            }
             NBTDataType.BOOLEAN -> getBoolean(key)
             NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
             NBTDataType.TAG_LIST -> getTagList(
                 key,
-                tagType ?: throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument")
+                tagType
+                    ?: throw IllegalArgumentException("For accessing a tag list you need to provide the tagType argument")
             )
         }
     }
 
     operator fun get(key: String): NBTBase? = getTag(key)
 
+    fun setNBTBase(key: String, value: NBTBase) = setNBTBase(key, value.rawNBT)
+
+    fun setNBTBase(key: String, value: MCNBTBase) = apply {
+        rawNBT.setTag(key, value)
+    }
+
+    fun setByte(key: String, value: Byte) = apply {
+        rawNBT.setByte(key, value)
+    }
+
+    fun setShort(key: String, value: Short) = apply {
+        rawNBT.setShort(key, value)
+    }
+
+    fun setInteger(key: String, value: Int) = apply {
+        rawNBT.setInteger(key, value)
+    }
+
+    fun setLong(key: String, value: Long) = apply {
+        rawNBT.setLong(key, value)
+    }
+
+    fun setFloat(key: String, value: Float) = apply {
+        rawNBT.setFloat(key, value)
+    }
+
+    fun setDouble(key: String, value: Double) = apply {
+        rawNBT.setDouble(key, value)
+    }
+
+    fun setString(key: String, value: String) = apply {
+        rawNBT.setString(key, value)
+    }
+
+    fun setByteArray(key: String, value: ByteArray) = apply {
+        rawNBT.setByteArray(key, value)
+    }
+
+    fun setIntArray(key: String, value: IntArray) = apply {
+        rawNBT.setIntArray(key, value)
+    }
+
+    fun setBoolean(key: String, value: Boolean) = apply {
+        rawNBT.setBoolean(key, value)
+    }
+
     operator fun set(key: String, value: Any) = apply {
         when (value) {
-            is NBTBase -> rawNBT.setTag(key, value.rawNBT)
-            is MCNBTBase -> rawNBT.setTag(key, value)
-            is Byte -> rawNBT.setByte(key, value)
-            is Short -> rawNBT.setShort(key, value)
-            is Int -> rawNBT.setInteger(key, value)
-            is Long -> rawNBT.setLong(key, value)
-            is Float -> rawNBT.setFloat(key, value)
-            is Double -> rawNBT.setDouble(key, value)
-            is String -> rawNBT.setString(key, value)
-            is ByteArray -> rawNBT.setByteArray(key, value)
-            is IntArray -> rawNBT.setIntArray(key, value)
-            is Boolean -> rawNBT.setBoolean(key, value)
+            is NBTBase -> setNBTBase(key, value)
+            is MCNBTBase -> setNBTBase(key, value)
+            is Byte -> setByte(key, value)
+            is Short -> setShort(key, value)
+            is Int -> setInteger(key, value)
+            is Long -> setLong(key, value)
+            is Float -> setFloat(key, value)
+            is Double -> setDouble(key, value)
+            is String -> setString(key, value)
+            is ByteArray -> setByteArray(key, value)
+            is IntArray -> setIntArray(key, value)
+            is Boolean -> setBoolean(key, value)
             else -> throw IllegalArgumentException("Unsupported NBT type: ${value.javaClass.simpleName}")
         }
     }
