@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
@@ -16,8 +15,6 @@ import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import com.chattriggers.ctjs.utils.kotlin.MCRayTraceType
 import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
-import net.minecraft.client.network.NetworkPlayerInfo
-import net.minecraft.scoreboard.ScorePlayerTeam
 import java.util.*
 
 @External
@@ -38,7 +35,7 @@ object Player {
 
     @JvmStatic
     fun getTeam(): Team? {
-        return World.getWorld()?.scoreboard?.getPlayersTeam(getName())?.let(::Team)
+        return Scoreboard.getScoreboard()?.getPlayersTeam(getName())?.let(::Team)
     }
 
     @JvmStatic

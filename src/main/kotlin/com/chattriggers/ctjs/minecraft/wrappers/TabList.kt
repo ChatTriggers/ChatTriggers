@@ -21,7 +21,7 @@ object TabList {
      */
     @JvmStatic
     fun getNamesByObjectives(): List<String> {
-        val scoreboard = World.getWorld()?.scoreboard ?: return emptyList()
+        val scoreboard = Scoreboard.getScoreboard() ?: return emptyList()
         val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0) ?: return emptyList()
 
         val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)

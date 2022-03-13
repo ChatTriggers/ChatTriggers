@@ -2,6 +2,8 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCScore
+import com.chattriggers.ctjs.utils.kotlin.MCScoreboard
+import net.minecraft.scoreboard.ScoreObjective
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.client.GuiIngameForge
 
@@ -11,8 +13,18 @@ object Scoreboard {
     private var scoreboardNames = mutableListOf<Score>()
     private var scoreboardTitle = ""
 
+    @JvmStatic
+    fun getScoreboard(): MCScoreboard? {
+        return World.getWorld()?.scoreboard
+    }
+
+    @JvmStatic
+    fun getSidebar(): ScoreObjective? {
+        return getScoreboard()?.getObjectiveInDisplaySlot(1)
+    }
+
     /**
-     * Alias for [Scoreboard.getTitle].
+     * Alias for [getTitle].
      *
      * @return the scoreboard title
      */
@@ -43,9 +55,7 @@ object Scoreboard {
      */
     @JvmStatic
     fun setTitle(title: String) {
-        val scoreboard = World.getWorld()?.scoreboard ?: return
-        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
-        sidebarObjective.displayName = title
+        getSidebar()?.displayName = title
     }
 
     /**
@@ -97,8 +107,8 @@ object Scoreboard {
      */
     @JvmStatic
     fun setLine(score: Int, line: String, override: Boolean) {
-        val scoreboard = World.getWorld()?.scoreboard ?: return
-        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
+        val scoreboard = getScoreboard() ?: return
+        val sidebarObjective = getSidebar() ?: return
 
         val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
 
@@ -131,8 +141,8 @@ object Scoreboard {
         scoreboardNames.clear()
         scoreboardTitle = ""
 
-        val scoreboard = World.getWorld()?.scoreboard ?: return
-        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1) ?: return
+        val scoreboard = getScoreboard() ?: return
+        val sidebarObjective = getSidebar() ?: return
         scoreboardTitle = sidebarObjective.displayName
 
         val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
@@ -160,7 +170,7 @@ object Scoreboard {
          * @return the display name
          */
         fun getName(): String = ScorePlayerTeam.formatPlayerName(
-            World.getWorld()!!.scoreboard.getPlayersTeam(score.playerName),
+            getScoreboard()!!.getPlayersTeam(score.playerName),
             score.playerName
         )
 
