@@ -25,6 +25,8 @@ abstract class Display {
     private var width = 0f
     private var height = 0f
 
+    internal var registerType = DisplayHandler.RegisterType.RENDER_OVERLAY
+
     constructor() {
         @Suppress("LeakingThis")
         DisplayHandler.registerDisplay(this)
@@ -42,6 +44,8 @@ abstract class Display {
         setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
 
         minWidth = config.getOption("minWidth", 0f).toFloat()
+
+        setRegisterType(config.getOption("registerType", DisplayHandler.RegisterType.RENDER_OVERLAY))
 
         @Suppress("LeakingThis")
         DisplayHandler.registerDisplay(this)
@@ -113,7 +117,7 @@ abstract class Display {
     }
 
     @JvmOverloads
-    fun addLine(index: Int = -1, line: Any) {
+    fun addLine(index: Int = -1, line: Any) = apply {
         val toAdd = when (line) {
             is String -> createDisplayLine(line)
             is DisplayLine -> line
@@ -173,6 +177,33 @@ abstract class Display {
         this.minWidth = minWidth
     }
 
+    /**
+     * Gets the type of register the display will render under.
+     *
+     * The returned value will be a DisplayHandler.RegisterType
+     *      renderOverlayEvent: render overlay
+     *      postGuiRenderEvent: post gui render
+     *
+     * @return the register type
+     */
+    fun getRegisterType() : DisplayHandler.RegisterType = registerType
+
+
+    /**
+     * Sets the type of register the display will render under.
+     *
+     * Possible input values are:.
+     *      renderOverlayEvent: render overlay
+     *      postGuiRenderEvent: post gui render
+     */
+    fun setRegisterType(registerType: Any) = apply {
+        this.registerType = when (registerType) {
+            is String -> DisplayHandler.RegisterType.valueOf(registerType.uppercase().replace(" ", "_"))
+            is DisplayHandler.RegisterType -> registerType
+            else -> DisplayHandler.RegisterType.RENDER_OVERLAY
+        }
+    }
+
     fun render() {
         if (!shouldRender)
             return
@@ -196,7 +227,7 @@ abstract class Display {
 
     override fun toString() =
         "Display{" +
-                "shouldRender=$shouldRender, " +
+                "shouldRender=$shouldRender, registerType=$registerType, " +
                 "renderX=$renderX, renderY=$renderY, " +
                 "background=$background, backgroundColor=$backgroundColor, " +
                 "textColor=$textColor, align=$align, order=$order, " +

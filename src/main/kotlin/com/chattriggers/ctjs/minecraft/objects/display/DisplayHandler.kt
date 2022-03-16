@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.objects.display
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.client.event.GuiScreenEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.util.concurrent.CopyOnWriteArrayList
@@ -20,10 +21,29 @@ object DisplayHandler {
     fun clearDisplays() = displays.clear()
 
     @SubscribeEvent
-    fun renderDisplays(event: RenderGameOverlayEvent.Text) {
+    fun renderDisplayOverlay(event: RenderGameOverlayEvent.Text) {
         GlStateManager.pushMatrix()
-        displays.forEach(Display::render)
+        displays.forEach {
+            if (it.registerType == RegisterType.RENDER_OVERLAY) {
+                it.render()
+            }
+        }
         GlStateManager.popMatrix()
+    }
+
+    @SubscribeEvent
+    fun renderDisplayGui(event: GuiScreenEvent.DrawScreenEvent.Post) {
+        GlStateManager.pushMatrix()
+        displays.forEach {
+            if (it.registerType == RegisterType.POST_GUI_RENDER) {
+                it.render()
+            }
+        }
+        GlStateManager.popMatrix()
+    }
+
+    enum class RegisterType {
+        RENDER_OVERLAY, POST_GUI_RENDER
     }
 
     enum class Background {
