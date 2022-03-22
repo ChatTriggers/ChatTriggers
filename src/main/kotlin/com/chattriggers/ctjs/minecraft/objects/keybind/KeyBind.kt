@@ -20,6 +20,45 @@ abstract class KeyBind {
     private var onKeyRelease: OnRegularTrigger? = null
     private var onKeyDown: OnRegularTrigger? = null
 
+    private var down: Boolean = false
+
+    init {
+        KeyBindHandler.registerKeyBind(this)
+    }
+
+    /**
+     * Creates a new key bind, editable in the user's controls.
+     *
+     * @param category the keybind category the keybind will be in
+     * @param description what the key bind does
+     * @param keyCode the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
+     * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
+     */
+    @JvmOverloads
+    constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
+        val possibleDuplicate = Client.getMinecraft().gameSettings.keyBindings.find {
+            I18n.format(it.keyDescription) == I18n.format(description) &&
+                    I18n.format(it.keyCategory) == I18n.format(category)
+        }
+
+        if (possibleDuplicate != null) {
+            if (possibleDuplicate in keyBinds)
+                keyBinding = possibleDuplicate
+            else throw IllegalArgumentException(
+                "KeyBind already exists! To get a KeyBind from an existing Minecraft KeyBinding, " +
+                        "use the other KeyBind constructor or Client.getKeyBindFromKey."
+            )
+        } else {
+            keyBinding = KeyBinding(description, keyCode, category)
+            ClientRegistry.registerKeyBinding(keyBinding)
+            keyBinds.add(keyBinding)
+        }
+    }
+
+    constructor(keyBinding: KeyBinding) {
+        this.keyBinding = keyBinding
+    }
+
     fun registerKeyPress(method: Any) = run {
         onKeyPress = OnRegularTrigger(method, TriggerType.Other, getLoader())
         onKeyPress
@@ -36,55 +75,20 @@ abstract class KeyBind {
     }
 
     internal fun onTick() {
+        if (isPressed()) {
+            onKeyPress?.trigger(arrayOf())
+            down = true
+        }
+
         if (isKeyDown()) {
             onKeyDown?.trigger(arrayOf())
+            down = true
         }
-    }
 
-    internal fun onKeyInput() {
-        if (Keyboard.getEventKey() != getKeyCode())
-            return
-
-        if (Keyboard.getEventKeyState()) {
-            onKeyPress?.trigger(arrayOf())
-        } else {
+        if (down && !isKeyDown()) {
             onKeyRelease?.trigger(arrayOf())
+            down = false
         }
-    }
-
-    /**
-     * Creates a new key bind, editable in the user's controls.
-     *
-     * @param category the keybind category the keybind will be in
-     * @param description what the key bind does
-     * @param keyCode the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
-     * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
-     */
-    @JvmOverloads
-    constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
-        val possibleDuplicate = Client.getMinecraft().gameSettings.keyBindings.find {
-            I18n.format(it.keyDescription) == I18n.format(description) &&
-            I18n.format(it.keyCategory) == I18n.format(category)
-        }
-
-        if (possibleDuplicate != null) {
-            if (possibleDuplicate in keyBinds)
-                keyBinding = possibleDuplicate
-            else throw IllegalArgumentException(
-                "KeyBind already exists! To get a KeyBind from an existing Minecraft KeyBinding, " +
-                        "use the other KeyBind constructor or Client.getKeyBindFromKey."
-            )
-        } else {
-            keyBinding = KeyBinding(description, keyCode, category)
-            ClientRegistry.registerKeyBinding(keyBinding)
-            keyBinds.add(keyBinding)
-        }
-        KeyBindHandler.registerKeyBind(this)
-    }
-
-    constructor(keyBinding: KeyBinding) {
-        this.keyBinding = keyBinding
-        KeyBindHandler.registerKeyBind(this)
     }
 
     /**
