@@ -26,9 +26,4 @@ internal object KeyBindHandler {
 
         keyBinds.forEach(KeyBind::onTick)
     }
-
-    @SubscribeEvent
-    fun onKeyInput(event: InputEvent.KeyInputEvent) {
-        keyBinds.forEach(KeyBind::onKeyInput)
-    }
 }
