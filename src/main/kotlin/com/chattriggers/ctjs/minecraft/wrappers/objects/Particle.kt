@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.objects
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
+import java.awt.Color
 
 //#if MC>10809
 //$$import com.chattriggers.ctjs.minecraft.mixins.MixinParticle
@@ -64,6 +65,18 @@ class Particle(val underlyingEntity: MCParticle) {
     fun setAlpha(a: Float) = apply {
         underlyingEntity.setAlphaF(a)
     }
+
+    /**
+     * Returns the color of the Particle
+     *
+     * @return A [java.awt.Color] with the R, G, B and A values
+     */
+    fun getColor(): Color = Color(
+        underlyingEntity.redColorF,
+        underlyingEntity.greenColorF,
+        underlyingEntity.blueColorF,
+        underlyingEntity.alpha
+    )
 
     /**
      * Sets the amount of ticks this particle will live for
