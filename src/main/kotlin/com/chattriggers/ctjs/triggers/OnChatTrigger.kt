@@ -12,7 +12,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     private var formatted: Boolean = false
     private var caseInsensitive: Boolean = false
     private lateinit var criteriaPattern: Regex
-    private var parameters = mutableListOf<Parameter?>()
+    private val parameters = mutableListOf<Parameter?>()
     private var triggerIfCanceled: Boolean = true
 
     /**
@@ -38,7 +38,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
 
         when (chatCriteria) {
             is String -> {
-                formatted = "&" in chatCriteria
+                formatted = Regex("[&\u00a7]") in chatCriteria
 
                 val replacedCriteria = Regex.escape(chatCriteria.replace("\n", "->newLine<-"))
                     .replace(Regex("\\\$\\{[^*]+?}"), "\\\\E(.+)\\\\Q")
@@ -61,7 +61,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
                     if ("" == it) ".+" else it
                 }
 
-                formatted = "&" in source
+                formatted = Regex("[&\u00a7]") in source
             }
             else -> throw IllegalArgumentException("Expected String or Regexp Object")
         }
@@ -83,7 +83,8 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
      * @return the trigger object for method chaining
      */
     fun setParameter(parameter: String) = apply {
-        parameters = mutableListOf(Parameter.getParameterByName(parameter))
+        parameters.clear()
+        addParameter(parameter)
     }
 
     /**
