@@ -203,10 +203,12 @@ fun injectTextComponentClick() = inject {
         val local1 = shadowLocal<MCITextComponent?>()
 
         code {
-            val event = CancellableEvent()
-            TriggerType.ChatComponentClicked.triggerAll(local1?.let(::TextComponent), event)
-            if (event.isCancelled())
-                iReturn(0)
+            if (local1 != null) {
+                val event = CancellableEvent()
+                TriggerType.ChatComponentClicked.triggerAll(TextComponent(local1), event)
+                if (event.isCancelled())
+                    iReturn(0)
+            }
         }
     }
 }
