@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
+import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
@@ -90,7 +91,7 @@ object ClientListener {
                     val packetReceivedEvent = CancellableEvent()
 
                     if (msg is Packet<*>) {
-                        Context.enter()
+                        JSContextFactory.enterContext()
                         try {
                             TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
                         } finally {
@@ -106,7 +107,7 @@ object ClientListener {
                     val packetSentEvent = CancellableEvent()
 
                     if (msg is Packet<*>) {
-                        Context.enter()
+                        JSContextFactory.enterContext()
                         try {
                             TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
                         } finally {
