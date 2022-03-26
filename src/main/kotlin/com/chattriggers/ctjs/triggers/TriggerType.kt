@@ -56,6 +56,7 @@ enum class TriggerType {
     RenderChat,
     RenderHelmet,
     RenderScoreboard,
+    RenderTitle,
     RenderEntity,
     PostGuiRender,
     PreItemRender,
