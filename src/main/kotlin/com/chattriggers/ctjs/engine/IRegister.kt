@@ -565,6 +565,24 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs before the title and subtitle are drawn.
+     *
+     * Passes through three arguments:
+     * - The title
+     * - The subtitle
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderTitle(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderTitle, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs before the block highlight box is drawn.
      *
      * Passes through two arguments:
