@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -185,7 +186,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     private fun getChatMessage(chatEvent: ClientChatReceivedEvent, chatMessage: String) =
         if (formatted)
             EventLib.getMessage(chatEvent).formattedText.replace("\u00a7", "&")
-        else chatMessage
+        else ChatLib.removeFormatting(chatMessage)
 
     // helper method to get the variables to pass through
     private fun getVariables(chatMessage: String) =
