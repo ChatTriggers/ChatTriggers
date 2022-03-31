@@ -9,17 +9,19 @@ import org.fife.ui.rsyntaxtextarea.Theme
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
-import java.awt.event.WindowEvent
 import java.io.File
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.util.*
 import javax.swing.*
 import javax.swing.text.DefaultCaret
 
 class Console(val loader: ILoader?) {
-    private val frame: JFrame = JFrame(
+    private val frame = JFrame(
         "ChatTriggers ${Reference.MODVERSION} ${loader?.getLanguage()?.langName ?: "Default"} Console"
     )
 
-    private val textArea = JTextArea()
+    private val textArea = JTextPane()
     private val inputField = RSyntaxTextArea(5, 1).apply {
         syntaxEditingStyle = loader?.getLanguage()?.syntaxStyle ?: SyntaxConstants.SYNTAX_STYLE_NONE
         Theme.load(javaClass.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml")).apply(this)
@@ -128,12 +130,13 @@ class Console(val loader: ILoader?) {
         }
     }
 
-    fun println(obj: Any) {
+    @JvmOverloads
+    fun println(obj: Any, logType: LogType = LogType.INFO, customColor: Color? = null) {
         SwingUtilities.invokeLater {
             try {
-                writer.println(obj.toString())
+                writer.println(obj.toString(), logType, customColor)
             } catch (exception: Exception) {
-                println(obj.toString())
+                println(obj.toString(), logType, customColor)
             }
         }
     }
@@ -162,11 +165,19 @@ class Console(val loader: ILoader?) {
                     } else it
                 }.toTypedArray()
 
-                error.printStackTrace(writer.printWriter)
+                printErrorWithColor(error)
             } catch (ignored: Throwable) {
                 error.printStackTrace()
             }
         }
+    }
+
+    private fun printErrorWithColor(error: Throwable) {
+        val sw = StringWriter()
+        error.printStackTrace(PrintWriter(sw))
+        val stacktrace = sw.toString()
+
+        writer.println(stacktrace, LogType.ERROR)
     }
 
     fun showConsole() {
@@ -266,11 +277,6 @@ class Console(val loader: ILoader?) {
 
         frame.toFront()
         frame.repaint()
-    }
-
-    protected fun finalize() {
-        frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-        frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
     }
 
     companion object {

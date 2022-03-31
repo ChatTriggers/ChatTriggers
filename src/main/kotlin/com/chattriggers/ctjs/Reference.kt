@@ -13,6 +13,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.Console
+import com.chattriggers.ctjs.utils.console.LogType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import com.google.common.reflect.ClassPath
@@ -129,5 +130,7 @@ object Reference {
     }
 }
 
-fun Any.printToConsole(console: Console = ModuleManager.generalConsole) = console.println(this)
+fun Any.printToConsole(console: Console = ModuleManager.generalConsole, logType: LogType = LogType.INFO) {
+    console.println(this, logType)
+}
 fun Throwable.printTraceToConsole(console: Console = ModuleManager.generalConsole) = console.printStackTrace(this)
