@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.console.Console
+import com.chattriggers.ctjs.utils.console.LogType
 import dev.falsehonesty.asmhelper.dsl.*
 import dev.falsehonesty.asmhelper.dsl.instructions.InsnListBuilder
 import dev.falsehonesty.asmhelper.dsl.writers.AccessType
@@ -114,7 +115,7 @@ object JSLoader : ILoader {
 
             if (asmFunction == null) {
                 "Asm entry for module ${module.name} has an invalid export. " +
-                        "An Asm entry must have a default export of a function.".printToConsole(console)
+                        "An Asm entry must have a default export of a function.".printToConsole(console, LogType.WARN)
                 return@wrapInContext
             }
 
@@ -124,7 +125,7 @@ object JSLoader : ILoader {
             println("Error loading asm entry for module ${module.name}")
             e.printStackTrace()
             e.printTraceToConsole(console)
-            "Error loading asm entry for module ${module.name}".printToConsole(console)
+            "Error loading asm entry for module ${module.name}".printToConsole(console, LogType.ERROR)
         }
     }
 
@@ -155,7 +156,7 @@ object JSLoader : ILoader {
             println("Error loading module ${module.name}")
             e.printStackTrace()
 
-            "Error loading module ${module.name}".printToConsole(console)
+            "Error loading module ${module.name}".printToConsole(console, LogType.ERROR)
             e.printTraceToConsole(console)
         }
     }
@@ -173,7 +174,10 @@ object JSLoader : ILoader {
                 println("Error loading asm function $functionURI in module ${module.name}.")
                 e.printStackTrace()
 
-                "Error loading asm function $functionURI in module ${module.name}.".printToConsole(console)
+                "Error loading asm function $functionURI in module ${module.name}.".printToConsole(
+                    console,
+                    LogType.ERROR,
+                )
                 e.printTraceToConsole(console)
 
                 // If we can't resolve the target function correctly, we will return
@@ -224,7 +228,7 @@ object JSLoader : ILoader {
         _methodDesc: String,
         _fieldMaps: Map<String, String>,
         _methodMaps: Map<String, String>,
-        _insnList: (Wrapper) -> Unit
+        _insnList: (Wrapper) -> Unit,
     ) {
         inject {
             className = _className
@@ -249,7 +253,7 @@ object JSLoader : ILoader {
         _methodName: String,
         _methodDesc: String,
         _methodMaps: Map<String, String>,
-        _numberToRemove: Int
+        _numberToRemove: Int,
     ) {
         remove {
             className = _className
@@ -267,7 +271,7 @@ object JSLoader : ILoader {
         _fieldName: String,
         _fieldDesc: String,
         _initialValue: Any?,
-        _accessTypes: List<AccessType>
+        _accessTypes: List<AccessType>,
     ) {
         applyField {
             className = _className

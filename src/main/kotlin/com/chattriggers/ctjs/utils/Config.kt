@@ -122,4 +122,37 @@ object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml"), sorting
         category = "Console",
     )
     var consoleBackgroundColor = Color(21, 21, 21)
+
+    @Property(
+        PropertyType.SWITCH,
+        name = "Use custom console colors for errors or warnings",
+        category = "Console",
+    )
+    var consoleErrorAndWarningColors = false
+
+    @Property(
+        PropertyType.COLOR,
+        name = "Console error color",
+        category = "Console",
+    )
+    var consoleErrorColor = Color(225, 65, 73)
+
+    @Property(
+        PropertyType.COLOR,
+        name = "Console warning color",
+        category = "Console",
+    )
+    var consoleWarningColor = Color(248, 191, 84)
+
+    init {
+        addDependency(
+            javaClass.getDeclaredField("consoleErrorColor"),
+            javaClass.getDeclaredField("consoleErrorAndWarningColors"),
+        )
+
+        addDependency(
+            javaClass.getDeclaredField("consoleWarningColor"),
+            javaClass.getDeclaredField("consoleErrorAndWarningColors"),
+        )
+    }
 }

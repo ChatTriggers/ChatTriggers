@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.Config
+import com.chattriggers.ctjs.utils.console.LogType
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.world.WorldEvent
@@ -78,7 +79,7 @@ object ModuleUpdater {
 
             if (newMetadata.version == null) {
                 ("Remote version of module ${metadata.name} has no version numbers, so it will " +
-                        "not be updated!").printToConsole()
+                        "not be updated!").printToConsole(logType = LogType.WARN)
                 return
             } else if (metadata.version != null && metadata.version.toVersion() >= newMetadata.version.toVersion()) {
                 return
@@ -95,7 +96,7 @@ object ModuleUpdater {
                 tryReportChangelog(module.metadata)
             }
         } catch (e: Exception) {
-            "Can't find page for ${metadata.name}".printToConsole()
+            "Can't find page for ${metadata.name}".printToConsole(logType = LogType.WARN)
         }
     }
 

@@ -16,15 +16,17 @@ global.setTimeout = function (func, delay) {
     }).start();
 };
 
+const LogType = com.chattriggers.ctjs.utils.console.LogType;
+
 // simplified methods
-global.print = function (toPrint) {
+global.print = function (toPrint, color = null) {
     if (toPrint === null) {
         toPrint = 'null';
     } else if (toPrint === undefined) {
         toPrint = 'undefined';
     }
 
-    Console.println(toPrint);
+    Console.println(toPrint, LogType.INFO, color);
 };
 
 /**
@@ -185,12 +187,12 @@ global.print = function (toPrint) {
 
 
     // Printer
-    _.println = function (s) {
-        Console.println(s);
+    _.printlnWarn = function (s) {
+        Console.println(s, LogType.WARN);
     };
 
     _.printLineToStdErr = function (s) {
-        Console.println(s);
+        Console.println(s, LogType.ERROR);
     };
 
     _.printLineToStdOut = function (s) {
@@ -218,9 +220,12 @@ global.print = function (toPrint) {
             : "");
         switch (msgType) {
             case "assert":
-            case "error":
+            case "error": {
+                this.printLineToStdErr(prefix + indent + msg);
+                break;
+            }
             case "warn": {
-                _.printLineToStdErr(prefix + indent + msg);
+                _.printlnWarn(prefix + indent + msg);
                 break;
             }
             default: {
