@@ -173,6 +173,46 @@ object FileLib {
         }.toString(Charset.forName("UTF-8"))
     }
 
+    /**
+     * Deletes a file at the specified location
+     *
+     * @param importName name of the import
+     * @param fileName name of the file
+     * @return if the file was deleted
+     */
+    @JvmStatic
+    fun delete(importName: String, fileName: String): Boolean {
+        return delete(absoluteLocation(importName, fileName))
+    }
+
+    /**
+     * Deletes a file at the specified location
+     *
+     * @param fileLocation the path of the file
+     * @return if the file was deleted
+     */
+    @JvmStatic
+    fun delete(fileLocation: String): Boolean {
+        return File(fileLocation).delete()
+    }
+
+    /**
+     * Deletes a directory at the specified location
+     *
+     * @param dir the directory to delete
+     * @return if the directory was deleted
+     */
+    @JvmStatic
+    fun deleteDirectory(dir: String): Boolean {
+        return deleteDirectory(File(dir))
+    }
+
+    /**
+     * Deletes a directory at the specified location
+     *
+     * @param dir the directory to delete
+     * @return if the directory was deleted
+     */
     @JvmStatic
     fun deleteDirectory(dir: File): Boolean {
         return dir.deleteRecursively()
