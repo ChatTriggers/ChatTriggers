@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.asm
+import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
 import net.minecraft.client.gui.inventory.GuiContainer
@@ -14,6 +15,39 @@ import net.minecraft.inventory.Slot
 fun injectGuiContainer() {
     injectDrawForeground()
     injectDrawSlotHighlight()
+    injectDrawSlot()
+}
+
+fun injectDrawSlot() = inject {
+    className = "net/minecraft/client/gui/inventory/GuiContainer"
+    methodName = "drawSlot"
+    methodDesc = "(Lnet/minecraft/inventory/Slot;)V"
+
+    at = At(InjectionPoint.HEAD)
+
+    methodMaps = mapOf(
+            "func_146977_a" to "drawSlot",
+    )
+
+    fieldMaps = mapOf("theSlot" to "field_147006_u")
+
+    codeBlock {
+
+        val local0 = shadowLocal<GuiContainer>()
+        val local1 = shadowLocal<Slot>()
+
+        code {
+            val event = CancellableEvent()
+
+            GlStateManager.pushMatrix()
+            TriggerType.DrawSlot.triggerAll(local1, local0, event)
+            GlStateManager.popMatrix()
+
+            if (event.isCancelled()) {
+                methodReturn()
+            }
+        }
+    }
 }
 
 fun injectDrawForeground() = inject {

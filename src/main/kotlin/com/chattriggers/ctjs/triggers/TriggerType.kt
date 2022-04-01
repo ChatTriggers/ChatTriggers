@@ -34,6 +34,7 @@ enum class TriggerType {
     ServerConnect,
     ServerDisconnect,
     GuiClosed,
+    DrawSlot,
     GuiDrawBackground,
 
     // rendering
