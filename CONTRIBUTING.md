@@ -5,8 +5,9 @@ and set up your run configurations.
 
 ChatTriggers uses a custom loading plugin, and as such, requires modifying the
 run configuration in your development environment. 
-Add `-Dfml.coreMods.load=com.chattriggers.ctjs.launch.plugin.CTJSLoadingPlugin` to your list of
-VM Options.
+Add `-Dfml.coreMods.load=dev.falsehonesty.asmhelper.core.AsmHelperLoadingPlugin` to your list of
+VM Options. Additionally, the run configuration needs to be modified to get Essential working.
+Add `--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker` to the program arguments.
 
 
 # Developing for different versions
