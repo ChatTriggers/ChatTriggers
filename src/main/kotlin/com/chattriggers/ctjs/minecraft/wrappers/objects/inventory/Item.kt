@@ -15,6 +15,9 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumChatFormatting
+import kotlin.math.round
+import kotlin.math.roundToLong
 
 //#if MC>10809
 //$$ import net.minecraft.client.util.ITooltipFlag
@@ -88,7 +91,7 @@ class Item {
     fun getID(): Int = MCItem.getIdFromItem(item)
 
     fun setStackSize(stackSize: Int) = apply {
-        itemStack = ItemStack(item, stackSize)
+        itemStack.stackSize = stackSize
     }
 
     fun getStackSize(): Int {
@@ -188,14 +191,15 @@ class Item {
     }
 
     /**
-     * Renders the item icon to the client's overlay.
+     * Renders the item icon to the client's overlay, with customizable overlay information.
      *
      * @param x the x location
      * @param y the y location
      * @param scale the scale
+     * @param z the z level to draw the item at
      */
     @JvmOverloads
-    fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f) {
+    fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f, z: Float = 200f) {
         val itemRenderer = Client.getMinecraft().renderItem
 
         GlStateManager.scale(scale, scale, 1f)
@@ -205,7 +209,7 @@ class Item {
         RenderHelper.enableStandardItemLighting()
         RenderHelper.enableGUIStandardItemLighting()
 
-        itemRenderer.zLevel = 200f
+        itemRenderer.zLevel = z
         itemRenderer.renderItemIntoGUI(itemStack, 0, 0)
 
         Renderer.finishDraw()
@@ -233,3 +237,4 @@ class Item {
 
     override fun toString(): String = itemStack.toString()
 }
+

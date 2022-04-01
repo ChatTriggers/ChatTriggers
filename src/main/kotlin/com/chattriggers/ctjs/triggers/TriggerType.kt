@@ -34,6 +34,7 @@ enum class TriggerType {
     ServerConnect,
     ServerDisconnect,
     GuiClosed,
+    RenderSlot,
     GuiDrawBackground,
 
     // rendering
@@ -60,6 +61,8 @@ enum class TriggerType {
     RenderEntity,
     PostGuiRender,
     PreItemRender,
+    RenderItemIntoGui,
+    RenderItemOverlayIntoGui,
     RenderSlotHighlight,
     PostRenderEntity,
     RenderTileEntity,

@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.TriggerType
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.methodReturn
 import dev.falsehonesty.asmhelper.dsl.inject
+import net.minecraft.client.renderer.GlStateManager
 
 fun injectGuiIngame() {
     injectRenderScoreboard()
@@ -29,3 +31,4 @@ fun injectRenderScoreboard() = inject {
         }
     }
 }
+

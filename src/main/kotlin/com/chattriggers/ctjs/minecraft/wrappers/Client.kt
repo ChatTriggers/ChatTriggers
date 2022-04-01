@@ -1,11 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Slot
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
+import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
@@ -232,6 +234,19 @@ abstract class Client {
              */
             @JvmStatic
             fun get(): GuiScreen? = getMinecraft().currentScreen
+
+            /**
+             * Gets the slot under the mouse in the current gui, if one exists.
+             *
+             * @return the [Slot] under the mouse
+             */
+            @JvmStatic
+            fun getSlotUnderMouse(): Slot? {
+                val screen: GuiScreen? = get()
+                return if ((screen is GuiContainer) && (screen.slotUnderMouse != null)) {
+                    Slot(screen.slotUnderMouse)
+                } else null
+            }
 
             /**
              * Closes the currently open gui

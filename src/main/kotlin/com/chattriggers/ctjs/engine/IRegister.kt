@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.engine
 
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Slot
 import com.chattriggers.ctjs.triggers.*
 import com.chattriggers.ctjs.utils.kotlin.External
 import kotlin.reflect.KFunction
@@ -1196,7 +1197,7 @@ interface IRegister {
      * Passes through five arguments:
      * - The mouseX position
      * - The mouseY position
-     * - The Slot
+     * - The MC Slot
      * - The GuiContainer
      *
      * Available modifications:
@@ -1210,12 +1211,60 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs before a slot is drawn in a container
+     * This is useful for hiding "background" items in containers used as GUIs.
+     *
+     * Passes through three arguments:
+     * - The [Slot] being drawn
+     * - The MC GUIScreen that is being drawn
+     * - The event, which can be cancelled
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderSlot(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderSlot, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before each item is drawn into a GUI.
+     *
+     * Passes through four arguments:
+     * - The [Item]
+     * - The x position
+     * - The y position
+     * - The event, which can be cancelled.
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderItemIntoGui(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderItemIntoGui, getImplementationLoader())
+    }
+
+    /**
+     * Registers a new trigger that runs before each item overlay (stack size and damage bar) is drawn.
+     *
+     * Passes through four arguments:
+     * - The [Item]
+     * - The x position
+     * - The y position
+     * - The event, which can be cancelled.
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderItemOverlayIntoGui(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderItemOverlayIntoGui, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs before the hovered slot square is drawn.
      *
      * Passes through six arguments:
      * - The mouseX position
      * - The mouseY position
-     * - The Slot
+     * - The MC Slot
      * - The GuiContainer
      * - The event, which can be cancelled
      *
