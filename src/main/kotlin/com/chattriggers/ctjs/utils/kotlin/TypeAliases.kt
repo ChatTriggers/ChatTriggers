@@ -11,6 +11,7 @@ internal typealias MCScore = net.minecraft.scoreboard.Score
 internal typealias MCTileEntity = net.minecraft.tileentity.TileEntity
 internal typealias MCScoreboard = net.minecraft.scoreboard.Scoreboard
 internal typealias MCItem = net.minecraft.item.Item
+internal typealias MCSlot = net.minecraft.inventory.Slot
 
 //#if MC<=10809
 internal typealias MCParticle = net.minecraft.client.particle.EntityFX

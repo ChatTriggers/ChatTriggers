@@ -60,6 +60,7 @@ global.PlayerMP = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.en
 
 global.Inventory = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Inventory");
 global.Item = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item");
+global.Slot = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Slot");
 
 global.Action = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.Action");
 global.ClickAction = Java.type("com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.action.ClickAction");
