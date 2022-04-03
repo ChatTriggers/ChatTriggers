@@ -1,7 +1,9 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Slot
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.MCSlot
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint
 import dev.falsehonesty.asmhelper.dsl.code.CodeBlock.Companion.asm
@@ -10,7 +12,6 @@ import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.inventory.Slot
 
 fun injectGuiContainer() {
     injectDrawForeground()
@@ -34,13 +35,13 @@ fun injectDrawSlot() = inject {
     codeBlock {
 
         val local0 = shadowLocal<GuiContainer>()
-        val local1 = shadowLocal<Slot>()
+        val local1 = shadowLocal<MCSlot>()
 
         code {
             val event = CancellableEvent()
 
             GlStateManager.pushMatrix()
-            TriggerType.DrawSlot.triggerAll(local1, local0, event)
+            TriggerType.DrawSlot.triggerAll(Slot(local1), local0, event)
             GlStateManager.popMatrix()
 
             if (event.isCancelled()) {
@@ -74,7 +75,7 @@ fun injectDrawForeground() = inject {
     fieldMaps = mapOf("theSlot" to "field_147006_u")
 
     codeBlock {
-        val theSlot = shadowField<Slot?>()
+        val theSlot = shadowField<MCSlot?>()
 
         val local0 = shadowLocal<GuiContainer>()
         val local1 = shadowLocal<Int>()
@@ -113,7 +114,7 @@ fun injectDrawSlotHighlight() = inject {
     fieldMaps = mapOf("theSlot" to "field_147006_u")
 
     codeBlock {
-        val theSlot = shadowField<Slot?>()
+        val theSlot = shadowField<MCSlot?>()
 
         val local0 = shadowLocal<GuiContainer>()
         val local1 = shadowLocal<Int>()

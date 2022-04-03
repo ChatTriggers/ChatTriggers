@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.engine
 
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Slot
 import com.chattriggers.ctjs.triggers.*
 import com.chattriggers.ctjs.utils.kotlin.External
 import kotlin.reflect.KFunction
@@ -871,8 +872,8 @@ interface IRegister {
      * This is useful for hiding "background" items in containers used as GUIs.
      *
      * Passes through three arguments:
-     * - The MC Slot being drawn
-     * - The [GUIScreen] that is being drawn
+     * - The [Slot] being drawn
+     * - The MC GUIScreen that is being drawn
      * - The event, which can be cancelled
      */
 
@@ -1191,7 +1192,7 @@ interface IRegister {
      * Passes through five arguments:
      * - The mouseX position
      * - The mouseY position
-     * - The Slot
+     * - The MC Slot
      * - The GuiContainer
      *
      * Available modifications:
@@ -1210,7 +1211,7 @@ interface IRegister {
      * Passes through six arguments:
      * - The mouseX position
      * - The mouseY position
-     * - The Slot
+     * - The MC Slot
      * - The GuiContainer
      * - The event, which can be cancelled
      *
