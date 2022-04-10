@@ -245,6 +245,7 @@ class Item {
      * @param scale the scale
      * @param z the z level to draw the item at
      */
+    @JvmOverloads
     fun drawWithOverlay(x: Float = 0f, y: Float = 0f, scale: Float = 1f, z: Float = 200f) {
         val stackSize = this.getStackSize()
         var overlayText: String? = null
@@ -255,7 +256,7 @@ class Item {
         }
 
         var durability: Float? = if (this.isDamagable()) (this.getDamage().toFloat() / this.getMaxDamage()) else null
-        if (durability == 1f) durability = null
+        if (durability == 0f) durability = null
         this.draw(x, y, scale, z, overlayText, durability)
     }
 
