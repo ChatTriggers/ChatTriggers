@@ -15,6 +15,9 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumChatFormatting
+import kotlin.math.round
+import kotlin.math.roundToLong
 
 //#if MC>10809
 //$$ import net.minecraft.client.util.ITooltipFlag
@@ -88,7 +91,7 @@ class Item {
     fun getID(): Int = MCItem.getIdFromItem(item)
 
     fun setStackSize(stackSize: Int) = apply {
-        itemStack = ItemStack(item, stackSize)
+        itemStack.stackSize = stackSize
     }
 
     fun getStackSize(): Int {
@@ -188,14 +191,17 @@ class Item {
     }
 
     /**
-     * Renders the item icon to the client's overlay.
+     * Renders the item icon to the client's overlay, with customizable overlay information.
      *
      * @param x the x location
      * @param y the y location
      * @param scale the scale
+     * @param z the z level to draw the item at
+     * @param overlayText text to display over item, e.g. stack size
+     * @param durability rendered as durability bar; 0 is undamaged and 1 is max damage.
      */
     @JvmOverloads
-    fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f) {
+    fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f, z: Float = 200f, overlayText: String? = null, durability: Float? = null) {
         val itemRenderer = Client.getMinecraft().renderItem
 
         GlStateManager.scale(scale, scale, 1f)
@@ -205,10 +211,52 @@ class Item {
         RenderHelper.enableStandardItemLighting()
         RenderHelper.enableGUIStandardItemLighting()
 
-        itemRenderer.zLevel = 200f
+        itemRenderer.zLevel = z
         itemRenderer.renderItemIntoGUI(itemStack, 0, 0)
+        GlStateManager.translate(-x, -y, z + 110)
 
+        Renderer.retainTransforms(true)
+
+        if (overlayText != null) {
+            val textWidth = Renderer.getStringWidth(overlayText)
+            Renderer.drawStringWithShadow(overlayText, x + 17 - textWidth, y + 9)
+        }
+
+        // Dimensions and color from Minecraft vanilla rendering code
+        if (durability != null) {
+            val barWidth = round(13 - durability * 13)
+            val green = (255 - durability * 255).roundToLong()
+            val barColorBackground = Renderer.color((255 - green) / 4L, 64L, 0L, 255L)
+            val barColor = Renderer.color(255 - green, green, 0L, 255L)
+            Renderer.drawRect(Renderer.BLACK, x + 2, y + 13, 13f, 2f)
+            Renderer.drawRect(barColorBackground, x + 2, y + 13, 12f, 1f)
+            Renderer.drawRect(barColor, x + 2, y + 13, barWidth, 1f)
+        }
+
+        Renderer.retainTransforms(false)
         Renderer.finishDraw()
+    }
+
+    /**
+     * Renders the item, stack size, and damage bar (if applicable) to the client's overlay.
+     *
+     * @param x the x location
+     * @param y the y location
+     * @param scale the scale
+     * @param z the z level to draw the item at
+     */
+    fun drawWithOverlay(x: Float = 0f, y: Float = 0f, scale: Float = 1f, z: Float = 200f) {
+        val stackSize = this.getStackSize()
+        var overlayText: String? = null
+        if (stackSize > 1) {
+            overlayText = stackSize.toString()
+        } else if (stackSize < 1) {
+            overlayText = EnumChatFormatting.RED.toString() + stackSize.toString()
+        }
+
+        var durability: Float? = if (this.isDamagable()) (this.getDamage().toFloat() / this.getMaxDamage()) else null
+        if (durability == 1f) durability = null
+        this.draw(x, y, scale, z, overlayText, durability)
     }
 
     /**
@@ -233,3 +281,4 @@ class Item {
 
     override fun toString(): String = itemStack.toString()
 }
+
