@@ -9,21 +9,7 @@ import java.awt.Color
 //#endif
 
 @External
-class Particle(val underlyingEntity: MCParticle) {
-    //#if MC<=10809
-    fun getX() = underlyingEntity.posX
-
-    fun getY() = underlyingEntity.posY
-
-    fun getZ() = underlyingEntity.posZ
-    //#else
-    //$$fun getX() = (underlyingEntity as MixinParticle).posX
-    //$$
-    //$$fun getY() = (underlyingEntity as MixinParticle).posY
-    //$$
-    //$$fun getZ() = (underlyingEntity as MixinParticle).posZ
-    //#endif
-
+class Particle(val underlyingEntity: MCParticle) : Entity(underlyingEntity) {
     fun setX(x: Double) = apply {
         underlyingEntity.setPosition(x, getY(), getZ())
     }
@@ -44,13 +30,26 @@ class Particle(val underlyingEntity: MCParticle) {
         underlyingEntity.multiplyVelocity(multiplier)
     }
 
-    fun setColor(r: Float, g: Float, b: Float) = apply {
-        underlyingEntity.setRBGColorF(r, g, b)
+    /**
+     * Sets the color of the particle.
+     * @param red the red value between 0 and 1.
+     * @param green the green value between 0 and 1.
+     * @param blue the blue value between 0 and 1.
+     */
+    fun setColor(red: Float, green: Float, blue: Float) = apply {
+        underlyingEntity.setRBGColorF(red, green, blue)
     }
 
-    fun setColor(r: Float, g: Float, b: Float, a: Float) = apply {
-        setColor(r, g, b)
-        setAlpha(a)
+    /**
+     * Sets the color of the particle.
+     * @param red the red value between 0 and 1.
+     * @param green the green value between 0 and 1.
+     * @param blue the blue value between 0 and 1.
+     * @param alpha the alpha value between 0 and 1.
+     */
+    fun setColor(red: Float, green: Float, blue: Float, alpha: Float) = apply {
+        setColor(red, green, blue)
+        setAlpha(alpha)
     }
 
     fun setColor(color: Long) = apply {
@@ -62,8 +61,12 @@ class Particle(val underlyingEntity: MCParticle) {
         setColor(red, green, blue, alpha)
     }
 
-    fun setAlpha(a: Float) = apply {
-        underlyingEntity.setAlphaF(a)
+    /**
+     * Sets the alpha of the particle.
+     * @param alpha the alpha value between 0 and 1.
+     */
+    fun setAlpha(alpha: Float) = apply {
+        underlyingEntity.setAlphaF(alpha)
     }
 
     /**
