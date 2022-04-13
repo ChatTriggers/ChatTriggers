@@ -1,22 +1,19 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
+import com.chattriggers.ctjs.minecraft.wrappers.entity.Particle
+import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity
+import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
-import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
-import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
-import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
-import com.chattriggers.ctjs.minecraft.wrappers.entity.Particle
-import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.multiplayer.WorldClient
-import net.minecraft.client.renderer.RenderGlobal
 import net.minecraft.util.EnumParticleTypes
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.jvm.isAccessible
 
 //#if MC>=11202
 //$$ import net.minecraft.util.ResourceLocation
@@ -313,21 +310,20 @@ object World {
             z: Double,
             xSpeed: Double,
             ySpeed: Double,
-            zSpeed: Double
+            zSpeed: Double,
         ): Particle {
             val particleType = EnumParticleTypes.valueOf(particle)
 
-            val fx = RenderGlobal::class.declaredMemberFunctions.firstOrNull {
-                it.name == "spawnEntityFX" || it.name == "func_174974_b"
-            }?.let {
-                it.isAccessible = true
-                it.call(
-                    Client.getMinecraft().renderGlobal,
-                    particleType.particleID,
-                    particleType.shouldIgnoreRange,
-                    x, y, z, xSpeed, ySpeed, zSpeed, intArrayOf()
-                ) as MCParticle
-            }!!
+            val fx = Client.getMinecraft().renderGlobal.spawnEntityFX(
+                particleType.particleID,
+                particleType.shouldIgnoreRange,
+                x,
+                y,
+                z,
+                xSpeed,
+                ySpeed,
+                zSpeed
+            )
 
             /*val method = ReflectionHelper.findMethod(
                     RenderGlobal::class.java,
