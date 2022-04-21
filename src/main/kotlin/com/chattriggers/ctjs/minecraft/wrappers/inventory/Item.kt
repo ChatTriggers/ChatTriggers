@@ -1,20 +1,21 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory
 
+import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
-import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
-import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.MCItem
+import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
+import com.chattriggers.ctjs.utils.kotlin.*
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
+import net.minecraftforge.common.util.Constants
 
 //#if MC>10809
 //$$ import net.minecraft.client.util.ITooltipFlag
@@ -24,7 +25,7 @@ import net.minecraft.item.ItemStack
 @External
 class Item {
     val item: MCItem
-    var itemStack: ItemStack
+    val itemStack: ItemStack
 
     constructor(itemStack: ItemStack) {
         item = itemStack.item
@@ -33,16 +34,19 @@ class Item {
 
     constructor(itemName: String) {
         item = MCItem.getByNameOrId(itemName)
+            ?: throw IllegalArgumentException("Item with name or id $itemName does not exist")
         itemStack = ItemStack(item)
     }
 
     constructor(itemID: Int) {
         item = MCItem.getItemById(itemID)
+            ?: throw IllegalArgumentException("Item with id $itemID does not exist")
         itemStack = ItemStack(item)
     }
 
     constructor(block: BlockType) {
         item = MCItem.getItemFromBlock(block.mcBlock)
+            ?: throw IllegalArgumentException("BlockType $block does not exist")
         itemStack = ItemStack(item)
     }
 
@@ -127,7 +131,15 @@ class Item {
      *
      * @return the item's stack display name
      */
-    fun getName(): String = if (getID() == 0) "air" else itemStack.displayName
+    fun getName(): String = itemStack.displayName
+
+    /**
+     * Sets the item's name.
+     * @param name the new name
+     */
+    fun setName(name: String) = apply {
+        itemStack.setStackDisplayName(ChatLib.addColor(name))
+    }
 
     fun getEnchantments(): Map<String, Int> {
         return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
@@ -179,12 +191,44 @@ class Item {
 
     fun isDamagable(): Boolean = itemStack.isItemStackDamageable
 
+    /**
+     * Gets the item's name and lore lines.
+     *
+     * @return the item's name and lore lines
+     */
     fun getLore(): List<String> {
         //#if MC<=10809
         return itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips)
         //#else
         //$$ return itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED)
         //#endif
+    }
+
+    /**
+     * Sets the item's lore. Does not set the item's name, use [setName] instead.
+     * @param loreLines the new lore lines
+     */
+    fun setLore(vararg loreLines: String) = apply {
+        if (itemStack.tagCompound == null) {
+            itemStack.tagCompound = MCNBTTagCompound()
+        }
+
+        val lore = getNBT().getCompoundTag("tag").let {
+            if (!it.rawNBT.hasKey("display")) {
+                it["display"] = MCNBTTagCompound()
+            }
+            it.getCompoundTag("display")
+        }.let {
+            if (!it.rawNBT.hasKey("display")) {
+                it["Lore"] = MCNBTTagList()
+            }
+            it.getTagList("Lore", Constants.NBT.TAG_STRING)
+        }
+
+        lore.tagList.clear()
+        loreLines.forEach {
+            lore.appendTag(MCNBTTagString(ChatLib.addColor(it)))
+        }
     }
 
     /**
