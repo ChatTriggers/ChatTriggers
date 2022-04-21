@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
+import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.input.Keyboard
 
 @Suppress("LeakingThis")
@@ -23,12 +24,12 @@ abstract class KeyBind {
     }
 
     /**
-     * Creates a new key bind, editable in the user's controls.
+     * Creates a new keybind, editable in the user's controls.
      *
+     * @param description what the keybind does
+     * @param keyCode the keycode which the keybind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
      * @param category the keybind category the keybind will be in
-     * @param description what the key bind does
-     * @param keyCode the keycode which the key bind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
-     * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
+     * @see [org.lwjgl.input.Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
     @JvmOverloads
     constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
@@ -38,16 +39,20 @@ abstract class KeyBind {
         }
 
         if (possibleDuplicate != null) {
-            if (possibleDuplicate in keyBinds)
+            if (possibleDuplicate in customKeyBindings) {
                 keyBinding = possibleDuplicate
-            else throw IllegalArgumentException(
+            } else throw IllegalArgumentException(
                 "KeyBind already exists! To get a KeyBind from an existing Minecraft KeyBinding, " +
                         "use the other KeyBind constructor or Client.getKeyBindFromKey."
             )
         } else {
+            if (category !in KeyBinding.getKeybinds()) {
+                uniqueCategories[category] = 0
+            }
+            uniqueCategories[category] = uniqueCategories[category]!! + 1
             keyBinding = KeyBinding(description, keyCode, category)
             ClientRegistry.registerKeyBinding(keyBinding)
-            keyBinds.add(keyBinding)
+            customKeyBindings.add(keyBinding)
         }
     }
 
@@ -102,11 +107,25 @@ abstract class KeyBind {
     fun isPressed(): Boolean = keyBinding.isPressed
 
     /**
+     * Gets the description of the key.
+     *
+     * @return the description
+     */
+    fun getDescription(): String = keyBinding.keyDescription
+
+    /**
      * Gets the key code of the key.
      *
      * @return the integer key code
      */
     fun getKeyCode(): Int = keyBinding.keyCode
+
+    /**
+     * Gets the category of the key.
+     *
+     * @return the category
+     */
+    fun getCategory(): String = keyBinding.keyCategory
 
     /**
      * Sets the state of the key.
@@ -117,7 +136,49 @@ abstract class KeyBind {
 
     internal abstract fun getLoader(): ILoader
 
+    override fun toString() = "KeyBind{" +
+            "description=${getDescription()}, " +
+            "keyCode=${getKeyCode()}, " +
+            "category=${getCategory()}" +
+            "}"
+
     companion object {
-        private val keyBinds = mutableListOf<KeyBinding>()
+        private val customKeyBindings = mutableListOf<KeyBinding>()
+        private val uniqueCategories = mutableMapOf<String, Int>()
+
+        private fun removeKeyBinding(keyBinding: KeyBinding) {
+            Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(
+                Client.getMinecraft().gameSettings.keyBindings,
+                keyBinding
+            )
+            val category = keyBinding.keyCategory
+
+            if (category in uniqueCategories) {
+                uniqueCategories[category] = uniqueCategories[category]!! - 1
+
+                if (uniqueCategories[category] == 0) {
+                    uniqueCategories.remove(category)
+                    KeyBinding.getKeybinds().remove(category)
+                }
+            }
+        }
+
+        @JvmStatic
+        fun removeKeyBind(keyBind: KeyBind) {
+            val keyBinding = keyBind.keyBinding
+            if (keyBinding !in customKeyBindings) return
+
+            removeKeyBinding(keyBinding)
+            customKeyBindings.remove(keyBinding)
+            KeyBindHandler.unregisterKeyBind(keyBind)
+        }
+
+        @JvmStatic
+        fun clearKeyBinds() {
+            val copy = KeyBindHandler.getKeyBinds().toList()
+            copy.forEach(::removeKeyBind)
+            customKeyBindings.clear()
+            KeyBindHandler.clearKeyBinds()
+        }
     }
 }

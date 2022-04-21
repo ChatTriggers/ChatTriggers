@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
-import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBindHandler
+import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.World
@@ -39,11 +39,11 @@ object Reference {
         DisplayHandler.clearDisplays()
         ModuleManager.teardown()
         MouseListener.clearListeners()
-        KeyBindHandler.clearKeyBinds()
+        KeyBind.clearKeyBinds()
 
         Command.activeCommands.values.toList().forEach(Command::unregister)
 
-        Client.getMinecraft().addScheduledTask { 
+        Client.getMinecraft().addScheduledTask {
             CTJS.images.forEach { it.getTexture().deleteGlTexture() }
             CTJS.images.clear()
         }
@@ -118,4 +118,5 @@ object Reference {
 fun Any.printToConsole(console: Console = ModuleManager.generalConsole, logType: LogType = LogType.INFO) {
     console.println(this, logType)
 }
+
 fun Throwable.printTraceToConsole(console: Console = ModuleManager.generalConsole) = console.printStackTrace(this)

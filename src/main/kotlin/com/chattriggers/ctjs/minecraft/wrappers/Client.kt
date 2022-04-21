@@ -18,8 +18,7 @@ import kotlin.math.roundToInt
 
 abstract class Client {
     /**
-     * Get the [KeyBind] from an already existing
-     * Minecraft KeyBinding, otherwise, returns null.
+     * Get the [KeyBind] from an already existing Minecraft KeyBinding, otherwise, returns null.
      *
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
      * @return the [KeyBind] from a Minecraft KeyBinding, or null if one doesn't exist
@@ -28,23 +27,33 @@ abstract class Client {
     abstract fun getKeyBindFromKey(keyCode: Int): KeyBind?
 
     /**
-     * Get the [KeyBind] from an already existing
-     * Minecraft KeyBinding, else, return a new one.
+     * Get the [KeyBind] from an already existing Minecraft KeyBinding, else, return a new one.
      *
-     * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
-     * @return the [KeyBind] from a Minecraft KeyBinding, or null if one doesn't exist
+     * @param keyCode the keycode which the keybind will respond to, see Keyboard below. Ex. Keyboard.KEY_A
+     * @param description the description of the keybind
+     * @param category the keybind category the keybind will be in
+     * @return the [KeyBind] from a Minecraft KeyBinding, or a new one if one doesn't exist
      * @see [org.lwjgl.input.Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
     abstract fun getKeyBindFromKey(keyCode: Int, description: String, category: String): KeyBind
 
+    /**
+     * Get the [KeyBind] from an already existing Minecraft KeyBinding, else, return a new one.
+     * This will create the [KeyBind] with the default category "ChatTriggers".
+     *
+     * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
+     * @param description the description of the keybind
+     * @return the [KeyBind] from a Minecraft KeyBinding, or a new one if one doesn't exist
+     * @see [org.lwjgl.input.Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
+     */
     abstract fun getKeyBindFromKey(keyCode: Int, description: String): KeyBind
 
     /**
      * Get the [KeyBind] from an already existing
-     * Minecraft KeyBinding, else, null.
+     * Minecraft KeyBinding, otherwise, returns null.
      *
-     * @param description the key binding's original description
-     * @return the key bind, or null if one doesn't exist
+     * @param description the description of the keybind
+     * @return the [KeyBind], or null if one doesn't exist
      */
     abstract fun getKeyBindFromDescription(description: String): KeyBind?
 

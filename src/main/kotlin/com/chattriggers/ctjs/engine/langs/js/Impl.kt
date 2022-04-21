@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.minecraft.objects.display.Display
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayLine
 import com.chattriggers.ctjs.minecraft.objects.gui.Gui
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
+import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBindHandler
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import net.minecraft.client.settings.KeyBinding
 import org.mozilla.javascript.NativeObject
@@ -51,16 +52,15 @@ class JSKeyBind : KeyBind {
 
 object JSClient : Client() {
     override fun getKeyBindFromKey(keyCode: Int): KeyBind? {
-        return getMinecraft().gameSettings.keyBindings
-            .firstOrNull { it.keyCode == keyCode }
-            ?.let(::JSKeyBind)
+        return KeyBindHandler.getKeyBinds()
+            .find { it.getKeyCode() == keyCode }
+            ?: getMinecraft().gameSettings.keyBindings
+                .find { it.keyCode == keyCode }
+                ?.let(::JSKeyBind)
     }
 
     override fun getKeyBindFromKey(keyCode: Int, description: String, category: String): KeyBind {
-        return getMinecraft().gameSettings.keyBindings
-            .firstOrNull { it.keyCode == keyCode }
-            ?.let(::JSKeyBind)
-            ?: JSKeyBind(description, keyCode, category)
+        return getKeyBindFromKey(keyCode) ?: JSKeyBind(description, keyCode, category)
     }
 
     override fun getKeyBindFromKey(keyCode: Int, description: String): KeyBind {
@@ -68,9 +68,11 @@ object JSClient : Client() {
     }
 
     override fun getKeyBindFromDescription(description: String): KeyBind? {
-        return getMinecraft().gameSettings.keyBindings
-            .firstOrNull { it.keyDescription == description }
-            ?.let(::JSKeyBind)
+        return KeyBindHandler.getKeyBinds()
+            .find { it.getDescription() == description }
+            ?: getMinecraft().gameSettings.keyBindings
+                .find { it.keyDescription == description }
+                ?.let(::JSKeyBind)
     }
 
     val currentGui = Client.Companion.currentGui
