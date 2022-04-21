@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import dev.falsehonesty.asmhelper.dsl.At

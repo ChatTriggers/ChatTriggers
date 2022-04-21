@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.triggers.TriggerType
 import dev.falsehonesty.asmhelper.dsl.At
 import dev.falsehonesty.asmhelper.dsl.InjectionPoint

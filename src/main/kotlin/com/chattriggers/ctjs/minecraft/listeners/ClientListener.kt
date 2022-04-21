@@ -5,9 +5,9 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockFace
-import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockFace
+import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config

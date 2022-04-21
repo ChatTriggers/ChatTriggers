@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
-import com.chattriggers.ctjs.minecraft.wrappers.objects.TileEntity
+import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.MCTileEntity
 import dev.falsehonesty.asmhelper.dsl.At

@@ -1,8 +1,7 @@
 package com.chattriggers.ctjs.launch.plugin
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Item
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Slot
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.MCSlot
 import dev.falsehonesty.asmhelper.dsl.At
@@ -13,7 +12,6 @@ import dev.falsehonesty.asmhelper.dsl.inject
 import dev.falsehonesty.asmhelper.dsl.instructions.Descriptor
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.item.ItemStack
 
 fun injectGuiContainer() {
     injectDrawSlot()

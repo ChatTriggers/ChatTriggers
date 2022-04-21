@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.Slot
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind

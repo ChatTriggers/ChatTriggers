@@ -1,13 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Chunk
-import com.chattriggers.ctjs.minecraft.wrappers.objects.Particle
-import com.chattriggers.ctjs.minecraft.wrappers.objects.TileEntity
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockPos
-import com.chattriggers.ctjs.minecraft.wrappers.objects.block.BlockType
-import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity
-import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.world.block.Block
+import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
+import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
+import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
+import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
+import com.chattriggers.ctjs.minecraft.wrappers.entity.Particle
+import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle

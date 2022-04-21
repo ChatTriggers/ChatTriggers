@@ -4,7 +4,7 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.MathLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
-import com.chattriggers.ctjs.minecraft.wrappers.objects.entity.PlayerMP
+import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer

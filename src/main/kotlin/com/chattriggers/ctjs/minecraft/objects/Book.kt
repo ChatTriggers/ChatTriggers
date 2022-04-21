@@ -4,8 +4,8 @@ import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagCompound
-import com.chattriggers.ctjs.minecraft.wrappers.objects.inventory.nbt.NBTTagList
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagList
 import com.chattriggers.ctjs.utils.kotlin.*
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
