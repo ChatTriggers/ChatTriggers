@@ -145,7 +145,7 @@ global.cancel = event => {
     }
 };
 
-global.register = TriggerRegister.register;
+global.register = (type, method) => TriggerRegister.register(type, method);
 
 // String prototypes
 String.prototype.addFormatting = function () {
