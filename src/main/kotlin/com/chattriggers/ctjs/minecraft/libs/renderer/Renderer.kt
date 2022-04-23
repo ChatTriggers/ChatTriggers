@@ -312,13 +312,14 @@ object Renderer {
         finishDraw()
     }
 
+    @JvmOverloads
     @JvmStatic
-    fun drawString(text: String, x: Float, y: Float) {
+    fun drawString(text: String, x: Float, y: Float, shadow: Boolean = false) {
         val fr = getFontRenderer()
         var newY = y
 
         ChatLib.addColor(text).split("\n").forEach {
-            fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), false)
+            fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), shadow)
 
             newY += fr.FONT_HEIGHT
         }
@@ -326,10 +327,7 @@ object Renderer {
     }
 
     @JvmStatic
-    fun drawStringWithShadow(text: String, x: Float, y: Float) {
-        getFontRenderer().drawString(ChatLib.addColor(text), x, y, colorized?.toInt() ?: 0xffffffff.toInt(), true)
-        finishDraw()
-    }
+    fun drawStringWithShadow(text: String, x: Float, y: Float) = drawString(text, x, y, true)
 
     @JvmStatic
     fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) {
