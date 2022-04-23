@@ -3,10 +3,16 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.utils.kotlin.External
+import com.chattriggers.ctjs.utils.kotlin.getOption
 import net.minecraft.client.renderer.GlStateManager
+import org.mozilla.javascript.NativeObject
 
 @External
-class Text @JvmOverloads constructor(private var string: String, private var x: Float = 0f, private var y: Float = 0f) {
+class Text {
+    private lateinit var string: String
+    private var x: Float = 0f
+    private var y: Float = 0f
+
     private val lines = mutableListOf<String>()
 
     private var color = 0xffffffff
@@ -19,8 +25,24 @@ class Text @JvmOverloads constructor(private var string: String, private var x: 
     private var maxLines = Int.MAX_VALUE
     private var scale = 1f
 
-    init {
-        updateFormatting()
+    @JvmOverloads
+    constructor(string: String, x: Float = 0f, y: Float = 0f) {
+        setString(string)
+        setX(x)
+        setY(y)
+    }
+
+    constructor(string: String, config: NativeObject) {
+        setString(string)
+        setColor(config.getOption("color", 0xffffffff).toLong())
+        setFormatted(config.getOption("formatted", true).toBoolean())
+        setShadow(config.getOption("shadow", false).toBoolean())
+        setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
+        setX(config.getOption("x", 0f).toFloat())
+        setY(config.getOption("y", 0f).toFloat())
+        setMaxLines((config.getOption("maxLines", Int.MAX_VALUE)).toDouble().toInt())
+        setScale(config.getOption("scale", 1f).toFloat())
+        setMaxWidth(config.getOption("maxWidth", 0).toInt())
     }
 
     fun getString(): String = string

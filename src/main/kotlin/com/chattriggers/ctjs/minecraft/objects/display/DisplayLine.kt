@@ -10,6 +10,8 @@ import com.chattriggers.ctjs.triggers.OnTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
+import com.chattriggers.ctjs.utils.kotlin.getOption
+import com.chattriggers.ctjs.utils.kotlin.getOptionNullable
 import org.mozilla.javascript.NativeObject
 
 @External
@@ -43,16 +45,12 @@ abstract class DisplayLine {
 
     constructor(text: String, config: NativeObject) {
         setText(text)
-
-        textColor = config.getOption("textColor", null)?.toLong()
-        backgroundColor = config.getOption("backgroundColor", null)?.toLong()
-
-        setAlign(config.getOption("align", null))
-        setBackground(config.getOption("background", null))
-    }
-
-    private fun NativeObject?.getOption(key: String, default: Any?): String? {
-        return (this?.get(key) ?: default)?.toString()
+        setTextColor(config.getOptionNullable("textColor", null)?.toLong())
+        setShadow(config.getOption("shadow", false).toBoolean())
+        setScale(config.getOption("scale", 1f).toFloat())
+        setAlign(config.getOptionNullable("align", null))
+        setBackground(config.getOptionNullable("background", null))
+        setBackgroundColor(config.getOptionNullable("backgroundColor", null)?.toLong())
     }
 
     init {
