@@ -2,12 +2,13 @@ package com.chattriggers.ctjs.minecraft.objects.display
 
 import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.NotAbstract
+import com.chattriggers.ctjs.utils.kotlin.getOption
 import org.mozilla.javascript.NativeObject
 import java.util.concurrent.CopyOnWriteArrayList
 
 @External
 @NotAbstract
-abstract class Display {
+abstract class Display() {
     private var lines = CopyOnWriteArrayList<DisplayLine>()
 
     private var renderX = 0f
@@ -26,32 +27,22 @@ abstract class Display {
 
     internal var registerType = DisplayHandler.RegisterType.RENDER_OVERLAY
 
-    constructor() {
+    init {
         @Suppress("LeakingThis")
         DisplayHandler.registerDisplay(this)
     }
 
-    constructor(config: NativeObject?) {
-        shouldRender = config.getOption("shouldRender", true).toBoolean()
-        renderX = config.getOption("renderX", 0).toFloat()
-        renderY = config.getOption("renderY", 0).toFloat()
-
+    constructor(config: NativeObject?) : this() {
         setBackgroundColor(config.getOption("backgroundColor", 0x50000000).toLong())
-        setBackground(config.getOption("background", DisplayHandler.Background.NONE))
         setTextColor(config.getOption("textColor", 0xffffffff).toLong())
+        setBackground(config.getOption("background", DisplayHandler.Background.NONE))
         setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
         setOrder(config.getOption("order", DisplayHandler.Order.DOWN))
-
-        minWidth = config.getOption("minWidth", 0f).toFloat()
-
+        setRenderX(config.getOption("renderX", 0f).toFloat())
+        setRenderY(config.getOption("renderY", 0f).toFloat())
+        setShouldRender(config.getOption("shouldRender", true).toBoolean())
+        setMinWidth(config.getOption("minWidth", 0f).toFloat())
         setRegisterType(config.getOption("registerType", DisplayHandler.RegisterType.RENDER_OVERLAY))
-
-        @Suppress("LeakingThis")
-        DisplayHandler.registerDisplay(this)
-    }
-
-    private fun NativeObject?.getOption(key: String, default: Any): String {
-        return (this?.get(key) ?: default).toString()
     }
 
     fun getBackgroundColor(): Long = backgroundColor
@@ -185,8 +176,7 @@ abstract class Display {
      *
      * @return the register type
      */
-    fun getRegisterType() : DisplayHandler.RegisterType = registerType
-
+    fun getRegisterType(): DisplayHandler.RegisterType = registerType
 
     /**
      * Sets the type of register the display will render under.
