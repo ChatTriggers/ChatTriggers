@@ -24,8 +24,6 @@ object WorldListener {
 
     @SubscribeEvent
     fun onWorldLoad(event: WorldEvent.Load) {
-        if (!shouldTriggerWorldLoad)
-            TriggerType.GameLoad.triggerAll()
         playerList.clear()
         shouldTriggerWorldLoad = true
     }
