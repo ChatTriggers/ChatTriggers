@@ -15,6 +15,7 @@ import java.io.File
 fun injectMinecraft() {
     injectDispatchKeypresses()
     injectDisplayGuiScreen()
+    injectStartGame()
 }
 
 fun injectDispatchKeypresses() = inject {
@@ -106,6 +107,21 @@ fun injectDisplayGuiScreen() = inject {
     codeBlock {
         code {
             TriggerType.GuiClosed.triggerAll(Minecraft.getMinecraft().currentScreen)
+        }
+    }
+}
+
+fun injectStartGame() = inject {
+    className = "net/minecraft/client/Minecraft"
+    methodName = "startGame"
+    methodDesc = "()V"
+    at = At(InjectionPoint.TAIL)
+
+    methodMaps = mapOf("func_71384_a" to "startGame")
+
+    codeBlock {
+        code {
+            TriggerType.GameLoad.triggerAll()
         }
     }
 }
