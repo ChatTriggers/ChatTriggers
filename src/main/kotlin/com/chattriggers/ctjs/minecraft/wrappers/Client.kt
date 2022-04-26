@@ -25,7 +25,7 @@ abstract class Client {
      *
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
      * @return the [KeyBind] from a Minecraft KeyBinding, or null if one doesn't exist
-     * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
+     * @see [org.lwjgl.input.Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
     abstract fun getKeyBindFromKey(keyCode: Int): KeyBind?
 
@@ -35,7 +35,7 @@ abstract class Client {
      *
      * @param keyCode the keycode to search for, see Keyboard below. Ex. Keyboard.KEY_A
      * @return the [KeyBind] from a Minecraft KeyBinding, or null if one doesn't exist
-     * @see [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
+     * @see [org.lwjgl.input.Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html)
      */
     abstract fun getKeyBindFromKey(keyCode: Int, description: String, category: String): KeyBind
 

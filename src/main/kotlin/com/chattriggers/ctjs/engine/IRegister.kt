@@ -687,7 +687,7 @@ interface IRegister {
      * This trigger is asynchronous.
      *
      * Passes through one argument:
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP] object
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP] object
      *
      * Available modifications:
      * - [OnTrigger.setPriority] Sets the priority
@@ -723,7 +723,7 @@ interface IRegister {
      *
      * Passes through five arguments:
      * - The [Item] that is picked up
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP] that picked up the item
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP] that picked up the item
      * - The item's position vector
      * - The item's motion vector
      * - The event, which can be cancelled
@@ -743,7 +743,7 @@ interface IRegister {
      *
      * Passes through five arguments:
      * - The [Item] that is dropped up
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.PlayerMP] that dropped the item
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP] that dropped the item
      * - The item's position vector
      * - The item's motion vector
      * - The event, which can be cancelled
@@ -890,7 +890,7 @@ interface IRegister {
      * This is useful for drawing custom backgrounds.
      *
      * Passes through one argument:
-     * - The [GuiScreen] that is being drawn
+     * - The [net.minecraft.client.gui.GuiScreen] that is being drawn
      *
      */
     fun registerGuiDrawBackground(method: Any): OnRegularTrigger {
@@ -1103,7 +1103,7 @@ interface IRegister {
      * Registers a new trigger that runs whenever an entity is rendered
      *
      * Passes through four arguments:
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity]
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.Entity]
      * - The position as a Vector3f
      * - The partial ticks
      * - The event, which can be cancelled
@@ -1122,7 +1122,7 @@ interface IRegister {
      * Registers a new trigger that runs after an entity is rendered
      *
      * Passes through three arguments:
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity]
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.Entity]
      * - The position as a Vector3f
      * - The partial ticks
      *
@@ -1282,7 +1282,7 @@ interface IRegister {
      * Registers a new trigger that runs whenever a particle is spawned
      *
      * Passes through three arguments:
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.Particle]
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.Particle]
      * - The [net.minecraft.util.EnumParticleTypes]
      * - The event, which can be cancelled
      *
@@ -1300,7 +1300,7 @@ interface IRegister {
      * Registers a new trigger that runs whenever the player has left clicked on an entity
      *
      * Passes through three arguments:
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.entity.Entity] that is being hit
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.Entity] that is being hit
      * - The event, which can be cancelled
      *
      * Available modifications:
@@ -1320,7 +1320,7 @@ interface IRegister {
      * when first left clicked.
      *
      * Passes through two arguments:
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.objects.block.Block] being hit
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.world.block.Block] being hit
      * - The event, which can be cancelled
      *
      * Available modifications:
