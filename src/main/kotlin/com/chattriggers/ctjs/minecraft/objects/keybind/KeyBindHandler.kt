@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.minecraft.objects.keybind
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.InputEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 
 internal object KeyBindHandler {
