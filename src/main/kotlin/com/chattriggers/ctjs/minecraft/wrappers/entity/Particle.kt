@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import java.awt.Color
 
@@ -8,7 +7,6 @@ import java.awt.Color
 //$$import com.chattriggers.ctjs.minecraft.mixins.MixinParticle
 //#endif
 
-@External
 class Particle(val underlyingEntity: MCParticle) : Entity(underlyingEntity) {
     fun setX(x: Double) = apply {
         underlyingEntity.setPosition(x, getY(), getZ())

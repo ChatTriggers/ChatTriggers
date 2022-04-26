@@ -7,7 +7,6 @@ import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.printToConsole
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.ChatLine
 import net.minecraftforge.client.ClientCommandHandler
@@ -16,7 +15,6 @@ import org.mozilla.javascript.regexp.NativeRegExp
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
 
-@External
 object ChatLib {
     /**
      * Prints text in the chat.

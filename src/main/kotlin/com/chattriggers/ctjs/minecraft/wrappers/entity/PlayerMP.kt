@@ -3,13 +3,11 @@ package com.chattriggers.ctjs.minecraft.wrappers.entity
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.fml.relauncher.ReflectionHelper
 
-@External
 class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
     fun isSpectator() = player.isSpectator
 

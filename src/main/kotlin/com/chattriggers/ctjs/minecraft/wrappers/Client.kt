@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
-import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
 import net.minecraft.client.gui.inventory.GuiContainer
@@ -17,7 +16,6 @@ import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 import kotlin.math.roundToInt
 
-@External
 abstract class Client {
     /**
      * Get the [KeyBind] from an already existing

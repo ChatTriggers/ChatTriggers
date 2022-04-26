@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.minecraft.objects.message
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.utils.kotlin.*
 
-@External
 class TextComponent {
 
     lateinit var chatComponentText: MCITextComponent

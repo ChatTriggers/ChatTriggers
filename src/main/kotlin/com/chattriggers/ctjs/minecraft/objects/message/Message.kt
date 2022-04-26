@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBaseTextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCChatPacket
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
@@ -15,7 +14,6 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 //$$ import net.minecraft.util.text.ChatType
 //#endif
 
-@External
 class Message {
     private lateinit var chatMessage: MCITextComponent
 

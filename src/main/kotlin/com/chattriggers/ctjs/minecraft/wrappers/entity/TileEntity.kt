@@ -3,10 +3,8 @@ package com.chattriggers.ctjs.minecraft.wrappers.entity
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTileEntity
 
-@External
 class TileEntity(val tileEntity: MCTileEntity) {
     fun getX(): Int = getBlock().x
 

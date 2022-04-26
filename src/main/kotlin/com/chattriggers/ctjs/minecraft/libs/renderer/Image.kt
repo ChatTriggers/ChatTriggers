@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.CTJS
-import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
@@ -12,7 +11,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.imageio.ImageIO
 
-@External
 class Image constructor(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
     private val textureWidth = image?.width ?: 0

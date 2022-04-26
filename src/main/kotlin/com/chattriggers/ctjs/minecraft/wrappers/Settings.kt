@@ -1,12 +1,10 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.world.EnumDifficulty
 
-@External
 class Settings {
     fun getSettings() = Client.getMinecraft().gameSettings
 

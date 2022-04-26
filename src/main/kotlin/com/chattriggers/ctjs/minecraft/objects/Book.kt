@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 
-@External
 class Book(bookName: String) {
     private var bookScreen: GuiScreenBook? = null
     private val book: ItemStack

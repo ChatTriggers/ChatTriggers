@@ -4,12 +4,10 @@ import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import com.chattriggers.ctjs.triggers.*
-import com.chattriggers.ctjs.utils.kotlin.External
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.memberFunctions
 
 @Suppress("unused")
-@External
 interface IRegister {
     companion object {
         private val methodMap = mutableMapOf<String, KFunction<*>>()

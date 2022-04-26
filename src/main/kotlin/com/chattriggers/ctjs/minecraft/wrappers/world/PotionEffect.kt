@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.world
 
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
 import net.minecraft.client.resources.I18n
 
@@ -8,7 +7,6 @@ import net.minecraft.client.resources.I18n
 //$$ import net.minecraft.potion.Potion
 //#endif
 
-@External
 class PotionEffect(val effect: MCPotionEffect) {
     /**
      * Returns the translation key of the potion.

@@ -3,11 +3,9 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
-import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 
-@External
 class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger(method, type, loader) {
     private lateinit var chatCriteria: Any
     private var formatted: Boolean = false

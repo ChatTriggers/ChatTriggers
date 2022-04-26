@@ -2,12 +2,10 @@ package com.chattriggers.ctjs.minecraft.wrappers.world
 
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCChunk
 import net.minecraft.world.EnumSkyBlock
 
-@External
 class Chunk(val chunk: MCChunk) {
     /**
      * Gets the x position of the chunk

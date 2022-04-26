@@ -1,13 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCScore
 import com.chattriggers.ctjs.utils.kotlin.MCScoreboard
 import net.minecraft.scoreboard.ScoreObjective
 import net.minecraft.scoreboard.ScorePlayerTeam
 import net.minecraftforge.client.GuiIngameForge
 
-@External
 object Scoreboard {
     private var needsUpdate = true
     private var scoreboardNames = mutableListOf<Score>()

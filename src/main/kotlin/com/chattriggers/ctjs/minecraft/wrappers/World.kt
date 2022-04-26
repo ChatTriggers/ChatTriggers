@@ -8,7 +8,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import net.minecraft.block.state.IBlockState
@@ -22,7 +21,6 @@ import net.minecraft.util.EnumParticleTypes
 //$$
 //#endif
 
-@External
 object World {
     /**
      * Gets Minecraft's WorldClient object

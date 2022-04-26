@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.objects.message.Message
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCGameType
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCScore
@@ -10,7 +9,6 @@ import com.google.common.collect.Ordering
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
 
-@External
 object TabList {
     private val playerComparator = Ordering.from(PlayerComparator())
 
