@@ -92,7 +92,7 @@ class Sound(private val config: NativeObject) {
         val x = (config.getOrDefault("x", Player.getX()) as Number).toFloat()
         val y = (config.getOrDefault("y", Player.getY()) as Number).toFloat()
         val z = (config.getOrDefault("z", Player.getZ()) as Number).toFloat()
-        val attModel = config.getOrDefault("attenuation", 1) as Int
+        val attModel = (config.getOrDefault("attenuation", 1) as Number).toInt()
         val distOrRoll = 16
 
         if (stream) {
