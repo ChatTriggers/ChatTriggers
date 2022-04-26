@@ -2,12 +2,10 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.getOption
 import net.minecraft.client.renderer.GlStateManager
 import org.mozilla.javascript.NativeObject
 
-@External
 class Text {
     private lateinit var string: String
     private var x: Float = 0f

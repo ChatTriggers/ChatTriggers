@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
 import net.minecraft.client.audio.SoundManager
 import net.minecraftforge.fml.relauncher.ReflectionHelper
@@ -34,7 +33,6 @@ import java.net.MalformedURLException
  *
  * @param config the JavaScript config object
  */
-@External
 class Sound(private val config: NativeObject) {
     private var sndSystem: SoundSystem? = null
     private val source: String = config["source"] as String

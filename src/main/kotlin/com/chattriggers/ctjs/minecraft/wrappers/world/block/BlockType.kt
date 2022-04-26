@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.world.block
 
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCBlock
 import net.minecraft.block.state.IBlockState
 
@@ -11,7 +10,6 @@ import net.minecraft.block.state.IBlockState
  * in the world. If a reference to a particular block is needed,
  * use [Block]
  */
-@External
 class BlockType(val mcBlock: MCBlock) {
     constructor(block: BlockType) : this(block.mcBlock)
 

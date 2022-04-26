@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.utils.Config
-import com.chattriggers.ctjs.utils.kotlin.External
 import java.io.*
 import java.net.URL
 import java.net.UnknownHostException
@@ -9,7 +8,6 @@ import java.nio.charset.Charset
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-@External
 object FileLib {
     /**
      * Writes a file to folder in modules.

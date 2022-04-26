@@ -22,7 +22,6 @@ import net.minecraftforge.common.util.Constants
 //$$ import com.chattriggers.ctjs.minecraft.wrappers.World
 //#endif
 
-@External
 class Item {
     val item: MCItem
     var itemStack: ItemStack

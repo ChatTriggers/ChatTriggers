@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
@@ -11,7 +10,6 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-@External
 class Shape(private var color: Long) {
     private val vertexes = mutableListOf<Vector2f>()
     private val reversedVertexes = vertexes.asReversed()

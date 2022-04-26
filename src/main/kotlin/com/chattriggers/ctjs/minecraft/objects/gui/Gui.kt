@@ -6,12 +6,10 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 
-@External
 abstract class Gui : GuiScreen() {
     private var onDraw: OnRegularTrigger? = null
     private var onClick: OnRegularTrigger? = null

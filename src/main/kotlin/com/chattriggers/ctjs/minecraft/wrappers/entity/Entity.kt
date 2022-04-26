@@ -5,14 +5,12 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import net.minecraft.util.Vec3
 import net.minecraft.world.World
 import java.util.*
 
-@External
 open class Entity(val entity: MCEntity) {
     fun getX() = entity.posX
 

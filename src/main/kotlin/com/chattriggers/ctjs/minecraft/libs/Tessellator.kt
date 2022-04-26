@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.minecraft.libs
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Player
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import net.minecraft.client.renderer.GlStateManager
@@ -11,7 +10,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.util.vector.Vector3f
 import kotlin.math.sqrt
 
-@External
 object Tessellator {
     @JvmStatic
     var partialTicks = 0f

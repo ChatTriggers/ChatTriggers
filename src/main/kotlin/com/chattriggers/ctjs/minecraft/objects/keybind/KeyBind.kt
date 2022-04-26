@@ -4,14 +4,12 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.OnRegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
 import org.lwjgl.input.Keyboard
 
 @Suppress("LeakingThis")
-@External
 abstract class KeyBind {
     private val keyBinding: KeyBinding
     private var onKeyPress: OnRegularTrigger? = null

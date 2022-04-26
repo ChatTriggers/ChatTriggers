@@ -1,8 +1,5 @@
 package com.chattriggers.ctjs.minecraft.libs
 
-import com.chattriggers.ctjs.utils.kotlin.External
-
-@External
 object MathLib {
     /**
      * Maps a number from one range to another.

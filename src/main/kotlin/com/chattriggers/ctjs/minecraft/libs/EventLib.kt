@@ -1,13 +1,11 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 
 //TODO: figure out what is not needed anymore after the kotlin conversion and remove
-@External
 object EventLib {
     @JvmStatic
     fun getType(event: ClientChatReceivedEvent): Int {

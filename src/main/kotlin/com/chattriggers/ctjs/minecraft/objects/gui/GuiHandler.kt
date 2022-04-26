@@ -1,12 +1,10 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.utils.kotlin.External
 import net.minecraft.client.gui.GuiScreen
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 
-@External
 object GuiHandler {
     private var pendingGui: GuiScreen? = null
 

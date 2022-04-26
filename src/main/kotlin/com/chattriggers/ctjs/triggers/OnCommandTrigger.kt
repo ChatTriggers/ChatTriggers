@@ -2,9 +2,7 @@ package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.utils.kotlin.External
 
-@External
 class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.Command, loader) {
     private lateinit var commandName: String
     private var overrideExisting: Boolean = false

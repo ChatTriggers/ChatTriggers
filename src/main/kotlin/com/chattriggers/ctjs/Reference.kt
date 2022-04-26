@@ -14,15 +14,10 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.console.LogType
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.times
-import com.google.common.reflect.ClassPath
-import me.ntrrgc.tsGenerator.TypeScriptGenerator
-import java.io.File
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
-@External
 object Reference {
     const val MODID = "chattriggers"
     const val MODNAME = "ChatTriggers"

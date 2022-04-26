@@ -1,9 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
-import com.chattriggers.ctjs.utils.kotlin.External
 import org.lwjgl.util.vector.Vector2f
 
-@External
 class Rectangle(
     private var color: Long,
     private var x: Float,

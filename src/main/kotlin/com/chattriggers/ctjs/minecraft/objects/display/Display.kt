@@ -1,13 +1,9 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
-import com.chattriggers.ctjs.utils.kotlin.External
-import com.chattriggers.ctjs.utils.kotlin.NotAbstract
 import com.chattriggers.ctjs.utils.kotlin.getOption
 import org.mozilla.javascript.NativeObject
 import java.util.concurrent.CopyOnWriteArrayList
 
-@External
-@NotAbstract
 abstract class Display() {
     private var lines = CopyOnWriteArrayList<DisplayLine>()
 

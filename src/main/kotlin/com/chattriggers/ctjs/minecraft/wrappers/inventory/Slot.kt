@@ -1,9 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory
 
-import com.chattriggers.ctjs.utils.kotlin.External
 import com.chattriggers.ctjs.utils.kotlin.MCSlot
 
-@External
 class Slot(val mcSlot: MCSlot) {
     fun getIndex(): Int = mcSlot.slotNumber
 
