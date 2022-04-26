@@ -118,16 +118,6 @@ object Reference {
             block()
         }
     }
-
-    internal fun generateBindings() {
-        val classpath = ClassPath.from(javaClass.classLoader)
-        val externalClasses = classpath.getTopLevelClassesRecursive("com.chattriggers.ctjs").map {
-            it.load()
-        }.filter { it.isAnnotationPresent(External::class.java) }.map { it.kotlin }
-
-        val generator = TypeScriptGenerator(rootClasses = externalClasses)
-        File(CTJS.assetsDir.parent, "typings.d.ts").apply { createNewFile() }.writeText(generator.definitionsText)
-    }
 }
 
 fun Any.printToConsole(console: Console = ModuleManager.generalConsole, logType: LogType = LogType.INFO) {
