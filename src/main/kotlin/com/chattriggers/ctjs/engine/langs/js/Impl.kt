@@ -8,8 +8,6 @@ import com.chattriggers.ctjs.minecraft.objects.gui.Gui
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import net.minecraft.client.settings.KeyBinding
-import net.minecraft.network.INetHandler
-import net.minecraft.network.Packet
 import org.mozilla.javascript.NativeObject
 
 /*
