@@ -25,7 +25,7 @@ import net.minecraftforge.common.util.Constants
 @External
 class Item {
     val item: MCItem
-    val itemStack: ItemStack
+    var itemStack: ItemStack
 
     constructor(itemStack: ItemStack) {
         item = itemStack.item
