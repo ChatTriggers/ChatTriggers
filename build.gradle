@@ -89,9 +89,6 @@ dependencies {
     provided("dev.falsehonesty.asmhelper:AsmHelper:1.5.3-$mcVersion") {
         exclude group: "org.jetbrains.kotlin"
     }
-    provided("com.github.falsehonesty:ts-generator:adfb57a8f6") {
-        exclude group: "org.jetbrains.kotlin"
-    }
     provided 'com.fasterxml.jackson.core:jackson-core:2.13.0'
     provided 'com.chattriggers:rhino:1.8.6'
     provided 'com.fifesoft:rsyntaxtextarea:3.1.3'
