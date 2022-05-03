@@ -548,6 +548,22 @@ interface IRegister {
     }
 
     /**
+     * Registers a new trigger that runs before the player's hand is drawn.
+     *
+     * Passes through one argument:
+     * - The event, which can be cancelled
+     *
+     * Available modifications:
+     * - [OnTrigger.setPriority] Sets the priority
+     *
+     * @param method The method to call when the event is fired
+     * @return The trigger for additional modification
+     */
+    fun registerRenderHand(method: Any): OnRegularTrigger {
+        return OnRegularTrigger(method, TriggerType.RenderHand, getImplementationLoader())
+    }
+
+    /**
      * Registers a new trigger that runs before the scoreboard is drawn.
      *
      * Passes through one argument:
