@@ -302,6 +302,11 @@ object ClientListener {
     //$$}
     //#endif
 
+    @SubscribeEvent
+    fun onHandRender(e: RenderHandEvent) {
+        TriggerType.RenderHand.triggerAll(e)
+    }
+
     /**
      * Used as a pass through argument in [com.chattriggers.ctjs.engine.IRegister.registerPlayerInteract].\n
      * Exposed in providedLibs as InteractAction.
