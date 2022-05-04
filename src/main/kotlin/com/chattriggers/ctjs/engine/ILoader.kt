@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.engine
 
 import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
-import com.chattriggers.ctjs.triggers.OnTrigger
+import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
@@ -60,7 +60,7 @@ interface ILoader {
     /**
      * Adds a trigger to this loader to be activated during the game
      */
-    fun addTrigger(trigger: OnTrigger)
+    fun addTrigger(trigger: Trigger)
 
     /**
      * Removes all triggers
@@ -75,12 +75,12 @@ interface ILoader {
     /**
      * Actually calls the method for this trigger in this loader
      */
-    fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>)
+    fun trigger(trigger: Trigger, method: Any, args: Array<out Any?>)
 
     /**
      * Removes a trigger from the current pool
      */
-    fun removeTrigger(trigger: OnTrigger)
+    fun removeTrigger(trigger: Trigger)
 
     /**
      * Save a resource to the OS's filesystem from inside the jar

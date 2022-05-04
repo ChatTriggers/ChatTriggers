@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.minecraft.libs.EventLib
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 
-class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger(method, type, loader) {
+class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(method, type, loader) {
     private lateinit var chatCriteria: Any
     private var formatted: Boolean = false
     private var caseInsensitive: Boolean = false
@@ -25,7 +25,7 @@ class OnChatTrigger(method: Any, type: TriggerType, loader: ILoader) : OnTrigger
     /**
      * Sets the chat criteria for [matchesChatCriteria].
      * Arguments for the trigger's method can be passed in using ${variable}.
-     * Example: `OnChatTrigger.setChatCriteria("<${name}> ${message}");`
+     * Example: `setChatCriteria("<${name}> ${message}");`
      * Use ${*} to match a chat message but ignore the pass through.
      * @param chatCriteria the chat criteria to set
      * @return the trigger object for method chaining

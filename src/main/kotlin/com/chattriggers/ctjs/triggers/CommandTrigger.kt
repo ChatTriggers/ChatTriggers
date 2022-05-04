@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.commands.Command
 import com.chattriggers.ctjs.engine.ILoader
 
-class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, TriggerType.Command, loader) {
+class CommandTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType.Command, loader) {
     private lateinit var commandName: String
     private var overrideExisting: Boolean = false
     private val tabCompletions = mutableListOf<String>()
@@ -41,7 +41,7 @@ class OnCommandTrigger(method: Any, loader: ILoader) : OnTrigger(method, Trigger
     /**
      * Sets the command name.
      * Example:
-     * OnCommandTrigger.setCommandName("test")
+     * setCommandName("test")
      * would result in the command being /test
      *
      * @param commandName The command name

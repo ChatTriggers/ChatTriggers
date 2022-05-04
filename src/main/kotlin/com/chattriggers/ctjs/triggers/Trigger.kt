@@ -3,11 +3,11 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 
-abstract class OnTrigger protected constructor(
+abstract class Trigger protected constructor(
     var method: Any,
     var type: TriggerType,
     protected var loader: ILoader
-) : Comparable<OnTrigger> {
+) : Comparable<Trigger> {
     private var priority: Priority = Priority.NORMAL
 
     init {
@@ -49,7 +49,7 @@ abstract class OnTrigger protected constructor(
 
     abstract fun trigger(args: Array<out Any?>)
 
-    override fun compareTo(other: OnTrigger): Int {
+    override fun compareTo(other: Trigger): Int {
         val ordCmp = priority.ordinal - other.priority.ordinal
         return if (ordCmp == 0)
             hashCode() - other.hashCode()
