@@ -199,8 +199,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerNoteBlockPlay(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.NoteBlockPlay, getImplementationLoader())
+    fun registerNoteBlockPlay(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.NoteBlockPlay, getImplementationLoader())
     }
 
     /**
@@ -218,8 +218,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerNoteBlockChange(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.NoteBlockChange, getImplementationLoader())
+    fun registerNoteBlockChange(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.NoteBlockChange, getImplementationLoader())
     }
 
     /**
@@ -559,8 +559,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHand(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderHand, getImplementationLoader())
+    fun registerRenderHand(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderHand, getImplementationLoader())
     }
 
     /**
@@ -575,8 +575,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderScoreboard(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderScoreboard, getImplementationLoader())
+    fun registerRenderScoreboard(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderScoreboard, getImplementationLoader())
     }
 
     /**
@@ -593,8 +593,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderTitle(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderTitle, getImplementationLoader())
+    fun registerRenderTitle(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderTitle, getImplementationLoader())
     }
 
     /**
@@ -610,8 +610,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerDrawBlockHighlight(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.BlockHighlight, getImplementationLoader())
+    fun registerDrawBlockHighlight(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.BlockHighlight, getImplementationLoader())
     }
 
     /**
@@ -674,8 +674,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiOpened(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiOpened, getImplementationLoader())
+    fun registerGuiOpened(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.GuiOpened, getImplementationLoader())
     }
 
     /**
@@ -748,8 +748,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPickupItem(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PickupItem, getImplementationLoader())
+    fun registerPickupItem(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.PickupItem, getImplementationLoader())
     }
 
     /**
@@ -768,8 +768,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerDropItem(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.DropItem, getImplementationLoader())
+    fun registerDropItem(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.DropItem, getImplementationLoader())
     }
 
     /**
@@ -785,8 +785,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerScreenshotTaken(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ScreenshotTaken, getImplementationLoader())
+    fun registerScreenshotTaken(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.ScreenshotTaken, getImplementationLoader())
     }
 
     /**
@@ -802,8 +802,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerMessageSent(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.MessageSent, getImplementationLoader())
+    fun registerMessageSent(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.MessageSent, getImplementationLoader())
     }
 
     /**
@@ -822,8 +822,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerItemTooltip(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.Tooltip, getImplementationLoader())
+    fun registerItemTooltip(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.Tooltip, getImplementationLoader())
     }
 
     /**
@@ -852,8 +852,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPlayerInteract(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PlayerInteract, getImplementationLoader())
+    fun registerPlayerInteract(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.PlayerInteract, getImplementationLoader())
     }
 
     /**
@@ -907,8 +907,8 @@ interface IRegister {
      * - The [net.minecraft.client.gui.GuiScreen] that is being drawn
      *
      */
-    fun registerGuiDrawBackground(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiDrawBackground, getImplementationLoader())
+    fun registerGuiDrawBackground(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.GuiDrawBackground, getImplementationLoader())
     }
 
     /**
@@ -944,8 +944,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiKey(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiKey, getImplementationLoader())
+    fun registerGuiKey(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.GuiKey, getImplementationLoader())
     }
 
     /**
@@ -965,8 +965,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiMouseClick(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiMouseClick, getImplementationLoader())
+    fun registerGuiMouseClick(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.GuiMouseClick, getImplementationLoader())
     }
 
     /**
@@ -986,8 +986,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiMouseRelease(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiMouseRelease, getImplementationLoader())
+    fun registerGuiMouseRelease(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.GuiMouseRelease, getImplementationLoader())
     }
 
     /**
@@ -1007,8 +1007,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiMouseDrag(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiMouseDrag, getImplementationLoader())
+    fun registerGuiMouseDrag(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.GuiMouseDrag, getImplementationLoader())
     }
 
     /**
@@ -1024,8 +1024,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketSent(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PacketSent, getImplementationLoader())
+    fun registerPacketSent(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.PacketSent, getImplementationLoader())
     }
 
     /**
@@ -1041,8 +1041,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketReceived(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
+    fun registerPacketReceived(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
     }
 
     /**
@@ -1057,8 +1057,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerServerConnect(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
+    fun registerServerConnect(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
     }
 
     /**
@@ -1091,8 +1091,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerChatComponentClicked(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ChatComponentClicked, getImplementationLoader())
+    fun registerChatComponentClicked(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.ChatComponentClicked, getImplementationLoader())
     }
 
     /**
@@ -1109,8 +1109,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerChatComponentHovered(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ChatComponentHovered, getImplementationLoader())
+    fun registerChatComponentHovered(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.ChatComponentHovered, getImplementationLoader())
     }
 
     /**
@@ -1128,8 +1128,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderEntity(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
+    fun registerRenderEntity(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1165,8 +1165,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderTileEntity(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
+    fun registerRenderTileEntity(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
     }
 
     /**
@@ -1236,8 +1236,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderSlot(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderSlot, getImplementationLoader())
+    fun registerRenderSlot(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderSlot, getImplementationLoader())
     }
 
     /**
@@ -1252,8 +1252,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderItemIntoGui(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderItemIntoGui, getImplementationLoader())
+    fun registerRenderItemIntoGui(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderItemIntoGui, getImplementationLoader())
     }
 
     /**
@@ -1268,8 +1268,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderItemOverlayIntoGui(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderItemOverlayIntoGui, getImplementationLoader())
+    fun registerRenderItemOverlayIntoGui(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderItemOverlayIntoGui, getImplementationLoader())
     }
 
     /**
@@ -1288,8 +1288,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderSlotHighlight(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderSlotHighlight, getImplementationLoader())
+    fun registerRenderSlotHighlight(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderSlotHighlight, getImplementationLoader())
     }
 
     /**
@@ -1306,8 +1306,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerSpawnParticle(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.SpawnParticle, getImplementationLoader())
+    fun registerSpawnParticle(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.SpawnParticle, getImplementationLoader())
     }
 
     /**
@@ -1323,8 +1323,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerAttackEntity(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.AttackEntity, getImplementationLoader())
+    fun registerAttackEntity(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.AttackEntity, getImplementationLoader())
     }
 
     /**
@@ -1343,8 +1343,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerHitBlock(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.HitBlock, getImplementationLoader())
+    fun registerHitBlock(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.HitBlock, getImplementationLoader())
     }
 
     fun getImplementationLoader(): ILoader
