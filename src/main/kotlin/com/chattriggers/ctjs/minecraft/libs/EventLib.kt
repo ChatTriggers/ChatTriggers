@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
+import net.minecraftforge.fml.common.eventhandler.Event
 
 //TODO: figure out what is not needed anymore after the kotlin conversion and remove
 object EventLib {
@@ -43,7 +44,10 @@ object EventLib {
             //$$ event.resultSound =null
             //#endif
             is CancellableEvent -> event.setCanceled(true)
-            else -> throw IllegalArgumentException()
+            is Event -> if (event.isCancelable) {
+                event.isCanceled = true
+            } else throw IllegalArgumentException("Attempt to cancel non-cancelable event ${event.javaClass.name}")
+            else -> throw IllegalArgumentException("cancel() expects an Event but received ${event.javaClass.name}")
         }
     }
 }
