@@ -14,11 +14,11 @@
     }
 
     function loadClass(path, className = getClassName(path)) {
-        global[className] = getClass(path, className);
+        global[className] = getClass(path);
     }
 
     function loadInstance(path, className = getClassName(path)) {
-        global[className] = getClass(path, className).INSTANCE;
+        global[className] = getClass(path).INSTANCE;
     }
 
     // Extra libs
@@ -96,13 +96,13 @@
     // Triggers
     loadInstance("com.chattriggers.ctjs.engine.langs.js.JSRegister", "TriggerRegister");
 
-    loadClass("com.chattriggers.ctjs.triggers.OnChatTrigger");
-    loadClass("com.chattriggers.ctjs.triggers.OnCommandTrigger");
-    loadClass("com.chattriggers.ctjs.triggers.OnRegularTrigger");
-    loadClass("com.chattriggers.ctjs.triggers.OnRenderTrigger");
-    loadClass("com.chattriggers.ctjs.triggers.OnSoundPlayTrigger");
-    loadClass("com.chattriggers.ctjs.triggers.OnStepTrigger");
-    loadClass("com.chattriggers.ctjs.triggers.OnTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.ChatTrigger", "OnChatTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.CommandTrigger", "OnCommandTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.RegularTrigger", "OnRegularTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.RenderTrigger", "OnRenderTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.SoundPlayTrigger", "OnSoundPlayTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.StepTrigger", "OnStepTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.Trigger", "OnTrigger");
     global.Priority = OnTrigger.Priority;
     //#if MC<=10809
     global.InteractAction = getClass("net.minecraftforge.event.entity.player.PlayerInteractEvent").Action;

@@ -2,20 +2,19 @@ package com.chattriggers.ctjs.minecraft.objects.keybind
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.triggers.OnRegularTrigger
+import com.chattriggers.ctjs.triggers.RegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
 import org.apache.commons.lang3.ArrayUtils
-import org.lwjgl.input.Keyboard
 
 @Suppress("LeakingThis")
 abstract class KeyBind {
     private val keyBinding: KeyBinding
-    private var onKeyPress: OnRegularTrigger? = null
-    private var onKeyRelease: OnRegularTrigger? = null
-    private var onKeyDown: OnRegularTrigger? = null
+    private var onKeyPress: RegularTrigger? = null
+    private var onKeyRelease: RegularTrigger? = null
+    private var onKeyDown: RegularTrigger? = null
 
     private var down: Boolean = false
 
@@ -61,17 +60,17 @@ abstract class KeyBind {
     }
 
     fun registerKeyPress(method: Any) = run {
-        onKeyPress = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onKeyPress = RegularTrigger(method, TriggerType.Other, getLoader())
         onKeyPress
     }
 
     fun registerKeyRelease(method: Any) = run {
-        onKeyRelease = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onKeyRelease = RegularTrigger(method, TriggerType.Other, getLoader())
         onKeyRelease
     }
 
     fun registerKeyDown(method: Any) = run {
-        onKeyDown = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onKeyDown = RegularTrigger(method, TriggerType.Other, getLoader())
         onKeyDown
     }
 

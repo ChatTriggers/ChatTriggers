@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.commands
 
-import com.chattriggers.ctjs.triggers.OnTrigger
+import com.chattriggers.ctjs.triggers.Trigger
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -11,14 +11,14 @@ import net.minecraftforge.client.ClientCommandHandler
 //#endif
 
 class Command(
-    trigger: OnTrigger,
+    trigger: Trigger,
     private val name: String,
     private val usage: String,
     private val tabCompletionOptions: MutableList<String>,
     private var aliases: MutableList<String>,
     private val overrideExisting: Boolean = false
 ) : CommandBase() {
-    private var triggers = mutableListOf<OnTrigger>()
+    private var triggers = mutableListOf<Trigger>()
 
     init {
         triggers.add(trigger)

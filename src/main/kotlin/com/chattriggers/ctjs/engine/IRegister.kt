@@ -24,7 +24,7 @@ interface IRegister {
      * @param method The name of the method or the actual method to callback when the event is fired
      * @return The trigger for additional modification
      */
-    fun register(triggerType: String, method: Any): OnTrigger {
+    fun register(triggerType: String, method: Any): Trigger {
         val name = triggerType.lowercase()
 
         var func = methodMap[name]
@@ -36,7 +36,7 @@ interface IRegister {
             methodMap[name] = func
         }
 
-        return func.call(this, method) as OnTrigger
+        return func.call(this, method) as Trigger
     }
 
     /**
@@ -47,16 +47,16 @@ interface IRegister {
      * - The chat event, which can be cancelled
      *
      * Available modifications:
-     * - [OnChatTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnChatTrigger.setChatCriteria] Sets the chat criteria
-     * - [OnChatTrigger.setParameter] Sets the chat parameter
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [ChatTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [ChatTrigger.setChatCriteria] Sets the chat criteria
+     * - [ChatTrigger.setParameter] Sets the chat parameter
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerChat(method: Any): OnChatTrigger {
-        return OnChatTrigger(method, TriggerType.Chat, getImplementationLoader())
+    fun registerChat(method: Any): ChatTrigger {
+        return ChatTrigger(method, TriggerType.Chat, getImplementationLoader())
     }
 
     /**
@@ -67,42 +67,42 @@ interface IRegister {
      * - The chat event, which can be cancelled
      *
      * Available modifications:
-     * - [OnChatTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnChatTrigger.setChatCriteria] Sets the chat criteria
-     * - [OnChatTrigger.setParameter] Sets the chat parameter
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [ChatTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [ChatTrigger.setChatCriteria] Sets the chat criteria
+     * - [ChatTrigger.setParameter] Sets the chat parameter
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerActionBar(method: Any): OnChatTrigger {
-        return OnChatTrigger(method, TriggerType.ActionBar, getImplementationLoader())
+    fun registerActionBar(method: Any): ChatTrigger {
+        return ChatTrigger(method, TriggerType.ActionBar, getImplementationLoader())
     }
 
     /**
      * Registers a trigger that runs before the world loads.
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerWorldLoad(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.WorldLoad, getImplementationLoader())
+    fun registerWorldLoad(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.WorldLoad, getImplementationLoader())
     }
 
     /**
      * Registers a new trigger that runs before the world unloads.
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerWorldUnload(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.WorldUnload, getImplementationLoader())
+    fun registerWorldUnload(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.WorldUnload, getImplementationLoader())
     }
 
     /**
@@ -115,13 +115,13 @@ interface IRegister {
      * - The mouse button state (true if button is pressed, false otherwise)
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerClicked(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.Clicked, getImplementationLoader())
+    fun registerClicked(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.Clicked, getImplementationLoader())
     }
 
     /**
@@ -133,13 +133,13 @@ interface IRegister {
      * - The scroll direction
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerScrolled(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.Scrolled, getImplementationLoader())
+    fun registerScrolled(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.Scrolled, getImplementationLoader())
     }
 
     /**
@@ -153,13 +153,13 @@ interface IRegister {
      * - The mouse button
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerDragged(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.Dragged, getImplementationLoader())
+    fun registerDragged(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.Dragged, getImplementationLoader())
     }
 
     /**
@@ -174,14 +174,14 @@ interface IRegister {
      * - The sound event, which can be cancelled
      *
      * Available modifications:
-     * - [OnSoundPlayTrigger.setCriteria] Sets the sound name criteria
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [SoundPlayTrigger.setCriteria] Sets the sound name criteria
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerSoundPlay(method: Any): OnSoundPlayTrigger {
-        return OnSoundPlayTrigger(method, getImplementationLoader())
+    fun registerSoundPlay(method: Any): SoundPlayTrigger {
+        return SoundPlayTrigger(method, getImplementationLoader())
     }
 
     /**
@@ -194,13 +194,13 @@ interface IRegister {
      * - The note block play event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerNoteBlockPlay(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.NoteBlockPlay, getImplementationLoader())
+    fun registerNoteBlockPlay(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.NoteBlockPlay, getImplementationLoader())
     }
 
     /**
@@ -213,13 +213,13 @@ interface IRegister {
      * - The note block change event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerNoteBlockChange(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.NoteBlockChange, getImplementationLoader())
+    fun registerNoteBlockChange(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.NoteBlockChange, getImplementationLoader())
     }
 
     /**
@@ -229,13 +229,13 @@ interface IRegister {
      * - Ticks elapsed
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerTick(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.Tick, getImplementationLoader())
+    fun registerTick(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.Tick, getImplementationLoader())
     }
 
     /**
@@ -245,17 +245,17 @@ interface IRegister {
      * - Steps elapsed
      *
      * Available modifications:
-     * - [OnStepTrigger.setFps] Sets the fps, i.e. how many times this trigger will fire
+     * - [StepTrigger.setFps] Sets the fps, i.e. how many times this trigger will fire
      *      per second
-     * - [OnStepTrigger.setDelay] Sets the delay in seconds, i.e. how many seconds it takes
-     *      to fire. Overrides [OnStepTrigger.setFps].
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [StepTrigger.setDelay] Sets the delay in seconds, i.e. how many seconds it takes
+     *      to fire. Overrides [StepTrigger.setFps].
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerStep(method: Any): OnStepTrigger {
-        return OnStepTrigger(method, getImplementationLoader())
+    fun registerStep(method: Any): StepTrigger {
+        return StepTrigger(method, getImplementationLoader())
     }
 
     /**
@@ -265,13 +265,13 @@ interface IRegister {
      * - Partial ticks elapsed
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderWorld(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.RenderWorld, getImplementationLoader())
+    fun registerRenderWorld(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.RenderWorld, getImplementationLoader())
     }
 
     /**
@@ -281,13 +281,13 @@ interface IRegister {
      * - The render event, which cannot be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderOverlay(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderOverlay, getImplementationLoader())
+    fun registerRenderOverlay(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderOverlay, getImplementationLoader())
     }
 
     /**
@@ -297,14 +297,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderPlayerList(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderPlayerList, getImplementationLoader())
+    fun registerRenderPlayerList(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderPlayerList, getImplementationLoader())
     }
 
     /**
@@ -314,14 +314,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderCrosshair(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderCrosshair, getImplementationLoader())
+    fun registerRenderCrosshair(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderCrosshair, getImplementationLoader())
     }
 
     /**
@@ -331,14 +331,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderDebug(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderDebug, getImplementationLoader())
+    fun registerRenderDebug(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderDebug, getImplementationLoader())
     }
 
     /**
@@ -348,14 +348,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderBossHealth(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderBossHealth, getImplementationLoader())
+    fun registerRenderBossHealth(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderBossHealth, getImplementationLoader())
     }
 
     /**
@@ -365,14 +365,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHealth(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderHealth, getImplementationLoader())
+    fun registerRenderHealth(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderHealth, getImplementationLoader())
     }
 
     /**
@@ -382,14 +382,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderArmor(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderArmor, getImplementationLoader())
+    fun registerRenderArmor(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderArmor, getImplementationLoader())
     }
 
     /**
@@ -399,14 +399,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderFood(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderFood, getImplementationLoader())
+    fun registerRenderFood(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderFood, getImplementationLoader())
     }
 
     /**
@@ -416,14 +416,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderMountHealth(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderMountHealth, getImplementationLoader())
+    fun registerRenderMountHealth(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderMountHealth, getImplementationLoader())
     }
 
     /**
@@ -434,14 +434,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderExperience(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderExperience, getImplementationLoader())
+    fun registerRenderExperience(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderExperience, getImplementationLoader())
     }
 
     /**
@@ -451,14 +451,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHotbar(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderHotbar, getImplementationLoader())
+    fun registerRenderHotbar(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderHotbar, getImplementationLoader())
     }
 
     /**
@@ -468,14 +468,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderAir(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderAir, getImplementationLoader())
+    fun registerRenderAir(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderAir, getImplementationLoader())
     }
 
     /**
@@ -485,14 +485,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderPortal(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderPortal, getImplementationLoader())
+    fun registerRenderPortal(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderPortal, getImplementationLoader())
     }
 
     /**
@@ -502,14 +502,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderJumpBar(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderJumpBar, getImplementationLoader())
+    fun registerRenderJumpBar(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderJumpBar, getImplementationLoader())
     }
 
     /**
@@ -519,14 +519,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderChat(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderChat, getImplementationLoader())
+    fun registerRenderChat(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderChat, getImplementationLoader())
     }
 
     /**
@@ -537,14 +537,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [EventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHelmet(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderHelmet, getImplementationLoader())
+    fun registerRenderHelmet(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderHelmet, getImplementationLoader())
     }
 
     /**
@@ -554,13 +554,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHand(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderHand, getImplementationLoader())
+    fun registerRenderHand(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderHand, getImplementationLoader())
     }
 
     /**
@@ -570,13 +570,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderScoreboard(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderScoreboard, getImplementationLoader())
+    fun registerRenderScoreboard(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderScoreboard, getImplementationLoader())
     }
 
     /**
@@ -588,13 +588,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderTitle(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderTitle, getImplementationLoader())
+    fun registerRenderTitle(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderTitle, getImplementationLoader())
     }
 
     /**
@@ -605,13 +605,13 @@ interface IRegister {
      * - The draw block highlight event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerDrawBlockHighlight(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.BlockHighlight, getImplementationLoader())
+    fun registerDrawBlockHighlight(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.BlockHighlight, getImplementationLoader())
     }
 
     /**
@@ -621,13 +621,13 @@ interface IRegister {
      * loaded and after "/ct load" happens.
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGameLoad(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GameLoad, getImplementationLoader())
+    fun registerGameLoad(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.GameLoad, getImplementationLoader())
     }
 
     /**
@@ -636,13 +636,13 @@ interface IRegister {
      * This runs before shutdown of the JVM and before "/ct load" happens.
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGameUnload(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GameUnload, getImplementationLoader())
+    fun registerGameUnload(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.GameUnload, getImplementationLoader())
     }
 
     /**
@@ -652,14 +652,14 @@ interface IRegister {
      * - The arguments supplied to the command by the user
      *
      * Available modifications:
-     * - [OnCommandTrigger.setCommandName] Sets the command name
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [CommandTrigger.setCommandName] Sets the command name
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerCommand(method: Any): OnCommandTrigger {
-        return OnCommandTrigger(method, getImplementationLoader())
+    fun registerCommand(method: Any): CommandTrigger {
+        return CommandTrigger(method, getImplementationLoader())
     }
 
     /**
@@ -669,13 +669,13 @@ interface IRegister {
      * - The gui opened event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiOpened(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.GuiOpened, getImplementationLoader())
+    fun registerGuiOpened(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.GuiOpened, getImplementationLoader())
     }
 
     /**
@@ -685,13 +685,13 @@ interface IRegister {
      * - The gui that was closed
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiClosed(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiClosed, getImplementationLoader())
+    fun registerGuiClosed(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.GuiClosed, getImplementationLoader())
     }
 
     /**
@@ -704,13 +704,13 @@ interface IRegister {
      * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP] object
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPlayerJoined(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PlayerJoin, getImplementationLoader())
+    fun registerPlayerJoined(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PlayerJoin, getImplementationLoader())
     }
 
     /**
@@ -723,13 +723,13 @@ interface IRegister {
      * - The name of the player that left
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPlayerLeft(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PlayerLeave, getImplementationLoader())
+    fun registerPlayerLeft(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PlayerLeave, getImplementationLoader())
     }
 
     /**
@@ -743,13 +743,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPickupItem(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.PickupItem, getImplementationLoader())
+    fun registerPickupItem(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.PickupItem, getImplementationLoader())
     }
 
     /**
@@ -763,13 +763,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerDropItem(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.DropItem, getImplementationLoader())
+    fun registerDropItem(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.DropItem, getImplementationLoader())
     }
 
     /**
@@ -780,13 +780,13 @@ interface IRegister {
      * - The screenshot event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerScreenshotTaken(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.ScreenshotTaken, getImplementationLoader())
+    fun registerScreenshotTaken(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.ScreenshotTaken, getImplementationLoader())
     }
 
     /**
@@ -797,13 +797,13 @@ interface IRegister {
      * - The message event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerMessageSent(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.MessageSent, getImplementationLoader())
+    fun registerMessageSent(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.MessageSent, getImplementationLoader())
     }
 
     /**
@@ -817,13 +817,13 @@ interface IRegister {
      * - The cancellable event.
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerItemTooltip(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.Tooltip, getImplementationLoader())
+    fun registerItemTooltip(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.Tooltip, getImplementationLoader())
     }
 
     /**
@@ -847,13 +847,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPlayerInteract(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.PlayerInteract, getImplementationLoader())
+    fun registerPlayerInteract(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.PlayerInteract, getImplementationLoader())
     }
 
     /**
@@ -863,13 +863,13 @@ interface IRegister {
      * - The block
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerBlockBreak(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.BlockBreak, getImplementationLoader())
+    fun registerBlockBreak(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.BlockBreak, getImplementationLoader())
     }
 
     /**
@@ -882,8 +882,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerEntityDamage(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.EntityDamage, getImplementationLoader())
+    fun registerEntityDamage(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.EntityDamage, getImplementationLoader())
     }
 
     /**
@@ -895,8 +895,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerEntityDeath(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.EntityDeath, getImplementationLoader())
+    fun registerEntityDeath(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.EntityDeath, getImplementationLoader())
     }
 
     /**
@@ -907,8 +907,8 @@ interface IRegister {
      * - The [net.minecraft.client.gui.GuiScreen] that is being drawn
      *
      */
-    fun registerGuiDrawBackground(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.GuiDrawBackground, getImplementationLoader())
+    fun registerGuiDrawBackground(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.GuiDrawBackground, getImplementationLoader())
     }
 
     /**
@@ -920,13 +920,13 @@ interface IRegister {
      * - The gui
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiRender(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.GuiRender, getImplementationLoader())
+    fun registerGuiRender(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.GuiRender, getImplementationLoader())
     }
 
     /**
@@ -939,13 +939,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiKey(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.GuiKey, getImplementationLoader())
+    fun registerGuiKey(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.GuiKey, getImplementationLoader())
     }
 
     /**
@@ -960,13 +960,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiMouseClick(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.GuiMouseClick, getImplementationLoader())
+    fun registerGuiMouseClick(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.GuiMouseClick, getImplementationLoader())
     }
 
     /**
@@ -981,13 +981,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiMouseRelease(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.GuiMouseRelease, getImplementationLoader())
+    fun registerGuiMouseRelease(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.GuiMouseRelease, getImplementationLoader())
     }
 
     /**
@@ -1002,13 +1002,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerGuiMouseDrag(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.GuiMouseDrag, getImplementationLoader())
+    fun registerGuiMouseDrag(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.GuiMouseDrag, getImplementationLoader())
     }
 
     /**
@@ -1019,13 +1019,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketSent(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.PacketSent, getImplementationLoader())
+    fun registerPacketSent(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.PacketSent, getImplementationLoader())
     }
 
     /**
@@ -1036,13 +1036,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketReceived(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
+    fun registerPacketReceived(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
     }
 
     /**
@@ -1052,13 +1052,13 @@ interface IRegister {
      * - The event, which cannot be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerServerConnect(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
+    fun registerServerConnect(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
     }
 
     /**
@@ -1068,13 +1068,13 @@ interface IRegister {
      * - The event, which cannot be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerServerDisconnect(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.ServerDisconnect, getImplementationLoader())
+    fun registerServerDisconnect(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.ServerDisconnect, getImplementationLoader())
     }
 
     /**
@@ -1086,13 +1086,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerChatComponentClicked(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.ChatComponentClicked, getImplementationLoader())
+    fun registerChatComponentClicked(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.ChatComponentClicked, getImplementationLoader())
     }
 
     /**
@@ -1104,13 +1104,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerChatComponentHovered(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.ChatComponentHovered, getImplementationLoader())
+    fun registerChatComponentHovered(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.ChatComponentHovered, getImplementationLoader())
     }
 
     /**
@@ -1123,13 +1123,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderEntity(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
+    fun registerRenderEntity(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1141,13 +1141,13 @@ interface IRegister {
      * - The partial ticks
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostRenderEntity(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
+    fun registerPostRenderEntity(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1160,13 +1160,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderTileEntity(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
+    fun registerRenderTileEntity(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
     }
 
     /**
@@ -1178,13 +1178,13 @@ interface IRegister {
      * - The partial ticks
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostRenderTileEntity(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
+    fun registerPostRenderTileEntity(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
     }
 
     /**
@@ -1196,13 +1196,13 @@ interface IRegister {
      * - The GuiScreen
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostGuiRender(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PostGuiRender, getImplementationLoader())
+    fun registerPostGuiRender(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PostGuiRender, getImplementationLoader())
     }
 
     /**
@@ -1215,13 +1215,13 @@ interface IRegister {
      * - The GuiContainer
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPreItemRender(method: Any): OnRegularTrigger {
-        return OnRegularTrigger(method, TriggerType.PreItemRender, getImplementationLoader())
+    fun registerPreItemRender(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PreItemRender, getImplementationLoader())
     }
 
     /**
@@ -1236,8 +1236,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderSlot(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderSlot, getImplementationLoader())
+    fun registerRenderSlot(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderSlot, getImplementationLoader())
     }
 
     /**
@@ -1252,8 +1252,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderItemIntoGui(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderItemIntoGui, getImplementationLoader())
+    fun registerRenderItemIntoGui(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderItemIntoGui, getImplementationLoader())
     }
 
     /**
@@ -1268,8 +1268,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderItemOverlayIntoGui(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderItemOverlayIntoGui, getImplementationLoader())
+    fun registerRenderItemOverlayIntoGui(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderItemOverlayIntoGui, getImplementationLoader())
     }
 
     /**
@@ -1283,13 +1283,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderSlotHighlight(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.RenderSlotHighlight, getImplementationLoader())
+    fun registerRenderSlotHighlight(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.RenderSlotHighlight, getImplementationLoader())
     }
 
     /**
@@ -1301,13 +1301,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerSpawnParticle(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.SpawnParticle, getImplementationLoader())
+    fun registerSpawnParticle(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.SpawnParticle, getImplementationLoader())
     }
 
     /**
@@ -1318,13 +1318,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerAttackEntity(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.AttackEntity, getImplementationLoader())
+    fun registerAttackEntity(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.AttackEntity, getImplementationLoader())
     }
 
     /**
@@ -1338,13 +1338,13 @@ interface IRegister {
      * - The event, which can be cancelled
      *
      * Available modifications:
-     * - [OnTrigger.setPriority] Sets the priority
+     * - [Trigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerHitBlock(method: Any): OnEventTrigger {
-        return OnEventTrigger(method, TriggerType.HitBlock, getImplementationLoader())
+    fun registerHitBlock(method: Any): EventTrigger {
+        return EventTrigger(method, TriggerType.HitBlock, getImplementationLoader())
     }
 
     fun getImplementationLoader(): ILoader

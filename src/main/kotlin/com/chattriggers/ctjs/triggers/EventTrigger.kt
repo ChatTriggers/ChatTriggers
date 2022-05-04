@@ -4,7 +4,7 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
 import net.minecraftforge.fml.common.eventhandler.Event
 
-class OnEventTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : OnTrigger(method, triggerType, loader) {
+class EventTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : Trigger(method, triggerType, loader) {
     private var triggerIfCanceled = true
 
     /**

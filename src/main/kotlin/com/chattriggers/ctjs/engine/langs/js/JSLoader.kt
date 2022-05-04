@@ -6,7 +6,7 @@ import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
-import com.chattriggers.ctjs.triggers.OnTrigger
+import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.console.LogType
@@ -34,7 +34,7 @@ import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
 object JSLoader : ILoader {
-    private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<OnTrigger>>()
+    private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<Trigger>>()
     override val console by lazy { Console(this) }
 
     private lateinit var moduleContext: Context
@@ -53,7 +53,7 @@ object JSLoader : ILoader {
         triggers[type]?.forEach { it.trigger(args) }
     }
 
-    override fun addTrigger(trigger: OnTrigger) {
+    override fun addTrigger(trigger: Trigger) {
         triggers.getOrPut(trigger.type, ::newTriggerSet).add(trigger)
     }
 
@@ -61,11 +61,11 @@ object JSLoader : ILoader {
         triggers.clear()
     }
 
-    override fun removeTrigger(trigger: OnTrigger) {
+    override fun removeTrigger(trigger: Trigger) {
         triggers[trigger.type]?.remove(trigger)
     }
 
-    private fun newTriggerSet() = ConcurrentSkipListSet<OnTrigger>()
+    private fun newTriggerSet() = ConcurrentSkipListSet<Trigger>()
 
     override fun setup(jars: List<URL>) {
         instanceContexts(jars)
@@ -290,7 +290,7 @@ object JSLoader : ILoader {
 
     override fun getLanguage() = Lang.JS
 
-    override fun trigger(trigger: OnTrigger, method: Any, args: Array<out Any?>) {
+    override fun trigger(trigger: Trigger, method: Any, args: Array<out Any?>) {
         wrapInContext {
             try {
                 if (method !is Function)

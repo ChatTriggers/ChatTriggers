@@ -5,8 +5,8 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.triggers.OnRegularTrigger
-import com.chattriggers.ctjs.triggers.OnTrigger
+import com.chattriggers.ctjs.triggers.RegularTrigger
+import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import org.mozilla.javascript.NativeObject
 
@@ -20,10 +20,10 @@ abstract class DisplayLine {
     private var background: DisplayHandler.Background? = null
     private var align: DisplayHandler.Align? = null
 
-    private var onClicked: OnTrigger? = null
-    private var onHovered: OnTrigger? = null
-    private var onDragged: OnTrigger? = null
-    private var onMouseLeave: OnTrigger? = null
+    private var onClicked: Trigger? = null
+    private var onHovered: Trigger? = null
+    private var onDragged: Trigger? = null
+    private var onMouseLeave: Trigger? = null
 
     internal var shouldRender: Boolean = true
 
@@ -117,22 +117,22 @@ abstract class DisplayLine {
     }
 
     fun registerClicked(method: Any) = run {
-        onClicked = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onClicked = RegularTrigger(method, TriggerType.Other, getLoader())
         onClicked
     }
 
     fun registerHovered(method: Any) = run {
-        onHovered = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onHovered = RegularTrigger(method, TriggerType.Other, getLoader())
         onHovered
     }
 
     fun registerMouseLeave(method: Any) = run {
-        onMouseLeave = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onMouseLeave = RegularTrigger(method, TriggerType.Other, getLoader())
         onMouseLeave
     }
 
     fun registerDragged(method: Any) = run {
-        onDragged = OnRegularTrigger(method, TriggerType.Other, getLoader())
+        onDragged = RegularTrigger(method, TriggerType.Other, getLoader())
         onDragged
     }
 
