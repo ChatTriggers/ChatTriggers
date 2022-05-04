@@ -43,7 +43,7 @@ object Reference {
 
         Command.activeCommands.values.toList().forEach(Command::unregister)
 
-        Client.getMinecraft().addScheduledTask {
+        Client.scheduleTask {
             CTJS.images.forEach { it.getTexture().deleteGlTexture() }
             CTJS.images.clear()
         }

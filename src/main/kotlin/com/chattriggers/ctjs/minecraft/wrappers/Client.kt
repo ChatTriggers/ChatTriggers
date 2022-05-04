@@ -1,9 +1,10 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
 import net.minecraft.client.gui.inventory.GuiContainer
@@ -83,18 +84,32 @@ abstract class Client {
         //#endif
 
         /**
+         * Schedule's a task to run on Minecraft's main thread in [delay] ticks.
+         * Defaults to the next tick.
+         * @param delay The delay in ticks
+         * @param callback The task to run on the main thread
+         */
+        @JvmOverloads
+        @JvmStatic
+        fun scheduleTask(delay: Int = 0, callback: () -> Unit) {
+            ClientListener.addTask(delay, callback)
+        }
+
+        /**
          * Quits the client back to the main menu.
          * This acts just like clicking the "Disconnect" or "Save and quit to title" button.
          */
         @JvmStatic
         fun disconnect() {
-            World.getWorld()?.sendQuittingDisconnectingPacket()
-            getMinecraft().loadWorld(null as WorldClient?)
+            scheduleTask {
+                World.getWorld()?.sendQuittingDisconnectingPacket()
+                getMinecraft().loadWorld(null as WorldClient?)
 
-            when {
-                getMinecraft().isIntegratedServerRunning -> getMinecraft().displayGuiScreen(GuiMainMenu())
-                getMinecraft().isConnectedToRealms -> RealmsBridge().switchToRealms(GuiMainMenu())
-                else -> getMinecraft().displayGuiScreen(GuiMultiplayer(GuiMainMenu()))
+                when {
+                    getMinecraft().isIntegratedServerRunning -> getMinecraft().displayGuiScreen(GuiMainMenu())
+                    getMinecraft().isConnectedToRealms -> RealmsBridge().switchToRealms(GuiMainMenu())
+                    else -> getMinecraft().displayGuiScreen(GuiMultiplayer(GuiMainMenu()))
+                }
             }
         }
 
@@ -202,9 +217,9 @@ abstract class Client {
         @JvmStatic
         fun <T : INetHandler> sendPacket(packet: Packet<T>) {
             //#if MC<=10809
-            getMinecraft().netHandler.networkManager.sendPacket(packet)
+            getConnection()?.networkManager?.sendPacket(packet)
             //#else
-            //$$getMinecraft().connection?.networkManager?.sendPacket(packet)
+            //$$getConnection()?.networkManager?.sendPacket(packet)
             //#endif
         }
 

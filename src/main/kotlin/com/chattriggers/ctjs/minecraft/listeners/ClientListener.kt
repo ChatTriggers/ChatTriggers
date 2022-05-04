@@ -3,11 +3,12 @@ package com.chattriggers.ctjs.minecraft.listeners
 import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
+import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockFace
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockFace
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
@@ -28,11 +29,15 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import org.lwjgl.util.vector.Vector3f
 import org.mozilla.javascript.Context
+import java.util.concurrent.CopyOnWriteArrayList
 
 object ClientListener {
     private var ticksPassed: Int = 0
     val chatHistory = mutableListOf<String>()
     val actionBarHistory = mutableListOf<String>()
+    private val tasks = CopyOnWriteArrayList<Task>()
+
+    class Task(var delay: Int, val callback: () -> Unit)
 
     init {
         ticksPassed = 0
@@ -65,9 +70,23 @@ object ClientListener {
         }
     }
 
+    fun addTask(delay: Int, callback: () -> Unit) {
+        tasks.add(Task(delay, callback))
+    }
+
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
-        if (World.getWorld() == null || event.phase == TickEvent.Phase.END)
+        if (event.phase == TickEvent.Phase.END)
+            return
+
+        tasks.removeAll {
+            if (it.delay-- <= 0) {
+                Client.getMinecraft().addScheduledTask { it.callback() }
+                true
+            } else false
+        }
+
+        if (!World.isLoaded())
             return
 
         TriggerType.Tick.triggerAll(ticksPassed)

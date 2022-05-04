@@ -48,17 +48,19 @@ object World {
      */
     @JvmStatic
     fun playSound(name: String, volume: Float, pitch: Float) {
-        //#if MC<=10809
-        Player.getPlayer()?.playSound(name, volume, pitch)
-        //#else
-        //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
-        //$$ Player.getPlayer()?.playSound(sound, volume, pitch)
-        //#endif
+        Client.scheduleTask {
+            //#if MC<=10809
+            Player.getPlayer()?.playSound(name, volume, pitch)
+            //#else
+            //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
+            //$$ Player.getPlayer()?.playSound(sound, volume, pitch)
+            //#endif
+        }
     }
 
     /**
      * Play a record at location x, y, and z.
-     * Use "null" as name in the same location to stop record.
+     * Use null as name in the same location to stop record.
      *
      * @param name the name of the sound/record
      * @param x the x location
@@ -66,13 +68,15 @@ object World {
      * @param z the z location
      */
     @JvmStatic
-    fun playRecord(name: String, x: Double, y: Double, z: Double) {
-        //#if MC<=10809
-        getWorld()?.playRecord(MCBlockPos(x, y, z), name)
-        //#else
-        //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
-        //$$ getWorld()?.playRecord(BlockPos(x, y, z), sound)
-        //#endif
+    fun playRecord(name: String?, x: Double, y: Double, z: Double) {
+        Client.scheduleTask {
+            //#if MC<=10809
+            getWorld()?.playRecord(MCBlockPos(x, y, z), name)
+            //#else
+            //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
+            //$$ getWorld()?.playRecord(BlockPos(x, y, z), sound)
+            //#endif
+        }
     }
 
     @JvmStatic
