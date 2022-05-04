@@ -202,7 +202,9 @@ class Message {
 
         //#if MC<=10809
         if (recursive) {
-            Client.getConnection()?.handleChat(MCChatPacket(chatMessage, 0))
+            Client.scheduleTask {
+                Client.getConnection()?.handleChat(MCChatPacket(chatMessage, 0))
+            }
         } else {
             Player.getPlayer()?.addChatMessage(chatMessage)
         }
