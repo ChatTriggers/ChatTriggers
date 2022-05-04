@@ -286,8 +286,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderOverlay(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderOverlay, getImplementationLoader())
+    fun registerRenderOverlay(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderOverlay, getImplementationLoader())
     }
 
     /**
@@ -297,14 +297,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderPlayerList(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderPlayerList, getImplementationLoader())
+    fun registerRenderPlayerList(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderPlayerList, getImplementationLoader())
     }
 
     /**
@@ -314,14 +314,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderCrosshair(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderCrosshair, getImplementationLoader())
+    fun registerRenderCrosshair(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderCrosshair, getImplementationLoader())
     }
 
     /**
@@ -331,14 +331,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderDebug(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderDebug, getImplementationLoader())
+    fun registerRenderDebug(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderDebug, getImplementationLoader())
     }
 
     /**
@@ -348,14 +348,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderBossHealth(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderBossHealth, getImplementationLoader())
+    fun registerRenderBossHealth(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderBossHealth, getImplementationLoader())
     }
 
     /**
@@ -365,14 +365,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHealth(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderHealth, getImplementationLoader())
+    fun registerRenderHealth(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderHealth, getImplementationLoader())
     }
 
     /**
@@ -382,14 +382,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderArmor(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderArmor, getImplementationLoader())
+    fun registerRenderArmor(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderArmor, getImplementationLoader())
     }
 
     /**
@@ -399,14 +399,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderFood(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderFood, getImplementationLoader())
+    fun registerRenderFood(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderFood, getImplementationLoader())
     }
 
     /**
@@ -416,14 +416,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderMountHealth(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderMountHealth, getImplementationLoader())
+    fun registerRenderMountHealth(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderMountHealth, getImplementationLoader())
     }
 
     /**
@@ -434,14 +434,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderExperience(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderExperience, getImplementationLoader())
+    fun registerRenderExperience(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderExperience, getImplementationLoader())
     }
 
     /**
@@ -451,14 +451,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHotbar(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderHotbar, getImplementationLoader())
+    fun registerRenderHotbar(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderHotbar, getImplementationLoader())
     }
 
     /**
@@ -468,14 +468,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderAir(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderAir, getImplementationLoader())
+    fun registerRenderAir(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderAir, getImplementationLoader())
     }
 
     /**
@@ -485,14 +485,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderPortal(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderPortal, getImplementationLoader())
+    fun registerRenderPortal(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderPortal, getImplementationLoader())
     }
 
     /**
@@ -502,14 +502,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderJumpBar(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderJumpBar, getImplementationLoader())
+    fun registerRenderJumpBar(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderJumpBar, getImplementationLoader())
     }
 
     /**
@@ -519,14 +519,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderChat(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderChat, getImplementationLoader())
+    fun registerRenderChat(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderChat, getImplementationLoader())
     }
 
     /**
@@ -537,14 +537,14 @@ interface IRegister {
      * - The render event, which can be cancelled
      *
      * Available modifications:
-     * - [OnRenderTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
+     * - [OnEventTrigger.triggerIfCanceled] Sets if triggered if event is already cancelled
      * - [OnTrigger.setPriority] Sets the priority
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderHelmet(method: Any): OnRenderTrigger {
-        return OnRenderTrigger(method, TriggerType.RenderHelmet, getImplementationLoader())
+    fun registerRenderHelmet(method: Any): OnEventTrigger {
+        return OnEventTrigger(method, TriggerType.RenderHelmet, getImplementationLoader())
     }
 
     /**
