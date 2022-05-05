@@ -99,7 +99,7 @@
     loadClass("com.chattriggers.ctjs.triggers.ChatTrigger", "OnChatTrigger");
     loadClass("com.chattriggers.ctjs.triggers.CommandTrigger", "OnCommandTrigger");
     loadClass("com.chattriggers.ctjs.triggers.RegularTrigger", "OnRegularTrigger");
-    loadClass("com.chattriggers.ctjs.triggers.RenderTrigger", "OnRenderTrigger");
+    loadClass("com.chattriggers.ctjs.triggers.EventTrigger", "OnRenderTrigger");
     loadClass("com.chattriggers.ctjs.triggers.SoundPlayTrigger", "OnSoundPlayTrigger");
     loadClass("com.chattriggers.ctjs.triggers.StepTrigger", "OnStepTrigger");
     loadClass("com.chattriggers.ctjs.triggers.Trigger", "OnTrigger");
