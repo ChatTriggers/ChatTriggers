@@ -8,11 +8,13 @@ import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
 import net.minecraft.client.gui.inventory.GuiContainer
+import net.minecraft.client.multiplayer.ServerData
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
 import net.minecraft.realms.RealmsBridge
+import net.minecraftforge.fml.client.FMLClientHandler
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 import kotlin.math.roundToInt
@@ -110,6 +112,20 @@ abstract class Client {
                     getMinecraft().isConnectedToRealms -> RealmsBridge().switchToRealms(GuiMainMenu())
                     else -> getMinecraft().displayGuiScreen(GuiMultiplayer(GuiMainMenu()))
                 }
+            }
+        }
+
+        /**
+         * Connects to the server with the given ip.
+         * @param ip The ip to connect to
+         */
+        @JvmStatic
+        fun connect(ip: String) {
+            scheduleTask {
+                FMLClientHandler.instance().connectToServer(
+                    GuiMultiplayer(GuiMainMenu()),
+                    ServerData("Server", ip, false)
+                )
             }
         }
 
