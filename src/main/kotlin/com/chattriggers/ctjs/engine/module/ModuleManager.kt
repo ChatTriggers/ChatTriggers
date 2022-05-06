@@ -5,7 +5,6 @@ import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
-import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.wrappers.World
@@ -16,7 +15,6 @@ import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
 import org.mozilla.javascript.Context
 import java.io.File
-import java.lang.invoke.MethodHandle
 import java.net.URLClassLoader
 
 object ModuleManager {
@@ -70,23 +68,6 @@ object ModuleManager {
         loaders.forEach {
             it.setup(jars)
         }
-
-        // We're finished setting up all of our loaders,
-        //  which means they can now have their ASM invocation re-lookups happen
-        IndySupport.invalidateInvocations()
-    }
-
-    fun asmPass() {
-        loaders.forEach(ILoader::asmSetup)
-
-        // Load the modules
-        loaders.forEach { loader ->
-            cachedModules.filter {
-                File(it.folder, it.metadata.asmEntry ?: return@filter false).extension == loader.getLanguage().extension
-            }.forEach {
-                loader.asmPass(it, File(it.folder, it.metadata.asmEntry!!).toURI())
-            }
-        }
     }
 
     fun entryPass(modules: List<Module> = cachedModules, completionListener: (percentComplete: Float) -> Unit = {}) {
@@ -106,22 +87,6 @@ object ModuleManager {
                 completionListener(completed.toFloat() / total)
             }
         }
-    }
-
-    fun asmInvokeLookup(moduleName: String, functionID: String): MethodHandle {
-        // Find the targeted module
-        val module = cachedModules.first { it.name == moduleName }
-
-        // Get the target function file from the metadata lookup table
-        val funcPath = module.metadata.asmExposedFunctions?.get(functionID) ?: throw IllegalArgumentException(
-            "Module $module contains no asm exported function with id $functionID"
-        )
-
-        val funcFile = File(module.folder, funcPath.replace('/', File.separatorChar).replace('\\', File.separatorChar))
-
-        return loaders.first {
-            it.getLanguage().extension == funcFile.extension
-        }.asmInvokeLookup(module, funcFile.toURI())
     }
 
     private fun getFoldersInDir(dir: File): List<File> {

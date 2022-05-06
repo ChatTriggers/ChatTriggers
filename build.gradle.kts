@@ -40,9 +40,6 @@ dependencies {
     compileOnly("gg.essential:essential-$platform:2666")
     embed("gg.essential:loader-launchwrapper:1.1.3")
 
-    // implementation("dev.falsehonesty.asmhelper:AsmHelper:1.5.3-${platform.mcVersion}") {
-    //     exclude("org.jetbrains.kotlin")
-    // }
     implementation("com.chattriggers:rhino:1.8.6")
     implementation("com.fasterxml.jackson.core:jackson-core:2.13.2")
     implementation("com.fifesoft:rsyntaxtextarea:3.2.0")

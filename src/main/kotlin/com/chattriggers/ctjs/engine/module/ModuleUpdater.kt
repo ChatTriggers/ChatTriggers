@@ -121,7 +121,7 @@ object ModuleUpdater {
             val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
             val connection = CTJS.makeWebRequest(url)
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
-            FileSystems.newFileSystem(downloadZip.toPath(), null).use {
+            FileSystems.newFileSystem(downloadZip.toPath()).use {
                 val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
                 if (!rootFolder.hasNext()) throw Exception("Too small")
                 val moduleFolder = rootFolder.next()
