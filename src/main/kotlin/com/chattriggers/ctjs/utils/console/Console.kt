@@ -129,13 +129,14 @@ class Console(val loader: ILoader?) {
         }
     }
 
+    // TODO: Make println and roll this back before 3.0.0
     @JvmOverloads
-    fun println(obj: Any, logType: LogType = LogType.INFO, customColor: Color? = null) {
+    fun println(obj: Any, logType: LogType = LogType.INFO, end: String = "\n", customColor: Color? = null) {
         SwingUtilities.invokeLater {
             try {
-                writer.println(obj.toString(), logType, customColor)
+                writer.println(obj.toString(), logType, end, customColor)
             } catch (exception: Exception) {
-                println(obj.toString(), logType, customColor)
+                println(obj.toString(), logType, end, customColor)
             }
         }
     }

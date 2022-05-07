@@ -45,13 +45,15 @@ class TextAreaWriter(private val textArea: JTextPane) : Writer() {
 
     }
 
+    // TODO: Make println and roll this back before 3.0.0
     @JvmOverloads
-    fun println(s: Any, logType: LogType = LogType.INFO, customColor: Color? = null) {
+    fun println(s: Any, logType: LogType = LogType.INFO, end: String = "\n", customColor: Color? = null) {
         if (Config.consoleErrorAndWarningColors) {
             currentLogType = logType
             this.customColor = customColor
         }
-        printWriter.println(s)
+        printWriter.print(s)
+        printWriter.print(end)
     }
 
     fun clear() {
