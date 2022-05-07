@@ -99,7 +99,7 @@ open class Entity(val entity: MCEntity) {
     fun getRiders(): List<Entity> {
         //#if MC<=10809
         return emptyList()
-        //#elseif
+        //#else
         //$$ return entity.passengers.map(::Entity)
         //#endif
     }

@@ -1,0 +1,40 @@
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml"
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+# Forge for 1.18 is version 38
+loaderVersion="[37,)"
+# The license for your mod. This is mandatory and allows for easier comprehension of your redistributive properties.
+# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
+license="MIT"
+# A URL to refer people to when problems occur with this mod
+issueTrackerURL="https://github.com/ChatTriggers/ChatTriggers/issues"
+# If the mods defined in this file should show as separate resource packs
+showAsResourcePack=false
+
+[[mods]]
+modId="chattriggers"
+version="2.0.4"
+displayName="ChatTriggers"
+# TODO: Host this file on the website
+#updateJSONURL="minecraftforge.net/versions.json"
+displayURL="https://chattriggers.com/"
+logoFile="CT_logo.png"
+credits=""
+authors="Ecolsson, FalseHonesty, kerbybit"
+description='''
+  ChatTriggers is a framework that allows for live scripting and client modification using JavaScript.
+  '''
+
+[[dependencies.chattriggers]]
+modId="forge"
+mandatory=true
+versionRange="[37,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.chattriggers]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.17.1,)"
+ordering="NONE"
+side="BOTH"
