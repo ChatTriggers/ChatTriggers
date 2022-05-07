@@ -2,13 +2,13 @@ package com.chattriggers.ctjs.minecraft.wrappers.inventory
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
 import com.chattriggers.ctjs.utils.kotlin.*
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.enchantment.Enchantment
@@ -79,7 +79,7 @@ class Item {
         }
     }
 
-    fun getTextComponent() = TextComponent(itemStack.chatComponent)
+    fun getTextComponent() = UTextComponent(itemStack.chatComponent)
 
     fun getRawNBT() = itemStack.serializeNBT().toString()
 

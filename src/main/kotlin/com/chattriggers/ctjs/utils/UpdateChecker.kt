@@ -5,12 +5,13 @@ import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
-import com.chattriggers.ctjs.minecraft.objects.message.Message
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.printTraceToConsole
+import com.chattriggers.ctjs.utils.kotlin.MCClickEventAction
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import com.google.gson.reflect.TypeToken
+import gg.essential.universal.wrappers.message.UMessage
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.world.WorldEvent
@@ -56,14 +57,14 @@ object UpdateChecker {
         if (!updateAvailable || warned) return
 
         World.playSound("note.bass", 1000f, 1f)
-        Message(
+        UMessage(
             "&c&m" + ChatLib.getChatBreak("-"),
             "\n",
             "&cChatTriggers requires an update to work properly!",
             "\n",
-            TextComponent("&a[Download]").setClick("open_url", "${CTJS.WEBSITE_ROOT}/#download"),
+            UTextComponent("&a[Download]").setClick(MCClickEventAction.OPEN_URL, "${CTJS.WEBSITE_ROOT}/#download"),
             " ",
-            TextComponent("&e[Changelog]").setClick("open_url", "https://github.com/ChatTriggers/ChatTriggers/releases"),
+            UTextComponent("&e[Changelog]").setClick(MCClickEventAction.OPEN_URL, "https://github.com/ChatTriggers/ChatTriggers/releases"),
             "\n",
             "&c&m" + ChatLib.getChatBreak("-")
         ).chat()

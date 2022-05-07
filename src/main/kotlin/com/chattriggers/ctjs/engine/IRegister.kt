@@ -1082,7 +1082,7 @@ interface IRegister {
      * chat component
      *
      * Passes through two arguments:
-     * - The [com.chattriggers.ctjs.minecraft.objects.message.TextComponent]
+     * - The [gg.essential.universal.wrappers.message.UTextComponent]
      * - The event, which can be cancelled
      *
      * Available modifications:
@@ -1100,7 +1100,7 @@ interface IRegister {
      * hoverable chat component
      *
      * Passes through two arguments:
-     * - The [com.chattriggers.ctjs.minecraft.objects.message.TextComponent]
+     * - The [gg.essential.universal.wrappers.message.UTextComponent]
      * - The event, which can be cancelled
      *
      * Available modifications:

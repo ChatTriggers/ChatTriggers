@@ -7,3 +7,4 @@ net.minecraft.entity.Entity net.minecraft.world.entity.Entity
 net.minecraft.entity.item.EntityItem net.minecraft.world.entity.item.ItemEntity
 net.minecraftforge.event.TickEvent net.minecraftforge.fml.common.gameevent.TickEvent
 net.minecraft.sounds.SoundSource net.minecraft.client.audio.SoundCategory
+net.minecraft.network.chat.TranslatableComponent net.minecraft.util.ChatComponentTranslation

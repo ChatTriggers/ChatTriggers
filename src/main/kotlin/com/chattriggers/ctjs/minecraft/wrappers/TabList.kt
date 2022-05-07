@@ -1,11 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.utils.kotlin.MCGameType
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCScore
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
+import gg.essential.universal.wrappers.message.UMessage
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
 
@@ -56,7 +56,7 @@ object TabList {
     }
 
     @JvmStatic
-    fun getHeaderMessage() = Client.getTabGui()?.header?.let(::Message)
+    fun getHeaderMessage() = Client.getTabGui()?.header?.let { UMessage(it) }
 
     @JvmStatic
     fun getHeader() = Client.getTabGui()?.header?.formattedText
@@ -70,8 +70,8 @@ object TabList {
     @JvmStatic
     fun setHeader(header: Any?) {
         when (header) {
-            is String -> Client.getTabGui()?.header = Message(header).getChatMessage()
-            is Message -> Client.getTabGui()?.header = header.getChatMessage()
+            is String -> Client.getTabGui()?.header = UMessage(header).chatMessage
+            is UMessage -> Client.getTabGui()?.header = header.chatMessage
             is MCITextComponent -> Client.getTabGui()?.header = header
             null -> Client.getTabGui()?.header = header
         }
@@ -81,7 +81,7 @@ object TabList {
     fun clearHeader() = setHeader(null)
 
     @JvmStatic
-    fun getFooterMessage() = Client.getTabGui()?.footer?.let(::Message)
+    fun getFooterMessage() = Client.getTabGui()?.footer?.let { UMessage(it) }
 
     @JvmStatic
     fun getFooter() = Client.getTabGui()?.footer?.formattedText
@@ -95,8 +95,8 @@ object TabList {
     @JvmStatic
     fun setFooter(footer: Any?) {
         when (footer) {
-            is String -> Client.getTabGui()?.footer = Message(footer).getChatMessage()
-            is Message -> Client.getTabGui()?.footer = footer.getChatMessage()
+            is String -> Client.getTabGui()?.footer = UMessage(footer).chatMessage
+            is UMessage -> Client.getTabGui()?.footer = footer.chatMessage
             is MCITextComponent -> Client.getTabGui()?.footer = footer
             null -> Client.getTabGui()?.footer = footer
         }

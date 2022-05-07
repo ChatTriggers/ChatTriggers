@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.scoreboard.ScorePlayerTeam
@@ -24,12 +24,12 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
      * i.e. the name shown in tab list and in the player's nametag.
      * @return the display name
      */
-    fun getDisplayName(): TextComponent {
-        return TextComponent(getPlayerName(getPlayerInfo()))
+    fun getDisplayName(): UTextComponent {
+        return UTextComponent(getPlayerName(getPlayerInfo()))
     }
 
-    fun setTabDisplayName(textComponent: TextComponent) {
-        getPlayerInfo()?.displayName = textComponent.chatComponentText
+    fun setTabDisplayName(textComponent: UTextComponent) {
+        getPlayerInfo()?.displayName = textComponent.component
     }
 
     /**
@@ -38,8 +38,8 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
      *
      * @param textComponent the new name to display
      */
-    fun setNametagName(textComponent: TextComponent) {
-        displayNameField.set(player, textComponent.chatComponentText.formattedText)
+    fun setNametagName(textComponent: UTextComponent) {
+        displayNameField.set(player, textComponent.component.formattedText)
     }
 
     /**

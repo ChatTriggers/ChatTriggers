@@ -2,7 +2,6 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Inventory
@@ -12,6 +11,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.entity.Team
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.*
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import com.chattriggers.ctjs.utils.kotlin.MCRayTraceType
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.block.BlockSign
 import net.minecraft.client.entity.EntityPlayerSP
 import java.util.*
@@ -296,8 +296,8 @@ object Player {
      * @return the display name
      */
     @JvmStatic
-    fun getDisplayName(): TextComponent {
-        return asPlayerMP()?.getDisplayName() ?: TextComponent("")
+    fun getDisplayName(): UTextComponent {
+        return asPlayerMP()?.getDisplayName() ?: UTextComponent("")
     }
 
     /**
@@ -306,7 +306,7 @@ object Player {
      * @param textComponent the new name to display
      */
     @JvmStatic
-    fun setTabDisplayName(textComponent: TextComponent) {
+    fun setTabDisplayName(textComponent: UTextComponent) {
         asPlayerMP()?.setTabDisplayName(textComponent)
     }
 
@@ -317,7 +317,7 @@ object Player {
      * @param textComponent the new name to display
      */
     @JvmStatic
-    fun setNametagName(textComponent: TextComponent) {
+    fun setNametagName(textComponent: UTextComponent) {
         asPlayerMP()?.setNametagName(textComponent)
     }
 

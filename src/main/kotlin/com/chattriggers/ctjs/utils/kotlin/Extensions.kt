@@ -3,35 +3,27 @@ package com.chattriggers.ctjs.utils.kotlin
 import com.fasterxml.jackson.core.Version
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import gg.essential.universal.wrappers.message.UMessage
 import org.mozilla.javascript.NativeObject
 
-fun MCITextComponent.getStyling(): MCTextStyle =
-    //#if MC<=10809
-    this.chatStyle
-
+//#if MC<=10809
+fun MCITextComponent.getStyling(): MCTextStyle = chatStyle
+fun MCTextStyle.getClick(): MCTextClickEvent? = chatClickEvent
+fun MCTextStyle.getHover(): MCTextHoverEvent? = chatHoverEvent
+fun MCTessellator.getRenderer(): MCWorldRenderer = worldRenderer
 //#else
-//$$ this.style
-//#endif
-fun MCTextStyle.getClick(): MCTextClickEvent? =
-    //#if MC<=10809
-    chatClickEvent
-//#else
-//$$ clickEvent
+//$$ fun MCITextComponent.getStyling(): MCTextStyle = style
+//$$ fun MCTextStyle.getClick(): MCTextClickEvent? = clickEvent
+//$$ fun MCTextStyle.getHover(): MCTextHoverEvent? = hoverEvent
+//$$ fun MCTessellator.getRenderer(): MCWorldRenderer = buffer
 //#endif
 
-fun MCTextStyle.getHover(): MCTextHoverEvent? =
-    //#if MC<=10809
-    chatHoverEvent
-//#else
-//$$ hoverEvent
-//#endif
-
-fun MCTessellator.getRenderer(): MCWorldRenderer =
-    //#if MC<=10809
-    worldRenderer
-//#else
-//$$ buffer
-//#endif
+fun UMessage.setChatLineId(id: Int) = apply {
+    chatLineId = id
+}
+fun UMessage.setRecursive(recursive: Boolean) = apply {
+    isRecursive = recursive
+}
 
 operator fun String.times(times: Number): String {
     val stringBuilder = StringBuilder()

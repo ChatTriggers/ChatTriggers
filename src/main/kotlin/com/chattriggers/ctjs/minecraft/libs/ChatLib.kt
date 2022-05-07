@@ -2,12 +2,14 @@ package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
-import com.chattriggers.ctjs.minecraft.objects.message.Message
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.printToConsole
+import com.chattriggers.ctjs.utils.kotlin.setChatLineId
+import com.chattriggers.ctjs.utils.kotlin.setRecursive
 import com.chattriggers.ctjs.utils.kotlin.times
+import gg.essential.universal.wrappers.message.UMessage
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.gui.ChatLine
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -18,17 +20,17 @@ import kotlin.math.roundToInt
 object ChatLib {
     /**
      * Prints text in the chat.
-     * The text can be a String, a [Message] or a [TextComponent]
+     * The text can be a String, a [UMessage] or a [UTextComponent]
      *
      * @param text the text to be printed
      */
     @JvmStatic
     fun chat(text: Any) {
         when (text) {
-            is String -> Message(text).chat()
-            is Message -> text.chat()
-            is TextComponent -> text.chat()
-            else -> Message(text.toString()).chat()
+            is String -> UMessage(text).chat()
+            is UMessage -> text.chat()
+            is UTextComponent -> text.chat()
+            else -> UMessage(text.toString()).chat()
         }
     }
 
@@ -39,33 +41,33 @@ object ChatLib {
 
     /**
      * Shows text in the action bar.
-     * The text can be a String, a [Message] or a [TextComponent]
+     * The text can be a String, a [UMessage] or a [UTextComponent]
      *
      * @param text the text to show
      */
     @JvmStatic
     fun actionBar(text: Any) {
         when (text) {
-            is String -> Message(text).actionBar()
-            is Message -> text.actionBar()
-            is TextComponent -> text.actionBar()
-            else -> Message(text.toString()).actionBar()
+            is String -> UMessage(text).actionBar()
+            is UMessage -> text.actionBar()
+            is UTextComponent -> text.actionBar()
+            else -> UMessage(text.toString()).actionBar()
         }
     }
 
     /**
      * Simulates a chat message to be caught by other triggers for testing.
-     * The text can be a String, a [Message] or a [TextComponent]
+     * The text can be a String, a [UMessage] or a [UTextComponent]
      *
      * @param text The message to simulate
      */
     @JvmStatic
     fun simulateChat(text: Any) {
         when (text) {
-            is String -> Message(text).setRecursive(true).chat()
-            is Message -> text.setRecursive(true).chat()
-            is TextComponent -> Message(text).setRecursive(true).chat()
-            else -> Message(text.toString()).setRecursive(true).chat()
+            is String -> UMessage(text).setRecursive(true).chat()
+            is UMessage -> text.setRecursive(true).chat()
+            is UTextComponent -> UMessage(text).setRecursive(true).chat()
+            else -> UMessage(text.toString()).setRecursive(true).chat()
         }
     }
 
@@ -190,7 +192,7 @@ object ChatLib {
      * @param replacements the new message(s) to be put in replace of the old one
      */
     @JvmStatic
-    fun editChat(regexp: NativeRegExp, vararg replacements: Message) {
+    fun editChat(regexp: NativeRegExp, vararg replacements: UMessage) {
         val global = regexp["global"] as Boolean
         val ignoreCase = regexp["ignoreCase"] as Boolean
         val multiline = regexp["multiline"] as Boolean
@@ -200,7 +202,7 @@ object ChatLib {
 
         editChat(
             {
-                val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+                val matcher = pattern.matcher(it.chatMessage.unformattedText)
                 if (global) matcher.find() else matcher.matches()
             },
             *replacements
@@ -214,26 +216,26 @@ object ChatLib {
      * @param replacements the new message(s) to be put in place of the old one
      */
     @JvmStatic
-    fun editChat(toReplace: String, vararg replacements: Message) {
+    fun editChat(toReplace: String, vararg replacements: UMessage) {
         editChat(
             {
-                removeFormatting(it.getChatMessage().unformattedText) == toReplace
+                removeFormatting(it.chatMessage.unformattedText) == toReplace
             },
             *replacements
         )
     }
 
     /**
-     * Edits an already sent chat message by the [Message]
+     * Edits an already sent chat message by the [UMessage]
      *
      * @param toReplace the message to be replaced
      * @param replacements the new message(s) to be put in place of the old one
      */
     @JvmStatic
-    fun editChat(toReplace: Message, vararg replacements: Message) {
+    fun editChat(toReplace: UMessage, vararg replacements: UMessage) {
         editChat(
             {
-                toReplace.getChatMessage().formattedText == it.getChatMessage().formattedText.substring(4)
+                toReplace.chatMessage.formattedText == it.chatMessage.formattedText.substring(4)
             },
             *replacements
         )
@@ -246,16 +248,16 @@ object ChatLib {
      * @param replacements the new message(s) to be put in place of the old one
      */
     @JvmStatic
-    fun editChat(chatLineId: Int, vararg replacements: Message) {
+    fun editChat(chatLineId: Int, vararg replacements: UMessage) {
         editChat(
             { message ->
-                message.getChatLineId() == chatLineId
+                message.chatLineId == chatLineId
             },
             *replacements
         )
     }
 
-    private fun editChat(toReplace: (Message) -> Boolean, vararg replacements: Message) {
+    private fun editChat(toReplace: (UMessage) -> Boolean, vararg replacements: UMessage) {
         val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
         val chatLines = Client.getChatGUI()!!.chatLines
 
@@ -265,8 +267,8 @@ object ChatLib {
 
     private fun editChatLineList(
         lineList: MutableList<ChatLine>,
-        toReplace: (Message) -> Boolean,
-        vararg replacements: Message
+        toReplace: (UMessage) -> Boolean,
+        vararg replacements: UMessage
     ) {
         val chatLineIterator = lineList.listIterator()
 
@@ -274,7 +276,7 @@ object ChatLib {
             val chatLine = chatLineIterator.next()
 
             val result = toReplace(
-                Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)
+                UMessage(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)
             )
 
             if (!result) {
@@ -284,9 +286,9 @@ object ChatLib {
             chatLineIterator.remove()
 
             replacements.map {
-                val lineId = if (it.getChatLineId() == -1) 0 else it.getChatLineId()
+                val lineId = if (it.chatLineId == -1) 0 else it.chatLineId
 
-                ChatLine(chatLine.updatedCounter, it.getChatMessage(), lineId)
+                ChatLine(chatLine.updatedCounter, it.chatMessage, lineId)
             }.forEach(chatLineIterator::add)
         }
     }
@@ -306,7 +308,7 @@ object ChatLib {
         val pattern = Pattern.compile(regexp["source"] as String, flags)
 
         deleteChat {
-            val matcher = pattern.matcher(it.getChatMessage().unformattedText)
+            val matcher = pattern.matcher(it.chatMessage.unformattedText)
             if (global) matcher.find() else matcher.matches()
         }
     }
@@ -319,19 +321,19 @@ object ChatLib {
     @JvmStatic
     fun deleteChat(toDelete: String) {
         deleteChat {
-            removeFormatting(it.getChatMessage().unformattedText) == toDelete
+            removeFormatting(it.chatMessage.unformattedText) == toDelete
         }
     }
 
     /**
-     * Deletes an already sent chat message by the [Message]
+     * Deletes an already sent chat message by the [UMessage]
      *
      * @param toDelete the message to be deleted
      */
     @JvmStatic
-    fun deleteChat(toDelete: Message) {
+    fun deleteChat(toDelete: UMessage) {
         deleteChat {
-            toDelete.getChatMessage().formattedText == it.getChatMessage().formattedText.substring(4)
+            toDelete.chatMessage.formattedText == it.chatMessage.formattedText.substring(4)
         }
     }
 
@@ -343,11 +345,11 @@ object ChatLib {
     @JvmStatic
     fun deleteChat(chatLineId: Int) {
         deleteChat {
-            it.getChatLineId() == chatLineId
+            it.chatLineId == chatLineId
         }
     }
 
-    private fun deleteChat(toDelete: (Message) -> Boolean) {
+    private fun deleteChat(toDelete: (UMessage) -> Boolean) {
         val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
         val chatLines = Client.getChatGUI()!!.chatLines
 
@@ -357,14 +359,14 @@ object ChatLib {
 
     private fun deleteChatLineList(
         lineList: MutableList<ChatLine>,
-        toDelete: (Message) -> Boolean,
+        toDelete: (UMessage) -> Boolean,
     ) {
         val chatLineIterator = lineList.listIterator()
 
         while (chatLineIterator.hasNext()) {
             val chatLine = chatLineIterator.next()
 
-            if (toDelete(Message(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)))
+            if (toDelete(UMessage(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)))
                 chatLineIterator.remove()
         }
     }

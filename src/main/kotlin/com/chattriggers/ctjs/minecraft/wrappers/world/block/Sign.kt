@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.world.block
 
-import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import gg.essential.universal.wrappers.message.UMessage
 import net.minecraft.tileentity.TileEntitySign
 
 /**
@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntitySign
 class Sign(block: Block) : Block(block.type, block.pos, block.face) {
     private val sign: TileEntitySign = World.getWorld()!!.getTileEntity(pos.toMCBlock()) as TileEntitySign
 
-    fun getLines(): List<Message> = sign.signText.map { it?.let(::Message) ?: Message("") }
+    fun getLines() = sign.signText.map { it?.let { UMessage(it) } ?: UMessage("") }
 
     fun getFormattedLines(): List<String> = sign.signText.map { it?.formattedText ?: "" }
 

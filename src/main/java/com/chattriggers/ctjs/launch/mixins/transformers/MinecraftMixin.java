@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import gg.essential.universal.wrappers.message.UTextComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.shader.Framebuffer;
@@ -45,7 +45,7 @@ public class MinecraftMixin {
     void injectDispatchKeypresses(CallbackInfo ci) {
         // TODO: What is the point of this Mixin?
         IChatComponent component = ScreenShotHelper.saveScreenshot(mcDataDir, displayWidth, displayHeight, framebufferMc);
-        new TextComponent(component).chat();
+        new UTextComponent(component).chat();
         ci.cancel();
     }
 

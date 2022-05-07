@@ -7,14 +7,15 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
-import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.Console
 import com.chattriggers.ctjs.utils.console.LogType
+import com.chattriggers.ctjs.utils.kotlin.setChatLineId
 import com.chattriggers.ctjs.utils.kotlin.times
+import gg.essential.universal.wrappers.message.UMessage
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
@@ -96,7 +97,7 @@ object Reference {
 
         val correctLine = "&c$prefix$fullWidth$padding$postfix"
 
-        Message(correctLine).setChatLineId(28445).chat()
+        UMessage(correctLine).setChatLineId(28445).chat()
     }
 
     @JvmStatic

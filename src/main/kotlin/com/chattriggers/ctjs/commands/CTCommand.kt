@@ -6,11 +6,13 @@ import com.chattriggers.ctjs.engine.module.ModulesGui
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
-import com.chattriggers.ctjs.minecraft.objects.message.Message
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.utils.Config
+import com.chattriggers.ctjs.utils.kotlin.MCClickEventAction
+import com.chattriggers.ctjs.utils.kotlin.setChatLineId
 import com.chattriggers.ctjs.utils.kotlin.toVersion
+import gg.essential.universal.wrappers.message.UMessage
+import gg.essential.universal.wrappers.message.UTextComponent
 import java.awt.Desktop
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -183,18 +185,23 @@ object CTCommand : CommandBase() {
 
         var toDump = lines
         if (toDump > messages.size) toDump = messages.size
-        Message("&6&m${ChatLib.getChatBreak()}").setChatLineId(idFixed).chat()
+        UMessage("&6&m${ChatLib.getChatBreak()}").setChatLineId(idFixed).chat()
         var msg: String
         for (i in 0 until toDump) {
             msg = ChatLib.replaceFormatting(messages[messages.size - toDump + i])
-            Message(
-                TextComponent(msg)
-                    .setClick("run_command", "/ct copy $msg")
-                    .setHoverValue(ChatLib.addColor("&eClick here to copy this message."))
-                    .setFormatted(false)
-            ).setFormatted(false).setChatLineId(idFixed + i + 1).chat()
+            UMessage(
+                UTextComponent(msg).apply {
+                    setClick(MCClickEventAction.RUN_COMMAND, "/ct copy $msg")
+                    hoverValue = ChatLib.addColor("&eClick here to copy this message.")
+                    formatted = false
+                }
+            ).apply {
+                isFormatted = false
+                chatLineId = idFixed + lines + 1
+                chat()
+            }
         }
-        Message("&6&m${ChatLib.getChatBreak()}").setChatLineId(idFixed + lines + 1).chat()
+        UMessage("&6&m${ChatLib.getChatBreak()}").setChatLineId(idFixed + lines + 1).chat()
 
         idFixedOffset = idFixed + lines + 1
     }

@@ -1,9 +1,9 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
-import com.chattriggers.ctjs.minecraft.objects.message.TextComponent;
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import gg.essential.universal.wrappers.message.UTextComponent;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IChatComponent;
@@ -84,7 +84,7 @@ public class GuiScreenMixin {
     void injectHandleComponentClick(IChatComponent component, CallbackInfoReturnable<Boolean> cir) {
         if (component != null) {
             CancellableEvent event = new CancellableEvent();
-            TriggerType.ChatComponentClicked.triggerAll(new TextComponent(component), event);
+            TriggerType.ChatComponentClicked.triggerAll(new UTextComponent(component), event);
             if (event.isCanceled())
                 cir.setReturnValue(false);
         }
@@ -92,9 +92,9 @@ public class GuiScreenMixin {
 
     @Inject(method = "handleComponentHover", at = @At("HEAD"), cancellable = true)
     void injectHandleComponentHover(IChatComponent component, int x, int y, CallbackInfo ci) {
-        TextComponent textComponent = null;
+        UTextComponent textComponent = null;
         if (component != null)
-            textComponent = new TextComponent(component);
+            textComponent = new UTextComponent(component);
         TriggerType.ChatComponentHovered.triggerAll(textComponent, x, y, ci);
     }
 

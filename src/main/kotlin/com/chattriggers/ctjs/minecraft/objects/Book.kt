@@ -1,12 +1,12 @@
 package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
-import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagList
 import com.chattriggers.ctjs.utils.kotlin.*
+import gg.essential.universal.wrappers.message.UMessage
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
@@ -35,7 +35,7 @@ class Book(bookName: String) {
      * @param message the entire message for what the page should be
      * @return the current book to allow method chaining
      */
-    fun addPage(message: Message) = apply {
+    fun addPage(message: UMessage) = apply {
         val pages = NBTTagList(
             (
                 bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
@@ -44,7 +44,7 @@ class Book(bookName: String) {
         pages.appendTag(
             MCNBTTagString(
                 MCTextComponentSerializer.componentToJson(
-                    message.getChatMessage()
+                    message.chatMessage
                 )
             )
         )
@@ -59,7 +59,7 @@ class Book(bookName: String) {
      * @return the current book to allow method chaining
      */
     fun addPage(message: String) = apply {
-        addPage(Message(message))
+        addPage(UMessage(message))
     }
 
     /**
@@ -69,7 +69,7 @@ class Book(bookName: String) {
      * @param message the message to set the page to
      * @return the current book to allow method chaining
      */
-    fun setPage(pageIndex: Int, message: Message) = apply {
+    fun setPage(pageIndex: Int, message: UMessage) = apply {
         val pages = NBTTagList(
             (
                 bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
@@ -81,7 +81,7 @@ class Book(bookName: String) {
 
         pages[pageIndex] = MCNBTTagString(
             MCTextComponentSerializer.componentToJson(
-                message.getChatMessage()
+                message.chatMessage
             )
         )
 
