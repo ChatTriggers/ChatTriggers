@@ -18,15 +18,16 @@ global.setTimeout = function (func, delay) {
 
 const LogType = com.chattriggers.ctjs.utils.console.LogType;
 
+// TODO: Make println and roll this back before 3.0.0
 // simplified methods
-global.print = function (toPrint, color = null) {
+global.print = function (toPrint, end = "\n", color = null) {
     if (toPrint === null) {
         toPrint = 'null';
     } else if (toPrint === undefined) {
         toPrint = 'undefined';
     }
 
-    Console.println(toPrint, LogType.INFO, color);
+    Console.println(toPrint, LogType.INFO, end, color);
 };
 
 /**
