@@ -101,6 +101,7 @@ enum class BlockFace(
     }
 
     companion object {
+        @JvmStatic
         fun fromMCEnumFacing(facing: MCEnumFacing) = when (facing) {
             EnumFacing.DOWN -> Down
             EnumFacing.UP -> Up

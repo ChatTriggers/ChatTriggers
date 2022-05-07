@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.fml.common.eventhandler.Event
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
 //TODO: figure out what is not needed anymore after the kotlin conversion and remove
 object EventLib {
@@ -47,6 +48,7 @@ object EventLib {
             is Event -> if (event.isCancelable) {
                 event.isCanceled = true
             } else throw IllegalArgumentException("Attempt to cancel non-cancelable event ${event.javaClass.name}")
+            is CallbackInfo -> event.cancel()
             else -> throw IllegalArgumentException("cancel() expects an Event but received ${event.javaClass.name}")
         }
     }

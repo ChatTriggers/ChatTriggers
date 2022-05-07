@@ -231,17 +231,6 @@ object ClientListener {
         )
     }
 
-    fun onHitBlock(pos: MCBlockPos, facing: EnumFacing): Boolean {
-        val event = CancellableEvent()
-
-        TriggerType.HitBlock.triggerAll(
-            World.getBlockAt(pos.x, pos.y, pos.z).withFace(BlockFace.fromMCEnumFacing(facing)),
-            event
-        )
-
-        return event.isCancelled()
-    }
-
     @SubscribeEvent
     fun onDropItem(event: ItemTossEvent) {
         val item = event.entityItem
