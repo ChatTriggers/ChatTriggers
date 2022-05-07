@@ -1,13 +1,20 @@
 package com.chattriggers.ctjs.commands
 
+import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.triggers.Trigger
+//#if MC==10809
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.BlockPos
-
-//#if MC==10809
 import net.minecraftforge.client.ClientCommandHandler
+//#else
+//$$ import com.mojang.brigadier.CommandDispatcher
+//$$ import com.mojang.brigadier.arguments.StringArgumentType
+//$$ import com.mojang.brigadier.context.CommandContext
+//$$ import net.minecraft.commands.CommandSourceStack
+//$$ import net.minecraft.commands.Commands
+//$$ import com.mojang.brigadier.tree.CommandNode
 //#endif
 
 class Command(
@@ -18,34 +25,25 @@ class Command(
     private var aliases: MutableList<String>,
     private val overrideExisting: Boolean = false,
     private val callback: ((Array<out String>) -> MutableList<String>)? = null,
+//#if MC<=11202
 ) : CommandBase() {
-    private var triggers = mutableListOf<Trigger>()
+//#else
+//$$ ) {
+//#endif
+    val triggers = mutableListOf<Trigger>()
 
     init {
         triggers.add(trigger)
     }
 
-    fun getTriggers() = triggers
-
-    //#if MC<=10809
+    //#if MC<=11202
     override fun getCommandName() = name
-    //#else
-    //$$ override fun getName() = name
-    //#endif
 
-    //#if MC<=10809
     override fun getCommandAliases() = aliases
-    //#else
-    //$$ override fun getAliases() = aliases
-    //#endif
 
     override fun getRequiredPermissionLevel() = 0
 
-    //#if MC<=10809
     override fun getCommandUsage(sender: ICommandSender) = usage
-    //#else
-    //$$ override fun getUsage(sender: ICommandSender) = usage
-    //#endif
 
     override fun addTabCompletionOptions(
         sender: ICommandSender?,
@@ -56,10 +54,30 @@ class Command(
     }
 
     @Throws(CommandException::class)
-    //#if MC<=10809
     override fun processCommand(sender: ICommandSender, args: Array<String>) = trigger(args)
     //#else
-    //$$ override fun execute(server: net.minecraft.server.MinecraftServer?, sender: ICommandSender, args: Array<String>) = trigger(args)
+    //$$ private lateinit var commandNode: CommandNode<CommandSourceStack>
+    //$$
+    //$$ fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
+    //$$     fun execute(context: CommandContext<CommandSourceStack>): Int {
+    //$$         val args = context.nodes.map {
+    //$$             context.input.substring(it.range.start, it.range.end)
+    //$$         }.toTypedArray()
+    //$$         triggers.forEach { it.trigger(args) }
+    //$$         return 1
+    //$$     }
+    //$$
+    //$$     var command = Commands.literal(name)
+    //$$
+    //$$     for (option in tabCompletionOptions) {
+    //$$         command = command.then(Commands.argument(
+    //$$             option,
+    //$$             StringArgumentType.greedyString()
+    //$$         )).executes(::execute)
+    //$$     }
+    //$$
+    //$$     commandNode = dispatcher.register(command.executes(::execute))
+    //$$ }
     //#endif
 
     private fun trigger(args: Array<String>) {
@@ -67,18 +85,26 @@ class Command(
     }
 
     fun register() {
+        //#if MC<=11202
         if (name in ClientCommandHandler.instance.commandMap.keys && !overrideExisting) {
             throw IllegalArgumentException("Command with name $name already exists!")
         }
 
         ClientCommandHandler.instance.registerCommand(this)
         activeCommands[name] = this
+        //#else
+        //$$ CTJS.registerCommand(commandNode)
+        //#endif
     }
 
     fun unregister() {
+        //#if MC<=11202
         ClientCommandHandler.instance.commandSet.remove(this)
         ClientCommandHandler.instance.commandMap.remove(name)
         activeCommands.remove(name)
+        //#else
+        //$$ CTJS.unregisterCommand(commandNode)
+        //#endif
     }
 
     companion object {

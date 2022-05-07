@@ -17,11 +17,7 @@ import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.google.gson.Gson
 import gg.essential.vigilance.Vigilance
-import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.io.File
 import java.net.URL
 import java.net.URLConnection
@@ -29,24 +25,46 @@ import java.security.MessageDigest
 import java.util.*
 import kotlin.concurrent.thread
 
+import net.minecraftforge.fml.common.Mod
+//#if MC>=11701
+import net.minecraftforge.client.ClientCommandHandler
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+//#else
+//$$ import net.minecraftforge.eventbus.api.SubscribeEvent
+//$$ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+//$$ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+//$$ import net.minecraftforge.event.RegisterCommandsEvent
+//$$ import net.minecraft.commands.CommandSourceStack
+//$$ import com.mojang.brigadier.CommandDispatcher
+//$$ import com.mojang.brigadier.tree.CommandNode
+//#endif
+
+//#if MC<=11202
 @Mod(
     modid = Reference.MODID,
     name = Reference.MODNAME,
     version = Reference.MODVERSION,
     clientSideOnly = true,
-    modLanguage = "Kotlin",
-    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
-object CTJS {
-    const val WEBSITE_ROOT = "https://www.chattriggers.com"
-    val gson = Gson()
-    val configLocation = File("./config")
-    val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
-    val sounds = mutableListOf<Sound>()
-    val images = mutableListOf<Image>()
+//#else
+//$$ @Mod(Reference.MODID)
+//$$ @Mod.EventBusSubscriber(modid = Reference.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//#endif
+class CTJS {
+    //#if MC>=11701 && FABRIC==0
+    //$$ init {
+    //$$     FMLJavaModLoadingContext.get().modEventBus.addListener(::init)
+    //$$ }
+    //#endif
 
+    //#if MC<=11202
     @Mod.EventHandler
-    fun preInit(event: FMLPreInitializationEvent) {
+    fun init(event: FMLInitializationEvent) {
+    //#elseif MC>=11701 && FABRIC==0
+    //$$ fun init(event: FMLCommonSetupEvent) {
+    //#else
+    //$$ fun init() {
+    //#endif
         listOf(
             WorldListener,
             CPS,
@@ -59,10 +77,7 @@ object CTJS {
 
         UriScheme.installUriScheme()
         UriScheme.createSocketListener()
-    }
 
-    @Mod.EventHandler
-    fun init(event: FMLInitializationEvent) {
         Vigilance.initialize()
         Config.preload()
 
@@ -84,19 +99,27 @@ object CTJS {
             }
         }
 
-        registerHooks()
-    }
+        Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
 
-    fun makeWebRequest(url: String): URLConnection = URL(url).openConnection().apply {
-        setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
-        connectTimeout = 3000
-        readTimeout = 3000
+        //#if MC<=11202
+        ClientCommandHandler.instance.registerCommand(CTCommand)
+        //#endif
     }
 
     private fun registerHooks() {
         ClientCommandHandler.instance.registerCommand(CTCommand)
         Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
     }
+
+    //#if MC>=11701
+    //$$ @SubscribeEvent
+    //$$ fun registerCommands(event: RegisterCommandsEvent) {
+    //$$     commandDispatcher = event.dispatcher
+    //$$     CTCommand.register(event.dispatcher)
+    //$$     commandsPendingRegistration.forEach(event.dispatcher.root::addChild)
+    //$$     commandsPendingRegistration.clear()
+    //$$ }
+    //#endif
 
     private fun reportHashedUUID() {
         val uuid = Player.getUUID().encodeToByteArray()
@@ -109,5 +132,40 @@ object CTJS {
         val url = "${WEBSITE_ROOT}/api/statistics/track?hash=$hash&version=${Reference.MODVERSION}"
         val connection = makeWebRequest(url)
         connection.getInputStream()
+    }
+
+    fun makeWebRequest(url: String): URLConnection = URL(url).openConnection().apply {
+        setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
+        connectTimeout = 3000
+        readTimeout = 3000
+    }
+
+    companion object {
+        const val WEBSITE_ROOT = "https://www.chattriggers.com"
+        val gson = Gson()
+        val configLocation = File("./config")
+        val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
+        val sounds = mutableListOf<Sound>()
+        val images = mutableListOf<Image>()
+
+        //#if MC>=11701
+        //$$ private val commandsPendingRegistration = mutableListOf<CommandNode<CommandSourceStack>>()
+        //$$ private var commandDispatcher: CommandDispatcher<CommandSourceStack>? = null
+        //$$
+        //$$ fun registerCommand(command: CommandNode<CommandSourceStack>) {
+        //$$     if (commandDispatcher!!.root.children.any { it.name == command.name })
+        //$$         throw IllegalArgumentException("Command with name ${command.name} already exists!")
+        //$$     commandDispatcher?.root?.addChild(command) ?: commandsPendingRegistration.add(command)
+        //$$ }
+        //$$
+        //$$ fun unregisterCommand(command: CommandNode<CommandSourceStack>) {
+        //$$     val dispatcher = commandDispatcher
+        //$$     if (dispatcher == null) {
+        //$$         commandsPendingRegistration.remove(command)
+        //$$     } else if (!dispatcher.root.children.remove(command)) {
+        //$$         throw IllegalArgumentException("Encountered an error while removing command ${command.name}")
+        //$$     }
+        //$$ }
+        //#endif
     }
 }
