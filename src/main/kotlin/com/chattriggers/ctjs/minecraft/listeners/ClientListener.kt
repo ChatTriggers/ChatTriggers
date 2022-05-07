@@ -12,25 +12,35 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockFace
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
+import gg.essential.universal.UMatrixStack
+import gg.essential.universal.UMouse
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.network.Packet
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.client.event.*
 import net.minecraftforge.event.entity.item.ItemTossEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.TickEvent
-import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import org.lwjgl.util.vector.Vector3f
 import org.mozilla.javascript.Context
 import java.util.concurrent.CopyOnWriteArrayList
 
+//#if MC>=11701
+//$$ import com.chattriggers.ctjs.Reference
+//$$ import net.minecraftforge.fml.common.Mod
+//$$ import net.minecraftforge.event.*
+//#else
+import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.network.Packet
+import net.minecraftforge.fml.common.gameevent.TickEvent
+import net.minecraftforge.fml.common.network.FMLNetworkEvent
+//#endif
+
+//#if MC>=11701
+//$$ @Mod.EventBusSubscriber(modid = Reference.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//#endif
 object ClientListener {
     private var ticksPassed: Int = 0
     val chatHistory = mutableListOf<String>()
@@ -95,6 +105,7 @@ object ClientListener {
         Scoreboard.resetCache()
     }
 
+    //#if MC<=11202
     @SubscribeEvent
     fun onClientDisconnect(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
         TriggerType.ServerDisconnect.triggerAll(event)
@@ -139,6 +150,7 @@ object ClientListener {
                 }
             })
     }
+    //#endif
 
     @SubscribeEvent
     fun onDrawScreenEvent(event: GuiScreenEvent.DrawScreenEvent.Post) {
@@ -155,16 +167,26 @@ object ClientListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
+        //#if MC<=11202
         GlStateManager.pushMatrix()
         handleOverlayTriggers(event)
         GlStateManager.popMatrix()
+        //#else
+        //$$ event.matrixStack.pushPose()
+        //$$ handleOverlayTriggers(event)
+        //$$ event.matrixStack.popPose()
+        //#endif
     }
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
         when (event.type) {
             RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RenderPlayerList.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.CROSSHAIRS -> TriggerType.RenderCrosshair.triggerAll(event)
             RenderGameOverlayEvent.ElementType.DEBUG -> TriggerType.RenderDebug.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.TEXT -> TriggerType.RenderOverlay.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.CHAT -> TriggerType.RenderChat.triggerAll(event)
+            // TODO(CONVERT): These don't exist, so I guess mixin them?
+            //#if MC<=11202
+            RenderGameOverlayEvent.ElementType.CROSSHAIRS -> TriggerType.RenderCrosshair.triggerAll(event)
             RenderGameOverlayEvent.ElementType.BOSSHEALTH -> TriggerType.RenderBossHealth.triggerAll(event)
             RenderGameOverlayEvent.ElementType.HEALTH -> TriggerType.RenderHealth.triggerAll(event)
             RenderGameOverlayEvent.ElementType.ARMOR -> TriggerType.RenderArmor.triggerAll(event)
@@ -173,11 +195,10 @@ object ClientListener {
             RenderGameOverlayEvent.ElementType.EXPERIENCE -> TriggerType.RenderExperience.triggerAll(event)
             RenderGameOverlayEvent.ElementType.HOTBAR -> TriggerType.RenderHotbar.triggerAll(event)
             RenderGameOverlayEvent.ElementType.AIR -> TriggerType.RenderAir.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.TEXT -> TriggerType.RenderOverlay.triggerAll(event)
             RenderGameOverlayEvent.ElementType.PORTAL -> TriggerType.RenderPortal.triggerAll(event)
             RenderGameOverlayEvent.ElementType.JUMPBAR -> TriggerType.RenderJumpBar.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.CHAT -> TriggerType.RenderChat.triggerAll(event)
             RenderGameOverlayEvent.ElementType.HELMET -> TriggerType.RenderHelmet.triggerAll(event)
+            //#endif
         }
     }
 
@@ -186,6 +207,8 @@ object ClientListener {
         if (event.gui != null) TriggerType.GuiOpened.triggerAll(event)
     }
 
+    // TODO(CONVERT)
+    //#if MC<=11202
     @SubscribeEvent
     fun onBlockHighlight(event: DrawBlockHighlightEvent) {
         if (event.target == null || event.target.blockPos == null) return
@@ -198,15 +221,23 @@ object ClientListener {
 
         TriggerType.BlockHighlight.triggerAll(position, event)
     }
+    //#endif
 
     @SubscribeEvent
     fun onPickupItem(event: EntityItemPickupEvent) {
-        if (event.entityPlayer !is EntityPlayerMP) return
+        //#if MC<=11202
+        val player = event.entityPlayer
+        //#else
+        //$$ val player = event.player
+        //#endif
 
-        val player = event.entityPlayer as EntityPlayerMP
+        if (player !is EntityPlayerMP)
+            return
 
         val item = event.item
 
+        // TODO(FEATURE): Vector3f wrapper class?
+        //#if MC<=11202
         val position = Vector3f(
             item.posX.toFloat(),
             item.posY.toFloat(),
@@ -217,6 +248,18 @@ object ClientListener {
             item.motionY.toFloat(),
             item.motionZ.toFloat()
         )
+        //#else
+        //$$ val position = Vector3f(
+        //$$     item.x.toFloat(),
+        //$$     item.y.toFloat(),
+        //$$     item.z.toFloat()
+        //$$ )
+        //$$ val motion = Vector3f(
+        //$$     item.deltaMovement.x.toFloat(),
+        //$$     item.deltaMovement.y.toFloat(),
+        //$$     item.deltaMovement.z.toFloat()
+        //$$ )
+        //#endif
 
         TriggerType.PickupItem.triggerAll(
             //#if MC<=10809
@@ -235,6 +278,7 @@ object ClientListener {
     fun onDropItem(event: ItemTossEvent) {
         val item = event.entityItem
 
+        //#if MC<=11202
         val position = Vector3f(
             item.posX.toFloat(),
             item.posY.toFloat(),
@@ -245,6 +289,18 @@ object ClientListener {
             item.motionY.toFloat(),
             item.motionZ.toFloat()
         )
+        //#else
+        //$$ val position = Vector3f(
+        //$$     item.x.toFloat(),
+        //$$     item.y.toFloat(),
+        //$$     item.z.toFloat()
+        //$$ )
+        //$$ val motion = Vector3f(
+        //$$     item.deltaMovement.x.toFloat(),
+        //$$     item.deltaMovement.y.toFloat(),
+        //$$     item.deltaMovement.z.toFloat()
+        //$$ )
+        //#endif
 
         TriggerType.DropItem.triggerAll(
             //#if MC<=10809
@@ -261,18 +317,26 @@ object ClientListener {
 
     @SubscribeEvent
     fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
+        //#if MC<=11202
         GlStateManager.pushMatrix()
+        //#else
+        //$$ e.matrixStack.pushPose()
+        //#endif
 
         TriggerType.GuiRender.triggerAll(
-            e.mouseX,
-            e.mouseY,
+            UMouse.Scaled.x,
+            UMouse.Scaled.y,
             e.gui
         )
 
+        //#if MC<=11202
         GlStateManager.popMatrix()
+        //#else
+        //$$ e.matrixStack.pushPose()
+        //#endif
     }
 
-    //#if MC<=10809
+    //#if MC<=11202
     @SubscribeEvent
     fun onInteract(e: PlayerInteractEvent) {
         val action = when (e.action) {
@@ -292,17 +356,12 @@ object ClientListener {
     //$$@SubscribeEvent
     //$$fun onLeftClick(e: PlayerInteractEvent) {
     //$$    val action = when (e) {
-    //$$        is PlayerInteractEvent.EntityInteract, is PlayerInteractEvent.EntityInteractSpecific ->
-    //$$            PlayerInteractAction.RIGHT_CLICK_ENTITY
     //$$        is PlayerInteractEvent.RightClickBlock -> PlayerInteractAction.RIGHT_CLICK_BLOCK
-    //$$        is PlayerInteractEvent.RightClickItem -> PlayerInteractAction.RIGHT_CLICK_ITEM
     //$$        is PlayerInteractEvent.RightClickEmpty -> PlayerInteractAction.RIGHT_CLICK_EMPTY
-    //$$        is PlayerInteractEvent.LeftClickBlock -> PlayerInteractAction.LEFT_CLICK_BLOCK
-    //$$        is PlayerInteractEvent.LeftClickEmpty -> PlayerInteractAction.LEFT_CLICK_EMPTY
     //$$        else -> PlayerInteractAction.UNKNOWN
     //$$    }
     //$$
-    //$$    TriggerType.PLAYER_INTERACT.triggerAll(
+    //$$    TriggerType.PlayerInteract.triggerAll(
     //$$            action,
     //$$            World.getBlockAt(e.pos.x, e.pos.y, e.pos.z),
     //$$            e
@@ -322,12 +381,6 @@ object ClientListener {
     enum class PlayerInteractAction {
         RIGHT_CLICK_BLOCK,
         RIGHT_CLICK_EMPTY,
-
-        //#if MC>10809
-        //$$RIGHT_CLICK_ENTITY,
-        //$$RIGHT_CLICK_ITEM,
-        //$$LEFT_CLICK_EMPTY,
-        //#endif
         UNKNOWN
     }
 }

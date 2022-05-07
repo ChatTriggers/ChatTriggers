@@ -18,6 +18,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.util.vector.Vector3f
 
+//#if MC>=11701
+//$$ import net.minecraft.client.resources.sounds.AbstractSoundInstance
+//$$ import com.chattriggers.ctjs.Reference
+//$$ import net.minecraftforge.fml.common.Mod
+//#else
+//#endif
+
+//#if MC>=11701
+//$$ @Mod.EventBusSubscriber(modid = Reference.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//#endif
 object WorldListener {
     private var shouldTriggerWorldLoad: Boolean = false
     private var playerList = mutableListOf<String>()
@@ -57,11 +67,19 @@ object WorldListener {
 
     @SubscribeEvent
     fun onSoundPlay(event: PlaySoundEvent) {
+        //#if MC<=11202
         val position = Vector3f(
             event.sound.xPosF,
             event.sound.yPosF,
             event.sound.zPosF
         )
+        //#else
+        //$$ val position = Vector3f(
+        //$$     event.sound.x.toFloat(),
+        //$$     event.sound.y.toFloat(),
+        //$$     event.sound.z.toFloat()
+        //$$ )
+        //#endif
 
         val vol = try {
             event.sound.volume
@@ -74,16 +92,21 @@ object WorldListener {
             1
         }
 
+        //#if MC<=11202
+        val category = event.category?.categoryName ?: "null"
+        //#else
+        //$$ val category = when (val sound = event.sound) {
+        //$$     is AbstractSoundInstance -> sound.source.name
+        //$$     else -> "null"
+        //$$ }
+        //#endif
+
         TriggerType.SoundPlay.triggerAll(
             position,
             event.name,
             vol,
             pitch,
-            //#if MC<=10809
-            event.category ?: event.category?.categoryName,
-            //#else
-            //$$ event.sound.category ?: event.sound.category.name,
-            //#endif
+            category,
             event
         )
     }
@@ -157,7 +180,11 @@ object WorldListener {
     fun attackEntityEvent(event: AttackEntityEvent) {
         TriggerType.EntityDamage.triggerAll(
             Entity(event.target),
+            //#if MC<=11202
             PlayerMP(event.entityPlayer)
+            //#else
+            //$$ PlayerMP(event.player)
+            //#endif
         )
     }
 }
