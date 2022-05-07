@@ -9,6 +9,7 @@ data class ModuleMetadata(
     val tags: ArrayList<String>? = null,
     val pictureLink: String? = null,
     val creator: String? = null,
+    val author: String? = null,
     val description: String? = null,
     val requires: ArrayList<String>? = null,
     val helpMessage: String? = null,
