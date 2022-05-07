@@ -128,7 +128,7 @@ object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml"), sorting
         name = "Use custom console colors for errors or warnings",
         category = "Console",
     )
-    var consoleErrorAndWarningColors = false
+    var consoleErrorAndWarningColors = true
 
     @Property(
         PropertyType.COLOR,
