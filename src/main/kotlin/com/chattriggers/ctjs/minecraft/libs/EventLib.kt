@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.libs
 
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
-import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.fml.common.eventhandler.Event
@@ -14,13 +14,13 @@ object EventLib {
         //#if MC<=10809
         return event.type.toInt()
         //#else
-        //$$ return event.type.id.toInt()
+        //$$ return event.type.ordinal
         //#endif
     }
 
     @JvmStatic
-    fun getMessage(event: ClientChatReceivedEvent): MCITextComponent {
-        return event.message
+    fun getMessage(event: ClientChatReceivedEvent): UTextComponent {
+        return UTextComponent(event.message)
     }
 
     @JvmStatic

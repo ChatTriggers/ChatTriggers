@@ -3,6 +3,7 @@
     "package": "com.chattriggers.ctjs.launch.mixins.transformers",
     "refmap": "mixins.chattriggers.refmap.json",
     "client": [
+        "ChatGuiMixin",
         "EffectRendererMixin",
         "GuiAccessor",
         "GuiContainerMixin",

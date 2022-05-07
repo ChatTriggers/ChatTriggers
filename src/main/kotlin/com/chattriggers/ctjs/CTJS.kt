@@ -26,7 +26,7 @@ import java.util.*
 import kotlin.concurrent.thread
 
 import net.minecraftforge.fml.common.Mod
-//#if MC>=11701
+//#if MC<=11202
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 //#else
@@ -150,7 +150,7 @@ class CTJS {
 
         //#if MC>=11701
         //$$ private val commandsPendingRegistration = mutableListOf<CommandNode<CommandSourceStack>>()
-        //$$ private var commandDispatcher: CommandDispatcher<CommandSourceStack>? = null
+        //$$ internal var commandDispatcher: CommandDispatcher<CommandSourceStack>? = null
         //$$
         //$$ fun registerCommand(command: CommandNode<CommandSourceStack>) {
         //$$     if (commandDispatcher!!.root.children.any { it.name == command.name })

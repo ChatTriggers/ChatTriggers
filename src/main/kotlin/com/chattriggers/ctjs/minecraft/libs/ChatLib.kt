@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
+import com.chattriggers.ctjs.launch.mixins.transformers.ChatGuiMixin
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -8,14 +9,27 @@ import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.utils.kotlin.setChatLineId
 import com.chattriggers.ctjs.utils.kotlin.setRecursive
 import com.chattriggers.ctjs.utils.kotlin.times
+import gg.essential.universal.UPacket
 import gg.essential.universal.wrappers.message.UMessage
 import gg.essential.universal.wrappers.message.UTextComponent
-import net.minecraft.client.gui.ChatLine
-import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
+
+//#if MC<=11202
+import net.minecraftforge.client.ClientCommandHandler
+typealias MCChatLine = net.minecraft.client.gui.ChatLine
+//#else
+//$$ import com.chattriggers.ctjs.CTJS
+//$$ import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
+//$$ import net.minecraft.ChatFormatting
+//$$ import net.minecraft.client.GuiMessage
+//$$ import net.minecraft.network.chat.Style
+//$$ import net.minecraft.network.chat.TextColor
+//$$ import net.minecraft.util.FormattedCharSequence
+//$$ import net.minecraft.util.FormattedCharSink
+//#endif
 
 object ChatLib {
     /**
@@ -32,11 +46,6 @@ object ChatLib {
             is UTextComponent -> text.chat()
             else -> UMessage(text.toString()).chat()
         }
-    }
-
-    @JvmStatic
-    fun test(e: Any) {
-        println(e)
     }
 
     /**
@@ -78,7 +87,7 @@ object ChatLib {
      * @param text the message to be sent
      */
     @JvmStatic
-    fun say(text: String) = Player.getPlayer()?.sendChatMessage(text)
+    fun say(text: String) = UPacket.sendChatMessage(UTextComponent(text).apply { formatted = false })
 
     /**
      * Runs a command.
@@ -86,11 +95,17 @@ object ChatLib {
      * @param text the command to run, without the leading slash (Ex. "help")
      * @param clientSide should the command be ran as a client side command
      */
+    // TODO(VERIFY)
     @JvmOverloads
     @JvmStatic
     fun command(text: String, clientSide: Boolean = false) {
-        if (clientSide) ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
-        else say("/$text")
+        if (clientSide) {
+            //#if MC<=11202
+            ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
+            //#else
+            // CTJS.commandDispatcher?.execute(text, Player.getPlayer()!!.createCommandSourceStack())
+            //#endif
+        } else say("/$text")
     }
 
     /**
@@ -100,16 +115,13 @@ object ChatLib {
      */
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
-        if (chatLineIDs.isEmpty()) {
-            //#if MC<=10809
-            Client.getChatGUI()?.clearChatMessages()
-            //#else
-            //$$ Client.getChatGUI()?.clearChatMessages(false)
-            //#endif
-            return
-        }
+        @Suppress("CAST_NEVER_SUCCEEDS")
+        val gui = Client.getChatGUI() as? ChatGuiMixin ?: return
+
+        if (chatLineIDs.isEmpty())
+            gui.clearMessages()
         for (chatLineID in chatLineIDs)
-            Client.getChatGUI()?.deleteChatLine(chatLineID)
+            gui.deleteMessage(chatLineID)
     }
 
     /**
@@ -136,7 +148,11 @@ object ChatLib {
      */
     @JvmStatic
     fun getChatWidth(): Int {
+        //#if MC<=11202
         return Client.getChatGUI()?.chatWidth ?: 0
+        //#else
+        //$$ return Client.getChatGUI()?.width ?: 0
+        //#endif
     }
 
     /**
@@ -258,38 +274,39 @@ object ChatLib {
     }
 
     private fun editChat(toReplace: (UMessage) -> Boolean, vararg replacements: UMessage) {
-        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
-        val chatLines = Client.getChatGUI()!!.chatLines
+        @Suppress("CAST_NEVER_SUCCEEDS")
+        val chatGui = Client.getChatGUI()!! as ChatGuiMixin
+        val drawnChatLines = chatGui.drawnChatLines
+        val chatLines = chatGui.chatLines
 
         editChatLineList(chatLines, toReplace, *replacements)
         editChatLineList(drawnChatLines, toReplace, *replacements)
     }
 
-    private fun editChatLineList(
-        lineList: MutableList<ChatLine>,
+    // TODO(VERIFY)
+    private fun <T> editChatLineList(
+        iterator: ChatLineListIterator<T>,
         toReplace: (UMessage) -> Boolean,
         vararg replacements: UMessage
     ) {
-        val chatLineIterator = lineList.listIterator()
-
-        while (chatLineIterator.hasNext()) {
-            val chatLine = chatLineIterator.next()
+        while (iterator.hasNext()) {
+            val chatLine = iterator.next()
 
             val result = toReplace(
-                UMessage(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)
+                UMessage(chatLine.component).setChatLineId(chatLine.id)
             )
 
             if (!result) {
                 continue
             }
 
-            chatLineIterator.remove()
+            iterator.remove()
 
             replacements.map {
                 val lineId = if (it.chatLineId == -1) 0 else it.chatLineId
 
-                ChatLine(chatLine.updatedCounter, it.chatMessage, lineId)
-            }.forEach(chatLineIterator::add)
+                ChatLine(lineId, chatLine.addedTime, it.chatMessage)
+            }.forEach(iterator::add)
         }
     }
 
@@ -350,24 +367,25 @@ object ChatLib {
     }
 
     private fun deleteChat(toDelete: (UMessage) -> Boolean) {
-        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
-        val chatLines = Client.getChatGUI()!!.chatLines
+        @Suppress("CAST_NEVER_SUCCEEDS")
+        val chatGui = Client.getChatGUI()!! as ChatGuiMixin
+        val drawnChatLines = chatGui.drawnChatLines
+        val chatLines = chatGui.chatLines
 
         deleteChatLineList(chatLines, toDelete)
         deleteChatLineList(drawnChatLines, toDelete)
     }
 
-    private fun deleteChatLineList(
-        lineList: MutableList<ChatLine>,
+    // TODO(VERIFY)
+    private fun <T> deleteChatLineList(
+        iterator: ChatLineListIterator<T>,
         toDelete: (UMessage) -> Boolean,
     ) {
-        val chatLineIterator = lineList.listIterator()
+        while (iterator.hasNext()) {
+            val chatLine = iterator.next()
 
-        while (chatLineIterator.hasNext()) {
-            val chatLine = chatLineIterator.next()
-
-            if (toDelete(UMessage(chatLine.chatComponent).setChatLineId(chatLine.chatLineID)))
-                chatLineIterator.remove()
+            if (toDelete(UMessage(chatLine.component).setChatLineId(chatLine.id)))
+                iterator.remove()
         }
     }
 
@@ -393,7 +411,11 @@ object ChatLib {
     @JvmOverloads
     @JvmStatic
     fun addToSentMessageHistory(index: Int = -1, message: String) {
+        //#if MC<=11202
         val sentMessages = Client.getChatGUI()!!.sentMessages
+        //#else
+        //$$ val sentMessages = Client.getChatGUI()!!.recentChat
+        //#endif
 
         if (index == -1) sentMessages.add(message)
         else sentMessages.add(index, message)
@@ -438,4 +460,115 @@ object ChatLib {
 
         return true
     }
+
+    data class ChatLine(val id: Int, val addedTime: Int, val component: UTextComponent)
+
+    interface ChatLineMapper<MCType> {
+        fun toCT(chatLine: MCType): ChatLine
+
+        fun toMC(chatLine: ChatLine): MCType
+    }
+
+    abstract class BaseChatLineListIterator<T>(
+        underlyingList: MutableList<T>
+    ) : MutableListIterator<ChatLine>, ChatLineMapper<T> {
+        private val listIterator = underlyingList.listIterator()
+
+        override fun hasNext() = listIterator.hasNext()
+
+        override fun hasPrevious() = listIterator.hasPrevious()
+
+        override fun next() = toCT(listIterator.next())
+
+        override fun nextIndex() = listIterator.nextIndex()
+
+        override fun previous() = toCT(listIterator.previous())
+
+        override fun previousIndex() = listIterator.previousIndex()
+
+        override fun add(element: ChatLine) {
+            listIterator.add(toMC(element))
+        }
+
+        override fun remove() = listIterator.remove()
+
+        override fun set(element: ChatLine) {
+            listIterator.set(toMC(element))
+        }
+    }
+
+    //#if MC<=11202
+    class ChatLineListIterator<T>(underlyingList: MutableList<MCChatLine>) : BaseChatLineListIterator<MCChatLine>(underlyingList) {
+        override fun toCT(chatLine: MCChatLine) = ChatLine(chatLine.chatLineID, chatLine.updatedCounter, UTextComponent(chatLine.chatComponent))
+
+        override fun toMC(chatLine: ChatLine) = MCChatLine(chatLine.addedTime, chatLine.component.component, chatLine.id)
+    }
+    //#else
+    //$$ class ChatLineListIterator<T>(
+    //$$     underlyingList: MutableList<GuiMessage<T>>,
+    //$$     private val isDrawnList: Boolean,
+    //$$ ) : BaseChatLineListIterator<GuiMessage<T>>(underlyingList) {
+    //$$     override fun toCT(chatLine: GuiMessage<T>): ChatLine {
+    //$$         val component = if (isDrawnList) {
+    //$$             val seq = chatLine.message as FormattedCharSequence
+    //$$             val builder = TextBuilder(true)
+    //$$             seq.accept(builder)
+    //$$             UTextComponent(builder.getString())
+    //$$         } else UTextComponent(chatLine.message as MCITextComponent)
+    //$$
+    //$$         return ChatLine(chatLine.id, chatLine.addedTime, component)
+    //$$     }
+    //$$
+    //$$     override fun toMC(chatLine: ChatLine): GuiMessage<T> = GuiMessage(
+    //$$         chatLine.addedTime,
+    //$$         let {
+    //$$             if (isDrawnList) {
+    //$$                 chatLine.component.visualOrderText
+    //$$             } else chatLine.component.component
+    //$$         } as T,
+    //$$         chatLine.id
+    //$$     )
+    //$$ }
+    //$$
+    // Taken from UTextComponent
+    //$$ private class TextBuilder(private val isFormatted: Boolean) : FormattedCharSink {
+    //$$     private val builder = StringBuilder()
+    //$$     private var cachedStyle: Style? = null
+    //$$
+    //$$     override fun accept(index: Int, style: Style, codePoint: Int): Boolean  {
+    //$$         if (isFormatted && style != cachedStyle) {
+    //$$             cachedStyle = style
+    //$$             builder.append(formatString(style))
+    //$$         }
+    //$$
+    //$$         builder.append(codePoint.toChar())
+    //$$         return true
+    //$$     }
+    //$$
+    //$$     fun getString() = builder.toString()
+    //$$
+    //$$     private fun formatString(style: Style): String {
+    //$$         val builder = StringBuilder("§r")
+    //$$
+    //$$         when {
+    //$$             style.isBold -> builder.append("§l")
+    //$$             style.isItalic -> builder.append("§o")
+    //$$             style.isUnderlined -> builder.append("§n")
+    //$$             style.isStrikethrough -> builder.append("§m")
+    //$$             style.isObfuscated -> builder.append("§k")
+    //$$         }
+    //$$
+    //$$         style.color?.let(colorToFormatChar::get)?.let {
+    //$$             builder.append(it)
+    //$$         }
+    //$$         return builder.toString()
+    //$$     }
+    //$$
+    //$$     companion object {
+    //$$         private val colorToFormatChar = ChatFormatting.values().mapNotNull { format ->
+    //$$             TextColor.fromLegacyFormat(format)?.let { it to format }
+    //$$         }.toMap()
+    //$$     }
+    //$$ }
+    //#endif
 }
