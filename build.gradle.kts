@@ -40,6 +40,9 @@ dependencies {
     compileOnly("gg.essential:essential-$platform:2666")
     embed("gg.essential:loader-launchwrapper:1.1.3")
 
+    compileOnly("org.spongepowered:mixin:0.8.5-SNAPSHOT")
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+
     implementation("com.chattriggers:rhino:1.8.6")
     implementation("com.fasterxml.jackson.core:jackson-core:2.13.2")
     implementation("com.fifesoft:rsyntaxtextarea:3.2.0")
