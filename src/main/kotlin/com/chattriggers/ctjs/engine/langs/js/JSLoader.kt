@@ -55,39 +55,19 @@ object JSLoader : ILoader {
 
     override fun setup(jars: List<URL>) {
         instanceContexts(jars)
-
-        wrapInContext {
-            val asmProvidedLibs = saveResource(
-                "/js/asmProvidedLibs.js",
-                File(modulesFolder.parentFile, "chattriggers-asm-provided-libs.js"),
-                true
-            )
-
-            try {
-                moduleContext.evaluateString(
-                    scope,
-                    asmProvidedLibs,
-                    "asmProvided",
-                    1, null
-                )
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                e.printTraceToConsole(console)
-            }
-        }
     }
 
     override fun entrySetup(): Unit = wrapInContext {
-        val moduleProvidedLibs = saveResource(
+        val providedLibs = saveResource(
             "/js/providedLibs.js",
-            File(modulesFolder.parentFile, "chattriggers-modules-provided-libs.js"),
+            File(modulesFolder.parentFile, "chattriggers-provided-libs.js"),
             true
         )
 
         try {
             moduleContext.evaluateString(
                 scope,
-                moduleProvidedLibs,
+                providedLibs,
                 "moduleProvided",
                 1, null
             )
