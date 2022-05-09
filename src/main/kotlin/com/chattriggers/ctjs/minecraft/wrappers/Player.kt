@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.minecraft.libs.Tessellator
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
@@ -58,13 +57,13 @@ object Player {
     fun getLastZ(): Double = getPlayer()?.lastTickPosZ ?: 0.0
 
     @JvmStatic
-    fun getRenderX(): Double = getLastX() + (getX() - getLastX()) * Tessellator.partialTicks
+    fun getRenderX(): Double = getLastX() + (getX() - getLastX()) * Renderer.partialTicks
 
     @JvmStatic
-    fun getRenderY(): Double = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
+    fun getRenderY(): Double = getLastY() + (getY() - getLastY()) * Renderer.partialTicks
 
     @JvmStatic
-    fun getRenderZ(): Double = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
+    fun getRenderZ(): Double = getLastZ() + (getZ() - getLastZ()) * Renderer.partialTicks
 
     /**
      * Gets the player's x motion.

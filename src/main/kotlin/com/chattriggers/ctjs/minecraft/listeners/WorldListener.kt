@@ -2,7 +2,7 @@ package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.engine.module.ModuleManager
-import com.chattriggers.ctjs.minecraft.libs.Tessellator
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
@@ -56,7 +56,7 @@ object WorldListener {
 
     @SubscribeEvent
     fun onRenderWorld(event: RenderWorldLastEvent) {
-        Tessellator.partialTicks = event.partialTicks
+        Renderer.partialTicks = event.partialTicks
         TriggerType.RenderWorld.triggerAll(event.partialTicks)
     }
 

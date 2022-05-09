@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
-import com.chattriggers.ctjs.minecraft.libs.Tessellator
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
@@ -26,11 +26,11 @@ open class Entity(val entity: MCEntity) {
 
     fun getLastZ() = entity.lastTickPosZ
 
-    fun getRenderX() = getLastX() + (getX() - getLastX()) * Tessellator.partialTicks
+    fun getRenderX() = getLastX() + (getX() - getLastX()) * Renderer.partialTicks
 
-    fun getRenderY() = getLastY() + (getY() - getLastY()) * Tessellator.partialTicks
+    fun getRenderY() = getLastY() + (getY() - getLastY()) * Renderer.partialTicks
 
-    fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Tessellator.partialTicks
+    fun getRenderZ() = getLastZ() + (getZ() - getLastZ()) * Renderer.partialTicks
 
     /**
      * Gets the pitch, the horizontal direction the entity is facing towards.

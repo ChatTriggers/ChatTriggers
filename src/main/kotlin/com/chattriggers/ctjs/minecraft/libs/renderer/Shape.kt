@@ -10,10 +10,11 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
+// TODO(VERIFY): The draw mode was changed from quad strip to quads
 class Shape(private var color: Long) {
     private val vertexes = mutableListOf<Vector2f>()
     private val reversedVertexes = vertexes.asReversed()
-    private var drawMode = 9
+    private var drawMode = Renderer.DrawMode.Quads
     private var area = 0f
 
     fun copy(): Shape = clone()
@@ -29,22 +30,12 @@ class Shape(private var color: Long) {
 
     fun setColor(color: Long) = apply { this.color = Renderer.fixAlpha(color) }
 
-    fun getDrawMode(): Int = drawMode
+    fun getDrawMode() = drawMode
 
     /**
-     * Sets the GL draw mode of the shape. Possible draw modes are:
-     * 0 = points
-     * 1 = lines
-     * 2 = line loop
-     * 3 = line strip
-     * 5 = triangles
-     * 5 = triangle strip
-     * 6 = triangle fan
-     * 7 = quads
-     * 8 = quad strip
-     * 9 = polygon
+     * Sets the GL draw mode of the shape
      */
-    fun setDrawMode(drawMode: Int) = apply { this.drawMode = drawMode }
+    fun setDrawMode(drawMode: Renderer.DrawMode) = apply { this.drawMode = drawMode }
 
     fun getVertexes(): List<Vector2f> = vertexes
 
@@ -78,7 +69,7 @@ class Shape(private var color: Long) {
         addVertex(x2 - i, y2 - j)
         addVertex(x1 - i, y1 - j)
 
-        drawMode = 7
+        drawMode = Renderer.DrawMode.Quads
     }
 
     /**
@@ -105,48 +96,27 @@ class Shape(private var color: Long) {
             addVertex(circleX * radius + x, circleY * radius + y)
         }
 
-        drawMode = 5
+        drawMode = Renderer.DrawMode.Triangles
     }
 
     fun draw() = apply {
-        val tessellator = MCTessellator.getInstance()
-        val worldRenderer = tessellator.getRenderer()
+        Renderer.setDrawMode(drawMode)
+        Renderer.withColor(color) {
+            Renderer.disableTexture2D()
+            Renderer.beginVertices(drawMode, Renderer.VertexFormat.Position)
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        Renderer.doColor(color)
-
-        worldRenderer.begin(drawMode, DefaultVertexFormats.POSITION)
-
-        if (area < 0) {
-            vertexes.forEach {
-                worldRenderer.pos(it.x.toDouble(), it.y.toDouble(), 0.0).endVertex()
+            if (area < 0) {
+                vertexes.forEach { Renderer.pos(it.x, it.y) }
+            } else {
+                reversedVertexes.forEach { Renderer.pos(it.x, it.y) }
             }
-        } else {
-            reversedVertexes.forEach {
-                worldRenderer.pos(it.x.toDouble(), it.y.toDouble(), 0.0).endVertex()
-            }
+
+            Renderer.endVertices()
+            Renderer.enableTexture2D()
         }
-
-        tessellator.draw()
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
-
-        Renderer.finishDraw()
     }
 
     private fun updateArea() {
-        area = 0f
-
-        for (i in vertexes.indices) {
-            val p1 = vertexes[i]
-            val p2 = vertexes[(i + 1) % vertexes.size]
-
-            area += p1.x * p2.y - p2.x * p1.y
-        }
-
-        area /= 2
+        area = Renderer.shapeArea(vertexes.map { listOf(it.x, it.y) }.toTypedArray())
     }
 }

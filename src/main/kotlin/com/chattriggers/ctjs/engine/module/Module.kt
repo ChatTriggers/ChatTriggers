@@ -20,10 +20,7 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
         gui.x = x
         gui.y = y
 
-        Renderer.drawRect(
-            0xaa000000,
-            x, y, width, 13f
-        )
+        Renderer.drawRect(x, y, width, 13f, 0xaa000000)
         Renderer.drawStringWithShadow(
             metadata.name ?: name,
             x + 3, y + 3
@@ -38,7 +35,7 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
         } else {
             gui.description.setMaxWidth(width.toInt() - 5)
 
-            Renderer.drawRect(0x50000000, x, y + 13, width, gui.description.getHeight() + 12)
+            Renderer.drawRect(x, y + 13, width, gui.description.getHeight() + 12, 0x50000000)
             Renderer.drawString("^", x + width - 10, y + 5)
 
             gui.description.draw(x + 3, y + 15)

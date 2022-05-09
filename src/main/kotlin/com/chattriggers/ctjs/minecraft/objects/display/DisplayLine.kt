@@ -157,7 +157,7 @@ abstract class DisplayLine {
         }
 
         if (background == DisplayHandler.Background.FULL)
-            Renderer.drawRect(backgroundColor, baseX - 1, y - 1, totalWidth + 1, text.getHeight())
+            Renderer.drawRect(baseX - 1, y - 1, totalWidth + 1, text.getHeight(), backgroundColor)
 
         if (text.getString().isEmpty())
             return
@@ -169,7 +169,7 @@ abstract class DisplayLine {
         }
 
         if (background == DisplayHandler.Background.PER_LINE)
-            Renderer.drawRect(backgroundColor, xOffset - 1, y - 1, textWidth + 1, text.getHeight())
+            Renderer.drawRect(xOffset - 1, y - 1, textWidth + 1, text.getHeight(), backgroundColor)
 
         text.setX(xOffset).setY(y).setColor(textColor).draw()
 

@@ -7,24 +7,48 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
+import gg.essential.elementa.utils.withAlpha
+import gg.essential.universal.UMinecraft
+import gg.essential.universal.UResolution
 import net.minecraft.client.entity.AbstractClientPlayer
-import net.minecraft.client.gui.FontRenderer
-import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import org.lwjgl.opengl.GL11
+import org.lwjgl.util.vector.Vector3f
+import java.awt.Color
+import java.nio.FloatBuffer
 import java.util.*
 import kotlin.math.*
 
 object Renderer {
-    var colorized: Long? = null
-    private var retainTransforms = false
-    private var drawMode: Int? = null
+    @JvmStatic
+    var partialTicks = 0f
+        internal set
 
-    private val tessellator = MCTessellator.getInstance()
-    private val worldRenderer = tessellator.getRenderer()
+    // TODO(BREAKING): This use to be a method called retainTransforms(),
+    //     now it will just be a normal getter/setter. It also used to call
+    //     finishDraw for some reason.
+    private var retainTransforms = false
+
+    // TODO(BREAKING): Was int, now an enum
+    private var drawMode: DrawMode? = null
+
+    private var vertexFormat: VertexFormat? = null
+
+    private var vertexStarted = true
+    private var began = false
+
+    private var tessellator = MCTessellator.getInstance()
+    private var worldRenderer = tessellator.getRenderer()
+
+    private val renderManager = getRenderManager()
+    private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
+    private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
+
+    private val colorBuffer = FloatBuffer.allocate(4)
 
     @JvmStatic
     val BLACK = color(0, 0, 0, 255)
@@ -97,17 +121,15 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getFontRenderer(): FontRenderer {
-        //#if MC<=10809
-        return Client.getMinecraft().fontRendererObj
-        //#else
-        //$$ return Client.getMinecraft().fontRenderer
-        //#endif
-    }
+    fun getFontRenderer() = UMinecraft.getFontRenderer()
 
     @JvmStatic
     fun getRenderManager(): RenderManager {
+        //#if MC<=11202
         return Client.getMinecraft().renderManager
+        //#else
+        //$$ return Client.getMinecraft().gameRenderer
+        //#endif
     }
 
     @JvmStatic
@@ -117,9 +139,9 @@ object Renderer {
     @JvmOverloads
     fun color(red: Long, green: Long, blue: Long, alpha: Long = 255): Long {
         return (MathLib.clamp(alpha.toInt(), 0, 255) * 0x1000000
-                + MathLib.clamp(red.toInt(), 0, 255) * 0x10000
-                + MathLib.clamp(green.toInt(), 0, 255) * 0x100
-                + MathLib.clamp(blue.toInt(), 0, 255)).toLong()
+            + MathLib.clamp(red.toInt(), 0, 255) * 0x10000
+            + MathLib.clamp(green.toInt(), 0, 255) * 0x100
+            + MathLib.clamp(blue.toInt(), 0, 255)).toLong()
     }
 
     @JvmStatic
@@ -141,48 +163,99 @@ object Renderer {
     }
 
     @JvmStatic
-    fun retainTransforms(retain: Boolean) {
-        retainTransforms = retain
-        finishDraw()
-    }
-
-    @JvmStatic
     @JvmOverloads
-    fun translate(x: Float, y: Float, z: Float = 0.0F) {
+    fun translate(x: Float, y: Float, z: Float = 0.0F) = apply {
         GlStateManager.translate(x, y, z)
     }
 
+    // TODO(BREAKING): In the Tessellator, scaleZ defaulted to scaleX. Does setting it to
+    //                 scaleX have any effect in 2D operations?
     @JvmStatic
     @JvmOverloads
-    fun scale(scaleX: Float, scaleY: Float = scaleX) {
-        GlStateManager.scale(scaleX, scaleY, 1f)
+    fun scale(scaleX: Float, scaleY: Float = scaleX, scaleZ: Float = 1f) = apply {
+        GlStateManager.scale(scaleX, scaleY, scaleZ)
     }
 
+    /**
+     * Rotates the Renderer in 2D screen space
+     */
     @JvmStatic
-    fun rotate(angle: Float) {
+    fun rotate(angle: Float) = apply {
         GlStateManager.rotate(angle, 0f, 0f, 1f)
     }
 
+    /**
+     * Rotates the Renderer in 3D space
+     */
+    @JvmStatic
+    fun rotate(angle: Float, x: Float, y: Float, z: Float) = apply {
+        GlStateManager.rotate(angle, x, y, z)
+    }
+
     @JvmStatic
     @JvmOverloads
-    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) {
-        colorized = fixAlpha(color(red.toLong(), green.toLong(), blue.toLong(), alpha.toLong()))
-
+    fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) = apply {
         GlStateManager.color(
-            MathLib.clampFloat(red, 0f, 1f),
-            MathLib.clampFloat(green, 0f, 1f),
-            MathLib.clampFloat(blue, 0f, 1f),
-            MathLib.clampFloat(alpha, 0f, 1f)
+            red.coerceIn(0f..1f),
+            green.coerceIn(0f..1f),
+            blue.coerceIn(0f..1f),
+            alpha.coerceIn(0f..1f),
         )
     }
 
     @JvmStatic
-    fun setDrawMode(drawMode: Int) = apply {
-        this.drawMode = drawMode
+    @JvmOverloads
+    fun colorize(red: Int, green: Int, blue: Int, alpha: Int = 255) = apply {
+        colorize(red.toFloat() / 255f, green.toFloat() / 255f, blue.toFloat() / 255f, alpha.toFloat() / 255)
     }
 
     @JvmStatic
-    fun getDrawMode() = drawMode
+    fun colorize(color: Color) = apply {
+        colorize(color.red, color.green, color.blue, color.alpha)
+    }
+
+    @JvmStatic
+    fun colorize(color: Long) = apply {
+        colorize(
+            (color shr 16 and 0xff).toFloat() / 255.0f,
+            (color shr 8 and 0xff).toFloat() / 255.0f,
+            (color and 0xff).toFloat() / 255.0f,
+            (color shr 24 and 0xff).toFloat() / 255.0f,
+        )
+    }
+
+    @JvmStatic
+    fun <T> withColor(color: Long?, block: () -> T): T {
+        if (color == null)
+            return block()
+
+        val old = getCurrentGlColor()
+        colorize(color)
+        return try {
+            block()
+        } finally {
+            colorize(old)
+        }
+    }
+
+    /**
+     * Gets the current OpenGL color value
+     */
+    @JvmStatic
+    fun getCurrentGlColor(): Color {
+        // TODO(VERIFY)
+        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, colorBuffer)
+        return Color(colorBuffer[0], colorBuffer[1], colorBuffer[2], colorBuffer[3])
+    }
+
+    /**
+     * Gets the current OpenGL color value. Takes into account the alpha bug
+     * (alphas less than 10 are bugged, so they are rounded up to 10)
+     */
+    @JvmStatic
+    fun getCurrentGlColorAlphaFixed() = getCurrentGlColor().let {
+        if (it.alpha < 10) it.withAlpha(10) else it
+    }
 
     @JvmStatic
     fun fixAlpha(color: Long): Long {
@@ -193,90 +266,318 @@ object Renderer {
     }
 
     @JvmStatic
-    fun drawRect(color: Long, x: Float, y: Float, width: Float, height: Float) {
+    fun disableAlpha() = apply {
+        GlStateManager.disableAlpha()
+    }
+
+    @JvmStatic
+    fun enableAlpha() = apply {
+        GlStateManager.enableAlpha()
+    }
+
+    @JvmStatic
+    fun alphaFunc(func: Int, ref: Float) = apply {
+        GlStateManager.alphaFunc(func, ref)
+    }
+
+    @JvmStatic
+    fun enableLighting() = apply {
+        GlStateManager.enableLighting()
+    }
+
+    @JvmStatic
+    fun disableLighting() = apply {
+        GlStateManager.disableLighting()
+    }
+
+    @JvmStatic
+    fun disableDepth() = apply {
+        GlStateManager.disableDepth()
+    }
+
+    @JvmStatic
+    fun enableDepth() = apply {
+        GlStateManager.enableDepth()
+    }
+
+    @JvmStatic
+    fun depthFunc(depthFunc: Int) = apply {
+        GlStateManager.depthFunc(depthFunc)
+    }
+
+    @JvmStatic
+    fun depthMask(flagIn: Boolean) = apply {
+        GlStateManager.depthMask(flagIn)
+    }
+
+    @JvmStatic
+    fun disableBlend() = apply {
+        GlStateManager.disableBlend()
+    }
+
+    @JvmStatic
+    fun enableBlend() = apply {
+        GlStateManager.enableBlend()
+    }
+
+    @JvmStatic
+    fun blendFunc(sourceFactor: Int, destFactor: Int) = apply {
+        GlStateManager.blendFunc(sourceFactor, destFactor)
+    }
+
+    @JvmStatic
+    fun tryBlendFuncSeparate(sourceFactor: Int, destFactor: Int, sourceFactorAlpha: Int, destFactorAlpha: Int) = apply {
+        GlStateManager.tryBlendFuncSeparate(sourceFactor, destFactor, sourceFactorAlpha, destFactorAlpha)
+    }
+
+    @JvmStatic
+    fun enableTexture2D() = apply {
+        GlStateManager.enableTexture2D()
+    }
+
+    @JvmStatic
+    fun disableTexture2D() = apply {
+        GlStateManager.disableTexture2D()
+    }
+
+    /**
+     * Binds a texture to the client for the Tessellator to use.
+     *
+     * @param texture the texture to bind
+     * @return the Tessellator to allow for method chaining
+     */
+    @JvmStatic
+    fun bindTexture(texture: Image) = apply {
+        GlStateManager.bindTexture(texture.getTexture().glTextureId)
+    }
+
+    @JvmStatic
+    fun deleteTexture(texture: Image) = apply {
+        GlStateManager.deleteTexture(texture.getTexture().glTextureId)
+    }
+
+    @JvmStatic
+    fun pushMatrix() = apply {
+        GlStateManager.pushMatrix()
+    }
+
+    @JvmStatic
+    fun popMatrix() = apply {
+        GlStateManager.popMatrix()
+    }
+
+    fun getRetainTransforms() = retainTransforms
+
+    fun setRetainTransforms(retain: Boolean) = apply {
+        retainTransforms = retain
+    }
+
+    fun getDrawMode() = drawMode
+
+    fun setDrawMode(mode: DrawMode) = apply {
+        drawMode = mode
+    }
+
+    fun getVertexFormat() = vertexFormat
+
+    fun setVertexFormat(format: VertexFormat) = apply {
+        vertexFormat = format
+    }
+
+    /**
+     * Gets a fixed render position from x, y, and z inputs adjusted with partial ticks
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return the Vector3f position to render at
+     */
+    @JvmStatic
+    fun getRenderPos(x: Float, y: Float, z: Float): Vector3f {
+        return Vector3f(
+            x - Player.getRenderX().toFloat(),
+            y - Player.getRenderY().toFloat(),
+            z - Player.getRenderZ().toFloat()
+        )
+    }
+
+    // TODO(BREAKING): Takes enum as first param, and VertexFormat and second (not boolean)
+    // TODO(BREAKING): No longer translates the player's camera position (see translateCamera)
+    // TODO(BREAKING): Second argument use to default to PositionTex in the Tessellator (now
+    //                 defaults indirectly to Position)
+    // TODO(BREAKING): Will throw if either parameter is not given and the corresponding Renderer
+    //                 field is null
+    @JvmStatic
+    @JvmOverloads
+    fun beginVertices(drawMode: DrawMode? = null, vertexFormat: VertexFormat? = null) = apply {
+        pushMatrix()
+        enableBlend()
+        tryBlendFuncSeparate(770, 771, 1, 0)
+
+        val theDrawMode = drawMode ?: this.drawMode ?: throw IllegalStateException(
+            "Call to Renderer.beginVertices() without a drawMode argument or drawMode set via Renderer.setDrawMode()"
+        )
+        val theVertexFormat = vertexFormat ?: this.vertexFormat ?: throw IllegalStateException(
+            "Call to Renderer.beginVertices() without a vertexFormat argument or vertexFormat set via Renderer.setVertexFormat()"
+        )
+
+        worldRenderer.begin(theDrawMode.toMCDrawMode(), theVertexFormat.mcVertexFormat)
+        vertexStarted = false
+        began = true
+    }
+
+    // TODO(BREAKING): Use to be called draw() in Tessellator
+    @JvmStatic
+    fun endVertices() {
+        if (!began)
+            throw IllegalStateException("Call to endVertices() without corresponding call to beginVertices()")
+
+        if (vertexStarted)
+            throw IllegalStateException("Call to endVertex() while in vertex. Did you forget to call endVertex()?")
+
+        began = false
+        tessellator.draw()
+        disableBlend()
+        popMatrix()
+
+        finishDraw()
+    }
+
+    @JvmStatic
+    fun finishDraw() {
+        if (!retainTransforms) {
+            drawMode = null
+            vertexFormat = null
+        }
+    }
+
+    @JvmStatic
+    fun translateCamera() = apply {
+        val renderManager = getRenderManager()
+        translate(
+            -renderManager.viewerPosX.toFloat(),
+            -renderManager.viewerPosY.toFloat(),
+            -renderManager.viewerPosZ.toFloat(),
+        )
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun pos(x: Number, y: Number, z: Number = 0.0) = apply {
+        // TODO(BREAKING): This use to call begin() automatically
+        if (!began)
+            throw IllegalStateException("Call to Renderer.pos() without a corresponding call to Renderer.beginVertices()")
+
+        // TODO(BREAKING): This use to call endVertex() automatically
+        if (vertexStarted)
+            throw IllegalStateException("Call to Renderer.pos() while in vertex. Did you forget to call Renderer.endVertex()?")
+
+        worldRenderer.pos(x.toDouble(), y.toDouble(), z.toDouble())
+        vertexStarted = true
+    }
+
+    @JvmStatic
+    fun tex(u: Number, v: Number) = apply {
+        // TODO(BREAKING): This check didn't use to be here
+        if (!began)
+            throw IllegalStateException("Call to Renderer.tex() without a corresponding call to Renderer.beginVertices()")
+
+        worldRenderer.tex(u.toDouble(), v.toDouble())
+    }
+
+    /**
+     * Calls WorldRenderer.color(). Named col to avoid confusion with colorize() and be
+     * as close to pos() and tex() as possible.
+     */
+    @JvmStatic
+    fun col(r: Float, g: Float, b: Float, a: Float) = apply {
+        if (!began)
+            throw IllegalStateException("Call to Renderer.col() without a corresponding call to Renderer.beginVertices()")
+
+        worldRenderer.color(r, g, b, a)
+    }
+
+    @JvmStatic
+    fun col(color: Color) = apply {
+        col(
+            color.red.toFloat() / 255f,
+            color.green.toFloat() / 255f,
+            color.blue.toFloat() / 255f,
+            color.alpha.toFloat() / 255f,
+        )
+    }
+
+    @JvmStatic
+    fun endVertex() = apply {
+        if (!vertexStarted)
+            throw IllegalStateException("Call to endVertex() with no active vertex")
+        vertexStarted = false
+        worldRenderer.endVertex()
+    }
+
+    // TODO(BREAKING): Color arg moved to the last position (since it can be omitted in favor of colorize())
+    // TODO(BREAKING): Unsure if this is breaking, but this function used to reset color to white
+    //     for some reason (also applies to all draw helpers below)
+    @JvmStatic
+    @JvmOverloads
+    fun drawRect(x: Float, y: Float, width: Float, height: Float, color: Long? = null) = apply {
         val pos = mutableListOf(x, y, x + width, y + height)
         if (pos[0] > pos[2])
             Collections.swap(pos, 0, 2)
         if (pos[1] > pos[3])
             Collections.swap(pos, 1, 3)
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        doColor(color)
+        withColor(color) {
+            disableTexture2D()
+            beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.Position)
 
-        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION)
-        worldRenderer.pos(pos[0].toDouble(), pos[3].toDouble(), 0.0).endVertex()
-        worldRenderer.pos(pos[2].toDouble(), pos[3].toDouble(), 0.0).endVertex()
-        worldRenderer.pos(pos[2].toDouble(), pos[1].toDouble(), 0.0).endVertex()
-        worldRenderer.pos(pos[0].toDouble(), pos[1].toDouble(), 0.0).endVertex()
+            pos(pos[0], pos[3], 0f).endVertex()
+            pos(pos[2], pos[3], 0f).endVertex()
+            pos(pos[2], pos[1], 0f).endVertex()
+            pos(pos[0], pos[1], 0f).endVertex()
 
-        tessellator.draw()
-
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
-
-        finishDraw()
-    }
-
-    @JvmStatic
-    @JvmOverloads
-    fun drawShape(color: Long, vararg vertexes: List<Float>, drawMode: Int = 9) {
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        doColor(color)
-
-        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
-
-        if (area(vertexes) >= 0)
-            vertexes.reverse()
-
-        vertexes.forEach {
-            worldRenderer.pos(it[0].toDouble(), it[1].toDouble(), 0.0).endVertex()
+            endVertices()
+            enableTexture2D()
         }
-
-        tessellator.draw()
-
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
-
-        finishDraw()
     }
 
     @JvmStatic
+    fun drawRect(x: Float, y: Float, width: Float, height: Float, color: Color) =
+        drawRect(x, y, width, height, color.rgb.toLong())
+
+    // TODO(BREAKING): Removed drawShape in favor of the more optimal Shape class
+
+    // TODO(BREAKING): Color arg moved to the last position (since it can be omitted in favor of colorize())
+    // TODO(BREAKING): Removed drawMode argument. Users should use setDrawMode()
+    @JvmStatic
     @JvmOverloads
-    fun drawLine(color: Long, x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, drawMode: Int = 7) {
+    fun drawLine(x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, color: Long? = null) = apply {
         val theta = -atan2(y2 - y1, x2 - x1)
         val i = sin(theta) * (thickness / 2)
         val j = cos(theta) * (thickness / 2)
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        doColor(color)
+        withColor(color) {
+            disableTexture2D()
+            beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.Position)
 
-        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
+            pos((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).endVertex()
+            pos((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).endVertex()
+            pos((x2 - i).toDouble(), (y2 - j).toDouble(), 0.0).endVertex()
+            pos((x1 - i).toDouble(), (y1 - j).toDouble(), 0.0).endVertex()
 
-        worldRenderer.pos((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).endVertex()
-        worldRenderer.pos((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).endVertex()
-        worldRenderer.pos((x2 - i).toDouble(), (y2 - j).toDouble(), 0.0).endVertex()
-        worldRenderer.pos((x1 - i).toDouble(), (y1 - j).toDouble(), 0.0).endVertex()
-
-        tessellator.draw()
-
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
-
-        finishDraw()
+            endVertices()
+            enableTexture2D()
+        }
     }
 
     @JvmStatic
+    fun drawLine(x1: Float, y1: Float, x2: Float, y2: Float, thickness: Float, color: Color) =
+        drawLine(x1, y1, x2, y2, thickness, color.rgb.toLong())
+
+    // TODO(BREAKING): Color arg moved to the last position (since it can be omitted in favor of colorize())
+    // TODO(BREAKING): Remove drawMode argument. Users should use setDrawMode()
+    @JvmStatic
     @JvmOverloads
-    fun drawCircle(color: Long, x: Float, y: Float, radius: Float, steps: Int, drawMode: Int = 5) {
+    fun drawCircle(x: Float, y: Float, radius: Float, steps: Int, color: Long? = null) = apply {
         val theta = 2 * PI / steps
         val cos = cos(theta).toFloat()
         val sin = sin(theta).toFloat()
@@ -285,71 +586,141 @@ object Renderer {
         var circleX = 1f
         var circleY = 0f
 
-        GlStateManager.enableBlend()
-        GlStateManager.disableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        doColor(color)
+        withColor(color) {
+            disableTexture2D()
+            beginVertices(drawMode ?: DrawMode.TriangleStrip, vertexFormat ?: VertexFormat.Position)
 
-        worldRenderer.begin(this.drawMode ?: drawMode, DefaultVertexFormats.POSITION)
+            for (i in 0..steps) {
+                pos(x.toDouble(), y.toDouble(), 0.0).endVertex()
+                pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+                xHolder = circleX
+                circleX = cos * circleX - sin * circleY
+                circleY = sin * xHolder + cos * circleY
+                pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+            }
 
-        for (i in 0..steps) {
-            worldRenderer.pos(x.toDouble(), y.toDouble(), 0.0).endVertex()
-            worldRenderer.pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
-            xHolder = circleX
-            circleX = cos * circleX - sin * circleY
-            circleY = sin * xHolder + cos * circleY
-            worldRenderer.pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+            endVertices()
+            enableTexture2D()
         }
-
-        tessellator.draw()
-
-        GlStateManager.color(1f, 1f, 1f, 1f)
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
-
-        finishDraw()
     }
+
+    @JvmStatic
+    fun drawCircle(x: Float, y: Float, radius: Float, steps: Int, color: Color) =
+        drawCircle(x, y, radius, steps, color.rgb.toLong())
 
     @JvmOverloads
     @JvmStatic
-    fun drawString(text: String, x: Float, y: Float, shadow: Boolean = false) {
+    fun drawString(text: String, x: Float, y: Float, shadow: Boolean = false) = apply {
         val fr = getFontRenderer()
         var newY = y
 
         ChatLib.addColor(text).split("\n").forEach {
-            fr.drawString(it, x, newY, colorized?.toInt() ?: WHITE.toInt(), shadow)
+            fr.drawString(it, x, newY, getCurrentGlColorAlphaFixed().rgb, shadow)
 
             newY += fr.FONT_HEIGHT
         }
+
         finishDraw()
     }
 
     @JvmStatic
     fun drawStringWithShadow(text: String, x: Float, y: Float) = drawString(text, x, y, true)
 
+    /**
+     * Renders floating lines of text in the 3D world at a specific position.
+     *
+     * @param text The string array of text to render
+     * @param x X coordinate in the game world
+     * @param y Y coordinate in the game world
+     * @param z Z coordinate in the game world
+     * @param renderBlackBox render a pretty black border behind the text
+     * @param scale the scale of the text
+     * @param increase whether to scale the text up as the player moves away
+     */
+    // TODO(BREAKING): Rename from drawString (in Tessellator)
+    // TODO(BREAKING): Remove color argument. Users should use colorize()
+    // TODO(CONVERT): Is the scale argument necessary? Does scale() affect this function?
     @JvmStatic
-    fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) {
-        if (colorized == null)
-            GlStateManager.color(1f, 1f, 1f, 1f)
+    @JvmOverloads
+    fun drawStringInWorld(
+        text: String,
+        x: Float,
+        y: Float,
+        z: Float,
+        renderBlackBox: Boolean = true,
+        scale: Float = 1f,
+        increase: Boolean = true,
+    ) {
+        var lScale = scale
+
+        val fontRenderer = getFontRenderer()
+
+        val renderPos = getRenderPos(x, y, z)
+
+        if (increase) {
+            val distance = sqrt(renderPos.x * renderPos.x + renderPos.y * renderPos.y + renderPos.z * renderPos.z)
+            val multiplier = distance / 120f //mobs only render ~120 blocks away
+            lScale *= 0.45f * multiplier
+        }
+
+        val xMultiplier = if (renderManager.options.thirdPersonView == 2) -1 else 1
+
+        val oldColor = getCurrentGlColorAlphaFixed()
+        colorize(1f, 1f, 1f, 0.5f)
+        pushMatrix()
+        translate(renderPos.x, renderPos.y, renderPos.z)
+        rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+        rotate(renderManager.playerViewX * xMultiplier, 1.0f, 0.0f, 0.0f)
+        scale(-lScale, -lScale, lScale)
+        disableLighting()
+        depthMask(false)
+        disableDepth()
+        enableBlend()
+        // TODO(VERIFY)
+        // blendFunc(770, 771)
+
+        val textWidth = fontRenderer.getStringWidth(text)
+
+        if (renderBlackBox) {
+            val j = textWidth / 2
+            disableTexture2D()
+            beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.PositionColor)
+            pos((-j - 1).toDouble(), (-1).toDouble(), 0.0).col(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            pos((-j - 1).toDouble(), 8.toDouble(), 0.0).col(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            pos((j + 1).toDouble(), 8.toDouble(), 0.0).col(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            pos((j + 1).toDouble(), (-1).toDouble(), 0.0).col(0.0f, 0.0f, 0.0f, 0.25f).endVertex()
+            endVertices()
+            enableTexture2D()
+        }
+
+        fontRenderer.drawString(text, -textWidth / 2, 0, getCurrentGlColorAlphaFixed().rgb)
+
+        colorize(oldColor)
+        depthMask(true)
+        enableDepth()
+        popMatrix()
+
+    }
+
+    // TODO(BREAKING): Doesn't set color to white if colorized() hasn't been called
+    @JvmStatic
+    fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) = apply {
         GlStateManager.enableBlend()
         GlStateManager.scale(1f, 1f, 50f)
         GlStateManager.bindTexture(image.getTexture().glTextureId)
         GlStateManager.enableTexture2D()
 
-        worldRenderer.begin(drawMode ?: 7, DefaultVertexFormats.POSITION_TEX)
+        enableTexture2D()
+        beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.PositionTex)
 
-        worldRenderer.pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
-        worldRenderer.pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
-        worldRenderer.pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex()
-        worldRenderer.pos(x, y, 0.0).tex(0.0, 0.0).endVertex()
-        tessellator.draw()
+        pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
+        pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
+        pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex()
+        pos(x, y, 0.0).tex(0.0, 0.0).endVertex()
 
-        finishDraw()
+        endVertices()
+        enableTexture2D()
     }
-
-    private val renderManager = getRenderManager()
-    private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
-    private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
 
     @JvmStatic
     @JvmOverloads
@@ -369,6 +740,8 @@ object Renderer {
 
         val ent = if (player is PlayerMP) player.player else Player.getPlayer()!!
 
+        pushMatrix()
+        enableTexture2D()
         GlStateManager.enableColorMaterial()
         RenderHelper.enableStandardItemLighting()
 
@@ -414,35 +787,14 @@ object Renderer {
         RenderHelper.disableStandardItemLighting()
         GlStateManager.disableRescaleNormal()
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit)
-        GlStateManager.disableTexture2D()
+        disableTexture2D()
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit)
 
+        popMatrix()
         finishDraw()
     }
 
-    internal fun doColor(longColor: Long) {
-        val color = longColor.toInt()
-
-        if (colorized == null) {
-            val a = (color shr 24 and 255).toFloat() / 255.0f
-            val r = (color shr 16 and 255).toFloat() / 255.0f
-            val g = (color shr 8 and 255).toFloat() / 255.0f
-            val b = (color and 255).toFloat() / 255.0f
-            GlStateManager.color(r, g, b, a)
-        }
-    }
-
-    @JvmStatic
-    fun finishDraw() {
-        if (!retainTransforms) {
-            colorized = null
-            drawMode = null
-            GlStateManager.popMatrix()
-            GlStateManager.pushMatrix()
-        }
-    }
-
-    private fun area(points: Array<out List<Float>>): Float {
+    fun shapeArea(points: Array<out List<Float>>): Float {
         var area = 0f
 
         for (i in points.indices) {
@@ -457,12 +809,47 @@ object Renderer {
 
     object screen {
         @JvmStatic
-        fun getWidth(): Int = ScaledResolution(Client.getMinecraft()).scaledWidth
+        fun getWidth(): Int = UResolution.scaledWidth
 
         @JvmStatic
-        fun getHeight(): Int = ScaledResolution(Client.getMinecraft()).scaledHeight
+        fun getHeight(): Int = UResolution.scaledHeight
 
         @JvmStatic
-        fun getScale(): Int = ScaledResolution(Client.getMinecraft()).scaleFactor
+        fun getScale(): Double = UResolution.scaleFactor
+    }
+
+    //#if MC<=11202
+    enum class DrawMode {
+        Lines,
+        LineStrip,
+        DebugLines,
+        DebugLineStrip,
+        Triangles,
+        TriangleStrip,
+        TriangleFan,
+        Quads;
+
+        fun toMCDrawMode() =
+            //#if MC<=11202
+            ordinal
+        //#else
+        //$$ VertexFormat.Mode.values()[ordinal]
+        //#endif
+    }
+    //#else
+    //$$ TODO()
+    //#endif
+
+    enum class VertexFormat(val mcVertexFormat: net.minecraft.client.renderer.vertex.VertexFormat) {
+        Block(DefaultVertexFormats.BLOCK),
+        Item(DefaultVertexFormats.ITEM),
+        Position(DefaultVertexFormats.POSITION),
+        PositionColor(DefaultVertexFormats.POSITION_COLOR),
+        PositionTex(DefaultVertexFormats.POSITION_TEX),
+        PositionNormal(DefaultVertexFormats.POSITION_NORMAL),
+        PositionTexColor(DefaultVertexFormats.POSITION_TEX_COLOR),
+        PositionTexNormal(DefaultVertexFormats.POSITION_TEX_NORMAL),
+        PositionTexLmapColor(DefaultVertexFormats.POSITION_TEX_LMAP_COLOR),
+        PositionTexColorNormal(DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL),
     }
 }
