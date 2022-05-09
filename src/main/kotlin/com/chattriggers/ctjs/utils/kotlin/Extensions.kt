@@ -1,22 +1,23 @@
 package com.chattriggers.ctjs.utils.kotlin
 
 import com.fasterxml.jackson.core.Version
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import gg.essential.universal.wrappers.message.UMessage
 import net.minecraft.client.renderer.Tessellator
+import net.minecraft.client.resources.I18n
 import org.mozilla.javascript.NativeObject
 
 //#if MC<=10809
-fun MCITextComponent.getStyling(): MCTextStyle = chatStyle
-fun MCTextStyle.getClick(): MCTextClickEvent? = chatClickEvent
-fun MCTextStyle.getHover(): MCTextHoverEvent? = chatHoverEvent
-fun Tessellator.getRenderer(): MCWorldRenderer = worldRenderer
+fun MCITextComponent.getStyling() = chatStyle
+fun MCTextStyle.getClick() = chatClickEvent
+fun MCTextStyle.getHover() = chatHoverEvent
+fun Tessellator.getRenderer() = worldRenderer
+fun String.i18Format(vararg objects: Any) = I18n.format(this, *objects)
 //#else
-//$$ fun MCITextComponent.getStyling(): MCTextStyle = style
-//$$ fun MCTextStyle.getClick(): MCTextClickEvent? = clickEvent
-//$$ fun MCTextStyle.getHover(): MCTextHoverEvent? = hoverEvent
-//$$ fun Tesselator.getRenderer(): MCWorldRenderer = buffer
+//$$ fun MCITextComponent.getStyling() = style
+//$$ fun MCTextStyle.getClick() = clickEvent
+//$$ fun MCTextStyle.getHover() = hoverEvent
+//$$ fun Tesselator.getRenderer() = builder
+//$$ fun String.i18Format(vararg objects: Any) = I18n.get(this, *objects)
 //#endif
 
 fun UMessage.setChatLineId(id: Int) = apply {

@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.world
 
 import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
-import net.minecraft.client.resources.I18n
+import com.chattriggers.ctjs.utils.kotlin.i18Format
 
 //#if MC>=11202
 //$$ import net.minecraft.potion.Potion
@@ -19,7 +19,7 @@ class PotionEffect(val effect: MCPotionEffect) {
      * is displayed in the player's inventory.
      * Ex: "Poison"
      */
-    fun getLocalizedName(): String = I18n.format(getName(), "%s")
+    fun getLocalizedName(): String = getName().i18Format("%s")
 
     fun getAmplifier(): Int = effect.amplifier
 

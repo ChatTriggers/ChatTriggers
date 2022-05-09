@@ -2,12 +2,20 @@ package com.chattriggers.ctjs.minecraft.objects.keybind
 
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.minecraft.wrappers.Settings
 import com.chattriggers.ctjs.triggers.RegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
-import net.minecraft.client.resources.I18n
+import com.chattriggers.ctjs.utils.kotlin.i18Format
+import gg.essential.universal.UMinecraft
+import org.apache.commons.lang3.ArrayUtils
+
+//#if MC<=11202
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
-import org.apache.commons.lang3.ArrayUtils
+//#else
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.KeyMappingAccessor
+//$$ import net.minecraft.client.KeyMapping
+//#endif
 
 @Suppress("LeakingThis")
 abstract class KeyBind {
@@ -32,10 +40,15 @@ abstract class KeyBind {
      */
     @JvmOverloads
     constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
-        val possibleDuplicate = Client.getMinecraft().gameSettings.keyBindings.find {
-            I18n.format(it.keyDescription) == I18n.format(description) &&
-                    I18n.format(it.keyCategory) == I18n.format(category)
+        //#if MC<=11202
+        val possibleDuplicate = UMinecraft.getSettings().keyBindings.find {
+            it.keyDescription.i18Format() == description.i18Format() && it.keyCategory.i18Format() == category.i18Format()
         }
+        //#else
+        //$$ val possibleDuplicate = UMinecraft.getSettings().keyMappings.find {
+        //$$     it.name.i18Format() == description.i18Format() && it.category.i18Format() == category.i18Format()
+        //$$ }
+        //#endif
 
         if (possibleDuplicate != null) {
             if (possibleDuplicate in customKeyBindings) {
@@ -45,12 +58,18 @@ abstract class KeyBind {
                         "use the other KeyBind constructor or Client.getKeyBindFromKey."
             )
         } else {
+            //#if MC<=11202
             if (category !in KeyBinding.getKeybinds()) {
+            //#else
+            //$$ if (category !in KeyMappingAccessor.getCategories()) {
+            //#endif
                 uniqueCategories[category] = 0
             }
             uniqueCategories[category] = uniqueCategories[category]!! + 1
             keyBinding = KeyBinding(description, keyCode, category)
+            //#if MC<=11202
             ClientRegistry.registerKeyBinding(keyBinding)
+            //#endif
             customKeyBindings.add(keyBinding)
         }
     }
@@ -96,42 +115,79 @@ abstract class KeyBind {
      *
      * @return whether the key is pressed
      */
-    fun isKeyDown(): Boolean = keyBinding.isKeyDown
+    fun isKeyDown(): Boolean {
+        //#if MC<=11202
+        return keyBinding.isKeyDown
+        //#else
+        //$$ return keyBinding.isDown
+        //#endif
+    }
 
     /**
      * Returns true on the initial key press. For continuous querying use [isKeyDown].
      *
      * @return whether the key has just been pressed
      */
-    fun isPressed(): Boolean = keyBinding.isPressed
+    fun isPressed(): Boolean {
+        //#if MC<=11202
+        return keyBinding.isPressed
+        //#else
+        //$$ return keyBinding.consumeClick()
+        //#endif
+    }
 
     /**
      * Gets the description of the key.
      *
      * @return the description
      */
-    fun getDescription(): String = keyBinding.keyDescription
+    // TODO(BREAKING): Formats the description
+    fun getDescription(): String {
+        //#if MC<=11202
+        return keyBinding.keyDescription.i18Format()
+        //#else
+        //$$ return keyBinding.name.i18Format()
+        //#endif
+    }
 
     /**
      * Gets the key code of the key.
      *
      * @return the integer key code
      */
-    fun getKeyCode(): Int = keyBinding.keyCode
+    fun getKeyCode(): Int {
+        //#if MC<=11202
+        return keyBinding.keyCode
+        //#else
+        //$$ return keyBinding.key.value
+        //#endif
+    }
 
     /**
      * Gets the category of the key.
      *
      * @return the category
      */
-    fun getCategory(): String = keyBinding.keyCategory
+    fun getCategory(): String {
+        //#if MC<=11202
+        return keyBinding.keyCategory
+        //#else
+        //$$ return keyBinding.category
+        //#endif
+    }
 
     /**
      * Sets the state of the key.
      *
      * @param pressed True to press, False to release
      */
-    fun setState(pressed: Boolean) = KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
+    fun setState(pressed: Boolean) {
+        //#if MC<=11202
+        KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
+        //#else
+        //$$ KeyMapping.set(keyBinding.key, pressed)
+        //#endif
+    }
 
     internal abstract fun getLoader(): ILoader
 
@@ -146,18 +202,30 @@ abstract class KeyBind {
         private val uniqueCategories = mutableMapOf<String, Int>()
 
         private fun removeKeyBinding(keyBinding: KeyBinding) {
+            //#if MC<=11202
             Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(
                 Client.getMinecraft().gameSettings.keyBindings,
                 keyBinding
             )
             val category = keyBinding.keyCategory
+            //#else
+            //$$ UMinecraft.getSettings().keyMappings = ArrayUtils.removeElement(
+            //$$     UMinecraft.getSettings().keyMappings,
+            //$$     keyBinding
+            //$$ )
+            //$$ val category = keyBinding.category
+            //#endif
 
             if (category in uniqueCategories) {
                 uniqueCategories[category] = uniqueCategories[category]!! - 1
 
                 if (uniqueCategories[category] == 0) {
                     uniqueCategories.remove(category)
+                    //#if MC<=11202
                     KeyBinding.getKeybinds().remove(category)
+                    //#else
+                    //$$ KeyMappingAccessor.getCategories().remove(category)
+                    //#endif
                 }
             }
         }

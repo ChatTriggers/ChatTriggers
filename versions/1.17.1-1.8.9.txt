@@ -17,3 +17,6 @@ net.minecraft.client.gui.Font net.minecraft.client.gui.FontRenderer
 com.mojang.blaze3d.platform.GlStateManager net.minecraft.client.renderer.GlStateManager
 net.minecraft.client.gui.components.Button net.minecraft.client.gui.GuiButton
 net.minecraft.client.gui.screens.Screen net.minecraft.client.gui.GuiScreen
+net.minecraft.client.resources.language.I18n net.minecraft.client.resources.I18n
+net.minecraft.client.KeyMapping net.minecraft.client.settings.KeyBinding
+net.minecraftforge.fmlclient.registry.ClientRegistry net.minecraftforge.fml.client.registry.ClientRegistry
