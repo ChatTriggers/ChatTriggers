@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
-import org.lwjgl.util.vector.Vector2f
+import gg.essential.elementa.utils.Vector2f
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos

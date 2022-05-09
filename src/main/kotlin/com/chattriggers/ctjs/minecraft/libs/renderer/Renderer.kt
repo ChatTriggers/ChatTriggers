@@ -703,14 +703,14 @@ object Renderer {
 
     @JvmOverloads
     @JvmStatic
-    fun drawString(text: String, x: Float, y: Float, shadow: Boolean = false) = apply {
+    fun drawString(text: String, x: Float, y: Float, shadow: Boolean = false, color: Long? = null) = apply {
         val fr = getFontRenderer()
         var newY = y
 
         ChatLib.addColor(text).split("\n").forEach {
             //#if MC<=11202
             // TODO(VERIFY): Color still works properly
-            fr.drawString(it, x, newY, getCurrentGlColorAlphaFixed().rgb, shadow)
+            fr.drawString(it, x, newY, color?.toInt() ?: getCurrentGlColorAlphaFixed().rgb, shadow)
             newY += fr.FONT_HEIGHT
             //#else
             //$$ if (shadow) {

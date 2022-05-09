@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
 import com.chattriggers.ctjs.utils.kotlin.getOption
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.renderer.GlStateManager
 import org.mozilla.javascript.NativeObject
 
@@ -126,8 +127,8 @@ class Text {
 
     @JvmOverloads
     fun draw(x: Float? = null, y: Float? = null) = apply {
-        GlStateManager.enableBlend()
-        GlStateManager.scale(scale, scale, scale)
+        Renderer.enableBlend()
+        Renderer.scale(scale, scale, scale)
 
         var longestLine = lines.maxOf { Renderer.getStringWidth(it) * scale }
         if (maxWidth != 0)
@@ -138,11 +139,10 @@ class Text {
 
         for (i in 0 until maxLines) {
             if (i >= lines.size) break
-            Renderer.getFontRenderer()
-                .drawString(lines[i], getXAlign(lines[i], x ?: this.x), yHolder / scale, color.toInt(), shadow)
+            Renderer.drawString(lines[i], getXAlign(lines[i], x ?: this.x), yHolder / scale, shadow, color)
             yHolder += scale * 10
         }
-        GlStateManager.disableBlend()
+        Renderer.disableBlend()
         Renderer.finishDraw()
     }
 
@@ -155,7 +155,15 @@ class Text {
 
         string.split("\n").forEach {
             if (maxWidth > 0) {
+                //#if MC<=11202
                 lines.addAll(Renderer.getFontRenderer().listFormattedStringToWidth(it, maxWidth))
+                //#else
+                //$$ for (chars in Renderer.getFontRenderer().split(UTextComponent(it).component, maxWidth)) {
+                //$$     val builder = ChatLib.TextBuilder(true)
+                //$$     chars.accept(builder)
+                //$$     lines.add(builder.getString())
+                //$$ }
+                //#endif
             } else {
                 lines.add(it)
             }

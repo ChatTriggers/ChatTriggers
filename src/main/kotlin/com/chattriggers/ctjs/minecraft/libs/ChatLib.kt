@@ -531,7 +531,7 @@ object ChatLib {
     //$$ }
     //$$
     // Taken from UTextComponent
-    //$$ private class TextBuilder(private val isFormatted: Boolean) : FormattedCharSink {
+    //$$ internal class TextBuilder(private val isFormatted: Boolean) : FormattedCharSink {
     //$$     private val builder = StringBuilder()
     //$$     private var cachedStyle: Style? = null
     //$$
