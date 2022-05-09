@@ -4,18 +4,19 @@ import com.fasterxml.jackson.core.Version
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import gg.essential.universal.wrappers.message.UMessage
+import net.minecraft.client.renderer.Tessellator
 import org.mozilla.javascript.NativeObject
 
 //#if MC<=10809
 fun MCITextComponent.getStyling(): MCTextStyle = chatStyle
 fun MCTextStyle.getClick(): MCTextClickEvent? = chatClickEvent
 fun MCTextStyle.getHover(): MCTextHoverEvent? = chatHoverEvent
-fun MCTessellator.getRenderer(): MCWorldRenderer = worldRenderer
+fun Tessellator.getRenderer(): MCWorldRenderer = worldRenderer
 //#else
 //$$ fun MCITextComponent.getStyling(): MCTextStyle = style
 //$$ fun MCTextStyle.getClick(): MCTextClickEvent? = clickEvent
 //$$ fun MCTextStyle.getHover(): MCTextHoverEvent? = hoverEvent
-//$$ fun MCTessellator.getRenderer(): MCWorldRenderer = buffer
+//$$ fun Tesselator.getRenderer(): MCWorldRenderer = buffer
 //#endif
 
 fun UMessage.setChatLineId(id: Int) = apply {
@@ -47,3 +48,7 @@ fun NativeObject?.getOption(key: String, default: Any): String {
 fun NativeObject?.getOptionNullable(key: String, default: Any?): String? {
     return (this?.get(key) ?: default)?.toString()
 }
+
+// To make the intent clear
+@Suppress("UNCHECKED_CAST")
+fun <T> Any?.asMixin(): T = this as T

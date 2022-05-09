@@ -11,6 +11,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.imageio.ImageIO
 
+//#if MC>=11701
+//$$ import com.mojang.blaze3d.platform.NativeImage
+//$$ import java.io.ByteArrayInputStream
+//$$ import java.io.ByteArrayOutputStream
+//#endif
+
 class Image constructor(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
     private val textureWidth = image?.width ?: 0
@@ -33,7 +39,7 @@ class Image constructor(var image: BufferedImage?) {
             // We're trying to access the texture before initialization. Presumably, the game overlay render event
             // hasn't fired yet so we haven't loaded the texture. Let's hope this is a rendering context!
             try {
-                texture = DynamicTexture(image)
+                texture = getDynamicTexture()
                 image = null
 
                 MinecraftForge.EVENT_BUS.unregister(this)
@@ -48,10 +54,18 @@ class Image constructor(var image: BufferedImage?) {
         return texture
     }
 
+    fun getTextureId(): Int {
+        //#if MC<=11202
+        return getTexture().glTextureId
+        //#else
+        //$$ return getTexture().id
+        //#endif
+    }
+
     @SubscribeEvent
     fun onRender(event: RenderGameOverlayEvent.Pre) {
         if (image != null) {
-            texture = DynamicTexture(image)
+            texture = getDynamicTexture()
             image = null
 
             MinecraftForge.EVENT_BUS.unregister(this)
@@ -67,6 +81,17 @@ class Image constructor(var image: BufferedImage?) {
         if (image != null) return@apply
 
         Renderer.drawImage(this, x, y, width, height)
+    }
+
+    private fun getDynamicTexture(): DynamicTexture {
+        //#if MC<=11202
+        return DynamicTexture(image!!)
+        //#else
+        //$$ return ByteArrayOutputStream().let {
+        //$$     ImageIO.write(image!!, "png", it)
+        //$$     ByteArrayInputStream(it.toByteArray())
+        //$$ }.let(NativeImage::read).let(::DynamicTexture)
+        //#endif
     }
 
     companion object {

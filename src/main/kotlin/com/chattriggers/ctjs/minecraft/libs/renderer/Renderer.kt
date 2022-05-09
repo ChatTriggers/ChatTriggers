@@ -5,15 +5,15 @@ import com.chattriggers.ctjs.minecraft.libs.MathLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
-import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import gg.essential.elementa.utils.withAlpha
+import gg.essential.universal.UGraphics
 import gg.essential.universal.UMinecraft
 import gg.essential.universal.UResolution
+import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.OpenGlHelper
-import net.minecraft.client.renderer.RenderHelper
+import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
@@ -23,7 +23,39 @@ import java.nio.FloatBuffer
 import java.util.*
 import kotlin.math.*
 
+//#if MC<=11202
+import net.minecraft.client.renderer.OpenGlHelper
+import net.minecraft.client.renderer.RenderHelper
+import net.minecraft.client.renderer.vertex.VertexFormat as MCVertexFormat
+//#else
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.AbstractClientPlayerAccessor
+//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//$$ import com.mojang.blaze3d.platform.Lighting
+//$$ import com.mojang.blaze3d.vertex.VertexFormat as MCVertexFormat
+//$$ import com.mojang.blaze3d.vertex.PoseStack
+//$$ import com.mojang.blaze3d.systems.RenderSystem
+//$$ import com.mojang.math.Quaternion
+//$$ import net.minecraft.client.CameraType
+//$$ import net.minecraft.client.renderer.entity.EntityRendererProvider
+//#endif
+
 object Renderer {
+    //#if MC>=11701
+    //$$ private val boundMatrices = ArrayDeque<PoseStack>()
+    //$$
+    //$$ private val matrixStack: PoseStack
+    //$$     get() = boundMatrices.last()
+    //$$
+    //$$ internal inline fun <T> withMatrixStack(stack: PoseStack, block: () -> T): T {
+    //$$     boundMatrices.addLast(stack)
+    //$$     return try {
+    //$$         block()
+    //$$     } finally {
+    //$$         boundMatrices.removeLast()
+    //$$     }
+    //$$ }
+    //#endif
+
     @JvmStatic
     var partialTicks = 0f
         internal set
@@ -41,14 +73,28 @@ object Renderer {
     private var vertexStarted = true
     private var began = false
 
-    private var tessellator = MCTessellator.getInstance()
+    private var tessellator = Tessellator.getInstance()
     private var worldRenderer = tessellator.getRenderer()
 
+    private val colorBuffer = FloatBuffer.allocate(4)
+
+    //#if MC<=11202
     private val renderManager = getRenderManager()
     private val slimCTRenderPlayer = CTRenderPlayer(renderManager, true)
     private val normalCTRenderPlayer = CTRenderPlayer(renderManager, false)
-
-    private val colorBuffer = FloatBuffer.allocate(4)
+    //#else
+    //$$ private lateinit var slimCTRenderPlayer: CTRenderPlayer
+    //$$ private lateinit var normalCTRenderPlayer: CTRenderPlayer
+    //$$
+    //$$ /**
+    //$$  * This function is intended for internal use, do not call.
+    //$$  */
+    //$$ @JvmStatic
+    //$$ fun initializeRenderPlayers(context: EntityRendererProvider.Context) {
+    //$$     slimCTRenderPlayer = CTRenderPlayer(context, true)
+    //$$     normalCTRenderPlayer = CTRenderPlayer(context, false)
+    //$$ }
+    //#endif
 
     @JvmStatic
     val BLACK = color(0, 0, 0, 255)
@@ -133,7 +179,7 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getStringWidth(text: String) = getFontRenderer().getStringWidth(ChatLib.addColor(text))
+    fun getStringWidth(text: String) = UGraphics.getStringWidth(ChatLib.addColor(text))
 
     @JvmStatic
     @JvmOverloads
@@ -165,7 +211,11 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun translate(x: Float, y: Float, z: Float = 0.0F) = apply {
+        //#if MC<=11202
         GlStateManager.translate(x, y, z)
+        //#else
+        //$$ matrixStack.translate(x.toDouble(), y.toDouble(), z.toDouble())
+        //#endif
     }
 
     // TODO(BREAKING): In the Tessellator, scaleZ defaulted to scaleX. Does setting it to
@@ -173,7 +223,11 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun scale(scaleX: Float, scaleY: Float = scaleX, scaleZ: Float = 1f) = apply {
+        //#if MC<=11202
         GlStateManager.scale(scaleX, scaleY, scaleZ)
+        //#else
+        //$$ matrixStack.translate(scaleX.toDouble(), scaleY.toDouble(), scaleZ.toDouble())
+        //#endif
     }
 
     /**
@@ -181,7 +235,11 @@ object Renderer {
      */
     @JvmStatic
     fun rotate(angle: Float) = apply {
+        //#if MC<=11202
         GlStateManager.rotate(angle, 0f, 0f, 1f)
+        //#else
+        //$$ matrixStack.mulPose(Quaternion(angle, 0f, 0f, 1f))
+        //#endif
     }
 
     /**
@@ -189,13 +247,17 @@ object Renderer {
      */
     @JvmStatic
     fun rotate(angle: Float, x: Float, y: Float, z: Float) = apply {
+        //#if MC<=11202
         GlStateManager.rotate(angle, x, y, z)
+        //#else
+        //$$ matrixStack.mulPose(Quaternion(angle, x, y, z))
+        //#endif
     }
 
     @JvmStatic
     @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) = apply {
-        GlStateManager.color(
+        UGraphics.color4f(
             red.coerceIn(0f..1f),
             green.coerceIn(0f..1f),
             blue.coerceIn(0f..1f),
@@ -244,7 +306,11 @@ object Renderer {
     @JvmStatic
     fun getCurrentGlColor(): Color {
         // TODO(VERIFY)
+        //#if MC<=11202
         GL11.glGetFloat(GL11.GL_CURRENT_COLOR, colorBuffer)
+        //#else
+        //$$ GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, colorBuffer)
+        //#endif
         return Color(colorBuffer[0], colorBuffer[1], colorBuffer[2], colorBuffer[3])
     }
 
@@ -267,77 +333,84 @@ object Renderer {
 
     @JvmStatic
     fun disableAlpha() = apply {
-        GlStateManager.disableAlpha()
+        UGraphics.disableAlpha()
     }
 
     @JvmStatic
     fun enableAlpha() = apply {
-        GlStateManager.enableAlpha()
+        UGraphics.enableAlpha()
     }
 
     @JvmStatic
     fun alphaFunc(func: Int, ref: Float) = apply {
+        // TODO(CONVERT)
+        //#if MC<=11202
         GlStateManager.alphaFunc(func, ref)
+        //#endif
     }
 
     @JvmStatic
     fun enableLighting() = apply {
-        GlStateManager.enableLighting()
+        UGraphics.enableLighting()
     }
 
     @JvmStatic
     fun disableLighting() = apply {
-        GlStateManager.disableLighting()
+        UGraphics.disableLighting()
     }
 
     @JvmStatic
     fun disableDepth() = apply {
-        GlStateManager.disableDepth()
+        UGraphics.disableDepth()
     }
 
     @JvmStatic
     fun enableDepth() = apply {
-        GlStateManager.enableDepth()
+        UGraphics.enableDepth()
     }
 
     @JvmStatic
     fun depthFunc(depthFunc: Int) = apply {
-        GlStateManager.depthFunc(depthFunc)
+        UGraphics.depthFunc(depthFunc)
     }
 
     @JvmStatic
     fun depthMask(flagIn: Boolean) = apply {
-        GlStateManager.depthMask(flagIn)
+        UGraphics.depthMask(flagIn)
     }
 
     @JvmStatic
     fun disableBlend() = apply {
-        GlStateManager.disableBlend()
+        UGraphics.disableBlend()
     }
 
     @JvmStatic
     fun enableBlend() = apply {
-        GlStateManager.enableBlend()
+        UGraphics.enableBlend()
     }
 
     @JvmStatic
     fun blendFunc(sourceFactor: Int, destFactor: Int) = apply {
+        //#if MC<=11202
         GlStateManager.blendFunc(sourceFactor, destFactor)
+        //#else
+        //$$ RenderSystem.blendFunc(sourceFactor, destFactor)
+        //#endif
     }
 
     @JvmStatic
     fun tryBlendFuncSeparate(sourceFactor: Int, destFactor: Int, sourceFactorAlpha: Int, destFactorAlpha: Int) = apply {
-        GlStateManager.tryBlendFuncSeparate(sourceFactor, destFactor, sourceFactorAlpha, destFactorAlpha)
+        UGraphics.tryBlendFuncSeparate(sourceFactor, destFactor, sourceFactorAlpha, destFactorAlpha)
     }
 
     @JvmStatic
     fun enableTexture2D() = apply {
-        GlStateManager.enableTexture2D()
+        UGraphics.enableTexture2D()
     }
 
     @JvmStatic
     fun disableTexture2D() = apply {
-        GlStateManager.disableTexture2D()
+        UGraphics.disableTexture2D()
     }
 
     /**
@@ -348,22 +421,30 @@ object Renderer {
      */
     @JvmStatic
     fun bindTexture(texture: Image) = apply {
-        GlStateManager.bindTexture(texture.getTexture().glTextureId)
+        UGraphics.bindTexture(texture.getTextureId())
     }
 
     @JvmStatic
     fun deleteTexture(texture: Image) = apply {
-        GlStateManager.deleteTexture(texture.getTexture().glTextureId)
+        UGraphics.deleteTexture(texture.getTextureId())
     }
 
     @JvmStatic
     fun pushMatrix() = apply {
+        //#if MC<=11202
         GlStateManager.pushMatrix()
+        //#else
+        //$$ matrixStack.pushPose()
+        //#endif
     }
 
     @JvmStatic
     fun popMatrix() = apply {
+        //#if MC<=11202
         GlStateManager.popMatrix()
+        //#else
+        //$$ matrixStack.popPose()
+        //#endif
     }
 
     fun getRetainTransforms() = retainTransforms
@@ -435,7 +516,11 @@ object Renderer {
             throw IllegalStateException("Call to endVertex() while in vertex. Did you forget to call endVertex()?")
 
         began = false
+        //#if MC<=11202
         tessellator.draw()
+        //#else
+        //$$ tessellator.end()
+        //#endif
         disableBlend()
         popMatrix()
 
@@ -454,9 +539,17 @@ object Renderer {
     fun translateCamera() = apply {
         val renderManager = getRenderManager()
         translate(
+            //#if MC<=11202
             -renderManager.viewerPosX.toFloat(),
             -renderManager.viewerPosY.toFloat(),
             -renderManager.viewerPosZ.toFloat(),
+            //#else
+            //$$ renderManager.mainCamera.position.x.toFloat(),
+            //$$ renderManager.mainCamera.position.y.toFloat(),
+            //$$ renderManager.mainCamera.position.z.toFloat(),
+            //$$
+            //$$
+            //#endif
         )
     }
 
@@ -615,9 +708,19 @@ object Renderer {
         var newY = y
 
         ChatLib.addColor(text).split("\n").forEach {
+            //#if MC<=11202
+            // TODO(VERIFY): Color still works properly
             fr.drawString(it, x, newY, getCurrentGlColorAlphaFixed().rgb, shadow)
-
             newY += fr.FONT_HEIGHT
+            //#else
+            //$$ if (shadow) {
+            //$$     fr.drawShadow(matrixStack, it, x, newY, getCurrentGlColorAlphaFixed().rgb)
+            //$$ } else {
+            //$$     fr.draw(matrixStack, it, x, newY, getCurrentGlColorAlphaFixed().rgb)
+            //$$ }
+            //$$
+            //$$ newY += fr.lineHeight
+            //#endif
         }
 
         finishDraw()
@@ -652,25 +755,39 @@ object Renderer {
         increase: Boolean = true,
     ) {
         var lScale = scale
-
-        val fontRenderer = getFontRenderer()
-
         val renderPos = getRenderPos(x, y, z)
 
         if (increase) {
+            //#if MC<=11202
             val distance = sqrt(renderPos.x * renderPos.x + renderPos.y * renderPos.y + renderPos.z * renderPos.z)
+            //#else
+            //$$ val distance = sqrt(renderPos.x() * renderPos.x() + renderPos.y() * renderPos.y() + renderPos.z() * renderPos.z())
+            //#endif
             val multiplier = distance / 120f //mobs only render ~120 blocks away
             lScale *= 0.45f * multiplier
         }
 
-        val xMultiplier = if (renderManager.options.thirdPersonView == 2) -1 else 1
+        //#if MC<=11202
+        val xMultiplier = if (UMinecraft.getSettings().thirdPersonView == 2) -1 else 1
+        //#else
+        //$$ val xMultiplier = if (UMinecraft.getSettings().cameraType == CameraType.THIRD_PERSON_FRONT) -1 else 1
+        //#endif
 
         val oldColor = getCurrentGlColorAlphaFixed()
         colorize(1f, 1f, 1f, 0.5f)
         pushMatrix()
+        //#if MC<=11202
         translate(renderPos.x, renderPos.y, renderPos.z)
+        //#else
+        //$$ translate(renderPos.x(), renderPos.y(), renderPos.z())
+        //#endif
+
+        // TODO(CONVERT): See InventoryScreen::renderEntityInInventory (line 138???)
+        //#if MC<=11202
         rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         rotate(renderManager.playerViewX * xMultiplier, 1.0f, 0.0f, 0.0f)
+        //#endif
+
         scale(-lScale, -lScale, lScale)
         disableLighting()
         depthMask(false)
@@ -679,7 +796,7 @@ object Renderer {
         // TODO(VERIFY)
         // blendFunc(770, 771)
 
-        val textWidth = fontRenderer.getStringWidth(text)
+        val textWidth = getStringWidth(text)
 
         if (renderBlackBox) {
             val j = textWidth / 2
@@ -693,7 +810,7 @@ object Renderer {
             enableTexture2D()
         }
 
-        fontRenderer.drawString(text, -textWidth / 2, 0, getCurrentGlColorAlphaFixed().rgb)
+        drawString(text, -textWidth / 2f, 0f)
 
         colorize(oldColor)
         depthMask(true)
@@ -705,12 +822,10 @@ object Renderer {
     // TODO(BREAKING): Doesn't set color to white if colorized() hasn't been called
     @JvmStatic
     fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) = apply {
-        GlStateManager.enableBlend()
-        GlStateManager.scale(1f, 1f, 50f)
-        GlStateManager.bindTexture(image.getTexture().glTextureId)
-        GlStateManager.enableTexture2D()
-
+        scale(1f, 1f, 50f)
+        bindTexture(image)
         enableTexture2D()
+
         beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.PositionTex)
 
         pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
@@ -722,6 +837,7 @@ object Renderer {
         enableTexture2D()
     }
 
+    // TODO(VERIFY)
     @JvmStatic
     @JvmOverloads
     fun drawPlayer(
@@ -738,53 +854,51 @@ object Renderer {
         val mouseX = -30f
         val mouseY = 0f
 
-        val ent = if (player is PlayerMP) player.player else Player.getPlayer()!!
+        val entity = if (player is PlayerMP) player.player else Player.getPlayer()!!
 
+        //#if MC<=11202
         pushMatrix()
         enableTexture2D()
         GlStateManager.enableColorMaterial()
         RenderHelper.enableStandardItemLighting()
 
-        val f = ent.renderYawOffset
-        val f1 = ent.rotationYaw
-        val f2 = ent.rotationPitch
-        val f3 = ent.prevRotationYawHead
-        val f4 = ent.rotationYawHead
+        val yawOffset = entity.renderYawOffset
+        val yaw = entity.rotationYaw
+        val pitch = entity.rotationPitch
+        val prevYawHead = entity.prevRotationYawHead
+        val yawHead = entity.rotationYawHead
 
         translate(x.toFloat(), y.toFloat(), 50.0f)
-        GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f)
-        GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f)
-        GlStateManager.rotate(-45.0f, 0.0f, 1.0f, 0.0f)
-        GlStateManager.rotate(-atan(mouseY / 40.0f) * 20.0f, 1.0f, 0.0f, 0.0f)
+        rotate(180.0f, 0.0f, 0.0f, 1.0f)
+        rotate(45.0f, 0.0f, 1.0f, 0.0f)
+        rotate(-45.0f, 0.0f, 1.0f, 0.0f)
+        rotate(-atan(mouseY / 40.0f) * 20.0f, 1.0f, 0.0f, 0.0f)
         scale(-1f, 1f)
         if (!rotate) {
-            ent.renderYawOffset = atan(mouseX / 40.0f) * 20.0f
-            ent.rotationYaw = atan(mouseX / 40.0f) * 40.0f
-            ent.rotationPitch = -atan(mouseY / 40.0f) * 20.0f
-            ent.rotationYawHead = ent.rotationYaw
-            ent.prevRotationYawHead = ent.rotationYaw
+            entity.renderYawOffset = atan(mouseX / 40.0f) * 20.0f
+            entity.rotationYaw = atan(mouseX / 40.0f) * 40.0f
+            entity.rotationPitch = -atan(mouseY / 40.0f) * 20.0f
+            entity.rotationYawHead = entity.rotationYaw
+            entity.prevRotationYawHead = entity.rotationYaw
         }
 
         renderManager.playerViewY = 180.0f
         renderManager.isRenderShadow = false
-        //#if MC<=10809
-        val isSmall = (ent as AbstractClientPlayer).skinType == "slim"
+        val isSmall = (entity as AbstractClientPlayer).skinType == "slim"
         val ctRenderPlayer = if (isSmall) slimCTRenderPlayer else normalCTRenderPlayer
 
         ctRenderPlayer.setOptions(showNametag, showArmor, showCape, showHeldItem, showArrows)
-        ctRenderPlayer.doRender(ent, 0.0, 0.0, 0.0, 0.0f, 1.0f)
-        //#else
-        //$$ renderManager.doRenderEntity(ent, 0.0, 0.0, 0.0, 0.0F, 1.0F, false)
-        //#endif
+        ctRenderPlayer.doRender(entity, 0.0, 0.0, 0.0, 0.0f, 1.0f)
         renderManager.isRenderShadow = true
 
-        ent.renderYawOffset = f
-        ent.rotationYaw = f1
-        ent.rotationPitch = f2
-        ent.prevRotationYawHead = f3
-        ent.rotationYawHead = f4
+        entity.renderYawOffset = yawOffset
+        entity.rotationYaw = yaw
+        entity.rotationPitch = pitch
+        entity.prevRotationYawHead = prevYawHead
+        entity.rotationYawHead = yawHead
 
         RenderHelper.disableStandardItemLighting()
+
         GlStateManager.disableRescaleNormal()
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit)
         disableTexture2D()
@@ -792,6 +906,65 @@ object Renderer {
 
         popMatrix()
         finishDraw()
+        //#else
+        //$$ val newYaw = atan(mouseY / 40.0).toFloat()
+        //$$ val newPitch = atan(mouseX / 40.0).toFloat()
+        //$$
+        //$$ val stack = RenderSystem.getModelViewStack()
+        //$$ stack.pushPose()
+        //$$ stack.translate(x.toDouble(), y.toDouble(), 1050.0)
+        //$$ stack.scale(1.0f, 1.0f, -1.0f)
+        //$$ RenderSystem.applyModelViewMatrix()
+        //$$ val newStack = PoseStack()
+        //$$ newStack.translate(0.0, 0.0, 1000.0)
+        //$$ newStack.scale(-1f, 1f, 1f)
+        //$$
+        //$$ val zRot = Vector3f.ZP.rotationDegrees(180.0f)
+        //$$ val xRot = Vector3f.XP.rotationDegrees(newPitch * 20.0f)
+        //$$ zRot.mul(xRot)
+        //$$ newStack.mulPose(zRot)
+        //$$
+        //$$ val yawOffset = entity.yBodyRot
+        //$$ val yaw = entity.yRot
+        //$$ val pitch = entity.xRot
+        //$$ val prevYawHead = entity.yHeadRotO
+        //$$ val yawHead = entity.yHeadRot
+        //$$
+        //$$ if (!rotate) {
+        //$$     entity.yBodyRot = 180.0f + newYaw * 20.0f
+        //$$     entity.yRot = 180.0f + newYaw * 40.0f
+        //$$     entity.xRot = -newPitch * 20.0f
+        //$$     entity.yHeadRot = entity.yRot
+        //$$     entity.yHeadRotO = entity.yRot
+        //$$ }
+        //$$
+        //$$ Lighting.setupForEntityInInventory()
+        //$$
+        //$$ val entityRenderDispatcher = Minecraft.getInstance().entityRenderDispatcher
+        //$$ xRot.conj()
+        //$$ entityRenderDispatcher.overrideCameraOrientation(xRot)
+        //$$ entityRenderDispatcher.setRenderShadow(false)
+        //$$ val lv6 = Minecraft.getInstance().renderBuffers().bufferSource()
+        //$$
+        //$$ val isSmall = entity.asMixin<AbstractClientPlayerAccessor>().playerInfo.modelName == "slim"
+        //$$ val ctRenderPlayer = if (isSmall) slimCTRenderPlayer else normalCTRenderPlayer
+        //$$
+        //$$ ctRenderPlayer.setOptions(showNametag, showArmor, showCape, showHeldItem, showArrows)
+        //$$ ctRenderPlayer.render(entity, 0f, 0f, newStack, lv6, 0xf000f0)
+        //$$
+        //$$ lv6.endBatch()
+        //$$ entityRenderDispatcher.setRenderShadow(true)
+        //$$
+        //$$ entity.yBodyRot = yawOffset
+        //$$ entity.yRot = yaw
+        //$$ entity.xRot = pitch
+        //$$ entity.yHeadRotO = prevYawHead
+        //$$ entity.yHeadRot = yawHead
+        //$$
+        //$$ stack.popPose()
+        //$$ RenderSystem.applyModelViewMatrix()
+        //$$ Lighting.setupFor3DItems()
+        //#endif
     }
 
     fun shapeArea(points: Array<out List<Float>>): Float {
@@ -818,7 +991,6 @@ object Renderer {
         fun getScale(): Double = UResolution.scaleFactor
     }
 
-    //#if MC<=11202
     enum class DrawMode {
         Lines,
         LineStrip,
@@ -832,24 +1004,24 @@ object Renderer {
         fun toMCDrawMode() =
             //#if MC<=11202
             ordinal
-        //#else
-        //$$ VertexFormat.Mode.values()[ordinal]
-        //#endif
+            //#else
+            //$$ MCVertexFormat.Mode.values()[ordinal]
+            //#endif
     }
-    //#else
-    //$$ TODO()
-    //#endif
 
-    enum class VertexFormat(val mcVertexFormat: net.minecraft.client.renderer.vertex.VertexFormat) {
+    enum class VertexFormat(val mcVertexFormat: MCVertexFormat) {
         Block(DefaultVertexFormats.BLOCK),
-        Item(DefaultVertexFormats.ITEM),
+
+        //#if MC<=11202
+        Particle(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP),
+
+        //#else
+        //$$ Particle(DefaultVertexFormat.PARTICLE),
+        //#endif
         Position(DefaultVertexFormats.POSITION),
         PositionColor(DefaultVertexFormats.POSITION_COLOR),
         PositionTex(DefaultVertexFormats.POSITION_TEX),
-        PositionNormal(DefaultVertexFormats.POSITION_NORMAL),
         PositionTexColor(DefaultVertexFormats.POSITION_TEX_COLOR),
-        PositionTexNormal(DefaultVertexFormats.POSITION_TEX_NORMAL),
-        PositionTexLmapColor(DefaultVertexFormats.POSITION_TEX_LMAP_COLOR),
         PositionTexColorNormal(DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL),
     }
 }

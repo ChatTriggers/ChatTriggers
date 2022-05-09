@@ -18,6 +18,12 @@
         "RenderManagerMixin",
         "ScreenShotHelperMixin",
         "TileEntityRendererDispatcherMixin"
+        //#if MC>=11701
+        //$$ ,
+        //$$ "AbstractClientPlayerAccessor",
+        //$$ "EntityRendererDispatcherMixin",
+        //$$ "PlayerRendererMixin"
+        //#endif
     ],
     "mixins": [
         "CrashReportMixin"

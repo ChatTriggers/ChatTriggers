@@ -9,3 +9,9 @@ net.minecraftforge.event.TickEvent net.minecraftforge.fml.common.gameevent.TickE
 net.minecraft.sounds.SoundSource net.minecraft.client.audio.SoundCategory
 net.minecraft.network.chat.TranslatableComponent net.minecraft.util.ChatComponentTranslation
 net.minecraftforge.eventbus.api.Event net.minecraftforge.fml.common.eventhandler.Event
+net.minecraft.client.player.AbstractClientPlayer net.minecraft.client.entity.AbstractClientPlayer
+com.mojang.blaze3d.vertex.DefaultVertexFormat net.minecraft.client.renderer.vertex.DefaultVertexFormats
+com.mojang.blaze3d.vertex.Tesselator net.minecraft.client.renderer.Tessellator
+net.minecraft.client.renderer.GameRenderer net.minecraft.client.renderer.entity.RenderManager
+net.minecraft.client.gui.Font net.minecraft.client.gui.FontRenderer
+com.mojang.blaze3d.platform.GlStateManager net.minecraft.client.renderer.GlStateManager
