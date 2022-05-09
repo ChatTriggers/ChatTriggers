@@ -105,6 +105,7 @@ object ClientListener {
         Scoreboard.resetCache()
     }
 
+    // TODO(CONVERT)
     //#if MC<=11202
     @SubscribeEvent
     fun onClientDisconnect(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
@@ -160,9 +161,10 @@ object ClientListener {
     @SubscribeEvent
     fun onRenderTick(event: TickEvent.RenderTickEvent) {
         TriggerType.Step.triggerAll()
-        if (World.isLoaded()) {
+        //#if MC<=11202
+        if (World.isLoaded())
             MouseListener.handleDragged()
-        }
+        //#endif
     }
 
     @SubscribeEvent

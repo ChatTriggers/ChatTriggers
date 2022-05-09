@@ -43,7 +43,7 @@ object Renderer {
     //#if MC>=11701
     //$$ private val boundMatrices = ArrayDeque<PoseStack>()
     //$$
-    //$$ private val matrixStack: PoseStack
+    //$$ val matrixStack: PoseStack
     //$$     get() = boundMatrices.last()
     //$$
     //$$ internal inline fun <T> withMatrixStack(stack: PoseStack, block: () -> T): T {

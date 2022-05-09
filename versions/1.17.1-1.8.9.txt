@@ -15,3 +15,5 @@ com.mojang.blaze3d.vertex.Tesselator net.minecraft.client.renderer.Tessellator
 net.minecraft.client.renderer.GameRenderer net.minecraft.client.renderer.entity.RenderManager
 net.minecraft.client.gui.Font net.minecraft.client.gui.FontRenderer
 com.mojang.blaze3d.platform.GlStateManager net.minecraft.client.renderer.GlStateManager
+net.minecraft.client.gui.components.Button net.minecraft.client.gui.GuiButton
+net.minecraft.client.gui.screens.Screen net.minecraft.client.gui.GuiScreen

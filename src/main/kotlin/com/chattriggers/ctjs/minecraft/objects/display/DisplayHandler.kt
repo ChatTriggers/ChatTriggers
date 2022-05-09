@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.GuiScreenEvent
@@ -20,24 +21,24 @@ object DisplayHandler {
 
     @SubscribeEvent
     fun renderDisplayOverlay(event: RenderGameOverlayEvent.Text) {
-        GlStateManager.pushMatrix()
+        Renderer.pushMatrix()
         displays.forEach {
             if (it.registerType == RegisterType.RENDER_OVERLAY) {
                 it.render()
             }
         }
-        GlStateManager.popMatrix()
+        Renderer.popMatrix()
     }
 
     @SubscribeEvent
     fun renderDisplayGui(event: GuiScreenEvent.DrawScreenEvent.Post) {
-        GlStateManager.pushMatrix()
+        Renderer.pushMatrix()
         displays.forEach {
             if (it.registerType == RegisterType.POST_GUI_RENDER) {
                 it.render()
             }
         }
-        GlStateManager.popMatrix()
+        Renderer.popMatrix()
     }
 
     enum class RegisterType {

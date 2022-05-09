@@ -11,6 +11,7 @@ import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.MCClickEventAction
 import com.chattriggers.ctjs.utils.kotlin.setChatLineId
 import com.chattriggers.ctjs.utils.kotlin.toVersion
+import gg.essential.api.utils.GuiUtil
 import gg.essential.universal.wrappers.message.UMessage
 import gg.essential.universal.wrappers.message.UTextComponent
 import java.awt.Desktop
@@ -57,13 +58,13 @@ object CTCommand : CommandBase() {
                 else -> ChatLib.chat("&cFailed to delete ${it[0]}")
             }
         },
-        subcommand("modules") { GuiHandler.openGui(ModulesGui) },
+        subcommand("modules") { GuiUtil.open(ModulesGui) },
         subcommand("console") {
             if (it.isEmpty()) {
                 ModuleManager.generalConsole.showConsole()
             } else ModuleManager.getConsole(it[0]).showConsole()
         },
-        subcommand("config", "settings", "setting") { GuiHandler.openGui(Config.gui()!!) },
+        subcommand("config", "settings", "setting") { GuiUtil.open(Config.gui()!!) },
         subcommand("sim", "simulate") { ChatLib.simulateChat(it.joinToString(" ")) },
         subcommand("dump") { dump(it) },
         subcommand("copy") { copyArgsToClipboard(it) },
