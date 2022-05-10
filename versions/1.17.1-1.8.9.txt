@@ -20,3 +20,6 @@ net.minecraft.client.gui.screens.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.resources.language.I18n net.minecraft.client.resources.I18n
 net.minecraft.client.KeyMapping net.minecraft.client.settings.KeyBinding
 net.minecraftforge.fmlclient.registry.ClientRegistry net.minecraftforge.fml.client.registry.ClientRegistry
+net.minecraft.client.gui.screens.inventory.BookEditScreen net.minecraft.client.gui.GuiScreenBook
+net.minecraft.world.item.Items net.minecraft.init.Items
+net.minecraft.world.item.ItemStack net.minecraft.item.ItemStack

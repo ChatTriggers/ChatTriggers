@@ -72,13 +72,7 @@ abstract class Gui : GuiScreen() {
         }
     }
 
-    fun isOpen(): Boolean = Client.getMinecraft().let {
-        //#if MC<=11202
-        it.currentScreen === this
-        //#else
-        //$$ it.screen === this
-        //#endif
-    }
+    fun isOpen(): Boolean = GuiUtil.getOpenedScreen() === this
 
     fun isControlDown(): Boolean = UKeyboard.isCtrlKeyDown()
 

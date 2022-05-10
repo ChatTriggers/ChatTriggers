@@ -5,6 +5,8 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
+import gg.essential.api.utils.GuiUtil
+import gg.essential.universal.UMinecraft
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
 import net.minecraft.client.gui.inventory.GuiContainer
@@ -70,7 +72,7 @@ abstract class Client {
          * @return The Minecraft object
          */
         @JvmStatic
-        fun getMinecraft(): Minecraft = Minecraft.getMinecraft()
+        fun getMinecraft() = UMinecraft.getMinecraft()
 
         /**
          * Gets Minecraft's NetHandlerPlayClient object
@@ -78,12 +80,7 @@ abstract class Client {
          * @return The NetHandlerPlayClient object
          */
         @JvmStatic
-        fun getConnection(): NetHandlerPlayClient? =
-            //#if MC<=10809
-            getMinecraft().netHandler
-        //#else
-        //$$ getMinecraft().connection
-        //#endif
+        fun getConnection() = UMinecraft.getNetHandler()
 
         /**
          * Schedule's a task to run on Minecraft's main thread in [delay] ticks.
@@ -138,7 +135,7 @@ abstract class Client {
         fun getChatGUI(): GuiNewChat? = getMinecraft().ingameGUI?.chatGUI
 
         @JvmStatic
-        fun isInChat(): Boolean = getMinecraft().currentScreen is GuiChat
+        fun isInChat(): Boolean = GuiUtil.getOpenedScreen() is GuiChat
 
         @JvmStatic
         fun getTabGui(): GuiPlayerTabOverlay? = getMinecraft().ingameGUI?.tabList
@@ -271,7 +268,7 @@ abstract class Client {
              * @return the Minecraft gui
              */
             @JvmStatic
-            fun get(): GuiScreen? = getMinecraft().currentScreen
+            fun get(): GuiScreen? = GuiUtil.getOpenedScreen()
 
             /**
              * Gets the slot under the mouse in the current gui, if one exists.
