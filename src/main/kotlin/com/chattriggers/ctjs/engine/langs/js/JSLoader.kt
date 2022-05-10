@@ -4,7 +4,6 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
-import com.chattriggers.ctjs.minecraft.wrappers.utils.WrappedThread
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.Trigger
@@ -29,7 +28,6 @@ import java.net.URL
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentSkipListSet
-import java.util.concurrent.ForkJoinPool
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -323,21 +321,6 @@ object JSLoader : ILoader {
         evalContext = JSContextFactory.enterContext()
         Context.exit()
         JSContextFactory.optimize = true
-    }
-
-    @Suppress("unused")
-    class Thread(private val task: Runnable) : WrappedThread() {
-        override fun start() {
-            ForkJoinPool.commonPool().execute {
-                wrapInContext {
-                    try {
-                        task.run()
-                    } catch (e: Throwable) {
-                        e.printTraceToConsole(console)
-                    }
-                }
-            }
-        }
     }
 
     class CTRequire(
