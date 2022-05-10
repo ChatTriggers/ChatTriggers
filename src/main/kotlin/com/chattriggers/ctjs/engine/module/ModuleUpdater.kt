@@ -70,9 +70,7 @@ object ModuleUpdater {
             "Checking for update in ${metadata.name}".printToConsole()
 
             val url = "${CTJS.WEBSITE_ROOT}/api/modules/${metadata.name}/metadata?modVersion=${Reference.MODVERSION}"
-            val connection = URL(url).openConnection().apply {
-                setRequestProperty("User-Agent", "Mozilla/5.0")
-            }
+            val connection = CTJS.makeWebRequest(url)
 
             val newMetadataText = connection.getInputStream().bufferedReader().readText()
             val newMetadata = CTJS.gson.fromJson(newMetadataText, ModuleMetadata::class.java)
@@ -121,8 +119,7 @@ object ModuleUpdater {
 
         try {
             val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
-            val connection = URL(url).openConnection()
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0")
+            val connection = CTJS.makeWebRequest(url)
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
             FileSystems.newFileSystem(downloadZip.toPath(), null).use {
                 val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()

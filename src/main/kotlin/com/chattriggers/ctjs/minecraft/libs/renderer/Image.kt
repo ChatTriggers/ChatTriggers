@@ -77,10 +77,9 @@ class Image constructor(var image: BufferedImage?) {
                 return ImageIO.read(resourceFile)
             }
 
-            val conn = (URL(url).openConnection() as HttpURLConnection).apply {
+            val conn = (CTJS.makeWebRequest(url!!) as HttpURLConnection).apply {
                 requestMethod = "GET"
                 doOutput = true
-                setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
             }
 
             val image = ImageIO.read(conn.inputStream) ?: return null

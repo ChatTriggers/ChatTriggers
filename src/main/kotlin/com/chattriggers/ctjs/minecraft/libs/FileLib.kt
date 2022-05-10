@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
+import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.utils.Config
 import java.io.*
 import java.net.URL
@@ -163,8 +164,7 @@ object FileLib {
     @JvmStatic
     @JvmOverloads
     fun getUrlContent(theUrl: String, userAgent: String? = "Mozilla/5.0"): String {
-        val conn = URL(theUrl).openConnection()
-        conn.setRequestProperty("User-Agent", userAgent)
+        val conn = CTJS.makeWebRequest(theUrl)
 
         return conn.getInputStream().use {
             it.readBytes()

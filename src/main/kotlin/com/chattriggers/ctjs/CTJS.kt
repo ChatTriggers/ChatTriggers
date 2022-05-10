@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.io.File
 import java.net.URL
+import java.net.URLConnection
 import java.security.MessageDigest
 import java.util.*
 import kotlin.concurrent.thread
@@ -86,6 +87,12 @@ object CTJS {
         registerHooks()
     }
 
+    fun makeWebRequest(url: String): URLConnection = URL(url).openConnection().apply {
+        setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
+        connectTimeout = 3000
+        readTimeout = 3000
+    }
+
     private fun registerHooks() {
         ClientCommandHandler.instance.registerCommand(CTCommand)
         Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
@@ -100,11 +107,7 @@ object CTJS {
         val hash = Base64.getUrlEncoder().encodeToString(hashedUUID)
 
         val url = "${WEBSITE_ROOT}/api/statistics/track?hash=$hash&version=${Reference.MODVERSION}"
-        val connection = URL(url).openConnection().apply {
-            setRequestProperty("User-Agent", "Mozilla/5.0")
-            connectTimeout = 5000
-            readTimeout = 5000
-        }
+        val connection = makeWebRequest(url)
         connection.getInputStream()
     }
 }
