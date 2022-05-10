@@ -41,4 +41,19 @@ object MathLib {
     fun clamp(number: Int, min: Int, max: Int): Int {
         return number.coerceIn(min, max)
     }
+
+    /**
+     * Wraps the angle in degrees to [-180.0, 180.0)
+     *
+     * @param angle the angle in degrees
+     * @return the wrapped angle
+     */
+    @JvmStatic
+    fun wrapAngleDegrees(angle: Double) = (angle % 360.0).let {
+        when {
+            it >= 180.0 -> it - 360.0
+            it < -180.0 -> it + 360.0
+            else -> it
+        }
+    }
 }

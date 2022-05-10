@@ -78,6 +78,7 @@
 
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.entity.Entity");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.entity.EntityLivingBase");
+    global.EquipmentSlot = global.EntityLivingBase.EquipmentSlot;
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP");
 
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.inventory.Inventory");

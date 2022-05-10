@@ -14,11 +14,26 @@ class TileEntity(val tileEntity: MCTileEntity) {
 
     fun getBlock(): Block = Block(getBlockType(), getBlockPos())
 
-    fun getBlockType(): BlockType = BlockType(tileEntity.blockType)
+    fun getBlockType(): BlockType {
+        //#if MC<=11202
+        return BlockType(tileEntity.blockType)
+        //#else
+        //$$ return BlockType(tileEntity.blockState.block)
+        //#endif
+    }
 
-    fun getBlockPos(): BlockPos = BlockPos(tileEntity.pos)
+    fun getBlockPos(): BlockPos {
+        //#if MC<=11202
+        return BlockPos(tileEntity.pos)
+        //#else
+        //$$ return BlockPos(tileEntity.blockPos)
+        //#endif
+    }
 
+    // TODO(BREAKING): Remove this, and maybe add a blockState getter/wrapper?
+    //#if MC<=11202
     fun getMetadata(): Int = tileEntity.blockMetadata
+    //#endif
 
     override fun toString(): String {
         return "TileEntity{x=${getX()}, y=${getY()}, z=${getZ()}, blockType=${getBlockType()}}"

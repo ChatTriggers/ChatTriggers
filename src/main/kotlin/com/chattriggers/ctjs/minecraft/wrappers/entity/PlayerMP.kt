@@ -1,22 +1,31 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
+import com.chattriggers.ctjs.launch.mixins.transformers.EntityPlayerAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.scoreboard.ScorePlayerTeam
-import net.minecraftforge.fml.relauncher.ReflectionHelper
 
 class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
     fun isSpectator() = player.isSpectator
 
     fun getPing(): Int {
+        //#if MC<=11202
         return getPlayerInfo()?.responseTime ?: -1
+        //#else
+        //$$ return getPlayerInfo()?.latency ?: -1
+        //#endif
     }
 
     fun getTeam(): Team? {
+        //#if MC<=11202
         return getPlayerInfo()?.playerTeam?.let(::Team)
+        //#else
+        //$$ return getPlayerInfo()?.team?.let(::Team)
+        //#endif
     }
 
     /**
@@ -29,7 +38,11 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
     }
 
     fun setTabDisplayName(textComponent: UTextComponent) {
+        //#if MC<=11202
         getPlayerInfo()?.displayName = textComponent.component
+        //#else
+        //$$ getPlayerInfo()?.tabListDisplayName = textComponent.component
+        //#endif
     }
 
     /**
@@ -39,7 +52,11 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
      * @param textComponent the new name to display
      */
     fun setNametagName(textComponent: UTextComponent) {
-        displayNameField.set(player, textComponent.component.formattedText)
+        //#if MC<=11202
+        player.asMixin<EntityPlayerAccessor>().displayName = textComponent.formattedText
+        //#else
+        //$$ player.asMixin<EntityPlayerAccessor>().displayName = textComponent.component
+        //#endif
     }
 
     /**
@@ -60,15 +77,28 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
         Renderer.drawPlayer(player, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
     }
 
-    private fun getPlayerName(networkPlayerInfoIn: NetworkPlayerInfo?): String {
-        return networkPlayerInfoIn?.displayName?.formattedText
-            ?: ScorePlayerTeam.formatPlayerName(
-                networkPlayerInfoIn?.playerTeam,
-                networkPlayerInfoIn?.gameProfile?.name
-            ) ?: ""
+    private fun getPlayerName(info: NetworkPlayerInfo?): String {
+        if (info == null)
+            return ""
+
+        //#if MC<=11202
+        val name = info.displayName
+        //#else
+        //$$ val name = info.tabListDisplayName
+        //#endif
+
+        if (name != null)
+            return UTextComponent(name).formattedText
+
+        //#if MC<=11202
+        return ScorePlayerTeam.formatPlayerName(info.playerTeam, info.gameProfile?.name) ?: ""
+        //#else
+        //$$ return PlayerTeam.formatNameForTeam(info.team, info.profile?.name?.let { UTextComponent(it) })
+        //$$     .let { UTextComponent(it).formattedText }
+        //#endif
     }
 
-    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(player.uniqueID)
+    private fun getPlayerInfo(): NetworkPlayerInfo? = Client.getConnection()?.getPlayerInfo(getUUID())
 
     override fun toString(): String {
         return "PlayerMP{name=" + getName() +
@@ -77,12 +107,5 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
                 "}"
     }
 
-    override fun getName(): String = player.name
-
-    companion object {
-        private val displayNameField = ReflectionHelper.findField(
-            EntityPlayer::class.java,
-            "displayname"
-        )
-    }
+    override fun getName(): String = UTextComponent(player.name).formattedText
 }

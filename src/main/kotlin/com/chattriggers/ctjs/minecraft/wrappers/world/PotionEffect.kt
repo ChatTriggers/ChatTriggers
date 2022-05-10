@@ -3,8 +3,9 @@ package com.chattriggers.ctjs.minecraft.wrappers.world
 import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
 import com.chattriggers.ctjs.utils.kotlin.i18Format
 
-//#if MC>=11202
-//$$ import net.minecraft.potion.Potion
+//#if MC>=11701
+//$$ import gg.essential.universal.wrappers.message.UTextComponent
+//$$ import net.minecraft.world.effect.MobEffect
 //#endif
 
 class PotionEffect(val effect: MCPotionEffect) {
@@ -12,7 +13,13 @@ class PotionEffect(val effect: MCPotionEffect) {
      * Returns the translation key of the potion.
      * Ex: "potion.poison"
      */
-    fun getName(): String = effect.effectName
+    fun getName(): String {
+        //#if MC<=11202
+        return effect.effectName
+        //#else
+        //$$ return UTextComponent(effect.effect.displayName).formattedText
+        //#endif
+    }
 
     /**
      * Returns the localized name of the potion that
@@ -29,19 +36,26 @@ class PotionEffect(val effect: MCPotionEffect) {
         //#if MC<=10809
         return effect.potionID
         //#else
-        //$$ return Potion.getIdFromPotion(effect.potion)
+        //$$ return MobEffect.getId(effect.effect)
         //#endif
     }
 
     fun isAmbient(): Boolean = effect.isAmbient
 
-    fun isDurationMax(): Boolean = effect.isPotionDurationMax
+    fun isDurationMax(): Boolean {
+        //#if MC<=11202
+        return effect.isPotionDurationMax
+        //#else
+        //$$ // TODO(VERIFY)
+        //$$ return effect.duration == Short.MAX_VALUE.toInt()
+        //#endif
+    }
 
     fun showsParticles(): Boolean {
         //#if MC<=10809
         return effect.isShowParticles
         //#else
-        //$$ return effect.doesShowParticles()
+        //$$ return effect.isVisible
         //#endif
     }
 

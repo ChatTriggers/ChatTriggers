@@ -5,6 +5,7 @@
     "client": [
         "ChatGuiMixin",
         "EffectRendererMixin",
+        "EntityPlayerAccessor",
         "GuiAccessor",
         "GuiContainerMixin",
         "GuiIngameAccessor",
@@ -21,9 +22,11 @@
         //#if MC>=11701
         //$$ ,
         //$$ "AbstractClientPlayerAccessor",
+        //$$ "EntityAccessor",
         //$$ "EntityRendererDispatcherMixin",
         //$$ "KeyMappingMixin",
         //$$ "ScreenAccessor",
+        //$$ "ParticleAccessor",
         //$$ "PlayerRendererMixin"
         //#endif
     ],
