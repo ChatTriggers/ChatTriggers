@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.objects.display
 
-import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
@@ -10,7 +9,7 @@ import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import org.mozilla.javascript.NativeObject
 
-abstract class DisplayLine {
+class DisplayLine {
     private lateinit var text: Text
 
     private var textWidth = 0f
@@ -117,22 +116,22 @@ abstract class DisplayLine {
     }
 
     fun registerClicked(method: Any) = run {
-        onClicked = RegularTrigger(method, TriggerType.Other, getLoader())
+        onClicked = RegularTrigger(method, TriggerType.Other)
         onClicked
     }
 
     fun registerHovered(method: Any) = run {
-        onHovered = RegularTrigger(method, TriggerType.Other, getLoader())
+        onHovered = RegularTrigger(method, TriggerType.Other)
         onHovered
     }
 
     fun registerMouseLeave(method: Any) = run {
-        onMouseLeave = RegularTrigger(method, TriggerType.Other, getLoader())
+        onMouseLeave = RegularTrigger(method, TriggerType.Other)
         onMouseLeave
     }
 
     fun registerDragged(method: Any) = run {
-        onDragged = RegularTrigger(method, TriggerType.Other, getLoader())
+        onDragged = RegularTrigger(method, TriggerType.Other)
         onDragged
     }
 
@@ -205,8 +204,6 @@ abstract class DisplayLine {
             hovered = false
         }
     }
-
-    internal abstract fun getLoader(): ILoader
 
     override fun toString() =
         "DisplayLine{" +

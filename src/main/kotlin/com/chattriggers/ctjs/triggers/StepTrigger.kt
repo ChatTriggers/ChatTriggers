@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 
-class StepTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType.Step, loader) {
+class StepTrigger(method: Any) : Trigger(method, TriggerType.Step) {
     private var fps: Long = 60L
     private var delay: Long = -1
     private var systemTime: Long = Client.getSystemTime()

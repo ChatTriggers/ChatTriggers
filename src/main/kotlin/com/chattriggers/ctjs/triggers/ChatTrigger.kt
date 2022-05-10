@@ -1,12 +1,11 @@
 package com.chattriggers.ctjs.triggers
 
-import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 
-class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(method, type, loader) {
+class ChatTrigger(method: Any, type: TriggerType) : Trigger(method, type) {
     private lateinit var chatCriteria: Any
     private var formatted: Boolean = false
     private var caseInsensitive: Boolean = false

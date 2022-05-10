@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
-import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
@@ -10,7 +9,7 @@ import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 
-abstract class Gui : GuiScreen() {
+class Gui : GuiScreen() {
     private var onDraw: RegularTrigger? = null
     private var onClick: RegularTrigger? = null
     private var onScroll: RegularTrigger? = null
@@ -61,7 +60,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerDraw(method: Any) = run {
-        onDraw = RegularTrigger(method, TriggerType.Other, getLoader())
+        onDraw = RegularTrigger(method, TriggerType.Other)
         onDraw
     }
 
@@ -77,7 +76,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerClicked(method: Any) = run {
-        onClick = RegularTrigger(method, TriggerType.Other, getLoader())
+        onClick = RegularTrigger(method, TriggerType.Other)
         onClick
     }
 
@@ -90,7 +89,7 @@ abstract class Gui : GuiScreen() {
      * - int scroll direction
      */
     fun registerScrolled(method: Any) = run {
-        onScroll = RegularTrigger(method, TriggerType.Other, getLoader())
+        onScroll = RegularTrigger(method, TriggerType.Other)
         onScroll
     }
 
@@ -105,7 +104,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerKeyTyped(method: Any) = run {
-        onKeyTyped = RegularTrigger(method, TriggerType.Other, getLoader())
+        onKeyTyped = RegularTrigger(method, TriggerType.Other)
         onKeyTyped
     }
 
@@ -122,7 +121,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerMouseDragged(method: Any) = run {
-        onMouseDragged = RegularTrigger(method, TriggerType.Other, getLoader())
+        onMouseDragged = RegularTrigger(method, TriggerType.Other)
         onMouseDragged
     }
 
@@ -138,7 +137,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerMouseReleased(method: Any) = run {
-        onMouseReleased = RegularTrigger(method, TriggerType.Other, getLoader())
+        onMouseReleased = RegularTrigger(method, TriggerType.Other)
         onMouseReleased
     }
 
@@ -152,7 +151,7 @@ abstract class Gui : GuiScreen() {
      * @return the trigger
      */
     fun registerActionPerformed(method: Any) = run {
-        onActionPerformed = RegularTrigger(method, TriggerType.Other, getLoader())
+        onActionPerformed = RegularTrigger(method, TriggerType.Other)
         onActionPerformed
     }
 
@@ -399,6 +398,4 @@ abstract class Gui : GuiScreen() {
     fun drawHoveringString(text: List<String>, x: Int, y: Int) {
         drawHoveringText(text, x, y, mc.fontRendererObj)
     }
-
-    internal abstract fun getLoader(): ILoader
 }

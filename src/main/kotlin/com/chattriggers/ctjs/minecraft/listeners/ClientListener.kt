@@ -327,7 +327,7 @@ object ClientListener {
     }
 
     /**
-     * Used as a pass through argument in [com.chattriggers.ctjs.engine.IRegister.registerPlayerInteract].\n
+     * Used as a pass through argument in [com.chattriggers.ctjs.engine.Register.registerPlayerInteract].\n
      * Exposed in providedLibs as InteractAction.
      */
     enum class PlayerInteractAction {

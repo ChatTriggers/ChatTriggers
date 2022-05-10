@@ -1,13 +1,11 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.Reference
+import com.chattriggers.ctjs.engine.Engine
 import com.chattriggers.ctjs.engine.ILoader
 
-abstract class Trigger protected constructor(
-    var method: Any,
-    var type: TriggerType,
-    protected var loader: ILoader
-) : Comparable<Trigger> {
+abstract class Trigger protected constructor(var method: Any, var type: TriggerType) : Comparable<Trigger> {
+    private val loader = Engine.getLoader()
     private var priority: Priority = Priority.NORMAL
 
     init {

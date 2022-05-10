@@ -1,9 +1,8 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.commands.Command
-import com.chattriggers.ctjs.engine.ILoader
 
-class CommandTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType.Command, loader) {
+class CommandTrigger(method: Any) : Trigger(method, TriggerType.Command) {
     private lateinit var commandName: String
     private var overrideExisting: Boolean = false
     private val tabCompletions = mutableListOf<String>()
