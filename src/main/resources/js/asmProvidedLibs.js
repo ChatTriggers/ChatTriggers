@@ -4,7 +4,7 @@ global.Java = {
     type: clazz => Packages[clazz]
 };
 
-global.Thread = Java.type("com.chattriggers.ctjs.minecraft.wrappers.utils.WrappedThread");
+global.Thread = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").Thread;
 global.Console = Java.type("com.chattriggers.ctjs.engine.langs.js.JSLoader").INSTANCE.getConsole();
 
 global.sync = (func, lock) => new org.mozilla.javascript.Synchronizer(func, lock);

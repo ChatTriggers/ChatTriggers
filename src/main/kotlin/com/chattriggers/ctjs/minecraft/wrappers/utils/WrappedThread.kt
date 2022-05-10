@@ -1,24 +1,8 @@
 package com.chattriggers.ctjs.minecraft.wrappers.utils
 
-import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
-import com.chattriggers.ctjs.engine.langs.js.JSLoader
-import com.chattriggers.ctjs.printTraceToConsole
-import org.mozilla.javascript.Context
-import java.util.concurrent.ForkJoinPool
-
 @Suppress("unused")
-class WrappedThread(private val task: Runnable) {
-    fun start() {
-        ForkJoinPool.commonPool().execute {
-            try {
-                JSContextFactory.enterContext()
-                task.run()
-                Context.exit()
-            } catch (e: Throwable) {
-                e.printTraceToConsole(JSLoader.console)
-            }
-        }
-    }
+abstract class WrappedThread {
+    abstract fun start()
 
     // Provide the following methods as no-ops to avoid breaking
     // changes, as this class use to extend Thread
