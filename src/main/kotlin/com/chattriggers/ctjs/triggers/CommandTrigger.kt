@@ -9,6 +9,7 @@ class CommandTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType
     private val tabCompletions = mutableListOf<String>()
     private val aliases = mutableListOf<String>()
     private var command: Command? = null
+    private var callback: ((Array<out String>) -> MutableList<String>)? = null
 
     override fun trigger(args: Array<out Any?>) {
         callMethod(args)
@@ -22,6 +23,31 @@ class CommandTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType
      */
     fun setTabCompletions(vararg args: String) = apply {
         tabCompletions.addAll(args)
+    }
+
+    /**
+     * This sets the possible tab completions for the command.
+     * This method must be used before setting the command name, otherwise, the tab completions will not be set.
+     *
+     * @param callback the callback that returns the tab completion options.
+     *
+     * For example:
+     * ```js
+     * register("command", () => {
+     *
+     * }).setTabCompletions((args) => {
+     *      return ["option1", "option2"];
+     * }).setName("test");
+     *```
+     * The `args` parameter of the callback are the arguments currently passed to the command.
+     * For instance, if you want to not show the options after the user tabs the first time, just add a check
+     * for the length of the arguments and return an empty array.
+     *
+     * The return value of the callback **must be an array of strings**, and in this case will always return the 2
+     * options in the array.
+     */
+    fun setTabCompletions(callback: (Array<out String>) -> MutableList<String>) = apply {
+        this.callback = callback
     }
 
     /**
@@ -67,7 +93,7 @@ class CommandTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType
 
     private fun reInstance() {
         command?.unregister()
-        command = Command(this, commandName, "/$commandName", tabCompletions, aliases, overrideExisting)
+        command = Command(this, commandName, "/$commandName", tabCompletions, aliases, overrideExisting, callback)
         command!!.register()
     }
 }
