@@ -125,6 +125,10 @@ abstract class Display() {
         })
     }
 
+    fun removeLine(index: Int) = apply {
+        lines.removeAt(index)
+    }
+
     fun clearLines() = apply {
         lines.clear()
     }
@@ -151,6 +155,14 @@ abstract class Display() {
     fun setShouldRender(shouldRender: Boolean) = apply {
         this.shouldRender = shouldRender
         lines.forEach { it.shouldRender = shouldRender }
+    }
+
+    fun show() = apply {
+        setShouldRender(true)
+    }
+
+    fun hide() = apply {
+        setShouldRender(false)
     }
 
     fun getWidth(): Float = width
