@@ -8,8 +8,10 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.full.memberFunctions
 
 @Suppress("unused")
-object Register {
-    private val methodMap = mutableMapOf<String, KFunction<*>>()
+interface IRegister {
+    companion object {
+        private val methodMap = mutableMapOf<String, KFunction<*>>()
+    }
 
     /**
      * Helper method register a trigger.
@@ -22,7 +24,6 @@ object Register {
      * @param method The name of the method or the actual method to callback when the event is fired
      * @return The trigger for additional modification
      */
-
     fun register(triggerType: String, method: Any): Trigger {
         val name = triggerType.lowercase()
 
@@ -54,9 +55,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerChat(method: Any): ChatTrigger {
-        return ChatTrigger(method, TriggerType.Chat)
+        return ChatTrigger(method, TriggerType.Chat, getImplementationLoader())
     }
 
     /**
@@ -75,9 +75,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerActionBar(method: Any): ChatTrigger {
-        return ChatTrigger(method, TriggerType.ActionBar)
+        return ChatTrigger(method, TriggerType.ActionBar, getImplementationLoader())
     }
 
     /**
@@ -89,9 +88,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerWorldLoad(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.WorldLoad)
+        return RegularTrigger(method, TriggerType.WorldLoad, getImplementationLoader())
     }
 
     /**
@@ -103,9 +101,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerWorldUnload(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.WorldUnload)
+        return RegularTrigger(method, TriggerType.WorldUnload, getImplementationLoader())
     }
 
     /**
@@ -123,9 +120,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerClicked(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.Clicked)
+        return RegularTrigger(method, TriggerType.Clicked, getImplementationLoader())
     }
 
     /**
@@ -142,9 +138,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerScrolled(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.Scrolled)
+        return RegularTrigger(method, TriggerType.Scrolled, getImplementationLoader())
     }
 
     /**
@@ -163,9 +158,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerDragged(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.Dragged)
+        return RegularTrigger(method, TriggerType.Dragged, getImplementationLoader())
     }
 
     /**
@@ -186,9 +180,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerSoundPlay(method: Any): SoundPlayTrigger {
-        return SoundPlayTrigger(method)
+        return SoundPlayTrigger(method, getImplementationLoader())
     }
 
     /**
@@ -206,9 +199,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerNoteBlockPlay(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.NoteBlockPlay)
+        return EventTrigger(method, TriggerType.NoteBlockPlay, getImplementationLoader())
     }
 
     /**
@@ -226,9 +218,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerNoteBlockChange(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.NoteBlockChange)
+        return EventTrigger(method, TriggerType.NoteBlockChange, getImplementationLoader())
     }
 
     /**
@@ -243,9 +234,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerTick(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.Tick)
+        return RegularTrigger(method, TriggerType.Tick, getImplementationLoader())
     }
 
     /**
@@ -264,9 +254,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerStep(method: Any): StepTrigger {
-        return StepTrigger(method)
+        return StepTrigger(method, getImplementationLoader())
     }
 
     /**
@@ -281,9 +270,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderWorld(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.RenderWorld)
+        return RegularTrigger(method, TriggerType.RenderWorld, getImplementationLoader())
     }
 
     /**
@@ -298,9 +286,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderOverlay(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderOverlay)
+        return EventTrigger(method, TriggerType.RenderOverlay, getImplementationLoader())
     }
 
     /**
@@ -316,9 +303,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderPlayerList(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderPlayerList)
+        return EventTrigger(method, TriggerType.RenderPlayerList, getImplementationLoader())
     }
 
     /**
@@ -334,9 +320,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderCrosshair(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderCrosshair)
+        return EventTrigger(method, TriggerType.RenderCrosshair, getImplementationLoader())
     }
 
     /**
@@ -352,9 +337,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderDebug(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderDebug)
+        return EventTrigger(method, TriggerType.RenderDebug, getImplementationLoader())
     }
 
     /**
@@ -370,9 +354,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderBossHealth(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderBossHealth)
+        return EventTrigger(method, TriggerType.RenderBossHealth, getImplementationLoader())
     }
 
     /**
@@ -388,9 +371,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderHealth(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderHealth)
+        return EventTrigger(method, TriggerType.RenderHealth, getImplementationLoader())
     }
 
     /**
@@ -406,9 +388,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderArmor(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderArmor)
+        return EventTrigger(method, TriggerType.RenderArmor, getImplementationLoader())
     }
 
     /**
@@ -424,9 +405,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderFood(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderFood)
+        return EventTrigger(method, TriggerType.RenderFood, getImplementationLoader())
     }
 
     /**
@@ -442,9 +422,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderMountHealth(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderMountHealth)
+        return EventTrigger(method, TriggerType.RenderMountHealth, getImplementationLoader())
     }
 
     /**
@@ -461,9 +440,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderExperience(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderExperience)
+        return EventTrigger(method, TriggerType.RenderExperience, getImplementationLoader())
     }
 
     /**
@@ -479,9 +457,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderHotbar(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderHotbar)
+        return EventTrigger(method, TriggerType.RenderHotbar, getImplementationLoader())
     }
 
     /**
@@ -497,9 +474,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderAir(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderAir)
+        return EventTrigger(method, TriggerType.RenderAir, getImplementationLoader())
     }
 
     /**
@@ -515,9 +491,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderPortal(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderPortal)
+        return EventTrigger(method, TriggerType.RenderPortal, getImplementationLoader())
     }
 
     /**
@@ -533,9 +508,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderJumpBar(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderJumpBar)
+        return EventTrigger(method, TriggerType.RenderJumpBar, getImplementationLoader())
     }
 
     /**
@@ -551,9 +525,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderChat(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderChat)
+        return EventTrigger(method, TriggerType.RenderChat, getImplementationLoader())
     }
 
     /**
@@ -570,9 +543,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderHelmet(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderHelmet)
+        return EventTrigger(method, TriggerType.RenderHelmet, getImplementationLoader())
     }
 
     /**
@@ -587,9 +559,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderHand(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderHand)
+        return EventTrigger(method, TriggerType.RenderHand, getImplementationLoader())
     }
 
     /**
@@ -604,9 +575,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderScoreboard(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderScoreboard)
+        return EventTrigger(method, TriggerType.RenderScoreboard, getImplementationLoader())
     }
 
     /**
@@ -623,9 +593,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderTitle(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderTitle)
+        return EventTrigger(method, TriggerType.RenderTitle, getImplementationLoader())
     }
 
     /**
@@ -641,9 +610,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerDrawBlockHighlight(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.BlockHighlight)
+        return EventTrigger(method, TriggerType.BlockHighlight, getImplementationLoader())
     }
 
     /**
@@ -658,9 +626,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGameLoad(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.GameLoad)
+        return RegularTrigger(method, TriggerType.GameLoad, getImplementationLoader())
     }
 
     /**
@@ -674,9 +641,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGameUnload(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.GameUnload)
+        return RegularTrigger(method, TriggerType.GameUnload, getImplementationLoader())
     }
 
     /**
@@ -692,9 +658,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerCommand(method: Any): CommandTrigger {
-        return CommandTrigger(method)
+        return CommandTrigger(method, getImplementationLoader())
     }
 
     /**
@@ -709,9 +674,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGuiOpened(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.GuiOpened)
+        return EventTrigger(method, TriggerType.GuiOpened, getImplementationLoader())
     }
 
     /**
@@ -726,9 +690,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGuiClosed(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.GuiClosed)
+        return RegularTrigger(method, TriggerType.GuiClosed, getImplementationLoader())
     }
 
     /**
@@ -746,9 +709,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPlayerJoined(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PlayerJoin)
+        return RegularTrigger(method, TriggerType.PlayerJoin, getImplementationLoader())
     }
 
     /**
@@ -766,9 +728,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPlayerLeft(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PlayerLeave)
+        return RegularTrigger(method, TriggerType.PlayerLeave, getImplementationLoader())
     }
 
     /**
@@ -787,9 +748,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPickupItem(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.PickupItem)
+        return EventTrigger(method, TriggerType.PickupItem, getImplementationLoader())
     }
 
     /**
@@ -808,9 +768,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerDropItem(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.DropItem)
+        return EventTrigger(method, TriggerType.DropItem, getImplementationLoader())
     }
 
     /**
@@ -826,9 +785,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerScreenshotTaken(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.ScreenshotTaken)
+        return EventTrigger(method, TriggerType.ScreenshotTaken, getImplementationLoader())
     }
 
     /**
@@ -844,9 +802,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerMessageSent(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.MessageSent)
+        return EventTrigger(method, TriggerType.MessageSent, getImplementationLoader())
     }
 
     /**
@@ -865,9 +822,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerItemTooltip(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.Tooltip)
+        return EventTrigger(method, TriggerType.Tooltip, getImplementationLoader())
     }
 
     /**
@@ -896,9 +852,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPlayerInteract(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.PlayerInteract)
+        return EventTrigger(method, TriggerType.PlayerInteract, getImplementationLoader())
     }
 
     /**
@@ -913,9 +868,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerBlockBreak(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.BlockBreak)
+        return RegularTrigger(method, TriggerType.BlockBreak, getImplementationLoader())
     }
 
     /**
@@ -928,9 +882,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerEntityDamage(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.EntityDamage)
+        return RegularTrigger(method, TriggerType.EntityDamage, getImplementationLoader())
     }
 
     /**
@@ -942,9 +895,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerEntityDeath(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.EntityDeath)
+        return RegularTrigger(method, TriggerType.EntityDeath, getImplementationLoader())
     }
 
     /**
@@ -955,9 +907,8 @@ object Register {
      * - The [net.minecraft.client.gui.GuiScreen] that is being drawn
      *
      */
-
     fun registerGuiDrawBackground(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.GuiDrawBackground)
+        return EventTrigger(method, TriggerType.GuiDrawBackground, getImplementationLoader())
     }
 
     /**
@@ -974,9 +925,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGuiRender(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.GuiRender)
+        return RegularTrigger(method, TriggerType.GuiRender, getImplementationLoader())
     }
 
     /**
@@ -994,9 +944,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGuiKey(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.GuiKey)
+        return EventTrigger(method, TriggerType.GuiKey, getImplementationLoader())
     }
 
     /**
@@ -1016,9 +965,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGuiMouseClick(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.GuiMouseClick)
+        return EventTrigger(method, TriggerType.GuiMouseClick, getImplementationLoader())
     }
 
     /**
@@ -1038,9 +986,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGuiMouseRelease(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.GuiMouseRelease)
+        return EventTrigger(method, TriggerType.GuiMouseRelease, getImplementationLoader())
     }
 
     /**
@@ -1060,9 +1007,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerGuiMouseDrag(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.GuiMouseDrag)
+        return EventTrigger(method, TriggerType.GuiMouseDrag, getImplementationLoader())
     }
 
     /**
@@ -1078,9 +1024,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPacketSent(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.PacketSent)
+        return EventTrigger(method, TriggerType.PacketSent, getImplementationLoader())
     }
 
     /**
@@ -1096,9 +1041,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPacketReceived(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.PacketReceived)
+        return EventTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
     }
 
     /**
@@ -1113,9 +1057,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerServerConnect(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.ServerConnect)
+        return EventTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
     }
 
     /**
@@ -1130,9 +1073,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerServerDisconnect(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.ServerDisconnect)
+        return RegularTrigger(method, TriggerType.ServerDisconnect, getImplementationLoader())
     }
 
     /**
@@ -1149,9 +1091,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerChatComponentClicked(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.ChatComponentClicked)
+        return EventTrigger(method, TriggerType.ChatComponentClicked, getImplementationLoader())
     }
 
     /**
@@ -1168,9 +1109,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerChatComponentHovered(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.ChatComponentHovered)
+        return EventTrigger(method, TriggerType.ChatComponentHovered, getImplementationLoader())
     }
 
     /**
@@ -1188,9 +1128,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderEntity(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderEntity)
+        return EventTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1207,9 +1146,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPostRenderEntity(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PostRenderEntity)
+        return RegularTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1227,9 +1165,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderTileEntity(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderTileEntity)
+        return EventTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
     }
 
     /**
@@ -1246,9 +1183,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPostRenderTileEntity(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PostRenderTileEntity)
+        return RegularTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
     }
 
     /**
@@ -1265,9 +1201,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPostGuiRender(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PostGuiRender)
+        return RegularTrigger(method, TriggerType.PostGuiRender, getImplementationLoader())
     }
 
     /**
@@ -1285,9 +1220,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerPreItemRender(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PreItemRender)
+        return RegularTrigger(method, TriggerType.PreItemRender, getImplementationLoader())
     }
 
     /**
@@ -1302,9 +1236,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderSlot(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderSlot)
+        return EventTrigger(method, TriggerType.RenderSlot, getImplementationLoader())
     }
 
     /**
@@ -1319,9 +1252,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderItemIntoGui(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderItemIntoGui)
+        return EventTrigger(method, TriggerType.RenderItemIntoGui, getImplementationLoader())
     }
 
     /**
@@ -1336,9 +1268,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderItemOverlayIntoGui(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderItemOverlayIntoGui)
+        return EventTrigger(method, TriggerType.RenderItemOverlayIntoGui, getImplementationLoader())
     }
 
     /**
@@ -1357,9 +1288,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerRenderSlotHighlight(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderSlotHighlight)
+        return EventTrigger(method, TriggerType.RenderSlotHighlight, getImplementationLoader())
     }
 
     /**
@@ -1376,9 +1306,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerSpawnParticle(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.SpawnParticle)
+        return EventTrigger(method, TriggerType.SpawnParticle, getImplementationLoader())
     }
 
     /**
@@ -1394,9 +1323,8 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerAttackEntity(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.AttackEntity)
+        return EventTrigger(method, TriggerType.AttackEntity, getImplementationLoader())
     }
 
     /**
@@ -1415,8 +1343,9 @@ object Register {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-
     fun registerHitBlock(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.HitBlock)
+        return EventTrigger(method, TriggerType.HitBlock, getImplementationLoader())
     }
+
+    fun getImplementationLoader(): ILoader
 }

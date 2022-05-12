@@ -4,7 +4,7 @@ import com.chattriggers.ctjs.utils.kotlin.getOption
 import org.mozilla.javascript.NativeObject
 import java.util.concurrent.CopyOnWriteArrayList
 
-class Display() {
+abstract class Display() {
     private var lines = CopyOnWriteArrayList<DisplayLine>()
 
     private var renderX = 0f
@@ -85,12 +85,12 @@ class Display() {
 
     fun setLine(index: Int, line: Any) = apply {
         while (lines.size - 1 < index)
-            lines.add(DisplayLine(""))
+            lines.add(createDisplayLine(""))
 
         lines[index] = when (line) {
-            is String -> DisplayLine(line)
+            is String -> createDisplayLine(line)
             is DisplayLine -> line
-            else -> DisplayLine("")
+            else -> createDisplayLine("")
         }
     }
 
@@ -105,9 +105,9 @@ class Display() {
     @JvmOverloads
     fun addLine(index: Int = -1, line: Any) = apply {
         val toAdd = when (line) {
-            is String -> DisplayLine(line)
+            is String -> createDisplayLine(line)
             is DisplayLine -> line
-            else -> DisplayLine("")
+            else -> createDisplayLine("")
         }
 
         if (index == -1) {
@@ -118,9 +118,9 @@ class Display() {
     fun addLines(vararg lines: Any) = apply {
         this.lines.addAll(lines.map {
             when (it) {
-                is String -> DisplayLine(it)
+                is String -> createDisplayLine(it)
                 is DisplayLine -> it
-                else -> DisplayLine("")
+                else -> createDisplayLine("")
             }
         })
     }
@@ -207,6 +207,8 @@ class Display() {
 
         height = i
     }
+
+    internal abstract fun createDisplayLine(text: String): DisplayLine
 
     override fun toString() =
         "Display{" +
