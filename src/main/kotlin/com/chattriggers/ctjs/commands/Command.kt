@@ -16,7 +16,8 @@ class Command(
     private val usage: String,
     private val tabCompletionOptions: MutableList<String>,
     private var aliases: MutableList<String>,
-    private val overrideExisting: Boolean = false
+    private val overrideExisting: Boolean = false,
+    private val callback: ((Array<out String>) -> MutableList<String>)? = null,
 ) : CommandBase() {
     private var triggers = mutableListOf<Trigger>()
 
@@ -51,7 +52,7 @@ class Command(
         args: Array<out String>?,
         pos: BlockPos?
     ): MutableList<String> {
-        return tabCompletionOptions
+        return callback?.invoke(args ?: arrayOf())?.toMutableList() ?: tabCompletionOptions
     }
 
     @Throws(CommandException::class)
