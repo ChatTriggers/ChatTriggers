@@ -40,11 +40,11 @@ open class Entity(val entity: MCEntity) {
     //$$
     //$$ fun getZ() = entity.z
     //$$
-    //$$ fun setX(x: Double) = apply { entity.x = x }
+    //$$ fun setX(x: Double) = apply { entity.setPos(x, getY(), getZ()) }
     //$$
-    //$$ fun setY(y: Double) = apply { entity.y = y }
+    //$$ fun setY(y: Double) = apply { entity.setPos(getX(), y, getZ()) }
     //$$
-    //$$ fun setZ(z: Double) = apply { entity.z = z }
+    //$$ fun setZ(z: Double) = apply { entity.setPos(getX(), getY(), z) }
     //#endif
 
     fun getPos() = Vec3i(getX(), getY(), getZ())
@@ -269,18 +269,24 @@ open class Entity(val entity: MCEntity) {
 
     fun getBiome(): String {
         val world = World.getWorld() ?: return ""
-        val chunk = world.getChunkFromBlockCoords(entity.position)
 
         //#if MC<=10809
-        val biome = chunk.getBiome(entity.position, world.worldChunkManager)
+        val chunk = world.getChunkFromBlockCoords(entity.position)
+        return chunk.getBiome(entity.position, world.worldChunkManager).biomeName
         //#else
-        //$$ val biome = chunk.getBiome(entity.position, world.biomeProvider)
+        //$$ // TODO(VERIFY)
+        //$$ // world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome).toString()
+        //$$ return world.getBiome(entity.blockPosition()).registryName?.toString() ?: ""
         //#endif
-
-        return biome.biomeName
     }
 
-    fun getLightLevel(): Int = World.getWorld()?.getLight(entity.position) ?: 0
+    fun getLightLevel(): Int {
+        //#if MC<=11202
+        return World.getWorld()?.getLight(entity.position) ?: 0
+        //#else
+        //$$ return World.getWorld()?.lightEngine?.getRawBrightness(entity.blockPosition(), 0) ?: 0
+        //#endif
+    }
 
     fun distanceTo(other: Entity): Float = distanceTo(other.entity)
 

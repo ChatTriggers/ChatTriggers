@@ -91,7 +91,11 @@ object ClientListener {
 
         tasks.removeAll {
             if (it.delay-- <= 0) {
+                //#if MC<=11202
                 Client.getMinecraft().addScheduledTask { it.callback() }
+                //#else
+                //$$ Client.getMinecraft().submit(it.callback)
+                //#endif
                 true
             } else false
         }

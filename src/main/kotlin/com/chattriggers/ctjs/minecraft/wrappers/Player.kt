@@ -379,7 +379,13 @@ object Player {
      * @return the currently opened container
      */
     @JvmStatic
-    fun getContainer(): Inventory? = getPlayer()?.openContainer?.let(::Inventory)
+    fun getContainer(): Inventory? {
+        //#if MC<=11202
+        return getPlayer()?.openContainer?.let(::Inventory)
+        //#else
+        //$$ return getPlayer()?.inventory?.let(::Inventory)
+        //#endif
+    }
 
     /**
      * Draws the player in the GUI

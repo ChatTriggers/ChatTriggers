@@ -10,7 +10,12 @@ data class ResourceLocation(val namespace: String, val path: String) {
             throw IllegalArgumentException("Invalid ResourceLocation path: $path")
     }
 
-    constructor(resourceLocation: MCResourceLocation) : this(resourceLocation.resourceDomain, resourceLocation.resourcePath)
+    constructor(resourceLocation: MCResourceLocation) :
+    //#if MC<=11202
+        this(resourceLocation.resourceDomain, resourceLocation.resourcePath)
+    //#else
+    //$$ this(resourceLocation.namespace, resourceLocation.path)
+    //#endif
 
     constructor(path: String) : this(path.substringBefore(':', "minecraft"), path.substringAfter(':'))
 

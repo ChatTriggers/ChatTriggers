@@ -564,7 +564,11 @@ object Renderer {
         if (vertexStarted)
             throw IllegalStateException("Call to Renderer.pos() while in vertex. Did you forget to call Renderer.endVertex()?")
 
+        //#if MC<=11202
         worldRenderer.pos(x.toDouble(), y.toDouble(), z.toDouble())
+        //#else
+        //$$ worldRenderer.vertex(x.toDouble(), y.toDouble(), z.toDouble())
+        //#endif
         vertexStarted = true
     }
 
@@ -574,7 +578,11 @@ object Renderer {
         if (!began)
             throw IllegalStateException("Call to Renderer.tex() without a corresponding call to Renderer.beginVertices()")
 
+        //#if MC<=11202
         worldRenderer.tex(u.toDouble(), v.toDouble())
+        //#else
+        //$$ worldRenderer.uv(u.toFloat(), v.toFloat())
+        //#endif
     }
 
     /**
@@ -854,9 +862,9 @@ object Renderer {
         val mouseX = -30f
         val mouseY = 0f
 
+        //#if MC<=11202
         val entity = if (player is PlayerMP) player.player else Player.getPlayer()!!
 
-        //#if MC<=11202
         pushMatrix()
         enableTexture2D()
         GlStateManager.enableColorMaterial()
@@ -907,6 +915,8 @@ object Renderer {
         popMatrix()
         finishDraw()
         //#else
+        //$$ val entity = ((player as? PlayerMP)?.player as? AbstractClientPlayer) ?: Player.getPlayer()!!
+        //$$
         //$$ val newYaw = atan(mouseY / 40.0).toFloat()
         //$$ val newPitch = atan(mouseX / 40.0).toFloat()
         //$$
