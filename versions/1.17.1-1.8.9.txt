@@ -39,3 +39,5 @@ net.minecraft.client.gui.screens.ChatScreen net.minecraft.client.gui.GuiChat
 net.minecraft.network.protocol.Packet net.minecraft.network.Packet
 net.minecraft.network.PacketListener net.minecraft.network.INetHandler
 net.minecraft.world.level.block.state.BlockState net.minecraft.block.state.IBlockState
+net.minecraft.core.Direction net.minecraft.util.EnumFacing
+net.minecraft.world.level.block.SignBlock net.minecraft.block.BlockSign

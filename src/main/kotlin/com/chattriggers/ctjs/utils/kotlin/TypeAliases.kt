@@ -20,7 +20,6 @@ internal typealias MCNBTTagList = net.minecraft.nbt.NBTTagList
 internal typealias MCNBTTagString = net.minecraft.nbt.NBTTagString
 
 internal typealias MCBlockPos = net.minecraft.util.BlockPos
-internal typealias MCRayTraceType = net.minecraft.util.MovingObjectPosition.MovingObjectType
 internal typealias MCMathHelper = net.minecraft.util.MathHelper
 internal typealias MCChatPacket = net.minecraft.network.play.server.S02PacketChat
 internal typealias MCITextComponent = net.minecraft.util.IChatComponent

@@ -2,13 +2,14 @@ package com.chattriggers.ctjs.minecraft.wrappers.entity
 
 import com.chattriggers.ctjs.minecraft.libs.MathLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import net.minecraft.util.Vec3
-import net.minecraft.world.World
 import java.util.*
 
 //#if MC>=11701
@@ -265,6 +266,21 @@ open class Entity(val entity: MCEntity) {
         //$$ entity.airSupply = air
         //#endif
     }
+
+    fun getBiome(): String {
+        val world = World.getWorld() ?: return ""
+        val chunk = world.getChunkFromBlockCoords(entity.position)
+
+        //#if MC<=10809
+        val biome = chunk.getBiome(entity.position, world.worldChunkManager)
+        //#else
+        //$$ val biome = chunk.getBiome(entity.position, world.biomeProvider)
+        //#endif
+
+        return biome.biomeName
+    }
+
+    fun getLightLevel(): Int = World.getWorld()?.getLight(entity.position) ?: 0
 
     fun distanceTo(other: Entity): Float = distanceTo(other.entity)
 
@@ -537,7 +553,7 @@ open class Entity(val entity: MCEntity) {
         //#endif
     }
 
-    fun getWorld(): World {
+    fun getWorld(): net.minecraft.world.World {
         //#if MC<=11202
         return entity.entityWorld
         //#else
@@ -551,6 +567,30 @@ open class Entity(val entity: MCEntity) {
         //#else
         //$$ return Chunk(getWorld().getChunk(entity.blockPosition()))
         //#endif
+    }
+
+    /**
+     * Gets the direction the entity is facing.
+     * Example: "South West"
+     *
+     * @return The direction the player is facing, one of the four cardinal directions
+     */
+    fun facing(): String {
+        if (Player.getPlayer() == null) return ""
+
+        val yaw = Player.getYaw()
+
+        return when {
+            yaw in -22.5..22.5 -> "South"
+            yaw in 22.5..67.5 -> "South West"
+            yaw in 67.5..112.5 -> "West"
+            yaw in 112.5..157.5 -> "North West"
+            yaw < -157.5 || yaw > 157.5 -> "North"
+            yaw in -157.5..-112.5 -> "North East"
+            yaw in -112.5..-67.5 -> "East"
+            yaw in -67.5..-22.5 -> "South East"
+            else -> ""
+        }
     }
 
     override fun toString(): String {
