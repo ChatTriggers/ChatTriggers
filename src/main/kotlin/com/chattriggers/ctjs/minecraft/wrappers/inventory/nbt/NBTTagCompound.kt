@@ -2,17 +2,35 @@ package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
 import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
+import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
 import net.minecraft.nbt.NBTTagByteArray
 import net.minecraft.nbt.NBTTagIntArray
 import net.minecraftforge.common.util.Constants
 import org.mozilla.javascript.NativeObject
 
+//#if MC>=11701
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.CompoundTagAccessor
+//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//#endif
+
 class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
     val tagMap: Map<String, MCNBTBase>
-        get() = rawNBT.tagMap
+        get() {
+            //#if MC<=11202
+            return rawNBT.tagMap
+            //#else
+            //$$ return rawNBT.asMixin<CompoundTagAccessor>().tags
+            //#endif
+        }
 
     val keySet: Set<String>
-        get() = rawNBT.keySet
+        get() {
+            //#if MC<=11202
+            return rawNBT.keySet
+            //#else
+            //$$ return rawNBT.allKeys
+            //#endif
+        }
 
     enum class NBTDataType {
         BYTE,
@@ -29,19 +47,38 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
         TAG_LIST,
     }
 
-    fun getTag(key: String) = when (val tag = rawNBT.getTag(key)) {
-        is MCNBTTagCompound -> NBTTagCompound(tag)
-        is MCNBTBase -> NBTBase(tag)
-        else -> null
+    fun getTag(key: String): NBTBase? {
+        //#if MC<=11202
+        return when (val tag = rawNBT.getTag(key)) {
+        //#else
+        //$$ return when (val tag = rawNBT.get(key)) {
+        //#endif
+            is MCNBTTagCompound -> NBTTagCompound(tag)
+            is MCNBTTagList -> NBTTagList(tag)
+            is MCNBTBase -> NBTBase(tag)
+            else -> null
+        }
     }
 
-    fun getTagId(key: String) = rawNBT.getTagId(key)
+    fun getTagId(key: String): Byte {
+        //#if MC<=11202
+        return rawNBT.getTagId(key)
+        //#else
+        //$$ return rawNBT.getTagType(key)
+        //#endif
+    }
 
     fun getByte(key: String) = rawNBT.getByte(key)
 
     fun getShort(key: String) = rawNBT.getShort(key)
 
-    fun getInteger(key: String) = rawNBT.getInteger(key)
+    fun getInteger(key: String): Int {
+        //#if MC<=11202
+        return rawNBT.getInteger(key)
+        //#else
+        //$$ return rawNBT.getInt(key)
+        //#endif
+    }
 
     fun getLong(key: String) = rawNBT.getLong(key)
 
@@ -57,9 +94,22 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
 
     fun getBoolean(key: String) = rawNBT.getBoolean(key)
 
-    fun getCompoundTag(key: String) = NBTTagCompound(rawNBT.getCompoundTag(key))
+    fun getCompoundTag(key: String): NBTTagCompound {
+        //#if MC<=11202
+        return NBTTagCompound(rawNBT.getCompoundTag(key))
+        //#else
+        //$$ return NBTTagCompound(rawNBT.getCompound(key))
+        //#endif
+    }
 
-    fun getTagList(key: String, type: Int) = rawNBT.getTagList(key, type)
+    // TODO(BREAKING): Wrap result
+    fun getTagList(key: String, type: Int): NBTTagList {
+        //#if MC<=11202
+        return NBTTagList(rawNBT.getTagList(key, type))
+        //#else
+        //$$ return NBTTagList(rawNBT.getList(key, type))
+        //#endif
+    }
 
     fun get(key: String, type: NBTDataType, tagType: Int?): Any? {
         return when (type) {
@@ -70,19 +120,35 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.FLOAT -> getFloat(key)
             NBTDataType.DOUBLE -> getDouble(key)
             NBTDataType.STRING -> {
-                if (rawNBT.hasKey(key, Constants.NBT.TAG_STRING))
+                //#if MC<=11202
+                if (rawNBT.hasKey(key, Constants.NBT.TAG_STRING)) {
+                //#else
+                //$$ if (rawNBT.contains(key, Constants.NBT.TAG_STRING)) {
+                //#endif
                     tagMap[key]?.let { NBTBase(it).toString() }
-                else null
+                } else null
             }
             NBTDataType.BYTE_ARRAY -> {
-                if (rawNBT.hasKey(key, Constants.NBT.TAG_BYTE_ARRAY))
-                        (tagMap[key] as NBTTagByteArray).byteArray
-                else null
+                //#if MC<=11202
+                if (rawNBT.hasKey(key, Constants.NBT.TAG_BYTE_ARRAY)) {
+                    (tagMap[key] as NBTTagByteArray).byteArray
+                } else null
+                //#else
+                //$$ if (rawNBT.contains(key, Constants.NBT.TAG_BYTE_ARRAY)) {
+                //$$     (tagMap[key] as ByteArrayTag).asByteArray
+                //$$ } else null
+                //#endif
             }
             NBTDataType.INT_ARRAY -> {
-                if (rawNBT.hasKey(key, Constants.NBT.TAG_INT_ARRAY))
-                        (tagMap[key] as NBTTagIntArray).intArray
-                else null
+                //#if MC<=11202
+                if (rawNBT.hasKey(key, Constants.NBT.TAG_INT_ARRAY)) {
+                    (tagMap[key] as NBTTagIntArray).intArray
+                } else null
+                //#else
+                //$$ if (rawNBT.contains(key, Constants.NBT.TAG_INT_ARRAY)) {
+                //$$     (tagMap[key] as IntArrayTag).asIntArray
+                //$$ } else null
+                //#endif
             }
             NBTDataType.BOOLEAN -> getBoolean(key)
             NBTDataType.COMPOUND_TAG -> getCompoundTag(key)
@@ -99,47 +165,91 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
     fun setNBTBase(key: String, value: NBTBase) = setNBTBase(key, value.rawNBT)
 
     fun setNBTBase(key: String, value: MCNBTBase) = apply {
+        //#if MC<=11202
         rawNBT.setTag(key, value)
+        //#else
+        //$$ rawNBT.put(key, value)
+        //#endif
     }
 
     fun setByte(key: String, value: Byte) = apply {
+        //#if MC<=11202
         rawNBT.setByte(key, value)
+        //#else
+        //$$ rawNBT.putByte(key, value)
+        //#endif
     }
 
     fun setShort(key: String, value: Short) = apply {
+        //#if MC<=11202
         rawNBT.setShort(key, value)
+        //#else
+        //$$ rawNBT.putShort(key, value)
+        //#endif
     }
 
     fun setInteger(key: String, value: Int) = apply {
+        //#if MC<=11202
         rawNBT.setInteger(key, value)
+        //#else
+        //$$ rawNBT.putInt(key, value)
+        //#endif
     }
 
     fun setLong(key: String, value: Long) = apply {
+        //#if MC<=11202
         rawNBT.setLong(key, value)
+        //#else
+        //$$ rawNBT.putLong(key, value)
+        //#endif
     }
 
     fun setFloat(key: String, value: Float) = apply {
+        //#if MC<=11202
         rawNBT.setFloat(key, value)
+        //#else
+        //$$ rawNBT.putFloat(key, value)
+        //#endif
     }
 
     fun setDouble(key: String, value: Double) = apply {
+        //#if MC<=11202
         rawNBT.setDouble(key, value)
+        //#else
+        //$$ rawNBT.putDouble(key, value)
+        //#endif
     }
 
     fun setString(key: String, value: String) = apply {
+        //#if MC<=11202
         rawNBT.setString(key, value)
+        //#else
+        //$$ rawNBT.putString(key, value)
+        //#endif
     }
 
     fun setByteArray(key: String, value: ByteArray) = apply {
+        //#if MC<=11202
         rawNBT.setByteArray(key, value)
+        //#else
+        //$$ rawNBT.putByteArray(key, value)
+        //#endif
     }
 
     fun setIntArray(key: String, value: IntArray) = apply {
+        //#if MC<=11202
         rawNBT.setIntArray(key, value)
+        //#else
+        //$$ rawNBT.putIntArray(key, value)
+        //#endif
     }
 
     fun setBoolean(key: String, value: Boolean) = apply {
+        //#if MC<=11202
         rawNBT.setBoolean(key, value)
+        //#else
+        //$$ rawNBT.putBoolean(key, value)
+        //#endif
     }
 
     operator fun set(key: String, value: Any) = apply {
@@ -161,7 +271,11 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
     }
 
     fun removeTag(key: String) = apply {
+        //#if MC<=11202
         rawNBT.removeTag(key)
+        //#else
+        //$$ rawNBT.remove(key)
+        //#endif
     }
 
     fun toObject(): NativeObject {

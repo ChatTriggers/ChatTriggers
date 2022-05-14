@@ -47,3 +47,14 @@ net.minecraft.world.item.enchantment.EnchantmentHelper net.minecraft.enchantment
 net.minecraft.world.item.enchantment.Enchantment net.minecraft.enchantment.Enchantment
 net.minecraft.world.inventory.AbstractContainerMenu net.minecraft.inventory.Container
 net.minecraft.world.inventory.ChestMenu net.minecraft.inventory.ContainerChest
+net.minecraft.nbt.StringTag net.minecraft.nbt.NBTTagString
+net.minecraft.nbt.ByteArrayTag net.minecraft.nbt.NBTTagByteArray
+net.minecraft.nbt.ByteTag net.minecraft.nbt.NBTTagByte
+net.minecraft.nbt.CompoundTag net.minecraft.nbt.NBTTagCompound
+net.minecraft.nbt.IntArrayTag net.minecraft.nbt.NBTTagIntArray
+net.minecraft.nbt.IntTag net.minecraft.nbt.NBTTagInt
+net.minecraft.nbt.DoubleTag net.minecraft.nbt.NBTTagDouble
+net.minecraft.nbt.FloatTag net.minecraft.nbt.NBTTagFloat
+net.minecraft.nbt.LongTag net.minecraft.nbt.NBTTagLong
+net.minecraft.nbt.ShortTag net.minecraft.nbt.NBTTagShort
+net.minecraft.nbt.ListTag net.minecraft.nbt.NBTTagList

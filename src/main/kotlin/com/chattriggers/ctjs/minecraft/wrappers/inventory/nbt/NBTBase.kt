@@ -19,13 +19,6 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
      */
     fun copy() = rawNBT.copy()
 
-    /**
-     * Return whether this compound has no tags.
-     */
-    fun hasNoTags() = rawNBT.hasNoTags()
-
-    fun hasTags() = !rawNBT.hasNoTags()
-
     override fun equals(other: Any?) = rawNBT == other
 
     override fun hashCode() = rawNBT.hashCode()
@@ -35,6 +28,7 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     companion object {
         fun MCNBTBase.toObject(): Any? {
             return when (this) {
+                //#if MC<=11202
                 is NBTTagString -> string
                 is NBTTagByte -> byte
                 is NBTTagShort -> short
@@ -47,6 +41,20 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
                 is NBTTagByteArray -> NativeArray(byteArray.toTypedArray()).expose()
                 is NBTTagIntArray -> NativeArray(intArray.toTypedArray()).expose()
                 else -> error("Unknown tag type $javaClass")
+                //#else
+                //$$ is StringTag -> asString
+                //$$ is ByteTag -> asByte
+                //$$ is ShortTag -> asShort
+                //$$ is IntTag -> asInt
+                //$$ is LongTag -> asLong
+                //$$ is FloatTag -> asFloat
+                //$$ is DoubleTag -> asDouble
+                //$$ is MCNBTTagCompound -> toObject()
+                //$$ is MCNBTTagList -> toObject()
+                //$$ is ByteArrayTag -> NativeArray(asByteArray.toTypedArray()).expose()
+                //$$ is IntArrayTag -> NativeArray(asIntArray.toTypedArray()).expose()
+                //$$ else -> error("Unknown tag type $javaClass")
+                //#endif
             }
         }
 
@@ -54,8 +62,13 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
             val o = NativeObject()
             o.expose()
 
+            //#if MC<=11202
             for (key in keySet) {
                 val value = tagMap[key]
+            //#else
+            //$$ for (key in allKeys) {
+            //$$     val value = get(key)
+            //#endif
                 if (value != null) {
                     o.put(key, o, value.toObject())
                 }
@@ -66,9 +79,12 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
 
         fun MCNBTTagList.toObject(): NativeArray {
             val tags = mutableListOf<Any?>()
-            for (i in 0 until tagCount()) {
+            //#if MC<=11202
+            for (i in 0 until tagCount())
+            //#else
+            //$$ for (i in 0 until size)
+            //#endif
                 tags.add(get(i).toObject())
-            }
             val array = NativeArray(tags.toTypedArray())
             array.expose()
             return array

@@ -23,10 +23,12 @@
         //$$ ,
         //$$ "AbstractClientPlayerAccessor",
         //$$ "ChatScreenAccessor",
+        //$$ "CompoundTagAccessor",
         //$$ "EntityAccessor",
         //$$ "EntityRendererDispatcherMixin",
         //$$ "KeyMappingMixin",
         //$$ "LevelRendererAccessor",
+        //$$ "ListTagAccessor",
         //$$ "ScreenAccessor",
         //$$ "ParticleAccessor",
         //$$ "PlayerRendererMixin"
