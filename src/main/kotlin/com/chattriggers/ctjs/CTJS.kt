@@ -134,12 +134,6 @@ class CTJS {
         connection.getInputStream()
     }
 
-    fun makeWebRequest(url: String): URLConnection = URL(url).openConnection().apply {
-        setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
-        connectTimeout = 3000
-        readTimeout = 3000
-    }
-
     companion object {
         const val WEBSITE_ROOT = "https://www.chattriggers.com"
         val gson = Gson()
@@ -147,6 +141,12 @@ class CTJS {
         val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
         val sounds = mutableListOf<Sound>()
         val images = mutableListOf<Image>()
+
+        fun makeWebRequest(url: String): URLConnection = URL(url).openConnection().apply {
+            setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
+            connectTimeout = 3000
+            readTimeout = 3000
+        }
 
         //#if MC>=11701
         //$$ private val commandsPendingRegistration = mutableListOf<CommandNode<CommandSourceStack>>()

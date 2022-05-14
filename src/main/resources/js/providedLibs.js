@@ -75,6 +75,7 @@
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.world.block.Sign");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i");
+    loadClass("com.chattriggers.ctjs.minecraft.wrappers.utils.ResourceLocation");
 
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.entity.Entity");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.entity.EntityLivingBase");

@@ -6,20 +6,25 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
+import com.chattriggers.ctjs.minecraft.wrappers.utils.ResourceLocation
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
 import com.chattriggers.ctjs.utils.kotlin.*
 import gg.essential.universal.wrappers.message.UTextComponent
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.Constants
 
-//#if MC>10809
+//#if MC==11202
 //$$ import net.minecraft.client.util.ITooltipFlag
-//$$ import com.chattriggers.ctjs.minecraft.wrappers.World
+//#endif
+
+//#if MC<=11202
+import net.minecraft.client.renderer.RenderHelper
+//#elseif MC>=11701
+//$$ import net.minecraft.world.item.TooltipFlag
+//$$ import net.minecraftforge.registries.ForgeRegistries
 //#endif
 
 class Item {
@@ -32,20 +37,63 @@ class Item {
     }
 
     constructor(itemName: String) {
-        item = MCItem.getByNameOrId(itemName)
-            ?: throw IllegalArgumentException("Item with name or id $itemName does not exist")
+        val id = itemName.toIntOrNull()
+        //#if MC<=11202
+        val item = if (id != null) {
+            MCItem.getItemById(id)
+        } else {
+            MCItem.itemRegistry.getObject(ResourceLocation(itemName).toMC())
+        }
+        //#else
+        //$$ val item = if (id != null) {
+        //$$     MCItem.byId(id)
+        //$$ } else {
+        //$$     ForgeRegistries.ITEMS.getValue(ResourceLocation(itemName).toMC())
+        //$$ }
+        //#endif
+        if (item == null)
+            throw IllegalArgumentException("Item with name or id $itemName does not exist")
+
+        this.item = item
+        itemStack = ItemStack(item)
+    }
+
+    constructor(resource: ResourceLocation) {
+        //#if MC<=11202
+        val item = MCItem.itemRegistry.getObject(resource.toMC())
+        //#else
+        //$$ val item = ForgeRegistries.ITEMS.getValue(resource.toMC())
+        //#endif
+
+        if (item == null)
+            throw IllegalArgumentException("Item with resource $resource does not exist")
+        this.item = item
         itemStack = ItemStack(item)
     }
 
     constructor(itemID: Int) {
-        item = MCItem.getItemById(itemID)
-            ?: throw IllegalArgumentException("Item with id $itemID does not exist")
+        //#if MC<=11202
+        val item = MCItem.getItemById(itemID)
+        //#else
+        //$$ val item = MCItem.byId(itemID)
+        //#endif
+
+        if (item == null)
+            throw IllegalArgumentException("Item with id $itemID does not exist")
+        this.item = item
         itemStack = ItemStack(item)
     }
 
     constructor(block: BlockType) {
-        item = MCItem.getItemFromBlock(block.mcBlock)
-            ?: throw IllegalArgumentException("BlockType $block does not exist")
+        //#if MC<=11202
+        val item = MCItem.getItemFromBlock(block.mcBlock)
+        //#else
+        //$$ val item = MCItem.byBlock(block.mcBlock)
+        //#endif
+
+        if (item == null)
+            throw IllegalArgumentException("BlockType $block does not exist")
+        this.item = item
         itemStack = ItemStack(item)
     }
 
@@ -79,7 +127,13 @@ class Item {
         }
     }
 
-    fun getTextComponent() = UTextComponent(itemStack.chatComponent)
+    fun getTextComponent(): UTextComponent {
+        //#if MC<=11202
+        return UTextComponent(itemStack.chatComponent)
+        //#else
+        //$$ return UTextComponent(itemStack.hoverName)
+        //#endif
+    }
 
     fun getRawNBT() = itemStack.serializeNBT().toString()
 
@@ -88,10 +142,20 @@ class Item {
     @Deprecated("Use the better-named method", ReplaceWith("getNBT"))
     fun getItemNBT(): NBTTagCompound = getNBT()
 
-    fun getID(): Int = MCItem.getIdFromItem(item)
+    fun getID(): Int {
+        //#if MC<=11202
+        return MCItem.getIdFromItem(item)
+        //#else
+        //$$ return MCItem.getId(item)
+        //#endif
+    }
 
     fun setStackSize(stackSize: Int) = apply {
+        //#if MC<=10809
         itemStack.stackSize = stackSize
+        //#else
+        //$$ itemStack.count = stackSize
+        //#endif
     }
 
     fun getStackSize(): Int {
@@ -108,7 +172,13 @@ class Item {
      *
      * @return the item's unlocalized name
      */
-    fun getUnlocalizedName(): String = item.unlocalizedName
+    fun getUnlocalizedName(): String {
+        //#if MC<=11202
+        return item.unlocalizedName
+        //#else
+        //$$ return item.descriptionId
+        //#endif
+    }
 
     /**
      * Gets the item's registry name.
@@ -116,13 +186,7 @@ class Item {
      *
      * @return the item's registry name
      */
-    fun getRegistryName(): String {
-        //#if MC<=10809
-        return item.registryName.toString()
-        //#else
-        //$$ return item.registryName.toString()
-        //#endif
-    }
+    fun getRegistryName(): String = item.registryName.toString()
 
     /**
      * Gets the item's stack display name.
@@ -130,48 +194,77 @@ class Item {
      *
      * @return the item's stack display name
      */
-    fun getName(): String = itemStack.displayName
+    fun getName(): String {
+        //#if MC<=11202
+        return itemStack.displayName
+        //#else
+        //$$ return UTextComponent(itemStack.displayName).unformattedText
+        //#endif
+    }
 
     /**
      * Sets the item's name.
      * @param name the new name
      */
     fun setName(name: String) = apply {
+        //#if MC<=11202
         itemStack.setStackDisplayName(ChatLib.addColor(name))
+        //#else
+        //$$ itemStack.hoverName = UTextComponent(ChatLib.addColor(name))
+        //#endif
     }
 
     fun getEnchantments(): Map<String, Int> {
         return EnchantmentHelper.getEnchantments(itemStack).mapKeys {
             //#if MC<=10809
-            Enchantment.getEnchantmentById(
-                it.key
-            )
-                //#else
-                //$$ it.key
-                //#endif
-                .name.replace("enchantment.", "")
+            Enchantment.getEnchantmentById(it.key).name.replace("enchantment.", "")
+            //#elseif MC<=11202
+            //$$ it.key.name.replace("enchantment.", "")
+            //#else
+            //$$ it.key.descriptionId.replace("enchantment.", "")
+            //#endif
         }
     }
 
-    fun isEnchantable(): Boolean = itemStack.isItemEnchantable
-
-    fun isEnchanted(): Boolean = itemStack.isItemEnchanted
-
-    fun getMetadata(): Int = itemStack.metadata
-
-    fun canPlaceOn(block: BlockType): Boolean = itemStack.canPlaceOn(block.mcBlock)
-
-    fun canHarvest(block: BlockType): Boolean {
-        //#if MC<=10809
-        return itemStack.canHarvestBlock(block.mcBlock)
+    fun isEnchantable(): Boolean {
+        //#if MC<=11202
+        return itemStack.isItemEnchantable
         //#else
-        //$$ return itemStack.canHarvestBlock(
-        //$$         World.getWorld().getBlockState(block.blockPos)
-        //$$ )
+        //$$ return itemStack.isEnchantable
         //#endif
     }
 
-    fun canDestroy(block: BlockType): Boolean = itemStack.canDestroy(block.mcBlock)
+    fun isEnchanted(): Boolean {
+        //#if MC<=11202
+        return itemStack.isItemEnchanted
+        //#else
+        //$$ return itemStack.isEnchanted
+        //#endif
+    }
+
+    // TODO(BREAKING): Removed this. Metadata doesn't exist in newer versions, being
+    //                 replaced completely by block states. I'd like to come up with
+    //                 a cross-platform solution to get this information.
+    // fun getMetadata(): Int = itemStack.metadata
+
+    // TODO(BREAKING): Removed this. Newer versions require a specific BlockPos. Maybe
+    //                 recreate the 1.8.9 canPlaceOn method manually, without the predicate
+    //                 present in newer versions? Or just make this a method on Block?
+    // fun canPlaceOn(block: BlockType): Boolean = itemStack.canPlaceOn(block.mcBlock)
+
+    // TODO(BREAKING): See canPlaceOn
+    // fun canHarvest(block: BlockType): Boolean {
+    //     //#if MC<=10809
+    //     return itemStack.canHarvestBlock(block.mcBlock)
+    //     //#else
+    //     //$$ return itemStack.canHarvestBlock(
+    //     //$$         World.getWorld().getBlockState(block.blockPos)
+    //     //$$ )
+    //     //#endif
+    // }
+
+    // TODO(BREAKING: See canPlaceOn
+    // fun canDestroy(block: BlockType): Boolean = itemStack.canDestroy(block.mcBlock)
 
     /**
      * Gets the item's durability, i.e. the number of uses left
@@ -180,26 +273,45 @@ class Item {
      */
     fun getDurability(): Int = getMaxDamage() - getDamage()
 
-    fun getDamage(): Int = itemStack.itemDamage
+    fun getDamage(): Int {
+        //#if MC<=11202
+        return itemStack.itemDamage
+        //#else
+        //$$ return itemStack.damageValue
+        //#endif
+    }
 
     fun setDamage(damage: Int) = apply {
+        //#if MC<=11202
         itemStack.itemDamage = damage
+        //#else
+        //$$ itemStack.damageValue = damage
+        //#endif
     }
 
     fun getMaxDamage(): Int = itemStack.maxDamage
 
-    fun isDamagable(): Boolean = itemStack.isItemStackDamageable
+    fun isDamagable(): Boolean {
+        //#if MC<=11202
+        return itemStack.isItemStackDamageable
+        //#else
+        //$$ return itemStack.isDamageableItem
+        //#endif
+    }
 
     /**
      * Gets the item's name and lore lines.
      *
      * @return the item's name and lore lines
      */
-    fun getLore(): List<String> {
+    // TODO(BREAKING): Returns a list of UTextComponent
+    fun getLore(): List<UTextComponent> {
         //#if MC<=10809
-        return itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips)
+        return itemStack.getTooltip(Player.getPlayer(), Client.getMinecraft().gameSettings.advancedItemTooltips).map(::UTextComponent)
+        //#elseif MC<=11202
+        //$$ return itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED).map(::UTextComponent)
         //#else
-        //$$ return itemStack.getTooltip(Player.getPlayer(), ITooltipFlag.TooltipFlags.ADVANCED)
+        //$$ return itemStack.getTooltipLines(Player.getPlayer(), TooltipFlag.Default.ADVANCED).map(::UTextComponent)
         //#endif
     }
 
@@ -208,19 +320,17 @@ class Item {
      * @param loreLines the new lore lines
      */
     fun setLore(vararg loreLines: String) = apply {
-        if (itemStack.tagCompound == null) {
+        //#if MC<=11202
+        if (itemStack.tagCompound == null)
             itemStack.tagCompound = MCNBTTagCompound()
-        }
 
         val lore = getNBT().getCompoundTag("tag").let {
-            if (!it.rawNBT.hasKey("display")) {
+            if (!it.rawNBT.hasKey("display"))
                 it["display"] = MCNBTTagCompound()
-            }
             it.getCompoundTag("display")
         }.let {
-            if (!it.rawNBT.hasKey("display")) {
+            if (!it.rawNBT.hasKey("display"))
                 it["Lore"] = MCNBTTagList()
-            }
             it.getTagList("Lore", Constants.NBT.TAG_STRING)
         }
 
@@ -228,6 +338,26 @@ class Item {
         loreLines.forEach {
             lore.appendTag(MCNBTTagString(ChatLib.addColor(it)))
         }
+        //#else
+        //$$ if (itemStack.tag == null)
+        //$$     itemStack.tag = MCNBTTagCompound()
+        //$$
+        //$$ val lore = getNBT().getCompoundTag("tag").let {
+        //$$     if (!it.rawNBT.contains("display"))
+        //$$         it["display"] = MCNBTTagCompound()
+        //$$     it.getCompoundTag("display")
+        //$$ }.let {
+        //$$     if (!it.rawNBT.contains("display"))
+        //$$         it["Lore"] = MCNBTTagList()
+        //$$     it.getTagList("Lore", Constants.NBT.TAG_STRING)
+        //$$ }
+        //$$
+        //$$ lore.tagList.clear()
+        //$$ loreLines.forEach {
+        //$$     lore.appendTag(MCNBTTagString.valueOf(ChatLib.addColor(it)))
+        //$$ }
+        //#endif
+
     }
 
     /**
@@ -240,17 +370,26 @@ class Item {
      */
     @JvmOverloads
     fun draw(x: Float = 0f, y: Float = 0f, scale: Float = 1f, z: Float = 200f) {
+        //#if MC<=11202
         val itemRenderer = Client.getMinecraft().renderItem
+        //#else
+        //$$ val itemRenderer = Client.getMinecraft().itemRenderer
+        //#endif
 
-        GlStateManager.scale(scale, scale, 1f)
-        GlStateManager.translate(x / scale, y / scale, 0f)
-        GlStateManager.color(1f, 1f, 1f, 1f)
+        Renderer.scale(scale, scale, 1f)
+        Renderer.translate(x / scale, y / scale, 0f)
+        Renderer.colorize(1f, 1f, 1f, 1f)
 
-        RenderHelper.enableStandardItemLighting()
+        //#if MC<=11202
         RenderHelper.enableGUIStandardItemLighting()
 
         itemRenderer.zLevel = z
         itemRenderer.renderItemIntoGUI(itemStack, 0, 0)
+        //#else
+        //$$ // TODO(VERIFY): Lighting.setupForEntityInInventory()?
+        //$$ itemRenderer.blitOffset = z
+        //$$ itemRenderer.renderGuiItem(itemStack, 0, 0)
+        //#endif
 
         Renderer.finishDraw()
     }

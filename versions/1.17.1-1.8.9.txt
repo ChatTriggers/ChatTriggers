@@ -41,3 +41,7 @@ net.minecraft.network.PacketListener net.minecraft.network.INetHandler
 net.minecraft.world.level.block.state.BlockState net.minecraft.block.state.IBlockState
 net.minecraft.core.Direction net.minecraft.util.EnumFacing
 net.minecraft.world.level.block.SignBlock net.minecraft.block.BlockSign
+net.minecraft.world.Container net.minecraft.inventory.IInventory
+net.minecraft.world.entity.item.ItemEntity net.minecraft.entity.item.EntityItem
+net.minecraft.world.item.enchantment.EnchantmentHelper net.minecraft.enchantment.EnchantmentHelper
+net.minecraft.world.item.enchantment.Enchantment net.minecraft.enchantment.Enchantment

@@ -33,6 +33,7 @@ internal typealias MCGameType = net.minecraft.world.WorldSettings.GameType
 internal typealias MCWorldRenderer = net.minecraft.client.renderer.WorldRenderer
 internal typealias MCTextComponentSerializer = net.minecraft.util.IChatComponent.Serializer
 internal typealias MCSoundCategory = net.minecraft.client.audio.SoundCategory
+internal typealias MCResourceLocation = net.minecraft.util.ResourceLocation
 //#else
 //$$ // internal typealias MCChunk = net.minecraft.world.chunk.Chunk
 //$$ internal typealias MCEntity = net.minecraft.world.entity.Entity
@@ -65,4 +66,5 @@ internal typealias MCSoundCategory = net.minecraft.client.audio.SoundCategory
 //$$ // internal typealias MCWorldRenderer = net.minecraft.client.renderer.WorldRenderer
 //$$ internal typealias MCTextComponentSerializer = net.minecraft.network.chat.Component.Serializer
 //$$ internal typealias MCSoundCategory = net.minecraft.sounds.SoundSource
+//$$ internal typealias MCResourceLocation = net.minecraft.resources.ResourceLocation
 //#endif
