@@ -12,13 +12,18 @@ import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.multiplayer.WorldClient
-import net.minecraft.util.EnumParticleTypes
 
-//#if MC>=11202
-//$$ import net.minecraft.util.ResourceLocation
-//$$ import net.minecraft.util.SoundEvent
-//$$ import kotlin.reflect.jvm.isAccessible
-//$$
+//#if MC<=11202
+import net.minecraft.util.EnumParticleTypes
+//#else
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.LevelRendererAccessor
+//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//$$ import net.minecraft.core.particles.ParticleOptions
+//$$ import net.minecraft.network.FriendlyByteBuf
+//$$ import net.minecraft.resources.ResourceLocation
+//$$ import net.minecraft.server.level.ServerLevel
+//$$ import net.minecraft.sounds.SoundSource
+//$$ import net.minecraftforge.registries.ForgeRegistries
 //#endif
 
 object World {
@@ -29,10 +34,10 @@ object World {
      */
     @JvmStatic
     fun getWorld(): WorldClient? {
-        //#if MC<=10809
+        //#if MC<=11202
         return Client.getMinecraft().theWorld
         //#else
-        //$$ return Client.getMinecraft().world
+        //$$ return Client.getMinecraft().level
         //#endif
     }
 
@@ -52,7 +57,7 @@ object World {
             //#if MC<=10809
             Player.getPlayer()?.playSound(name, volume, pitch)
             //#else
-            //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
+            //$$ val sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation("minecraft", name))
             //$$ Player.getPlayer()?.playSound(sound, volume, pitch)
             //#endif
         }
@@ -68,30 +73,52 @@ object World {
      * @param z the z location
      */
     @JvmStatic
-    fun playRecord(name: String?, x: Double, y: Double, z: Double) {
+    fun playRecord(name: String, x: Double, y: Double, z: Double) {
         Client.scheduleTask {
             //#if MC<=10809
             getWorld()?.playRecord(MCBlockPos(x, y, z), name)
             //#else
-            //$$ val sound = SoundEvent.REGISTRY.getObject(ResourceLocation("minecraft", name))
-            //$$ getWorld()?.playRecord(BlockPos(x, y, z), sound)
+            //$$ val sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation("minecraft", name)) ?: return@scheduleTask
+            //$$ getWorld()?.playLocalSound(x, y, z, sound, SoundSource.RECORDS, 1.0f, 1.0f, false)
             //#endif
         }
     }
 
     @JvmStatic
     fun stopAllSounds() {
+        //#if MC<=11202
         Client.getMinecraft().soundHandler.stopSounds()
+        //#else
+        //$$ Client.getMinecraft().soundManager.stop()
+        //#endif
     }
 
     @JvmStatic
-    fun isRaining(): Boolean = getWorld()?.worldInfo?.isRaining ?: false
+    fun isRaining(): Boolean {
+        //#if MC<=11202
+        return getWorld()?.worldInfo?.isRaining ?: false
+        //#else
+        //$$ return getWorld()?.levelData?.isRaining ?: false
+        //#endif
+    }
 
     @JvmStatic
-    fun getRainingStrength(): Float = getWorld()?.rainingStrength ?: -1f
+    fun getRainingStrength(): Float {
+        //#if MC<=11202
+        return getWorld()?.rainingStrength ?: -1f
+        //#else
+        //$$ return getWorld()?.rainLevel ?: -1f
+        //#endif
+    }
 
     @JvmStatic
-    fun getTime(): Long = getWorld()?.worldTime ?: -1L
+    fun getTime(): Long {
+        //#if MC<=11202
+        return getWorld()?.worldTime ?: -1L
+        //#else
+        //$$ return getWorld()?.dayTime ?: -1L
+        //#endif
+    }
 
     @JvmStatic
     fun getDifficulty(): String = getWorld()?.difficulty.toString()
@@ -100,16 +127,19 @@ object World {
     fun getMoonPhase(): Int = getWorld()?.moonPhase ?: -1
 
     @JvmStatic
-    fun getSeed(): Long = getWorld()?.seed ?: -1L
-
-    @JvmStatic
-    fun getType(): String {
-        //#if MC<=10809
-        return getWorld()?.worldType?.worldTypeName.toString()
+    fun getSeed(): Long {
+        //#if MC<=11202
+        return getWorld()?.seed ?: -1L
         //#else
-        //$$ return getWorld()?.worldType?.name.toString()
+        //$$ return (Player.getPlayer()?.level as? ServerLevel)?.seed ?: -1L
         //#endif
     }
+
+    // TODO(CONVERT)
+    //#if MC<=11202
+    @JvmStatic
+    fun getType() = getWorld()?.worldType?.worldTypeName.toString()
+    //#endif
 
     /**
      * Gets the [BlockType] at a location in the world.
@@ -150,7 +180,13 @@ object World {
      * @return the players
      */
     @JvmStatic
-    fun getAllPlayers(): List<PlayerMP> = getWorld()?.playerEntities?.map(::PlayerMP) ?: listOf()
+    fun getAllPlayers(): List<PlayerMP> {
+        //#if MC<=11202
+        return getWorld()?.playerEntities?.map(::PlayerMP) ?: listOf()
+        //#else
+        //$$ return getWorld()?.players()?.map(::PlayerMP) ?: listOf()
+        //#endif
+    }
 
     /**
      * Gets a player by their username, must be in the currently loaded chunks!
@@ -160,24 +196,30 @@ object World {
      */
     @JvmStatic
     fun getPlayerByName(name: String): PlayerMP? {
-        return getWorld()?.getPlayerEntityByName(name)?.let(::PlayerMP)
+        return getAllPlayers().firstOrNull { it.getName() == name }
     }
 
     @JvmStatic
-    fun hasPlayer(name: String): Boolean = getWorld()?.getPlayerEntityByName(name) != null
+    fun hasPlayer(name: String): Boolean = getPlayerByName(name) != null
 
     @JvmStatic
     fun getChunk(x: Int, y: Int, z: Int): Chunk {
         return Chunk(
-            getWorld()!!.getChunkFromBlockCoords(
-                MCBlockPos(x, y, z)
-            )
+            //#if MC<=11202
+            getWorld()!!.getChunkFromBlockCoords(MCBlockPos(x, y, z))
+            //#else
+            //$$ getWorld()!!.getChunk(MCBlockPos(x, y, z))
+            //#endif
         )
     }
 
     @JvmStatic
     fun getAllEntities(): List<Entity> {
+        //#if MC<=11202
         return getWorld()?.loadedEntityList?.map(::Entity) ?: listOf()
+        //#else
+        //$$ return getWorld()?.entitiesForRendering()?.map(::Entity) ?: listOf()
+        //#endif
     }
 
     /**
@@ -188,14 +230,17 @@ object World {
      */
     @JvmStatic
     fun getAllEntitiesOfType(clazz: Class<*>): List<Entity> {
-        return getAllEntities().filter {
-            clazz.isInstance(it.entity)
-        }
+        return getAllEntities().filter { clazz.isInstance(it.entity) }
     }
 
     @JvmStatic
     fun getAllTileEntities(): List<TileEntity> {
+        //#if MC<=11202
         return getWorld()?.loadedTileEntityList?.map(::TileEntity) ?: listOf()
+        //#else
+        //$$ // TODO(CONVERT)
+        //$$ return listOf()
+        //#endif
     }
 
     @JvmStatic
@@ -231,7 +276,7 @@ object World {
          * @return the border size
          */
         @JvmStatic
-        fun getSize(): Int = getWorld()!!.worldBorder.size
+        fun getSize(): Double = getWorld()!!.worldBorder.size.toDouble()
 
         /**
          * Gets the border target size.
@@ -239,7 +284,13 @@ object World {
          * @return the border target size
          */
         @JvmStatic
-        fun getTargetSize(): Double = getWorld()!!.worldBorder.targetSize
+        fun getTargetSize(): Double {
+            //#if MC<=11202
+            return getWorld()!!.worldBorder.targetSize
+            //#else
+            //$$ return getWorld()!!.worldBorder.lerpTarget
+            //#endif
+        }
 
         /**
          * Gets the border time until the target size is met.
@@ -247,7 +298,13 @@ object World {
          * @return the border time until target
          */
         @JvmStatic
-        fun getTimeUntilTarget(): Long = getWorld()!!.worldBorder.timeUntilTarget
+        fun getTimeUntilTarget(): Long {
+            //#if MC<=11202
+            return getWorld()!!.worldBorder.timeUntilTarget
+            //#else
+            //$$ return getWorld()!!.worldBorder.lerpRemainingTime
+            //#endif
+        }
     }
 
     /**
@@ -255,12 +312,26 @@ object World {
      */
     object spawn {
         /**
+         * Gets the spawn BlockPos.
+         *
+         * @return the spawn location.
+         */
+        @JvmStatic
+        fun getPos(): BlockPos {
+            //#if MC<=11202
+            return BlockPos(getWorld()!!.spawnPoint)
+            //#else
+            //$$ return BlockPos(getWorld()!!.sharedSpawnPos)
+            //#endif
+        }
+
+        /**
          * Gets the spawn x location.
          *
          * @return the spawn x location.
          */
         @JvmStatic
-        fun getX(): Int = getWorld()!!.spawnPoint.x
+        fun getX(): Int = getPos().x
 
         /**
          * Gets the spawn y location.
@@ -268,7 +339,7 @@ object World {
          * @return the spawn y location.
          */
         @JvmStatic
-        fun getY(): Int = getWorld()!!.spawnPoint.y
+        fun getY(): Int = getPos().y
 
         /**
          * Gets the spawn z location.
@@ -276,7 +347,7 @@ object World {
          * @return the spawn z location.
          */
         @JvmStatic
-        fun getZ(): Int = getWorld()!!.spawnPoint.z
+        fun getZ(): Int = getPos().z
     }
 
     object particle {
@@ -287,9 +358,17 @@ object World {
          * @return the array of name strings
          */
         @JvmStatic
-        fun getParticleNames(): List<String> = EnumParticleTypes.values().map {
-            it.name
-        }.toList()
+        fun getParticleNames(): List<String> {
+            // TODO(CONVERT): Introduce ResourceLocation wrapper and return this? Could also
+            //                be used anywhere Registry is used
+
+            //#if MC<=11202
+            return EnumParticleTypes.values().map { it.name }.toList()
+            //#else
+            //$$ // TODO(VERIFY)
+            //$$ return ForgeRegistries.PARTICLE_TYPES.map { it.registryName.toString() }
+            //#endif
+        }
 
         /**
          * Spawns a particle into the world with the given attributes,
@@ -314,6 +393,7 @@ object World {
             ySpeed: Double,
             zSpeed: Double,
         ): Particle {
+            //#if MC<=11202
             val particleType = EnumParticleTypes.valueOf(particle)
 
             val fx = Client.getMinecraft().renderGlobal.spawnEntityFX(
@@ -326,13 +406,43 @@ object World {
                 ySpeed,
                 zSpeed
             )
+            //#else
+            //$$ val resourceLocation = ResourceLocation("minecraft", particle)
+            //$$ val particleType = ForgeRegistries.PARTICLE_TYPES.getValue(resourceLocation)!!
+            //$$
+            //$$ val fx = Client.getMinecraft().levelRenderer.asMixin<LevelRendererAccessor>().invokeAddParticleInternal(
+            //$$     object : ParticleOptions {
+            //$$         override fun getType() = particleType
+            //$$
+            //$$         override fun writeToNetwork(arg: FriendlyByteBuf) {}
+            //$$
+            //$$         override fun writeToString() = resourceLocation.toString()
+            //$$     },
+            //$$     particleType.overrideLimiter,
+            //$$     true,
+            //$$     x,
+            //$$     y,
+            //$$     z,
+            //$$     xSpeed,
+            //$$     ySpeed,
+            //$$     zSpeed,
+            //$$ )
+            //#endif
+
 
             return Particle(fx)
         }
 
         @JvmStatic
         fun spawnParticle(particle: MCParticle) {
+            //#if MC<=11202
             Client.getMinecraft().effectRenderer.addEffect(particle)
+            //#else
+            //$$ Client.getMinecraft().particleEngine.add(particle)
+            //#endif
         }
+
+        @JvmStatic
+        fun spawnParticle(particle: Particle) = spawnParticle(particle.entity)
     }
 }

@@ -26,6 +26,7 @@
         //$$ "EntityAccessor",
         //$$ "EntityRendererDispatcherMixin",
         //$$ "KeyMappingMixin",
+        //$$ "LevelRendererAccessor",
         //$$ "ScreenAccessor",
         //$$ "ParticleAccessor",
         //$$ "PlayerRendererMixin"
