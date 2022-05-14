@@ -32,3 +32,9 @@ net.minecraft.client.multiplayer.ClientPacketListener net.minecraft.client.netwo
 net.minecraft.client.multiplayer.PlayerInfo net.minecraft.client.network.NetworkPlayerInfo
 net.minecraft.world.scores.PlayerTeam net.minecraft.scoreboard.ScorePlayerTeam
 net.minecraft.world.level.block.entity.BlockEntity net.minecraft.tileentity.TileEntity
+net.minecraft.client.multiplayer.ClientLevel net.minecraft.client.multiplayer.WorldClient
+net.minecraft.client.gui.components.ChatComponent net.minecraft.client.gui.GuiNewChat
+net.minecraft.client.gui.components.PlayerTabOverlay net.minecraft.client.gui.GuiPlayerTabOverlay
+net.minecraft.client.gui.screens.ChatScreen net.minecraft.client.gui.GuiChat
+net.minecraft.network.protocol.Packet net.minecraft.network.Packet
+net.minecraft.network.PacketListener net.minecraft.network.INetHandler

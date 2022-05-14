@@ -6,20 +6,34 @@ import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import gg.essential.api.utils.GuiUtil
+import gg.essential.universal.UKeyboard
 import gg.essential.universal.UMinecraft
+import gg.essential.universal.UMouse
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
-import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.multiplayer.ServerData
-import net.minecraft.client.multiplayer.WorldClient
-import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
+import kotlin.math.roundToInt
+
+//#if MC<=11202
+import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.realms.RealmsBridge
 import net.minecraftforge.fml.client.FMLClientHandler
-import org.lwjgl.input.Mouse
+import net.minecraft.client.multiplayer.WorldClient
 import org.lwjgl.opengl.Display
-import kotlin.math.roundToInt
+//#else
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.ChatScreenAccessor
+//$$ import com.mojang.realmsclient.RealmsMainScreen
+//$$ import gg.essential.universal.wrappers.message.UTextComponent
+//$$ import net.minecraft.client.gui.components.ChatComponent
+//$$ import net.minecraft.client.gui.components.PlayerTabOverlay
+//$$ import net.minecraft.client.gui.screens.*
+//$$ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+//$$ import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen
+//$$ import net.minecraft.client.multiplayer.resolver.ServerAddress
+//$$ import net.minecraft.network.chat.TranslatableComponent
+//#endif
 
 abstract class Client {
     /**
@@ -101,6 +115,7 @@ abstract class Client {
         @JvmStatic
         fun disconnect() {
             scheduleTask {
+                //#if MC<=11202
                 World.getWorld()?.sendQuittingDisconnectingPacket()
                 getMinecraft().loadWorld(null as WorldClient?)
 
@@ -109,6 +124,26 @@ abstract class Client {
                     getMinecraft().isConnectedToRealms -> RealmsBridge().switchToRealms(GuiMainMenu())
                     else -> getMinecraft().displayGuiScreen(GuiMultiplayer(GuiMainMenu()))
                 }
+                //#else
+                //$$ // TODO(VERIFY)
+                //$$ World.getWorld()?.disconnect()
+                //$$ getMinecraft().clearLevel()
+                //$$ // See PauseScreen::createPauseMenu
+                //$$ if (getMinecraft().isLocalServer) {
+                //$$     getMinecraft().clearLevel(GenericDirtMessageScreen(TranslatableComponent("menu.savingLevel")))
+                //$$ } else {
+                //$$     getMinecraft().clearLevel()
+                //$$ }
+                //$$
+                //$$ if (getMinecraft().isLocalServer) {
+                //$$     getMinecraft().setScreen(TitleScreen())
+                //$$ } else if (getMinecraft().isConnectedToRealms) {
+                //$$     getMinecraft().setScreen(RealmsMainScreen(TitleScreen()))
+                //$$ } else {
+                //$$     getMinecraft().setScreen(JoinMultiplayerScreen(TitleScreen()))
+                //$$ }
+                //#endif
+
             }
         }
 
@@ -119,10 +154,19 @@ abstract class Client {
         @JvmStatic
         fun connect(ip: String) {
             scheduleTask {
+                //#if MC<=11202
                 FMLClientHandler.instance().connectToServer(
                     GuiMultiplayer(GuiMainMenu()),
                     ServerData("Server", ip, false)
                 )
+                //#else
+                //$$ ConnectScreen.startConnecting(
+                //$$     JoinMultiplayerScreen(TitleScreen()),
+                //$$     getMinecraft(),
+                //$$     ServerAddress.parseString(ip),
+                //$$     ServerData("Server", ip, false),
+                //$$ )
+                //#endif
             }
         }
 
@@ -132,16 +176,41 @@ abstract class Client {
          * @return The GuiNewChat object for the chat gui
          */
         @JvmStatic
-        fun getChatGUI(): GuiNewChat? = getMinecraft().ingameGUI?.chatGUI
+        fun getChatGUI(): GuiNewChat? {
+            //#if MC<=11202
+            return getMinecraft().ingameGUI?.chatGUI
+            //#else
+            //$$ return getMinecraft().gui?.chat
+            //#endif
+        }
 
         @JvmStatic
-        fun isInChat(): Boolean = GuiUtil.getOpenedScreen() is GuiChat
+        fun isInChat(): Boolean {
+            //#if MC<=11202
+            return GuiUtil.getOpenedScreen() is GuiChat
+            //#else
+            //$$ // TODO(CONVERT)
+            //$$ return false
+            //#endif
+        }
 
         @JvmStatic
-        fun getTabGui(): GuiPlayerTabOverlay? = getMinecraft().ingameGUI?.tabList
+        fun getTabGui(): GuiPlayerTabOverlay? {
+            //#if MC<=11202
+            return getMinecraft().ingameGUI?.tabList
+            //#else
+            //$$ return getMinecraft().gui?.tabList
+            //#endif
+        }
 
         @JvmStatic
-        fun isInTab(): Boolean = getMinecraft().gameSettings.keyBindPlayerList.isKeyDown
+        fun isInTab(): Boolean {
+            //#if MC<=11202
+            return getMinecraft().gameSettings.keyBindPlayerList.isKeyDown
+            //#else
+            //$$ return getMinecraft().options.keyPlayerList.isDown
+            //#endif
+        }
 
         /**
          * Gets whether the Minecraft window is active
@@ -150,22 +219,42 @@ abstract class Client {
          * @return true if the game is active, false otherwise
          */
         @JvmStatic
-        fun isTabbedIn(): Boolean = Display.isActive()
+        fun isTabbedIn(): Boolean {
+            //#if MC<=11202
+            return Display.isActive()
+            //#else
+            //$$ // TODO(CONVERT)
+            //$$ return true
+            //#endif
+        }
 
         @JvmStatic
-        fun isControlDown(): Boolean = GuiScreen.isCtrlKeyDown()
+        fun isControlDown(): Boolean = UKeyboard.isCtrlKeyDown()
 
         @JvmStatic
-        fun isShiftDown(): Boolean = GuiScreen.isShiftKeyDown()
+        fun isShiftDown(): Boolean = UKeyboard.isShiftKeyDown()
 
         @JvmStatic
-        fun isAltDown(): Boolean = GuiScreen.isAltKeyDown()
+        fun isAltDown(): Boolean = UKeyboard.isAltKeyDown()
 
         @JvmStatic
-        fun getFPS(): Int = Minecraft.getDebugFPS()
+        fun getFPS(): Int {
+            //#if MC<=11202
+            return Minecraft.getDebugFPS()
+            //#else
+            //$$ // TODO(CONVERT): Use MinecraftMixin to expose Minecraft::fps
+            //$$ return 0
+            //#endif
+        }
 
         @JvmStatic
-        fun getVersion(): String = getMinecraft().version
+        fun getVersion(): String {
+            //#if MC<=11202
+            return getMinecraft().version
+            //#else
+            //$$ return getMinecraft().launchedVersion
+            //#endif
+        }
 
         @JvmStatic
         fun getMaxMemory(): Long = Runtime.getRuntime().maxMemory()
@@ -180,23 +269,13 @@ abstract class Client {
         fun getMemoryUsage(): Int = ((getTotalMemory() - getFreeMemory()) * 100 / getMaxMemory().toFloat()).roundToInt()
 
         @JvmStatic
-        fun getSystemTime(): Long = Minecraft.getSystemTime()
+        fun getSystemTime(): Long = System.currentTimeMillis()
 
         @JvmStatic
-        fun getMouseX(): Float {
-            val mx = Mouse.getX().toFloat()
-            val rw = Renderer.screen.getWidth().toFloat()
-            val dw = getMinecraft().displayWidth.toFloat()
-            return mx * rw / dw
-        }
+        fun getMouseX(): Double = UMouse.Scaled.x
 
         @JvmStatic
-        fun getMouseY(): Float {
-            val my = Mouse.getY().toFloat()
-            val rh = Renderer.screen.getHeight().toFloat()
-            val dh = getMinecraft().displayHeight.toFloat()
-            return rh - my * rh / dh - 1f
-        }
+        fun getMouseY(): Double = UMouse.Scaled.y
 
         @JvmStatic
         fun isInGui(): Boolean = currentGui.get() != null
@@ -209,8 +288,11 @@ abstract class Client {
         @JvmStatic
         fun getCurrentChatMessage(): String {
             return if (isInChat()) {
-                val chatGui = getMinecraft().currentScreen as GuiChat
-                chatGui.inputField.text
+                //#if MC<=11202
+                (currentGui.get() as GuiChat).inputField.text
+                //#else
+                //$$ (currentGui.get() as ChatScreenAccessor).input.value
+                //#endif
             } else ""
         }
 
@@ -221,18 +303,23 @@ abstract class Client {
          */
         @JvmStatic
         fun setCurrentChatMessage(message: String) {
+            //#if MC<=11202
             if (isInChat()) {
-                val chatGui = getMinecraft().currentScreen as GuiChat
-                chatGui.inputField.text = message
+                (currentGui.get() as GuiChat).inputField.text = message
             } else getMinecraft().displayGuiScreen(GuiChat(message))
+            //#else
+            //$$ if (isInChat()) {
+            //$$     (currentGui.get() as ChatScreenAccessor).input.value = message
+            //$$ } else getMinecraft().setScreen(ChatScreen(message))
+            //#endif
         }
 
         @JvmStatic
         fun <T : INetHandler> sendPacket(packet: Packet<T>) {
-            //#if MC<=10809
+            //#if MC<=11202
             getConnection()?.networkManager?.sendPacket(packet)
             //#else
-            //$$getConnection()?.networkManager?.sendPacket(packet)
+            //$$ getConnection()?.connection?.send(packet)
             //#endif
         }
 
@@ -247,10 +334,17 @@ abstract class Client {
          */
         @JvmStatic
         fun showTitle(title: String, subtitle: String, fadeIn: Int, time: Int, fadeOut: Int) {
+            //#if MC<=11202
             val gui = getMinecraft().ingameGUI
             gui.displayTitle(ChatLib.addColor(title), null, fadeIn, time, fadeOut)
             gui.displayTitle(null, ChatLib.addColor(subtitle), fadeIn, time, fadeOut)
             gui.displayTitle(null, null, fadeIn, time, fadeOut)
+            //#else
+            //$$ val gui = getMinecraft().gui
+            //$$ gui.setTimes(fadeIn, time, fadeOut)
+            //$$ gui.setTitle(UTextComponent(ChatLib.addColor(title)))
+            //$$ gui.setSubtitle(UTextComponent(ChatLib.addColor(subtitle)))
+            //#endif
         }
 
         object currentGui {
@@ -278,9 +372,11 @@ abstract class Client {
             @JvmStatic
             fun getSlotUnderMouse(): Slot? {
                 val screen: GuiScreen? = get()
-                return if ((screen is GuiContainer) && (screen.slotUnderMouse != null)) {
-                    Slot(screen.slotUnderMouse)
-                } else null
+                //#if MC<=11202
+                return (screen as? GuiContainer)?.slotUnderMouse?.let(::Slot)
+                //#else
+                //$$ return (screen as? AbstractContainerScreen<*>)?.slotUnderMouse?.let(::Slot)
+                //#endif
             }
 
             /**
@@ -288,19 +384,34 @@ abstract class Client {
              */
             @JvmStatic
             fun close() {
+                //#if MC<=11202
                 Player.getPlayer()?.closeScreen()
+                //#else
+                //$$ Player.getPlayer()?.closeContainer()
+                //#endif
             }
         }
 
         object camera {
+            //#if MC<=11202
             @JvmStatic
-            fun getX(): Double = getMinecraft().renderManager.viewerPosX
+            fun getX(): Double = Renderer.getRenderManager().viewerPosX
 
             @JvmStatic
-            fun getY(): Double = getMinecraft().renderManager.viewerPosY
+            fun getY(): Double = Renderer.getRenderManager().viewerPosY
 
             @JvmStatic
-            fun getZ(): Double = getMinecraft().renderManager.viewerPosZ
+            fun getZ(): Double = Renderer.getRenderManager().viewerPosZ
+            //#else
+            //$$ @JvmStatic
+            //$$ fun getX(): Double = Renderer.getRenderManager().mainCamera.position.x
+            //$$
+            //$$ @JvmStatic
+            //$$ fun getY(): Double = Renderer.getRenderManager().mainCamera.position.y
+            //$$
+            //$$ @JvmStatic
+            //$$ fun getZ(): Double = Renderer.getRenderManager().mainCamera.position.z
+            //#endif
         }
     }
 }

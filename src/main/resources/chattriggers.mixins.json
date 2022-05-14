@@ -22,6 +22,7 @@
         //#if MC>=11701
         //$$ ,
         //$$ "AbstractClientPlayerAccessor",
+        //$$ "ChatScreenAccessor",
         //$$ "EntityAccessor",
         //$$ "EntityRendererDispatcherMixin",
         //$$ "KeyMappingMixin",
