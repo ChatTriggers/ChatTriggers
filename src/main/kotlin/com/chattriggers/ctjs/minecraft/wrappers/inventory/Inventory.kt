@@ -30,7 +30,13 @@ class Inventory : JSONImpl {
      *
      * @return the size of the Inventory
      */
-    fun getSize(): Int = inventory?.sizeInventory ?: container!!.inventorySlots.size
+    fun getSize(): Int {
+        //#if MC<=11202
+        return inventory?.sizeInventory ?: container!!.inventorySlots.size
+        //#else
+        //$$ return inventory?.containerSize ?: container!!.slots.size
+        //#endif
+    }
 
     /**
      * Gets the item in any slot, starting from 0.
@@ -39,9 +45,15 @@ class Inventory : JSONImpl {
      * @return the [Item] in that slot
      */
     fun getStackInSlot(slot: Int): Item? {
-        return if (inventory == null)
+        //#if MC<=11202
+        return if (inventory == null) {
             container!!.getSlot(slot).stack?.let(::Item)
-        else inventory.getStackInSlot(slot)?.let(::Item)
+        } else inventory.getStackInSlot(slot)?.let(::Item)
+        //#else
+        //$$ return if (inventory == null) {
+        //$$     container!!.getSlot(slot).item?.let(::Item)
+        //$$ } else inventory.getItem(slot)?.let(::Item)
+        //#endif
     }
 
     /**
@@ -50,7 +62,13 @@ class Inventory : JSONImpl {
      *
      * @return the window id
      */
-    fun getWindowId(): Int = container?.windowId ?: -1
+    fun getWindowId(): Int {
+        //#if MC<=11202
+        return container?.windowId ?: -1
+        //#else
+        //$$ return container?.containerId ?: -1
+        //#endif
+    }
 
     fun doAction(action: Action) {
         action.complete()
@@ -64,8 +82,11 @@ class Inventory : JSONImpl {
      * @return whether it can be shift clicked in
      */
     fun isItemValidForSlot(slot: Int, item: Item): Boolean {
-        return inventory == null
-                || inventory.isItemValidForSlot(slot, item.itemStack)
+        //#if MC<=11202
+        return inventory == null || inventory.isItemValidForSlot(slot, item.itemStack)
+        //#else
+        //$$ return inventory == null || inventory.canPlaceItem(slot, item.itemStack)
+        //#endif
     }
 
     /**
@@ -182,10 +203,15 @@ class Inventory : JSONImpl {
      * @return the name of the inventory
      */
     fun getName(): String {
+        //#if MC<=11202
         return when (container) {
             is ContainerChest -> container.lowerChestInventory.name
             else -> inventory?.name ?: "container"
         }
+        //#else
+        //$$ // TODO(CONVERT)
+        //$$ return "container"
+        //#endif
     }
 
     fun getClassName(): String = inventory?.javaClass?.simpleName ?: container!!.javaClass.simpleName

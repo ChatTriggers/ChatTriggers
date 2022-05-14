@@ -67,4 +67,5 @@ internal typealias MCResourceLocation = net.minecraft.util.ResourceLocation
 //$$ internal typealias MCTextComponentSerializer = net.minecraft.network.chat.Component.Serializer
 //$$ internal typealias MCSoundCategory = net.minecraft.sounds.SoundSource
 //$$ internal typealias MCResourceLocation = net.minecraft.resources.ResourceLocation
+//$$ internal typealias MCClickType = net.minecraft.world.inventory.ClickType
 //#endif
