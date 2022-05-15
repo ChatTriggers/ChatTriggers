@@ -1,8 +1,16 @@
 package com.chattriggers.ctjs.minecraft.wrappers.world.block
 
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.utils.ResourceLocation
 import com.chattriggers.ctjs.utils.kotlin.MCBlock
+import com.chattriggers.ctjs.utils.kotlin.MCResourceLocation
 import net.minecraft.block.state.IBlockState
+
+//#if MC>=11701
+//$$ import gg.essential.universal.wrappers.message.UTextComponent
+//$$ import net.minecraft.core.Registry
+//$$ import net.minecraftforge.registries.ForgeRegistries
+//#endif
 
 /**
  * An immutable wrapper around Minecraft's Block object. Note
@@ -13,11 +21,30 @@ import net.minecraft.block.state.IBlockState
 class BlockType(val mcBlock: MCBlock) {
     constructor(block: BlockType) : this(block.mcBlock)
 
-    constructor(blockName: String) : this(MCBlock.getBlockFromName(blockName)!!)
+    constructor(blockName: String) : this(ResourceLocation("minecraft", blockName))
 
-    constructor(blockID: Int) : this(MCBlock.getBlockById(blockID))
+    constructor(resourceLocation: ResourceLocation) : this(resourceLocation.toMC())
 
-    constructor(item: Item) : this(MCBlock.getBlockFromItem(item.item))
+    constructor(resourceLocation: MCResourceLocation) :
+    //#if MC<=11202
+        this(MCBlock.blockRegistry.getObject(resourceLocation))
+    //#else
+    //$$ this(ForgeRegistries.BLOCKS.getValue(resourceLocation)!!)
+    //#endif
+
+    constructor(blockID: Int) :
+    //#if MC<=11202
+        this(MCBlock.getBlockById(blockID))
+    //#else
+    //$$     this(Registry.BLOCK.byId(blockID))
+    //#endif
+
+    constructor(item: Item) :
+    //#if MC<=11202
+        this(MCBlock.getBlockFromItem(item.item))
+    //#else
+    //$$     this(MCBlock.byItem(item.item))
+    //#endif
 
     /**
      * Returns a PlacedBlock based on this block and the
@@ -28,7 +55,13 @@ class BlockType(val mcBlock: MCBlock) {
      */
     fun withBlockPos(blockPos: BlockPos) = Block(this, blockPos)
 
-    fun getID(): Int = MCBlock.getIdFromBlock(mcBlock)
+    fun getID(): Int {
+        //#if MC<=11202
+        return MCBlock.getIdFromBlock(mcBlock)
+        //#else
+        //$$ return Registry.BLOCK.getId(mcBlock)
+        //#endif
+    }
 
     /**
      * Gets the block's registry name.
@@ -40,7 +73,7 @@ class BlockType(val mcBlock: MCBlock) {
         //#if MC<=10809
         return mcBlock.registryName
         //#else
-        //$$ return block.registryName.toString()
+        //$$ return mcBlock.registryName.toString()
         //#endif
     }
 
@@ -50,7 +83,13 @@ class BlockType(val mcBlock: MCBlock) {
      *
      * @return the block's unlocalized name
      */
-    fun getUnlocalizedName(): String = mcBlock.unlocalizedName
+    fun getUnlocalizedName(): String {
+        //#if MC<=11202
+        return mcBlock.unlocalizedName
+        //#else
+        //$$ return mcBlock.descriptionId
+        //#endif
+    }
 
     /**
      * Gets the block's localized name.
@@ -58,45 +97,47 @@ class BlockType(val mcBlock: MCBlock) {
      *
      * @return the block's localized name
      */
-    fun getName(): String = mcBlock.localizedName
+    fun getName(): String {
+        //#if MC<=11202
+        return mcBlock.localizedName
+        //#else
+        //$$ return UTextComponent(mcBlock.name).formattedText
+        //#endif
+    }
 
     fun getLightValue(): Int {
         //#if MC<=10809
         return mcBlock.lightValue
         //#else
-        //$$ return block.getLightValue(
-        //$$         World.getWorld()!!.getBlockState(blockPos),
-        //$$         World.getWorld(),
-        //$$         blockPos
-        //$$ )
+        //$$ return getDefaultState().lightEmission
         //#endif
     }
 
-    fun getDefaultState(): IBlockState = mcBlock.defaultState
+    fun getDefaultState(): IBlockState {
+        //#if MC<=11202
+        return mcBlock.defaultState
+        //#else
+        //$$ return mcBlock.defaultBlockState()
+        //#endif
+    }
 
-    fun getDefaultMetadata(): Int = mcBlock.getMetaFromState(getDefaultState())
+    // TODO(BREAKING): See other block metadata methods
+    // fun getDefaultMetadata(): Int = mcBlock.getMetaFromState(getDefaultState())
 
     fun canProvidePower(): Boolean {
         //#if MC<=10809
         return mcBlock.canProvidePower()
         //#else
-        //$$ return block.canProvidePower(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
+        //$$ return getDefaultState().isSignalSource
         //#endif
     }
 
+    // TODO(BREAKING): Probably remove this, or move to Block
+    //#if MC<=11202
     fun getHarvestLevel(): Int = mcBlock.getHarvestLevel(getDefaultState())
 
-    fun isTranslucent(): Boolean {
-        //#if MC<=10809
-        return mcBlock.isTranslucent
-        //#else
-        //$$ return block.isTranslucent(
-        //$$         World.getWorld()!!.getBlockState(blockPos)
-        //$$ )
-        //#endif
-    }
+    fun isTranslucent(): Boolean = mcBlock.isTranslucent
+    //#endif
 
     override fun toString(): String = "BlockType{name=${mcBlock.registryName}}"
 }

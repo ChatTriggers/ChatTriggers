@@ -30,6 +30,7 @@
         //$$ "LevelRendererAccessor",
         //$$ "ListTagAccessor",
         //$$ "ScreenAccessor",
+        //$$ "SignBlockEntityAccessor",
         //$$ "ParticleAccessor",
         //$$ "PlayerRendererMixin"
         //#endif

@@ -30,20 +30,45 @@ open class Block(
 
     fun getState() = World.getBlockStateAt(pos)
 
-    fun getMetadata(): Int = type.mcBlock.getMetaFromState(getState())
+    // TODO(BREAKING): See TileEntity.getMetadata
+    // fun getMetadata(): Int = type.mcBlock.getMetaFromState(getState())
 
-    fun isPowered() = World.getWorld()!!.isBlockPowered(pos.toMCBlock())
+    fun isPowered(): Boolean {
+        //#if MC<=11202
+        return World.getWorld()!!.isBlockPowered(pos.toMCBlock())
+        //#else
+        //$$ return World.getWorld()!!.hasNeighborSignal(pos.toMCBlock())
+        //#endif
+    }
 
-    fun getRedstoneStrength() = World.getWorld()!!.getStrongPower(pos.toMCBlock())
+    fun getRedstoneStrength(): Int {
+        //#if MC<=11202
+        return World.getWorld()!!.getStrongPower(pos.toMCBlock())
+        //#else
+        //$$ return World.getWorld()!!.getBestNeighborSignal(pos.toMCBlock())
+        //#endif
+    }
 
     /**
      * Checks whether the block can be mined with the tool in the player's hand
      *
      * @return whether the block can be mined
      */
-    fun canBeHarvested(): Boolean = type.mcBlock.canHarvestBlock(World.getWorld(), pos.toMCBlock(), Player.getPlayer())
+    fun canBeHarvested(): Boolean {
+        //#if MC<=11202
+        return type.mcBlock.canHarvestBlock(World.getWorld(), pos.toMCBlock(), Player.getPlayer())
+        //#else
+        //$$ return type.mcBlock.canHarvestBlock(
+        //$$     getState(),
+        //$$     World.getWorld(),
+        //$$     pos.toMCBlock(),
+        //$$     Player.getPlayer(),
+        //$$ )
+        //#endif
+    }
 
-    fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
+    // TODO: See Item.canHarvest
+    // fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
 
     override fun toString() = "Block{type=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"
 }

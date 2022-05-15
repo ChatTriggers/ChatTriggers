@@ -1,7 +1,8 @@
 package com.chattriggers.ctjs.utils.kotlin
 
-//#if MC<=11202
 internal typealias MCChunk = net.minecraft.world.chunk.Chunk
+
+//#if MC<=11202
 internal typealias MCEntity = net.minecraft.entity.Entity
 internal typealias MCEntityLivingBase = net.minecraft.entity.EntityLivingBase
 internal typealias MCPotionEffect = net.minecraft.potion.PotionEffect
@@ -35,7 +36,6 @@ internal typealias MCTextComponentSerializer = net.minecraft.util.IChatComponent
 internal typealias MCSoundCategory = net.minecraft.client.audio.SoundCategory
 internal typealias MCResourceLocation = net.minecraft.util.ResourceLocation
 //#else
-//$$ // internal typealias MCChunk = net.minecraft.world.chunk.Chunk
 //$$ internal typealias MCEntity = net.minecraft.world.entity.Entity
 //$$ internal typealias MCEntityLivingBase = net.minecraft.world.entity.LivingEntity
 //$$ internal typealias MCPotionEffect = net.minecraft.world.effect.MobEffectInstance

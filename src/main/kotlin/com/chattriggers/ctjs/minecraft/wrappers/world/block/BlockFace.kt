@@ -58,7 +58,11 @@ enum class BlockFace(
         else -> throw IllegalStateException("Cannot rotate $this around z-axis")
     }
 
+    //#if MC<=11202
     override fun getName() = name.lowercase()
+    //#else
+    //$$ override fun getSerializedName() = name.lowercase()
+    //#endif
 
     enum class Plane : Predicate<BlockFace>, Iterable<BlockFace> {
         Horizontal,
@@ -94,9 +98,11 @@ enum class BlockFace(
             return t.axis == this
         }
 
-        override fun getName(): String {
-            return name.lowercase()
-        }
+        //#if MC<=11202
+        override fun getName() = name.lowercase()
+        //#else
+        //$$ override fun getSerializedName() = name.lowercase()
+        //#endif
     }
 
     companion object {
