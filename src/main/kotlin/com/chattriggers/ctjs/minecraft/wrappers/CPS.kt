@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import net.minecraftforge.client.event.MouseEvent
+import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import kotlin.math.roundToInt
@@ -15,6 +15,18 @@ object CPS {
 
     private var leftClicksMax = 0
     private var rightClicksMax = 0
+
+    init {
+        MouseListener.registerClickListener { _, _, button, pressed ->
+            if (!pressed)
+                return@registerClickListener
+
+            when (button) {
+                0 -> leftClicks.add(20)
+                1 -> rightClicks.add(20)
+            }
+        }
+    }
 
     @SubscribeEvent
     fun update(event: RenderGameOverlayEvent.Pre) {
@@ -34,16 +46,6 @@ object CPS {
             clearOldRight()
 
             findMax()
-        }
-    }
-
-    @SubscribeEvent
-    fun click(event: MouseEvent) {
-        if (event.buttonstate) {
-            when (event.button) {
-                0 -> leftClicks.add(20)
-                1 -> rightClicks.add(20)
-            }
         }
     }
 

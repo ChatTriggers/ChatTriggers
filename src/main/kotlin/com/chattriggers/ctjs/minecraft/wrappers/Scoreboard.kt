@@ -2,14 +2,21 @@ package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.MCScore
 import com.chattriggers.ctjs.utils.kotlin.MCScoreboard
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.scoreboard.ScoreObjective
 import net.minecraft.scoreboard.ScorePlayerTeam
+
+//#if MC<=11202
 import net.minecraftforge.client.GuiIngameForge
+//#else
+//$$ import net.minecraftforge.client.gui.ForgeIngameGui
+//$$ import net.minecraftforge.client.gui.OverlayRegistry
+//#endif
 
 object Scoreboard {
     private var needsUpdate = true
     private var scoreboardNames = mutableListOf<Score>()
-    private var scoreboardTitle = ""
+    private var scoreboardTitle = UTextComponent("")
 
     @JvmStatic
     fun getScoreboard(): MCScoreboard? {
@@ -18,16 +25,21 @@ object Scoreboard {
 
     @JvmStatic
     fun getSidebar(): ScoreObjective? {
+        //#if MC<=11202
         return getScoreboard()?.getObjectiveInDisplaySlot(1)
+        //#else
+        //$$ return getScoreboard()?.getDisplayObjective(1)
+        //#endif
     }
 
-    /**
-     * Alias for [getTitle].
-     *
-     * @return the scoreboard title
-     */
-    @JvmStatic
-    fun getScoreboardTitle(): String = getTitle()
+    // TODO(BREAKING): Removed this
+    // /**
+    //  * Alias for [getTitle].
+    //  *
+    //  * @return the scoreboard title
+    //  */
+    // @JvmStatic
+    // fun getScoreboardTitle(): UTextComponent = getTitle()
 
     /**
      * Gets the top-most string which is displayed on the scoreboard. (doesn't have a score on the side).
@@ -35,8 +47,9 @@ object Scoreboard {
      *
      * @return the scoreboard title
      */
+    // TODO(BREAKING): Return UTextComponent
     @JvmStatic
-    fun getTitle(): String {
+    fun getTitle(): UTextComponent {
         if (needsUpdate) {
             updateNames()
             needsUpdate = false
@@ -51,9 +64,14 @@ object Scoreboard {
      * @param title the new title
      * @return the scoreboard title
      */
+    // TODO(BREAKING): Change parameter type to UTextComponent
     @JvmStatic
-    fun setTitle(title: String) {
-        getSidebar()?.displayName = title
+    fun setTitle(title: UTextComponent) {
+        //#if MC<=11202
+        getSidebar()?.displayName = title.formattedText
+        //#else
+        //$$ getSidebar()?.displayName = title
+        //#endif
     }
 
     /**
@@ -108,7 +126,8 @@ object Scoreboard {
         val scoreboard = getScoreboard() ?: return
         val sidebarObjective = getSidebar() ?: return
 
-        val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
+        //#if MC<=11202
+        val scores = scoreboard.getSortedScores(sidebarObjective)
 
         if (override) {
             scores.filter {
@@ -118,32 +137,53 @@ object Scoreboard {
             }
         }
 
-        //#if MC<=10809
-        val theScore = scoreboard.getValueFromObjective(line, sidebarObjective)!!
+        scoreboard.getValueFromObjective(line, sidebarObjective)!!.scorePoints = score
         //#else
-        //$$ val theScore = scoreboard.getOrCreateScore(line, sidebarObjective)
+        //$$ val scores = scoreboard.getPlayerScores(sidebarObjective)
+        //$$
+        //$$ if (override) {
+        //$$     scores.filter {
+        //$$         it.score == score
+        //$$     }.forEach {
+        //$$         scoreboard.resetPlayerScore(it.owner, sidebarObjective)
+        //$$     }
+        //$$ }
+        //$$
+        //$$ scoreboard.getOrCreatePlayerScore(line, sidebarObjective).score = score
         //#endif
+    }
 
-        theScore.scorePoints = score
+    @JvmStatic
+    fun getShouldRender(): Boolean {
+        //#if MC<=11202
+        return GuiIngameForge.renderObjective
+        //#else
+        //$$ return OverlayRegistry.getEntry(ForgeIngameGui.SCOREBOARD_ELEMENT)?.isEnabled ?: false
+        //#endif
     }
 
     @JvmStatic
     fun setShouldRender(shouldRender: Boolean) {
+        //#if MC<=11202
         GuiIngameForge.renderObjective = shouldRender
+        //#else
+        //$$ OverlayRegistry.enableOverlay(ForgeIngameGui.SCOREBOARD_ELEMENT, shouldRender)
+        //#endif
     }
-
-    @JvmStatic
-    fun getShouldRender() = GuiIngameForge.renderObjective
 
     private fun updateNames() {
         scoreboardNames.clear()
-        scoreboardTitle = ""
+        scoreboardTitle = UTextComponent("")
 
         val scoreboard = getScoreboard() ?: return
         val sidebarObjective = getSidebar() ?: return
-        scoreboardTitle = sidebarObjective.displayName
+        scoreboardTitle = UTextComponent(sidebarObjective.displayName)
 
-        val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
+        //#if MC<=11202
+        val scores = scoreboard.getSortedScores(sidebarObjective)
+        //#else
+        //$$ val scores = scoreboard.getPlayerScores(sidebarObjective)
+        //#endif
 
         scoreboardNames = scores.map(::Score).toMutableList()
     }
@@ -160,18 +200,34 @@ object Scoreboard {
          *
          * @return the actual point value
          */
-        fun getPoints(): Int = score.scorePoints
+        fun getPoints(): Int {
+            //#if MC<=11202
+            return score.scorePoints
+            //#else
+            //$$ return score.score
+            //#endif
+        }
 
         /**
          * Gets the display string of this score
          *
          * @return the display name
          */
-        fun getName(): String = ScorePlayerTeam.formatPlayerName(
-            getScoreboard()!!.getPlayersTeam(score.playerName),
-            score.playerName
-        )
+        // TODO(BREAKING): Return UTextComponent
+        fun getName(): UTextComponent {
+            //#if MC<=11202
+            return UTextComponent(ScorePlayerTeam.formatPlayerName(
+                getScoreboard()!!.getPlayersTeam(score.playerName),
+                score.playerName
+            ))
+            //#else
+            //$$ return UTextComponent(PlayerTeam.formatNameForTeam(
+            //$$     getScoreboard()!!.getPlayersTeam(score.owner),
+            //$$     UTextComponent(score.owner),
+            //$$ ))
+            //#endif
+        }
 
-        override fun toString(): String = getName()
+        override fun toString(): String = getName().formattedText
     }
 }
