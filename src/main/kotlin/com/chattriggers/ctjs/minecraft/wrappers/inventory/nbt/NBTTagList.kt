@@ -53,6 +53,10 @@ class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
         //#endif
     }
 
+    fun clear() {
+        rawNBT.tagList.clear()
+    }
+
     // TODO(BREAKING): Wrap return value
     fun getCompoundTagAt(index: Int): NBTTagCompound {
         //#if MC<=11202
