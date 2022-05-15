@@ -85,6 +85,7 @@ class CTJS {
         if (Config.threadedLoading) {
             thread {
                 try {
+                    ModuleManager.setup()
                     ModuleManager.entryPass()
                     reportHashedUUID()
                 } catch (e: Exception) {
@@ -93,6 +94,7 @@ class CTJS {
                 }
             }
         } else {
+            ModuleManager.setup()
             ModuleManager.entryPass()
             thread {
                 reportHashedUUID()
