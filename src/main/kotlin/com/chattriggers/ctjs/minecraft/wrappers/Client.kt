@@ -76,6 +76,73 @@ abstract class Client {
      */
     abstract fun getKeyBindFromDescription(description: String): KeyBind?
 
+    object currentGui {
+        /**
+         * Gets the Java class name of the currently open gui, for example, "GuiChest"
+         *
+         * @return the class name of the current gui
+         */
+        @JvmStatic
+        fun getClassName(): String = get()?.javaClass?.simpleName ?: "null"
+
+        /**
+         * Gets the Minecraft gui class that is currently open
+         *
+         * @return the Minecraft gui
+         */
+        @JvmStatic
+        fun get(): GuiScreen? = GuiUtil.getOpenedScreen()
+
+        /**
+         * Gets the slot under the mouse in the current gui, if one exists.
+         *
+         * @return the [Slot] under the mouse
+         */
+        @JvmStatic
+        fun getSlotUnderMouse(): Slot? {
+            val screen: GuiScreen? = get()
+            //#if MC<=11202
+            return (screen as? GuiContainer)?.slotUnderMouse?.let(::Slot)
+            //#else
+            //$$ return (screen as? AbstractContainerScreen<*>)?.slotUnderMouse?.let(::Slot)
+            //#endif
+        }
+
+        /**
+         * Closes the currently open gui
+         */
+        @JvmStatic
+        fun close() {
+            //#if MC<=11202
+            Player.getPlayer()?.closeScreen()
+            //#else
+            //$$ Player.getPlayer()?.closeContainer()
+            //#endif
+        }
+    }
+
+    object camera {
+        //#if MC<=11202
+        @JvmStatic
+        fun getX(): Double = Renderer.getRenderManager().viewerPosX
+
+        @JvmStatic
+        fun getY(): Double = Renderer.getRenderManager().viewerPosY
+
+        @JvmStatic
+        fun getZ(): Double = Renderer.getRenderManager().viewerPosZ
+        //#else
+        //$$ @JvmStatic
+        //$$ fun getX(): Double = Renderer.getRenderManager().mainCamera.position.x
+        //$$
+        //$$ @JvmStatic
+        //$$ fun getY(): Double = Renderer.getRenderManager().mainCamera.position.y
+        //$$
+        //$$ @JvmStatic
+        //$$ fun getZ(): Double = Renderer.getRenderManager().mainCamera.position.z
+        //#endif
+    }
+
     companion object {
         @JvmStatic
         val settings = Settings()
@@ -344,73 +411,6 @@ abstract class Client {
             //$$ gui.setTimes(fadeIn, time, fadeOut)
             //$$ gui.setTitle(UTextComponent(ChatLib.addColor(title)))
             //$$ gui.setSubtitle(UTextComponent(ChatLib.addColor(subtitle)))
-            //#endif
-        }
-
-        object currentGui {
-            /**
-             * Gets the Java class name of the currently open gui, for example, "GuiChest"
-             *
-             * @return the class name of the current gui
-             */
-            @JvmStatic
-            fun getClassName(): String = get()?.javaClass?.simpleName ?: "null"
-
-            /**
-             * Gets the Minecraft gui class that is currently open
-             *
-             * @return the Minecraft gui
-             */
-            @JvmStatic
-            fun get(): GuiScreen? = GuiUtil.getOpenedScreen()
-
-            /**
-             * Gets the slot under the mouse in the current gui, if one exists.
-             *
-             * @return the [Slot] under the mouse
-             */
-            @JvmStatic
-            fun getSlotUnderMouse(): Slot? {
-                val screen: GuiScreen? = get()
-                //#if MC<=11202
-                return (screen as? GuiContainer)?.slotUnderMouse?.let(::Slot)
-                //#else
-                //$$ return (screen as? AbstractContainerScreen<*>)?.slotUnderMouse?.let(::Slot)
-                //#endif
-            }
-
-            /**
-             * Closes the currently open gui
-             */
-            @JvmStatic
-            fun close() {
-                //#if MC<=11202
-                Player.getPlayer()?.closeScreen()
-                //#else
-                //$$ Player.getPlayer()?.closeContainer()
-                //#endif
-            }
-        }
-
-        object camera {
-            //#if MC<=11202
-            @JvmStatic
-            fun getX(): Double = Renderer.getRenderManager().viewerPosX
-
-            @JvmStatic
-            fun getY(): Double = Renderer.getRenderManager().viewerPosY
-
-            @JvmStatic
-            fun getZ(): Double = Renderer.getRenderManager().viewerPosZ
-            //#else
-            //$$ @JvmStatic
-            //$$ fun getX(): Double = Renderer.getRenderManager().mainCamera.position.x
-            //$$
-            //$$ @JvmStatic
-            //$$ fun getY(): Double = Renderer.getRenderManager().mainCamera.position.y
-            //$$
-            //$$ @JvmStatic
-            //$$ fun getZ(): Double = Renderer.getRenderManager().mainCamera.position.z
             //#endif
         }
     }

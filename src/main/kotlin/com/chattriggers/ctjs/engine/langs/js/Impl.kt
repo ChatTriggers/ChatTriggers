@@ -82,6 +82,6 @@ object JSClient : Client() {
                 ?.let(::JSKeyBind)
     }
 
-    val currentGui = Client.Companion.currentGui
-    val camera = Client.Companion.camera
+    val currentGui = Client.currentGui
+    val camera = Client.camera
 }
