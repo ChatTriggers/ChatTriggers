@@ -62,3 +62,6 @@ net.minecraft.world.level.chunk.ChunkAccess net.minecraft.world.chunk.Chunk
 net.minecraft.util.StringRepresentable net.minecraft.util.IStringSerializable
 net.minecraft.world.level.block.entity.SignBlockEntity net.minecraft.tileentity.TileEntitySign
 net.minecraft.world.scores.Objective net.minecraft.scoreboard.ScoreObjective
+net.minecraft.client.Options net.minecraft.client.settings.GameSettings
+net.minecraft.world.Difficulty net.minecraft.world.EnumDifficulty
+net.minecraft.world.entity.player.PlayerModelPart net.minecraft.entity.player.EnumPlayerModelParts

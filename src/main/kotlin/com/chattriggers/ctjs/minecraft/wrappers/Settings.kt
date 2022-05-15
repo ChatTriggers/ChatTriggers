@@ -1,120 +1,175 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
+import net.minecraft.client.settings.GameSettings
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.world.EnumDifficulty
 
+//#if MC>=11701
+//$$ import net.minecraft.client.*
+//$$ import net.minecraft.world.entity.player.ChatVisiblity
+//#endif
+
 class Settings {
-    fun getSettings() = Client.getMinecraft().gameSettings
-
-    fun getFOV() = getSettings().fovSetting
-
-    fun setFOV(fov: Float) {
-        getSettings().fovSetting = fov
+    fun getSettings(): GameSettings {
+        //#if MC<=11202
+        return Client.getMinecraft().gameSettings
+        //#else
+        //$$ return Client.getMinecraft().options
+        //#endif
     }
 
-    fun getDifficulty() = getSettings().difficulty.difficultyId
+    fun getFOV(): Double {
+        //#if MC<=11202
+        return getSettings().fovSetting.toDouble()
+        //#else
+        //$$ return getSettings().fov
+        //#endif
+    }
+
+    fun setFOV(fov: Double) {
+        //#if MC<=11202
+        getSettings().fovSetting = fov.toFloat()
+        //#else
+        //$$ getSettings().fov = fov
+        //#endif
+    }
+
+    fun getDifficulty(): Int {
+        //#if MC<=11202
+        return getSettings().difficulty.difficultyId
+        //#else
+        //$$ return getSettings().difficulty.id
+        //#endif
+    }
 
     fun setDifficulty(difficulty: Int) {
+        //#if MC<=11202
         getSettings().difficulty = EnumDifficulty.getDifficultyEnum(difficulty)
+        //#else
+        //$$ getSettings().difficulty = Difficulty.byId(difficulty)
+        //#endif
     }
 
+    // TODO(BREAKING): Changed these method names (like getCape -> isCapeEnabled)
     val skin = object {
-        fun getCape() = getSettings().modelParts.contains(EnumPlayerModelParts.CAPE)
-
-        fun setCape(toggled: Boolean) {
-            getSettings().setModelPartEnabled(EnumPlayerModelParts.CAPE, toggled)
+        private fun isPartEnabled(part: EnumPlayerModelParts): Boolean {
+            //#if MC<=11202
+            return getSettings().modelParts.contains(part)
+            //#else
+            //$$ return getSettings().isModelPartEnabled(part)
+            //#endif
         }
 
-        fun getJacket() = getSettings().modelParts.contains(EnumPlayerModelParts.JACKET)
-
-        fun setJacket(toggled: Boolean) {
-            getSettings().setModelPartEnabled(EnumPlayerModelParts.JACKET, toggled)
+        private fun setPartEnabled(part: EnumPlayerModelParts, enabled: Boolean) {
+            //#if MC<=11202
+            getSettings().setModelPartEnabled(part, enabled)
+            //#else
+            //$$ getSettings().toggleModelPart(part, enabled)
+            //#endif
         }
 
-        fun getLeftSleeve() = getSettings().modelParts.contains(EnumPlayerModelParts.LEFT_SLEEVE)
+        fun isCapeEnabled() = isPartEnabled(EnumPlayerModelParts.CAPE)
 
-        fun setLeftSleeve(toggled: Boolean) {
-            getSettings().setModelPartEnabled(EnumPlayerModelParts.LEFT_SLEEVE, toggled)
-        }
+        fun setCapeEnabled(toggled: Boolean) = setPartEnabled(EnumPlayerModelParts.CAPE, toggled)
 
-        fun getRightSleeve() = getSettings().modelParts.contains(EnumPlayerModelParts.RIGHT_SLEEVE)
+        fun isJacketEnabled() = isPartEnabled(EnumPlayerModelParts.JACKET)
 
-        fun setRightSleeve(toggled: Boolean) {
-            getSettings().setModelPartEnabled(EnumPlayerModelParts.RIGHT_SLEEVE, toggled)
-        }
+        fun setJacketEnabled(toggled: Boolean) = setPartEnabled(EnumPlayerModelParts.JACKET, toggled)
 
-        fun getLeftPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.LEFT_PANTS_LEG)
+        fun isLeftSleeveEnabled() = isPartEnabled(EnumPlayerModelParts.LEFT_SLEEVE)
 
-        fun setLeftPantsLeg(toggled: Boolean) {
-            getSettings().setModelPartEnabled(EnumPlayerModelParts.LEFT_PANTS_LEG, toggled)
-        }
+        fun setLeftSleeveEnabled(toggled: Boolean) = setPartEnabled(EnumPlayerModelParts.LEFT_SLEEVE, toggled)
 
-        fun getRightPantsLeg() = getSettings().modelParts.contains(EnumPlayerModelParts.RIGHT_PANTS_LEG)
+        fun isRightSleeveEnabled() = isPartEnabled(EnumPlayerModelParts.RIGHT_SLEEVE)
 
-        fun setRightPantsLeg(toggled: Boolean) {
-            getSettings().setModelPartEnabled(EnumPlayerModelParts.RIGHT_PANTS_LEG, toggled)
-        }
+        fun setRightSleeveEnabled(toggled: Boolean) = setPartEnabled(EnumPlayerModelParts.RIGHT_SLEEVE, toggled)
 
-        fun getHat() = getSettings().modelParts.contains(EnumPlayerModelParts.HAT)
+        fun isLeftPantsLegEnabled() = isPartEnabled(EnumPlayerModelParts.LEFT_PANTS_LEG)
 
-        fun setHat(toggled: Boolean) {
-            getSettings().setModelPartEnabled(EnumPlayerModelParts.HAT, toggled)
-        }
+        fun setLeftPantsLegEnabled(toggled: Boolean) = setPartEnabled(EnumPlayerModelParts.LEFT_PANTS_LEG, toggled)
+
+        fun isRightPantsLegEnabled() = isPartEnabled(EnumPlayerModelParts.RIGHT_PANTS_LEG)
+
+        fun setRightPantsLegEnabled(toggled: Boolean) = setPartEnabled(EnumPlayerModelParts.RIGHT_PANTS_LEG, toggled)
+
+        fun isHatEnabled() = isPartEnabled(EnumPlayerModelParts.HAT)
+
+        fun setHatEnabled(toggled: Boolean) = setPartEnabled(EnumPlayerModelParts.HAT, toggled)
     }
 
     val sound = object {
-        fun getMasterVolume() = getSettings().getSoundLevel(MCSoundCategory.MASTER)
+        private fun getCategoryVolume(category: MCSoundCategory): Float {
+            //#if MC<=11202
+            return getSettings().getSoundLevel(category)
+            //#else
+            //$$ return getSettings().getSoundSourceVolume(category)
+            //#endif
+        }
 
-        fun setMasterVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MASTER, level)
+        private fun setCategoryVolume(category: MCSoundCategory, volume: Float) {
+            //#if MC<=11202
+            getSettings().setSoundLevel(category, volume)
+            //#else
+            //$$ getSettings().setSoundCategoryVolume(category, volume)
+            //#endif
+        }
 
-        fun getMusicVolume() = getSettings().getSoundLevel(MCSoundCategory.MUSIC)
+        fun getMasterVolume() = getCategoryVolume(MCSoundCategory.MASTER)
 
-        fun setMusicVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MUSIC, level)
+        fun setMasterVolume(level: Float) = setCategoryVolume(MCSoundCategory.MASTER, level)
 
-        fun getNoteblockVolume() = getSettings().getSoundLevel(MCSoundCategory.RECORDS)
+        fun getMusicVolume() = getCategoryVolume(MCSoundCategory.MUSIC)
 
-        fun setNoteblockVolume(level: Float) = getSettings().setSoundLevel(MCSoundCategory.RECORDS, level)
+        fun setMusicVolume(level: Float) = setCategoryVolume(MCSoundCategory.MUSIC, level)
 
-        fun getWeather() = getSettings().getSoundLevel(MCSoundCategory.WEATHER)
+        fun getNoteblockVolume() = getCategoryVolume(MCSoundCategory.RECORDS)
 
-        fun setWeather(level: Float) = getSettings().setSoundLevel(MCSoundCategory.WEATHER, level)
+        fun setNoteblockVolume(level: Float) = setCategoryVolume(MCSoundCategory.RECORDS, level)
 
-        fun getBlocks() = getSettings().getSoundLevel(MCSoundCategory.BLOCKS)
+        fun getWeather() = getCategoryVolume(MCSoundCategory.WEATHER)
 
-        fun setBlocks(level: Float) = getSettings().setSoundLevel(MCSoundCategory.BLOCKS, level)
+        fun setWeather(level: Float) = setCategoryVolume(MCSoundCategory.WEATHER, level)
+
+        fun getBlocks() = getCategoryVolume(MCSoundCategory.BLOCKS)
+
+        fun setBlocks(level: Float) = setCategoryVolume(MCSoundCategory.BLOCKS, level)
 
         //#if MC<=10809
-        fun getHostileCreatures() = getSettings().getSoundLevel(MCSoundCategory.MOBS)
+        fun getHostileCreatures() = getCategoryVolume(MCSoundCategory.MOBS)
 
-        fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.MOBS, level)
+        fun setHostileCreatures(level: Float) = setCategoryVolume(MCSoundCategory.MOBS, level)
 
-        fun getFriendlyCreatures() = getSettings().getSoundLevel(MCSoundCategory.ANIMALS)
+        fun getFriendlyCreatures() = getCategoryVolume(MCSoundCategory.ANIMALS)
 
-        fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.ANIMALS, level)
+        fun setFriendlyCreatures(level: Float) = setCategoryVolume(MCSoundCategory.ANIMALS, level)
         //#else
-        //$$ fun getHostileCreatures() = getSettings().getSoundLevel(MCSoundCategory.HOSTILE)
-        //$$ fun setHostileCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.HOSTILE, level)
+        //$$ fun getHostileCreatures() = getCategoryVolume(MCSoundCategory.HOSTILE)
+        //$$ fun setHostileCreatures(level: Float) = setCategoryVolume(MCSoundCategory.HOSTILE, level)
         //$$
-        //$$ fun getFriendlyCreatures() = getSettings().getSoundLevel(MCSoundCategory.NEUTRAL)
-        //$$ fun setFriendlyCreatures(level: Float) = getSettings().setSoundLevel(MCSoundCategory.NEUTRAL, level)
+        //$$ fun getFriendlyCreatures() = getCategoryVolume(MCSoundCategory.NEUTRAL)
+        //$$ fun setFriendlyCreatures(level: Float) = setCategoryVolume(MCSoundCategory.NEUTRAL, level)
         //#endif
 
-        fun getPlayers() = getSettings().getSoundLevel(MCSoundCategory.PLAYERS)
+        fun getPlayers() = getCategoryVolume(MCSoundCategory.PLAYERS)
 
-        fun setPlayers(level: Float) = getSettings().setSoundLevel(MCSoundCategory.PLAYERS, level)
+        fun setPlayers(level: Float) = setCategoryVolume(MCSoundCategory.PLAYERS, level)
 
-        fun getAmbient() = getSettings().getSoundLevel(MCSoundCategory.AMBIENT)
+        fun getAmbient() = getCategoryVolume(MCSoundCategory.AMBIENT)
 
-        fun setAmbient(level: Float) = getSettings().setSoundLevel(MCSoundCategory.AMBIENT, level)
+        fun setAmbient(level: Float) = setCategoryVolume(MCSoundCategory.AMBIENT, level)
     }
 
+    // TODO(CONVERT):
+    // TODO(BREAKING): Make enums for most of these methods
     val video = object {
-        fun getGraphics() = getSettings().fancyGraphics
+        //#if MC<=11202
+        // TODO(BREAKING): Change return to int (and below methods argument type)
+        fun getGraphics() = if (getSettings().fancyGraphics) 1 else 0
 
-        fun setGraphics(fancy: Boolean) {
-            getSettings().fancyGraphics = fancy
+        fun setGraphics(mode: Int) {
+            getSettings().fancyGraphics = mode != 0
         }
 
         fun getRenderDistance() = getSettings().renderDistanceChunks
@@ -135,11 +190,12 @@ class Settings {
             getSettings().limitFramerate = frameRate
         }
 
-        fun get3dAnaglyph() = getSettings().anaglyph
-
-        fun set3dAnaglyph(toggled: Boolean) {
-            getSettings().anaglyph = toggled
-        }
+        // TODO(BREAKING): Removed these
+        // fun get3dAnaglyph() = getSettings().anaglyph
+        //
+        // fun set3dAnaglyph(toggled: Boolean) {
+        //     getSettings().anaglyph = toggled
+        // }
 
         fun getBobbing() = getSettings().viewBobbing
 
@@ -153,10 +209,10 @@ class Settings {
             getSettings().guiScale = scale
         }
 
-        fun getBrightness() = getSettings().gammaSetting
+        fun getBrightness() = getSettings().gammaSetting.toDouble()
 
-        fun setBrightness(brightness: Float) {
-            getSettings().gammaSetting = brightness
+        fun setBrightness(brightness: Double) {
+            getSettings().gammaSetting = brightness.toFloat()
         }
 
         fun getClouds() = getSettings().clouds
@@ -189,28 +245,90 @@ class Settings {
             getSettings().mipmapLevels = mipmapLevels
         }
 
-        //#if MC<=10809
-        fun getAlternateBlocks() = getSettings().allowBlockAlternatives
-
-        fun setAlternateBlocks(toggled: Boolean) {
-            getSettings().allowBlockAlternatives = toggled
-        }
-        //#else
-        //$$ fun getAlternateBlocks() = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
-        //$$ fun setAlternateBlocks(toggled: Boolean) = UnsupportedOperationException("1.12 has no Alternative Blocks settings")
-        //#endif
-
-        fun getVBOs() = getSettings().useVbo
-
-        fun setVBOs(toggled: Boolean) {
-            getSettings().useVbo = toggled
-        }
-
         fun getEntityShadows() = getSettings().entityShadows
 
         fun setEntityShadows(toggled: Boolean) {
             getSettings().entityShadows = toggled
         }
+        //#else
+        //$$ fun getGraphics() = getSettings().graphicsMode.id
+        //$$
+        //$$ fun setGraphics(mode: Int) {
+        //$$     getSettings().graphicsMode = GraphicsStatus.byId(mode)
+        //$$ }
+        //$$
+        //$$ fun getRenderDistance() = getSettings().renderDistance
+        //$$
+        //$$ fun setRenderDistance(distance: Int) {
+        //$$     getSettings().renderDistance = distance
+        //$$ }
+        //$$
+        //$$ fun getSmoothLighting() = getSettings().ambientOcclusion.id
+        //$$
+        //$$ fun setSmoothLighting(level: Int) {
+        //$$     getSettings().ambientOcclusion = AmbientOcclusionStatus.byId(level)
+        //$$ }
+        //$$
+        //$$ fun getMaxFrameRate() = getSettings().framerateLimit
+        //$$
+        //$$ fun setMaxFrameRate(frameRate: Int) {
+        //$$     getSettings().framerateLimit = frameRate
+        //$$ }
+        //$$
+        //$$ fun getBobbing() = getSettings().bobView
+        //$$
+        //$$ fun setBobbing(toggled: Boolean) {
+        //$$     getSettings().bobView = toggled
+        //$$ }
+        //$$
+        //$$ fun getGuiScale() = getSettings().guiScale
+        //$$
+        //$$ fun setGuiScale(scale: Int) {
+        //$$     getSettings().guiScale = scale
+        //$$ }
+        //$$
+        //$$ fun getBrightness() = getSettings().gamma
+        //$$
+        //$$ fun setBrightness(brightness: Double) {
+        //$$     getSettings().gamma = brightness
+        //$$ }
+        //$$
+        //$$ fun getClouds() = getSettings().renderClouds.ordinal
+        //$$
+        //$$ fun setClouds(clouds: Int) {
+        //$$     getSettings().renderClouds = CloudStatus.values()[clouds]
+        //$$ }
+        //$$
+        //$$ fun getParticles() = getSettings().particles.id
+        //$$
+        //$$ fun setParticles(particles: Int) {
+        //$$     getSettings().particles = ParticleStatus.byId(particles)
+        //$$ }
+        //$$
+        //$$ fun getFullscreen() = getSettings().fullscreen
+        //$$
+        //$$ fun setFullscreen(toggled: Boolean) {
+        //$$     getSettings().fullscreen = toggled
+        //$$ }
+        //$$
+        //$$ fun getVsync() = getSettings().enableVsync
+        //$$
+        //$$ fun setVsync(toggled: Boolean) {
+        //$$     getSettings().enableVsync = toggled
+        //$$ }
+        //$$
+        //$$ fun getMipmapLevels() = getSettings().mipmapLevels
+        //$$
+        //$$ fun setMipmapLevels(mipmapLevels: Int) {
+        //$$     getSettings().mipmapLevels = mipmapLevels
+        //$$ }
+        //$$
+        //$$ fun getEntityShadows() = getSettings().entityShadows
+        //$$
+        //$$ fun setEntityShadows(toggled: Boolean) {
+        //$$     getSettings().entityShadows = toggled
+        //$$ }
+        //#endif
     }
 
     val chat = object {
@@ -218,16 +336,32 @@ class Settings {
 
         fun setVisibility(visibility: String) {
             getSettings().chatVisibility = when (visibility.lowercase()) {
+                //#if MC<=11202
                 "hidden" -> EntityPlayer.EnumChatVisibility.HIDDEN
                 "commands", "system" -> EntityPlayer.EnumChatVisibility.SYSTEM
                 else -> EntityPlayer.EnumChatVisibility.FULL
+                //#else
+                //$$ "hidden" -> ChatVisiblity.HIDDEN
+                //$$ "commands", "system" -> ChatVisiblity.SYSTEM
+                //$$ else -> ChatVisiblity.FULL
+                //#endif
             }
         }
 
-        fun getColors() = getSettings().chatColours
+        fun getColors(): Boolean {
+            //#if MC<=11202
+            return getSettings().chatColours
+            //#else
+            //$$ return getSettings().chatColors
+            //#endif
+        }
 
         fun setColors(toggled: Boolean) {
+            //#if MC<=11202
             getSettings().chatColours = toggled
+            //#else
+            //$$ getSettings().chatColors = toggled
+            //#endif
         }
 
         fun getWebLinks() = getSettings().chatLinks
@@ -236,10 +370,14 @@ class Settings {
             getSettings().chatLinks = toggled
         }
 
-        fun getOpacity() = getSettings().chatOpacity
+        fun getOpacity() = getSettings().chatOpacity.toDouble()
 
-        fun setOpacity(opacity: Float) {
-            getSettings().chatOpacity = opacity
+        fun setOpacity(opacity: Double) {
+            //#if MC<=11202
+            getSettings().chatOpacity = opacity.toFloat()
+            //#else
+            //$$ getSettings().chatOpacity = opacity
+            //#endif
         }
 
         fun getPromptOnWebLinks() = getSettings().chatLinksPrompt
@@ -248,28 +386,44 @@ class Settings {
             getSettings().chatLinksPrompt = toggled
         }
 
-        fun getScale() = getSettings().chatScale
+        fun getScale() = getSettings().chatScale.toDouble()
 
-        fun setScale(scale: Float) {
-            getSettings().chatScale = scale
+        fun setScale(scale: Double) {
+            //#if MC<=11202
+            getSettings().chatScale = scale.toFloat()
+            //#else
+            //$$ getSettings().chatScale = scale
+            //#endif
         }
 
-        fun getFocusedHeight() = getSettings().chatHeightFocused
+        fun getFocusedHeight() = getSettings().chatHeightFocused.toDouble()
 
-        fun setFocusedHeight(height: Float) {
-            getSettings().chatHeightFocused = height
+        fun setFocusedHeight(height: Double) {
+            //#if MC<=11202
+            getSettings().chatHeightFocused = height.toFloat()
+            //#else
+            //$$ getSettings().chatHeightFocused = height
+            //#endif
         }
 
-        fun getUnfocusedHeight() = getSettings().chatHeightUnfocused
+        fun getUnfocusedHeight() = getSettings().chatHeightUnfocused.toDouble()
 
-        fun setUnfocusedHeight(height: Float) {
-            getSettings().chatHeightUnfocused = height
+        fun setUnfocusedHeight(height: Double) {
+            //#if MC<=11202
+            getSettings().chatHeightUnfocused = height.toFloat()
+            //#else
+            //$$ getSettings().chatHeightUnfocused = height
+            //#endif
         }
 
-        fun getWidth() = getSettings().chatWidth
+        fun getWidth() = getSettings().chatWidth.toDouble()
 
-        fun setWidth(width: Float) {
-            getSettings().chatWidth = width
+        fun setWidth(width: Double) {
+            //#if MC<=11202
+            getSettings().chatWidth = width.toFloat()
+            //#else
+            //$$ getSettings().chatWidth = width
+            //#endif
         }
 
         fun getReducedDebugInfo() = getSettings().reducedDebugInfo
