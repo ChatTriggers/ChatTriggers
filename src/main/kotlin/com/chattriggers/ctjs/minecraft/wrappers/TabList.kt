@@ -1,11 +1,14 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.transformers.PlayerTabOverlayAccessor
 import com.chattriggers.ctjs.utils.kotlin.MCGameType
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import com.chattriggers.ctjs.utils.kotlin.MCScore
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import gg.essential.universal.wrappers.message.UMessage
+import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
 
@@ -17,26 +20,42 @@ object TabList {
      *
      * @return The formatted names
      */
+    // TODO(BREAKING): Returns UTextComponents instead of Strings
     @JvmStatic
-    fun getNamesByObjectives(): List<String> {
+    fun getNamesByObjectives(): List<UTextComponent> {
         val scoreboard = Scoreboard.getScoreboard() ?: return emptyList()
-        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0) ?: return emptyList()
 
-        val scores: Collection<MCScore> = scoreboard.getSortedScores(sidebarObjective)
+        //#if MC<=11202
+        val sidebarObjective = scoreboard.getObjectiveInDisplaySlot(0) ?: return emptyList()
+        val scores = scoreboard.getSortedScores(sidebarObjective)
 
         return scores.map {
             val team = scoreboard.getPlayersTeam(it.playerName)
-            ScorePlayerTeam.formatPlayerName(team, it.playerName)
+            UTextComponent(ScorePlayerTeam.formatPlayerName(team, it.playerName))
         }
+        //#else
+        //$$ val sidebarObjective = scoreboard.getDisplayObjective(0) ?: return emptyList()
+        //$$ val scores = scoreboard.getPlayerScores(sidebarObjective)
+        //$$
+        //$$ return scores.map {
+        //$$     val team = scoreboard.getPlayersTeam(it.owner)
+        //$$     UTextComponent(PlayerTeam.formatNameForTeam(team, UTextComponent(it.owner)))
+        //$$ }
+        //#endif
     }
 
+    // TODO(BREAKING): Returns UTextComponents instead of Strings
     @JvmStatic
-    fun getNames(): List<String> {
+    fun getNames(): List<UTextComponent> {
         if (Client.getTabGui() == null) return listOf()
 
-        val playerList = playerComparator.sortedCopy(Player.getPlayer()!!.sendQueue.playerInfoMap)
-
-        return playerList.map(Client.getTabGui()!!::getPlayerName)
+        //#if MC<=11202
+        val playerList = playerComparator.sortedCopy(Client.getConnection()?.playerInfoMap ?: return emptyList())
+        return playerList.map { UTextComponent(Client.getTabGui()?.getPlayerName(it) ?: return emptyList()) }
+        //#else
+        //$$ val playerList = playerComparator.sortedCopy(Client.getConnection()?.onlinePlayers ?: return emptyList())
+        //$$ return playerList.map { UTextComponent(Client.getTabGui()?.getNameForDisplay(it) ?: return emptyList()) }
+        //#endif
     }
 
     /**
@@ -48,18 +67,26 @@ object TabList {
     fun getUnformattedNames(): List<String> {
         if (Player.getPlayer() == null) return listOf()
 
-        return Client.getConnection()?.playerInfoMap?.let {
-            playerComparator.sortedCopy(it)
-        }?.map {
-            it.gameProfile.name
-        } ?: emptyList()
+        //#if MC<=11202
+        return Client.getConnection()?.playerInfoMap
+            ?.let { playerComparator.sortedCopy(it) }
+            ?.map { it.gameProfile.name }
+            ?: emptyList()
+        //#else
+        //$$ return Client.getConnection()?.onlinePlayers
+        //$$     ?.let { playerComparator.sortedCopy(it) }
+        //$$     ?.map { it.profile.name }
+        //$$     ?: emptyList()
+        //#endif
     }
 
-    @JvmStatic
-    fun getHeaderMessage() = Client.getTabGui()?.header?.let { UMessage(it) }
+    // TODO(BREAKING): Removed this
+    // @JvmStatic
+    // fun getHeaderMessage() = getTabGui()?.header?.let { UMessage(it) }
 
+    // TODO(BREAKING): Return UTextComponent
     @JvmStatic
-    fun getHeader() = Client.getTabGui()?.header?.formattedText
+    fun getHeader() = UTextComponent.from(getTabGui()?.header ?: "")!!
 
     /**
      * Sets the header text for the TabList.
@@ -70,21 +97,23 @@ object TabList {
     @JvmStatic
     fun setHeader(header: Any?) {
         when (header) {
-            is String -> Client.getTabGui()?.header = UMessage(header).chatMessage
-            is UMessage -> Client.getTabGui()?.header = header.chatMessage
-            is MCITextComponent -> Client.getTabGui()?.header = header
-            null -> Client.getTabGui()?.header = header
+            is String -> getTabGui()?.header = UMessage(header).chatMessage
+            is UMessage -> getTabGui()?.header = header.chatMessage
+            is MCITextComponent -> getTabGui()?.header = header
+            null -> getTabGui()?.header = header
         }
     }
 
     @JvmStatic
     fun clearHeader() = setHeader(null)
 
-    @JvmStatic
-    fun getFooterMessage() = Client.getTabGui()?.footer?.let { UMessage(it) }
+    // TODO(BREAKING): Removed this
+    // @JvmStatic
+    // fun getFooterMessage() = getTabGui()?.footer?.let { UMessage(it) }
 
+    // TODO(BREAKING): Return UTextComponent
     @JvmStatic
-    fun getFooter() = Client.getTabGui()?.footer?.formattedText
+    fun getFooter() = UTextComponent.from(getTabGui()?.footer ?: "")
 
     /**
      * Sets the footer text for the TabList.
@@ -95,38 +124,40 @@ object TabList {
     @JvmStatic
     fun setFooter(footer: Any?) {
         when (footer) {
-            is String -> Client.getTabGui()?.footer = UMessage(footer).chatMessage
-            is UMessage -> Client.getTabGui()?.footer = footer.chatMessage
-            is MCITextComponent -> Client.getTabGui()?.footer = footer
-            null -> Client.getTabGui()?.footer = footer
+            is String -> getTabGui()?.footer = UMessage(footer).chatMessage
+            is UMessage -> getTabGui()?.footer = footer.chatMessage
+            is MCITextComponent -> getTabGui()?.footer = footer
+            null -> getTabGui()?.footer = footer
         }
     }
+
+    private fun getTabGui() = Client.getTabGui()?.asMixin<PlayerTabOverlayAccessor>()
 
     @JvmStatic
     fun clearFooter() = setFooter(null)
 
     internal class PlayerComparator internal constructor() : Comparator<NetworkPlayerInfo> {
         override fun compare(playerOne: NetworkPlayerInfo, playerTwo: NetworkPlayerInfo): Int {
+            //#if MC<=11202
             val teamOne = playerOne.playerTeam
             val teamTwo = playerTwo.playerTeam
+            //#else
+            //$$ val teamOne = playerOne.team
+            //$$ val teamTwo = playerTwo.team
+            //#endif
 
             return ComparisonChain
                 .start()
-                .compareTrueFirst(
-                    playerOne.gameType != MCGameType.SPECTATOR,
-                    playerTwo.gameType != MCGameType.SPECTATOR
-                ).compare(
-                    //#if MC<=10809
-                    teamOne?.registeredName ?: "",
-                    teamTwo?.registeredName ?: ""
-                    //#else
-                    //$$ teamOne?.name ?: "",
-                    //$$ teamTwo?.name ?: ""
-                    //#endif
-                ).compare(
-                    playerOne.gameProfile.name,
-                    playerTwo.gameProfile.name
-                ).result()
+                //#if MC<=11202
+                .compareTrueFirst(playerOne.gameType != MCGameType.SPECTATOR, playerTwo.gameType != MCGameType.SPECTATOR)
+                .compare(teamOne?.registeredName ?: "", teamTwo?.registeredName ?: "")
+                .compare(playerOne.gameProfile.name, playerTwo.gameProfile.name)
+                //#else
+                //$$ .compareTrueFirst(playerOne.gameMode != MCGameType.SPECTATOR, playerTwo.gameMode != MCGameType.SPECTATOR)
+                //$$ .compare(teamOne?.name ?: "", teamTwo?.name ?: "")
+                //$$ .compare(playerOne.profile.name, playerTwo.profile.name)
+                //#endif
+                .result()
         }
     }
 }

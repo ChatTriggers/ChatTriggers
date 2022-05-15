@@ -18,7 +18,8 @@
         "RenderItemMixin",
         "RenderManagerMixin",
         "ScreenShotHelperMixin",
-        "TileEntityRendererDispatcherMixin"
+        "PlayerTabOverlayAccessor",
+        "TileEntityRendererDispatcherMixin",
         //#if MC>=11701
         //$$ ,
         //$$ "AbstractClientPlayerAccessor",
@@ -32,7 +33,7 @@
         //$$ "ScreenAccessor",
         //$$ "SignBlockEntityAccessor",
         //$$ "ParticleAccessor",
-        //$$ "PlayerRendererMixin"
+        //$$ "PlayerRendererMixin",
         //#endif
     ],
     "mixins": [

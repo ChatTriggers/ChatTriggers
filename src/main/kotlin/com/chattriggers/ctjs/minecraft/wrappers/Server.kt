@@ -1,7 +1,22 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import gg.essential.universal.wrappers.message.UTextComponent
+import net.minecraft.client.multiplayer.ServerData
 
 object Server {
+    /**
+     * Returns whether the current world is a single-player world
+     *
+     * @return True if the current world is single-player, false otherwise.
+     */
+    fun isSinglePlayer(): Boolean {
+        //#if MC<=11202
+        return Client.getMinecraft().isSingleplayer
+        //#else
+        //$$ return Client.getMinecraft().hasSingleplayerServer()
+        //#endif
+    }
+
     /**
      * Gets the current server's IP, or "localhost" if the player
      * is in a single-player world.
@@ -10,9 +25,14 @@ object Server {
      */
     @JvmStatic
     fun getIP(): String {
-        if (Client.getMinecraft().isSingleplayer) return "localhost"
+        if (isSinglePlayer())
+            return "localhost"
 
-        return Client.getMinecraft().currentServerData?.serverIP ?: ""
+        //#if MC<=11202
+        return getServerData()?.serverIP ?: ""
+        //#else
+        //$$ return getServerData()?.ip ?: ""
+        //#endif
     }
 
     /**
@@ -23,9 +43,14 @@ object Server {
      */
     @JvmStatic
     fun getName(): String {
-        if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
+        if (isSinglePlayer())
+            return "SinglePlayer"
 
-        return Client.getMinecraft().currentServerData?.serverName ?: ""
+        //#if MC<=11202
+        return getServerData()?.serverName ?: ""
+        //#else
+        //$$ return getServerData()?.name ?: ""
+        //#endif
     }
 
     /**
@@ -34,11 +59,17 @@ object Server {
      *
      * @return The MOTD of the current server
      */
+    // TODO(BREAKING): Return UTextComponent
     @JvmStatic
-    fun getMOTD(): String {
-        if (Client.getMinecraft().isSingleplayer) return "SinglePlayer"
+    fun getMOTD(): UTextComponent {
+        if (isSinglePlayer())
+            return UTextComponent("SinglePlayer")
 
-        return Client.getMinecraft().currentServerData?.serverMOTD ?: ""
+        //#if MC<=11202
+        return UTextComponent(getServerData()?.serverMOTD ?: "")
+        //#else
+        //$$ return UTextComponent.from(getServerData()?.motd ?: "")!!
+        //#endif
     }
 
     /**
@@ -49,16 +80,22 @@ object Server {
      */
     @JvmStatic
     fun getPing(): Long {
-        val player = Player.getPlayer()
-
-        if (player == null
-            || Client.getMinecraft().isSingleplayer
-            || Client.getMinecraft().currentServerData == null
-        ) {
+        if (Player.getPlayer() == null || isSinglePlayer() || getServerData() == null)
             return 5L
-        }
 
-        return Client.getConnection()?.getPlayerInfo(player.uniqueID)?.responseTime?.toLong()
-            ?: Client.getMinecraft().currentServerData?.pingToServer ?: -1L
+        //#if MC<=11202
+        return Client.getConnection()?.getPlayerInfo(Player.getUUID())?.responseTime?.toLong()
+            ?: getServerData()?.pingToServer ?: -1L
+        //#else
+        //$$ return Client.getConnection()?.getPlayerInfo(Player.getUUID())?.latency?.toLong()
+        //$$    ?: getServerData()?.ping ?: -1L
+        //#endif
     }
+
+    private fun getServerData(): ServerData? =
+        //#if MC<=11202
+        Client.getMinecraft().currentServerData
+        //#else
+        //$$ Client.getMinecraft().currentServer
+        //#endif
 }
