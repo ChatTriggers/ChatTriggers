@@ -2,6 +2,10 @@
     // Helpers to load classes which throws if the class isn't found. This
     // helps spot refactoring bugs early!
 
+    global.Java = {
+        type: clazz => Packages[clazz]
+    };
+
     const Class = Java.type('java.lang.Class');
 
     const getClassName = path => path.substring(path.lastIndexOf('.') + 1)
@@ -32,7 +36,6 @@
     loadClass("com.chattriggers.ctjs.minecraft.libs.EventLib");
     loadClass("com.chattriggers.ctjs.minecraft.libs.FileLib");
     loadClass("com.chattriggers.ctjs.minecraft.libs.MathLib");
-    loadClass("com.chattriggers.ctjs.minecraft.libs.Tessellator");
 
     loadClass("com.chattriggers.ctjs.minecraft.libs.renderer.Image");
     loadClass("com.chattriggers.ctjs.minecraft.libs.renderer.Rectangle");

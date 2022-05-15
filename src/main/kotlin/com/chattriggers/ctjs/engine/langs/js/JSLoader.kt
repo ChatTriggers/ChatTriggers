@@ -68,7 +68,7 @@ object JSLoader : ILoader {
             moduleContext.evaluateString(
                 scope,
                 providedLibs,
-                "moduleProvided",
+                "providedLibs",
                 1, null
             )
         } catch (e: Throwable) {
