@@ -45,7 +45,13 @@ object Reference {
         Command.activeCommands.values.toList().forEach(Command::unregister)
 
         Client.scheduleTask {
-            CTJS.images.forEach { it.getTexture().deleteGlTexture() }
+            CTJS.images.forEach {
+                //#if MC<=11202
+                it.getTexture().deleteGlTexture()
+                //#else
+                //$$ it.getTexture().close()
+                //#endif
+            }
             CTJS.images.clear()
         }
 
@@ -59,7 +65,11 @@ object Reference {
     fun loadCT() {
         if (!isLoaded) return
 
+        //#if MC<=11202
         Client.getMinecraft().gameSettings.saveOptions()
+        //#else
+        //$$ Client.getMinecraft().options.save()
+        //#endif
         unloadCT(false)
 
         ChatLib.chat("&cReloading ChatTriggers scripts...")
@@ -71,7 +81,11 @@ object Reference {
             ModuleManager.entryPass(completionListener = ::printLoadCompletionStatus)
             MouseListener.registerTriggerListeners()
 
+            //#if MC<=11202
             Client.getMinecraft().gameSettings.loadOptions()
+            //#else
+            //$$ Client.getMinecraft().options.load()
+            //#endif
             ChatLib.chat("&aDone reloading scripts!")
             isLoaded = true
 

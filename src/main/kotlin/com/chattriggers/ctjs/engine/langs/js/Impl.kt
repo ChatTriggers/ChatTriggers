@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.objects.gui.Gui
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBindHandler
 import com.chattriggers.ctjs.minecraft.wrappers.Client
+import com.chattriggers.ctjs.utils.kotlin.i18Format
 import net.minecraft.client.settings.KeyBinding
 import org.mozilla.javascript.NativeObject
 
@@ -54,8 +55,11 @@ object JSClient : Client() {
     override fun getKeyBindFromKey(keyCode: Int): KeyBind? {
         return KeyBindHandler.getKeyBinds()
             .find { it.getKeyCode() == keyCode }
-            ?: getMinecraft().gameSettings.keyBindings
-                .find { it.keyCode == keyCode }
+            //#if MC<=11202
+            ?: getMinecraft().gameSettings.keyBindings.find { it.keyCode == keyCode }
+            //#else
+            //$$ ?: getMinecraft().options.keyMappings.find { it.key.value == keyCode }
+            //#endif
                 ?.let(::JSKeyBind)
     }
 
@@ -70,8 +74,11 @@ object JSClient : Client() {
     override fun getKeyBindFromDescription(description: String): KeyBind? {
         return KeyBindHandler.getKeyBinds()
             .find { it.getDescription() == description }
-            ?: getMinecraft().gameSettings.keyBindings
-                .find { it.keyDescription == description }
+            //#if MC<=11202
+            ?: getMinecraft().gameSettings.keyBindings.find { it.keyDescription.i18Format() == description.i18Format() }
+            //#else
+            //$$ ?: getMinecraft().options.keyMappings.find { it.name.i18Format() == description.i18Format() }
+            //#endif
                 ?.let(::JSKeyBind)
     }
 

@@ -106,11 +106,6 @@ class CTJS {
         //#endif
     }
 
-    private fun registerHooks() {
-        ClientCommandHandler.instance.registerCommand(CTCommand)
-        Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
-    }
-
     //#if MC>=11701
     //$$ @SubscribeEvent
     //$$ fun registerCommands(event: RegisterCommandsEvent) {
