@@ -68,3 +68,4 @@ net.minecraft.world.entity.player.PlayerModelPart net.minecraft.entity.player.En
 net.minecraft.client.sounds.SoundEngine paulscode.sound.SoundSystem
 net.minecraft.client.sounds.SoundManager net.minecraft.client.audio.SoundManager
 net.minecraftforge.fml.util.ObfuscationReflectionHelper net.minecraftforge.fml.relauncher.ReflectionHelper
+net.minecraftforge.fml.loading.FMLLoader net.minecraftforge.fml.common.Loader

@@ -352,7 +352,7 @@ class Item {
         //$$     it.getTagList("Lore", Constants.NBT.TAG_STRING)
         //$$ }
         //$$
-        //$$ lore.tagList.clear()
+        //$$ lore.clear()
         //$$ loreLines.forEach {
         //$$     lore.appendTag(MCNBTTagString.valueOf(ChatLib.addColor(it)))
         //$$ }

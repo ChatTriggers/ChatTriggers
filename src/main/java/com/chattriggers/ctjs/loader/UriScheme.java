@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.loader;
 import com.chattriggers.ctjs.Reference;
 import com.chattriggers.ctjs.engine.module.ModuleManager;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -45,10 +44,15 @@ public class UriScheme {
 
             regAdd(" /f /v " + quote("URL Protocol") + " /d " + quote(""));
 
-            ModContainer container = Loader.instance().getIndexedModList().get(Reference.MODID);
-            String modJar = container.getSource().getAbsolutePath();
             String sep = File.separator;
             String javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "javaw.exe";
+
+            // TODO(VERIFY)
+            //#if MC<=11202
+            String modJar = Loader.instance().getIndexedModList().get(Reference.MODID).getSource().getAbsolutePath();
+            //#else
+            //$$ String modJar = FMLLoader.getLoadingModList().getModFileById(Reference.MODID).getFile().getFilePath().toAbsolutePath().toString();
+            //#endif
 
             String value = ("\"" + javaProgram + "\" -cp \"" + modJar
                 + "\" com.chattriggers.ctjs.loader.UriScheme " + "\"%1\"").replace("\"", "\\\"");

@@ -101,9 +101,9 @@ class Particle(val entity: MCParticle) {
      *
      * @return the particle's max age (in ticks)
      */
-    fun getMaxAge(): Float {
+    fun getMaxAge(): Int {
         //#if MC<=11202
-        return entity.particleMaxAge.toFloat()
+        return entity.particleMaxAge
         //#else
         //$$ return entity.asMixin<ParticleAccessor>().lifetime
         //#endif
@@ -114,9 +114,9 @@ class Particle(val entity: MCParticle) {
      *
      * @param maxAge the particle's max age (in ticks)
      */
-    fun setMaxAge(maxAge: Float) = apply {
+    fun setMaxAge(maxAge: Int) = apply {
         //#if MC<=11202
-        entity.particleMaxAge = maxAge.toInt()
+        entity.particleMaxAge = maxAge
         //#else
         //$$ entity.asMixin<ParticleAccessor>().lifetime = maxAge
         //#endif

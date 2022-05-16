@@ -54,7 +54,11 @@ class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
     }
 
     fun clear() {
+        //#if MC<=11202
         rawNBT.tagList.clear()
+        //#else
+        //$$ rawNBT.clear()
+        //#endif
     }
 
     // TODO(BREAKING): Wrap return value
