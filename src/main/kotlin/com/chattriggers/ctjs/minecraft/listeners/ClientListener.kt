@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
+import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -36,11 +37,14 @@ object ClientListener {
     val chatHistory = mutableListOf<String>()
     val actionBarHistory = mutableListOf<String>()
     private val tasks = CopyOnWriteArrayList<Task>()
+    private var packetContext: Context
 
     class Task(var delay: Int, val callback: () -> Unit)
 
     init {
         ticksPassed = 0
+        packetContext = JSContextFactory.enterContext()
+        Context.exit()
     }
 
     @SubscribeEvent
@@ -110,11 +114,8 @@ object ClientListener {
                     val packetReceivedEvent = CancellableEvent()
 
                     if (msg is Packet<*>) {
-                        JSContextFactory.enterContext()
-                        try {
+                        JSLoader.wrapInContext(packetContext) {
                             TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
-                        } finally {
-                            Context.exit()
                         }
                     }
 
@@ -126,11 +127,8 @@ object ClientListener {
                     val packetSentEvent = CancellableEvent()
 
                     if (msg is Packet<*>) {
-                        JSContextFactory.enterContext()
-                        try {
+                        JSLoader.wrapInContext(packetContext) {
                             TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
-                        } finally {
-                            Context.exit()
                         }
                     }
 
