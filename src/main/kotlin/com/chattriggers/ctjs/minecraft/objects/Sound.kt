@@ -12,6 +12,18 @@ import paulscode.sound.SoundSystem
 import java.io.File
 import java.net.MalformedURLException
 
+//#if MC>=11701
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.AbstractSoundInstanceAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.SoundAccessor
+//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//$$ import net.minecraft.client.sounds.WeighedSoundEvents
+//$$ import net.minecraft.client.resources.sounds.AbstractSoundInstance
+//$$ import net.minecraft.client.resources.sounds.SoundInstance
+//$$ import net.minecraft.resources.ResourceLocation
+//#endif
+
+// TODO(BREAKING) attenuation is now a boolean (true = linear, false = none). New
+//                versions don't have rolloff
 /**
  * Instances a new Sound with certain properties. These properties
  * should be passed through as a normal JavaScript object.
@@ -29,13 +41,16 @@ import java.net.MalformedURLException
  * - volume (float) - volume of the sound, see [setVolume]
  * - pitch (float) - pitch of the sound, see [setPitch]
  * - x, y, z (float) - location of the sound, see [setPosition]. Defaults to the players position.
- * - attenuation (int) - fade out model of the sound, see [setAttenuation]
+ * - attenuation (boolean) - fade out model of the sound, see [setAttenuation]
  *
  * @param config the JavaScript config object
  */
 class Sound(private val config: NativeObject) {
-    private var sndSystem: SoundSystem? = null
+    //#if MC<=11202
     private val source: String = config["source"] as String
+    //#else
+    //$$ private lateinit var source: AbstractSoundInstance
+    //#endif
     var isListening = false
 
     init {
@@ -68,17 +83,6 @@ class Sound(private val config: NativeObject) {
 
     }
 
-    private fun loadSndSystem() {
-        val sndManager = Client.getMinecraft().soundHandler.sndManager
-
-        sndSystem = ReflectionHelper.getPrivateValue<SoundSystem, SoundManager>(
-            SoundManager::class.java,
-            sndManager,
-            "sndSystem",
-            "field_148620_e"
-        )
-    }
-
     @Throws(MalformedURLException::class)
     private fun bootstrap() {
         val source = config["source"]?.toString() ?: throw IllegalArgumentException("Sound source is null.")
@@ -86,37 +90,38 @@ class Sound(private val config: NativeObject) {
         val loop = config.getOrDefault("loop", false) as Boolean
         val stream = config.getOrDefault("stream", false) as Boolean
 
-        val url = File(CTJS.assetsDir, source).toURI().toURL()
+        val url = File(CTJS.assetsDir, source).toURI()
         val x = (config.getOrDefault("x", Player.getX()) as Number).toFloat()
         val y = (config.getOrDefault("y", Player.getY()) as Number).toFloat()
         val z = (config.getOrDefault("z", Player.getZ()) as Number).toFloat()
-        val attModel = (config.getOrDefault("attenuation", 1) as Number).toInt()
+        val attenuation = (config.getOrDefault("attenuation", false) as Boolean)
         val distOrRoll = 16
 
+        //#if MC<=11202
         if (stream) {
             sndSystem!!.newStreamingSource(
                 priority,
                 source,
-                url,
+                url.toURL(),
                 source,
                 loop,
                 x,
                 y,
                 z,
-                attModel,
+                if (attenuation) 2 else 0,
                 distOrRoll.toFloat()
             )
         } else {
             sndSystem!!.newSource(
                 priority,
                 source,
-                url,
+                url.toURL(),
                 source,
                 loop,
                 x,
                 y,
                 z,
-                attModel,
+                if (attenuation) 2 else 0,
                 distOrRoll.toFloat()
             )
         }
@@ -132,6 +137,45 @@ class Sound(private val config: NativeObject) {
         if (config["category"] != null) {
             setCategory(config["category"] as String)
         }
+        //#else
+        //$$ val volume = config["volume"]?.let {
+        //$$     (it as Number).toFloat()
+        //$$ } ?: 1.0f
+        //$$
+        //$$ val pitch = config["pitch"]?.let {
+        //$$     (it as Number).toFloat()
+        //$$ } ?: 1.0f
+        //$$
+        //$$ val category = config["category"]?.let { c ->
+        //$$     MCSoundCategory.values().first { it.name == (c as String).lowercase() }
+        //$$ } ?: MCSoundCategory.MASTER
+        //$$
+        //$$ // TODO(VERIFY): See how this gets resolved to a path once we can launch the game
+        //$$ this.source = object : AbstractSoundInstance(ResourceLocation("chattriggers", url.path), category) {
+        //$$     init {
+        //$$         this.volume = volume
+        //$$         this.pitch = pitch
+        //$$         this.x = x.toDouble()
+        //$$         this.y = y.toDouble()
+        //$$         this.z = z.toDouble()
+        //$$         this.looping = loop
+        //$$         this.attenuation = if (attenuation) {
+        //$$             SoundInstance.Attenuation.LINEAR
+        //$$         } else SoundInstance.Attenuation.NONE
+        //$$     }
+        //$$
+        //$$     override fun resolve(arg: SoundManager): WeighedSoundEvents? {
+        //$$         return super.resolve(arg).also {
+        //$$             if (this.sound == null)
+        //$$                 return@also
+        //$$
+        //$$             this.sound.asMixin<SoundAccessor>().setStream(stream)
+        //$$             this.sound.asMixin<SoundAccessor>().setAttenuationDistance(distOrRoll)
+        //$$             this.sound.asMixin<SoundAccessor>().setPreload(priority) // TODO(VERIFY): ???
+        //$$         }
+        //$$     }
+        //$$ }
+        //#endif
     }
 
     /**
@@ -141,8 +185,21 @@ class Sound(private val config: NativeObject) {
      * @param category the category
      */
     fun setCategory(category: String) = apply {
+        //#if MC<=11202
         val category1 = MCSoundCategory.getCategory(category.lowercase())
         setVolume(Client.getMinecraft().gameSettings.getSoundLevel(category1))
+        //#else
+        //$$ val category1 = MCSoundCategory.values().first { it.name == category.lowercase() }
+        //$$ source.asMixin<AbstractSoundInstanceAccessor>().setSource(category1)
+        //#endif
+    }
+
+    fun getVolume(): Float {
+        //#if MC<=11202
+        return sndSystem!!.getVolume(source)
+        //#else
+        //$$ return source.sound.volume
+        //#endif
     }
 
     /**
@@ -151,9 +208,13 @@ class Sound(private val config: NativeObject) {
      *
      * @param volume New volume, float value ( 0.0f - 1.0f ).
      */
-    fun setVolume(volume: Float) = apply { sndSystem!!.setVolume(source, volume) }
-
-    fun getVolume() = sndSystem!!.getVolume(source)
+    fun setVolume(volume: Float) = apply {
+        //#if MC<=11202
+        sndSystem!!.setVolume(source, volume)
+        //#else
+        //$$ source.asMixin<AbstractSoundInstanceAccessor>().setVolume(volume)
+        //#endif
+    }
 
     /**
      * Updates the position of this sound
@@ -162,27 +223,53 @@ class Sound(private val config: NativeObject) {
      * @param y the y coordinate
      * @param z the z coordinate
      */
-    fun setPosition(x: Float, y: Float, z: Float) = apply { sndSystem!!.setPosition(source, x, y, z) }
+    fun setPosition(x: Float, y: Float, z: Float) = apply {
+        //#if MC<=11202
+        sndSystem!!.setPosition(source, x, y, z)
+        //#else
+        //$$ source.asMixin<AbstractSoundInstanceAccessor>().setX(x.toDouble())
+        //$$ source.asMixin<AbstractSoundInstanceAccessor>().setY(y.toDouble())
+        //$$ source.asMixin<AbstractSoundInstanceAccessor>().setZ(z.toDouble())
+        //#endif
+    }
+
+    fun getPitch(): Float {
+        //#if MC<=11202
+        return sndSystem!!.getPitch(source)
+        //#else
+        //$$ return source.pitch
+        //#endif
+    }
 
     /**
      * Sets this sound's pitch.
      *
      * @param pitch A float value ( 0.5f - 2.0f ).
      */
-    fun setPitch(pitch: Float) = apply { sndSystem!!.setPitch(source, pitch) }
-
-    fun getPitch() = sndSystem!!.getPitch(source)
+    fun setPitch(pitch: Float) = apply {
+        //#if MC<=11202
+        sndSystem!!.setPitch(source, pitch)
+        //#else
+        //$$ source.asMixin<AbstractSoundInstanceAccessor>().setPitch(pitch)
+        //#endif
+    }
 
     /**
      * Sets the attenuation (fade out over space) of the song.
-     * Models are:
-     *  NONE(0) - no fade
-     *  ROLLOFF(1) - this is the default, meant to be somewhat realistic
-     *  LINEAR(2) - fades out linearly, as the name implies
+     * True uses linear attenuation, false uses no attenutation
      *
      * @param model the model
      */
-    fun setAttenuation(model: Int) = apply { sndSystem!!.setAttenuation(source, model) }
+    fun setAttenuation(attenuation: Boolean) = apply {
+        //#if MC<=11202
+        sndSystem!!.setAttenuation(source, if (attenuation) 0 else 2)
+        //#else
+        //$$ val a = if (attenuation) {
+        //$$     SoundInstance.Attenuation.LINEAR
+        //$$ } else SoundInstance.Attenuation.NONE
+        //$$ source.asMixin<AbstractSoundInstanceAccessor>().setAttenuation(a)
+        //#endif
+    }
 
     /**
      * Plays/resumes the sound
@@ -191,12 +278,13 @@ class Sound(private val config: NativeObject) {
         sndSystem!!.play(source)
     }
 
-    /**
-     * Pauses the sound, to be resumed later
-     */
-    fun pause() {
-        sndSystem!!.pause(source)
-    }
+    // TODO(BREAKING): Removed this (doesn't exist outside of paulscode)
+    // /**
+    //  * Pauses the sound, to be resumed later
+    //  */
+    // fun pause() {
+    //     sndSystem!!.pause(source)
+    // }
 
     /**
      * Completely stops the sound
@@ -205,10 +293,38 @@ class Sound(private val config: NativeObject) {
         sndSystem!!.stop(source)
     }
 
-    /**
-     * Immediately restarts the sound
-     */
-    fun rewind() {
-        sndSystem!!.rewind(source)
+    // TODO(BREAKING): Removed this (doesn't exist outside of paulscode)
+    // /**
+    //  * Immediately restarts the sound
+    //  */
+    // fun rewind() {
+    //     sndSystem!!.rewind(source)
+    // }
+
+    companion object {
+        private var sndSystem: SoundSystem? = null
+
+        private fun loadSndSystem() {
+            if (sndSystem != null)
+                return
+
+            //#if MC<=11202
+            val sndManager = Client.getMinecraft().soundHandler.sndManager
+            //#else
+            //$$ val sndManager = Client.getMinecraft().soundManager
+            //#endif
+
+            // TODO(VERIFY): Does this work in dev? It doesn't take the unobfuscated name
+            sndSystem = ReflectionHelper.getPrivateValue(
+                SoundManager::class.java,
+                sndManager,
+                //#if MC<=11202
+                "sndSystem",
+                "field_148620_e"
+                //#else
+                //$$ "f_120349_",
+                //#endif
+            )
+        }
     }
 }

@@ -23,6 +23,7 @@
         //#if MC>=11701
         //$$ ,
         //$$ "AbstractClientPlayerAccessor",
+        //$$ "AbstractSoundInstanceAccessor",
         //$$ "ChatScreenAccessor",
         //$$ "CompoundTagAccessor",
         //$$ "EntityAccessor",
@@ -32,6 +33,7 @@
         //$$ "ListTagAccessor",
         //$$ "ScreenAccessor",
         //$$ "SignBlockEntityAccessor",
+        //$$ "SoundAccessor",
         //$$ "ParticleAccessor",
         //$$ "PlayerRendererMixin",
         //#endif
