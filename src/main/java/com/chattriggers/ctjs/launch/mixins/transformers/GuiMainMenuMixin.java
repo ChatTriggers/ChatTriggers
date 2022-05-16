@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.utils.UpdateChecker;
 import net.minecraft.client.gui.GuiMainMenu;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,3 +21,4 @@ public class GuiMainMenuMixin {
         UpdateChecker.INSTANCE.drawUpdateMessage();
     }
 }
+//#endif

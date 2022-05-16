@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -57,3 +58,4 @@ public class RenderManagerMixin {
         );
     }
 }
+//#endif

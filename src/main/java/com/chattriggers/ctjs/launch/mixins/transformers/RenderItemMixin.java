@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.gui.FontRenderer;
@@ -31,3 +32,4 @@ public class RenderItemMixin {
         }
     }
 }
+//#endif

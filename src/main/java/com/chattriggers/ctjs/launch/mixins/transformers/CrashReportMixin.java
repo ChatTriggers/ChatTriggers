@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.engine.module.Module;
 import com.chattriggers.ctjs.engine.module.ModuleManager;
 import net.minecraft.crash.CrashReport;
@@ -29,3 +30,4 @@ public class CrashReportMixin {
         );
     }
 }
+//#endif

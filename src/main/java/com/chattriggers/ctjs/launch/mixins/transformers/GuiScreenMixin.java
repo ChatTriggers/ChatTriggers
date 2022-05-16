@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item;
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -116,3 +117,4 @@ public class GuiScreenMixin {
         TriggerType.GuiDrawBackground.triggerAll(this, ci);
     }
 }
+//#endif

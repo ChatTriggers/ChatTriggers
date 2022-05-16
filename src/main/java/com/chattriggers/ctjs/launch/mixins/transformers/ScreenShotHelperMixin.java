@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.shader.Framebuffer;
@@ -31,3 +32,4 @@ public class ScreenShotHelperMixin {
             cir.setReturnValue(null);
     }
 }
+//#endif

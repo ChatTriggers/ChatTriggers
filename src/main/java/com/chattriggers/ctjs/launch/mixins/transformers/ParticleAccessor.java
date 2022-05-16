@@ -93,9 +93,9 @@ package com.chattriggers.ctjs.launch.mixins.transformers;
 //$$     void setAlpha(float alpha);
 //$$
 //$$     @Accessor
-//$$     float getLifetime();
+//$$     int getLifetime();
 //$$
 //$$     @Accessor
-//$$     float setLifetime(float lifetime);
+//$$     void setLifetime(int lifetime);
 //$$ }
 //#endif

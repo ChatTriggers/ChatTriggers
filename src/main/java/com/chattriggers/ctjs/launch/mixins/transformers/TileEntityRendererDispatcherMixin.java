@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -53,3 +54,4 @@ public class TileEntityRendererDispatcherMixin {
         );
     }
 }
+//#endif

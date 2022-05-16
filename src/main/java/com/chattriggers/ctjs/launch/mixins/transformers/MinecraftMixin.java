@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.triggers.TriggerType;
 import gg.essential.universal.wrappers.message.UTextComponent;
 import net.minecraft.client.Minecraft;
@@ -65,3 +66,4 @@ public class MinecraftMixin {
         TriggerType.GameLoad.triggerAll();
     }
 }
+//#endif

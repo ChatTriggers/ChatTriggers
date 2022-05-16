@@ -4,13 +4,16 @@
     "refmap": "mixins.chattriggers.refmap.json",
     "client": [
         "ChatGuiMixin",
-        "EffectRendererMixin",
         "EntityPlayerAccessor",
+        "PlayerTabOverlayAccessor",
+        //#if MC<=11202
+        "CrashReportMixin",
+        "EffectRendererMixin",
         "GuiAccessor",
         "GuiContainerMixin",
         "GuiIngameAccessor",
-        "GuiIngameForgeMixin",
         "GuiIngameMixin",
+        "GuiIngameForgeMixin",
         "GuiMainMenuMixin",
         "GuiScreenMixin",
         "MinecraftMixin",
@@ -18,27 +21,21 @@
         "RenderItemMixin",
         "RenderManagerMixin",
         "ScreenShotHelperMixin",
-        "PlayerTabOverlayAccessor",
         "TileEntityRendererDispatcherMixin",
-        //#if MC>=11701
-        //$$ ,
+        //#else
         //$$ "AbstractClientPlayerAccessor",
         //$$ "AbstractSoundInstanceAccessor",
         //$$ "ChatScreenAccessor",
         //$$ "CompoundTagAccessor",
         //$$ "EntityAccessor",
         //$$ "EntityRendererDispatcherMixin",
-        //$$ "KeyMappingMixin",
         //$$ "LevelRendererAccessor",
         //$$ "ListTagAccessor",
         //$$ "ScreenAccessor",
         //$$ "SignBlockEntityAccessor",
         //$$ "SoundAccessor",
         //$$ "ParticleAccessor",
-        //$$ "PlayerRendererMixin",
+        //$$ "PlayerRendererMixin"
         //#endif
-    ],
-    "mixins": [
-        "CrashReportMixin"
     ]
 }

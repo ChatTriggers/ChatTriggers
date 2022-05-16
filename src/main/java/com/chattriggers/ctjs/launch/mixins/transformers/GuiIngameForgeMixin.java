@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraftforge.client.GuiIngameForge;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,3 +27,4 @@ public class GuiIngameForgeMixin {
             TriggerType.RenderTitle.triggerAll(title, subtitle, ci);
     }
 }
+//#endif

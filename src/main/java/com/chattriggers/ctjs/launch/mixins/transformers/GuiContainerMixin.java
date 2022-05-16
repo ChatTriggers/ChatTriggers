@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
+//#if MC<=11202
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -60,3 +61,4 @@ public class GuiContainerMixin {
         }
     }
 }
+//#endif
