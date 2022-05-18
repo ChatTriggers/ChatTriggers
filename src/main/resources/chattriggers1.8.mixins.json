@@ -2,11 +2,11 @@
     "required": true,
     "package": "com.chattriggers.ctjs.launch.mixins.transformers",
     "refmap": "mixins.chattriggers.refmap.json",
+    "compatibilityLevel": "JAVA_8",
     "client": [
         "ChatGuiMixin",
         "EntityPlayerAccessor",
         "PlayerTabOverlayAccessor",
-        //#if MC<=11202
         "CrashReportMixin",
         "EffectRendererMixin",
         "GuiAccessor",
@@ -21,21 +21,6 @@
         "RenderItemMixin",
         "RenderManagerMixin",
         "ScreenShotHelperMixin",
-        "TileEntityRendererDispatcherMixin",
-        //#else
-        //$$ "AbstractClientPlayerAccessor",
-        //$$ "AbstractSoundInstanceAccessor",
-        //$$ "ChatScreenAccessor",
-        //$$ "CompoundTagAccessor",
-        //$$ "EntityAccessor",
-        //$$ "EntityRendererDispatcherMixin",
-        //$$ "LevelRendererAccessor",
-        //$$ "ListTagAccessor",
-        //$$ "ScreenAccessor",
-        //$$ "SignBlockEntityAccessor",
-        //$$ "SoundAccessor",
-        //$$ "ParticleAccessor",
-        //$$ "PlayerRendererMixin"
-        //#endif
+        "TileEntityRendererDispatcherMixin"
     ]
 }

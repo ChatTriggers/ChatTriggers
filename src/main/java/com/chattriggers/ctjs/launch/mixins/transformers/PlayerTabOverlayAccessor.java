@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 //#if MC<=11202
@@ -16,10 +15,10 @@ public interface PlayerTabOverlayAccessor {
     @Accessor
     IChatComponent getFooter();
 
-    @Shadow
+    @Accessor
     void setHeader(IChatComponent header);
 
-    @Shadow
+    @Accessor
     void setFooter(IChatComponent footer);
 }
 //#else
@@ -34,10 +33,10 @@ public interface PlayerTabOverlayAccessor {
 //$$     @Accessor
 //$$     Component getFooter();
 //$$
-//$$     @Shadow
+//$$     @Accessor
 //$$     void setHeader(Component header);
 //$$
-//$$     @Shadow
+//$$     @Accessor
 //$$     void setFooter(Component footer);
 //$$ }
 //#endif

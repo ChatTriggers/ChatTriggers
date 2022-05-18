@@ -8,7 +8,8 @@ plugins {
 group = "com.chattriggers"
 version = "2.1.0"
 
-val accessTransformerName = "ctjs1.${platform.mcMinor}_at.cfg"
+val accessTransformerName = "chattriggers1.${platform.mcMinor}_at.cfg"
+val mixinName = "chattriggers1.${platform.mcMinor}.mixins.json"
 
 loom {
     forge {
@@ -23,7 +24,7 @@ loom {
             property("mixin.debug.export", "true")
             property("mixin.dumpTargetOnFailure", "true")
             arg("--tweakClass", "gg.essential.loader.stage0.EssentialSetupTweaker")
-            arg("--mixin", "chattriggers.mixins.json")
+            arg("--mixin", mixinName)
         }
     }
 }
@@ -60,6 +61,6 @@ tasks.jar {
         "FMLAT" to accessTransformerName,
         "TweakClass" to "gg.essential.loader.stage0.EssentialSetupTweaker",
         "TweakOrder" to "0",
-        "MixinConfigs" to "chattriggers.mixins.json"
+        "MixinConfigs" to mixinName,
     ))
 }
