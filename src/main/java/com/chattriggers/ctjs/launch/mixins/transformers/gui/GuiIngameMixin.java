@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.launch.mixins.transformers;
+package com.chattriggers.ctjs.launch.mixins.transformers.gui;
 
 //#if MC<=11202
 import com.chattriggers.ctjs.triggers.TriggerType;
@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiIngame.class)
-public class GuiIngameMixin {
+public abstract class GuiIngameMixin {
     @Accessor
-    String getDisplayedTitle() { return null; }
+    abstract String getDisplayedTitle();
 
     @Accessor
-    String getDisplayedSubTitle() { return null; }
+    abstract String getDisplayedSubTitle();
 
     @Inject(method = "renderScoreboard", at = @At("HEAD"), cancellable = true)
     void injectRenderScoreboard(ScoreObjective objective, ScaledResolution scaledRes, CallbackInfo ci) {

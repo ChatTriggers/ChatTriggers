@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
-import com.chattriggers.ctjs.launch.mixins.transformers.EntityPlayerAccessor
+import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityPlayerAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.asMixin

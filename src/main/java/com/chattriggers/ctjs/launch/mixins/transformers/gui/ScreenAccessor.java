@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.launch.mixins.transformers;
+package com.chattriggers.ctjs.launch.mixins.transformers.gui;
 
 //#if MC>=11701
 //$$ import com.mojang.blaze3d.vertex.PoseStack;

@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
-import com.chattriggers.ctjs.launch.mixins.transformers.ChatGuiMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.gui.ChatGuiMixin
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -116,7 +116,8 @@ object ChatLib {
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
         @Suppress("CAST_NEVER_SUCCEEDS")
-        val gui = Client.getChatGUI() as? ChatGuiMixin ?: return
+        val gui = Client.getChatGUI() as? ChatGuiMixin
+            ?: return
 
         if (chatLineIDs.isEmpty())
             gui.clearMessages()

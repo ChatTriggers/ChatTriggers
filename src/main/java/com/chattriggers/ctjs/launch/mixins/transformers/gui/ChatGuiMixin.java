@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.launch.mixins.transformers;
+package com.chattriggers.ctjs.launch.mixins.transformers.gui;
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib;
 import org.spongepowered.asm.mixin.Final;

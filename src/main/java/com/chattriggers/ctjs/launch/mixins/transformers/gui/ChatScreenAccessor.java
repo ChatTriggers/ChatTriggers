@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.launch.mixins.transformers;
+package com.chattriggers.ctjs.launch.mixins.transformers.gui;
 
 //#if MC>=11701
 //$$ import net.minecraft.client.gui.components.EditBox;

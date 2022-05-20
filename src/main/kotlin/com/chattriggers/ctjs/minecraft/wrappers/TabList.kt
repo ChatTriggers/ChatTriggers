@@ -1,9 +1,8 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.launch.mixins.transformers.PlayerTabOverlayAccessor
+import com.chattriggers.ctjs.launch.mixins.transformers.entity.PlayerTabOverlayAccessor
 import com.chattriggers.ctjs.utils.kotlin.MCGameType
 import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
-import com.chattriggers.ctjs.utils.kotlin.MCScore
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering

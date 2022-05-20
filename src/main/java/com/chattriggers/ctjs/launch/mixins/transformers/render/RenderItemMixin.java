@@ -1,4 +1,4 @@
-package com.chattriggers.ctjs.launch.mixins.transformers;
+package com.chattriggers.ctjs.launch.mixins.transformers.render;
 
 //#if MC<=11202
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item;
