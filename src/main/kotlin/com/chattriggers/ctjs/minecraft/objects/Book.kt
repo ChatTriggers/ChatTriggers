@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.objects
 
+import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiScreenBookAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagList
@@ -86,7 +87,7 @@ class Book(bookName: String) {
         bookData["pages"] = pages
         //#if MC<=11202
         book.tagCompound = bookData.rawNBT
-        bookScreen?.bookPages = pages.rawNBT
+        bookScreen?.asMixin<GuiScreenBookAccessor>()?.bookPages = pages.rawNBT
         //#else
         //$$ book.tag = bookData.rawNBT
         //$$ // TODO(VERIFY)
@@ -98,7 +99,7 @@ class Book(bookName: String) {
     fun display(pageIndex: Int = 0) {
         //#if MC<=11202
         bookScreen = GuiScreenBook(Player.getPlayer()!!, book, false)
-        bookScreen!!.currPage = pageIndex
+        bookScreen!!.asMixin<GuiScreenBookAccessor>().currPage = pageIndex
         //#else
         //$$ bookScreen = BookEditScreen(Player.getPlayer()!!, book, InteractionHand.MAIN_HAND)
         //$$ bookScreen!!.asMixin<BookEditScreenAccessor>().currentPage = pageIndex
@@ -113,7 +114,7 @@ class Book(bookName: String) {
     fun getCurrentPage(): Int {
         return if (isOpen() && bookScreen != null) {
             //#if MC<=11202
-            bookScreen!!.currPage
+            bookScreen!!.asMixin<GuiScreenBookAccessor>().currPage
             //#else
             //$$ bookScreen!!.asMixin<BookEditScreenAccessor>().currentPage
             //#endif

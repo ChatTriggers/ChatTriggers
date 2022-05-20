@@ -3,9 +3,14 @@ package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.nbt.*
 import org.mozilla.javascript.NativeArray
 import org.mozilla.javascript.NativeObject
+
+//#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
+//#endif
 
 open class NBTBase(open val rawNBT: MCNBTBase) {
     /**
@@ -64,7 +69,7 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
 
             //#if MC<=11202
             for (key in keySet) {
-                val value = tagMap[key]
+                val value = asMixin<NBTTagCompoundAccessor>().tagMap[key]
             //#else
             //$$ for (key in allKeys) {
             //$$     val value = get(key)

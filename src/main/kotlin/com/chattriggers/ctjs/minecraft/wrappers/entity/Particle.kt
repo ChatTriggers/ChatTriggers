@@ -1,9 +1,11 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
+import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityFXAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import java.awt.Color
 
 //#if MC>=11701
@@ -103,7 +105,7 @@ class Particle(val entity: MCParticle) {
      */
     fun getMaxAge(): Int {
         //#if MC<=11202
-        return entity.particleMaxAge
+        return entity.asMixin<EntityFXAccessor>().particleMaxAge
         //#else
         //$$ return entity.asMixin<ParticleAccessor>().lifetime
         //#endif
@@ -116,7 +118,7 @@ class Particle(val entity: MCParticle) {
      */
     fun setMaxAge(maxAge: Int) = apply {
         //#if MC<=11202
-        entity.particleMaxAge = maxAge
+        entity.asMixin<EntityFXAccessor>().particleMaxAge = maxAge
         //#else
         //$$ entity.asMixin<ParticleAccessor>().lifetime = maxAge
         //#endif

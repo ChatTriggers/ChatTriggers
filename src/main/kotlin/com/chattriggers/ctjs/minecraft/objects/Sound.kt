@@ -1,10 +1,12 @@
 package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.launch.mixins.transformers.SoundHandlerMixin
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.client.audio.SoundManager
 import net.minecraftforge.fml.relauncher.ReflectionHelper
 import org.mozilla.javascript.NativeObject
@@ -309,7 +311,7 @@ class Sound(private val config: NativeObject) {
                 return
 
             //#if MC<=11202
-            val sndManager = Client.getMinecraft().soundHandler.sndManager
+            val sndManager = Client.getMinecraft().soundHandler.asMixin<SoundHandlerMixin>().sndManager
             //#else
             //$$ val sndManager = Client.getMinecraft().soundManager
             //#endif

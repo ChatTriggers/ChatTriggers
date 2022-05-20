@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import gg.essential.api.utils.GuiUtil
 import gg.essential.universal.UKeyboard
 import gg.essential.universal.UMinecraft
@@ -17,6 +18,7 @@ import net.minecraft.network.Packet
 import kotlin.math.roundToInt
 
 //#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiChatAccessor
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.realms.RealmsBridge
 import net.minecraftforge.fml.client.FMLClientHandler
@@ -356,7 +358,7 @@ abstract class Client {
         fun getCurrentChatMessage(): String {
             return if (isInChat()) {
                 //#if MC<=11202
-                (currentGui.get() as GuiChat).inputField.text
+                currentGui.get().asMixin<GuiChatAccessor>().inputField.text
                 //#else
                 //$$ (currentGui.get() as ChatScreenAccessor).input.value
                 //#endif
@@ -372,7 +374,7 @@ abstract class Client {
         fun setCurrentChatMessage(message: String) {
             //#if MC<=11202
             if (isInChat()) {
-                (currentGui.get() as GuiChat).inputField.text = message
+                currentGui.get().asMixin<GuiChatAccessor>().inputField.text = message
             } else getMinecraft().displayGuiScreen(GuiChat(message))
             //#else
             //$$ if (isInChat()) {

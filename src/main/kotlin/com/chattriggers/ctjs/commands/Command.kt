@@ -1,7 +1,9 @@
 package com.chattriggers.ctjs.commands
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.launch.mixins.transformers.CommandHandlerAccessor
 import com.chattriggers.ctjs.triggers.Trigger
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 //#if MC==10809
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
@@ -86,7 +88,7 @@ class Command(
 
     fun register() {
         //#if MC<=11202
-        if (name in ClientCommandHandler.instance.commandMap.keys && !overrideExisting) {
+        if (name in commandHandler().commandMap.keys && !overrideExisting) {
             throw IllegalArgumentException("Command with name $name already exists!")
         }
 
@@ -99,13 +101,17 @@ class Command(
 
     fun unregister() {
         //#if MC<=11202
-        ClientCommandHandler.instance.commandSet.remove(this)
-        ClientCommandHandler.instance.commandMap.remove(name)
+        commandHandler().commandSet.remove(this)
+        commandHandler().commandMap.remove(name)
         activeCommands.remove(name)
         //#else
         //$$ CTJS.unregisterCommand(commandNode)
         //#endif
     }
+
+    //#if MC<=11202
+    private fun commandHandler() = ClientCommandHandler.instance.asMixin<CommandHandlerAccessor>()
+    //#endif
 
     companion object {
         internal val activeCommands = mutableMapOf<String, Command>()

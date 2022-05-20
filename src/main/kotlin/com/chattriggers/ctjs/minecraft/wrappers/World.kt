@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderGlobalAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Particle
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
@@ -10,6 +11,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCParticle
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.multiplayer.WorldClient
 
@@ -396,7 +398,7 @@ object World {
             //#if MC<=11202
             val particleType = EnumParticleTypes.valueOf(particle)
 
-            val fx = Client.getMinecraft().renderGlobal.spawnEntityFX(
+            val fx = Client.getMinecraft().renderGlobal.asMixin<RenderGlobalAccessor>().invokeSpawnEntityFX(
                 particleType.particleID,
                 particleType.shouldIgnoreRange,
                 x,

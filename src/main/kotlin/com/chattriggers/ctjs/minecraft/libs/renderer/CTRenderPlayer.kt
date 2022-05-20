@@ -1,19 +1,17 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import net.minecraft.client.entity.AbstractClientPlayer
+import net.minecraft.client.renderer.entity.RenderPlayer
+import net.minecraft.client.renderer.entity.layers.*
 
 //#if MC<=11202
 import net.minecraft.client.renderer.entity.RenderManager
-import net.minecraft.client.renderer.entity.RenderPlayer
-import net.minecraft.client.renderer.entity.layers.*
 //#else
 //$$ import com.mojang.blaze3d.vertex.PoseStack
 //$$ import net.minecraft.client.model.HumanoidModel
 //$$ import net.minecraft.client.model.geom.ModelLayers
 //$$ import net.minecraft.client.renderer.MultiBufferSource
 //$$ import net.minecraft.client.renderer.entity.EntityRendererProvider
-//$$ import net.minecraft.client.renderer.entity.layers.*
-//$$ import net.minecraft.client.renderer.entity.player.PlayerRenderer
 //$$ import net.minecraft.network.chat.Component
 //#endif
 
@@ -98,32 +96,27 @@ internal class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boole
     }
 
     //#if MC<=11202
-    override fun setModelVisibilities(clientPlayer: AbstractClientPlayer) {
-        super.setModelVisibilities(clientPlayer)
-        if (!showHeldItem) getMainModel().heldItemRight = 0
-    }
-
-    override fun canRenderName(entity: AbstractClientPlayer?) = showNametag
+    override fun canRenderName(entity: AbstractClientPlayer) = showNametag
 
     override fun renderOffsetLivingLabel(
-        entityIn: AbstractClientPlayer?,
+        entityIn: AbstractClientPlayer,
         x: Double,
         y: Double,
         z: Double,
-        str: String?,
+        str: String,
         p_177069_9_: Float,
         p_177069_10_: Double
     ) {
         if (showNametag) super.renderOffsetLivingLabel(entityIn, x, y, z, str, p_177069_9_, p_177069_10_)
     }
 
-    override fun renderName(entity: AbstractClientPlayer?, x: Double, y: Double, z: Double) {
+    override fun renderName(entity: AbstractClientPlayer, x: Double, y: Double, z: Double) {
         if (showNametag) super.renderName(entity, x, y, z)
     }
 
     override fun renderLivingLabel(
-        entityIn: AbstractClientPlayer?,
-        str: String?,
+        entityIn: AbstractClientPlayer,
+        str: String,
         x: Double,
         y: Double,
         z: Double,

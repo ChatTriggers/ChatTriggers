@@ -11,19 +11,28 @@
         "entity.EntityPlayerAccessor",
         "entity.PlayerTabOverlayAccessor",
         "gui.ChatGuiMixin",
+        "render.RenderPlayerMixin",
         //#if MC<=11202
+        "CommandHandlerAccessor",
         "CrashReportMixin",
         "MinecraftMixin",
+        "NBTTagCompoundAccessor",
+        "NBTTagListAccessor",
         "ScreenShotHelperMixin",
+        "SoundHandlerMixin",
+        "entity.EntityFXAccessor",
         "entity.PlayerControllerMPMixin",
         "gui.GuiAccessor",
+        "gui.GuiChatAccessor",
         "gui.GuiContainerMixin",
         "gui.GuiIngameAccessor",
         "gui.GuiIngameForgeMixin",
         "gui.GuiIngameMixin",
         "gui.GuiMainMenuMixin",
+        "gui.GuiScreenBookAccessor",
         "gui.GuiScreenMixin",
         "render.EffectRendererMixin",
+        "render.RenderGlobalAccessor",
         "render.RenderItemMixin",
         "render.RenderManagerMixin",
         "render.TileEntityRendererDispatcherMixin"
@@ -40,7 +49,6 @@
         //$$ "gui.ScreenAccessor",
         //$$ "render.EntityRendererDispatcherMixin",
         //$$ "render.LevelRendererAccessor",
-        //$$ "render.PlayerRendererMixin"
         //#endif
     ]
 }

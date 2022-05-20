@@ -35,11 +35,11 @@ public abstract class ChatGuiMixin {
     public abstract void deleteChatLine(int id);
 
     public ChatLib.ChatLineListIterator<ChatLine> getChatLines() {
-        return new ChatLib.ChatLineListIterator<>(chatLines);
+        return new ChatLib.ChatLineListIterator<>(this.chatLines);
     }
 
     public ChatLib.ChatLineListIterator<ChatLine> getDrawnChatLines() {
-        return new ChatLib.ChatLineListIterator<>(chatLines);
+        return new ChatLib.ChatLineListIterator<>(this.chatLines);
     }
 
     public void clearMessages() {
@@ -68,11 +68,11 @@ public abstract class ChatGuiMixin {
 //$$     private void removeById(int id) {}
 //$$
 //$$     public ChatLib.ChatLineListIterator<Component> getChatLines() {
-//$$         return new ChatLib.ChatLineListIterator<>(allMessages, false);
+//$$         return new ChatLib.ChatLineListIterator<>(this.allMessages, false);
 //$$     }
 //$$
 //$$     public ChatLib.ChatLineListIterator<FormattedCharSequence> getDrawnChatLines() {
-//$$         return new ChatLib.ChatLineListIterator<>(trimmedMessages, true);
+//$$         return new ChatLib.ChatLineListIterator<>(this.trimmedMessages, true);
 //$$     }
 //$$
 //$$     public void clearMessages() {

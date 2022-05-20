@@ -3,12 +3,15 @@ package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.nbt.NBTTagByteArray
 import net.minecraft.nbt.NBTTagIntArray
 import net.minecraftforge.common.util.Constants
 import org.mozilla.javascript.NativeObject
 
-//#if MC>=11701
+//#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
+//#else
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.CompoundTagAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //#endif
@@ -17,7 +20,7 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
     val tagMap: Map<String, MCNBTBase>
         get() {
             //#if MC<=11202
-            return rawNBT.tagMap
+            return rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap
             //#else
             //$$ return rawNBT.asMixin<CompoundTagAccessor>().tags
             //#endif

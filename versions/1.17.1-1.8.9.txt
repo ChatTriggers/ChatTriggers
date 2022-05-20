@@ -69,3 +69,5 @@ net.minecraft.client.sounds.SoundEngine paulscode.sound.SoundSystem
 net.minecraft.client.sounds.SoundManager net.minecraft.client.audio.SoundManager
 net.minecraftforge.fml.util.ObfuscationReflectionHelper net.minecraftforge.fml.relauncher.ReflectionHelper
 net.minecraftforge.fml.loading.FMLLoader net.minecraftforge.fml.common.Loader
+net.minecraft.client.renderer.entity.player.PlayerRenderer net.minecraft.client.renderer.entity.RenderPlayer
+net.minecraft.client.gui.screens.inventory.BookEditScreen net.minecraft.client.gui.GuiScreenBook

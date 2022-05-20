@@ -10,12 +10,18 @@ version = "2.1.0"
 
 val mcMinor = platform.mcMinor
 val isForge = platform.isForge
+val accessTransformerName = "chattriggers_at.cfg"
 val mixinName = "chattriggers1.$mcMinor.mixins.json"
 
 loom {
     runConfigs {
         named("client") {
             ideConfigGenerated(true)
+        }
+    }
+    if (project.platform.isForge) {
+        forge {
+            accessTransformer(rootProject.file("src/main/resources/$accessTransformerName"))
         }
     }
     mixin {
@@ -68,6 +74,7 @@ tasks.jar {
 
     manifest.attributes(mapOf(
         "ModSide" to "CLIENT",
+        "FMLAT" to accessTransformerName,
         "TweakClass" to "gg.essential.loader.stage0.EssentialSetupTweaker",
         "TweakOrder" to "0",
         "MixinConfigs" to mixinName,
