@@ -17,7 +17,8 @@ pluginManagement {
 
 listOf(
     "1.8.9-forge",
-    "1.17.1-forge"
+    "1.17.1-forge",
+    "1.17.1-fabric",
 ).forEach { version ->
     include(":$version")
     project(":$version").apply {

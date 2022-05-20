@@ -1,18 +1,22 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
-    id("gg.essential.loom")
     id("gg.essential.multi-version")
+    id("gg.essential.loom")
     id("gg.essential.defaults")
 }
 
 group = "com.chattriggers"
 version = "2.1.0"
 
-val accessTransformerName = "ctjs1.${platform.mcMinor}_at.cfg"
+val mcMinor = platform.mcMinor
+val isForge = platform.isForge
+val mixinName = "chattriggers1.$mcMinor.mixins.json"
 
 loom {
-    forge {
-        accessTransformer(rootProject.file("src/main/resources/$accessTransformerName"))
+    runConfigs {
+        named("client") {
+            ideConfigGenerated(true)
+        }
     }
     mixin {
         defaultRefmapName.set("chattriggers.mixins.refmap.json")
@@ -22,8 +26,15 @@ loom {
             property("mixin.debug.verbose", "true")
             property("mixin.debug.export", "true")
             property("mixin.dumpTargetOnFailure", "true")
-            arg("--tweakClass", "gg.essential.loader.stage0.EssentialSetupTweaker")
-            arg("--mixin", "chattriggers.mixins.json")
+
+            if (isForge && mcMinor <= 12)
+                arg("--tweakClass", "gg.essential.loader.stage0.EssentialSetupTweaker")
+        }
+    }
+
+    if (isForge) {
+        forge {
+            mixinConfigs.set(mutableListOf("mixinName"))
         }
     }
 }
@@ -57,9 +68,8 @@ tasks.jar {
 
     manifest.attributes(mapOf(
         "ModSide" to "CLIENT",
-        "FMLAT" to accessTransformerName,
         "TweakClass" to "gg.essential.loader.stage0.EssentialSetupTweaker",
         "TweakOrder" to "0",
-        "MixinConfigs" to "chattriggers.mixins.json"
+        "MixinConfigs" to mixinName,
     ))
 }

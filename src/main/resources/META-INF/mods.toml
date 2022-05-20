@@ -22,7 +22,7 @@ logoFile="CT_logo.png"
 credits=""
 authors="Ecolsson, FalseHonesty, kerbybit"
 description='''
-  ChatTriggers is a framework that allows for live scripting and client modification using JavaScript.
+  A framework that allows for live scripting and client modification using JavaScript.
   '''
 
 [[dependencies.chattriggers]]

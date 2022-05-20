@@ -5,8 +5,10 @@ plugins {
 }
 
 preprocess {
-    val forge11701 = createNode("1.17.1-forge", 11701, "mcp")
-    val forge10809 = createNode("1.8.9-forge", 10809, "mcp")
+    val fabric11701 = createNode("1.17.1-fabric", 11701, "yarn")
+    val forge11701 = createNode("1.17.1-forge", 11701, "srg")
+    val forge10809 = createNode("1.8.9-forge", 10809, "srg")
 
+    fabric11701.link(forge11701)
     forge11701.link(forge10809, file("versions/1.17.1-1.8.9.txt"))
 }
