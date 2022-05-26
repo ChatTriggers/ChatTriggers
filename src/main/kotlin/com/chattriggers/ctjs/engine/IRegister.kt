@@ -872,6 +872,7 @@ interface IRegister {
         return RegularTrigger(method, TriggerType.BlockBreak, getImplementationLoader())
     }
 
+    // TODO(BREAKING): Remove this (it's just a worse attackentity)
     /**
      * Registers a new trigger that runs before an entity is damaged
      *
@@ -1205,6 +1206,7 @@ interface IRegister {
         return RegularTrigger(method, TriggerType.PostGuiRender, getImplementationLoader())
     }
 
+    // TODO(BREAKING): Remove in favor of slot triggers?
     /**
      * Registers a new trigger that runs before the items in the gui are drawn
      *
@@ -1310,6 +1312,7 @@ interface IRegister {
         return EventTrigger(method, TriggerType.SpawnParticle, getImplementationLoader())
     }
 
+    // TODO(BREAKING): Collapse into left/right click triggers
     /**
      * Registers a new trigger that runs whenever the player has left clicked on an entity
      *
@@ -1327,14 +1330,16 @@ interface IRegister {
         return EventTrigger(method, TriggerType.AttackEntity, getImplementationLoader())
     }
 
+    // TODO(BREAKING): Added Hand argument
     /**
      * Registers a new trigger that runs whenever a block is left clicked
      *
      * Note: this is not continuously called while the block is being broken, only once
-     * when first left clicked.
+     * when first left clicked. The hand argument will always be LEFT in 1.8.9.
      *
      * Passes through two arguments:
      * - The [com.chattriggers.ctjs.minecraft.wrappers.world.block.Block] being hit
+     * - The [com.chattriggers.ctjs.minecraft.wrappers.Player.Hand] used to hit the block
      * - The event, which can be cancelled
      *
      * Available modifications:

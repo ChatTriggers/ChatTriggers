@@ -430,4 +430,9 @@ object Player {
         @JvmStatic
         fun getBoots(): Item? = getInventory()?.getStackInSlot(36)
     }
+
+    enum class Hand {
+        LEFT,
+        RIGHT,
+    }
 }

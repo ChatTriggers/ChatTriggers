@@ -68,7 +68,6 @@ class CTJS {
         listOf(
             WorldListener,
             CPS,
-            GuiHandler,
             ClientListener,
             UpdateChecker,
             MouseListener,

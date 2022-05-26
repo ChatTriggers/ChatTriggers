@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.launch.mixins.transformers.entity;
 //#if MC<=11202
 import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
+import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity;
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockFace;
@@ -30,6 +31,7 @@ public class PlayerControllerMPMixin {
 
         TriggerType.HitBlock.triggerAll(
             World.getBlockAt(loc.getX(), loc.getY(), loc.getZ()).withFace(BlockFace.fromMCEnumFacing(face)),
+            Player.Hand.LEFT,
             event
         );
 

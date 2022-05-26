@@ -173,15 +173,9 @@ object ClientListener {
 
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
-        //#if MC<=11202
-        GlStateManager.pushMatrix()
+        Renderer.pushMatrix()
         handleOverlayTriggers(event)
-        GlStateManager.popMatrix()
-        //#else
-        //$$ event.matrixStack.pushPose()
-        //$$ handleOverlayTriggers(event)
-        //$$ event.matrixStack.popPose()
-        //#endif
+        Renderer.popMatrix()
     }
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
@@ -323,11 +317,7 @@ object ClientListener {
 
     @SubscribeEvent
     fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
-        //#if MC<=11202
-        GlStateManager.pushMatrix()
-        //#else
-        //$$ e.matrixStack.pushPose()
-        //#endif
+        Renderer.pushMatrix()
 
         TriggerType.GuiRender.triggerAll(
             UMouse.Scaled.x,
@@ -335,11 +325,7 @@ object ClientListener {
             e.gui
         )
 
-        //#if MC<=11202
-        GlStateManager.popMatrix()
-        //#else
-        //$$ e.matrixStack.pushPose()
-        //#endif
+        Renderer.popMatrix()
     }
 
     //#if MC<=11202

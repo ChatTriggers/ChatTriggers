@@ -57,6 +57,10 @@ dependencies {
     compileOnly("gg.essential:essential-$platform:2666")
     embed("gg.essential:loader-launchwrapper:1.1.3")
 
+    if (platform.isFabric) {
+        modImplementation("net.fabricmc.fabric-api:fabric-api:0.45.0+1.17")
+    }
+
     compileOnly("org.spongepowered:mixin:0.8.5-SNAPSHOT")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
