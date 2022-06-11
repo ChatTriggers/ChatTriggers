@@ -8,11 +8,16 @@ import com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import gg.essential.api.utils.GuiUtil
 import gg.essential.universal.UKeyboard
-import gg.essential.universal.UMinecraft
 import gg.essential.universal.UMouse
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.*
+import net.minecraft.client.gui.GuiChat
+import net.minecraft.client.gui.GuiMainMenu
+import net.minecraft.client.gui.GuiMultiplayer
+import net.minecraft.client.gui.GuiNewChat
+import net.minecraft.client.gui.GuiPlayerTabOverlay
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.multiplayer.ServerData
+import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
 import kotlin.math.roundToInt
@@ -23,18 +28,19 @@ import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.realms.RealmsBridge
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraft.client.multiplayer.WorldClient
-import org.lwjgl.opengl.Display
 //#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.ChatScreenAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.ChatScreenAccessor
 //$$ import com.mojang.realmsclient.RealmsMainScreen
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
-//$$ import net.minecraft.client.gui.components.ChatComponent
-//$$ import net.minecraft.client.gui.components.PlayerTabOverlay
-//$$ import net.minecraft.client.gui.screens.*
+//$$ import net.minecraft.client.gui.screens.ConnectScreen
+//$$ import net.minecraft.client.gui.screens.GenericDirtMessageScreen
 //$$ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
-//$$ import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen
 //$$ import net.minecraft.client.multiplayer.resolver.ServerAddress
 //$$ import net.minecraft.network.chat.TranslatableComponent
+//#endif
+
+//#if FABRIC
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.HandledScreenAccessor
 //#endif
 
 abstract class Client {
@@ -106,7 +112,11 @@ abstract class Client {
             //#if MC<=11202
             return (screen as? GuiContainer)?.slotUnderMouse?.let(::Slot)
             //#else
+            //#if FORGE
             //$$ return (screen as? AbstractContainerScreen<*>)?.slotUnderMouse?.let(::Slot)
+            //#else
+            //$$ return (screen as? HandledScreen<*>)?.asMixin<HandledScreenAccessor>()?.focusedSlot?.let(::Slot)
+            //#endif
             //#endif
         }
 
@@ -155,7 +165,13 @@ abstract class Client {
          * @return The Minecraft object
          */
         @JvmStatic
-        fun getMinecraft() = UMinecraft.getMinecraft()
+        fun getMinecraft(): Minecraft {
+            //#if MC<=11202
+            return Minecraft.getMinecraft()
+            //#elseif MC>=11701
+            //$$ return Minecraft.getInstance()
+            //#endif
+        }
 
         /**
          * Gets Minecraft's NetHandlerPlayClient object
@@ -163,7 +179,13 @@ abstract class Client {
          * @return The NetHandlerPlayClient object
          */
         @JvmStatic
-        fun getConnection() = UMinecraft.getNetHandler()
+        fun getConnection(): NetHandlerPlayClient? {
+            //#if MC<=11202
+            return getMinecraft().netHandler
+            //#elseif MC>=11701
+            //$$ return getMinecraft().connection
+            //#endif
+        }
 
         /**
          * Schedule's a task to run on Minecraft's main thread in [delay] ticks.
@@ -239,13 +261,14 @@ abstract class Client {
             }
         }
 
+        // TODO(Breaking) Renamed from GUI to Gui
         /**
          * Gets the Minecraft GuiNewChat object for the chat gui
          *
          * @return The GuiNewChat object for the chat gui
          */
         @JvmStatic
-        fun getChatGUI(): GuiNewChat? {
+        fun getChatGui(): GuiNewChat? {
             //#if MC<=11202
             return getMinecraft().ingameGUI?.chatGUI
             //#else
@@ -290,10 +313,9 @@ abstract class Client {
         @JvmStatic
         fun isTabbedIn(): Boolean {
             //#if MC<=11202
-            return Display.isActive()
-            //#else
-            //$$ // TODO(CONVERT)
-            //$$ return true
+            return getMinecraft().inGameHasFocus
+            //#elseif MC>=11701
+            //$$ return getMinecraft().isWindowActive
             //#endif
         }
 

@@ -3,28 +3,28 @@ package com.chattriggers.ctjs.minecraft.libs
 import com.chattriggers.ctjs.launch.mixins.transformers.gui.ChatGuiMixin
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.minecraft.listeners.events.ChatEvent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.utils.kotlin.setChatLineId
 import com.chattriggers.ctjs.utils.kotlin.setRecursive
 import com.chattriggers.ctjs.utils.kotlin.times
-import gg.essential.universal.UPacket
+import gg.essential.universal.ChatColor
+import gg.essential.universal.UChat
 import gg.essential.universal.wrappers.message.UMessage
 import gg.essential.universal.wrappers.message.UTextComponent
-import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 import java.util.regex.Pattern
 import kotlin.math.roundToInt
 
 //#if MC<=11202
 import net.minecraftforge.client.ClientCommandHandler
-typealias MCChatLine = net.minecraft.client.gui.ChatLine
 //#else
 //$$ import com.chattriggers.ctjs.CTJS
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 //$$ import net.minecraft.ChatFormatting
 //$$ import net.minecraft.client.GuiMessage
+//$$ import net.minecraft.network.chat.Component
 //$$ import net.minecraft.network.chat.Style
 //$$ import net.minecraft.network.chat.TextColor
 //$$ import net.minecraft.util.FormattedCharSequence
@@ -87,7 +87,7 @@ object ChatLib {
      * @param text the message to be sent
      */
     @JvmStatic
-    fun say(text: String) = UPacket.sendChatMessage(UTextComponent(text).apply { formatted = false })
+    fun say(text: String) = UChat.say(text)
 
     /**
      * Runs a command.
@@ -116,7 +116,7 @@ object ChatLib {
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
         @Suppress("CAST_NEVER_SUCCEEDS")
-        val gui = Client.getChatGUI() as? ChatGuiMixin
+        val gui = Client.getChatGui() as? ChatGuiMixin
             ?: return
 
         if (chatLineIDs.isEmpty())
@@ -150,9 +150,9 @@ object ChatLib {
     @JvmStatic
     fun getChatWidth(): Int {
         //#if MC<=11202
-        return Client.getChatGUI()?.chatWidth ?: 0
+        return Client.getChatGui()?.chatWidth ?: 0
         //#else
-        //$$ return Client.getChatGUI()?.width ?: 0
+        //$$ return Client.getChatGui()?.width ?: 0
         //#endif
     }
 
@@ -163,9 +163,7 @@ object ChatLib {
      * @return the unformatted string
      */
     @JvmStatic
-    fun removeFormatting(text: String): String {
-        return text.replace("[\u00a7&][0-9a-fk-or]".toRegex(), "")
-    }
+    fun removeFormatting(text: String) = ChatColor.stripControlCodes(text)!!
 
     /**
      * Replaces Minecraft formatted text with normal formatted text
@@ -174,9 +172,7 @@ object ChatLib {
      * @return the unformatted string
      */
     @JvmStatic
-    fun replaceFormatting(text: String): String {
-        return text.replace("\u00a7(?![^0-9a-fk-or]|$)".toRegex(), "&")
-    }
+    fun replaceFormatting(text: String) = text.replace(ChatColor.FORMATTING_CODE_PATTERN, "&")
 
     /**
      * Get a message that will be perfectly centered in chat.
@@ -193,13 +189,7 @@ object ChatLib {
             return text
 
         val spaceWidth = (chatWidth - textWidth) / 2f
-        val spaceBuilder = StringBuilder().apply {
-            repeat((spaceWidth / Renderer.getStringWidth(" ")).roundToInt()) {
-                append(' ')
-            }
-        }
-
-        return spaceBuilder.append(text).toString()
+        return " " * (spaceWidth / Renderer.getStringWidth(" ")).roundToInt() + text
     }
 
     /**
@@ -276,7 +266,7 @@ object ChatLib {
 
     private fun editChat(toReplace: (UMessage) -> Boolean, vararg replacements: UMessage) {
         @Suppress("CAST_NEVER_SUCCEEDS")
-        val chatGui = Client.getChatGUI()!! as ChatGuiMixin
+        val chatGui = Client.getChatGui()!! as ChatGuiMixin
         val drawnChatLines = chatGui.drawnChatLines
         val chatLines = chatGui.chatLines
 
@@ -288,7 +278,7 @@ object ChatLib {
     private fun <T> editChatLineList(
         iterator: ChatLineListIterator<T>,
         toReplace: (UMessage) -> Boolean,
-        vararg replacements: UMessage
+        vararg replacements: UMessage,
     ) {
         while (iterator.hasNext()) {
             val chatLine = iterator.next()
@@ -369,7 +359,7 @@ object ChatLib {
 
     private fun deleteChat(toDelete: (UMessage) -> Boolean) {
         @Suppress("CAST_NEVER_SUCCEEDS")
-        val chatGui = Client.getChatGUI()!! as ChatGuiMixin
+        val chatGui = Client.getChatGui()!! as ChatGuiMixin
         val drawnChatLines = chatGui.drawnChatLines
         val chatLines = chatGui.chatLines
 
@@ -413,9 +403,9 @@ object ChatLib {
     @JvmStatic
     fun addToSentMessageHistory(index: Int = -1, message: String) {
         //#if MC<=11202
-        val sentMessages = Client.getChatGUI()!!.sentMessages
+        val sentMessages = Client.getChatGui()!!.sentMessages
         //#else
-        //$$ val sentMessages = Client.getChatGUI()!!.recentChat
+        //$$ val sentMessages = Client.getChatGui()!!.recentChat
         //#endif
 
         if (index == -1) sentMessages.add(message)
@@ -433,7 +423,7 @@ object ChatLib {
      */
     @JvmOverloads
     @JvmStatic
-    fun getChatMessage(event: ClientChatReceivedEvent, formatted: Boolean = false): String {
+    fun getChatMessage(event: ChatEvent, formatted: Boolean = false): String {
         return if (formatted) {
             replaceFormatting(EventLib.getMessage(event).formattedText)
         } else {
@@ -448,9 +438,7 @@ object ChatLib {
      * @return the formatted message
      */
     @JvmStatic
-    fun addColor(message: String?): String {
-        return message.toString().replace("(?<!\\\\)&(?![^0-9a-fk-or]|$)".toRegex(), "\u00a7")
-    }
+    fun addColor(message: String?) = ChatColor.translateAlternateColorCodes('&', message.toString())
 
     // helper method to make sure player exists before putting something in chat
     fun isPlayer(out: String): Boolean {
@@ -471,7 +459,7 @@ object ChatLib {
     }
 
     abstract class BaseChatLineListIterator<T>(
-        underlyingList: MutableList<T>
+        underlyingList: MutableList<T>,
     ) : MutableListIterator<ChatLine>, ChatLineMapper<T> {
         private val listIterator = underlyingList.listIterator()
 
@@ -499,10 +487,20 @@ object ChatLib {
     }
 
     //#if MC<=11202
-    class ChatLineListIterator<T>(underlyingList: MutableList<MCChatLine>) : BaseChatLineListIterator<MCChatLine>(underlyingList) {
-        override fun toCT(chatLine: MCChatLine) = ChatLine(chatLine.chatLineID, chatLine.updatedCounter, UTextComponent(chatLine.chatComponent))
+    class ChatLineListIterator<T>(
+        underlyingList: MutableList<net.minecraft.client.gui.ChatLine>
+    ) : BaseChatLineListIterator<net.minecraft.client.gui.ChatLine>(underlyingList) {
+        override fun toCT(chatLine: net.minecraft.client.gui.ChatLine) = ChatLine(
+            chatLine.chatLineID,
+            chatLine.updatedCounter,
+            UTextComponent(chatLine.chatComponent)
+        )
 
-        override fun toMC(chatLine: ChatLine) = MCChatLine(chatLine.addedTime, chatLine.component.component, chatLine.id)
+        override fun toMC(chatLine: ChatLine) = net.minecraft.client.gui.ChatLine(
+            chatLine.addedTime,
+            chatLine.component.component,
+            chatLine.id
+        )
     }
     //#else
     //$$ class ChatLineListIterator<T>(
@@ -515,7 +513,7 @@ object ChatLib {
     //$$             val builder = TextBuilder(true)
     //$$             seq.accept(builder)
     //$$             UTextComponent(builder.getString())
-    //$$         } else UTextComponent(chatLine.message as MCITextComponent)
+    //$$         } else UTextComponent(chatLine.message as Component)
     //$$
     //$$         return ChatLine(chatLine.id, chatLine.addedTime, component)
     //$$     }

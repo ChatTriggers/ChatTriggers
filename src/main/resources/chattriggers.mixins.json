@@ -50,6 +50,9 @@
         //$$ "gui.ScreenAccessor",
         //$$ "render.EntityRendererDispatcherMixin",
         //$$ "render.LevelRendererAccessor",
+        //#if FORGE
+        //#else
+        //$$ "gui.HandledScreenAccessor",
         //#endif
     ]
 }
