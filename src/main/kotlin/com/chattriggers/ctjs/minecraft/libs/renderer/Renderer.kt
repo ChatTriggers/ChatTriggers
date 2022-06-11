@@ -8,30 +8,27 @@ import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import gg.essential.elementa.utils.withAlpha
 import gg.essential.universal.UGraphics
-import gg.essential.universal.UMinecraft
 import gg.essential.universal.UResolution
-import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.AbstractClientPlayer
+import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector3f
 import java.awt.Color
-import java.nio.FloatBuffer
 import java.util.*
 import kotlin.math.*
 
 //#if MC<=11202
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
-import net.minecraft.client.renderer.vertex.VertexFormat as MCVertexFormat
 //#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.AbstractClientPlayerAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.entity.AbstractClientPlayerAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import com.mojang.blaze3d.platform.Lighting
-//$$ import com.mojang.blaze3d.vertex.VertexFormat as MCVertexFormat
 //$$ import com.mojang.blaze3d.vertex.PoseStack
 //$$ import com.mojang.blaze3d.systems.RenderSystem
 //$$ import com.mojang.math.Quaternion
@@ -76,7 +73,7 @@ object Renderer {
     private var tessellator = Tessellator.getInstance()
     private var worldRenderer = tessellator.getRenderer()
 
-    private val colorBuffer = FloatBuffer.allocate(4)
+    private val colorBuffer = BufferUtils.createFloatBuffer(16)
 
     //#if MC<=11202
     private val renderManager = getRenderManager()
@@ -167,7 +164,13 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getFontRenderer() = UMinecraft.getFontRenderer()
+    fun getFontRenderer(): FontRenderer {
+        //#if MC<=11202
+        return Client.getMinecraft().fontRendererObj
+        //#elseif MC>=11701
+        //$$ return Client.getMinecraft().font
+        //#endif
+    }
 
     @JvmStatic
     fun getRenderManager(): RenderManager {
@@ -776,9 +779,9 @@ object Renderer {
         }
 
         //#if MC<=11202
-        val xMultiplier = if (UMinecraft.getSettings().thirdPersonView == 2) -1 else 1
+        val xMultiplier = if (Client.settings.getSettings().thirdPersonView == 2) -1 else 1
         //#else
-        //$$ val xMultiplier = if (UMinecraft.getSettings().cameraType == CameraType.THIRD_PERSON_FRONT) -1 else 1
+        //$$ val xMultiplier = if (Client.settings.getSettings().cameraType == CameraType.THIRD_PERSON_FRONT) -1 else 1
         //#endif
 
         val oldColor = getCurrentGlColorAlphaFixed()
@@ -950,11 +953,11 @@ object Renderer {
         //$$
         //$$ Lighting.setupForEntityInInventory()
         //$$
-        //$$ val entityRenderDispatcher = Minecraft.getInstance().entityRenderDispatcher
+        //$$ val entityRenderDispatcher = Client.getMinecraft().entityRenderDispatcher
         //$$ xRot.conj()
         //$$ entityRenderDispatcher.overrideCameraOrientation(xRot)
         //$$ entityRenderDispatcher.setRenderShadow(false)
-        //$$ val lv6 = Minecraft.getInstance().renderBuffers().bufferSource()
+        //$$ val lv6 = Client.getMinecraft().renderBuffers().bufferSource()
         //$$
         //$$ val isSmall = entity.asMixin<AbstractClientPlayerAccessor>().playerInfo.modelName == "slim"
         //$$ val ctRenderPlayer = if (isSmall) slimCTRenderPlayer else normalCTRenderPlayer
@@ -975,19 +978,6 @@ object Renderer {
         //$$ RenderSystem.applyModelViewMatrix()
         //$$ Lighting.setupFor3DItems()
         //#endif
-    }
-
-    fun shapeArea(points: Array<out List<Float>>): Float {
-        var area = 0f
-
-        for (i in points.indices) {
-            val (x1, y1) = points[i]
-            val (x2, y2) = points[(i + 1) % points.size]
-
-            area += x1 * y2 - x2 * y1
-        }
-
-        return area / 2
     }
 
     object screen {
@@ -1015,16 +1005,15 @@ object Renderer {
             //#if MC<=11202
             ordinal
             //#else
-            //$$ MCVertexFormat.Mode.values()[ordinal]
+            //$$ com.mojang.blaze3d.vertex.VertexFormat.Mode.values()[ordinal]
             //#endif
     }
 
-    enum class VertexFormat(val mcVertexFormat: MCVertexFormat) {
+    enum class VertexFormat(val mcVertexFormat: net.minecraft.client.renderer.vertex.VertexFormat) {
         Block(DefaultVertexFormats.BLOCK),
 
         //#if MC<=11202
         Particle(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP),
-
         //#else
         //$$ Particle(DefaultVertexFormat.PARTICLE),
         //#endif

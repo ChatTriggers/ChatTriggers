@@ -113,6 +113,15 @@ class Shape(private var color: Long) {
     }
 
     private fun updateArea() {
-        area = Renderer.shapeArea(vertexes.map { listOf(it.x, it.y) }.toTypedArray())
+        var calculatedArea = 0f
+
+        for (i in vertexes.indices) {
+            val (x1, y1) = vertexes[i]
+            val (x2, y2) = vertexes[(i + 1) % vertexes.size]
+
+            calculatedArea += x1 * y2 - x2 * y1
+        }
+
+        area = calculatedArea / 2
     }
 }
