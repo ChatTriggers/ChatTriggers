@@ -57,7 +57,7 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
         }
     }
 
-    fun click(x: Int, y: Int, width: Float) {
+    fun click(x: Double, y: Double, width: Float) {
         if (x > gui.x && x < gui.x + width
             && y > gui.y && y < gui.y + 13
         ) {
