@@ -15,6 +15,9 @@
         "issues": "https://github.com/ChatTriggers/ChatTriggers/issues"
     },
     "entrypoints": {
+        "preLaunch": [
+            "gg.essential.loader.stage0.EssentialSetupPreLaunch"
+        ],
         "client": ["com.chattriggers.ctjs.CTJS"]
     },
     "mixins": ["chattriggers.mixins.json"]
