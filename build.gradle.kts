@@ -19,7 +19,7 @@ loom {
             ideConfigGenerated(true)
         }
     }
-    if (project.platform.isForge) {
+    if (isForge) {
         forge {
             accessTransformer(rootProject.file("src/main/resources/$accessTransformerName"))
         }
@@ -33,7 +33,9 @@ loom {
             property("mixin.debug.export", "true")
             property("mixin.dumpTargetOnFailure", "true")
 
-            if (isForge && mcMinor <= 12)
+            arg("--mixin", "chattriggers.mixins.json")
+
+            if (isForge)
                 arg("--tweakClass", "gg.essential.loader.stage0.EssentialSetupTweaker")
         }
     }
@@ -55,9 +57,12 @@ repositories {
 
 dependencies {
     compileOnly("gg.essential:essential-$platform:2666")
-    embed("gg.essential:loader-launchwrapper:1.1.3")
+
+    if (isForge && mcMinor <= 12)
+        embed("gg.essential:loader-launchwrapper:1.1.3")
 
     if (platform.isFabric) {
+        modImplementation(embed("gg.essential:loader-fabric:1.0.0")!!)
         modImplementation("net.fabricmc.fabric-api:fabric-api:0.45.0+1.17")
     }
 
@@ -71,6 +76,10 @@ dependencies {
 
 tasks.processResources {
     rename("(.+_at.cfg)", "META-INF/$1")
+
+    filesMatching("META-INF/mods.toml") {
+        expand("version" to project.version)
+    }
 }
 
 tasks.jar {
