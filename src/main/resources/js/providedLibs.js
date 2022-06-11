@@ -167,14 +167,7 @@
         Console.println(toPrint, LogType.INFO, end, color);
     };
 
-    global.cancel = event => {
-        try {
-            EventLib.cancel(event);
-        } catch (err) {
-            if (event.isCancelable())
-                event.setCanceled(true);
-        }
-    };
+    global.cancel = event => EventLib.cancel(event);
 
     global.register = (type, method) => TriggerRegister.register(type, method);
 

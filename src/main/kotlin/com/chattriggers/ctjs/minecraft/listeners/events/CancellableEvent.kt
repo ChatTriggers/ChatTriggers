@@ -1,10 +1,10 @@
-package com.chattriggers.ctjs.minecraft.listeners
+package com.chattriggers.ctjs.minecraft.listeners.events
 
 //#if FABRIC
 //$$ import net.minecraft.util.ActionResult
 //#endif
 
-class CancellableEvent {
+open class CancellableEvent {
     private var cancelled = false
 
     @JvmOverloads

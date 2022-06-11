@@ -9,7 +9,6 @@ import java.util.List;
 //#if MC<=11202
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiNewChat;
-import org.spongepowered.asm.mixin.gen.Accessor;
 //#else
 //$$ import net.minecraft.client.gui.components.ChatComponent;
 //$$ import net.minecraft.client.GuiMessage;
@@ -39,7 +38,7 @@ public abstract class ChatGuiMixin {
     }
 
     public ChatLib.ChatLineListIterator<ChatLine> getDrawnChatLines() {
-        return new ChatLib.ChatLineListIterator<>(this.chatLines);
+        return new ChatLib.ChatLineListIterator<>(this.drawnChatLines);
     }
 
     public void clearMessages() {
