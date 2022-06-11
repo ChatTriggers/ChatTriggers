@@ -11,6 +11,7 @@
         "entity.EntityPlayerAccessor",
         "entity.PlayerTabOverlayAccessor",
         "gui.ChatGuiMixin",
+        "gui.GuiButtonAccessor",
         "render.RenderPlayerMixin",
         //#if MC<=11202
         "CommandHandlerAccessor",

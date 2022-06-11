@@ -5,18 +5,10 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import net.minecraft.client.gui.GuiScreen
+import gg.essential.universal.UMatrixStack
+import gg.essential.universal.UScreen
 
-//#if MC>=11701
-//$$ import com.mojang.blaze3d.vertex.PoseStack
-//$$ import gg.essential.universal.wrappers.message.UTextComponent
-//#endif
-
-//#if MC<=11202
-object ModulesGui : GuiScreen() {
-//#else
-//$$ object ModulesGui : Screen(UTextComponent("")) {
-//#endif
+object ModulesGui : UScreen() {
     private val window = object {
         var title = Text("Modules").setScale(2f).setShadow(true)
         var exit = Text(ChatLib.addColor("&cx")).setScale(2f)
@@ -25,7 +17,7 @@ object ModulesGui : GuiScreen() {
     }
 
     init {
-        MouseListener.registerScrollListener { x, y, delta ->
+        MouseListener.registerScrollListener { _, _, delta ->
             window.scroll += delta / 10
         }
     }
@@ -36,20 +28,12 @@ object ModulesGui : GuiScreen() {
     //$$ override fun isPauseScreen() = false
     //#endif
 
-    //#if MC<=11202
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.drawScreen(mouseX, mouseY, partialTicks)
-    //#else
-    //$$ override fun render(matrixStack: PoseStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
-    //$$     super.render(matrixStack, mouseX, mouseY, partialTicks)
-    //$$     Renderer.withMatrixStack(matrixStack) {
-    //#endif
-
+    override fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        super.onDrawScreen(matrixStack, mouseX, mouseY, partialTicks)
         Renderer.pushMatrix()
 
         val middle = Renderer.screen.getWidth() / 2f
-        var width = Renderer.screen.getWidth() - 100f
-        if (width > 500) width = 500f
+        val width = (Renderer.screen.getWidth() - 100f).coerceAtMost(500f)
 
         Renderer.drawRect(
             0f,
@@ -80,25 +64,12 @@ object ModulesGui : GuiScreen() {
         }
 
         Renderer.popMatrix()
-
-        //#if MC>=11701
-        //$$ }
-        //#endif
     }
 
-    //#if MC<=11202
-    override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseClicked(mouseX, mouseY, button)
-    //#else
-    //$$ override fun mouseClicked(mouseX_: Double, mouseY_: Double, button: Int): Boolean {
-    //$$     if (!super.mouseClicked(mouseX_, mouseY_, button))
-    //$$         return false
-    //$$     val mouseX = mouseX_.toInt()
-    //$$     val mouseY = mouseY_.toInt()
-    //#endif
+    override fun onMouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int) {
+        super.onMouseClicked(mouseX, mouseY, mouseButton)
 
-        var width = Renderer.screen.getWidth() - 100f
-        if (width > 500) width = 500f
+        val width = (Renderer.screen.getWidth() - 100f).coerceAtMost(500f)
 
         if (mouseX > Renderer.screen.getWidth() - 20 && mouseY > Renderer.screen.getHeight() - 20) {
             window.scroll = 0f
@@ -111,9 +82,5 @@ object ModulesGui : GuiScreen() {
                 it.click(mouseX, mouseY, width)
             }
         }
-
-        //#if MC>=11701
-        //$$ return true
-        //#endif
     }
 }

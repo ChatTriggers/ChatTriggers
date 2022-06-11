@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiButtonAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
@@ -8,25 +9,22 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.RegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import gg.essential.api.utils.GuiUtil
 import gg.essential.universal.UKeyboard
+import gg.essential.universal.UMatrixStack
+import gg.essential.universal.UScreen
 import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiScreen
 
 //#if MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.ScreenAccessor
-//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.ScreenAccessor
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
 //$$ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
 //$$ import net.minecraft.network.chat.TranslatableComponent
 //$$ import com.mojang.blaze3d.vertex.PoseStack
 //#endif
 
-//#if MC<=11202
-abstract class Gui : GuiScreen() {
-    //#else
-//$$ abstract class Gui : Screen(TranslatableComponent("")) {
-//#endif
+abstract class Gui : UScreen() {
     private var onDraw: RegularTrigger? = null
     private var onClick: RegularTrigger? = null
     private var onScroll: RegularTrigger? = null
@@ -190,37 +188,18 @@ abstract class Gui : GuiScreen() {
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    //#if MC<=11202
-    override fun mouseClicked(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseClicked(mouseX, mouseY, button)
-        onClick?.trigger(arrayOf(mouseX, mouseY, button))
+    override fun onMouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int) {
+        super.onMouseClicked(mouseX, mouseY, mouseButton)
+        onClick?.trigger(arrayOf(mouseX, mouseY, mouseButton))
     }
-    //#else
-    //$$ override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-    //$$     if (!super.mouseClicked(mouseX, mouseY, button))
-    //$$         return false
-    //$$     onClick?.trigger(arrayOf(mouseX, mouseY, button))
-    //$$     return true
-    //$$ }
-    //#endif
-
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    //#if MC<=11202
-    override fun mouseReleased(mouseX: Int, mouseY: Int, button: Int) {
-        super.mouseReleased(mouseX, mouseY, button)
-        onMouseReleased?.trigger(arrayOf(mouseX, mouseY, button))
+    override fun onMouseReleased(mouseX: Double, mouseY: Double, state: Int) {
+        super.onMouseReleased(mouseX, mouseY, state)
+        onMouseReleased?.trigger(arrayOf(mouseX, mouseY, state))
     }
-    //#else
-    //$$ override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
-    //$$     if (!super.mouseReleased(mouseX, mouseY, button))
-    //$$         return false
-    //$$     onMouseReleased?.trigger(arrayOf(mouseX, mouseY, button))
-    //$$     return true
-    //$$ }
-    //#endif
 
     /**
      * Internal method to run trigger. Not meant for public use
@@ -235,48 +214,29 @@ abstract class Gui : GuiScreen() {
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    //#if MC<=11202
-    override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
-        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
+    override fun onMouseDragged(x: Double, y: Double, clickedButton: Int, timeSinceLastClick: Long) {
+        super.onMouseDragged(x, y, clickedButton, timeSinceLastClick)
         // TODO(BREAKING): Remove timeSinceLastClicked
-        onMouseDragged?.trigger(arrayOf(mouseX, mouseY, clickedMouseButton))
+        onMouseDragged?.trigger(arrayOf(mouseX, mouseY, clickedButton))
     }
-    //#else
-    //$$ override fun mouseDragged(mouseX: Double, mouseY: Double, clickedMouseButton: Int, dx: Double, dy: Double): Boolean {
-    //$$     if (!super.mouseDragged(mouseX, mouseY, clickedMouseButton, dx, dy))
-    //$$         return false
-    //$$     onMouseDragged?.trigger(arrayOf(mouseX, mouseY, clickedMouseButton))
-    //$$     return true
-    //$$ }
-    //#endif
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    //#if MC<=11202
-    override fun initGui() {
-        super.initGui()
+    override fun initScreen(width: Int, height: Int) {
+        super.initScreen(width, height)
+        //#if MC<=11202
         buttonList.addAll(buttons)
+        //#elseif MC>=11701
+        //$$ buttons.values.forEach(::addWidget)
+        //#endif
     }
-    //#else
-    //$$ override fun init() {
-    //$$     super.init()
-    //$$     buttons.values.forEach(::addWidget)
-    //$$ }
-    //#endif
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    //#if MC<=11202
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.drawScreen(mouseX, mouseY, partialTicks)
-        //#else
-        //$$ override fun render(stack: PoseStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        //$$     super.render(stack, mouseX, mouseY, partialTicks)
-        //$$     Renderer.withMatrixStack(stack) {
-        //#endif
-
+    override fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        super.onDrawScreen(matrixStack, mouseX, mouseY, partialTicks)
         Renderer.partialTicks = partialTicks
         Renderer.pushMatrix()
 
@@ -286,28 +246,15 @@ abstract class Gui : GuiScreen() {
         onDraw?.trigger(arrayOf(mouseX, mouseY, partialTicks))
 
         Renderer.popMatrix()
-
-        //#if MC>=11701
-        //$$ }
-        //#endif
     }
 
     /**
      * Internal method to run trigger. Not meant for public use
      */
-    //#if MC<=11202
-    override fun keyTyped(typedChar: Char, keyCode: Int) {
-        super.keyTyped(typedChar, keyCode)
+    override fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
+        super.onKeyPressed(keyCode, typedChar, modifiers)
         onKeyTyped?.trigger(arrayOf(typedChar, keyCode))
     }
-    //#else
-    //$$ override fun keyPressed(key: Int, scanCode: Int, modifiers: Int): Boolean {
-    //$$     if (!super.keyPressed(key, scanCode, modifiers))
-    //$$         return false
-    //$$     onKeyTyped?.trigger(arrayOf(key.toChar(), scanCode))
-    //$$     return true
-    //$$ }
-    //#endif
 
     /**
      * Internal method to run trigger. Not meant for public use
@@ -465,7 +412,7 @@ abstract class Gui : GuiScreen() {
      * @return the Gui for method chaining
      */
     fun setButtonHeight(buttonId: Int, height: Int) = apply {
-        getButton(buttonId)?.height = height
+        getButton(buttonId)?.asMixin<GuiButtonAccessor>()?.setHeight(height)
     }
 
     fun getButtonX(buttonId: Int): Int {
