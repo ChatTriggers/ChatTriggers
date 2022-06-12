@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.launch.mixins.transformers.render;
 
 //#if MC<=11202
-import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
+import com.chattriggers.ctjs.minecraft.listeners.events.CancellableEvent;
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Particle;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.particle.EffectRenderer;
@@ -25,7 +25,8 @@ public class EffectRendererMixin {
         locals = LocalCapture.CAPTURE_FAILHARD,
         cancellable = true
     )
-    void injectSpawnEffectParticle(
+    @SuppressWarnings("InvalidInjectorMethodSignature")
+    private void chattriggers_spawnParticleTrigger(
         int particleId,
         double xCoord,
         double yCoord,

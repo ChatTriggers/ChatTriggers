@@ -1,8 +1,7 @@
 package com.chattriggers.ctjs.launch.mixins.transformers.entity;
 
 //#if MC<=11202
-import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
-import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
+import com.chattriggers.ctjs.minecraft.listeners.events.CancellableEvent;
 import com.chattriggers.ctjs.minecraft.wrappers.Player;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity;
@@ -21,12 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerControllerMP.class)
 public class PlayerControllerMPMixin {
     @Inject(method = "attackEntity", at = @At("HEAD"), cancellable = true)
-    void injectAttackEntity(EntityPlayer playerIn, net.minecraft.entity.Entity targetEntity, CallbackInfo ci) {
+    private void chattriggers_attackEntityTrigger(EntityPlayer playerIn, net.minecraft.entity.Entity targetEntity, CallbackInfo ci) {
         TriggerType.AttackEntity.triggerAll(new Entity(targetEntity), ci);
     }
 
     @Inject(method = "clickBlock", at = @At("HEAD"), cancellable = true)
-    void injectClickBlock(BlockPos loc, EnumFacing face, CallbackInfoReturnable<Boolean> cir) {
+    private void chattriggers_hitBlockTrigger(BlockPos loc, EnumFacing face, CallbackInfoReturnable<Boolean> cir) {
         CancellableEvent event = new CancellableEvent();
 
         TriggerType.HitBlock.triggerAll(
@@ -40,7 +39,7 @@ public class PlayerControllerMPMixin {
     }
 
     @Inject(method = "onPlayerDestroyBlock", at = @At("HEAD"))
-    void injectOnPlayerDestroyBlock(BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> cir) {
+    private void chattriggers_blockBreakTrigger(BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> cir) {
         TriggerType.BlockBreak.triggerAll(
             World.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).withFace(BlockFace.fromMCEnumFacing(side))
         );

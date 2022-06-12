@@ -13,6 +13,7 @@
         "NetHandlerLoginClientMixin",
         "NetHandlerPlayClientMixin",
         "NetworkManagerAccessor",
+        "ScreenShotHelperMixin",
         "entity.EntityItemMixin",
         "entity.EntityLivingBaseMixin",
         "entity.EntityPlayerMixin",

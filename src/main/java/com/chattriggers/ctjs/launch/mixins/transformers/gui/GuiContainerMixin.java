@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.launch.mixins.transformers.gui;
 
 //#if MC<=11202
-import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
+import com.chattriggers.ctjs.minecraft.listeners.events.CancellableEvent;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,7 +19,7 @@ public class GuiContainerMixin {
     private Slot theSlot;
 
     @Inject(method = "drawSlot", at = @At("HEAD"), cancellable = true)
-    void injectDrawSlot(Slot slotIn, CallbackInfo ci) {
+    private void chattriggers_renderSlotTrigger(Slot slotIn, CallbackInfo ci) {
         GlStateManager.pushMatrix();
         TriggerType.RenderSlot.triggerAll(new com.chattriggers.ctjs.minecraft.wrappers.inventory.Slot(slotIn), this, ci);
         GlStateManager.popMatrix();
@@ -32,7 +32,7 @@ public class GuiContainerMixin {
             target = "Lnet/minecraft/client/gui/inventory/GuiContainer;drawGuiContainerForegroundLayer(II)V"
         )
     )
-    void injectDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+    private void chattriggers_preItemRenderTrigger(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         if (theSlot != null) {
             GlStateManager.pushMatrix();
             // TODO(BREAKING): Wrap this in a CT slot
@@ -48,7 +48,7 @@ public class GuiContainerMixin {
             target = "Lnet/minecraft/client/gui/inventory/GuiContainer;drawGradientRect(IIIIII)V"
         )
     )
-    void drawScreenProxy(GuiContainer instance, int left, int top, int right, int bottom, int startColor, int endColor, int mouseX, int mouseY, float partialTicks) {
+    private void chattriggers_renderSlotHighlightTrigger(GuiContainer instance, int left, int top, int right, int bottom, int startColor, int endColor, int mouseX, int mouseY, float partialTicks) {
         if (theSlot != null) {
             CancellableEvent event = new CancellableEvent();
 

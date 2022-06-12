@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.launch.mixins.transformers.render;
 
 //#if MC<=11202
-import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent;
+import com.chattriggers.ctjs.minecraft.listeners.events.CancellableEvent;
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(RenderManager.class)
 public class RenderManagerMixin {
     @Inject(method = "doRenderEntity", at = @At("HEAD"), cancellable = true)
-    void injectDoRenderEntityPre(
+    private void chattriggers_renderEntityTrigger(
         net.minecraft.entity.Entity entity,
         double x,
         double y,
@@ -41,7 +41,7 @@ public class RenderManagerMixin {
         method = "doRenderEntity",
         at = @At(value = "RETURN", ordinal = 1)
     )
-    void injectDoRenderEntityPost(
+    private void chattriggers_postRenderEntityTrigger(
         net.minecraft.entity.Entity entity,
         double x,
         double y,
