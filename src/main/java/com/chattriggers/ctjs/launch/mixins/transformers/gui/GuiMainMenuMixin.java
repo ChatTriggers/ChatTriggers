@@ -12,12 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GuiMainMenuMixin {
     @Inject(
         method = "drawScreen",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;II)V"
-        )
+        at = @At("TAIL")
     )
-    void injectDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+    private void chattriggers_drawUpdateMessage(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         UpdateChecker.INSTANCE.drawUpdateMessage();
     }
 }

@@ -17,7 +17,7 @@ public class TileEntityRendererDispatcherMixin {
         at = @At("HEAD"),
         cancellable = true
     )
-    void injectRenderTileEntityAtPre(
+    private void chattriggers_renderTileEntityTrigger(
         net.minecraft.tileentity.TileEntity tileEntityIn,
         double x,
         double y,
@@ -38,7 +38,7 @@ public class TileEntityRendererDispatcherMixin {
         method = "renderTileEntityAt(Lnet/minecraft/tileentity/TileEntity;DDDFI)V",
         at = @At("TAIL")
     )
-    void injectRenderTileEntityAtPost(
+    private void chattriggers_postRenderTileEntityTrigger(
         net.minecraft.tileentity.TileEntity tileEntityIn,
         double x,
         double y,

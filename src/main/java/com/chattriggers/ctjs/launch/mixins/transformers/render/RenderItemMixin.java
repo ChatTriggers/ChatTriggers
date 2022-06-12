@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderItem.class)
 public class RenderItemMixin {
     @Inject(method = "renderItemAndEffectIntoGUI", at = @At("HEAD"), cancellable = true)
-    void injectRenderItemAndEffectIntoGUI(ItemStack stack, int xPosition, int yPosition, CallbackInfo ci) {
+    private void chattriggers_renderItemIntoGuiTrigger(ItemStack stack, int xPosition, int yPosition, CallbackInfo ci) {
         if (stack != null) {
             GlStateManager.pushMatrix();
             TriggerType.RenderItemIntoGui.triggerAll(new Item(stack), xPosition, yPosition, ci);
@@ -24,7 +24,7 @@ public class RenderItemMixin {
     }
 
     @Inject(method = "renderItemOverlayIntoGUI", at = @At("HEAD"), cancellable = true)
-    void injectRenderItemOverlayIntoGUI(FontRenderer fr, ItemStack stack, int xPosition, int yPosition, String text, CallbackInfo ci) {
+    private void chattriggers_renderItemOverlayIntoGuiTrigger(FontRenderer fr, ItemStack stack, int xPosition, int yPosition, String text, CallbackInfo ci) {
         if (stack != null) {
             GlStateManager.pushMatrix();
             TriggerType.RenderItemOverlayIntoGui.triggerAll(new Item(stack), xPosition, yPosition, ci);
