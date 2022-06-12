@@ -4,10 +4,6 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Inventory
 
-//#if MC>=11701
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
-//#endif
-
 abstract class Action(var slot: Int, var windowId: Int) {
     fun setSlot(slot: Int) = apply {
         this.slot = slot
@@ -30,7 +26,7 @@ abstract class Action(var slot: Int, var windowId: Int) {
         )
     }
     //#else
-    //$$ protected fun doClick(button: Int, mode: MCClickType) {
+    //$$ protected fun doClick(button: Int, mode: net.minecraft.world.inventory.ClickType) {
     //$$     Client.getMinecraft().gameMode?.handleInventoryMouseClick(
     //$$         windowId,
     //$$         slot,

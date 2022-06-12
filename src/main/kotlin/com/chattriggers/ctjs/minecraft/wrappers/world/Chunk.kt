@@ -2,8 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.world
 
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
-import com.chattriggers.ctjs.utils.kotlin.MCChunk
+import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 
 //#if MC<=11202
 import net.minecraft.world.EnumSkyBlock
@@ -14,7 +13,7 @@ import net.minecraft.world.EnumSkyBlock
 //$$ import net.minecraft.world.level.chunk.ProtoChunk
 //#endif
 
-class Chunk(val chunk: MCChunk) {
+class Chunk(val chunk: net.minecraft.world.chunk.Chunk) {
     /**
      * Gets the x position of the chunk
      */
@@ -61,9 +60,9 @@ class Chunk(val chunk: MCChunk) {
      */
     fun getSkyLightLevel(x: Int, y: Int, z: Int): Int {
         //#if MC<=11202
-        return chunk.getLightFor(EnumSkyBlock.SKY, MCBlockPos(x, y, z))
+        return chunk.getLightFor(EnumSkyBlock.SKY, BlockPos(x, y, z).toMCBlock())
         //#else
-        //$$ return World.getWorld()?.lightEngine?.getLayerListener(LightLayer.SKY)?.getLightValue(MCBlockPos(x, y, z)) ?: 0
+        //$$ return World.getWorld()?.lightEngine?.getLayerListener(LightLayer.SKY)?.getLightValue(BlockPos(x, y, z).toMCBlock()) ?: 0
         //#endif
     }
 
@@ -77,9 +76,9 @@ class Chunk(val chunk: MCChunk) {
      */
     fun getBlockLightLevel(x: Int, y: Int, z: Int): Int {
         //#if MC<=11202
-        return chunk.getLightFor(EnumSkyBlock.BLOCK, MCBlockPos(x, y, z))
+        return chunk.getLightFor(EnumSkyBlock.BLOCK, BlockPos(x, y, z).toMCBlock())
         //#else
-        //$$ return World.getWorld()?.lightEngine?.getLayerListener(LightLayer.BLOCK)?.getLightValue(MCBlockPos(x, y, z)) ?: 0
+        //$$ return World.getWorld()?.lightEngine?.getLayerListener(LightLayer.BLOCK)?.getLightValue(BlockPos(x, y, z).toMCBlock()) ?: 0
         //#endif
     }
 

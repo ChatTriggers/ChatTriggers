@@ -1,12 +1,10 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory
 
-import com.chattriggers.ctjs.utils.kotlin.MCSlot
-
 //#if MC<=11202
 import net.minecraft.client.gui.inventory.GuiContainerCreative.CreativeSlot
 //#endif
 
-class Slot(val mcSlot: MCSlot) {
+class Slot(val mcSlot: net.minecraft.inventory.Slot) {
     fun getIndex(): Int {
         //#if MC<=11202
         return if (mcSlot is CreativeSlot) {
@@ -15,7 +13,11 @@ class Slot(val mcSlot: MCSlot) {
             mcSlot.slotNumber
         }
         //#else
+        //#if FORGE
         //$$ return mcSlot.slotIndex
+        //#else
+        //$$ return mcSlot.index
+        //#endif
         //#endif
     }
 

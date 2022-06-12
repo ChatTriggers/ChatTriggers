@@ -1,7 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
-import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 
 //#if MC<=11202
@@ -11,7 +9,7 @@ import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagListAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //#endif
 
-class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
+class NBTTagList(override val rawNBT: net.minecraft.nbt.NBTTagList) : NBTBase(rawNBT) {
     val tagCount: Int
         get() {
             //#if MC<=11202
@@ -23,7 +21,7 @@ class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
 
     fun appendTag(nbt: NBTBase) = appendTag(nbt.rawNBT)
 
-    fun appendTag(nbt: MCNBTBase) = apply {
+    fun appendTag(nbt: net.minecraft.nbt.NBTBase) = apply {
         //#if MC<=11202
         rawNBT.appendTag(nbt)
         //#else
@@ -33,13 +31,13 @@ class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
 
     operator fun set(id: Int, nbt: NBTBase) = set(id, nbt.rawNBT)
 
-    operator fun set(id: Int, nbt: MCNBTBase) = apply {
+    operator fun set(id: Int, nbt: net.minecraft.nbt.NBTBase) = apply {
         rawNBT.set(id, nbt)
     }
 
     fun insertTag(index: Int, nbt: NBTBase) = insertTag(index, nbt.rawNBT)
 
-    fun insertTag(index: Int, nbt: MCNBTBase) = apply {
+    fun insertTag(index: Int, nbt: net.minecraft.nbt.NBTBase) = apply {
         //#if MC<=11202
         rawNBT.asMixin<NBTTagListAccessor>().tagList.add(index, nbt)
         //#else

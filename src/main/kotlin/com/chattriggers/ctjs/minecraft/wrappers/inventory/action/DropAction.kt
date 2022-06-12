@@ -1,10 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.action
 
-
-//#if MC>10809
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
-//#endif
-
 class DropAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     private var holdingCtrl = false
 
@@ -25,7 +20,7 @@ class DropAction(slot: Int, windowId: Int) : Action(slot, windowId) {
             //#if MC<=10809
             4
             //#else
-            //$$ MCClickType.THROW
+            //$$ net.minecraft.world.inventory.ClickType.THROW
             //#endif
         )
     }

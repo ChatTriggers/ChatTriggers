@@ -3,9 +3,8 @@ package com.chattriggers.ctjs.minecraft.wrappers.entity
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
-import com.chattriggers.ctjs.utils.kotlin.MCTileEntity
 
-class TileEntity(val tileEntity: MCTileEntity) {
+class TileEntity(val tileEntity: net.minecraft.tileentity.TileEntity) {
     fun getX(): Int = getBlock().x
 
     fun getY(): Int = getBlock().y

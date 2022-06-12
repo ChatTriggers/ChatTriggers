@@ -4,18 +4,20 @@ import com.fasterxml.jackson.core.Version
 import gg.essential.universal.wrappers.message.UMessage
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.resources.I18n
+import net.minecraft.util.ChatStyle
+import net.minecraft.util.IChatComponent
 import org.mozilla.javascript.NativeObject
 
-//#if MC<=10809
-fun MCITextComponent.getStyling() = chatStyle
-fun MCTextStyle.getClick() = chatClickEvent
-fun MCTextStyle.getHover() = chatHoverEvent
+//#if MC<=11202
+fun IChatComponent.getStyling() = chatStyle
+fun ChatStyle.getClick() = chatClickEvent
+fun ChatStyle.getHover() = chatHoverEvent
 fun Tessellator.getRenderer() = worldRenderer
 fun String.i18Format(vararg objects: Any) = I18n.format(this, *objects)
-//#else
-//$$ fun MCITextComponent.getStyling() = style
-//$$ fun MCTextStyle.getClick() = clickEvent
-//$$ fun MCTextStyle.getHover() = hoverEvent
+//#elseif MC>=11701
+//$$ fun Component.getStyling() = style
+//$$ fun Style.getClick() = clickEvent
+//$$ fun Style.getHover() = hoverEvent
 //$$ fun Tesselator.getRenderer() = builder
 //$$ fun String.i18Format(vararg objects: Any) = I18n.get(this, *objects)
 //#endif
@@ -23,6 +25,7 @@ fun String.i18Format(vararg objects: Any) = I18n.format(this, *objects)
 fun UMessage.setChatLineId(id: Int) = apply {
     chatLineId = id
 }
+
 fun UMessage.setRecursive(recursive: Boolean) = apply {
     isRecursive = recursive
 }

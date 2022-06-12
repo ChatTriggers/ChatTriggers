@@ -1,10 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.action
 
-
-//#if MC>10809
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
-//#endif
-
 class KeyAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     private var key: Int = -1
 
@@ -24,7 +19,7 @@ class KeyAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         //#if MC<=10809
         doClick(key, 2)
         //#else
-        //$$ doClick(key, MCClickType.SWAP)
+        //$$ doClick(key, net.minecraft.world.inventory.ClickType.SWAP)
         //#endif
     }
 }

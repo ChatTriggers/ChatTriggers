@@ -2,15 +2,9 @@ package com.chattriggers.ctjs.minecraft.wrappers.entity
 
 import com.chattriggers.ctjs.minecraft.wrappers.world.PotionEffect
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.MCEntity
-import com.chattriggers.ctjs.utils.kotlin.MCEntityLivingBase
 import net.minecraft.potion.Potion
 
-//#if MC>=11701
-//$$ import net.minecraft.world.entity.EquipmentSlot as MCEquipmentSlot
-//#endif
-
-open class EntityLivingBase(val entityLivingBase: MCEntityLivingBase) : Entity(entityLivingBase) {
+open class EntityLivingBase(val entityLivingBase: net.minecraft.entity.EntityLivingBase) : Entity(entityLivingBase) {
     fun addPotionEffect(effect: PotionEffect) {
         //#if MC<=11202
         entityLivingBase.addPotionEffect(effect.effect)
@@ -35,7 +29,7 @@ open class EntityLivingBase(val entityLivingBase: MCEntityLivingBase) : Entity(e
         //#endif
     }
 
-    fun canSeeEntity(other: MCEntity): Boolean {
+    fun canSeeEntity(other: net.minecraft.entity.Entity): Boolean {
         //#if MC<=11202
         return entityLivingBase.canEntityBeSeen(other)
         //#else
@@ -129,13 +123,13 @@ open class EntityLivingBase(val entityLivingBase: MCEntityLivingBase) : Entity(e
         Head(4),
     }
     //#else
-    //$$ enum class EquipmentSlot(val mcValue: MCEquipmentSlot) {
-    //$$     MainHand(MCEquipmentSlot.MAINHAND),
-    //$$     OffHand(MCEquipmentSlot.OFFHAND),
-    //$$     Feet(MCEquipmentSlot.FEET),
-    //$$     Legs(MCEquipmentSlot.LEGS),
-    //$$     Chest(MCEquipmentSlot.CHEST),
-    //$$     Head(MCEquipmentSlot.HEAD),
+    //$$ enum class EquipmentSlot(val mcValue: net.minecraft.world.entity.EquipmentSlot) {
+    //$$     MainHand(net.minecraft.world.entity.EquipmentSlot.MAINHAND),
+    //$$     OffHand(net.minecraft.world.entity.EquipmentSlot.OFFHAND),
+    //$$     Feet(net.minecraft.world.entity.EquipmentSlot.FEET),
+    //$$     Legs(net.minecraft.world.entity.EquipmentSlot.LEGS),
+    //$$     Chest(net.minecraft.world.entity.EquipmentSlot.CHEST),
+    //$$     Head(net.minecraft.world.entity.EquipmentSlot.HEAD),
     //$$ }
     //#endif
 }

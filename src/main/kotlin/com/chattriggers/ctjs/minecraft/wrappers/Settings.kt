@@ -1,13 +1,16 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
+import net.minecraft.client.audio.SoundCategory
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.world.EnumDifficulty
 
 //#if MC>=11701
-//$$ import net.minecraft.client.*
+//$$ import net.minecraft.client.AmbientOcclusionStatus
+//$$ import net.minecraft.client.CloudStatus
+//$$ import net.minecraft.client.GraphicsStatus
+//$$ import net.minecraft.client.ParticleStatus
 //$$ import net.minecraft.world.entity.player.ChatVisiblity
 //#endif
 
@@ -100,7 +103,7 @@ class Settings {
     }
 
     val sound = object {
-        private fun getCategoryVolume(category: MCSoundCategory): Float {
+        private fun getCategoryVolume(category: SoundCategory): Float {
             //#if MC<=11202
             return getSettings().getSoundLevel(category)
             //#else
@@ -108,7 +111,7 @@ class Settings {
             //#endif
         }
 
-        private fun setCategoryVolume(category: MCSoundCategory, volume: Float) {
+        private fun setCategoryVolume(category: SoundCategory, volume: Float) {
             //#if MC<=11202
             getSettings().setSoundLevel(category, volume)
             //#else
@@ -116,49 +119,49 @@ class Settings {
             //#endif
         }
 
-        fun getMasterVolume() = getCategoryVolume(MCSoundCategory.MASTER)
+        fun getMasterVolume() = getCategoryVolume(SoundCategory.MASTER)
 
-        fun setMasterVolume(level: Float) = setCategoryVolume(MCSoundCategory.MASTER, level)
+        fun setMasterVolume(level: Float) = setCategoryVolume(SoundCategory.MASTER, level)
 
-        fun getMusicVolume() = getCategoryVolume(MCSoundCategory.MUSIC)
+        fun getMusicVolume() = getCategoryVolume(SoundCategory.MUSIC)
 
-        fun setMusicVolume(level: Float) = setCategoryVolume(MCSoundCategory.MUSIC, level)
+        fun setMusicVolume(level: Float) = setCategoryVolume(SoundCategory.MUSIC, level)
 
-        fun getNoteblockVolume() = getCategoryVolume(MCSoundCategory.RECORDS)
+        fun getNoteblockVolume() = getCategoryVolume(SoundCategory.RECORDS)
 
-        fun setNoteblockVolume(level: Float) = setCategoryVolume(MCSoundCategory.RECORDS, level)
+        fun setNoteblockVolume(level: Float) = setCategoryVolume(SoundCategory.RECORDS, level)
 
-        fun getWeather() = getCategoryVolume(MCSoundCategory.WEATHER)
+        fun getWeather() = getCategoryVolume(SoundCategory.WEATHER)
 
-        fun setWeather(level: Float) = setCategoryVolume(MCSoundCategory.WEATHER, level)
+        fun setWeather(level: Float) = setCategoryVolume(SoundCategory.WEATHER, level)
 
-        fun getBlocks() = getCategoryVolume(MCSoundCategory.BLOCKS)
+        fun getBlocks() = getCategoryVolume(SoundCategory.BLOCKS)
 
-        fun setBlocks(level: Float) = setCategoryVolume(MCSoundCategory.BLOCKS, level)
+        fun setBlocks(level: Float) = setCategoryVolume(SoundCategory.BLOCKS, level)
+        //#if MC<=11202
+        fun getHostileCreatures() = getCategoryVolume(SoundCategory.MOBS)
 
-        //#if MC<=10809
-        fun getHostileCreatures() = getCategoryVolume(MCSoundCategory.MOBS)
+        fun setHostileCreatures(level: Float) = setCategoryVolume(SoundCategory.MOBS, level)
 
-        fun setHostileCreatures(level: Float) = setCategoryVolume(MCSoundCategory.MOBS, level)
+        fun getFriendlyCreatures() = getCategoryVolume(SoundCategory.ANIMALS)
 
-        fun getFriendlyCreatures() = getCategoryVolume(MCSoundCategory.ANIMALS)
+        fun setFriendlyCreatures(level: Float) = setCategoryVolume(SoundCategory.ANIMALS, level)
 
-        fun setFriendlyCreatures(level: Float) = setCategoryVolume(MCSoundCategory.ANIMALS, level)
-        //#else
-        //$$ fun getHostileCreatures() = getCategoryVolume(MCSoundCategory.HOSTILE)
-        //$$ fun setHostileCreatures(level: Float) = setCategoryVolume(MCSoundCategory.HOSTILE, level)
+        //#elseif MC>=11701
+        //$$ fun getHostileCreatures() = getCategoryVolume(SoundSource.HOSTILE)
         //$$
-        //$$ fun getFriendlyCreatures() = getCategoryVolume(MCSoundCategory.NEUTRAL)
-        //$$ fun setFriendlyCreatures(level: Float) = setCategoryVolume(MCSoundCategory.NEUTRAL, level)
+        //$$ fun setHostileCreatures(level: Float) = setCategoryVolume(SoundSource.HOSTILE, level)
+        //$$
+        //$$ fun getFriendlyCreatures() = getCategoryVolume(SoundSource.NEUTRAL)
+        //$$
+        //$$ fun setFriendlyCreatures(level: Float) = setCategoryVolume(SoundSource.NEUTRAL, level)
         //#endif
 
-        fun getPlayers() = getCategoryVolume(MCSoundCategory.PLAYERS)
+        fun setPlayers(level: Float) = setCategoryVolume(SoundCategory.PLAYERS, level)
 
-        fun setPlayers(level: Float) = setCategoryVolume(MCSoundCategory.PLAYERS, level)
+        fun getAmbient() = getCategoryVolume(SoundCategory.AMBIENT)
 
-        fun getAmbient() = getCategoryVolume(MCSoundCategory.AMBIENT)
-
-        fun setAmbient(level: Float) = setCategoryVolume(MCSoundCategory.AMBIENT, level)
+        fun setAmbient(level: Float) = setCategoryVolume(SoundCategory.AMBIENT, level)
     }
 
     // TODO(CONVERT):

@@ -8,19 +8,19 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
-import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import net.minecraft.util.Vec3
 import java.util.*
 
 //#if MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.EntityAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
+//$$ import net.minecraft.data.BuiltinRegistries
 //$$ import net.minecraft.world.entity.MoverType
 //$$ import kotlin.math.sqrt
 //#endif
 
-open class Entity(val entity: MCEntity) {
+open class Entity(val entity: net.minecraft.entity.Entity) {
     //#if MC<=11202
     fun getX() = entity.posX
 
@@ -276,7 +276,7 @@ open class Entity(val entity: MCEntity) {
         //#else
         //$$ // TODO(VERIFY)
         //$$ // world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome).toString()
-        //$$ return world.getBiome(entity.blockPosition()).registryName?.toString() ?: ""
+        //$$ return BuiltinRegistries.BIOME.getKey(world.getBiome(entity.blockPosition()))?.path ?: ""
         //#endif
     }
 
@@ -290,7 +290,7 @@ open class Entity(val entity: MCEntity) {
 
     fun distanceTo(other: Entity): Float = distanceTo(other.entity)
 
-    fun distanceTo(other: MCEntity): Float {
+    fun distanceTo(other: net.minecraft.entity.Entity): Float {
         //#if MC<=11202
         return entity.getDistanceToEntity(other)
         //#else

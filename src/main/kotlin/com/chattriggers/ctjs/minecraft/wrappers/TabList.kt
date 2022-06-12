@@ -1,8 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.launch.mixins.transformers.entity.PlayerTabOverlayAccessor
-import com.chattriggers.ctjs.utils.kotlin.MCGameType
-import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
@@ -10,6 +8,13 @@ import gg.essential.universal.wrappers.message.UMessage
 import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.scoreboard.ScorePlayerTeam
+import net.minecraft.util.IChatComponent
+
+//#if MC<=11202
+import net.minecraft.world.WorldSettings
+//#elseif MC>=11701
+//$$ import net.minecraft.world.level.GameType
+//#endif
 
 object TabList {
     private val playerComparator = Ordering.from(PlayerComparator())
@@ -98,7 +103,7 @@ object TabList {
         when (header) {
             is String -> getTabGui()?.header = UMessage(header).chatMessage
             is UMessage -> getTabGui()?.header = header.chatMessage
-            is MCITextComponent -> getTabGui()?.header = header
+            is IChatComponent -> getTabGui()?.header = header
             null -> getTabGui()?.header = header
         }
     }
@@ -125,7 +130,7 @@ object TabList {
         when (footer) {
             is String -> getTabGui()?.footer = UMessage(footer).chatMessage
             is UMessage -> getTabGui()?.footer = footer.chatMessage
-            is MCITextComponent -> getTabGui()?.footer = footer
+            is IChatComponent -> getTabGui()?.footer = footer
             null -> getTabGui()?.footer = footer
         }
     }
@@ -140,23 +145,24 @@ object TabList {
             //#if MC<=11202
             val teamOne = playerOne.playerTeam
             val teamTwo = playerTwo.playerTeam
-            //#else
-            //$$ val teamOne = playerOne.team
-            //$$ val teamTwo = playerTwo.team
-            //#endif
 
             return ComparisonChain
                 .start()
-                //#if MC<=11202
-                .compareTrueFirst(playerOne.gameType != MCGameType.SPECTATOR, playerTwo.gameType != MCGameType.SPECTATOR)
+                .compareTrueFirst(playerOne.gameType != WorldSettings.GameType.SPECTATOR, playerTwo.gameType != WorldSettings.GameType.SPECTATOR)
                 .compare(teamOne?.registeredName ?: "", teamTwo?.registeredName ?: "")
                 .compare(playerOne.gameProfile.name, playerTwo.gameProfile.name)
-                //#else
-                //$$ .compareTrueFirst(playerOne.gameMode != MCGameType.SPECTATOR, playerTwo.gameMode != MCGameType.SPECTATOR)
-                //$$ .compare(teamOne?.name ?: "", teamTwo?.name ?: "")
-                //$$ .compare(playerOne.profile.name, playerTwo.profile.name)
-                //#endif
                 .result()
+            //#elseif MC>=11701
+            //$$ val teamOne = playerOne.team
+            //$$ val teamTwo = playerTwo.team
+            //$$
+            //$$ return ComparisonChain
+            //$$     .start()
+            //$$     .compareTrueFirst(playerOne.gameMode != GameType.SPECTATOR, playerTwo.gameMode != GameType.SPECTATOR)
+            //$$     .compare(teamOne?.name ?: "", teamTwo?.name ?: "")
+            //$$     .compare(playerOne.profile.name, playerTwo.profile.name)
+            //$$     .result()
+            //#endif
         }
     }
 }

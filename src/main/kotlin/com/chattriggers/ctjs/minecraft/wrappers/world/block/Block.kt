@@ -56,19 +56,20 @@ open class Block(
      */
     fun canBeHarvested(): Boolean {
         //#if MC<=11202
-        return type.mcBlock.canHarvestBlock(World.getWorld(), pos.toMCBlock(), Player.getPlayer())
-        //#else
-        //$$ return type.mcBlock.canHarvestBlock(
-        //$$     getState(),
-        //$$     World.getWorld(),
-        //$$     pos.toMCBlock(),
-        //$$     Player.getPlayer(),
-        //$$ )
+        return Player.getPlayer()?.canHarvestBlock(type.mcBlock) ?: false
+        //#elseif MC>=11701
+        //$$ return Player.getPlayer()?.hasCorrectToolForDrops(getState()) ?: false
         //#endif
     }
 
     // TODO: See Item.canHarvest
     // fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
 
-    override fun toString() = "Block{type=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"
+    override fun toString() = "Block{type=${
+        //#if MC<=11202
+        type.mcBlock.registryName
+        //#elseif MC>=11701
+        //$$ type.mcBlock.name.string
+        //#endif
+    }, x=$x, y=$y, z=$z}"
 }
