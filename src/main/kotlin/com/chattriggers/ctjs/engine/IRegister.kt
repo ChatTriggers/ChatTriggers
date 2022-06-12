@@ -752,14 +752,13 @@ interface IRegister {
         return EventTrigger(method, TriggerType.PickupItem, getImplementationLoader())
     }
 
+    // TODO(BREAKING) Removed position, motion, player to make the event trigger for singleplayer too,
+    // should still work like forge's but a little sooner.
     /**
      * Registers a new trigger that runs before an item is dropped.
      *
      * Passes through five arguments:
      * - The [Item] that is dropped up
-     * - The [com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP] that dropped the item
-     * - The item's position vector
-     * - The item's motion vector
      * - The event, which can be cancelled
      *
      * Available modifications:
@@ -1025,8 +1024,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketSent(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.PacketSent, getImplementationLoader())
+    fun registerPacketSent(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PacketSent, getImplementationLoader())
     }
 
     /**
@@ -1042,8 +1041,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketReceived(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
+    fun registerPacketReceived(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
     }
 
     /**
@@ -1058,8 +1057,8 @@ interface IRegister {
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerServerConnect(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
+    fun registerServerConnect(method: Any): RegularTrigger {
+        return RegularTrigger(method, TriggerType.ServerConnect, getImplementationLoader())
     }
 
     /**

@@ -3,7 +3,7 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
-import net.minecraftforge.client.event.ClientChatReceivedEvent
+import com.chattriggers.ctjs.minecraft.listeners.events.ChatEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 
 class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(method, type, loader) {
@@ -165,12 +165,12 @@ class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(met
      * @param args list of arguments as described
      */
     override fun trigger(args: Array<out Any?>) {
-        if (args[0] !is String || args[1] !is ClientChatReceivedEvent)
-            throw IllegalArgumentException("Argument 1 must be a String, Argument 2 must be a ClientChatReceivedEvent")
+        if (args[0] !is String || args[1] !is ChatEvent)
+            throw IllegalArgumentException("Argument 1 must be a String, Argument 2 must be a ChatEvent")
 
-        val chatEvent = args[1] as ClientChatReceivedEvent
+        val chatEvent = args[1] as ChatEvent
 
-        if (!triggerIfCanceled && chatEvent.isCanceled) return
+        if (!triggerIfCanceled && chatEvent.isCanceled()) return
 
         val chatMessage = getChatMessage(chatEvent, args[0] as String)
 
@@ -181,7 +181,7 @@ class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(met
     }
 
     // helper method to get the proper chat message based on the presence of color codes
-    private fun getChatMessage(chatEvent: ClientChatReceivedEvent, chatMessage: String) =
+    private fun getChatMessage(chatEvent: ChatEvent, chatMessage: String) =
         if (formatted)
             EventLib.getMessage(chatEvent).formattedText.replace("\u00a7", "&")
         else ChatLib.removeFormatting(chatMessage)

@@ -1,22 +1,13 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.triggers.TriggerType
-import net.minecraftforge.client.event.GuiScreenEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
-//#if MC>=11701
-//$$ import com.chattriggers.ctjs.Reference
-//$$ import net.minecraftforge.fml.common.Mod
-//#else
+//#if MC<=11202
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import org.lwjgl.input.Mouse
-import net.minecraftforge.client.event.MouseEvent
 //#endif
 
-//#if MC>=11701
-//$$ @Mod.EventBusSubscriber(modid = Reference.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-//#endif
 object MouseListener {
     private val scrollListeners = mutableListOf<(x: Double, y: Double, delta: Int) -> Unit>()
     private val clickListeners = mutableListOf<(x: Double, y: Double, button: Int, pressed: Boolean) -> Unit>()
@@ -45,15 +36,15 @@ object MouseListener {
         draggedListeners.add(listener)
     }
 
-    private fun scrolled(x: Double, y: Double, delta: Int) {
+    internal fun scrolled(x: Double, y: Double, delta: Int) {
         scrollListeners.forEach { it(x, y, delta) }
     }
 
-    private fun clicked(x: Double, y: Double, button: Int, pressed: Boolean) {
+    internal fun clicked(x: Double, y: Double, button: Int, pressed: Boolean) {
         clickListeners.forEach { it(x, y, button, pressed) }
     }
 
-    private fun dragged(deltaX: Double, deltaY: Double, x: Double, y: Double, button: Int) {
+    internal fun dragged(deltaX: Double, deltaY: Double, x: Double, y: Double, button: Int) {
         draggedListeners.forEach { it(deltaX, deltaY, x, y, button) }
     }
 
@@ -70,11 +61,11 @@ object MouseListener {
     }
 
     //#if MC<=11202
-    private fun process(button: Int, dWheel: Int) {
+    internal fun process(button: Int, dWheel: Int) {
         if (dWheel != 0) {
             scrolled(
-                Client.getMouseX().toDouble(),
-                Client.getMouseY().toDouble(),
+                Client.getMouseX(),
+                Client.getMouseY(),
                 if (dWheel < 0) -1 else 1,
             )
         }
@@ -86,8 +77,8 @@ object MouseListener {
         if (Mouse.isButtonDown(button) == mouseState[button])
             return
 
-        val x = Client.getMouseX().toDouble()
-        val y = Client.getMouseY().toDouble()
+        val x = Client.getMouseX()
+        val y = Client.getMouseY()
 
         clicked(
             x,
@@ -106,13 +97,7 @@ object MouseListener {
         }
     }
 
-    @SubscribeEvent
-    fun onMouseInput(event: MouseEvent) {
-        process(event.button, event.dwheel)
-    }
-
-    @SubscribeEvent
-    fun onGuiMouseInput(event: GuiScreenEvent.MouseInputEvent.Pre) {
+    internal fun onGuiMouseInput() {
         if (!World.isLoaded()) {
             mouseState.clear()
             draggedState.clear()
@@ -129,8 +114,8 @@ object MouseListener {
             if (button !in draggedState)
                 continue
 
-            val x = Client.getMouseX().toDouble()
-            val y = Client.getMouseY().toDouble()
+            val x = Client.getMouseX()
+            val y = Client.getMouseY()
 
             if (x == draggedState[button]?.x && y == draggedState[button]?.y)
                 continue
@@ -147,29 +132,5 @@ object MouseListener {
             draggedState[button] = State(x, y)
         }
     }
-    //#else
-    //$$ @SubscribeEvent
-    //$$ fun onMouseScroll(event: GuiScreenEvent.MouseScrollEvent) {
-    //$$     if (event is GuiScreenEvent.MouseScrollEvent.Pre)
-    //$$         scrolled(event.mouseX, event.mouseY, if (event.scrollDelta < 0) -1 else 1)
-    //$$ }
-    //$$
-    //$$ @SubscribeEvent
-    //$$ fun onMouseClicked(event: GuiScreenEvent.MouseClickedEvent) {
-    //$$     if (event is GuiScreenEvent.MouseClickedEvent.Pre)
-    //$$         clicked(event.mouseX, event.mouseY, event.button, true)
-    //$$ }
-    //$$
-    //$$ @SubscribeEvent
-    //$$ fun onMouseRelease(event: GuiScreenEvent.MouseReleasedEvent) {
-    //$$     if (event is GuiScreenEvent.MouseReleasedEvent.Pre)
-    //$$         clicked(event.mouseX, event.mouseY, event.button, false)
-    //$$ }
-    //$$
-    //$$ @SubscribeEvent
-    //$$ fun onMouseDragged(event: GuiScreenEvent.MouseDragEvent) {
-    //$$     if (event is GuiScreenEvent.MouseDragEvent.Pre)
-    //$$         dragged(event.dragX, event.dragY, event.mouseX, event.mouseY, event.mouseButton)
-    //$$ }
     //#endif
 }

@@ -1,7 +1,9 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
 //#if MC>=11701
+//$$ import org.spongepowered.asm.mixin.Final;
 //$$ import org.spongepowered.asm.mixin.Mixin;
+//$$ import org.spongepowered.asm.mixin.Mutable;
 //$$ import org.spongepowered.asm.mixin.gen.Accessor;
 //$$ import net.minecraft.client.resources.sounds.AbstractSoundInstance;
 //$$ import net.minecraft.client.resources.sounds.SoundInstance;
@@ -9,6 +11,8 @@ package com.chattriggers.ctjs.launch.mixins.transformers;
 //$$
 //$$ @Mixin(AbstractSoundInstance.class)
 //$$ public interface AbstractSoundInstanceAccessor {
+//$$     @Final
+//$$     @Mutable
 //$$     @Accessor
 //$$     void setSource(SoundSource source);
 //$$

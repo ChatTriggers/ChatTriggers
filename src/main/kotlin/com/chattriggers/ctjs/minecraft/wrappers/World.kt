@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderGlobalAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Particle
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
@@ -9,23 +8,23 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.Block
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockType
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
-import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.multiplayer.WorldClient
 
 //#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderGlobalAccessor
 import net.minecraft.util.EnumParticleTypes
 //#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.LevelRendererAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.WorldAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.render.LevelRendererAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//$$ import net.minecraft.core.Registry
 //$$ import net.minecraft.core.particles.ParticleOptions
 //$$ import net.minecraft.network.FriendlyByteBuf
 //$$ import net.minecraft.resources.ResourceLocation
 //$$ import net.minecraft.server.level.ServerLevel
 //$$ import net.minecraft.sounds.SoundSource
-//$$ import net.minecraftforge.registries.ForgeRegistries
 //#endif
 
 object World {
@@ -59,7 +58,7 @@ object World {
             //#if MC<=10809
             Player.getPlayer()?.playSound(name, volume, pitch)
             //#else
-            //$$ val sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation("minecraft", name))
+            //$$ val sound = Registry.SOUND_EVENT.get(ResourceLocation("minecraft", name))
             //$$ Player.getPlayer()?.playSound(sound, volume, pitch)
             //#endif
         }
@@ -78,9 +77,9 @@ object World {
     fun playRecord(name: String, x: Double, y: Double, z: Double) {
         Client.scheduleTask {
             //#if MC<=10809
-            getWorld()?.playRecord(MCBlockPos(x, y, z), name)
+            getWorld()?.playRecord(net.minecraft.util.BlockPos(x, y, z), name)
             //#else
-            //$$ val sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation("minecraft", name)) ?: return@scheduleTask
+            //$$ val sound = Registry.SOUND_EVENT.get(ResourceLocation("minecraft", name)) ?: return@scheduleTask
             //$$ getWorld()?.playLocalSound(x, y, z, sound, SoundSource.RECORDS, 1.0f, 1.0f, false)
             //#endif
         }
@@ -109,7 +108,7 @@ object World {
         //#if MC<=11202
         return getWorld()?.rainingStrength ?: -1f
         //#else
-        //$$ return getWorld()?.rainLevel ?: -1f
+        //$$ return getWorld()?.asMixin<WorldAccessor>()?.rainLevel ?: -1f
         //#endif
     }
 
@@ -208,9 +207,9 @@ object World {
     fun getChunk(x: Int, y: Int, z: Int): Chunk {
         return Chunk(
             //#if MC<=11202
-            getWorld()!!.getChunkFromBlockCoords(MCBlockPos(x, y, z))
+            getWorld()!!.getChunkFromBlockCoords(BlockPos(x, y, z).toMCBlock())
             //#else
-            //$$ getWorld()!!.getChunk(MCBlockPos(x, y, z))
+            //$$ getWorld()!!.getChunk(BlockPos(x, y, z).toMCBlock())
             //#endif
         )
     }
@@ -368,7 +367,7 @@ object World {
             return EnumParticleTypes.values().map { it.name }.toList()
             //#else
             //$$ // TODO(VERIFY)
-            //$$ return ForgeRegistries.PARTICLE_TYPES.map { it.registryName.toString() }
+            //$$ return Registry.PARTICLE_TYPE.entrySet().map { it.value.javaClass.name }
             //#endif
         }
 
@@ -410,7 +409,7 @@ object World {
             )
             //#else
             //$$ val resourceLocation = ResourceLocation("minecraft", particle)
-            //$$ val particleType = ForgeRegistries.PARTICLE_TYPES.getValue(resourceLocation)!!
+            //$$ val particleType = Registry.PARTICLE_TYPE.get(resourceLocation)!!
             //$$
             //$$ val fx = Client.getMinecraft().levelRenderer.asMixin<LevelRendererAccessor>().invokeAddParticleInternal(
             //$$     object : ParticleOptions {
@@ -436,7 +435,7 @@ object World {
         }
 
         @JvmStatic
-        fun spawnParticle(particle: MCParticle) {
+        fun spawnParticle(particle: net.minecraft.client.particle.EntityFX) {
             //#if MC<=11202
             Client.getMinecraft().effectRenderer.addEffect(particle)
             //#else

@@ -110,11 +110,8 @@
     loadClass("com.chattriggers.ctjs.triggers.StepTrigger", "OnStepTrigger");
     loadClass("com.chattriggers.ctjs.triggers.Trigger", "OnTrigger");
     global.Priority = OnTrigger.Priority;
-    //#if MC<=10809
-    global.InteractAction = getClass("net.minecraftforge.event.entity.player.PlayerInteractEvent").Action;
-    //#else
-    //$$ global.InteractAction = Java.type("com.chattriggers.ctjs.minecraft.listeners.ClientListener").INSTANCE.PlayerInteractAction;
-    //#endif
+    // TODO(BREAKING): Replaced Forge's InteractAction with ours
+    loadClass("com.chattriggers.ctjs.minecraft.listeners.ClientListener$PlayerInteractAction", "InteractAction");
 
     // Misc
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.utils.WrappedThread", "Thread");

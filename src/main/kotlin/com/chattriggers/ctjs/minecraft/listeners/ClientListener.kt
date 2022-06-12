@@ -1,176 +1,146 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
+import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
+import com.chattriggers.ctjs.launch.mixins.transformers.NetworkManagerAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
-import com.chattriggers.ctjs.minecraft.libs.EventLib
+import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import com.chattriggers.ctjs.minecraft.listeners.events.CancellableEvent
+import com.chattriggers.ctjs.minecraft.listeners.events.ChatEvent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Scoreboard
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
-import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockFace
 import com.chattriggers.ctjs.printToConsole
+import com.chattriggers.ctjs.triggers.EventType
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
-import gg.essential.universal.UMatrixStack
-import gg.essential.universal.UMouse
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
-import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraftforge.client.event.*
-import net.minecraftforge.event.entity.item.ItemTossEvent
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent
-import net.minecraftforge.event.entity.player.PlayerInteractEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraft.entity.item.EntityItem
+import net.minecraft.item.ItemStack
+import net.minecraft.network.NetworkManager
+import net.minecraft.network.Packet
+import net.minecraft.util.BlockPos
 import org.lwjgl.util.vector.Vector3f
 import org.mozilla.javascript.Context
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 import java.util.concurrent.CopyOnWriteArrayList
 
-//#if MC>=11701
-//$$ import com.chattriggers.ctjs.Reference
-//$$ import net.minecraftforge.fml.common.Mod
-//$$ import net.minecraftforge.event.*
-//#else
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.network.Packet
-import net.minecraftforge.fml.common.gameevent.TickEvent
-import net.minecraftforge.fml.common.network.FMLNetworkEvent
+//#if FORGE
+import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 //#endif
 
-//#if MC>=11701
-//$$ @Mod.EventBusSubscriber(modid = Reference.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-//#endif
 object ClientListener {
-    private var ticksPassed: Int = 0
+    var ticksPassed: Int = 0
     val chatHistory = mutableListOf<String>()
     val actionBarHistory = mutableListOf<String>()
     private val tasks = CopyOnWriteArrayList<Task>()
 
     class Task(var delay: Int, val callback: () -> Unit)
 
-    init {
-        ticksPassed = 0
-    }
-
-    @SubscribeEvent
-    fun onReceiveChat(event: ClientChatReceivedEvent) {
-        when (EventLib.getType(event)) {
-            in 0..1 -> {
-                // save to chatHistory
-                chatHistory += ChatLib.getChatMessage(event, true)
-                if (chatHistory.size > 1000) chatHistory.removeAt(0)
-
-                // normal Chat Message
-                TriggerType.Chat.triggerAll(ChatLib.getChatMessage(event, false), event)
-
-                // print to console
-                if (Config.printChatToConsole) {
-                    "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".printToConsole()
-                }
-            }
-            2 -> {
-                // save to actionbar history
-                actionBarHistory += ChatLib.getChatMessage(event, true)
-                if (actionBarHistory.size > 1000) actionBarHistory.removeAt(0)
-
-                // action bar
-                TriggerType.ActionBar.triggerAll(ChatLib.getChatMessage(event, false), event)
-            }
-        }
-    }
-
     fun addTask(delay: Int, callback: () -> Unit) {
         tasks.add(Task(delay, callback))
     }
 
-    @SubscribeEvent
-    fun onTick(event: TickEvent.ClientTickEvent) {
-        if (event.phase == TickEvent.Phase.END)
-            return
+    init {
+        ticksPassed = 0
 
-        tasks.removeAll {
-            if (it.delay-- <= 0) {
-                //#if MC<=11202
-                Client.getMinecraft().addScheduledTask { it.callback() }
-                //#else
-                //$$ Client.getMinecraft().submit(it.callback)
-                //#endif
-                true
-            } else false
+        CTJS.addEventListener(EventType.Tick) {
+            tasks.removeAll {
+                if (it.delay-- <= 0) {
+                    //#if MC<=11202
+                    Client.getMinecraft().addScheduledTask(it.callback)
+                    //#else
+                    //$$ Client.getMinecraft().tell(it.callback)
+                    //#endif
+                    true
+                } else false
+            }
+
+            if (!World.isLoaded())
+                return@addEventListener
+
+            TriggerType.Tick.triggerAll(ticksPassed)
+            ticksPassed++
+
+            Scoreboard.resetCache()
         }
 
-        if (!World.isLoaded())
-            return
+        CTJS.addEventListener(EventType.Chat) { args ->
+            val event = args!![0] as ChatEvent
 
-        TriggerType.Tick.triggerAll(ticksPassed)
-        ticksPassed++
+            when (event.type.toInt()) {
+                in 0..1 -> {
+                    // save to chatHistory
+                    chatHistory += ChatLib.getChatMessage(event, true)
+                    if (chatHistory.size > 1000) chatHistory.removeAt(0)
 
-        Scoreboard.resetCache()
-    }
+                    // normal Chat Message
+                    TriggerType.Chat.triggerAll(ChatLib.getChatMessage(event, false), event)
 
-    // TODO(CONVERT)
-    //#if MC<=11202
-    @SubscribeEvent
-    fun onClientDisconnect(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
-        TriggerType.ServerDisconnect.triggerAll(event)
-    }
+                    // print to console
+                    if (Config.printChatToConsole) {
+                        "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".printToConsole()
+                    }
+                }
+                2 -> {
+                    // save to actionbar history
+                    actionBarHistory += ChatLib.getChatMessage(event, true)
+                    if (actionBarHistory.size > 1000) actionBarHistory.removeAt(0)
 
-    @SubscribeEvent
-    fun onNetworkEvent(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
-        TriggerType.ServerConnect.triggerAll(event)
+                    // action bar
+                    TriggerType.ActionBar.triggerAll(ChatLib.getChatMessage(event, false), event)
+                }
+            }
+        }
 
-        event.manager.channel().pipeline()
-            .addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
-                override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
-                    val packetReceivedEvent = CancellableEvent()
+        CTJS.addEventListener(EventType.ServerConnect) { args ->
+            val manager = args!![0] as NetworkManager
 
-                    if (msg is Packet<*>) {
-                        JSContextFactory.enterContext()
-                        try {
-                            TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
-                        } finally {
-                            Context.exit()
+            TriggerType.ServerConnect.triggerAll()
+
+            manager.asMixin<NetworkManagerAccessor>().channel.pipeline()
+                .addBefore("packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
+                    override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
+                        val packetReceivedEvent = CancellableEvent()
+
+                        if (msg is Packet<*>) {
+                            JSContextFactory.enterContext()
+                            try {
+                                TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
+                            } finally {
+                                Context.exit()
+                            }
                         }
+
+                        if (!packetReceivedEvent.isCanceled())
+                            ctx?.fireChannelRead(msg)
                     }
 
-                    if (!packetReceivedEvent.isCancelled())
-                        ctx?.fireChannelRead(msg)
-                }
+                    override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
+                        val packetSentEvent = CancellableEvent()
 
-                override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
-                    val packetSentEvent = CancellableEvent()
-
-                    if (msg is Packet<*>) {
-                        JSContextFactory.enterContext()
-                        try {
-                            TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
-                        } finally {
-                            Context.exit()
+                        if (msg is Packet<*>) {
+                            JSContextFactory.enterContext()
+                            try {
+                                TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
+                            } finally {
+                                Context.exit()
+                            }
                         }
+
+                        if (!packetSentEvent.isCanceled())
+                            ctx?.write(msg, promise)
                     }
-
-                    if (!packetSentEvent.isCancelled())
-                        ctx?.write(msg, promise)
-                }
-            })
-    }
-    //#endif
-
-    @SubscribeEvent
-    fun onDrawScreenEvent(event: GuiScreenEvent.DrawScreenEvent.Post) {
-        TriggerType.PostGuiRender.triggerAll(event.mouseX, event.mouseY, event.gui)
+                })
+        }
     }
 
-    @SubscribeEvent
-    fun onRenderTick(event: TickEvent.RenderTickEvent) {
-        TriggerType.Step.triggerAll()
-        //#if MC<=11202
-        if (World.isLoaded())
-            MouseListener.handleDragged()
-        //#endif
-    }
-
+    //#if FORGE
     @SubscribeEvent
     fun onRenderGameOverlay(event: RenderGameOverlayEvent.Pre) {
         Renderer.pushMatrix()
@@ -180,14 +150,22 @@ object ClientListener {
 
     private fun handleOverlayTriggers(event: RenderGameOverlayEvent.Pre) {
         when (event.type) {
-            RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RenderPlayerList.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.DEBUG -> TriggerType.RenderDebug.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.TEXT -> TriggerType.RenderOverlay.triggerAll(event)
+            //#if MC<=11202
+            RenderGameOverlayEvent.ElementType.BOSSHEALTH -> TriggerType.RenderBossHealth.triggerAll(event)
+            //elseif MC>=11701
+            //$$ RenderGameOverlayEvent.ElementType.BOSSINFO -> TriggerType.RenderBossHealth.triggerAll(event)
+            //#endif
             RenderGameOverlayEvent.ElementType.CHAT -> TriggerType.RenderChat.triggerAll(event)
-            // TODO(CONVERT): These don't exist, so I guess mixin them?
+            RenderGameOverlayEvent.ElementType.DEBUG -> TriggerType.RenderDebug.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.PLAYER_LIST -> TriggerType.RenderPlayerList.triggerAll(event)
+            RenderGameOverlayEvent.ElementType.TEXT -> {
+                TriggerType.RenderOverlay.triggerAll(event)
+                CTJS.getEventListeners(EventType.RenderOverlay).forEach {
+                    it.invoke(arrayOf(event))
+                }
+            }
             //#if MC<=11202
             RenderGameOverlayEvent.ElementType.CROSSHAIRS -> TriggerType.RenderCrosshair.triggerAll(event)
-            RenderGameOverlayEvent.ElementType.BOSSHEALTH -> TriggerType.RenderBossHealth.triggerAll(event)
             RenderGameOverlayEvent.ElementType.HEALTH -> TriggerType.RenderHealth.triggerAll(event)
             RenderGameOverlayEvent.ElementType.ARMOR -> TriggerType.RenderArmor.triggerAll(event)
             RenderGameOverlayEvent.ElementType.FOOD -> TriggerType.RenderFood.triggerAll(event)
@@ -199,171 +177,32 @@ object ClientListener {
             RenderGameOverlayEvent.ElementType.JUMPBAR -> TriggerType.RenderJumpBar.triggerAll(event)
             RenderGameOverlayEvent.ElementType.HELMET -> TriggerType.RenderHelmet.triggerAll(event)
             //#endif
+            else -> {}
         }
-    }
-
-    @SubscribeEvent
-    fun onGuiOpened(event: GuiOpenEvent) {
-        if (event.gui != null) TriggerType.GuiOpened.triggerAll(event)
-    }
-
-    // TODO(CONVERT)
-    //#if MC<=11202
-    @SubscribeEvent
-    fun onBlockHighlight(event: DrawBlockHighlightEvent) {
-        if (event.target == null || event.target.blockPos == null) return
-
-        val position = Vector3f(
-            event.target.blockPos.x.toFloat(),
-            event.target.blockPos.y.toFloat(),
-            event.target.blockPos.z.toFloat()
-        )
-
-        TriggerType.BlockHighlight.triggerAll(position, event)
     }
     //#endif
 
-    @SubscribeEvent
-    fun onPickupItem(event: EntityItemPickupEvent) {
-        //#if MC<=11202
-        val player = event.entityPlayer
-        //#else
-        //$$ val player = event.player
-        //#endif
-
-        if (player !is EntityPlayerMP)
+    internal fun onDropItem(item: ItemStack?, cir: CallbackInfoReturnable<EntityItem>) {
+        if (item == null)
             return
 
-        val item = event.item
+        val event = CancellableEvent()
+        TriggerType.DropItem.triggerAll(Item(item), event)
 
-        // TODO(FEATURE): Vector3f wrapper class?
-        //#if MC<=11202
-        val position = Vector3f(
-            item.posX.toFloat(),
-            item.posY.toFloat(),
-            item.posZ.toFloat()
-        )
-        val motion = Vector3f(
-            item.motionX.toFloat(),
-            item.motionY.toFloat(),
-            item.motionZ.toFloat()
-        )
-        //#else
-        //$$ val position = Vector3f(
-        //$$     item.x.toFloat(),
-        //$$     item.y.toFloat(),
-        //$$     item.z.toFloat()
-        //$$ )
-        //$$ val motion = Vector3f(
-        //$$     item.deltaMovement.x.toFloat(),
-        //$$     item.deltaMovement.y.toFloat(),
-        //$$     item.deltaMovement.z.toFloat()
-        //$$ )
-        //#endif
-
-        TriggerType.PickupItem.triggerAll(
-            //#if MC<=10809
-            Item(item.entityItem),
-            //#else
-            //$$ Item(item.item),
-            //#endif
-            PlayerMP(player),
-            position,
-            motion,
-            event
-        )
+        if (event.isCanceled())
+            cir.returnValue = null
     }
 
-    @SubscribeEvent
-    fun onDropItem(event: ItemTossEvent) {
-        val item = event.entityItem
-
-        //#if MC<=11202
-        val position = Vector3f(
-            item.posX.toFloat(),
-            item.posY.toFloat(),
-            item.posZ.toFloat()
-        )
-        val motion = Vector3f(
-            item.motionX.toFloat(),
-            item.motionY.toFloat(),
-            item.motionZ.toFloat()
-        )
-        //#else
-        //$$ val position = Vector3f(
-        //$$     item.x.toFloat(),
-        //$$     item.y.toFloat(),
-        //$$     item.z.toFloat()
-        //$$ )
-        //$$ val motion = Vector3f(
-        //$$     item.deltaMovement.x.toFloat(),
-        //$$     item.deltaMovement.y.toFloat(),
-        //$$     item.deltaMovement.z.toFloat()
-        //$$ )
-        //#endif
-
-        TriggerType.DropItem.triggerAll(
-            //#if MC<=10809
-            Item(item),
-            //#else
-            //$$ Item(item.item),
-            //#endif
-            PlayerMP(event.player),
-            position,
-            motion,
-            event
-        )
-    }
-
-    @SubscribeEvent
-    fun onGuiRender(e: GuiScreenEvent.BackgroundDrawnEvent) {
-        Renderer.pushMatrix()
-
-        TriggerType.GuiRender.triggerAll(
-            UMouse.Scaled.x,
-            UMouse.Scaled.y,
-            e.gui
-        )
-
-        Renderer.popMatrix()
-    }
-
-    //#if MC<=11202
-    @SubscribeEvent
-    fun onInteract(e: PlayerInteractEvent) {
-        val action = when (e.action) {
-            PlayerInteractEvent.Action.LEFT_CLICK_BLOCK -> return
-            PlayerInteractEvent.Action.RIGHT_CLICK_AIR -> PlayerInteractAction.RIGHT_CLICK_EMPTY
-            PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK -> PlayerInteractAction.RIGHT_CLICK_BLOCK
-            null -> PlayerInteractAction.UNKNOWN
-        }
+    internal fun onPlayerInteract(action: PlayerInteractAction, pos: BlockPos?): Boolean {
+        val event = CancellableEvent()
 
         TriggerType.PlayerInteract.triggerAll(
             action,
-            Vector3f((e.pos?.x ?: 0).toFloat(), (e.pos?.y ?: 0).toFloat(), (e.pos?.z ?: 0).toFloat()),
-            e
+            Vector3f((pos?.x ?: 0).toFloat(), (pos?.y ?: 0).toFloat(), (pos?.z ?: 0).toFloat()),
+            event
         )
-    }
-    //#else
-    //$$@SubscribeEvent
-    //$$fun onLeftClick(e: PlayerInteractEvent) {
-    //$$    val action = when (e) {
-    //$$        is PlayerInteractEvent.RightClickBlock -> PlayerInteractAction.RIGHT_CLICK_BLOCK
-    //$$        is PlayerInteractEvent.RightClickEmpty -> PlayerInteractAction.RIGHT_CLICK_EMPTY
-    //$$        else -> PlayerInteractAction.UNKNOWN
-    //$$    }
-    //$$
-    //$$    TriggerType.PlayerInteract.triggerAll(
-    //$$            action,
-    //$$            World.getBlockAt(e.pos.x, e.pos.y, e.pos.z),
-    //$$            e
-    //$$    )
-    //$$}
-    //#endif
 
-    @SubscribeEvent
-    fun onHandRender(e: RenderHandEvent) {
-        TriggerType.RenderHand.triggerAll(e)
+        return !event.isCanceled()
     }
 
     /**
@@ -372,7 +211,6 @@ object ClientListener {
      */
     enum class PlayerInteractAction {
         RIGHT_CLICK_BLOCK,
-        RIGHT_CLICK_EMPTY,
-        UNKNOWN
+        RIGHT_CLICK_EMPTY
     }
 }

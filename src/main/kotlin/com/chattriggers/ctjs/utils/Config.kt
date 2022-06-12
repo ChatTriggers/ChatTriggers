@@ -139,6 +139,8 @@ object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml"), sorting
     var consoleWarningColor = Color(248, 191, 84)
 
     init {
+        initialize()
+
         addDependency(
             javaClass.getDeclaredField("consoleErrorColor"),
             javaClass.getDeclaredField("consoleErrorAndWarningColors"),

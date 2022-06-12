@@ -1,27 +1,30 @@
 package com.chattriggers.ctjs.minecraft.objects
 
 import com.chattriggers.ctjs.CTJS
-import com.chattriggers.ctjs.launch.mixins.transformers.SoundHandlerMixin
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.utils.kotlin.MCSoundCategory
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.client.audio.SoundManager
-import net.minecraftforge.fml.relauncher.ReflectionHelper
 import org.mozilla.javascript.NativeObject
-import paulscode.sound.SoundSystem
 import java.io.File
 import java.net.MalformedURLException
 
-//#if MC>=11701
+//#if MC<=11202
+import net.minecraftforge.fml.relauncher.ReflectionHelper
+import com.chattriggers.ctjs.launch.mixins.transformers.SoundHandlerAccessor
+import net.minecraft.client.audio.SoundCategory
+import paulscode.sound.SoundSystem
+//#elseif MC>=11701
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.AbstractSoundInstanceAccessor
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.SoundAccessor
-//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.SoundManagerAccessor
 //$$ import net.minecraft.client.sounds.WeighedSoundEvents
 //$$ import net.minecraft.client.resources.sounds.AbstractSoundInstance
 //$$ import net.minecraft.client.resources.sounds.SoundInstance
 //$$ import net.minecraft.resources.ResourceLocation
+//$$ import net.minecraft.client.sounds.SoundEngine
+//$$ import net.minecraft.sounds.SoundSource
 //#endif
 
 // TODO(BREAKING) attenuation is now a boolean (true = linear, false = none). New
@@ -149,8 +152,8 @@ class Sound(private val config: NativeObject) {
         //$$ } ?: 1.0f
         //$$
         //$$ val category = config["category"]?.let { c ->
-        //$$     MCSoundCategory.values().first { it.name == (c as String).lowercase() }
-        //$$ } ?: MCSoundCategory.MASTER
+        //$$     SoundSource.values().first { it.name == (c as String).lowercase() }
+        //$$ } ?: SoundSource.MASTER
         //$$
         //$$ // TODO(VERIFY): See how this gets resolved to a path once we can launch the game
         //$$ this.source = object : AbstractSoundInstance(ResourceLocation("chattriggers", url.path), category) {
@@ -188,10 +191,10 @@ class Sound(private val config: NativeObject) {
      */
     fun setCategory(category: String) = apply {
         //#if MC<=11202
-        val category1 = MCSoundCategory.getCategory(category.lowercase())
+        val category1 = SoundCategory.getCategory(category.lowercase())
         setVolume(Client.getMinecraft().gameSettings.getSoundLevel(category1))
         //#else
-        //$$ val category1 = MCSoundCategory.values().first { it.name == category.lowercase() }
+        //$$ val category1 = SoundSource.values().first { it.name == category.lowercase() }
         //$$ source.asMixin<AbstractSoundInstanceAccessor>().setSource(category1)
         //#endif
     }
@@ -304,29 +307,34 @@ class Sound(private val config: NativeObject) {
     // }
 
     companion object {
+        //#if MC<=11202
         private var sndSystem: SoundSystem? = null
+        //#elseif MC>=11701
+        //$$ private var sndSystem: SoundEngine? = null
+        //#endif
 
         private fun loadSndSystem() {
             if (sndSystem != null)
                 return
 
             //#if MC<=11202
-            val sndManager = Client.getMinecraft().soundHandler.asMixin<SoundHandlerMixin>().sndManager
+            val sndManager = Client.getMinecraft().soundHandler.asMixin<SoundHandlerAccessor>().sndManager
             //#else
             //$$ val sndManager = Client.getMinecraft().soundManager
             //#endif
 
             // TODO(VERIFY): Does this work in dev? It doesn't take the unobfuscated name
+
+            //#if MC<=11202
             sndSystem = ReflectionHelper.getPrivateValue(
                 SoundManager::class.java,
                 sndManager,
-                //#if MC<=11202
                 "sndSystem",
                 "field_148620_e"
-                //#else
-                //$$ "f_120349_",
-                //#endif
             )
+            //#elseif MC>=11701
+            //$$ sndSystem = sndManager.asMixin<SoundManagerAccessor>().soundEngine
+            //#endif
         }
     }
 }
