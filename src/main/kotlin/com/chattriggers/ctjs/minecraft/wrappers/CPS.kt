@@ -1,8 +1,8 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import com.chattriggers.ctjs.triggers.EventType
 import kotlin.math.roundToInt
 
 object CPS {
@@ -26,26 +26,25 @@ object CPS {
                 1 -> rightClicks.add(20)
             }
         }
-    }
 
-    @SubscribeEvent
-    fun update(event: RenderGameOverlayEvent.Pre) {
-        while (Client.getSystemTime() > sysTime + 50L) {
-            sysTime += 50L
+        CTJS.addEventListener(EventType.RenderOverlay) {
+            while (Client.getSystemTime() > sysTime + 50L) {
+                sysTime += 50L
 
-            decreaseClicks(leftClicks)
-            decreaseClicks(rightClicks)
+                decreaseClicks(leftClicks)
+                decreaseClicks(rightClicks)
 
-            leftClicksAverage.add(leftClicks.size.toDouble())
-            rightClicksAverage.add(rightClicks.size.toDouble())
+                leftClicksAverage.add(leftClicks.size.toDouble())
+                rightClicksAverage.add(rightClicks.size.toDouble())
 
-            limitAverage(leftClicksAverage)
-            limitAverage(rightClicksAverage)
+                limitAverage(leftClicksAverage)
+                limitAverage(rightClicksAverage)
 
-            clearOldLeft()
-            clearOldRight()
+                clearOldLeft()
+                clearOldRight()
 
-            findMax()
+                findMax()
+            }
         }
     }
 
