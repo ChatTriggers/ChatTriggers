@@ -1,8 +1,12 @@
 package com.chattriggers.ctjs.triggers
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.minecraft.listeners.CancellableEvent
+import com.chattriggers.ctjs.minecraft.listeners.events.CancellableEvent
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+
+//#if FORGE
 import net.minecraftforge.fml.common.eventhandler.Event
+//#endif
 
 class EventTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : Trigger(method, triggerType, loader) {
     private var triggerIfCanceled = true
@@ -19,7 +23,10 @@ class EventTrigger(method: Any, triggerType: TriggerType, loader: ILoader) : Tri
     override fun trigger(args: Array<out Any?>) {
         val isCanceled = when (val event = args.lastOrNull()) {
             is CancellableEvent -> event.isCanceled()
+            //#if FORGE
             is Event -> event.isCanceled
+            //#endif
+            is CallbackInfo -> event.isCancelled
             else -> throw IllegalArgumentException(
                 "Expected last argument of ${type.name} trigger to be an Event, got ${event?.javaClass?.name ?: "null"}"
             )

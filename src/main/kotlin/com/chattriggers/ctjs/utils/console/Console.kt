@@ -273,7 +273,11 @@ class Console(val loader: ILoader?) {
         // TODO: Ligatures make everything extremely slow for some reason. Is this fixable?
 //        val attrs = FIRA_FONT.attributes.apply { (this as MutableMap<TextAttribute, Any>)[TextAttribute.LIGATURES] = TextAttribute.LIGATURES_ON }
 //        inputField.font = FIRA_FONT.deriveFont(attrs)
-        inputField.font = chosenFont
+        try {
+            // Sometimes causes null pointers, causing tiny font size
+            inputField.font = chosenFont
+        } catch (ignored: Exception) {
+        }
 
         frame.toFront()
         frame.repaint()

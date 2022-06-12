@@ -135,6 +135,14 @@ class CTJS {
         val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
         val sounds = mutableListOf<Sound>()
         val images = mutableListOf<Image>()
+        private val eventListeners = mutableMapOf<EventType, CopyOnWriteArrayList<(Array<Any>?) -> Unit>>()
+
+        fun addEventListener(category: EventType, listener: (Array<Any>?) -> Unit) : () -> Unit {
+            eventListeners.getOrPut(category) { CopyOnWriteArrayList() }.add(listener)
+            return { eventListeners[category]?.remove(listener) }
+        }
+
+        fun getEventListeners(type: EventType): List<(Array<Any>?) -> Unit> = eventListeners[type] ?: listOf()
 
         fun makeWebRequest(url: String): URLConnection = URL(url).openConnection().apply {
             setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")

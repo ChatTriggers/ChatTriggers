@@ -2,12 +2,12 @@ package com.chattriggers.ctjs.minecraft.wrappers.world.block
 
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Entity
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
-import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 
 class BlockPos(x: Number, y: Number, z: Number) : Vec3i(x, y, z) {
     constructor(pos: Vec3i) : this(pos.x, pos.y, pos.z)
 
-    constructor(pos: MCBlockPos) : this(pos.x, pos.y, pos.z)
+    constructor(pos: net.minecraft.util.BlockPos) :
+            this(pos.x, pos.y, pos.z)
 
     constructor(source: Entity) : this(source.getPos())
 
@@ -46,5 +46,13 @@ class BlockPos(x: Number, y: Number, z: Number) : Vec3i(x, y, z) {
         return BlockPos(x + facing.getOffsetX() * n, y + facing.getOffsetY() * n, z + facing.getOffsetZ() * n)
     }
 
-    fun toMCBlock() = MCBlockPos(x, y, z)
+    //#if MC<=11202
+    fun toMCBlock() = net.minecraft.util.BlockPos(x, y, z)
+    //#elseif MC>=11701
+    //#if FORGE
+    //$$ fun toMCBlock() = net.minecraft.core.BlockPos(x, y, z)
+    //#else
+    //$$ fun toMCBlock() = net.minecraft.util.math.BlockPos(x, y, z)
+    //#endif
+    //#endif
 }
