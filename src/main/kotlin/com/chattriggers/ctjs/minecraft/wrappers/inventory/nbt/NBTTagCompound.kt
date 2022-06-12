@@ -1,23 +1,18 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
-import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.nbt.NBTTagByteArray
 import net.minecraft.nbt.NBTTagIntArray
-import net.minecraftforge.common.util.Constants
 import org.mozilla.javascript.NativeObject
 
 //#if MC<=11202
 import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
 //#else
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.CompoundTagAccessor
-//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //#endif
 
-class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
-    val tagMap: Map<String, MCNBTBase>
+class NBTTagCompound(override val rawNBT: net.minecraft.nbt.NBTTagCompound) : NBTBase(rawNBT) {
+    val tagMap: Map<String, net.minecraft.nbt.NBTBase>
         get() {
             //#if MC<=11202
             return rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap
@@ -56,9 +51,9 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
         //#else
         //$$ return when (val tag = rawNBT.get(key)) {
         //#endif
-            is MCNBTTagCompound -> NBTTagCompound(tag)
-            is MCNBTTagList -> NBTTagList(tag)
-            is MCNBTBase -> NBTBase(tag)
+            is net.minecraft.nbt.NBTTagCompound -> NBTTagCompound(tag)
+            is net.minecraft.nbt.NBTTagList -> NBTTagList(tag)
+            is net.minecraft.nbt.NBTBase -> NBTBase(tag)
             else -> null
         }
     }
@@ -124,31 +119,31 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
             NBTDataType.DOUBLE -> getDouble(key)
             NBTDataType.STRING -> {
                 //#if MC<=11202
-                if (rawNBT.hasKey(key, Constants.NBT.TAG_STRING)) {
+                if (rawNBT.hasKey(key, 8)) {
                 //#else
-                //$$ if (rawNBT.contains(key, Constants.NBT.TAG_STRING)) {
+                //$$ if (rawNBT.contains(key, 8)) {
                 //#endif
                     tagMap[key]?.let { NBTBase(it).toString() }
                 } else null
             }
             NBTDataType.BYTE_ARRAY -> {
                 //#if MC<=11202
-                if (rawNBT.hasKey(key, Constants.NBT.TAG_BYTE_ARRAY)) {
+                if (rawNBT.hasKey(key, 7)) {
                     (tagMap[key] as NBTTagByteArray).byteArray
                 } else null
                 //#else
-                //$$ if (rawNBT.contains(key, Constants.NBT.TAG_BYTE_ARRAY)) {
+                //$$ if (rawNBT.contains(key, 7)) {
                 //$$     (tagMap[key] as ByteArrayTag).asByteArray
                 //$$ } else null
                 //#endif
             }
             NBTDataType.INT_ARRAY -> {
                 //#if MC<=11202
-                if (rawNBT.hasKey(key, Constants.NBT.TAG_INT_ARRAY)) {
+                if (rawNBT.hasKey(key, 11)) {
                     (tagMap[key] as NBTTagIntArray).intArray
                 } else null
                 //#else
-                //$$ if (rawNBT.contains(key, Constants.NBT.TAG_INT_ARRAY)) {
+                //$$ if (rawNBT.contains(key, 11)) {
                 //$$     (tagMap[key] as IntArrayTag).asIntArray
                 //$$ } else null
                 //#endif
@@ -167,7 +162,7 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
 
     fun setNBTBase(key: String, value: NBTBase) = setNBTBase(key, value.rawNBT)
 
-    fun setNBTBase(key: String, value: MCNBTBase) = apply {
+    fun setNBTBase(key: String, value: net.minecraft.nbt.NBTBase) = apply {
         //#if MC<=11202
         rawNBT.setTag(key, value)
         //#else
@@ -258,7 +253,7 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
     operator fun set(key: String, value: Any) = apply {
         when (value) {
             is NBTBase -> setNBTBase(key, value)
-            is MCNBTBase -> setNBTBase(key, value)
+            is net.minecraft.nbt.NBTBase -> setNBTBase(key, value)
             is Byte -> setByte(key, value)
             is Short -> setShort(key, value)
             is Int -> setInteger(key, value)

@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.objects
 
-import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiScreenBookAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagList
@@ -11,10 +10,13 @@ import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
+import net.minecraft.util.IChatComponent
 
-//#if MC>=11701
+//#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiScreenBookAccessor
+//#elseif MC>=11701
 //$$ import net.minecraft.world.InteractionHand
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.BookEditScreenAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.BookEditScreenAccessor
 //#endif
 
 class Book(bookName: String) {
@@ -26,12 +28,12 @@ class Book(bookName: String) {
         //$$ ItemStack(Items.WRITTEN_BOOK)
         //#endif
     }
-    private val bookData: NBTTagCompound = NBTTagCompound(MCNBTTagCompound())
+    private val bookData: NBTTagCompound = NBTTagCompound(net.minecraft.nbt.NBTTagCompound())
 
     init {
         bookData["author"] = makeStringNbtTag(Player.getName())
         bookData["title"] = makeStringNbtTag("CT-$bookName")
-        bookData["pages"] = MCNBTTagList()
+        bookData["pages"] = net.minecraft.nbt.NBTTagList()
 
         //#if MC<=11202
         book.tagCompound = bookData.rawNBT
@@ -48,7 +50,7 @@ class Book(bookName: String) {
      */
     fun addPage(message: UMessage) = apply {
         val data = bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
-        val pages = NBTTagList(data as MCNBTTagList)
+        val pages = NBTTagList(data as net.minecraft.nbt.NBTTagList)
         pages.appendTag(makeStringNbtTag(componentToJson(message.chatMessage)))
         updateBookScreen(pages)
     }
@@ -72,7 +74,7 @@ class Book(bookName: String) {
      */
     fun setPage(pageIndex: Int, message: UMessage) = apply {
         val data = bookData.get("pages", NBTTagCompound.NBTDataType.TAG_LIST, 8) ?: return@apply
-        val pages = NBTTagList(data as MCNBTTagList)
+        val pages = NBTTagList(data as net.minecraft.nbt.NBTTagList)
 
         for (i in pages.tagCount..pageIndex)
             addPage("")
@@ -121,19 +123,19 @@ class Book(bookName: String) {
         } else -1
     }
 
-    private fun makeStringNbtTag(value: String): MCNBTTagString {
+    private fun makeStringNbtTag(value: String): net.minecraft.nbt.NBTTagString {
         //#if MC<=11202
-        return MCNBTTagString(value)
-        //#else
-        //$$ return MCNBTTagString.valueOf(value)
+        return net.minecraft.nbt.NBTTagString(value)
+        //#elseif MC>=11701
+        //$$ return net.minecraft.nbt.StringTag.valueOf(value)
         //#endif
     }
 
     private fun componentToJson(component: UTextComponent): String {
         //#if MC<=11202
-        return MCTextComponentSerializer.componentToJson(component)
-        //#else
-        //$$ return MCTextComponentSerializer.toJson(component)
+        return IChatComponent.Serializer.componentToJson(component)
+        //#elseif MC>=11701
+        //$$ return Component.Serializer.toJson(component)
         //#endif
     }
 }

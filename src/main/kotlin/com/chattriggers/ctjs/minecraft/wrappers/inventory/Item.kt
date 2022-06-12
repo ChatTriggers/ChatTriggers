@@ -14,21 +14,26 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
-import net.minecraftforge.common.util.Constants
 
 //#if MC==11202
 //$$ import net.minecraft.client.util.ITooltipFlag
 //#endif
 
 //#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
 import net.minecraft.client.renderer.RenderHelper
 //#elseif MC>=11701
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.CompoundTagAccessor
+//$$ import net.minecraft.core.Registry
 //$$ import net.minecraft.world.item.TooltipFlag
-//$$ import net.minecraftforge.registries.ForgeRegistries
 //#endif
 
 class Item {
-    val item: MCItem
+    //#if MC<=11202
+    val item: net.minecraft.item.Item
+    //#elseif MC>=11701
+    //$$ val item: net.minecraft.world.item.Item
+    //#endif
     var itemStack: ItemStack
 
     constructor(itemStack: ItemStack) {
@@ -37,19 +42,10 @@ class Item {
     }
 
     constructor(itemName: String) {
-        val id = itemName.toIntOrNull()
         //#if MC<=11202
-        val item = if (id != null) {
-            MCItem.getItemById(id)
-        } else {
-            MCItem.itemRegistry.getObject(ResourceLocation(itemName).toMC())
-        }
+        val item = net.minecraft.item.Item.itemRegistry.getObject(ResourceLocation(itemName).toMC())
         //#else
-        //$$ val item = if (id != null) {
-        //$$     MCItem.byId(id)
-        //$$ } else {
-        //$$     ForgeRegistries.ITEMS.getValue(ResourceLocation(itemName).toMC())
-        //$$ }
+        //$$ val item = Registry.ITEM.get(ResourceLocation(itemName).toMC())
         //#endif
         if (item == null)
             throw IllegalArgumentException("Item with name or id $itemName does not exist")
@@ -60,9 +56,9 @@ class Item {
 
     constructor(resource: ResourceLocation) {
         //#if MC<=11202
-        val item = MCItem.itemRegistry.getObject(resource.toMC())
+        val item = net.minecraft.item.Item.itemRegistry.getObject(resource.toMC())
         //#else
-        //$$ val item = ForgeRegistries.ITEMS.getValue(resource.toMC())
+        //$$ val item = Registry.ITEM.get(resource.toMC())
         //#endif
 
         if (item == null)
@@ -73,9 +69,9 @@ class Item {
 
     constructor(itemID: Int) {
         //#if MC<=11202
-        val item = MCItem.getItemById(itemID)
+        val item = net.minecraft.item.Item.getItemById(itemID)
         //#else
-        //$$ val item = MCItem.byId(itemID)
+        //$$ val item = net.minecraft.world.item.Item.byId(itemID)
         //#endif
 
         if (item == null)
@@ -86,9 +82,9 @@ class Item {
 
     constructor(block: BlockType) {
         //#if MC<=11202
-        val item = MCItem.getItemFromBlock(block.mcBlock)
+        val item = net.minecraft.item.Item.getItemFromBlock(block.mcBlock)
         //#else
-        //$$ val item = MCItem.byBlock(block.mcBlock)
+        //$$ val item = net.minecraft.world.item.Item.byBlock(block.mcBlock)
         //#endif
 
         if (item == null)
@@ -135,18 +131,29 @@ class Item {
         //#endif
     }
 
-    fun getRawNBT() = itemStack.serializeNBT().toString()
+    fun getRawNBT() =
+        //#if FORGE
+        itemStack.serializeNBT().toString()
+        //#else
+        //$$ itemStack.orCreateNbt.toString()
+        //#endif
 
-    fun getNBT() = NBTTagCompound(itemStack.serializeNBT())
+    fun getNBT() = NBTTagCompound(
+        //#if FORGE
+        itemStack.serializeNBT()
+        //#else
+        //$$ itemStack.orCreateNbt
+        //#endif
+    )
 
     @Deprecated("Use the better-named method", ReplaceWith("getNBT"))
     fun getItemNBT(): NBTTagCompound = getNBT()
 
     fun getID(): Int {
         //#if MC<=11202
-        return MCItem.getIdFromItem(item)
+        return net.minecraft.item.Item.getIdFromItem(item)
         //#else
-        //$$ return MCItem.getId(item)
+        //$$ return net.minecraft.world.item.Item.getId(item)
         //#endif
     }
 
@@ -186,7 +193,11 @@ class Item {
      *
      * @return the item's registry name
      */
+    //#if FORGE
     fun getRegistryName(): String = item.registryName.toString()
+    //#else
+    //$$ fun getRegistryName(): String = Registry.ITEM.getKey(item).get().value.toString()
+    //#endif
 
     /**
      * Gets the item's stack display name.
@@ -322,42 +333,40 @@ class Item {
     fun setLore(vararg loreLines: String) = apply {
         //#if MC<=11202
         if (itemStack.tagCompound == null)
-            itemStack.tagCompound = MCNBTTagCompound()
+            itemStack.tagCompound = net.minecraft.nbt.NBTTagCompound()
+        //#elseif MC>=11701
+        //$$ if (itemStack.tag == null)
+        //$$     itemStack.tag = net.minecraft.nbt.CompoundTag()
+        //#endif
 
         val lore = getNBT().getCompoundTag("tag").let {
-            if (!it.rawNBT.hasKey("display"))
-                it["display"] = MCNBTTagCompound()
+            //#if MC<=11202
+            it.rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap.getOrPut("display") {
+            //#elseif MC>=11701
+            //$$ it.rawNBT.asMixin<CompoundTagAccessor>().tags.getOrPut("display") {
+            //#endif
+                net.minecraft.nbt.NBTTagCompound()
+            }
             it.getCompoundTag("display")
         }.let {
-            if (!it.rawNBT.hasKey("display"))
-                it["Lore"] = MCNBTTagList()
-            it.getTagList("Lore", Constants.NBT.TAG_STRING)
+            //#if MC<=11202
+            it.rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap.getOrPut("Lore") {
+            //#elseif MC>=11701
+            //$$ it.rawNBT.asMixin<CompoundTagAccessor>().tags.getOrPut("Lore") {
+            //#endif
+                net.minecraft.nbt.NBTTagCompound()
+            }
+            it.getTagList("Lore", 8)
         }
 
         lore.clear()
         loreLines.forEach {
-            lore.appendTag(MCNBTTagString(ChatLib.addColor(it)))
+            //#if MC<=11202
+            lore.appendTag(net.minecraft.nbt.NBTTagString(ChatLib.addColor(it)))
+            //#elseif MC>=11701
+            //$$ lore.appendTag(net.minecraft.nbt.StringTag.valueOf(ChatLib.addColor(it)))
+            //#endif
         }
-        //#else
-        //$$ if (itemStack.tag == null)
-        //$$     itemStack.tag = MCNBTTagCompound()
-        //$$
-        //$$ val lore = getNBT().getCompoundTag("tag").let {
-        //$$     if (!it.rawNBT.contains("display"))
-        //$$         it["display"] = MCNBTTagCompound()
-        //$$     it.getCompoundTag("display")
-        //$$ }.let {
-        //$$     if (!it.rawNBT.contains("display"))
-        //$$         it["Lore"] = MCNBTTagList()
-        //$$     it.getTagList("Lore", Constants.NBT.TAG_STRING)
-        //$$ }
-        //$$
-        //$$ lore.clear()
-        //$$ loreLines.forEach {
-        //$$     lore.appendTag(MCNBTTagString.valueOf(ChatLib.addColor(it)))
-        //$$ }
-        //#endif
-
     }
 
     /**

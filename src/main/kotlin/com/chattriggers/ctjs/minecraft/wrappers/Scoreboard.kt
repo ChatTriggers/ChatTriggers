@@ -1,25 +1,27 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.utils.kotlin.MCScore
-import com.chattriggers.ctjs.utils.kotlin.MCScoreboard
 import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.scoreboard.ScoreObjective
 import net.minecraft.scoreboard.ScorePlayerTeam
 
-//#if MC<=11202
+//#if FORGE
 import net.minecraftforge.client.GuiIngameForge
-//#else
-//$$ import net.minecraftforge.client.gui.ForgeIngameGui
+//#if MC>=11701
 //$$ import net.minecraftforge.client.gui.OverlayRegistry
+//#endif
 //#endif
 
 object Scoreboard {
     private var needsUpdate = true
     private var scoreboardNames = mutableListOf<Score>()
     private var scoreboardTitle = UTextComponent("")
+    //#if FABRIC
+    //$$ @JvmStatic
+    //$$ internal var shouldRender = true
+    //#endif
 
     @JvmStatic
-    fun getScoreboard(): MCScoreboard? {
+    fun getScoreboard(): net.minecraft.scoreboard.Scoreboard? {
         return World.getWorld()?.scoreboard
     }
 
@@ -153,6 +155,7 @@ object Scoreboard {
         //#endif
     }
 
+    //#if FORGE
     @JvmStatic
     fun getShouldRender(): Boolean {
         //#if MC<=11202
@@ -170,6 +173,7 @@ object Scoreboard {
         //$$ OverlayRegistry.enableOverlay(ForgeIngameGui.SCOREBOARD_ELEMENT, shouldRender)
         //#endif
     }
+    //#endif
 
     private fun updateNames() {
         scoreboardNames.clear()
@@ -193,7 +197,7 @@ object Scoreboard {
         needsUpdate = true
     }
 
-    class Score(val score: MCScore) {
+    class Score(val score: net.minecraft.scoreboard.Score) {
         /**
          * Gets the score point value for this score,
          * i.e. the number on the right of the board

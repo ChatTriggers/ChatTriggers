@@ -2,12 +2,21 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.entity.RenderPlayer
-import net.minecraft.client.renderer.entity.layers.*
+import net.minecraft.client.renderer.entity.layers.LayerArrow
+import net.minecraft.client.renderer.entity.layers.LayerBipedArmor
+import net.minecraft.client.renderer.entity.layers.LayerCape
+import net.minecraft.client.renderer.entity.layers.LayerCustomHead
+import net.minecraft.client.renderer.entity.layers.LayerDeadmau5Head
+import net.minecraft.client.renderer.entity.layers.LayerHeldItem
 
 //#if MC<=11202
 import net.minecraft.client.renderer.entity.RenderManager
 //#else
 //$$ import com.mojang.blaze3d.vertex.PoseStack
+//$$ import net.minecraft.client.renderer.entity.layers.BeeStingerLayer
+//$$ import net.minecraft.client.renderer.entity.layers.ElytraLayer
+//$$ import net.minecraft.client.renderer.entity.layers.ParrotOnShoulderLayer
+//$$ import net.minecraft.client.renderer.entity.layers.SpinAttackEffectLayer
 //$$ import net.minecraft.client.model.HumanoidModel
 //$$ import net.minecraft.client.model.geom.ModelLayers
 //$$ import net.minecraft.client.renderer.MultiBufferSource
@@ -16,7 +25,7 @@ import net.minecraft.client.renderer.entity.RenderManager
 //#endif
 
 //#if MC<=11202
-internal class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boolean) : RenderPlayer(renderManager, useSmallArms) {
+internal class CTRenderPlayer(renderManager: RenderManager, useSmallArms: Boolean) : RenderPlayer(renderManager, useSmallArms) {
 //#else
 //$$ internal class CTRenderPlayer(
 //$$     private val context: EntityRendererProvider.Context,
@@ -63,7 +72,11 @@ internal class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boole
             addLayer(LayerCustomHead(getMainModel().bipedHead))
 
         //#else
+        //#if FORGE
         //$$ layers.clear()
+        //#else
+        //$$ features.clear()
+        //#endif
         //$$
         //$$ if (showArmor) {
         //$$     addLayer(
@@ -125,11 +138,19 @@ internal class CTRenderPlayer(renderManager: RenderManager?, useSmallArms: Boole
         if (showNametag) super.renderLivingLabel(entityIn, str, x, y, z, maxDistance)
     }
     //#else
+    //#if FORGE
     //$$ override fun shouldShowName(arg: AbstractClientPlayer): Boolean {
+    //#else
+    //$$ override fun hasLabel(arg: AbstractClientPlayerEntity): Boolean {
+    //#endif
     //$$     return showNametag
     //$$ }
     //$$
+    //#if FORGE
     //$$ override fun renderNameTag(
+    //#else
+    //$$ override fun renderLabelIfPresent(
+    //#endif
     //$$     arg: AbstractClientPlayer,
     //$$     arg2: Component,
     //$$     arg3: PoseStack,

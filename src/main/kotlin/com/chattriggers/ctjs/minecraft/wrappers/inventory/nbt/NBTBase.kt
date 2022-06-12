@@ -1,8 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
-import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagCompound
-import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.nbt.*
 import org.mozilla.javascript.NativeArray
@@ -12,7 +9,7 @@ import org.mozilla.javascript.NativeObject
 import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
 //#endif
 
-open class NBTBase(open val rawNBT: MCNBTBase) {
+open class NBTBase(open val rawNBT: net.minecraft.nbt.NBTBase) {
     /**
      * Gets the type byte for the tag.
      */
@@ -31,7 +28,7 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
     override fun toString() = rawNBT.toString()
 
     companion object {
-        fun MCNBTBase.toObject(): Any? {
+        fun net.minecraft.nbt.NBTBase.toObject(): Any? {
             return when (this) {
                 //#if MC<=11202
                 is NBTTagString -> string
@@ -41,8 +38,8 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
                 is NBTTagLong -> long
                 is NBTTagFloat -> float
                 is NBTTagDouble -> double
-                is MCNBTTagCompound -> toObject()
-                is MCNBTTagList -> toObject()
+                is net.minecraft.nbt.NBTTagCompound -> toObject()
+                is net.minecraft.nbt.NBTTagList -> toObject()
                 is NBTTagByteArray -> NativeArray(byteArray.toTypedArray()).expose()
                 is NBTTagIntArray -> NativeArray(intArray.toTypedArray()).expose()
                 else -> error("Unknown tag type $javaClass")
@@ -54,8 +51,8 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
                 //$$ is LongTag -> asLong
                 //$$ is FloatTag -> asFloat
                 //$$ is DoubleTag -> asDouble
-                //$$ is MCNBTTagCompound -> toObject()
-                //$$ is MCNBTTagList -> toObject()
+                //$$ is net.minecraft.nbt.CompoundTag -> toObject()
+                //$$ is net.minecraft.nbt.ListTag -> toObject()
                 //$$ is ByteArrayTag -> NativeArray(asByteArray.toTypedArray()).expose()
                 //$$ is IntArrayTag -> NativeArray(asIntArray.toTypedArray()).expose()
                 //$$ else -> error("Unknown tag type $javaClass")
@@ -63,7 +60,7 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
             }
         }
 
-        fun MCNBTTagCompound.toObject(): NativeObject {
+        fun net.minecraft.nbt.NBTTagCompound.toObject(): NativeObject {
             val o = NativeObject()
             o.expose()
 
@@ -82,7 +79,7 @@ open class NBTBase(open val rawNBT: MCNBTBase) {
             return o
         }
 
-        fun MCNBTTagList.toObject(): NativeArray {
+        fun net.minecraft.nbt.NBTTagList.toObject(): NativeArray {
             val tags = mutableListOf<Any?>()
             //#if MC<=11202
             for (i in 0 until tagCount())

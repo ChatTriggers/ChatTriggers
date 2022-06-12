@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.engine.langs.js
 
+import gg.essential.api.EssentialAPI
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Context.EMIT_DEBUG_OUTPUT
 import org.mozilla.javascript.Context.FEATURE_LOCATION_INFORMATION_IN_ERROR
@@ -9,12 +10,6 @@ import org.mozilla.javascript.WrapFactory
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
-
-//#if MC<=11202
-import net.minecraft.launchwrapper.Launch
-//#else
-//$$ import net.minecraftforge.fml.loading.FMLLoader
-//#endif
 
 object JSContextFactory : ContextFactory() {
     private val classLoader = ModifiedURLClassLoader()
@@ -46,11 +41,7 @@ object JSContextFactory : ContextFactory() {
         when (featureIndex) {
             FEATURE_LOCATION_INFORMATION_IN_ERROR -> return true
             EMIT_DEBUG_OUTPUT -> {
-                //#if MC<=11202
-                return Launch.blackboard.getOrDefault("fml.deobfuscatedEnvironment", false) as Boolean
-                //#else
-                //$$ FMLLoader.isProduction()
-                //#endif
+                return EssentialAPI.getMinecraftUtil().isDevelopment()
             }
         }
 

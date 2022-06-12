@@ -1,10 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.action
 
-
-//#if MC>10809
-//$$ import com.chattriggers.ctjs.utils.kotlin.MCClickType
-//#endif
-
 class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
     private lateinit var clickType: ClickType
     private lateinit var stage: Stage
@@ -67,7 +62,7 @@ class DragAction(slot: Int, windowId: Int) : Action(slot, windowId) {
         //#if MC<=10809
         doClick(button, 5)
         //#else
-        //$$ doClick(button, MCClickType.QUICK_CRAFT)
+        //$$ doClick(button, net.minecraft.world.inventory.ClickType.QUICK_CRAFT)
         //#endif
     }
 

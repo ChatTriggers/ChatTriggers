@@ -2,13 +2,18 @@ package com.chattriggers.ctjs.loader;
 
 import com.chattriggers.ctjs.Reference;
 import com.chattriggers.ctjs.engine.module.ModuleManager;
-import net.minecraftforge.fml.common.Loader;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.stream.Collectors;
+
+//#if FORGE
+import net.minecraftforge.fml.common.Loader;
+//#else
+//$$ import net.fabricmc.loader.api.FabricLoader;
+//#endif
 
 public class UriScheme {
     private static final String PROTOCOL = "chattriggers://";
@@ -48,10 +53,17 @@ public class UriScheme {
             String javaProgram = System.getProperty("java.home") + sep + "bin" + sep + "javaw.exe";
 
             // TODO(VERIFY)
+            //#if FORGE
             //#if MC<=11202
             String modJar = Loader.instance().getIndexedModList().get(Reference.MODID).getSource().getAbsolutePath();
             //#else
             //$$ String modJar = FMLLoader.getLoadingModList().getModFileById(Reference.MODID).getFile().getFilePath().toAbsolutePath().toString();
+            //#endif
+            //#else
+            //$$ String modJar = FabricLoader.getInstance()
+            //$$         .getModContainer(Reference.MODID).get()
+            //$$         .getRootPaths().get(0).toAbsolutePath()
+            //$$         .toString();
             //#endif
 
             String value = ("\"" + javaProgram + "\" -cp \"" + modJar

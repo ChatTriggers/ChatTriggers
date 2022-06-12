@@ -5,7 +5,7 @@ import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.tileentity.TileEntitySign
 
 //#if MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.SignBlockEntityAccessor
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.entity.SignBlockEntityAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //#endif
 
@@ -42,5 +42,5 @@ class Sign(block: Block) : Block(block.type, block.pos, block.face) {
     fun getUnformattedLines(): List<String> = getLines().map { it.unformattedText }
 
     override fun toString(): String =
-        "Sign{lines=${getLines()}, name=${type.mcBlock.registryName}, x=$x, y=$y, z=$z}"
+        "Sign{lines=${getLines()}, name=${type.getRegistryName()}, x=$x, y=$y, z=$z}"
 }

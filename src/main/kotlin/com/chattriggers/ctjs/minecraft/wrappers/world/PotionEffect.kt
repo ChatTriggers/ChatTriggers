@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.wrappers.world
 
-import com.chattriggers.ctjs.utils.kotlin.MCPotionEffect
 import com.chattriggers.ctjs.utils.kotlin.i18Format
 
 //#if MC>=11701
@@ -8,7 +7,7 @@ import com.chattriggers.ctjs.utils.kotlin.i18Format
 //$$ import net.minecraft.world.effect.MobEffect
 //#endif
 
-class PotionEffect(val effect: MCPotionEffect) {
+class PotionEffect(val effect: net.minecraft.potion.PotionEffect) {
     /**
      * Returns the translation key of the potion.
      * Ex: "potion.poison"

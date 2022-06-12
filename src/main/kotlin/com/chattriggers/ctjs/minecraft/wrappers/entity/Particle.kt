@@ -1,21 +1,21 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
-import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityFXAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
-import com.chattriggers.ctjs.utils.kotlin.MCParticle
 import com.chattriggers.ctjs.utils.kotlin.asMixin
+import net.minecraft.client.particle.EntityFX
 import java.awt.Color
 
-//#if MC>=11701
+//#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityFXAccessor
+//#elseif MC>=11701
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.ParticleAccessor
-//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import kotlin.math.max
 //#endif
 
 // TODO(BREAKING): No longer extends entity (particles in newer versions don't inherit from Entity)
-class Particle(val entity: MCParticle) {
+class Particle(val entity: EntityFX) {
     fun scale(scale: Float) = apply {
         //#if MC<=11202
         entity.multipleParticleScaleBy(scale)

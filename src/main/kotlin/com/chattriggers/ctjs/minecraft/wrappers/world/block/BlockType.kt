@@ -2,14 +2,11 @@ package com.chattriggers.ctjs.minecraft.wrappers.world.block
 
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.minecraft.wrappers.utils.ResourceLocation
-import com.chattriggers.ctjs.utils.kotlin.MCBlock
-import com.chattriggers.ctjs.utils.kotlin.MCResourceLocation
 import net.minecraft.block.state.IBlockState
 
 //#if MC>=11701
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
 //$$ import net.minecraft.core.Registry
-//$$ import net.minecraftforge.registries.ForgeRegistries
 //#endif
 
 /**
@@ -18,32 +15,32 @@ import net.minecraft.block.state.IBlockState
  * in the world. If a reference to a particular block is needed,
  * use [Block]
  */
-class BlockType(val mcBlock: MCBlock) {
+class BlockType(val mcBlock: net.minecraft.block.Block) {
     constructor(block: BlockType) : this(block.mcBlock)
 
     constructor(blockName: String) : this(ResourceLocation("minecraft", blockName))
 
     constructor(resourceLocation: ResourceLocation) : this(resourceLocation.toMC())
 
-    constructor(resourceLocation: MCResourceLocation) :
+    constructor(resourceLocation: net.minecraft.util.ResourceLocation) :
     //#if MC<=11202
-        this(MCBlock.blockRegistry.getObject(resourceLocation))
+        this(net.minecraft.block.Block.blockRegistry.getObject(resourceLocation))
     //#else
-    //$$ this(ForgeRegistries.BLOCKS.getValue(resourceLocation)!!)
+    //$$ this(Registry.BLOCK.get(resourceLocation)!!)
     //#endif
 
     constructor(blockID: Int) :
     //#if MC<=11202
-        this(MCBlock.getBlockById(blockID))
+        this(net.minecraft.block.Block.getBlockById(blockID))
     //#else
     //$$     this(Registry.BLOCK.byId(blockID))
     //#endif
 
     constructor(item: Item) :
     //#if MC<=11202
-        this(MCBlock.getBlockFromItem(item.item))
-    //#else
-    //$$     this(MCBlock.byItem(item.item))
+        this(net.minecraft.block.Block.getBlockFromItem(item.item))
+    //#elseif MC>=11701
+    //$$     this(net.minecraft.world.level.block.Block.byItem(item.item))
     //#endif
 
     /**
@@ -57,7 +54,7 @@ class BlockType(val mcBlock: MCBlock) {
 
     fun getID(): Int {
         //#if MC<=11202
-        return MCBlock.getIdFromBlock(mcBlock)
+        return net.minecraft.block.Block.getIdFromBlock(mcBlock)
         //#else
         //$$ return Registry.BLOCK.getId(mcBlock)
         //#endif
@@ -73,7 +70,7 @@ class BlockType(val mcBlock: MCBlock) {
         //#if MC<=10809
         return mcBlock.registryName
         //#else
-        //$$ return mcBlock.registryName.toString()
+        //$$ return Registry.BLOCK.getId(mcBlock).toString()
         //#endif
     }
 
@@ -139,5 +136,5 @@ class BlockType(val mcBlock: MCBlock) {
     fun isTranslucent(): Boolean = mcBlock.isTranslucent
     //#endif
 
-    override fun toString(): String = "BlockType{name=${mcBlock.registryName}}"
+    override fun toString(): String = "BlockType{name=${getRegistryName()}}"
 }
