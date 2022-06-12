@@ -15,7 +15,6 @@
         "render.RenderPlayerMixin",
         //#if MC<=11202
         "CommandHandlerAccessor",
-        "CrashReportMixin",
         "MinecraftMixin",
         "NBTTagCompoundAccessor",
         "NBTTagListAccessor",
