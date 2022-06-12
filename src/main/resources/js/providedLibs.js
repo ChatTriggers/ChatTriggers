@@ -28,8 +28,9 @@
     // Extra libs
     loadClass("java.util.ArrayList");
     loadClass("java.util.HashMap");
-    loadClass("net.minecraftforge.fml.relauncher.ReflectionHelper");
-    loadClass("org.lwjgl.input.Keyboard");
+    //TODO: Add wrappers around these commented out classes: these aren't available in all MC versions
+    // loadClass("net.minecraftforge.fml.relauncher.ReflectionHelper");
+    // loadClass("org.lwjgl.input.Keyboard");
 
     // Libraries
     loadClass("com.chattriggers.ctjs.minecraft.libs.ChatLib");
@@ -122,7 +123,7 @@
     /*End Built in Vars */
 
     // GL
-    loadClass("net.minecraft.client.renderer.GlStateManager");
+    // loadClass("net.minecraft.client.renderer.GlStateManager");
     loadClass("org.lwjgl.opengl.GL11");
     loadClass("org.lwjgl.opengl.GL12");
     loadClass("org.lwjgl.opengl.GL13");
