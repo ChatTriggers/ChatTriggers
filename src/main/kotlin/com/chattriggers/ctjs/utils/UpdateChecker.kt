@@ -7,18 +7,14 @@ import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.printTraceToConsole
-import com.chattriggers.ctjs.utils.kotlin.MCClickEventAction
+import com.chattriggers.ctjs.triggers.EventType
 import com.chattriggers.ctjs.utils.kotlin.toVersion
 import com.google.gson.reflect.TypeToken
 import gg.essential.universal.wrappers.message.UMessage
 import gg.essential.universal.wrappers.message.UTextComponent
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.event.world.WorldEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraft.event.ClickEvent
 
 object UpdateChecker {
-    private var worldLoaded = false
     private var updateAvailable = false
     private var warned = false
 
@@ -29,6 +25,29 @@ object UpdateChecker {
             exception.printTraceToConsole()
         }
         warned = !Config.showUpdatesInChat
+
+        CTJS.addEventListener(EventType.WorldLoad) {
+            if (!updateAvailable || warned) return@addEventListener
+
+            //#if MC<=11202
+            World.playSound("note.bass", 1000f, 1f)
+            //#elseif MC>=11701
+            //$$ World.playSound("block.note_block.bass", 1000f, 1f)
+            //#endif
+            UMessage(
+                "&c&m" + ChatLib.getChatBreak("-"),
+                "\n",
+                "&cChatTriggers requires an update to work properly!",
+                "\n",
+                UTextComponent("&a[Download]").setClick(ClickEvent.Action.OPEN_URL, "${CTJS.WEBSITE_ROOT}/#download"),
+                " ",
+                UTextComponent("&e[Changelog]").setClick(ClickEvent.Action.OPEN_URL, "https://github.com/ChatTriggers/ChatTriggers/releases"),
+                "\n",
+                "&c&m" + ChatLib.getChatBreak("-")
+            ).chat()
+
+            warned = true
+        }
     }
 
     private fun getUpdate() {
@@ -44,34 +63,6 @@ object UpdateChecker {
         updateAvailable = latestVersion > Reference.MODVERSION.toVersion()
     }
 
-    @SubscribeEvent
-    fun worldLoad(event: WorldEvent.Load) {
-        worldLoaded = true
-    }
-
-    @SubscribeEvent
-    fun renderOverlay(event: RenderGameOverlayEvent.Pre) {
-        if (!worldLoaded) return
-        worldLoaded = false
-
-        if (!updateAvailable || warned) return
-
-        World.playSound("note.bass", 1000f, 1f)
-        UMessage(
-            "&c&m" + ChatLib.getChatBreak("-"),
-            "\n",
-            "&cChatTriggers requires an update to work properly!",
-            "\n",
-            UTextComponent("&a[Download]").setClick(MCClickEventAction.OPEN_URL, "${CTJS.WEBSITE_ROOT}/#download"),
-            " ",
-            UTextComponent("&e[Changelog]").setClick(MCClickEventAction.OPEN_URL, "https://github.com/ChatTriggers/ChatTriggers/releases"),
-            "\n",
-            "&c&m" + ChatLib.getChatBreak("-")
-        ).chat()
-
-        warned = true
-    }
-
     fun drawUpdateMessage() {
         if (!updateAvailable) return
 
@@ -81,7 +72,6 @@ object UpdateChecker {
             ChatLib.addColor("&cChatTriggers requires an update to work properly!"),
             2f,
             2f,
-            color = -0x1,
         )
 
         Renderer.popMatrix()

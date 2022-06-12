@@ -1,14 +1,11 @@
 package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.triggers.EventType
 import net.minecraft.client.renderer.texture.DynamicTexture
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.net.HttpURLConnection
-import java.net.URL
 import javax.imageio.ImageIO
 
 //#if MC>=11701
@@ -17,14 +14,23 @@ import javax.imageio.ImageIO
 //$$ import java.io.ByteArrayOutputStream
 //#endif
 
-class Image constructor(var image: BufferedImage?) {
+class Image(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
     private val textureWidth = image?.width ?: 0
     private val textureHeight = image?.height ?: 0
+    lateinit var unregister: () -> Unit
 
     init {
-        MinecraftForge.EVENT_BUS.register(this)
         CTJS.images.add(this)
+
+        unregister = CTJS.addEventListener(EventType.RenderOverlay) {
+            if (image != null) {
+                texture = getDynamicTexture()
+                image = null
+
+                unregister()
+            }
+        }
     }
 
     @JvmOverloads
@@ -42,7 +48,7 @@ class Image constructor(var image: BufferedImage?) {
                 texture = getDynamicTexture()
                 image = null
 
-                MinecraftForge.EVENT_BUS.unregister(this)
+                unregister()
             } catch (e: Exception) {
                 // Unlucky. This probably wasn't a rendering context.
                 println("Trying to bake texture in a non-rendering context.")
@@ -60,16 +66,6 @@ class Image constructor(var image: BufferedImage?) {
         //#else
         //$$ return getTexture().id
         //#endif
-    }
-
-    @SubscribeEvent
-    fun onRender(event: RenderGameOverlayEvent.Pre) {
-        if (image != null) {
-            texture = getDynamicTexture()
-            image = null
-
-            MinecraftForge.EVENT_BUS.unregister(this)
-        }
     }
 
     @JvmOverloads

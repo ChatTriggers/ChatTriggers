@@ -7,15 +7,12 @@ import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
+import com.chattriggers.ctjs.triggers.EventType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.LogType
 import com.chattriggers.ctjs.utils.kotlin.toVersion
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.event.world.WorldEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.apache.commons.io.FileUtils
 import java.io.File
-import java.net.URL
 import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -23,25 +20,11 @@ import java.nio.file.StandardCopyOption
 
 object ModuleUpdater {
     private val changelogs = mutableListOf<ModuleMetadata>()
-    private var shouldReportChangelog = false
 
-    @SubscribeEvent
-    fun onWorldLoad(event: WorldEvent.Load) {
-        shouldReportChangelog = true
-    }
-
-    @SubscribeEvent
-    fun onRenderGameOverlay(event: RenderGameOverlayEvent.Text) {
-        if (!shouldReportChangelog) return
-        changelogs.forEach(::reportChangelog)
-        changelogs.clear()
-    }
-
-    private fun tryReportChangelog(module: ModuleMetadata) {
-        if (shouldReportChangelog) {
-            reportChangelog(module)
-        } else {
-            changelogs.add(module)
+    init {
+        CTJS.addEventListener(EventType.WorldLoad) {
+            changelogs.forEach(::reportChangelog)
+            changelogs.clear()
         }
     }
 
@@ -91,7 +74,7 @@ object ModuleUpdater {
             }
 
             if (Config.moduleChangelog && module.metadata.changelog != null) {
-                tryReportChangelog(module.metadata)
+                changelogs.add(module.metadata)
             }
         } catch (e: Exception) {
             "Can't find page for ${metadata.name}".printToConsole(logType = LogType.WARN)
@@ -121,7 +104,7 @@ object ModuleUpdater {
             val url = "${CTJS.WEBSITE_ROOT}/api/modules/$name/scripts?modVersion=${Reference.MODVERSION}"
             val connection = CTJS.makeWebRequest(url)
             FileUtils.copyInputStreamToFile(connection.getInputStream(), downloadZip)
-            FileSystems.newFileSystem(downloadZip.toPath()).use {
+            FileSystems.newFileSystem(downloadZip.toPath(), null as ClassLoader?).use {
                 val rootFolder = Files.newDirectoryStream(it.rootDirectories.first()).iterator()
                 if (!rootFolder.hasNext()) throw Exception("Too small")
                 val moduleFolder = rootFolder.next()

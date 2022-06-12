@@ -9,36 +9,49 @@ import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
-import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.wrappers.CPS
+import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.triggers.EventType
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.UpdateChecker
 import com.google.gson.Gson
-import gg.essential.vigilance.Vigilance
-import net.minecraftforge.common.MinecraftForge
+import net.minecraft.client.Minecraft
 import java.io.File
 import java.net.URL
 import java.net.URLConnection
 import java.security.MessageDigest
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.concurrent.thread
 
-import net.minecraftforge.fml.common.Mod
 //#if MC<=11202
-import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-//#else
-//$$ import net.minecraftforge.eventbus.api.SubscribeEvent
-//$$ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
-//$$ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-//$$ import net.minecraftforge.event.RegisterCommandsEvent
-//$$ import net.minecraft.commands.CommandSourceStack
-//$$ import com.mojang.brigadier.CommandDispatcher
-//$$ import com.mojang.brigadier.tree.CommandNode
 //#endif
 
+//#if MC>=11701
+//$$ import com.mojang.brigadier.CommandDispatcher
+//$$ import com.mojang.brigadier.tree.CommandNode
+//$$ import net.minecraft.commands.CommandSourceStack
+//#endif
+
+//#if MC>=11701 && FORGE
+//$$ import net.minecraftforge.api.distmarker.Dist
+//$$ import net.minecraftforge.event.RegisterCommandsEvent
+//$$ import net.minecraftforge.eventbus.api.SubscribeEvent
+//$$ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+//$$ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+//#endif
+
+//#if FORGE
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.common.Mod
+//#else
+//$$ import net.fabricmc.api.ClientModInitializer
+//#endif
+
+//#if FORGE
 //#if MC<=11202
 @Mod(
     modid = Reference.MODID,
@@ -51,59 +64,64 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 //$$ @Mod.EventBusSubscriber(modid = Reference.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 //#endif
 class CTJS {
-    //#if MC>=11701 && FABRIC==0
-    //$$ init {
-    //$$     FMLJavaModLoadingContext.get().modEventBus.addListener(::init)
-    //$$ }
-    //#endif
+//#else
+//$$ class CTJS : ClientModInitializer {
+//#endif
 
     //#if MC<=11202
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-    //#elseif MC>=11701 && FABRIC==0
-    //$$ fun init(event: FMLCommonSetupEvent) {
-    //#else
-    //$$ fun init() {
-    //#endif
-        CTCommand.register()
+        //#elseif MC>=11701 && FABRIC==0
+        //$$ fun init(event: FMLCommonSetupEvent) {
+        //#else
+        //$$ override fun onInitializeClient() {
+        //#endif
 
-        listOf(
-            WorldListener,
-            CPS,
-            ClientListener,
-            UpdateChecker,
-            MouseListener,
+        //#if MC<=11202
+        Minecraft.getMinecraft().addScheduledTask {
+        //#elseif MC>=11701
+        //$$ Minecraft.getInstance().tell {
+        //#endif
+            Config.preload()
+            CTCommand.register()
+
             ModuleUpdater
-        ).forEach(MinecraftForge.EVENT_BUS::register)
+            UpdateChecker
+            MouseListener
+            CPS
+            WorldListener
 
-        UriScheme.installUriScheme()
-        UriScheme.createSocketListener()
+            //#if FORGE
+            MinecraftForge.EVENT_BUS.register(ClientListener)
+            //#else
+            //$$ ClientListener
+            //#endif
 
-        Vigilance.initialize()
-        Config.preload()
+            UriScheme.installUriScheme()
+            UriScheme.createSocketListener()
 
-        // Ensure that reportHashedUUID always runs on a separate thread
-        if (Config.threadedLoading) {
-            thread {
-                try {
-                    ModuleManager.setup()
-                    ModuleManager.entryPass()
+            // Ensure that reportHashedUUID always runs on a separate thread
+            if (Config.threadedLoading) {
+                thread {
+                    try {
+                        ModuleManager.setup()
+                        ModuleManager.entryPass()
+                        reportHashedUUID()
+                    } catch (e: Exception) {
+                        e.printTraceToConsole()
+                        e.printStackTrace()
+                    }
+                }
+            } else {
+                ModuleManager.setup()
+                ModuleManager.entryPass()
+                thread {
                     reportHashedUUID()
-                } catch (e: Exception) {
-                    e.printTraceToConsole()
-                    e.printStackTrace()
                 }
             }
-        } else {
-            ModuleManager.setup()
-            ModuleManager.entryPass()
-            thread {
-                reportHashedUUID()
-            }
+
+            Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
         }
-
-        Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
-
     }
 
     //#if MC>=11701 && FABRIC==0

@@ -1,10 +1,10 @@
 package com.chattriggers.ctjs.commands
 
 import com.chattriggers.ctjs.CTJS
-import com.chattriggers.ctjs.launch.mixins.transformers.CommandHandlerAccessor
 import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 //#if MC==10809
+import com.chattriggers.ctjs.launch.mixins.transformers.CommandHandlerAccessor
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
