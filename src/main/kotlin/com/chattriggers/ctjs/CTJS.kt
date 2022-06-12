@@ -132,6 +132,7 @@ class CTJS {
 
     companion object {
         const val WEBSITE_ROOT = "https://www.chattriggers.com"
+        const val modulesFolder = "./config/ChatTriggers/modules"
         val gson = Gson()
         val configLocation = File("./config")
         val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }

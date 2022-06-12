@@ -8,13 +8,7 @@ import java.awt.Color
 import java.io.File
 
 object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml"), sortingBehavior = CategorySorting) {
-    @Property(
-        PropertyType.TEXT,
-        name = "Modules Folders",
-        category = "General",
-        description = "Folder where CT modules are stored",
-    )
-    var modulesFolder: String = "./config/ChatTriggers/modules"
+    //TODO(BREAKING) Removed modulesFolder, moved to CTJS.modulesFolder
 
     @Property(
         PropertyType.SWITCH,

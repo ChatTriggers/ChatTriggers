@@ -19,12 +19,11 @@ import java.net.URLClassLoader
 
 object ModuleManager {
     private val loaders = listOf(JSLoader)
-    val generalConsole = Console(null)
-    val cachedModules = mutableListOf<Module>()
-    val modulesFolder = run {
-        Config.loadData()
-        File(Config.modulesFolder)
+    val generalConsole by lazy {
+        Console(null)
     }
+    val cachedModules = mutableListOf<Module>()
+    val modulesFolder = File(CTJS.modulesFolder)
     val pendingOldModules = mutableListOf<Module>()
 
     fun setup() {
