@@ -266,6 +266,6 @@ object FileLib {
     }
 
     private fun absoluteLocation(importName: String, fileLocation: String): String {
-        return Config.modulesFolder + File.separator + importName + File.separator + fileLocation
+        return CTJS.modulesFolder + File.separator + importName + File.separator + fileLocation
     }
 }
