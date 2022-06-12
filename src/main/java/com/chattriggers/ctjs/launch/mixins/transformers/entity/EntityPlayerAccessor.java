@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.launch.mixins.transformers.entity;
 
+//#if FORGE
 import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
@@ -11,16 +12,17 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(EntityPlayer.class)
 public interface EntityPlayerAccessor {
     //#if MC<=11202
-    @Accessor("displayname")
+    @Accessor(value = "displayname", remap = false)
     String getDisplayName();
 
-    @Accessor("displayname")
+    @Accessor(value = "displayname", remap = false)
     void setDisplayName(String name);
     //#else
-    //$$ @Accessor("displayname")
+    //$$ @Accessor(value = "displayname", remap = false)
     //$$ Component getDisplayName();
     //$$
-    //$$ @Accessor("displayname")
+    //$$ @Accessor(value = "displayname", remap = false)
     //$$ void setDisplayName(Component name);
     //#endif
 }
+//#endif

@@ -1,13 +1,17 @@
 package com.chattriggers.ctjs.minecraft.wrappers.entity
 
-import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityPlayerAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.scoreboard.ScorePlayerTeam
+
+//#if MC<=11202
+import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityPlayerAccessor
+//#elseif MC>=11701
+//$$import com.chattriggers.ctjs.launch.mixins.transformers.GameProfileAccessor
+//#endif
 
 class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
     fun isSpectator() = player.isSpectator
@@ -55,7 +59,7 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
         //#if MC<=11202
         player.asMixin<EntityPlayerAccessor>().displayName = textComponent.formattedText
         //#else
-        //$$ player.asMixin<EntityPlayerAccessor>().displayName = textComponent.component
+        //$$ player.gameProfile.asMixin<GameProfileAccessor>().setName(textComponent.component.string)
         //#endif
     }
 
@@ -91,10 +95,15 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
             return UTextComponent(name).formattedText
 
         //#if MC<=11202
-        return ScorePlayerTeam.formatPlayerName(info.playerTeam, info.gameProfile?.name) ?: ""
-        //#else
-        //$$ return PlayerTeam.formatNameForTeam(info.team, info.profile?.name?.let { UTextComponent(it) })
+        return net.minecraft.scoreboard.ScorePlayerTeam.formatPlayerName(info.playerTeam, info.gameProfile?.name) ?: ""
+        //#elseif MC>=11701
+        //#if FORGE
+        //$$ return net.minecraft.world.scores.PlayerTeam.formatNameForTeam(info.team, info.profile?.name?.let(::UTextComponent))
         //$$     .let { UTextComponent(it).formattedText }
+        //#else
+        //$$ return net.minecraft.scoreboard.Team.decorateName(info.scoreboardTeam, info.profile?.name?.let(::UTextComponent))
+        //$$     .let { UTextComponent(it).formattedText }
+        //#endif
         //#endif
     }
 
