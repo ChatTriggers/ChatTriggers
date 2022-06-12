@@ -12,6 +12,11 @@ import com.chattriggers.ctjs.utils.kotlin.i18Format
 import net.minecraft.client.settings.KeyBinding
 import org.mozilla.javascript.NativeObject
 
+//#if MC>=11701
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.KeyMappingAccessor
+//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//#endif
+
 /*
 This file holds the "glue" for this language.
 
@@ -58,7 +63,7 @@ object JSClient : Client() {
             //#if MC<=11202
             ?: getMinecraft().gameSettings.keyBindings.find { it.keyCode == keyCode }
             //#else
-            //$$ ?: getMinecraft().options.keyMappings.find { it.key.value == keyCode }
+            //$$ ?: getMinecraft().options.keyMappings.find { it.asMixin<KeyMappingAccessor>().key.value == keyCode }
             //#endif
                 ?.let(::JSKeyBind)
     }

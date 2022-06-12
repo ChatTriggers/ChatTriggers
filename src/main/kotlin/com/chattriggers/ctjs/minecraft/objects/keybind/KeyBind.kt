@@ -1,12 +1,12 @@
 package com.chattriggers.ctjs.minecraft.objects.keybind
 
 import com.chattriggers.ctjs.engine.ILoader
+import com.chattriggers.ctjs.launch.mixins.transformers.GameSettingsAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.Client
-import com.chattriggers.ctjs.minecraft.wrappers.Settings
 import com.chattriggers.ctjs.triggers.RegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import com.chattriggers.ctjs.utils.kotlin.i18Format
-import gg.essential.universal.UMinecraft
 import org.apache.commons.lang3.ArrayUtils
 
 //#if MC<=11202
@@ -41,11 +41,11 @@ abstract class KeyBind {
     @JvmOverloads
     constructor(description: String, keyCode: Int, category: String = "ChatTriggers") {
         //#if MC<=11202
-        val possibleDuplicate = UMinecraft.getSettings().keyBindings.find {
+        val possibleDuplicate = Client.settings.getSettings().keyBindings.find {
             it.keyDescription.i18Format() == description.i18Format() && it.keyCategory.i18Format() == category.i18Format()
         }
         //#else
-        //$$ val possibleDuplicate = UMinecraft.getSettings().keyMappings.find {
+        //$$ val possibleDuplicate = Client.settings.getSettings().keyMappings.find {
         //$$     it.name.i18Format() == description.i18Format() && it.category.i18Format() == category.i18Format()
         //$$ }
         //#endif
@@ -159,7 +159,7 @@ abstract class KeyBind {
         //#if MC<=11202
         return keyBinding.keyCode
         //#else
-        //$$ return keyBinding.key.value
+        //$$ return keyBinding.asMixin<KeyMappingAccessor>().key.value
         //#endif
     }
 
@@ -185,7 +185,7 @@ abstract class KeyBind {
         //#if MC<=11202
         KeyBinding.setKeyBindState(keyBinding.keyCode, pressed)
         //#else
-        //$$ KeyMapping.set(keyBinding.key, pressed)
+        //$$ KeyMapping.set(keyBinding.asMixin<KeyMappingAccessor>().key, pressed)
         //#endif
     }
 
@@ -202,17 +202,25 @@ abstract class KeyBind {
         private val uniqueCategories = mutableMapOf<String, Int>()
 
         private fun removeKeyBinding(keyBinding: KeyBinding) {
+            Client.settings.getSettings().asMixin<GameSettingsAccessor>()
+                //#if MC<=11202
+                .setKeyBindings(
+                //#elseif MC>=11701
+                //$$ .setKeyMappings(
+                //#endif
+
+                    ArrayUtils.removeElement(
+                        //#if MC<=11202
+                        Client.settings.getSettings().keyBindings,
+                        //#elseif MC>=11701
+                        //$$ Client.settings.getSettings().keyMappings,
+                        //#endif
+                        keyBinding
+                    )
+                )
             //#if MC<=11202
-            Client.getMinecraft().gameSettings.keyBindings = ArrayUtils.removeElement(
-                Client.getMinecraft().gameSettings.keyBindings,
-                keyBinding
-            )
             val category = keyBinding.keyCategory
             //#else
-            //$$ UMinecraft.getSettings().keyMappings = ArrayUtils.removeElement(
-            //$$     UMinecraft.getSettings().keyMappings,
-            //$$     keyBinding
-            //$$ )
             //$$ val category = keyBinding.category
             //#endif
 
