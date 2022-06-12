@@ -65,6 +65,8 @@ class CTJS {
     //#else
     //$$ fun init() {
     //#endif
+        CTCommand.register()
+
         listOf(
             WorldListener,
             CPS,
@@ -102,16 +104,11 @@ class CTJS {
 
         Runtime.getRuntime().addShutdownHook(Thread(TriggerType.GameUnload::triggerAll))
 
-        //#if MC<=11202
-        ClientCommandHandler.instance.registerCommand(CTCommand)
-        //#endif
     }
 
-    //#if MC>=11701
+    //#if MC>=11701 && FABRIC==0
     //$$ @SubscribeEvent
     //$$ fun registerCommands(event: RegisterCommandsEvent) {
-    //$$     commandDispatcher = event.dispatcher
-    //$$     CTCommand.register(event.dispatcher)
     //$$     commandsPendingRegistration.forEach(event.dispatcher.root::addChild)
     //$$     commandsPendingRegistration.clear()
     //$$ }
