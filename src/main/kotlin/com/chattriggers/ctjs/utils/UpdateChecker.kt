@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
+import com.chattriggers.ctjs.minecraft.listeners.Initializer
 import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.EventType
@@ -14,11 +15,11 @@ import gg.essential.universal.wrappers.message.UMessage
 import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.event.ClickEvent
 
-object UpdateChecker {
+object UpdateChecker : Initializer {
     private var updateAvailable = false
     private var warned = false
 
-    init {
+    override fun init() {
         try {
             getUpdate()
         } catch (exception: Exception) {

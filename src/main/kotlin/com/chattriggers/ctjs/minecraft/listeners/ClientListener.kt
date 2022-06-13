@@ -34,8 +34,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 //#endif
 
-object ClientListener {
-    var ticksPassed: Int = 0
+object ClientListener : Initializer {
+    private var ticksPassed: Int = 0
     val chatHistory = mutableListOf<String>()
     val actionBarHistory = mutableListOf<String>()
     private val tasks = CopyOnWriteArrayList<Task>()
@@ -46,7 +46,7 @@ object ClientListener {
         tasks.add(Task(delay, callback))
     }
 
-    init {
+    override fun init() {
         ticksPassed = 0
 
         CTJS.addEventListener(EventType.Tick) {

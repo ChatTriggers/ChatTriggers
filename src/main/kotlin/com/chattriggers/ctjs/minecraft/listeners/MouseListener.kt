@@ -8,7 +8,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import org.lwjgl.input.Mouse
 //#endif
 
-object MouseListener {
+object MouseListener : Initializer {
     private val scrollListeners = mutableListOf<(x: Double, y: Double, delta: Int) -> Unit>()
     private val clickListeners = mutableListOf<(x: Double, y: Double, button: Int, pressed: Boolean) -> Unit>()
     private val draggedListeners = mutableListOf<(deltaX: Double, deltaY: Double, x: Double, y: Double, button: Int) -> Unit>()
@@ -20,7 +20,7 @@ object MouseListener {
     class State(val x: Double, val y: Double)
     //#endif
 
-    init {
+    override fun init() {
         registerTriggerListeners()
     }
 

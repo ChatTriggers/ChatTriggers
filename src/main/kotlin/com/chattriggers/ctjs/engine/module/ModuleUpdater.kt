@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.module.ModuleManager.cachedModules
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
+import com.chattriggers.ctjs.minecraft.listeners.Initializer
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.EventType
@@ -18,10 +19,10 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
-object ModuleUpdater {
+object ModuleUpdater : Initializer {
     private val changelogs = mutableListOf<ModuleMetadata>()
 
-    init {
+    override fun init() {
         CTJS.addEventListener(EventType.WorldLoad) {
             changelogs.forEach(::reportChangelog)
             changelogs.clear()

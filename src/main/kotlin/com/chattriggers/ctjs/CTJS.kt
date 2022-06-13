@@ -10,7 +10,6 @@ import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
 import com.chattriggers.ctjs.minecraft.wrappers.CPS
-import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.triggers.EventType
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -41,7 +40,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 //$$ import net.minecraftforge.event.RegisterCommandsEvent
 //$$ import net.minecraftforge.eventbus.api.SubscribeEvent
 //$$ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-//$$ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 //#endif
 
 //#if FORGE
@@ -71,11 +69,11 @@ class CTJS {
     //#if MC<=11202
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        //#elseif MC>=11701 && FABRIC==0
-        //$$ fun init(event: FMLCommonSetupEvent) {
-        //#else
-        //$$ override fun onInitializeClient() {
-        //#endif
+    //#elseif MC>=11701 && FABRIC==0
+    //$$ fun init(event: FMLCommonSetupEvent) {
+    //#else
+    //$$ override fun onInitializeClient() {
+    //#endif
 
         //#if MC<=11202
         Minecraft.getMinecraft().addScheduledTask {
@@ -85,16 +83,15 @@ class CTJS {
             Config.preload()
             CTCommand.register()
 
-            ModuleUpdater
-            UpdateChecker
-            MouseListener
-            CPS
-            WorldListener
+            ClientListener.init()
+            CPS.init()
+            ModuleUpdater.init()
+            MouseListener.init()
+            UpdateChecker.init()
+            WorldListener.init()
 
             //#if FORGE
             MinecraftForge.EVENT_BUS.register(ClientListener)
-            //#else
-            //$$ ClientListener
             //#endif
 
             UriScheme.installUriScheme()
