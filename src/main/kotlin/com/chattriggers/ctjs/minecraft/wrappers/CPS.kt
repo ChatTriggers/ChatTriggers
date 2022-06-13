@@ -1,11 +1,12 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.minecraft.listeners.Initializer
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.triggers.EventType
 import kotlin.math.roundToInt
 
-object CPS {
+object CPS : Initializer {
     private var sysTime = Client.getSystemTime()
 
     private var leftClicks = mutableListOf<Int>()
@@ -16,7 +17,7 @@ object CPS {
     private var leftClicksMax = 0
     private var rightClicksMax = 0
 
-    init {
+    override fun init() {
         MouseListener.registerClickListener { _, _, button, pressed ->
             if (!pressed)
                 return@registerClickListener

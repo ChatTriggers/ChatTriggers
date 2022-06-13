@@ -6,10 +6,10 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.triggers.EventType
 import com.chattriggers.ctjs.triggers.TriggerType
 
-object WorldListener {
+object WorldListener : Initializer {
     private var playerList = mutableListOf<String>()
 
-    init {
+    override fun init() {
         CTJS.addEventListener(EventType.WorldLoad) {
             playerList.clear()
             TriggerType.WorldLoad.triggerAll()
