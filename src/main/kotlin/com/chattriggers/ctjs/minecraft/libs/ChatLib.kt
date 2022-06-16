@@ -103,7 +103,7 @@ object ChatLib {
             //#if MC<=11202
             ClientCommandHandler.instance.executeCommand(Player.getPlayer(), "/$text")
             //#else
-            // CTJS.commandDispatcher?.execute(text, Player.getPlayer()!!.createCommandSourceStack())
+            //$$ say("/$text")
             //#endif
         } else say("/$text")
     }

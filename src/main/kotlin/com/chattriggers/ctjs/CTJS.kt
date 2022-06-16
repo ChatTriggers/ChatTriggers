@@ -6,6 +6,7 @@ import com.chattriggers.ctjs.engine.module.ModuleUpdater
 import com.chattriggers.ctjs.loader.UriScheme
 import com.chattriggers.ctjs.minecraft.libs.renderer.Image
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
+import com.chattriggers.ctjs.minecraft.listeners.Initializer
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.listeners.WorldListener
 import com.chattriggers.ctjs.minecraft.objects.Sound
@@ -29,16 +30,7 @@ import kotlin.concurrent.thread
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 //#endif
 
-//#if MC>=11701
-//$$ import com.mojang.brigadier.CommandDispatcher
-//$$ import com.mojang.brigadier.tree.CommandNode
-//$$ import net.minecraft.commands.CommandSourceStack
-//#endif
-
 //#if MC>=11701 && FORGE
-//$$ import net.minecraftforge.api.distmarker.Dist
-//$$ import net.minecraftforge.event.RegisterCommandsEvent
-//$$ import net.minecraftforge.eventbus.api.SubscribeEvent
 //$$ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 //#endif
 
@@ -83,12 +75,14 @@ class CTJS {
             Config.preload()
             CTCommand.register()
 
-            ClientListener.init()
-            CPS.init()
-            ModuleUpdater.init()
-            MouseListener.init()
-            UpdateChecker.init()
-            WorldListener.init()
+            initialize(
+                ClientListener,
+                CPS,
+                ModuleUpdater,
+                MouseListener,
+                UpdateChecker,
+                WorldListener,
+            )
 
             //#if FORGE
             MinecraftForge.EVENT_BUS.register(ClientListener)
@@ -121,13 +115,9 @@ class CTJS {
         }
     }
 
-    //#if MC>=11701 && FABRIC==0
-    //$$ @SubscribeEvent
-    //$$ fun registerCommands(event: RegisterCommandsEvent) {
-    //$$     commandsPendingRegistration.forEach(event.dispatcher.root::addChild)
-    //$$     commandsPendingRegistration.clear()
-    //$$ }
-    //#endif
+    private fun initialize(vararg clazz: Initializer) {
+        clazz.forEach { it.init() }
+    }
 
     private fun reportHashedUUID() {
         val uuid = Player.getUUID().encodeToByteArray()
@@ -164,25 +154,5 @@ class CTJS {
             connectTimeout = 3000
             readTimeout = 3000
         }
-
-        //#if MC>=11701
-        //$$ private val commandsPendingRegistration = mutableListOf<CommandNode<CommandSourceStack>>()
-        //$$ internal var commandDispatcher: CommandDispatcher<CommandSourceStack>? = null
-        //$$
-        //$$ fun registerCommand(command: CommandNode<CommandSourceStack>) {
-        //$$     if (commandDispatcher!!.root.children.any { it.name == command.name })
-        //$$         throw IllegalArgumentException("Command with name ${command.name} already exists!")
-        //$$     commandDispatcher?.root?.addChild(command) ?: commandsPendingRegistration.add(command)
-        //$$ }
-        //$$
-        //$$ fun unregisterCommand(command: CommandNode<CommandSourceStack>) {
-        //$$     val dispatcher = commandDispatcher
-        //$$     if (dispatcher == null) {
-        //$$         commandsPendingRegistration.remove(command)
-        //$$     } else if (!dispatcher.root.children.remove(command)) {
-        //$$         throw IllegalArgumentException("Encountered an error while removing command ${command.name}")
-        //$$     }
-        //$$ }
-        //#endif
     }
 }
