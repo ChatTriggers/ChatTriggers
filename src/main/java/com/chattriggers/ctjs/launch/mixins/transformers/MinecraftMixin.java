@@ -7,6 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
 import com.chattriggers.ctjs.triggers.EventType;
 import com.chattriggers.ctjs.triggers.TriggerType;
+import gg.essential.lib.mixinextras.injector.ModifyExpressionValue;
 import gg.essential.universal.wrappers.message.UTextComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -26,7 +27,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.File;
@@ -157,7 +157,7 @@ public class MinecraftMixin {
         MouseListener.INSTANCE.process$chattriggers(Mouse.getEventButton(), Mouse.getEventDWheel());
     }
 
-    @Redirect(
+    @ModifyExpressionValue(
             method = "rightClickMouse",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;onPlayerRightClick(Lnet/minecraft/client/entity/EntityPlayerSP;Lnet/minecraft/client/multiplayer/WorldClient;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/BlockPos;Lnet/minecraft/util/EnumFacing;Lnet/minecraft/util/Vec3;)Z")
     )
@@ -168,7 +168,7 @@ public class MinecraftMixin {
         ) && playerController.onPlayerRightClick(player, world, itemStack, blockPos, enumFacing, vec3);
     }
 
-    @Redirect(
+    @ModifyExpressionValue(
             method = "rightClickMouse",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;sendUseItem(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Z")
     )
