@@ -42,7 +42,7 @@ object Reference {
         MouseListener.clearListeners()
         KeyBind.clearKeyBinds()
 
-        Command.activeCommands.values.toList().forEach(Command::unregister)
+        Command.activeCommands.forEach(Command::unregister)
 
         Client.scheduleTask {
             CTJS.images.forEach {
