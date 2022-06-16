@@ -111,3 +111,4 @@ net.minecraft.client.renderer.entity.LivingEntityRenderer net.minecraft.client.r
 net.minecraft.world.phys.HitResult net.minecraft.util.MovingObjectPosition
 net.minecraft.client.model.Model net.minecraft.client.model.ModelBase
 net.minecraft.client.model.PlayerModel net.minecraft.client.model.ModelPlayer
+net.minecraft.client.gui.screens.inventory.AbstractContainerScreen net.minecraft.client.gui.inventory.GuiContainer

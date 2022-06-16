@@ -22,6 +22,7 @@
         "entity.PlayerTabOverlayAccessor",
         "gui.ChatGuiMixin",
         "gui.GuiButtonAccessor",
+        "gui.GuiContainerMixin",
         "gui.GuiIngameMixin",
         "render.RenderPlayerMixin",
         //#if MC<=11202
@@ -35,7 +36,6 @@
         "entity.PlayerControllerMPMixin",
         "gui.GuiAccessor",
         "gui.GuiChatAccessor",
-        "gui.GuiContainerMixin",
         "gui.GuiMainMenuMixin",
         "gui.GuiScreenBookAccessor",
         "gui.GuiScreenMixin",

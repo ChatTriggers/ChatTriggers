@@ -4,8 +4,7 @@ import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.scoreboard.ScoreObjective;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //#if MC<=11202
@@ -17,23 +16,15 @@ import net.minecraft.client.gui.ScaledResolution;
 //#if FABRIC
 //$$ import com.chattriggers.ctjs.CTJS;
 //$$ import com.chattriggers.ctjs.triggers.EventType;
-//$$ import com.chattriggers.ctjs.triggers.TriggerType;
 //$$ import com.chattriggers.ctjs.minecraft.listeners.events.CancellableEvent;
-//$$ import net.minecraft.client.MinecraftClient;
+//$$ import gg.essential.lib.mixinextras.injector.ModifyExpressionValue;
+//$$ import gg.essential.lib.mixinextras.injector.WrapWithCondition;
 //$$ import net.minecraft.client.gui.hud.BossBarHud;
 //$$ import net.minecraft.client.gui.hud.ChatHud;
 //$$ import net.minecraft.client.gui.hud.DebugHud;
 //$$ import net.minecraft.client.gui.hud.PlayerListHud;
-//$$ import net.minecraft.client.util.math.MatrixStack;
 //$$ import net.minecraft.entity.player.PlayerEntity;
 //$$ import net.minecraft.scoreboard.Scoreboard;
-//$$ import net.minecraft.util.Identifier;
-//$$ import org.spongepowered.asm.mixin.Final;
-//$$ import org.spongepowered.asm.mixin.Mixin;
-//$$ import org.spongepowered.asm.mixin.Shadow;
-//$$ import org.spongepowered.asm.mixin.injection.ModifyVariable;
-//$$ import org.spongepowered.asm.mixin.injection.Redirect;
-//$$ import org.spongepowered.asm.mixin.injection.Slice;
 //#endif
 
 @Mixin(GuiIngame.class)
@@ -61,13 +52,6 @@ public class GuiIngameMixin {
     }
 
     //#if FABRIC
-    //$$ @Final
-    //$$ @Shadow
-    //$$ private MinecraftClient client;
-    //$$
-    //$$ @Shadow
-    //$$ private void renderOverlay(Identifier par1, float par2) {}
-    //$$
     //$$ @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
     //$$ private void chattriggers_renderCrosshairTrigger(MatrixStack matrices, CallbackInfo ci) {
     //$$     TriggerType.RenderCrosshair.triggerAll(ci);
@@ -78,7 +62,14 @@ public class GuiIngameMixin {
     //$$     TriggerType.RenderHealth.triggerAll(ci);
     //$$ }
     //$$
-    //$$ @ModifyVariable(method = "renderStatusBars", at = @At(value = "CONSTANT", args = "intValue=0", ordinal = 0))
+    //$$ @ModifyConstant(
+    //$$         method = "renderStatusBars",
+    //$$         constant = @Constant(intValue = 0, ordinal = 0),
+    //$$         slice = @Slice(
+    //$$                 from = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V", args = "ldc=armor"),
+    //$$                 to = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=health")
+    //$$         )
+    //$$ )
     //$$ private int chattriggers_renderArmorTrigger(int original) {
     //$$     CancellableEvent event = new CancellableEvent();
     //$$     TriggerType.RenderArmor.triggerAll(event);
@@ -86,15 +77,13 @@ public class GuiIngameMixin {
     //$$     return event.isCanceled() ? 100 : original;
     //$$ }
     //$$
-    //$$    // TODO(VERIFY)
-    //$$ @ModifyVariable(
+    //$$ @ModifyConstant(
     //$$         method = "renderStatusBars",
-    //$$         at = @At(value = "STORE", ordinal = 0),
+    //$$         constant = @Constant(intValue = 0, ordinal = 0),
     //$$         slice = @Slice(
     //$$                 from = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=food"),
     //$$                 to = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=air")
-    //$$         ),
-    //$$         ordinal = 0
+    //$$         )
     //$$ )
     //$$ private int chattriggers_renderFoodTrigger(int original) {
     //$$     CancellableEvent event = new CancellableEvent();
@@ -117,20 +106,19 @@ public class GuiIngameMixin {
     //$$ private void chattriggers_renderHotbarTrigger(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
     //$$     TriggerType.RenderHotbar.triggerAll(ci);
     //$$ }
-    //$$// TODO(VERIFY)
-    //$$ @Inject(
+    //$$
+    //$$ @ModifyConstant(
     //$$         method = "renderStatusBars",
-    //$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;getHeartRows(I)I"),
-    //$$         cancellable = true
+    //$$         constant = @Constant(intValue = 0, ordinal = 0),
+    //$$         slice = @Slice(
+    //$$                 from = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=air")
+    //$$         )
     //$$ )
-    //$$ private void chattriggers_renderAirTrigger(MatrixStack matrices, CallbackInfo ci) {
+    //$$ private int chattriggers_renderAirTrigger(int original) {
     //$$    CancellableEvent event = new CancellableEvent();
     //$$    TriggerType.RenderAir.triggerAll(event);
     //$$
-    //$$    if (event.isCanceled()) {
-    //$$        client.getProfiler().pop();
-    //$$        ci.cancel();
-    //$$    }
+    //$$    return event.isCanceled() ? 100 : original;
     //$$ }
     //$$
     //$$ @Inject(method = "renderPortalOverlay", at = @At("HEAD"), cancellable = true)
@@ -143,62 +131,59 @@ public class GuiIngameMixin {
     //$$     TriggerType.RenderJumpBar.triggerAll(ci);
     //$$ }
     //$$
-    //$$ @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/util/Identifier;F)V", ordinal = 0))
-    //$$ private void chattriggers_renderHelmetTrigger(InGameHud instance, Identifier texture, float opacity) {
+    //$$ @ModifyExpressionValue(
+    //$$         method = "render",
+    //$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z")
+    //$$ )
+    //$$ private boolean chattriggers_renderHelmetTrigger(boolean original) {
     //$$     CancellableEvent event = new CancellableEvent();
     //$$     TriggerType.RenderHelmet.triggerAll(event);
     //$$
-    //$$     if (!event.isCanceled()) {
-    //$$         renderOverlay(texture, opacity);
-    //$$     }
+    //$$     return !event.isCanceled() && original;
     //$$ }
     //$$
-    //$$ @Final
-    //$$ @Shadow
-    //$$ private BossBarHud bossBarHud;
-    //$$
-    //$$ @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/BossBarHud;render(Lnet/minecraft/client/util/math/MatrixStack;)V"))
-    //$$ private void chattriggers_renderBossHealthTrigger(BossBarHud instance, MatrixStack matrices) {
+    //$$ @WrapWithCondition(
+    //$$         method = "render",
+    //$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/BossBarHud;render(Lnet/minecraft/client/util/math/MatrixStack;)V")
+    //$$ )
+    //$$ private boolean chattriggers_renderBossHealthTrigger(BossBarHud instance, MatrixStack matrices) {
     //$$     CancellableEvent event = new CancellableEvent();
-    //$$
     //$$     TriggerType.RenderBossHealth.triggerAll(event);
     //$$
-    //$$     if (!event.isCanceled()) {
-    //$$         bossBarHud.render(matrices);
-    //$$     }
+    //$$     return !event.isCanceled();
     //$$ }
     //$$
-    //$$ @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;render(Lnet/minecraft/client/util/math/MatrixStack;I)V"))
-    //$$ private void chattriggers_renderChatTrigger(ChatHud instance, MatrixStack matrices, int tickDelta) {
+    //$$ @WrapWithCondition(
+    //$$         method = "render",
+    //$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;render(Lnet/minecraft/client/util/math/MatrixStack;I)V")
+    //$$ )
+    //$$ private boolean chattriggers_renderChatTrigger(ChatHud instance, MatrixStack matrices, int tickDelta) {
     //$$     CancellableEvent event = new CancellableEvent();
-    //$$
     //$$     TriggerType.RenderChat.triggerAll(event);
     //$$
-    //$$     if (!event.isCanceled()) {
-    //$$         instance.render(matrices, tickDelta);
-    //$$     }
+    //$$     return !event.isCanceled();
     //$$ }
     //$$
-    //$$ @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;render(Lnet/minecraft/client/util/math/MatrixStack;)V"))
-    //$$ private void chattriggers_renderDebugTrigger(DebugHud instance, MatrixStack matrices) {
+    //$$ @WrapWithCondition(
+    //$$         method = "render",
+    //$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;render(Lnet/minecraft/client/util/math/MatrixStack;)V")
+    //$$ )
+    //$$ private boolean chattriggers_renderDebugTrigger(DebugHud instance, MatrixStack matrices) {
     //$$     CancellableEvent event = new CancellableEvent();
-    //$$
     //$$     TriggerType.RenderDebug.triggerAll(event);
     //$$
-    //$$     if (!event.isCanceled()) {
-    //$$         instance.render(matrices);
-    //$$     }
+    //$$     return !event.isCanceled();
     //$$ }
     //$$
-    //$$ @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;render(Lnet/minecraft/client/util/math/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V"))
-    //$$ private void chattriggers_renderPlayerListTrigger(PlayerListHud instance, MatrixStack matrices, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective) {
+    //$$ @WrapWithCondition(
+    //$$         method = "render",
+    //$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;render(Lnet/minecraft/client/util/math/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V")
+    //$$ )
+    //$$ private boolean chattriggers_renderPlayerListTrigger(PlayerListHud instance, MatrixStack matrices, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective) {
     //$$     CancellableEvent event = new CancellableEvent();
-    //$$
     //$$     TriggerType.RenderPlayerList.triggerAll(event);
     //$$
-    //$$     if (!event.isCanceled()) {
-    //$$         instance.render(matrices, scaledWindowWidth, scoreboard, objective);
-    //$$     }
+    //$$     return !event.isCanceled();
     //$$ }
     //$$
     //$$ @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderColor(FFFF)V", ordinal = 1, remap = false))

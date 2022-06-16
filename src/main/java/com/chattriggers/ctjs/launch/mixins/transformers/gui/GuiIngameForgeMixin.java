@@ -33,7 +33,8 @@ public class GuiIngameForgeMixin extends GuiIngame {
             //#endif
             ordinal = 0
         ),
-        cancellable = true
+        cancellable = true,
+        remap = false
     )
     //#if MC<=11202
     private void chattriggers_renderTitleTrigger(int width, int height, float partialTicks, CallbackInfo ci) {
