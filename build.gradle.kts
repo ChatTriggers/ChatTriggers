@@ -24,9 +24,6 @@ loom {
             accessTransformer(rootProject.file("src/main/resources/$accessTransformerName"))
         }
     }
-    mixin {
-        defaultRefmapName.set("chattriggers.mixins.refmap.json")
-    }
     launchConfigs {
         getByName("client") {
             property("mixin.debug.verbose", "true")
@@ -62,16 +59,18 @@ dependencies {
         embed("gg.essential:loader-launchwrapper:1.1.3")
 
     if (platform.isFabric) {
-        modImplementation(embed("gg.essential:loader-fabric:1.0.0")!!)
+        val include by configurations
+
+        modImplementation(include("gg.essential:loader-fabric:1.0.0")!!)
         modImplementation("net.fabricmc.fabric-api:fabric-api:0.45.0+1.17")
     }
 
     compileOnly("org.spongepowered:mixin:0.8.5-SNAPSHOT")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
-    implementation("com.chattriggers:rhino:1.8.6")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.13.2")
-    implementation("com.fifesoft:rsyntaxtextarea:3.2.0")
+    embed("com.chattriggers:rhino:1.8.6")
+    embed("com.fasterxml.jackson.core:jackson-core:2.13.2")
+    embed("com.fifesoft:rsyntaxtextarea:3.2.0")
 }
 
 tasks.processResources {
@@ -80,10 +79,23 @@ tasks.processResources {
     filesMatching("META-INF/mods.toml") {
         expand("version" to project.version)
     }
+
+    filesMatching("fabric.mod.json") {
+        expand("version" to project.version)
+    }
 }
 
 tasks.jar {
-    from(embed.files.map { zipTree(it) })
+    from(embed.files.map {
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("LICENSE.txt")
+        exclude("META-INF/LICENSE.txt")
+        exclude("**/module-info.class")
+        exclude("META-INF/versions/9/**")
+        zipTree(it)
+    })
 
     manifest.attributes(mapOf(
         "ModSide" to "CLIENT",

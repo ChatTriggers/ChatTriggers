@@ -16,7 +16,6 @@ import net.minecraft.client.multiplayer.WorldClient
 import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderGlobalAccessor
 import net.minecraft.util.EnumParticleTypes
 //#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.WorldAccessor
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.render.LevelRendererAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import net.minecraft.core.Registry
@@ -108,7 +107,7 @@ object World {
         //#if MC<=11202
         return getWorld()?.rainingStrength ?: -1f
         //#else
-        //$$ return getWorld()?.asMixin<WorldAccessor>()?.rainLevel ?: -1f
+        //$$ return getWorld()?.getRainLevel(1f) ?: -1f
         //#endif
     }
 

@@ -364,7 +364,7 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#if MC<=11202
         return entity.fireResistance
         //#else
-        //$$ return entity.asMixin<EntityAccessor>().invokeGetFireImmuneTicks()
+        //$$ return entity.asMixin<EntityAccessor>().remainingFireTicks
         //#endif
     }
 
