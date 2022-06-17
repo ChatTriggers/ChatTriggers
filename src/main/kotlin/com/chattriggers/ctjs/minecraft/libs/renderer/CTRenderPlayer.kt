@@ -42,13 +42,26 @@ internal class CTRenderPlayer(renderManager: RenderManager, useSmallArms: Boolea
         private set
     var showArrows = true
         private set
+    //#if MC>=11701
+    //$$ var showParrot = true
+    //$$     private set
+    //$$ var showSpinAttackEffect = true
+    //$$     private set
+    //$$ var showBeeStinger = true
+    //$$     private set
+    //#endif
 
     fun setOptions(
         showNametag: Boolean,
         showArmor: Boolean,
         showCape: Boolean,
         showHeldItem: Boolean,
-        showArrows: Boolean
+        showArrows: Boolean,
+        //#if MC>=11701
+        //$$ showParrot: Boolean,
+        //$$ showSpinAttack: Boolean,
+        //$$ showBeeStinger: Boolean,
+        //#endif
     ) {
         this.showNametag = showNametag
         this.showArmor = showArmor
@@ -100,11 +113,12 @@ internal class CTRenderPlayer(renderManager: RenderManager, useSmallArms: Boolea
         //$$     addLayer(CustomHeadLayer(this, context.modelSet))
         //$$     addLayer(ElytraLayer(this, context.modelSet))
         //$$ }
-        //$$
-        //$$ // TODO(CONVERT): Hide these behind flags?
-        //$$ addLayer(ParrotOnShoulderLayer(this, context.modelSet))
-        //$$ addLayer(SpinAttackEffectLayer(this, context.modelSet))
-        //$$ addLayer(BeeStingerLayer(this))
+        //$$ if (showParrot)
+        //$$     addLayer(ParrotOnShoulderLayer(this, context.modelSet))
+        //$$ if (showSpinAttackEffect)
+        //$$     addLayer(SpinAttackEffectLayer(this, context.modelSet))
+        //$$ if (showBeeStinger)
+        //$$     addLayer(BeeStingerLayer(this))
         //#endif
     }
 

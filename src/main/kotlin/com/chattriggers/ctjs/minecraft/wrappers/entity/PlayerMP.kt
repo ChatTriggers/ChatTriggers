@@ -63,12 +63,12 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
         //#endif
     }
 
+    // TODO(BREAKING) Removed unneeded player param
     /**
      * Draws the player in the GUI
      */
     @JvmOverloads
     fun draw(
-        player: Any,
         x: Int,
         y: Int,
         rotate: Boolean = false,
@@ -76,7 +76,12 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
         showArmor: Boolean = true,
         showCape: Boolean = true,
         showHeldItem: Boolean = true,
-        showArrows: Boolean = true
+        showArrows: Boolean = true,
+        //#if MC>=11701
+        //$$ showParrot: Boolean,
+        //$$ showSpinAttack: Boolean,
+        //$$ showBeeStinger: Boolean,
+        //#endif
     ) = apply {
         Renderer.drawPlayer(player, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
     }
