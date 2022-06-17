@@ -1,7 +1,6 @@
 {
     "required": true,
     "package": "com.chattriggers.ctjs.launch.mixins.transformers",
-    "refmap": "mixins.chattriggers.refmap.json",
     //#if MC<=11202
     "compatibilityLevel": "JAVA_8",
     //#else
@@ -55,7 +54,6 @@
         //$$ "SoundAccessor",
         //$$ "SoundEngineMixin",
         //$$ "SoundManagerAccessor",
-        //$$ "WorldAccessor",
         //$$ "entity.AbstractClientPlayerAccessor",
         //$$ "entity.EntityAccessor",
         //$$ "entity.SignBlockEntityAccessor",

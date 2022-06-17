@@ -152,7 +152,7 @@ public class MinecraftMixin {
     }
 
     //#if MC<=11202
-    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;next()Z", shift = At.Shift.BY, by = 2))
+    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;next()Z", shift = At.Shift.BY, by = 1))
     private void chattriggers_mouseClickTrigger(CallbackInfo ci) {
         MouseListener.INSTANCE.process$chattriggers(Mouse.getEventButton(), Mouse.getEventDWheel());
     }
