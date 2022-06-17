@@ -23,6 +23,7 @@
         "gui.GuiButtonAccessor",
         "gui.GuiContainerMixin",
         "gui.GuiIngameMixin",
+        "gui.GuiMainMenuMixin",
         "render.RenderPlayerMixin",
         //#if MC<=11202
         "CommandHandlerAccessor",
@@ -35,7 +36,6 @@
         "entity.PlayerControllerMPMixin",
         "gui.GuiAccessor",
         "gui.GuiChatAccessor",
-        "gui.GuiMainMenuMixin",
         "gui.GuiScreenBookAccessor",
         "gui.GuiScreenMixin",
         "render.EffectRendererMixin",

@@ -486,7 +486,7 @@ abstract class Gui : UScreen() {
         //#if MC<=11202
         drawString(Renderer.getFontRenderer(), text, x, y, color)
         //#else
-        //$$ drawString(Renderer.matrixStack, Renderer.getFontRenderer(), text, x, y, color)
+        //$$ drawString(Renderer.matrixStack.toMC(), Renderer.getFontRenderer(), text, x, y, color)
         //#endif
     }
 
@@ -505,7 +505,7 @@ abstract class Gui : UScreen() {
         drawHoveringText(text, x, y, mc.fontRendererObj)
         //#else
         //$$ this.asMixin<ScreenAccessor>().invokeRenderTooltipInternal(
-        //$$     Renderer.matrixStack,
+        //$$     Renderer.matrixStack.toMC(),
         //$$     text.map {
         //$$         ClientTextTooltip(UTextComponent(it).visualOrderText)
         //$$     },

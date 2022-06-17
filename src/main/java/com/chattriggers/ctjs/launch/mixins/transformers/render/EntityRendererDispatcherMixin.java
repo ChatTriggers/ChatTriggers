@@ -18,7 +18,7 @@ package com.chattriggers.ctjs.launch.mixins.transformers.render;
 //$$             )
 //$$     )
 //$$     private EntityRendererProvider.Context chattriggers_initializeRenderPlayers(EntityRendererProvider.Context context) {
-//$$         Renderer.initializeRenderPlayers(context);
+//$$         Renderer.initializeRenderPlayers$chattriggers(context);
 //$$         return context;
 //$$     }
 //$$ }

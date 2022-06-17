@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.RenderHelper
 //$$ import com.mojang.blaze3d.vertex.PoseStack
 //$$ import com.mojang.blaze3d.systems.RenderSystem
 //$$ import com.mojang.math.Quaternion
+//$$ import gg.essential.universal.UMatrixStack
 //$$ import net.minecraft.client.CameraType
 //$$ import net.minecraft.client.renderer.entity.EntityRendererProvider
 //#endif
@@ -40,8 +41,7 @@ object Renderer {
     //#if MC>=11701
     //$$ private val boundMatrices = ArrayDeque<PoseStack>()
     //$$
-    //$$ val matrixStack: PoseStack
-    //$$     get() = boundMatrices.last()
+    //$$ val matrixStack = UMatrixStack()
     //$$
     //$$ internal inline fun <T> withMatrixStack(stack: PoseStack, block: () -> T): T {
     //$$     boundMatrices.addLast(stack)
@@ -83,11 +83,8 @@ object Renderer {
     //$$ private lateinit var slimCTRenderPlayer: CTRenderPlayer
     //$$ private lateinit var normalCTRenderPlayer: CTRenderPlayer
     //$$
-    //$$ /**
-    //$$  * This function is intended for internal use, do not call.
-    //$$  */
     //$$ @JvmStatic
-    //$$ fun initializeRenderPlayers(context: EntityRendererProvider.Context) {
+    //$$ internal fun initializeRenderPlayers(context: EntityRendererProvider.Context) {
     //$$     slimCTRenderPlayer = CTRenderPlayer(context, true)
     //$$     normalCTRenderPlayer = CTRenderPlayer(context, false)
     //$$ }
@@ -241,7 +238,7 @@ object Renderer {
         //#if MC<=11202
         GlStateManager.rotate(angle, 0f, 0f, 1f)
         //#else
-        //$$ matrixStack.mulPose(Quaternion(angle, 0f, 0f, 1f))
+        //$$ matrixStack.multiply(Quaternion(angle, 0f, 0f, 1f))
         //#endif
     }
 
@@ -253,19 +250,18 @@ object Renderer {
         //#if MC<=11202
         GlStateManager.rotate(angle, x, y, z)
         //#else
-        //$$ matrixStack.mulPose(Quaternion(angle, x, y, z))
+        //$$ matrixStack.multiply(Quaternion(angle, x, y, z))
         //#endif
     }
 
     @JvmStatic
     @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) = apply {
-        UGraphics.color4f(
-            red.coerceIn(0f..1f),
-            green.coerceIn(0f..1f),
-            blue.coerceIn(0f..1f),
-            alpha.coerceIn(0f..1f),
-        )
+        colorBuffer.clear()
+        colorBuffer.put(red.coerceIn(0f..1f))
+        colorBuffer.put(green.coerceIn(0f..1f))
+        colorBuffer.put(blue.coerceIn(0f..1f))
+        colorBuffer.put(alpha.coerceIn(0f..1f))
     }
 
     @JvmStatic
@@ -437,7 +433,7 @@ object Renderer {
         //#if MC<=11202
         GlStateManager.pushMatrix()
         //#else
-        //$$ matrixStack.pushPose()
+        //$$ matrixStack.push()
         //#endif
     }
 
@@ -446,24 +442,30 @@ object Renderer {
         //#if MC<=11202
         GlStateManager.popMatrix()
         //#else
-        //$$ matrixStack.popPose()
+        //$$ matrixStack.pop()
         //#endif
     }
 
+    @JvmStatic
     fun getRetainTransforms() = retainTransforms
 
+    @JvmStatic
     fun setRetainTransforms(retain: Boolean) = apply {
         retainTransforms = retain
     }
 
+    @JvmStatic
     fun getDrawMode() = drawMode
 
+    @JvmStatic
     fun setDrawMode(mode: DrawMode) = apply {
         drawMode = mode
     }
 
+    @JvmStatic
     fun getVertexFormat() = vertexFormat
 
+    @JvmStatic
     fun setVertexFormat(format: VertexFormat) = apply {
         vertexFormat = format
     }
@@ -533,6 +535,7 @@ object Renderer {
     @JvmStatic
     fun finishDraw() {
         if (!retainTransforms) {
+            colorBuffer.clear()
             drawMode = null
             vertexFormat = null
         }
@@ -725,9 +728,9 @@ object Renderer {
             newY += fr.FONT_HEIGHT
             //#else
             //$$ if (shadow) {
-            //$$     fr.drawShadow(matrixStack, it, x, newY, getCurrentGlColorAlphaFixed().rgb)
+            //$$     fr.drawShadow(matrixStack.toMC(), it, x, newY, color?.toInt() ?: getCurrentGlColorAlphaFixed().rgb)
             //$$ } else {
-            //$$     fr.draw(matrixStack, it, x, newY, getCurrentGlColorAlphaFixed().rgb)
+            //$$     fr.draw(matrixStack.toMC(), it, x, newY, color?.toInt() ?: getCurrentGlColorAlphaFixed().rgb)
             //$$ }
             //$$
             //$$ newY += fr.lineHeight
@@ -860,7 +863,13 @@ object Renderer {
         showArmor: Boolean = true,
         showCape: Boolean = true,
         showHeldItem: Boolean = true,
-        showArrows: Boolean = true
+        showArrows: Boolean = true,
+        // TODO(CONVERT) Add the rest of the layers as options in an object.
+        //#if MC>=11701
+        //$$ showParrot: Boolean,
+        //$$ showSpinAttack: Boolean,
+        //$$ showBeeStinger: Boolean,
+        //#endif
     ) {
         val mouseX = -30f
         val mouseY = 0f
@@ -962,7 +971,7 @@ object Renderer {
         //$$ val isSmall = entity.asMixin<AbstractClientPlayerAccessor>().playerInfo.modelName == "slim"
         //$$ val ctRenderPlayer = if (isSmall) slimCTRenderPlayer else normalCTRenderPlayer
         //$$
-        //$$ ctRenderPlayer.setOptions(showNametag, showArmor, showCape, showHeldItem, showArrows)
+        //$$ ctRenderPlayer.setOptions(showNametag, showArmor, showCape, showHeldItem, showArrows, showParrot, showSpinAttack, showBeeStinger)
         //$$ ctRenderPlayer.render(entity, 0f, 0f, newStack, lv6, 0xf000f0)
         //$$
         //$$ lv6.endBatch()
