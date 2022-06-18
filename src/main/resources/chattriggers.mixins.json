@@ -9,6 +9,7 @@
     "client": [
         "BlockNoteMixin",
         "GameSettingsAccessor",
+        "MinecraftAccessor",
         "MinecraftMixin",
         "NetHandlerLoginClientMixin",
         "NetHandlerPlayClientMixin",
