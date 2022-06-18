@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
@@ -29,6 +30,7 @@ import net.minecraft.realms.RealmsBridge
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraft.client.multiplayer.WorldClient
 //#else
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftMixin
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.ChatScreenAccessor
 //$$ import com.mojang.realmsclient.RealmsMainScreen
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
@@ -216,7 +218,6 @@ abstract class Client {
                     else -> getMinecraft().displayGuiScreen(GuiMultiplayer(GuiMainMenu()))
                 }
                 //#else
-                //$$ // TODO(VERIFY)
                 //$$ World.getWorld()?.disconnect()
                 //$$ getMinecraft().clearLevel()
                 //$$ // See PauseScreen::createPauseMenu
@@ -277,14 +278,7 @@ abstract class Client {
         }
 
         @JvmStatic
-        fun isInChat(): Boolean {
-            //#if MC<=11202
-            return GuiUtil.getOpenedScreen() is GuiChat
-            //#else
-            //$$ // TODO(CONVERT)
-            //$$ return false
-            //#endif
-        }
+        fun isInChat() = currentGui.get() is GuiChat
 
         @JvmStatic
         fun getTabGui(): GuiPlayerTabOverlay? {
@@ -328,15 +322,9 @@ abstract class Client {
         @JvmStatic
         fun isAltDown(): Boolean = UKeyboard.isAltKeyDown()
 
+        // TODO(BREAKING): Renamed from getFPS
         @JvmStatic
-        fun getFPS(): Int {
-            //#if MC<=11202
-            return Minecraft.getDebugFPS()
-            //#else
-            //$$ // TODO(CONVERT): Use MinecraftMixin to expose Minecraft::fps
-            //$$ return 0
-            //#endif
-        }
+        fun getFps() = MinecraftAccessor.getFps()
 
         @JvmStatic
         fun getVersion(): String {
