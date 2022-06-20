@@ -20,11 +20,11 @@
         "entity.EntityPlayerMixin",
         "entity.EntityPlayerSPMixin",
         "entity.PlayerTabOverlayAccessor",
-        "gui.ChatGuiMixin",
         "gui.GuiButtonAccessor",
         "gui.GuiContainerMixin",
         "gui.GuiIngameMixin",
         "gui.GuiMainMenuMixin",
+        "gui.GuiNewChatAccessor",
         "render.RenderPlayerMixin",
         //#if MC<=11202
         "CommandHandlerAccessor",

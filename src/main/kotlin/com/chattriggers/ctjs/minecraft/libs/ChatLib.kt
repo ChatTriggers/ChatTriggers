@@ -1,12 +1,13 @@
 package com.chattriggers.ctjs.minecraft.libs
 
-import com.chattriggers.ctjs.launch.mixins.transformers.gui.ChatGuiMixin
+import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiNewChatAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.events.ChatEvent
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.printToConsole
+import com.chattriggers.ctjs.utils.kotlin.asMixin
 import com.chattriggers.ctjs.utils.kotlin.setChatLineId
 import com.chattriggers.ctjs.utils.kotlin.setRecursive
 import com.chattriggers.ctjs.utils.kotlin.times
@@ -95,7 +96,6 @@ object ChatLib {
      * @param text the command to run, without the leading slash (Ex. "help")
      * @param clientSide should the command be ran as a client side command
      */
-    // TODO(VERIFY)
     @JvmOverloads
     @JvmStatic
     fun command(text: String, clientSide: Boolean = false) {
@@ -115,14 +115,16 @@ object ChatLib {
      */
     @JvmStatic
     fun clearChat(vararg chatLineIDs: Int) {
-        @Suppress("CAST_NEVER_SUCCEEDS")
-        val gui = Client.getChatGui() as? ChatGuiMixin
-            ?: return
+        val gui = Client.getChatGui().asMixin<GuiNewChatAccessor>()
 
         if (chatLineIDs.isEmpty())
-            gui.clearMessages()
+            //#if MC<=11202
+            gui.invokeClearChatMessages()
+            //#elseif MC>=11701
+            //$$ gui.invokeClearChatMessages(true)
+            //#endif
         for (chatLineID in chatLineIDs)
-            gui.deleteMessage(chatLineID)
+            gui.invokeDeleteChatLine(chatLineID)
     }
 
     /**
@@ -265,16 +267,19 @@ object ChatLib {
     }
 
     private fun editChat(toReplace: (UMessage) -> Boolean, vararg replacements: UMessage) {
-        @Suppress("CAST_NEVER_SUCCEEDS")
-        val chatGui = Client.getChatGui()!! as ChatGuiMixin
-        val drawnChatLines = chatGui.drawnChatLines
-        val chatLines = chatGui.chatLines
+        val chatGui = Client.getChatGui()!!.asMixin<GuiNewChatAccessor>()
+        //#if MC<=11202
+        val drawnChatLines = ChatLineListIterator<net.minecraft.client.gui.ChatLine>(chatGui.drawnChatLines)
+        val chatLines = ChatLineListIterator<net.minecraft.client.gui.ChatLine>(chatGui.chatLines)
+        //#elseif MC>=11701
+        //$$ val drawnChatLines = ChatLineListIterator(chatGui.drawnChatLines, true)
+        //$$ val chatLines = ChatLineListIterator(chatGui.chatLines, false)
+        //#endif
 
         editChatLineList(chatLines, toReplace, *replacements)
         editChatLineList(drawnChatLines, toReplace, *replacements)
     }
 
-    // TODO(VERIFY)
     private fun <T> editChatLineList(
         iterator: ChatLineListIterator<T>,
         toReplace: (UMessage) -> Boolean,
@@ -358,16 +363,19 @@ object ChatLib {
     }
 
     private fun deleteChat(toDelete: (UMessage) -> Boolean) {
-        @Suppress("CAST_NEVER_SUCCEEDS")
-        val chatGui = Client.getChatGui()!! as ChatGuiMixin
-        val drawnChatLines = chatGui.drawnChatLines
-        val chatLines = chatGui.chatLines
+        val chatGui = Client.getChatGui()!!.asMixin<GuiNewChatAccessor>()
+        //#if MC<=11202
+        val drawnChatLines = ChatLineListIterator<net.minecraft.client.gui.ChatLine>(chatGui.drawnChatLines)
+        val chatLines = ChatLineListIterator<net.minecraft.client.gui.ChatLine>(chatGui.chatLines)
+        //#elseif MC>=11701
+        //$$ val drawnChatLines = ChatLineListIterator(chatGui.drawnChatLines, true)
+        //$$ val chatLines = ChatLineListIterator(chatGui.chatLines, false)
+        //#endif
 
         deleteChatLineList(chatLines, toDelete)
         deleteChatLineList(drawnChatLines, toDelete)
     }
 
-    // TODO(VERIFY)
     private fun <T> deleteChatLineList(
         iterator: ChatLineListIterator<T>,
         toDelete: (UMessage) -> Boolean,
