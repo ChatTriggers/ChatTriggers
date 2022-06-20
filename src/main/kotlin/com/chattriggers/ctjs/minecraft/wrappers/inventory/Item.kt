@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory
 
+import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -20,10 +21,8 @@ import net.minecraft.item.ItemStack
 //#endif
 
 //#if MC<=11202
-import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
 import net.minecraft.client.renderer.RenderHelper
 //#elseif MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.CompoundTagAccessor
 //$$ import net.minecraft.core.Registry
 //$$ import net.minecraft.world.item.TooltipFlag
 //#endif
@@ -340,20 +339,12 @@ class Item {
         //#endif
 
         val lore = getNBT().getCompoundTag("tag").let {
-            //#if MC<=11202
             it.rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap.getOrPut("display") {
-            //#elseif MC>=11701
-            //$$ it.rawNBT.asMixin<CompoundTagAccessor>().tags.getOrPut("display") {
-            //#endif
                 net.minecraft.nbt.NBTTagCompound()
             }
             it.getCompoundTag("display")
         }.let {
-            //#if MC<=11202
             it.rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap.getOrPut("Lore") {
-            //#elseif MC>=11701
-            //$$ it.rawNBT.asMixin<CompoundTagAccessor>().tags.getOrPut("Lore") {
-            //#endif
                 net.minecraft.nbt.NBTTagCompound()
             }
             it.getTagList("Lore", 8)

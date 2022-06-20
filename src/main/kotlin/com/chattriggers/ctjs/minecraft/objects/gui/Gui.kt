@@ -17,11 +17,7 @@ import gg.essential.universal.UScreen
 import net.minecraft.client.gui.GuiButton
 
 //#if MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.ScreenAccessor
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
-//$$ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
-//$$ import net.minecraft.network.chat.TranslatableComponent
-//$$ import com.mojang.blaze3d.vertex.PoseStack
 //#endif
 
 abstract class Gui : UScreen() {
@@ -504,11 +500,9 @@ abstract class Gui : UScreen() {
         //#if MC<=11202
         drawHoveringText(text, x, y, mc.fontRendererObj)
         //#else
-        //$$ this.asMixin<ScreenAccessor>().invokeRenderTooltipInternal(
+        //$$ renderTooltip(
         //$$     Renderer.matrixStack.toMC(),
-        //$$     text.map {
-        //$$         ClientTextTooltip(UTextComponent(it).visualOrderText)
-        //$$     },
+        //$$     text.map { (UTextComponent(it).visualOrderText) },
         //$$     x,
         //$$     y
         //$$ )

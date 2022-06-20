@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiChatAccessor
 import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
@@ -24,14 +25,11 @@ import net.minecraft.network.Packet
 import kotlin.math.roundToInt
 
 //#if MC<=11202
-import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiChatAccessor
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.realms.RealmsBridge
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraft.client.multiplayer.WorldClient
 //#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftMixin
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.ChatScreenAccessor
 //$$ import com.mojang.realmsclient.RealmsMainScreen
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
 //$$ import net.minecraft.client.gui.screens.ConnectScreen
@@ -367,10 +365,12 @@ abstract class Client {
         @JvmStatic
         fun getCurrentChatMessage(): String {
             return if (isInChat()) {
+                val inputField = currentGui.get().asMixin<GuiChatAccessor>().inputField
+
                 //#if MC<=11202
-                currentGui.get().asMixin<GuiChatAccessor>().inputField.text
+                inputField.text
                 //#else
-                //$$ (currentGui.get() as ChatScreenAccessor).input.value
+                //$$ inputField.value
                 //#endif
             } else ""
         }
@@ -382,15 +382,15 @@ abstract class Client {
          */
         @JvmStatic
         fun setCurrentChatMessage(message: String) {
-            //#if MC<=11202
             if (isInChat()) {
-                currentGui.get().asMixin<GuiChatAccessor>().inputField.text = message
-            } else getMinecraft().displayGuiScreen(GuiChat(message))
-            //#else
-            //$$ if (isInChat()) {
-            //$$     (currentGui.get() as ChatScreenAccessor).input.value = message
-            //$$ } else getMinecraft().setScreen(ChatScreen(message))
-            //#endif
+                val inputField = currentGui.get().asMixin<GuiChatAccessor>().inputField
+
+                //#if MC<=11202
+                inputField.text = message
+                //#else
+                //$$ inputField.value = message
+                //#endif
+            } else GuiUtil.open(GuiChat(message))
         }
 
         @JvmStatic

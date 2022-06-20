@@ -1,25 +1,13 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
+import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.nbt.NBTTagByteArray
 import net.minecraft.nbt.NBTTagIntArray
 import org.mozilla.javascript.NativeObject
 
-//#if MC<=11202
-import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
-//#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.CompoundTagAccessor
-//#endif
-
 class NBTTagCompound(override val rawNBT: net.minecraft.nbt.NBTTagCompound) : NBTBase(rawNBT) {
-    val tagMap: Map<String, net.minecraft.nbt.NBTBase>
-        get() {
-            //#if MC<=11202
-            return rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap
-            //#else
-            //$$ return rawNBT.asMixin<CompoundTagAccessor>().tags
-            //#endif
-        }
+    val tagMap: Map<String, net.minecraft.nbt.NBTBase> = rawNBT.asMixin<NBTTagCompoundAccessor>().tagMap
 
     val keySet: Set<String>
         get() {

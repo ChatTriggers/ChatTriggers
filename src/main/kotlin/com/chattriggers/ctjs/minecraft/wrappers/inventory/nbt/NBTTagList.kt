@@ -1,13 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
 import com.chattriggers.ctjs.utils.kotlin.asMixin
-
-//#if MC<=11202
 import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagListAccessor
-//#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.ListTagAccessor
-//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
-//#endif
 
 class NBTTagList(override val rawNBT: net.minecraft.nbt.NBTTagList) : NBTBase(rawNBT) {
     val tagCount: Int
@@ -38,11 +32,7 @@ class NBTTagList(override val rawNBT: net.minecraft.nbt.NBTTagList) : NBTBase(ra
     fun insertTag(index: Int, nbt: NBTBase) = insertTag(index, nbt.rawNBT)
 
     fun insertTag(index: Int, nbt: net.minecraft.nbt.NBTBase) = apply {
-        //#if MC<=11202
         rawNBT.asMixin<NBTTagListAccessor>().tagList.add(index, nbt)
-        //#else
-        //$$ rawNBT.asMixin<ListTagAccessor>().list.add(index, nbt)
-        //#endif
     }
 
     // TODO(BREAKING): Wrap return value
