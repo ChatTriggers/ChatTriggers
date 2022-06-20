@@ -369,6 +369,8 @@ class Item {
         }
     }
 
+    // TODO(FIX): Always draws at 0, 0 with default scale.
+    //            How do you fix this?
     /**
      * Renders the item icon to the client's overlay, with customizable overlay information.
      *
@@ -395,7 +397,6 @@ class Item {
         itemRenderer.zLevel = z
         itemRenderer.renderItemIntoGUI(itemStack, 0, 0)
         //#else
-        //$$ // TODO(VERIFY): Lighting.setupForEntityInInventory()?
         //$$ itemRenderer.blitOffset = z
         //$$ itemRenderer.renderGuiItem(itemStack, 0, 0)
         //#endif
@@ -425,4 +426,3 @@ class Item {
 
     override fun toString(): String = itemStack.toString()
 }
-
