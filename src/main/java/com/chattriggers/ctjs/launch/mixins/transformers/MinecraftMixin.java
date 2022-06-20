@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.listeners.ClientListener;
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener;
 import com.chattriggers.ctjs.minecraft.wrappers.Client;
 import com.chattriggers.ctjs.minecraft.wrappers.World;
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Inventory;
 import com.chattriggers.ctjs.triggers.EventType;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import gg.essential.lib.mixinextras.injector.ModifyExpressionValue;
@@ -114,6 +115,7 @@ public class MinecraftMixin {
     )
     private void chattriggers_guiClosedTrigger(GuiScreen guiScreenIn, CallbackInfo ci) {
         TriggerType.GuiClosed.triggerAll(Client.currentGui.get());
+        Inventory.Companion.setOpenedInventoryName$chattriggers(null);
     }
 
     @Inject(

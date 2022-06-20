@@ -6,8 +6,11 @@ import com.chattriggers.ctjs.minecraft.wrappers.inventory.action.ClickAction
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.action.DragAction
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.action.DropAction
 import net.minecraft.inventory.Container
-import net.minecraft.inventory.ContainerChest
 import net.minecraft.inventory.IInventory
+
+//#if MC>=11701
+//$$ import net.minecraft.world.Nameable
+//#endif
 
 class Inventory : JSONImpl {
     val inventory: IInventory?
@@ -204,21 +207,26 @@ class Inventory : JSONImpl {
      */
     fun getName(): String {
         //#if MC<=11202
-        return when (container) {
-            is ContainerChest -> container.lowerChestInventory.name
-            else -> inventory?.name ?: "container"
-        }
+        return if (container == null) {
+            inventory!!.name
         //#else
-        //$$ // TODO(CONVERT)
-        //$$ return "container"
+        //$$ return if (inventory is Nameable) {
+        //$$     inventory.name.string
         //#endif
+        } else {
+            openedInventoryName ?: "container"
+        }
     }
 
-    fun getClassName(): String = inventory?.javaClass?.simpleName ?: container!!.javaClass.simpleName
+    fun getClassName(): String = (inventory ?: container)!!.javaClass.simpleName
 
     override fun toString(): String = "Inventory{" +
             "name=${getName()}, " +
             "size=${getSize()}, " +
             "type=${if (isContainer()) "container" else "inventory"}" +
             "}"
+
+    companion object {
+        internal var openedInventoryName: String? = null
+    }
 }
