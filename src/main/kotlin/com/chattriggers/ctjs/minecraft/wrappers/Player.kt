@@ -383,7 +383,7 @@ object Player {
         //#if MC<=11202
         return getPlayer()?.openContainer?.let(::Inventory)
         //#else
-        //$$ return getPlayer()?.inventory?.let(::Inventory)
+        //$$ return getPlayer()?.containerMenu?.let(::Inventory)
         //#endif
     }
 
