@@ -2,11 +2,13 @@ package com.chattriggers.ctjs.launch.mixins.transformers;
 
 import com.chattriggers.ctjs.CTJS;
 import com.chattriggers.ctjs.minecraft.listeners.events.ChatEvent;
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.Inventory;
 import com.chattriggers.ctjs.triggers.EventType;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.play.server.S01PacketJoinGame;
 import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S2DPacketOpenWindow;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -65,5 +67,23 @@ public class NetHandlerPlayClientMixin {
         if (event.isCanceled()) {
             ci.cancel();
         }
+    }
+
+    @Inject(
+            //#if MC<=11202
+            method = "handleOpenWindow",
+            //#elseif MC>=11701
+            //$$ method = "handleOpenScreen",
+            //#endif
+            at = @At("HEAD")
+    )
+    private void chattriggers_getInventoryName(S2DPacketOpenWindow packetIn, CallbackInfo ci) {
+        Inventory.Companion.setOpenedInventoryName$chattriggers(
+                //#if MC<=11202
+                packetIn.getWindowTitle().getFormattedText()
+                //#elseif MC>=11701
+                //$$ packetIn.getTitle().getString()
+                //#endif
+        );
     }
 }
