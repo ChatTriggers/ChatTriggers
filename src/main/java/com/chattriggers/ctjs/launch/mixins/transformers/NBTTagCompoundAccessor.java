@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.launch.mixins.transformers;
 
-//#if MC<=11202
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,7 +9,10 @@ import java.util.Map;
 
 @Mixin(NBTTagCompound.class)
 public interface NBTTagCompoundAccessor {
+    //#if MC<=11202
     @Accessor
+    //#elseif MC>=11701
+    //$$ @Accessor("tags")
+    //#endif
     Map<String, NBTBase> getTagMap();
 }
-//#endif
