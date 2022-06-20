@@ -7,7 +7,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 //#if MC<=11202
 import net.minecraft.world.EnumSkyBlock
 //#else
-//$$ import com.chattriggers.ctjs.minecraft.wrappers.World
+//$$ import net.minecraft.client.multiplayer.ClientLevel
 //$$ import net.minecraft.world.level.LightLayer
 //$$ import net.minecraft.world.level.chunk.LevelChunk
 //$$ import net.minecraft.world.level.chunk.ProtoChunk
@@ -62,7 +62,7 @@ class Chunk(val chunk: net.minecraft.world.chunk.Chunk) {
         //#if MC<=11202
         return chunk.getLightFor(EnumSkyBlock.SKY, BlockPos(x, y, z).toMCBlock())
         //#else
-        //$$ return World.getWorld()?.lightEngine?.getLayerListener(LightLayer.SKY)?.getLightValue(BlockPos(x, y, z).toMCBlock()) ?: 0
+        //$$ return chunk.level.lightEngine.getLayerListener(LightLayer.SKY).getLightValue(BlockPos(x, y, z).toMCBlock())
         //#endif
     }
 
@@ -78,19 +78,21 @@ class Chunk(val chunk: net.minecraft.world.chunk.Chunk) {
         //#if MC<=11202
         return chunk.getLightFor(EnumSkyBlock.BLOCK, BlockPos(x, y, z).toMCBlock())
         //#else
-        //$$ return World.getWorld()?.lightEngine?.getLayerListener(LightLayer.BLOCK)?.getLightValue(BlockPos(x, y, z).toMCBlock()) ?: 0
+        //$$ return chunk.level.lightEngine.getLayerListener(LightLayer.BLOCK).getLightValue(BlockPos(x, y, z).toMCBlock())
         //#endif
     }
 
-    // TODO(CONVERT): Probably have to remove the next two methods
-    //#if MC<=11202
     /**
      * Gets every entity in this chunk
      *
      * @return the entity list
      */
     fun getAllEntities(): List<Entity> {
+        //#if MC<=11202
         return chunk.entityLists.toList().flatten().map(::Entity)
+        //#elseif MC>=11701
+        //$$ return (chunk.level as ClientLevel).entitiesForRendering()?.map(::Entity) ?: listOf()
+        //#endif
     }
 
     /**
@@ -104,7 +106,6 @@ class Chunk(val chunk: net.minecraft.world.chunk.Chunk) {
             clazz.isInstance(it.entity)
         }
     }
-    //#endif
 
     /**
      * Gets every tile entity in this chunk
@@ -115,13 +116,7 @@ class Chunk(val chunk: net.minecraft.world.chunk.Chunk) {
         //#if MC<=11202
         return chunk.tileEntityMap.values.map(::TileEntity)
         //#else
-        //$$ return when (chunk) {
-        //$$     is ProtoChunk -> chunk.blockEntities.values.map(::TileEntity)
-        //$$     is LevelChunk -> chunk.blockEntities.values.map(::TileEntity)
-        //$$     else -> chunk.blockEntitiesPos.mapNotNull {
-        //$$         chunk.getBlockEntity(it)?.let(::TileEntity)
-        //$$     }
-        //$$ }
+        //$$ return chunk.blockEntities.values.map(::TileEntity)
         //#endif
     }
 

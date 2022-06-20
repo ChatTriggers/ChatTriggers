@@ -17,6 +17,7 @@ import java.util.*
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
 //$$ import net.minecraft.data.BuiltinRegistries
 //$$ import net.minecraft.world.entity.MoverType
+//$$ import net.minecraft.world.level.chunk.LevelChunk
 //$$ import kotlin.math.sqrt
 //#endif
 
@@ -571,7 +572,7 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#if MC<=11202
         return Chunk(getWorld().getChunkFromChunkCoords(entity.chunkCoordX, entity.chunkCoordZ))
         //#else
-        //$$ return Chunk(getWorld().getChunk(entity.blockPosition()))
+        //$$ return Chunk(getWorld().getChunk(entity.blockPosition()) as LevelChunk)
         //#endif
     }
 

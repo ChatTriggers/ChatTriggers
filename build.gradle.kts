@@ -11,7 +11,8 @@ version = "2.1.0"
 val mcMinor = platform.mcMinor
 val isForge = platform.isForge
 val accessTransformerName = "chattriggers_at.cfg"
-val mixinName = "chattriggers1.$mcMinor.mixins.json"
+var accessWidenerName = "chattriggers.accesswidener"
+val mixinName = "chattriggers.mixins.json"
 
 loom {
     runConfigs {
@@ -22,7 +23,10 @@ loom {
     if (isForge) {
         forge {
             accessTransformer(rootProject.file("src/main/resources/$accessTransformerName"))
+            mixinConfigs.set(mutableListOf(mixinName))
         }
+    } else {
+        accessWidenerPath.set(file("src/main/resources/$accessWidenerName"))
     }
     launchConfigs {
         getByName("client") {
@@ -34,12 +38,6 @@ loom {
 
             if (isForge)
                 arg("--tweakClass", "gg.essential.loader.stage0.EssentialSetupTweaker")
-        }
-    }
-
-    if (isForge) {
-        forge {
-            mixinConfigs.set(mutableListOf("mixinName"))
         }
     }
 }
