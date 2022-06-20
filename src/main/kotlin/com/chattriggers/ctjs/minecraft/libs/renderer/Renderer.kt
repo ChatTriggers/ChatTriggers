@@ -8,6 +8,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
 import gg.essential.elementa.utils.withAlpha
 import gg.essential.universal.UGraphics
+import gg.essential.universal.UMatrixStack
 import gg.essential.universal.UResolution
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.gui.FontRenderer
@@ -32,26 +33,12 @@ import net.minecraft.client.renderer.RenderHelper
 //$$ import com.mojang.blaze3d.vertex.PoseStack
 //$$ import com.mojang.blaze3d.systems.RenderSystem
 //$$ import com.mojang.math.Quaternion
-//$$ import gg.essential.universal.UMatrixStack
 //$$ import net.minecraft.client.CameraType
 //$$ import net.minecraft.client.renderer.entity.EntityRendererProvider
 //#endif
 
 object Renderer {
-    //#if MC>=11701
-    //$$ private val boundMatrices = ArrayDeque<PoseStack>()
-    //$$
-    //$$ val matrixStack = UMatrixStack()
-    //$$
-    //$$ internal inline fun <T> withMatrixStack(stack: PoseStack, block: () -> T): T {
-    //$$     boundMatrices.addLast(stack)
-    //$$     return try {
-    //$$         block()
-    //$$     } finally {
-    //$$         boundMatrices.removeLast()
-    //$$     }
-    //$$ }
-    //#endif
+    val matrixStack = UMatrixStack()
 
     @JvmStatic
     var partialTicks = 0f
@@ -226,7 +213,7 @@ object Renderer {
         //#if MC<=11202
         GlStateManager.scale(scaleX, scaleY, scaleZ)
         //#else
-        //$$ matrixStack.translate(scaleX.toDouble(), scaleY.toDouble(), scaleZ.toDouble())
+        //$$ matrixStack.scale(scaleX.toDouble(), scaleY.toDouble(), scaleZ.toDouble())
         //#endif
     }
 
@@ -234,13 +221,7 @@ object Renderer {
      * Rotates the Renderer in 2D screen space
      */
     @JvmStatic
-    fun rotate(angle: Float) = apply {
-        //#if MC<=11202
-        GlStateManager.rotate(angle, 0f, 0f, 1f)
-        //#else
-        //$$ matrixStack.multiply(Quaternion(angle, 0f, 0f, 1f))
-        //#endif
-    }
+    fun rotate(angle: Float) = rotate(angle, 0f, 0f, 1f)
 
     /**
      * Rotates the Renderer in 3D space
@@ -250,7 +231,7 @@ object Renderer {
         //#if MC<=11202
         GlStateManager.rotate(angle, x, y, z)
         //#else
-        //$$ matrixStack.multiply(Quaternion(angle, x, y, z))
+        //$$ matrixStack.rotate(angle, x, y, z)
         //#endif
     }
 
@@ -304,7 +285,6 @@ object Renderer {
      */
     @JvmStatic
     fun getCurrentGlColor(): Color {
-        // TODO(VERIFY)
         //#if MC<=11202
         GL11.glGetFloat(GL11.GL_CURRENT_COLOR, colorBuffer)
         //#else
@@ -723,7 +703,6 @@ object Renderer {
 
         ChatLib.addColor(text).split("\n").forEach {
             //#if MC<=11202
-            // TODO(VERIFY): Color still works properly
             fr.drawString(it, x, newY, color?.toInt() ?: getCurrentGlColorAlphaFixed().rgb, shadow)
             newY += fr.FONT_HEIGHT
             //#else
