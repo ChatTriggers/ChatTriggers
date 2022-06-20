@@ -41,14 +41,7 @@ class PotionEffect(val effect: net.minecraft.potion.PotionEffect) {
 
     fun isAmbient(): Boolean = effect.isAmbient
 
-    fun isDurationMax(): Boolean {
-        //#if MC<=11202
-        return effect.isPotionDurationMax
-        //#else
-        //$$ // TODO(VERIFY)
-        //$$ return effect.duration == Short.MAX_VALUE.toInt()
-        //#endif
-    }
+    fun isDurationMax(): Boolean = effect.duration == Short.MAX_VALUE.toInt()
 
     fun showsParticles(): Boolean {
         //#if MC<=10809

@@ -80,7 +80,7 @@ object Server {
      */
     @JvmStatic
     fun getPing(): Long {
-        if (Player.getPlayer() == null || isSinglePlayer() || getServerData() == null)
+        if (isSinglePlayer())
             return 5L
 
         //#if MC<=11202

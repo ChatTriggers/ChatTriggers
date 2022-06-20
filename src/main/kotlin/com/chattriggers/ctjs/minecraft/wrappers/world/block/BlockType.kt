@@ -26,7 +26,7 @@ class BlockType(val mcBlock: net.minecraft.block.Block) {
     //#if MC<=11202
         this(net.minecraft.block.Block.blockRegistry.getObject(resourceLocation))
     //#else
-    //$$ this(Registry.BLOCK.get(resourceLocation)!!)
+    //$$ this(Registry.BLOCK.get(resourceLocation))
     //#endif
 
     constructor(blockID: Int) :
@@ -70,7 +70,7 @@ class BlockType(val mcBlock: net.minecraft.block.Block) {
         //#if MC<=10809
         return mcBlock.registryName
         //#else
-        //$$ return Registry.BLOCK.getId(mcBlock).toString()
+        //$$ return Registry.BLOCK.getKey(mcBlock).toString()
         //#endif
     }
 
