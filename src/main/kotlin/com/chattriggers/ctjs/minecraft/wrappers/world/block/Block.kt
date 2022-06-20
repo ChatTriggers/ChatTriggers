@@ -65,11 +65,5 @@ open class Block(
     // TODO: See Item.canHarvest
     // fun canBeHarvestedWith(item: Item): Boolean = item.canHarvest(type)
 
-    override fun toString() = "Block{type=${
-        //#if MC<=11202
-        type.mcBlock.registryName
-        //#elseif MC>=11701
-        //$$ type.mcBlock.name.string
-        //#endif
-    }, x=$x, y=$y, z=$z}"
+    override fun toString() = "Block{type=$type, x=$x, y=$y, z=$z}"
 }

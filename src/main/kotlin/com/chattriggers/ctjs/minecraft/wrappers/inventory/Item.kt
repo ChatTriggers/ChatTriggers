@@ -193,10 +193,10 @@ class Item {
      *
      * @return the item's registry name
      */
-    //#if FORGE
+    //#if MC<=11202
     fun getRegistryName(): String = item.registryName.toString()
     //#else
-    //$$ fun getRegistryName(): String = Registry.ITEM.getKey(item).get().value.toString()
+    //$$ fun getRegistryName(): String = Registry.ITEM.getKey(item).toString()
     //#endif
 
     /**
@@ -424,5 +424,5 @@ class Item {
         return result
     }
 
-    override fun toString(): String = itemStack.toString()
+    override fun toString(): String = "Item{name=${getName()}, count=${getStackSize()}, itemStack=$itemStack}"
 }

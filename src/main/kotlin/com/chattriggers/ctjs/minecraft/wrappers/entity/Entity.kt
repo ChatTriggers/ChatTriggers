@@ -7,15 +7,14 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
-import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import net.minecraft.util.Vec3
 import java.util.*
 
 //#if MC>=11701
+//$$ import net.minecraft.core.Registry
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
-//$$ import net.minecraft.data.BuiltinRegistries
 //$$ import net.minecraft.world.entity.MoverType
 //$$ import net.minecraft.world.level.chunk.LevelChunk
 //$$ import kotlin.math.sqrt
@@ -275,9 +274,7 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         val chunk = world.getChunkFromBlockCoords(entity.position)
         return chunk.getBiome(entity.position, world.worldChunkManager).biomeName
         //#else
-        //$$ // TODO(VERIFY)
-        //$$ // world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome).toString()
-        //$$ return BuiltinRegistries.BIOME.getKey(world.getBiome(entity.blockPosition()))?.path ?: ""
+        //$$ return world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(world.getBiome(entity.blockPosition())).toString()
         //#endif
     }
 
@@ -497,9 +494,9 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#endif
     }
 
-    // TODO(CONVERT)
+    // TODO(BREAKING) Remove this as unneeded
     //#if MC<=11202
-    fun dropItem(item: Item, size: Int) = entity.dropItem(item.item, size)
+    // fun dropItem(item: Item, size: Int) = entity.dropItem(item.item, size)
     //#endif
 
     fun isSneaking(): Boolean {
