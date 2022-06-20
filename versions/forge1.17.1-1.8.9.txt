@@ -62,7 +62,7 @@ net.minecraft.nbt.FloatTag net.minecraft.nbt.NBTTagFloat
 net.minecraft.nbt.LongTag net.minecraft.nbt.NBTTagLong
 net.minecraft.nbt.ShortTag net.minecraft.nbt.NBTTagShort
 net.minecraft.nbt.ListTag net.minecraft.nbt.NBTTagList
-net.minecraft.world.level.chunk.ChunkAccess net.minecraft.world.chunk.Chunk
+net.minecraft.world.level.chunk.LevelChunk net.minecraft.world.chunk.Chunk
 net.minecraft.util.StringRepresentable net.minecraft.util.IStringSerializable
 net.minecraft.world.level.block.entity.SignBlockEntity net.minecraft.tileentity.TileEntitySign
 net.minecraft.world.scores.Objective net.minecraft.scoreboard.ScoreObjective

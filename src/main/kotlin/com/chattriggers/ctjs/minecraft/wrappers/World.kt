@@ -17,13 +17,13 @@ import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderGlobalAcces
 import net.minecraft.util.EnumParticleTypes
 //#else
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.render.LevelRendererAccessor
-//$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
+//$$ import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderChunkInfoAccessor
 //$$ import net.minecraft.core.Registry
-//$$ import net.minecraft.core.particles.ParticleOptions
-//$$ import net.minecraft.network.FriendlyByteBuf
+//$$ import net.minecraft.core.particles.SimpleParticleType
 //$$ import net.minecraft.resources.ResourceLocation
 //$$ import net.minecraft.server.level.ServerLevel
 //$$ import net.minecraft.sounds.SoundSource
+//$$ import net.minecraft.world.level.chunk.LevelChunk
 //#endif
 
 object World {
@@ -208,7 +208,7 @@ object World {
             //#if MC<=11202
             getWorld()!!.getChunkFromBlockCoords(BlockPos(x, y, z).toMCBlock())
             //#else
-            //$$ getWorld()!!.getChunk(BlockPos(x, y, z).toMCBlock())
+            //$$ getWorld()!!.getChunk(BlockPos(x, y, z).toMCBlock()) as LevelChunk
             //#endif
         )
     }
@@ -238,8 +238,10 @@ object World {
         //#if MC<=11202
         return getWorld()?.loadedTileEntityList?.map(::TileEntity) ?: listOf()
         //#else
-        //$$ // TODO(CONVERT)
-        //$$ return listOf()
+        //$$ val mixin = Client.getMinecraft().levelRenderer.asMixin<LevelRendererAccessor>()
+        //$$
+        //$$ val entities = mixin.renderChunks.flatMap { it.asMixin<RenderChunkInfoAccessor>().chunk.compiledChunk.renderableBlockEntities }
+        //$$ return entities.map(::TileEntity)
         //#endif
     }
 
@@ -363,10 +365,9 @@ object World {
             //                be used anywhere Registry is used
 
             //#if MC<=11202
-            return EnumParticleTypes.values().map { it.name }.toList()
+            return EnumParticleTypes.getParticleNames().toList()
             //#else
-            //$$ // TODO(VERIFY)
-            //$$ return Registry.PARTICLE_TYPE.entrySet().map { it.value.javaClass.name }
+            //$$ return Registry.PARTICLE_TYPE.keySet().map { it.path }
             //#endif
         }
 
@@ -408,16 +409,10 @@ object World {
             )
             //#else
             //$$ val resourceLocation = ResourceLocation("minecraft", particle)
-            //$$ val particleType = Registry.PARTICLE_TYPE.get(resourceLocation)!!
+            //$$ val particleType = Registry.PARTICLE_TYPE.get(resourceLocation)!! as SimpleParticleType
             //$$
             //$$ val fx = Client.getMinecraft().levelRenderer.asMixin<LevelRendererAccessor>().invokeAddParticleInternal(
-            //$$     object : ParticleOptions {
-            //$$         override fun getType() = particleType
-            //$$
-            //$$         override fun writeToNetwork(arg: FriendlyByteBuf) {}
-            //$$
-            //$$         override fun writeToString() = resourceLocation.toString()
-            //$$     },
+            //$$     particleType.type,
             //$$     particleType.overrideLimiter,
             //$$     true,
             //$$     x,

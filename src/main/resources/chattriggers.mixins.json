@@ -63,6 +63,7 @@
         //$$ "render.EntityRendererDispatcherMixin",
         //$$ "render.LevelRendererAccessor",
         //$$ "render.LevelRendererMixin",
+        //$$ "render.RenderChunkInfoAccessor",
         //#endif
 
         //#if FORGE
