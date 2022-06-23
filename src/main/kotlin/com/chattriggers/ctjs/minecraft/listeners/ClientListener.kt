@@ -202,7 +202,7 @@ object ClientListener : Initializer {
             event
         )
 
-        return !event.isCanceled()
+        return event.isCanceled()
     }
 
     /**
