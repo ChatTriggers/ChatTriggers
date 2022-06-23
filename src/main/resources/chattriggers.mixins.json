@@ -21,6 +21,7 @@
         "entity.EntityLivingBaseMixin",
         "entity.EntityPlayerMixin",
         "entity.EntityPlayerSPMixin",
+        "entity.PlayerControllerMPMixin",
         "entity.PlayerTabOverlayAccessor",
         "gui.GuiButtonAccessor",
         "gui.GuiChatAccessor",
@@ -29,20 +30,19 @@
         "gui.GuiMainMenuMixin",
         "gui.GuiNewChatAccessor",
         "gui.GuiScreenBookAccessor",
+        "gui.GuiScreenMixin",
+        "render.EffectRendererMixin",
+        "render.EntityRendererMixin",
         "render.RenderPlayerMixin",
+        "render.TileEntityRendererDispatcherMixin",
         //#if MC<=11202
         "SoundHandlerAccessor",
         "SoundManagerMixin",
         "TileEntityNoteMixin",
         "entity.EntityFXAccessor",
-        "entity.PlayerControllerMPMixin",
-        "gui.GuiScreenMixin",
-        "render.EffectRendererMixin",
-        "render.EntityRendererMixin",
         "render.RenderGlobalAccessor",
         "render.RenderItemMixin",
         "render.RenderManagerMixin",
-        "render.TileEntityRendererDispatcherMixin"
         //#else
         //$$ "AbstractSoundInstanceAccessor",
         //$$ "GameProfileAccessor",
@@ -61,10 +61,10 @@
         //#endif
 
         //#if FORGE
-        //$$ "entity.EntityPlayerAccessor",
-        //$$ "gui.GuiIngameForgeMixin",
+        "entity.EntityPlayerAccessor",
+        "gui.GuiIngameForgeMixin"
         //#else
-        //$$ "gui.HandledScreenAccessor",
+        //$$ "gui.HandledScreenAccessor"
         //#endif
     ]
 }

@@ -1,9 +1,8 @@
 package com.chattriggers.ctjs.launch.mixins.transformers.render;
 
-//#if MC<=11202
-import com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.util.vector.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,45 +12,52 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TileEntityRendererDispatcher.class)
 public class TileEntityRendererDispatcherMixin {
     @Inject(
-        method = "renderTileEntityAt(Lnet/minecraft/tileentity/TileEntity;DDDFI)V",
-        at = @At("HEAD"),
-        cancellable = true
+            //#if MC<=11202
+            method = "renderTileEntityAt(Lnet/minecraft/tileentity/TileEntity;DDDFI)V",
+            //#elseif MC>=11701
+            //$$ method = "tryRender",
+            //#endif
+            at = @At("HEAD"),
+            cancellable = true
     )
-    private void chattriggers_renderTileEntityTrigger(
-        net.minecraft.tileentity.TileEntity tileEntityIn,
-        double x,
-        double y,
-        double z,
-        float partialTicks,
-        int destroyStage,
-        CallbackInfo ci
-    ) {
+    //#if MC<=11202
+    private void chattriggers_renderTileEntityTrigger(TileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage, CallbackInfo ci) {
+    //#elseif MC>=11701
+    //$$ private static void chattriggers_renderTileEntityTrigger(BlockEntity tileEntityIn, Runnable runnable, CallbackInfo ci) {
+    //#endif
+        // TODO(BREAKING) Removed partialTicks parameter
         TriggerType.RenderTileEntity.triggerAll(
-            new TileEntity(tileEntityIn),
-            new Vector3f((float) x, (float) y, (float) z),
-            partialTicks,
-            ci
+                new com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity(tileEntityIn),
+                //#if MC<=11202
+                new Vector3f((float) x, (float) y, (float) z),
+                //#elseif MC>=11701
+                //$$ new Vector3f(tileEntityIn.getBlockPos().getX(), tileEntityIn.getBlockPos().getY(), tileEntityIn.getBlockPos().getZ()),
+                //#endif
+                ci
         );
     }
 
     @Inject(
-        method = "renderTileEntityAt(Lnet/minecraft/tileentity/TileEntity;DDDFI)V",
-        at = @At("TAIL")
+            //#if MC<=11202
+            method = "renderTileEntityAt(Lnet/minecraft/tileentity/TileEntity;DDDFI)V",
+            //#elseif MC>=11701
+            //$$ method = "tryRender",
+            //#endif
+            at = @At("TAIL")
     )
-    private void chattriggers_postRenderTileEntityTrigger(
-        net.minecraft.tileentity.TileEntity tileEntityIn,
-        double x,
-        double y,
-        double z,
-        float partialTicks,
-        int destroyStage,
-        CallbackInfo ci
-    ) {
+    //#if MC<=11202
+    private void chattriggers_postRenderTileEntityTrigger(TileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage, CallbackInfo ci) {
+    //#elseif MC>=11701
+    //$$ private static void chattriggers_postRenderTileEntityTrigger(BlockEntity tileEntityIn, Runnable runnable, CallbackInfo ci) {
+    //#endif
+        // TODO(BREAKING) Removed partialTicks parameter
         TriggerType.PostRenderTileEntity.triggerAll(
-            new TileEntity(tileEntityIn),
-            new Vector3f((float) x, (float) y, (float) z),
-            partialTicks
+                new com.chattriggers.ctjs.minecraft.wrappers.entity.TileEntity(tileEntityIn),
+                //#if MC<=11202
+                new Vector3f((float) x, (float) y, (float) z)
+                //#elseif MC>=11701
+                //$$ new Vector3f(tileEntityIn.getBlockPos().getX(), tileEntityIn.getBlockPos().getY(), tileEntityIn.getBlockPos().getZ())
+                //#endif
         );
     }
 }
-//#endif
