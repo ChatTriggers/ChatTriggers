@@ -7,14 +7,11 @@ import com.chattriggers.ctjs.triggers.RegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import com.chattriggers.ctjs.utils.kotlin.i18Format
+import net.minecraft.client.settings.KeyBinding
 import org.apache.commons.lang3.ArrayUtils
 
-//#if MC<=11202
-import net.minecraft.client.settings.KeyBinding
-import net.minecraftforge.fml.client.registry.ClientRegistry
-//#else
+//#if MC>=11701
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.KeyMappingAccessor
-//$$ import net.minecraft.client.KeyMapping
 //#endif
 
 @Suppress("LeakingThis")
@@ -67,9 +64,16 @@ abstract class KeyBind {
             }
             uniqueCategories[category] = uniqueCategories[category]!! + 1
             keyBinding = KeyBinding(description, keyCode, category)
-            //#if MC<=11202
-            ClientRegistry.registerKeyBinding(keyBinding)
-            //#endif
+            Client.settings.getSettings().asMixin<GameSettingsAccessor>().setKeyBindings(
+                ArrayUtils.add(
+                    //#if MC<=11202
+                    Client.settings.getSettings().keyBindings,
+                    //#elseif MC>=11701
+                    //$$ Client.settings.getSettings().keyMappings,
+                    //#endif
+                    keyBinding
+                )
+            )
             customKeyBindings.add(keyBinding)
         }
     }
@@ -202,22 +206,16 @@ abstract class KeyBind {
         private val uniqueCategories = mutableMapOf<String, Int>()
 
         private fun removeKeyBinding(keyBinding: KeyBinding) {
-            Client.settings.getSettings().asMixin<GameSettingsAccessor>()
-                //#if MC<=11202
-                .setKeyBindings(
-                //#elseif MC>=11701
-                //$$ .setKeyMappings(
-                //#endif
-
-                    ArrayUtils.removeElement(
-                        //#if MC<=11202
-                        Client.settings.getSettings().keyBindings,
-                        //#elseif MC>=11701
-                        //$$ Client.settings.getSettings().keyMappings,
-                        //#endif
-                        keyBinding
-                    )
+            Client.settings.getSettings().asMixin<GameSettingsAccessor>().setKeyBindings(
+                ArrayUtils.removeElement(
+                    //#if MC<=11202
+                    Client.settings.getSettings().keyBindings,
+                    //#elseif MC>=11701
+                    //$$ Client.settings.getSettings().keyMappings,
+                    //#endif
+                    keyBinding
                 )
+            )
             //#if MC<=11202
             val category = keyBinding.keyCategory
             //#else
