@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface GameSettingsAccessor {
     @Final
     @Mutable
-    @Accessor
     //#if MC<=11202
-    void setKeyBindings(KeyBinding[] keyBindings);
+    @Accessor
     //#elseif MC>=11701
-    //$$ void setKeyMappings(KeyMapping[] keyBindings);
+    //$$ @Accessor("keyMappings")
     //#endif
+    void setKeyBindings(KeyBinding[] keyBindings);
 }
