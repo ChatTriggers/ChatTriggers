@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
+import com.chattriggers.ctjs.utils.kotlin.i18Format
 import net.minecraft.client.audio.SoundCategory
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.entity.player.EntityPlayer
@@ -164,15 +165,17 @@ class Settings {
         fun setAmbient(level: Float) = setCategoryVolume(SoundCategory.AMBIENT, level)
     }
 
-    // TODO(CONVERT):
     // TODO(BREAKING): Make enums for most of these methods
     val video = object {
         //#if MC<=11202
-        // TODO(BREAKING): Change return to int (and below methods argument type)
-        fun getGraphics() = if (getSettings().fancyGraphics) 1 else 0
+        fun getGraphics() = if (getSettings().fancyGraphics) {
+            Graphics.Fancy
+        } else {
+            Graphics.Fast
+        }
 
-        fun setGraphics(mode: Int) {
-            getSettings().fancyGraphics = mode != 0
+        fun setGraphics(mode: Graphics) {
+            getSettings().fancyGraphics = mode.id != 0
         }
 
         fun getRenderDistance() = getSettings().renderDistanceChunks
@@ -181,10 +184,10 @@ class Settings {
             getSettings().renderDistanceChunks = distance
         }
 
-        fun getSmoothLighting() = getSettings().ambientOcclusion
+        fun getSmoothLighting() = SmoothLighting.fromId(getSettings().ambientOcclusion)
 
-        fun setSmoothLighting(level: Int) {
-            getSettings().ambientOcclusion = level
+        fun setSmoothLighting(level: SmoothLighting) {
+            getSettings().ambientOcclusion = level.id
         }
 
         fun getMaxFrameRate() = getSettings().limitFramerate
@@ -218,16 +221,16 @@ class Settings {
             getSettings().gammaSetting = brightness.toFloat()
         }
 
-        fun getClouds() = getSettings().clouds
+        fun getClouds() = Clouds.fromId(getSettings().clouds)
 
-        fun setClouds(clouds: Int) {
-            getSettings().clouds = clouds
+        fun setClouds(clouds: Clouds) {
+            getSettings().clouds = clouds.id
         }
 
-        fun getParticles() = getSettings().particleSetting
+        fun getParticles() = Particles.fromId(getSettings().particleSetting)
 
-        fun setParticles(particles: Int) {
-            getSettings().particleSetting = particles
+        fun setParticles(particles: Particles) {
+            getSettings().particleSetting = particles.id
         }
 
         fun getFullscreen() = getSettings().fullScreen
@@ -254,10 +257,10 @@ class Settings {
             getSettings().entityShadows = toggled
         }
         //#else
-        //$$ fun getGraphics() = getSettings().graphicsMode.id
+        //$$ fun getGraphics() = Graphics.fromId(getSettings().graphicsMode.id)
         //$$
-        //$$ fun setGraphics(mode: Int) {
-        //$$     getSettings().graphicsMode = GraphicsStatus.byId(mode)
+        //$$ fun setGraphics(mode: Graphics) {
+        //$$     getSettings().graphicsMode = GraphicsStatus.byId(mode.id)
         //$$ }
         //$$
         //$$ fun getRenderDistance() = getSettings().renderDistance
@@ -266,10 +269,10 @@ class Settings {
         //$$     getSettings().renderDistance = distance
         //$$ }
         //$$
-        //$$ fun getSmoothLighting() = getSettings().ambientOcclusion.id
+        //$$ fun getSmoothLighting() = SmoothLighting.fromId(getSettings().ambientOcclusion.id)
         //$$
-        //$$ fun setSmoothLighting(level: Int) {
-        //$$     getSettings().ambientOcclusion = AmbientOcclusionStatus.byId(level)
+        //$$ fun setSmoothLighting(level: SmoothLighting) {
+        //$$     getSettings().ambientOcclusion = AmbientOcclusionStatus.byId(level.id)
         //$$ }
         //$$
         //$$ fun getMaxFrameRate() = getSettings().framerateLimit
@@ -296,16 +299,16 @@ class Settings {
         //$$     getSettings().gamma = brightness
         //$$ }
         //$$
-        //$$ fun getClouds() = getSettings().renderClouds.ordinal
+        //$$ fun getClouds() = Clouds.fromId(getSettings().renderClouds.ordinal)
         //$$
-        //$$ fun setClouds(clouds: Int) {
-        //$$     getSettings().renderClouds = CloudStatus.values()[clouds]
+        //$$ fun setClouds(clouds: Clouds) {
+        //$$     getSettings().renderClouds = CloudStatus.values()[clouds.id]
         //$$ }
         //$$
-        //$$ fun getParticles() = getSettings().particles.id
+        //$$ fun getParticles() = Particles.fromId(getSettings().particles.id)
         //$$
-        //$$ fun setParticles(particles: Int) {
-        //$$     getSettings().particles = ParticleStatus.byId(particles)
+        //$$ fun setParticles(particles: Particles) {
+        //$$     getSettings().particles = ParticleStatus.byId(particles.id)
         //$$ }
         //$$
         //$$ fun getFullscreen() = getSettings().fullscreen
@@ -335,18 +338,29 @@ class Settings {
     }
 
     val chat = object {
-        fun getVisibility() = getSettings().chatVisibility
+        fun getVisibility() = when (getSettings().chatVisibility) {
+            //#if MC<=11202
+            EntityPlayer.EnumChatVisibility.HIDDEN -> Chat.Hidden
+            EntityPlayer.EnumChatVisibility.SYSTEM -> Chat.System
+            EntityPlayer.EnumChatVisibility.FULL -> Chat.All
+            //#elseif MC>=11701
+            //$$ ChatVisibility.HIDDEN -> Chat.Hidden
+            //$$ ChatVisibility.SYSTEM -> Chat.System
+            //$$ ChatVisibility.FULL -> Chat.All
+            //#endif
+            null -> Chat.All
+        }
 
-        fun setVisibility(visibility: String) {
-            getSettings().chatVisibility = when (visibility.lowercase()) {
+        fun setVisibility(visibility: Chat) {
+            getSettings().chatVisibility = when (visibility) {
                 //#if MC<=11202
-                "hidden" -> EntityPlayer.EnumChatVisibility.HIDDEN
-                "commands", "system" -> EntityPlayer.EnumChatVisibility.SYSTEM
-                else -> EntityPlayer.EnumChatVisibility.FULL
-                //#else
-                //$$ "hidden" -> ChatVisiblity.HIDDEN
-                //$$ "commands", "system" -> ChatVisiblity.SYSTEM
-                //$$ else -> ChatVisiblity.FULL
+                Chat.Hidden -> EntityPlayer.EnumChatVisibility.HIDDEN
+                Chat.System -> EntityPlayer.EnumChatVisibility.SYSTEM
+                Chat.All -> EntityPlayer.EnumChatVisibility.FULL
+                //#elseif MC>=11701
+                //$$ Chat.Hidden -> ChatVisibility.HIDDEN
+                //$$ Chat.System -> ChatVisibility.SYSTEM
+                //$$ Chat.All -> ChatVisibility.FULL
                 //#endif
             }
         }
@@ -376,11 +390,10 @@ class Settings {
         fun getOpacity() = getSettings().chatOpacity.toDouble()
 
         fun setOpacity(opacity: Double) {
-            //#if MC<=11202
-            getSettings().chatOpacity = opacity.toFloat()
-            //#else
-            //$$ getSettings().chatOpacity = opacity
-            //#endif
+            getSettings().chatOpacity = opacity
+                //#if MC<=11202
+                .toFloat()
+                //#endif
         }
 
         fun getPromptOnWebLinks() = getSettings().chatLinksPrompt
@@ -392,41 +405,37 @@ class Settings {
         fun getScale() = getSettings().chatScale.toDouble()
 
         fun setScale(scale: Double) {
-            //#if MC<=11202
-            getSettings().chatScale = scale.toFloat()
-            //#else
-            //$$ getSettings().chatScale = scale
-            //#endif
+            getSettings().chatScale = scale
+                //#if MC<=11202
+                .toFloat()
+                //#endif
         }
 
         fun getFocusedHeight() = getSettings().chatHeightFocused.toDouble()
 
         fun setFocusedHeight(height: Double) {
-            //#if MC<=11202
-            getSettings().chatHeightFocused = height.toFloat()
-            //#else
-            //$$ getSettings().chatHeightFocused = height
-            //#endif
+            getSettings().chatHeightFocused = height
+                //#if MC<=11202
+                .toFloat()
+                //#endif
         }
 
         fun getUnfocusedHeight() = getSettings().chatHeightUnfocused.toDouble()
 
         fun setUnfocusedHeight(height: Double) {
-            //#if MC<=11202
-            getSettings().chatHeightUnfocused = height.toFloat()
-            //#else
-            //$$ getSettings().chatHeightUnfocused = height
-            //#endif
+            getSettings().chatHeightUnfocused = height
+                //#if MC<=11202
+                .toFloat()
+                //#endif
         }
 
         fun getWidth() = getSettings().chatWidth.toDouble()
 
         fun setWidth(width: Double) {
-            //#if MC<=11202
-            getSettings().chatWidth = width.toFloat()
-            //#else
-            //$$ getSettings().chatWidth = width
-            //#endif
+            getSettings().chatWidth = width
+                //#if MC<=11202
+                .toFloat()
+                //#endif
         }
 
         fun getReducedDebugInfo() = getSettings().reducedDebugInfo
@@ -434,5 +443,54 @@ class Settings {
         fun setReducedDebugInfo(toggled: Boolean) {
             getSettings().reducedDebugInfo = toggled
         }
+    }
+
+    enum class Graphics(val id: Int) {
+        Fast(0),
+        Fancy(1),
+        //#if MC>=11701
+        //$$ Fabulous(2)
+        //#endif
+        ;
+
+        companion object {
+            fun fromId(id: Int) = values().find { it.id == id } ?: Fancy
+        }
+    }
+
+    enum class SmoothLighting(val id: Int) {
+        Off(0),
+        Min(1),
+        Max(2);
+
+        companion object {
+            fun fromId(id: Int) = values().find { it.id == id } ?: Max
+        }
+    }
+
+    enum class Clouds(val id: Int) {
+        Off(0),
+        Fast(1),
+        Fancy(2);
+
+        companion object {
+            fun fromId(id: Int) = values().find { it.id == id } ?: Fancy
+        }
+    }
+
+    enum class Particles(val id: Int) {
+        All(0),
+        Decreased(1),
+        Minimal(2);
+
+        companion object {
+            fun fromId(id: Int) = values().find { it.id == id } ?: All
+        }
+    }
+
+    enum class Chat {
+        Hidden,
+        System,
+        All
     }
 }

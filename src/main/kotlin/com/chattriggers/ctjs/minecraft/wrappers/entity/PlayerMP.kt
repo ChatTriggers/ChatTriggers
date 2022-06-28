@@ -83,7 +83,7 @@ class PlayerMP(override val entity: EntityPlayer) : EntityLivingBase(entity) {
         //$$ showBeeStinger: Boolean,
         //#endif
     ) = apply {
-        Renderer.drawPlayer(player, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
+        Renderer.drawPlayer(this, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
     }
 
     private fun getPlayerName(info: NetworkPlayerInfo?): String {
