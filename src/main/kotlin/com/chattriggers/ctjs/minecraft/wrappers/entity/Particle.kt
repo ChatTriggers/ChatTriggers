@@ -241,8 +241,8 @@ class Particle(val entity: EntityFX) {
     //$$
     //$$ fun getHeight() = entity.boundingBox.ysize
     //$$
-    //$$ // TODO(CONVERT)
-    //$$ fun getName() {}
+    //$$ // TODO(BREAKING) Removed this as it always returned "unknown"
+    //$$ //fun getName() {}
     //$$
     //$$ fun addVelocity(x: Double, y: Double, z: Double) = apply {
     //$$     entity.asMixin<ParticleAccessor>().motionX += x

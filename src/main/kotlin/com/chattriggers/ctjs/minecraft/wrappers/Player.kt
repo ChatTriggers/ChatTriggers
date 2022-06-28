@@ -26,7 +26,7 @@ object Player {
     @JvmStatic
     fun asPlayerMP(): PlayerMP? {
         val player = getPlayer() ?: return null
-        if (cachedPlayer?.player != player)
+        if (cachedPlayer?.entity != player)
             cachedPlayer = PlayerMP(player)
         return cachedPlayer
     }

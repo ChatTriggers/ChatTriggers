@@ -135,11 +135,7 @@ object World {
         //#endif
     }
 
-    // TODO(CONVERT)
-    //#if MC<=11202
-    @JvmStatic
-    fun getType() = getWorld()?.worldType?.worldTypeName.toString()
-    //#endif
+    // TODO(BREAKING) Removed getType as it isn't possible to get in newer versions
 
     /**
      * Gets the [BlockType] at a location in the world.
@@ -361,9 +357,6 @@ object World {
          */
         @JvmStatic
         fun getParticleNames(): List<String> {
-            // TODO(CONVERT): Introduce ResourceLocation wrapper and return this? Could also
-            //                be used anywhere Registry is used
-
             //#if MC<=11202
             return EnumParticleTypes.getParticleNames().toList()
             //#else
@@ -439,5 +432,11 @@ object World {
 
         @JvmStatic
         fun spawnParticle(particle: Particle) = spawnParticle(particle.entity)
+    }
+
+    enum class Dimension {
+        Nether,
+        Overworld,
+        End
     }
 }

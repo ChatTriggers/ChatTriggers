@@ -393,10 +393,10 @@ object Renderer {
     }
 
     /**
-     * Binds a texture to the client for the Tessellator to use.
+     * Binds a texture to the client for the Renderer to use.
      *
      * @param texture the texture to bind
-     * @return the Tessellator to allow for method chaining
+     * @return the Renderer to allow for method chaining
      */
     @JvmStatic
     fun bindTexture(texture: Image) = apply {
@@ -854,7 +854,7 @@ object Renderer {
         val mouseY = 0f
 
         //#if MC<=11202
-        val entity = if (player is PlayerMP) player.player else Player.getPlayer()!!
+        val entity = if (player is PlayerMP) player.entity else Player.getPlayer()!!
 
         pushMatrix()
         enableTexture2D()
@@ -906,7 +906,7 @@ object Renderer {
         popMatrix()
         finishDraw()
         //#else
-        //$$ val entity = ((player as? PlayerMP)?.player as? AbstractClientPlayer) ?: Player.getPlayer()!!
+        //$$ val entity = ((player as? PlayerMP)?.entity as? AbstractClientPlayer) ?: Player.getPlayer()!!
         //$$
         //$$ val newYaw = atan(mouseY / 40.0).toFloat()
         //$$ val newPitch = atan(mouseX / 40.0).toFloat()

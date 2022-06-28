@@ -13,8 +13,8 @@ import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityPlayerAcces
 //$$import com.chattriggers.ctjs.launch.mixins.transformers.GameProfileAccessor
 //#endif
 
-class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
-    fun isSpectator() = player.isSpectator
+class PlayerMP(override val entity: EntityPlayer) : EntityLivingBase(entity) {
+    fun isSpectator() = entity.isSpectator
 
     fun getPing(): Int {
         //#if MC<=11202
@@ -57,9 +57,9 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
      */
     fun setNametagName(textComponent: UTextComponent) {
         //#if MC<=11202
-        player.asMixin<EntityPlayerAccessor>().displayName = textComponent.formattedText
+        entity.asMixin<EntityPlayerAccessor>().displayName = textComponent.formattedText
         //#else
-        //$$ player.gameProfile.asMixin<GameProfileAccessor>().setName(textComponent.component.string)
+        //$$ entity.gameProfile.asMixin<GameProfileAccessor>().setName(textComponent.component.string)
         //#endif
     }
 
@@ -121,5 +121,5 @@ class PlayerMP(val player: EntityPlayer) : EntityLivingBase(player) {
                 "}"
     }
 
-    override fun getName(): String = UTextComponent(player.name).formattedText
+    override fun getName(): String = UTextComponent(entity.name).formattedText
 }

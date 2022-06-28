@@ -111,11 +111,11 @@ class Item {
     constructor(entity: Entity) {
         if (entity.entity is EntityItem) {
             //#if MC<=10809
-            item = entity.entity.entityItem.item
-            itemStack = entity.entity.entityItem
+            item = (entity.entity as EntityItem).entityItem.item
+            itemStack = (entity.entity as EntityItem).entityItem
             //#else
-            //$$ item = entity.entity.item.item
-            //$$ itemStack = entity.entity.item
+            //$$ item = (entity.entity as ItemEntity).item.item
+            //$$ itemStack = (entity.entity as ItemEntity).item
             //#endif
         } else {
             throw IllegalArgumentException("Entity is not of type EntityItem")
