@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.minecraft.libs.MathLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
@@ -11,40 +12,30 @@ import net.minecraft.util.Vec3
 import java.util.*
 
 //#if MC>=11701
-//$$ import net.minecraft.core.Registry
 //$$ import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
+//$$ import net.minecraft.core.Registry
 //$$ import net.minecraft.world.entity.MoverType
 //$$ import net.minecraft.world.level.chunk.LevelChunk
 //$$ import kotlin.math.sqrt
 //#endif
 
-open class Entity(val entity: net.minecraft.entity.Entity) {
+// TODO(BREAKING) Removed all the server-side methods
+// TODO(BREAKING) Made subclasses use entity field instead of making new ones
+open class Entity(open val entity: net.minecraft.entity.Entity) {
     //#if MC<=11202
     fun getX() = entity.posX
 
     fun getY() = entity.posY
 
     fun getZ() = entity.posZ
-
-    fun setX(x: Double) = apply { entity.posX = x }
-
-    fun setY(y: Double) = apply { entity.posY = y }
-
-    fun setZ(z: Double) = apply { entity.posZ = z }
     //#else
     //$$ fun getX() = entity.x
     //$$
     //$$ fun getY() = entity.y
     //$$
     //$$ fun getZ() = entity.z
-    //$$
-    //$$ fun setX(x: Double) = apply { entity.setPos(x, getY(), getZ()) }
-    //$$
-    //$$ fun setY(y: Double) = apply { entity.setPos(getX(), y, getZ()) }
-    //$$
-    //$$ fun setZ(z: Double) = apply { entity.setPos(getX(), getY(), z) }
     //#endif
 
     fun getPos() = Vec3i(getX(), getY(), getZ())
@@ -259,14 +250,6 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#endif
     }
 
-    fun setAir(air: Int) = apply {
-        //#if MC<=11202
-        entity.air = air
-        //#else
-        //$$ entity.airSupply = air
-        //#endif
-    }
-
     fun getBiome(): String {
         val world = World.getWorld() ?: return ""
 
@@ -392,25 +375,26 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#endif
     }
 
-    // TODO(CONVERT): Introduce a CT enum for this
-    //#if MC<=11202
-    fun getDimension() = entity.dimension
-    //#endif
-
-    fun setPosition(x: Double, y: Double, z: Double) = apply {
+    fun getNBT(): NBTTagCompound {
+        val compound = net.minecraft.nbt.NBTTagCompound()
         //#if MC<=11202
-        entity.setPosition(x, y, z)
-        //#else
-        //$$ entity.setPos(x, y, z)
+        entity.writeToNBT(compound)
+        //#elseif MC>=11701
+        //$$ entity.saveWithoutId(compound)
         //#endif
+        return NBTTagCompound(compound)
     }
 
-    fun setAngles(yaw: Float, pitch: Float) = apply {
+    fun getDimension(): World.Dimension {
         //#if MC<=11202
-        entity.setAngles(yaw, pitch)
-        //#else
-        //$$ entity.xRot = yaw
-        //$$ entity.yRot = pitch
+        return World.Dimension.values()[entity.dimension + 1]
+        //#elseif MC>=11701
+        //$$ return when (entity.level.dimension()) {
+        //$$     net.minecraft.world.level.Level.NETHER -> World.Dimension.Nether
+        //$$     net.minecraft.world.level.Level.OVERWORLD -> World.Dimension.Overworld
+        //$$     net.minecraft.world.level.Level.END -> World.Dimension.End
+        //$$     else -> World.Dimension.Overworld
+        //$$ }
         //#endif
     }
 
@@ -422,45 +406,9 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#endif
     }
 
-    fun setOnFire(seconds: Int) = apply {
-        //#if MC<=11202
-        entity.setFire(seconds)
-        //#else
-        //$$ entity.setSecondsOnFire(seconds)
-        //#endif
-    }
-
-    fun extinguish() = apply {
-        //#if MC<=11202
-        entity.extinguish()
-        //#else
-        //$$ entity.setRemainingFireTicks(0)
-        //#endif
-    }
-
-    fun move(x: Double, y: Double, z: Double) = apply {
-        //#if MC<=11202
-        entity.moveEntity(x, y, z)
-        //#else
-        //$$ entity.move(MoverType.SELF, Vec3(x, y, z))
-        //#endif
-    }
-
     fun isSilent() = entity.isSilent
 
-    fun setIsSilent(silent: Boolean) = apply {
-        entity.isSilent = silent
-    }
-
     fun isInLava() = entity.isInLava
-
-    fun addVelocity(x: Double, y: Double, z: Double) = apply {
-        //#if MC<=11202
-        entity.addVelocity(x, y, z)
-        //#else
-        //$$ entity.deltaMovement = entity.deltaMovement.add(x, y, z)
-        //#endif
-    }
 
     fun getLookVector(partialTicks: Float): Vec3 {
         //#if MC<=11202
@@ -494,11 +442,6 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#endif
     }
 
-    // TODO(BREAKING) Remove this as unneeded
-    //#if MC<=11202
-    // fun dropItem(item: Item, size: Int) = entity.dropItem(item.item, size)
-    //#endif
-
     fun isSneaking(): Boolean {
         //#if MC<=11202
         return entity.isSneaking
@@ -507,34 +450,11 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //#endif
     }
 
-    fun setIsSneaking(sneaking: Boolean) = apply {
-        //#if MC<=11202
-        entity.isSneaking = sneaking
-        //#else
-        //$$ entity.isShiftKeyDown = sneaking
-        //#endif
-    }
-
     fun isSprinting() = entity.isSprinting
-
-    fun setIsSprinting(sprinting: Boolean) = apply {
-        entity.isSprinting = sprinting
-    }
 
     fun isInvisible() = entity.isInvisible
 
-    fun setIsInvisible(invisible: Boolean) = apply {
-        entity.isInvisible = invisible
-    }
-
-    // TODO(CONVERT)
-    //#if MC<=11202
-    fun isEating() = entity.isEating
-
-    fun setIsEating(eating: Boolean) = apply {
-        entity.isEating = eating
-    }
-    //#endif
+    // TODO(BREAKING) Moved isEating to EntityLivingBase
 
     fun isOutsideBorder(): Boolean {
         //#if MC<=11202
@@ -543,11 +463,6 @@ open class Entity(val entity: net.minecraft.entity.Entity) {
         //$$ return entity.level.worldBorder.isWithinBounds(entity.boundingBox)
         //#endif
     }
-
-    // TODO(BREAKING): Remove this, as it doesn't really make much sense
-    // fun setIsOutsideBorder(outside: Boolean) = apply {
-    //     entity.isOutsideBorder = outside
-    // }
 
     fun isBurning(): Boolean {
         //#if MC<=11202

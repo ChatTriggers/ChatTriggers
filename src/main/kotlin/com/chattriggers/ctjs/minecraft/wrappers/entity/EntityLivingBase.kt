@@ -4,36 +4,28 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.PotionEffect
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import net.minecraft.potion.Potion
 
-open class EntityLivingBase(val entityLivingBase: net.minecraft.entity.EntityLivingBase) : Entity(entityLivingBase) {
-    fun addPotionEffect(effect: PotionEffect) {
+open class EntityLivingBase(override val entity: net.minecraft.entity.EntityLivingBase) : Entity(entity) {
+    fun isEating(): Boolean {
         //#if MC<=11202
-        entityLivingBase.addPotionEffect(effect.effect)
-        //#else
-        //$$ entityLivingBase.addEffect(effect.effect)
-        //#endif
-    }
-
-    fun clearPotionEffects() {
-        //#if MC<=11202
-        entityLivingBase.clearActivePotions()
-        //#else
-        //$$ entityLivingBase.removeAllEffects()
+        return entity.isEating
+        //#elseif MC>=11701
+        //$$ return entity.isUsingItem && entity.getItemInHand(entity.usedItemHand).isEdible
         //#endif
     }
 
     fun getActivePotionEffects(): List<PotionEffect> {
         //#if MC<=11202
-        return entityLivingBase.activePotionEffects.map(::PotionEffect)
+        return entity.activePotionEffects.map(::PotionEffect)
         //#else
-        //$$ return entityLivingBase.activeEffects.map(::PotionEffect)
+        //$$ return entity.activeEffects.map(::PotionEffect)
         //#endif
     }
 
     fun canSeeEntity(other: net.minecraft.entity.Entity): Boolean {
         //#if MC<=11202
-        return entityLivingBase.canEntityBeSeen(other)
+        return entity.canEntityBeSeen(other)
         //#else
-        //$$ return entityLivingBase.hasLineOfSight(other)
+        //$$ return entity.hasLineOfSight(other)
         //#endif
     }
 
@@ -52,40 +44,32 @@ open class EntityLivingBase(val entityLivingBase: net.minecraft.entity.EntityLiv
         //#if MC<=11202
         if (slot == EquipmentSlot.OffHand)
             return null
-        return entityLivingBase.getEquipmentInSlot(slot.mcValue)?.let(::Item)
+        return entity.getEquipmentInSlot(slot.mcValue)?.let(::Item)
         //#else
-        //$$ return entityLivingBase.getItemBySlot(slot.mcValue)?.let(::Item)
+        //$$ return entity.getItemBySlot(slot.mcValue)?.let(::Item)
         //#endif
     }
 
-    fun getHP() = entityLivingBase.health
+    fun getHP() = entity.health
 
-    fun setHP(health: Float) = apply {
-        entityLivingBase.health = health
-    }
+    fun getMaxHP() = entity.maxHealth
 
-    fun getMaxHP() = entityLivingBase.maxHealth
-
-    fun getAbsorption() = entityLivingBase.absorptionAmount
-
-    fun setAbsorption(absorption: Float) = apply {
-        entityLivingBase.absorptionAmount = absorption
-    }
+    fun getAbsorption() = entity.absorptionAmount
 
     // TODO(BREAKING): Remove this (doesn't exist in new versions, should just use getTicksExisted())
-    // fun getAge() = entityLivingBase.age
+    // fun getAge() = entity.age
 
     fun getArmorValue(): Int {
         //#if MC<=11202
-        return entityLivingBase.totalArmorValue
+        return entity.totalArmorValue
         //#else
-        //$$ return entityLivingBase.armorValue
+        //$$ return entity.armorValue
         //#endif
     }
 
     fun isPotionActive(id: Int): Boolean {
         //#if MC<=11202
-        return entityLivingBase.isPotionActive(id)
+        return entity.isPotionActive(id)
         //#else
         //$$ return MobEffect.byId(id)?.let(::isPotionActive) ?: false
         //#endif
@@ -95,7 +79,7 @@ open class EntityLivingBase(val entityLivingBase: net.minecraft.entity.EntityLiv
         //#if MC<=11202
         return isPotionActive(potion.id)
         //#else
-        //$$ return entityLivingBase.hasEffect(potion)
+        //$$ return entity.hasEffect(potion)
         //#endif
     }
 
