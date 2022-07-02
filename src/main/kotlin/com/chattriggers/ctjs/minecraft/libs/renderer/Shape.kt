@@ -6,7 +6,6 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-// TODO(VERIFY): The draw mode was changed from quad strip to quads
 class Shape(private var color: Long) {
     private val vertexes = mutableListOf<Vector2f>()
     private val reversedVertexes = vertexes.asReversed()
@@ -92,19 +91,18 @@ class Shape(private var color: Long) {
             addVertex(circleX * radius + x, circleY * radius + y)
         }
 
-        drawMode = Renderer.DrawMode.Triangles
+        drawMode = Renderer.DrawMode.TriangleStrip
     }
 
     fun draw() = apply {
-        Renderer.setDrawMode(drawMode)
         Renderer.withColor(color) {
             Renderer.disableTexture2D()
-            Renderer.beginVertices(drawMode, Renderer.VertexFormat.Position)
+            Renderer.beginVertices(drawMode, Renderer.VertexFormat.PositionColor)
 
             if (area < 0) {
-                vertexes.forEach { Renderer.pos(it.x, it.y) }
+                vertexes.forEach { Renderer.pos(it.x, it.y).col(color).endVertex() }
             } else {
-                reversedVertexes.forEach { Renderer.pos(it.x, it.y) }
+                reversedVertexes.forEach { Renderer.pos(it.x, it.y).col(color).endVertex() }
             }
 
             Renderer.endVertices()
