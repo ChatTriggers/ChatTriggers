@@ -12,6 +12,7 @@ import gg.essential.universal.UMatrixStack
 import gg.essential.universal.UResolution
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.gui.FontRenderer
+import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.entity.RenderManager
@@ -34,6 +35,7 @@ import net.minecraft.client.renderer.RenderHelper
 //$$ import com.mojang.blaze3d.systems.RenderSystem
 //$$ import com.mojang.math.Quaternion
 //$$ import net.minecraft.client.CameraType
+//$$ import net.minecraft.client.gui.GuiComponent
 //$$ import net.minecraft.client.renderer.entity.EntityRendererProvider
 //#endif
 
@@ -238,11 +240,11 @@ object Renderer {
     @JvmStatic
     @JvmOverloads
     fun colorize(red: Float, green: Float, blue: Float, alpha: Float = 1f) = apply {
-        colorBuffer.clear()
-        colorBuffer.put(red.coerceIn(0f..1f))
-        colorBuffer.put(green.coerceIn(0f..1f))
-        colorBuffer.put(blue.coerceIn(0f..1f))
-        colorBuffer.put(alpha.coerceIn(0f..1f))
+        //#if MC<=11202
+        GlStateManager.color(red, green, blue, alpha)
+        //#elseif MC>=11701
+        //$$ RenderSystem.setShaderColor(red, green, blue, alpha)
+        //#endif
     }
 
     @JvmStatic
@@ -285,6 +287,7 @@ object Renderer {
      */
     @JvmStatic
     fun getCurrentGlColor(): Color {
+        colorBuffer.clear()
         //#if MC<=11202
         GL11.glGetFloat(GL11.GL_CURRENT_COLOR, colorBuffer)
         //#else
@@ -330,12 +333,20 @@ object Renderer {
 
     @JvmStatic
     fun enableLighting() = apply {
+        //#if MC<=11202
         UGraphics.enableLighting()
+        //#elseif MC>=11701
+        //$$ Lighting.setupNetherLevel(matrixStack.toMC().last().pose())
+        //#endif
     }
 
     @JvmStatic
     fun disableLighting() = apply {
+        //#if MC<=11202
         UGraphics.disableLighting()
+        //#elseif MC>=11701
+        //$$ Lighting.setupLevel(matrixStack.toMC().last().pose())
+        //#endif
     }
 
     @JvmStatic
@@ -400,7 +411,7 @@ object Renderer {
      */
     @JvmStatic
     fun bindTexture(texture: Image) = apply {
-        UGraphics.bindTexture(texture.getTextureId())
+        UGraphics.bindTexture(0, texture.getTextureId())
     }
 
     @JvmStatic
@@ -515,7 +526,6 @@ object Renderer {
     @JvmStatic
     fun finishDraw() {
         if (!retainTransforms) {
-            colorBuffer.clear()
             drawMode = null
             vertexFormat = null
         }
@@ -593,6 +603,15 @@ object Renderer {
         )
     }
 
+    fun col(color: Long) = apply {
+        col(
+            (color shr 16 and 0xff).toFloat() / 255.0f,
+            (color shr 8 and 0xff).toFloat() / 255.0f,
+            (color and 0xff).toFloat() / 255.0f,
+            (color shr 24 and 0xff).toFloat() / 255.0f
+        )
+    }
+
     @JvmStatic
     fun endVertex() = apply {
         if (!vertexStarted)
@@ -613,14 +632,15 @@ object Renderer {
         if (pos[1] > pos[3])
             Collections.swap(pos, 1, 3)
 
-        withColor(color) {
+        val realColor = color ?: getCurrentGlColorAlphaFixed().rgb.toLong()
+        withColor(realColor) {
             disableTexture2D()
-            beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.Position)
+            beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.PositionColor)
 
-            pos(pos[0], pos[3], 0f).endVertex()
-            pos(pos[2], pos[3], 0f).endVertex()
-            pos(pos[2], pos[1], 0f).endVertex()
-            pos(pos[0], pos[1], 0f).endVertex()
+            pos(pos[0], pos[3], 0f).col(realColor).endVertex()
+            pos(pos[2], pos[3], 0f).col(realColor).endVertex()
+            pos(pos[2], pos[1], 0f).col(realColor).endVertex()
+            pos(pos[0], pos[1], 0f).col(realColor).endVertex()
 
             endVertices()
             enableTexture2D()
@@ -642,14 +662,15 @@ object Renderer {
         val i = sin(theta) * (thickness / 2)
         val j = cos(theta) * (thickness / 2)
 
-        withColor(color) {
+        val realColor = color ?: getCurrentGlColorAlphaFixed().rgb.toLong()
+        withColor(realColor) {
             disableTexture2D()
-            beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.Position)
+            beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.PositionColor)
 
-            pos((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).endVertex()
-            pos((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).endVertex()
-            pos((x2 - i).toDouble(), (y2 - j).toDouble(), 0.0).endVertex()
-            pos((x1 - i).toDouble(), (y1 - j).toDouble(), 0.0).endVertex()
+            pos((x1 + i).toDouble(), (y1 + j).toDouble(), 0.0).col(realColor).endVertex()
+            pos((x2 + i).toDouble(), (y2 + j).toDouble(), 0.0).col(realColor).endVertex()
+            pos((x2 - i).toDouble(), (y2 - j).toDouble(), 0.0).col(realColor).endVertex()
+            pos((x1 - i).toDouble(), (y1 - j).toDouble(), 0.0).col(realColor).endVertex()
 
             endVertices()
             enableTexture2D()
@@ -673,17 +694,24 @@ object Renderer {
         var circleX = 1f
         var circleY = 0f
 
-        withColor(color) {
+        val realColor = color ?: getCurrentGlColorAlphaFixed().rgb.toLong()
+        withColor(realColor) {
             disableTexture2D()
-            beginVertices(drawMode ?: DrawMode.TriangleStrip, vertexFormat ?: VertexFormat.Position)
+            beginVertices(drawMode ?: DrawMode.TriangleStrip, vertexFormat ?: VertexFormat.PositionColor)
 
             for (i in 0..steps) {
-                pos(x.toDouble(), y.toDouble(), 0.0).endVertex()
-                pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+                pos(x.toDouble(), y.toDouble(), 0.0)
+                    .col(realColor)
+                    .endVertex()
+                pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0)
+                    .col(realColor)
+                    .endVertex()
                 xHolder = circleX
                 circleX = cos * circleX - sin * circleY
                 circleY = sin * xHolder + cos * circleY
-                pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0).endVertex()
+                pos((circleX * radius + x).toDouble(), (circleY * radius + y).toDouble(), 0.0)
+                    .col(realColor)
+                    .endVertex()
             }
 
             endVertices()
@@ -735,6 +763,7 @@ object Renderer {
      */
     // TODO(BREAKING): Rename from drawString (in Tessellator)
     // TODO(BREAKING): Remove color argument. Users should use colorize()
+    // TODO(CONVERT): Currently does not work in 1.17
     // TODO(CONVERT): Is the scale argument necessary? Does scale() affect this function?
     @JvmStatic
     @JvmOverloads
@@ -775,7 +804,6 @@ object Renderer {
         //$$ translate(renderPos.x(), renderPos.y(), renderPos.z())
         //#endif
 
-        // TODO(CONVERT): See InventoryScreen::renderEntityInInventory (line 138???)
         //#if MC<=11202
         rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         rotate(renderManager.playerViewX * xMultiplier, 1.0f, 0.0f, 0.0f)
@@ -815,19 +843,23 @@ object Renderer {
     // TODO(BREAKING): Doesn't set color to white if colorized() hasn't been called
     @JvmStatic
     fun drawImage(image: Image, x: Double, y: Double, width: Double, height: Double) = apply {
-        scale(1f, 1f, 50f)
+        pushMatrix()
         bindTexture(image)
-        enableTexture2D()
+        enableBlend()
+        enableAlpha()
 
-        beginVertices(drawMode ?: DrawMode.Quads, vertexFormat ?: VertexFormat.PositionTex)
+        val totalWidth = image.getTextureWidth()
+        val totalHeight = image.getTextureHeight()
 
-        pos(x, y + height, 0.0).tex(0.0, 1.0).endVertex()
-        pos(x + width, y + height, 0.0).tex(1.0, 1.0).endVertex()
-        pos(x + width, y, 0.0).tex(1.0, 0.0).endVertex()
-        pos(x, y, 0.0).tex(0.0, 0.0).endVertex()
+        translate(x.toFloat(), y.toFloat())
+        scale(width.toFloat() / totalWidth, height.toFloat() / totalHeight)
 
-        endVertices()
-        enableTexture2D()
+        //#if MC<=11202
+        Gui.drawModalRectWithCustomSizedTexture(0, 0, 0f, 0f, totalWidth, totalHeight, totalWidth.toFloat(), totalHeight.toFloat())
+        //#elseif MC>=11701
+        //$$ GuiComponent.blit(matrixStack.toMC(), 0, 0, 0f, 0f, totalWidth, totalHeight, totalWidth, totalHeight)
+        //#endif
+        popMatrix()
     }
 
     // TODO(VERIFY)
@@ -979,21 +1011,28 @@ object Renderer {
         fun getScale(): Double = UResolution.scaleFactor
     }
 
-    enum class DrawMode {
-        Lines,
-        LineStrip,
-        DebugLines,
-        DebugLineStrip,
-        Triangles,
-        TriangleStrip,
-        TriangleFan,
-        Quads;
+    // TODO(BREAKING): Some GL draw modes aren't supported in newer versions.
+    //                 Also removed Debug draw modes as they aren't used anywhere.
+    enum class DrawMode(private val glMode: Int) {
+        Lines(GL11.GL_LINES),
+        LineStrip(GL11.GL_LINE_STRIP),
+        Triangles(GL11.GL_TRIANGLES),
+        TriangleStrip(GL11.GL_TRIANGLE_STRIP),
+        TriangleFan(GL11.GL_TRIANGLE_FAN),
+        Quads(GL11.GL_QUADS);
 
         fun toMCDrawMode() =
             //#if MC<=11202
-            ordinal
-            //#else
-            //$$ com.mojang.blaze3d.vertex.VertexFormat.Mode.values()[ordinal]
+            glMode
+            //#elseif MC>=11701
+            //$$ when (this) {
+            //$$     Lines -> com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES
+            //$$     LineStrip -> com.mojang.blaze3d.vertex.VertexFormat.Mode.LINE_STRIP
+            //$$     Triangles -> com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLES
+            //$$     TriangleStrip -> com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLE_STRIP
+            //$$     TriangleFan -> com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLE_FAN
+            //$$     Quads -> com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS
+            //$$ }
             //#endif
     }
 

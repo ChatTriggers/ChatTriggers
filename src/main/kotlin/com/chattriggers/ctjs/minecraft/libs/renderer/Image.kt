@@ -18,7 +18,7 @@ class Image(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
     private val textureWidth = image?.width ?: 0
     private val textureHeight = image?.height ?: 0
-    lateinit var unregister: () -> Unit
+    private lateinit var unregister: () -> Unit
 
     init {
         CTJS.images.add(this)
