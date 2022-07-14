@@ -402,12 +402,27 @@ object Player {
         showHeldItem: Boolean = true,
         showArrows: Boolean = true,
         //#if MC>=11701
-        //$$ showParrot: Boolean,
-        //$$ showSpinAttack: Boolean,
-        //$$ showBeeStinger: Boolean,
+        //$$ showParrot: Boolean = true,
+        //$$ showSpinAttack: Boolean = true,
+        //$$ showBeeStinger: Boolean = true,
         //#endif
     ) = apply {
-        Renderer.drawPlayer(this, x, y, rotate, showNametag, showArmor, showCape, showHeldItem, showArrows)
+        Renderer.drawPlayer(
+            this,
+            x,
+            y,
+            rotate,
+            showNametag,
+            showArmor,
+            showCape,
+            showHeldItem,
+            showArrows,
+            //#if MC>=11701
+            //$$ showParrot,
+            //$$ showSpinAttack,
+            //$$ showBeeStinger,
+            //#endif
+        )
     }
 
     object armor {
