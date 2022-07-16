@@ -21,8 +21,9 @@ class Image constructor(var image: BufferedImage?) {
         CTJS.images.add(this)
     }
 
-    @JvmOverloads
-    constructor(name: String, url: String? = null) : this(getBufferedImage(name, url))
+    constructor(name: String, url: String) : this(getBufferedImage(name, url))
+
+    constructor(file: File) : this(ImageIO.read(file))
 
     fun getTextureWidth(): Int = textureWidth
 
@@ -70,14 +71,14 @@ class Image constructor(var image: BufferedImage?) {
     }
 
     companion object {
-        private fun getBufferedImage(name: String, url: String? = null): BufferedImage? {
+        private fun getBufferedImage(name: String, url: String): BufferedImage? {
             val resourceFile = File(CTJS.assetsDir, name)
 
             if (resourceFile.exists()) {
                 return ImageIO.read(resourceFile)
             }
 
-            val conn = (CTJS.makeWebRequest(url!!) as HttpURLConnection).apply {
+            val conn = (CTJS.makeWebRequest(url) as HttpURLConnection).apply {
                 requestMethod = "GET"
                 doOutput = true
             }
