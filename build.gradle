@@ -21,7 +21,7 @@ buildscript {
         classpath(
             mcVersion >= 11200
                 ? "com.github.ReplayMod.ForgeGradle:541e1485-all"
-                : "com.github.asbyth:ForgeGradle:ddb1eb01"
+                : "com.github.DJtheRedstoner:ForgeGradle:8708bf3"
         )
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
