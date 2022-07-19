@@ -49,6 +49,15 @@ class Image constructor(var image: BufferedImage?) {
         return texture
     }
 
+    /**
+     * Clears the image from GPU memory and removes its references CT side
+     * that way it can be garbage collected if not referenced in js code.
+     */
+    fun destroy() {
+        texture.deleteGlTexture()
+        CTJS.images.remove(this)
+    }
+
     @SubscribeEvent
     fun onRender(event: RenderGameOverlayEvent.Pre) {
         if (image != null) {
