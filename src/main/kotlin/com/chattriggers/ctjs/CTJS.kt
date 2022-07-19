@@ -43,7 +43,7 @@ object CTJS {
     val configLocation = File("./config")
     val assetsDir = File(configLocation, "ChatTriggers/images/").apply { mkdirs() }
     val sounds = mutableListOf<Sound>()
-    val images = mutableListOf<Image>()
+    val images = mutableSetOf<Image>()
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
