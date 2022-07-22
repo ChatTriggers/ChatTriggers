@@ -33,9 +33,10 @@ import net.minecraft.client.renderer.RenderHelper
 //$$ import com.mojang.blaze3d.platform.Lighting
 //$$ import com.mojang.blaze3d.vertex.PoseStack
 //$$ import com.mojang.blaze3d.systems.RenderSystem
-//$$ import com.mojang.math.Quaternion
-//$$ import net.minecraft.client.CameraType
+//$$ import com.mojang.math.Matrix4f
+//$$ import com.mojang.math.Transformation
 //$$ import net.minecraft.client.gui.GuiComponent
+//$$ import net.minecraft.client.renderer.MultiBufferSource
 //$$ import net.minecraft.client.renderer.entity.EntityRendererProvider
 //#endif
 
@@ -497,6 +498,20 @@ object Renderer {
             "Call to Renderer.beginVertices() without a vertexFormat argument or vertexFormat set via Renderer.setVertexFormat()"
         )
 
+        //#if MC>=11701
+        //$$ RenderSystem.setShader {
+        //$$     when ((vertexFormat ?: this.vertexFormat)!!) {
+        //$$         VertexFormat.Block -> GameRenderer.getBlockShader()
+        //$$         VertexFormat.Particle -> GameRenderer.getParticleShader()
+        //$$         VertexFormat.Position -> GameRenderer.getPositionShader()
+        //$$         VertexFormat.PositionColor -> GameRenderer.getPositionColorShader()
+        //$$         VertexFormat.PositionTex -> GameRenderer.getPositionTexShader()
+        //$$         VertexFormat.PositionTexColor -> GameRenderer.getPositionTexColorShader()
+        //$$         VertexFormat.PositionTexColorNormal -> GameRenderer.getPositionTexColorNormalShader()
+        //$$     }
+        //$$ }
+        //#endif
+
         worldRenderer.begin(theDrawMode.toMCDrawMode(), theVertexFormat.mcVertexFormat)
         vertexStarted = false
         began = true
@@ -760,11 +775,10 @@ object Renderer {
      * @param renderBlackBox render a pretty black border behind the text
      * @param scale the scale of the text
      * @param increase whether to scale the text up as the player moves away
+     * @param visibleThroughWalls whether to show the text through walls
      */
     // TODO(BREAKING): Rename from drawString (in Tessellator)
     // TODO(BREAKING): Remove color argument. Users should use colorize()
-    // TODO(CONVERT): Currently does not work in 1.17
-    // TODO(CONVERT): Is the scale argument necessary? Does scale() affect this function?
     @JvmStatic
     @JvmOverloads
     fun drawStringInWorld(
@@ -775,47 +789,34 @@ object Renderer {
         renderBlackBox: Boolean = true,
         scale: Float = 1f,
         increase: Boolean = true,
+        visibleThroughWalls: Boolean = true,
     ) {
+        //#if MC<=11202
         var lScale = scale
         val renderPos = getRenderPos(x, y, z)
 
         if (increase) {
-            //#if MC<=11202
             val distance = sqrt(renderPos.x * renderPos.x + renderPos.y * renderPos.y + renderPos.z * renderPos.z)
-            //#else
-            //$$ val distance = sqrt(renderPos.x() * renderPos.x() + renderPos.y() * renderPos.y() + renderPos.z() * renderPos.z())
-            //#endif
-            val multiplier = distance / 120f //mobs only render ~120 blocks away
-            lScale *= 0.45f * multiplier
+            val multiplier = distance / 6f
+            lScale *= multiplier
         }
 
-        //#if MC<=11202
         val xMultiplier = if (Client.settings.getSettings().thirdPersonView == 2) -1 else 1
-        //#else
-        //$$ val xMultiplier = if (Client.settings.getSettings().cameraType == CameraType.THIRD_PERSON_FRONT) -1 else 1
-        //#endif
 
-        val oldColor = getCurrentGlColorAlphaFixed()
-        colorize(1f, 1f, 1f, 0.5f)
         pushMatrix()
-        //#if MC<=11202
         translate(renderPos.x, renderPos.y, renderPos.z)
-        //#else
-        //$$ translate(renderPos.x(), renderPos.y(), renderPos.z())
-        //#endif
 
-        //#if MC<=11202
         rotate(-renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         rotate(renderManager.playerViewX * xMultiplier, 1.0f, 0.0f, 0.0f)
-        //#endif
 
-        scale(-lScale, -lScale, lScale)
+        scale(-lScale * 0.025f, -lScale * 0.025f, lScale * 0.025f)
         disableLighting()
         depthMask(false)
-        disableDepth()
+        if (visibleThroughWalls) {
+            disableDepth()
+        }
         enableBlend()
-        // TODO(VERIFY)
-        // blendFunc(770, 771)
+        blendFunc(770, 771)
 
         val textWidth = getStringWidth(text)
 
@@ -833,11 +834,82 @@ object Renderer {
 
         drawString(text, -textWidth / 2f, 0f)
 
-        colorize(oldColor)
+        enableLighting()
         depthMask(true)
-        enableDepth()
+        if (visibleThroughWalls) {
+            enableDepth()
+        }
         popMatrix()
-
+        //#elseif MC>=11701
+        //$$ var lScale = scale
+        //$$
+        //$$ val camera = getRenderManager().mainCamera
+        //$$ val camX = camera.position.x
+        //$$ val camY = camera.position.y
+        //$$ val camZ = camera.position.z
+        //$$
+        //$$ if (increase) {
+        //$$     val deltaX = camX - x
+        //$$     val deltaY = camY - y
+        //$$     val deltaZ = camZ - z
+        //$$     val dist = sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ).toFloat()
+        //$$     val multiplier = dist / 6f
+        //$$     lScale *= multiplier
+        //$$ }
+        //$$
+        //$$ disableLighting()
+        //$$ enableBlend()
+        //$$ tryBlendFuncSeparate(770, 771, 1, 0)
+        //$$ disableTexture2D()
+        //$$ if (text.isNotEmpty()) {
+        //$$     val d = x + 0.5
+        //$$     val e = y + 1.2
+        //$$     val f = z + 0.5
+        //$$     val textRenderer = getFontRenderer()
+        //$$     val matrixStack = RenderSystem.getModelViewStack()
+        //$$     matrixStack.pushPose()
+        //$$     matrixStack.translate(
+        //$$         d - camX,
+        //$$         e - camY + 0.07f,
+        //$$         f - camZ
+        //$$     )
+        //$$     matrixStack.mulPoseMatrix(Matrix4f(camera.rotation()))
+        //$$     matrixStack.scale(lScale * 0.025f, -lScale * 0.025f, lScale * 0.025f)
+        //$$     enableTexture2D()
+        //$$     if (visibleThroughWalls) {
+        //$$         disableDepth()
+        //$$     } else {
+        //$$         enableDepth()
+        //$$     }
+        //$$     depthMask(true)
+        //$$     matrixStack.scale(-1.0f, 1.0f, 1.0f)
+        //$$     RenderSystem.applyModelViewMatrix()
+        //$$     val immediate = MultiBufferSource.immediate(Tesselator.getInstance().builder)
+        //$$     textRenderer.drawInBatch(
+        //$$         text,
+        //$$         -getStringWidth(text) / 2.0f,
+        //$$         0.0f,
+        //$$         -1,
+        //$$         false,
+        //$$         Transformation.identity().matrix,
+        //$$         immediate,
+        //$$         visibleThroughWalls,
+        //$$         if (renderBlackBox) {
+        //$$             0x40000000
+        //$$         } else {
+        //$$             0
+        //$$         },
+        //$$         0xF000F0
+        //$$     )
+        //$$     immediate.endBatch()
+        //$$     enableDepth()
+        //$$     matrixStack.popPose()
+        //$$     RenderSystem.applyModelViewMatrix()
+        //$$ }
+        //$$ enableTexture2D()
+        //$$ disableBlend()
+        //$$ enableLighting()
+        //#endif
     }
 
     // TODO(BREAKING): Doesn't set color to white if colorized() hasn't been called

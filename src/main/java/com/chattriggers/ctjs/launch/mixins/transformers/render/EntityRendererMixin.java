@@ -28,30 +28,20 @@ import net.minecraft.util.MovingObjectPosition;
 //$$ @Mixin(GameRenderer.class)
 //#endif
 public class EntityRendererMixin {
+    //#if MC<=11202
     @Inject(
-            //#if MC<=11202
             method = "renderWorldPass",
-            //#elseif MC>=11701
-            //$$ method = "renderLevel",
-            //#endif
             at = @At(
                     value = "INVOKE_STRING",
-                    //#if MC<=11202
                     target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V",
-                    //#elseif MC>=11701
-                    //$$ target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V",
-                    //#endif
                     args = "ldc=hand"
             )
     )
-    //#if MC<=11202
     private void chattriggers_renderWorldTrigger(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
-    //#elseif MC>=11701
-    //$$ private void chattriggers_renderWorldTrigger(float partialTicks, long l, PoseStack arg, CallbackInfo ci) {
-    //#endif
         Renderer.setPartialTicks$chattriggers(partialTicks);
         TriggerType.RenderWorld.triggerAll(partialTicks);
     }
+    //#endif
 
     //#if MC<=11202
     @WrapWithCondition(
