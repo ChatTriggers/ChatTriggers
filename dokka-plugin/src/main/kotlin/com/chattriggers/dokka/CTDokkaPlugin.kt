@@ -1,10 +1,12 @@
 package com.chattriggers.dokka
 
+import com.chattriggers.dokka.DataWriter.createDataPage
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.jetbrains.dokka.CoreExtensions
 import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.dri
 import org.jetbrains.dokka.links.DRI
 import org.jetbrains.dokka.model.*
+import org.jetbrains.dokka.model.properties.WithExtraProperties
 import org.jetbrains.dokka.pages.DriResolver
 import org.jetbrains.dokka.pages.RendererSpecificResourcePage
 import org.jetbrains.dokka.pages.RenderingStrategy
@@ -15,7 +17,6 @@ import org.jetbrains.dokka.transformers.documentation.DocumentableTransformer
 import org.jetbrains.dokka.transformers.pages.PageTransformer
 
 class CTDokkaPlugin : DokkaPlugin() {
-
     val transformer by extending {
         CoreExtensions.documentableTransformer with Extractor
     }
@@ -23,63 +24,132 @@ class CTDokkaPlugin : DokkaPlugin() {
     val preprocessor by extending {
         CoreExtensions.pageTransformer with DataWriter
     }
-
 }
 
-data class DocumentableData(val dri: DRI, val sourceSets: Set<DisplaySourceSet>, val string: String)
+data class RenderedItem(
+    val name: String,
+    val descriptor: String,
+    val url: String,
+)
+
+data class DocumentableData(
+    val dri: DRI,
+    val sourceSets: Set<DisplaySourceSet>,
+    val name: String,
+    val descriptor: String,
+) {
+    fun render(url: String) = RenderedItem(name, descriptor, url)
+}
 
 object Extractor : DocumentableTransformer {
-    private val _list = mutableListOf<DocumentableData>()
-    val list: List<DocumentableData>
-        get() = _list
+    val list = mutableListOf<DocumentableData>()
+    val objectNames = mutableSetOf<String>()
 
     override fun invoke(original: DModule, context: DokkaContext): DModule {
         return original.also {
             it.withDescendants().forEach { documentable ->
-                val rendered = when (documentable) {
-                    is DClasslike -> documentable.name!!
-                    is DFunction -> renderFunction(documentable)
-                    is DProperty -> buildString {
-                        val dri = documentable.dri
-                        if (dri.classNames != null) {
-                            append(dri.classNames)
-                            append(".")
-                        }
-                        append(documentable.name)
-                        append(": ")
-                        append(renderProjection(documentable.type))
+                val name = documentable.name ?: return@forEach
+
+                val descriptor = when (documentable) {
+                    is DClass -> "class $name"
+                    is DEnum -> "enum $name"
+                    is DInterface -> "interface $name"
+                    is DObject -> {
+                        objectNames.add(name)
+                        "object $name"
                     }
-                    else -> null
+                    is DFunction -> {
+                        if (documentable.receiver != null)
+                            return@forEach
+                        makeFunctionDescriptor(documentable)
+                    }
+                    is DProperty -> {
+                        if (documentable.receiver != null)
+                            return@forEach
+                        makePropertyDescriptor(documentable)
+                    }
+                    else -> return@forEach
                 }
-                if (rendered != null) {
-                    _list.add(DocumentableData(documentable.dri, documentable.sourceSets.toDisplaySourceSets(), rendered))
-                }
+
+                list.add(
+                    DocumentableData(
+                        documentable.dri,
+                        documentable.sourceSets.toDisplaySourceSets(),
+                        name,
+                        descriptor,
+                    )
+                )
             }
         }
     }
 }
 
-fun renderFunction(function: DFunction): String {
-    return buildString {
-        val dri = function.dri
-        if (dri.classNames != null) {
-            append(dri.classNames)
-            append(".")
+private fun hasStaticAnnotation(annotations: Annotations?) = annotations?.directAnnotations?.any { (_, list) ->
+    list.any { it.dri.packageName == "kotlin.jvm" && it.dri.classNames == "JvmStatic" }
+} ?: false
+
+private fun isInObject(name: String) = name in Extractor.objectNames || name.endsWith(".Companion")
+
+private fun makePropertyDescriptor(property: DProperty) = buildString {
+    val dri = property.dri
+    val outerClassName = dri.classNames
+    if (outerClassName != null) {
+        append(outerClassName.replace(".Companion", ""))
+
+        val separator = when {
+            !isInObject(outerClassName) -> "."
+            hasStaticAnnotation(property.extra[Annotations]) -> ".INSTANCE."
+            else -> "#"
         }
+
+        append(separator)
+    }
+
+    append(property.name)
+    append(": ")
+    append(renderProjection(property.type))
+}
+
+private fun makeFunctionDescriptor(function: DFunction) = buildString {
+    val dri = function.dri
+    val outerClassName = dri.classNames
+    if (outerClassName != null) {
+        append(outerClassName.replace(".Companion", ""))
+
+        if (!function.isConstructor) {
+            val separator = when {
+                !isInObject(outerClassName) -> "#"
+                !hasStaticAnnotation(function.extra[Annotations]) -> ".INSTANCE."
+                else -> "."
+            }
+
+            append(separator)
+        }
+    }
+
+    if (!function.isConstructor)
         append(function.name)
-        append("(")
-        function.parameters.forEachIndexed { i, param ->
-            append(param.name)
-            append(": ")
-            append(renderProjection(param.type))
-            if (i < function.parameters.size - 1) append(", ")
-        }
-        append("): ")
+
+    append('(')
+
+    function.parameters.forEachIndexed { i, param ->
+        append(param.name)
+        append(": ")
+        append(renderProjection(param.type))
+
+        if (i != function.parameters.lastIndex)
+            append(", ")
+    }
+
+    append(')')
+
+    if (!function.isConstructor) {
+        append(": ")
         append(renderProjection(function.type))
     }
 }
 
-fun renderProjection(p: Projection): String {
+private fun renderProjection(p: Projection): String {
     return when(p) {
         is TypeParameter -> p.name
         is FunctionalTypeConstructor -> {
@@ -123,27 +193,16 @@ fun renderProjection(p: Projection): String {
 }
 
 object DataWriter : PageTransformer {
-    val mapper = jacksonObjectMapper()
+    private val mapper = jacksonObjectMapper()
 
-    fun createDataPage(): RendererSpecificResourcePage {
-        fun getData(locationResolver: DriResolver) =
-            Extractor.list.associate {
-                it.string to locationResolver(it.dri, it.sourceSets)
-            }
+    private fun createDataPage() = RendererSpecificResourcePage(
+        name = "docs-data.json",
+        children = emptyList(),
+        strategy = RenderingStrategy.DriLocationResolvableWrite { resolver ->
+            val data = Extractor.list.map { it.render(resolver(it.dri, it.sourceSets)!!) }
+            mapper.writeValueAsString(data)
+        }
+    )
 
-
-        return RendererSpecificResourcePage(
-            name = "docs-data.json",
-            children = emptyList(),
-            strategy = RenderingStrategy.DriLocationResolvableWrite {
-                mapper.writeValueAsString(getData(it))
-            }
-        )
-    }
-
-    override fun invoke(input: RootPageNode): RootPageNode {
-        return input.modified(
-            children = input.children + createDataPage()
-        )
-    }
+    override fun invoke(input: RootPageNode) = input.modified(children = input.children + createDataPage())
 }

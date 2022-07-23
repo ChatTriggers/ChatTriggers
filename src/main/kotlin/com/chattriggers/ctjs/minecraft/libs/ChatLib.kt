@@ -32,11 +32,6 @@ object ChatLib {
         }
     }
 
-    @JvmStatic
-    fun test(e: Any) {
-        println(e)
-    }
-
     /**
      * Shows text in the action bar.
      * The text can be a String, a [Message] or a [TextComponent]
