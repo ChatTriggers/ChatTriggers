@@ -6,7 +6,7 @@ buildscript {
 
     project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
     ext.kotlin_version = "1.6.0"
-    ext.dokka_version = "1.6.0"
+    ext.dokka_version = "1.6.10"
 
     repositories {
         mavenCentral()
@@ -137,6 +137,10 @@ processResources {
 task userdocs(type: DokkaTask) {
     description = "Generate the docs to be used by scripters, excludes internal classes"
     group = "documentation"
+
+    dependencies {
+        userdocsPlugin(project(":dokka-plugin"))
+    }
 
     outputDirectory.set(file("$buildDir/javadoc"))
 
