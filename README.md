@@ -5,7 +5,7 @@
     </a>
   </p>
   <p>
-    <a href="https://discord.gg/0fNjZyopOvBHZyG8">
+    <a href="https://discord.gg/chattriggers">
       <img src="https://discordapp.com/api/guilds/119493402902528000/embed.png" alt="Discord" />
     </a>
     <a href="https://travis-ci.org/ChatTriggers/ChatTriggers">
