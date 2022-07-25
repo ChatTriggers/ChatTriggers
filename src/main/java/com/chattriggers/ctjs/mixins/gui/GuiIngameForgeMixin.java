@@ -4,6 +4,7 @@ package com.chattriggers.ctjs.mixins.gui;
 import com.chattriggers.ctjs.triggers.TriggerType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraftforge.client.GuiIngameForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,8 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //$$ import net.minecraft.network.chat.Component;
 //#endif
 
-@Pseudo
-@Mixin(targets = "net.minecraftforge.client.GuiIngameForge")
+@Mixin(value = GuiIngameForge.class, remap = false)
 public class GuiIngameForgeMixin extends GuiIngame {
     public GuiIngameForgeMixin(Minecraft minecraft) {
         super(minecraft);

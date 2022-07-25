@@ -344,9 +344,9 @@ class Settings {
             EntityPlayer.EnumChatVisibility.SYSTEM -> Chat.System
             EntityPlayer.EnumChatVisibility.FULL -> Chat.All
             //#elseif MC>=11701
-            //$$ ChatVisibility.HIDDEN -> Chat.Hidden
-            //$$ ChatVisibility.SYSTEM -> Chat.System
-            //$$ ChatVisibility.FULL -> Chat.All
+            //$$ ChatVisiblity.HIDDEN -> Chat.Hidden
+            //$$ ChatVisiblity.SYSTEM -> Chat.System
+            //$$ ChatVisiblity.FULL -> Chat.All
             //#endif
             null -> Chat.All
         }
@@ -358,9 +358,9 @@ class Settings {
                 Chat.System -> EntityPlayer.EnumChatVisibility.SYSTEM
                 Chat.All -> EntityPlayer.EnumChatVisibility.FULL
                 //#elseif MC>=11701
-                //$$ Chat.Hidden -> ChatVisibility.HIDDEN
-                //$$ Chat.System -> ChatVisibility.SYSTEM
-                //$$ Chat.All -> ChatVisibility.FULL
+                //$$ Chat.Hidden -> ChatVisiblity.HIDDEN
+                //$$ Chat.System -> ChatVisiblity.SYSTEM
+                //$$ Chat.All -> ChatVisiblity.FULL
                 //#endif
             }
         }

@@ -34,7 +34,7 @@ import net.minecraft.client.gui.ScaledResolution;
 
 @Mixin(GuiIngame.class)
 public class GuiIngameMixin {
-    //#if MC>=11701
+    //#if FABRIC
     //$$ @Shadow
     //$$ private Text title;
     //$$

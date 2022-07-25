@@ -97,6 +97,7 @@ net.minecraft.network.chat.Style net.minecraft.util.ChatStyle
 net.minecraft.world.scores.Scoreboard net.minecraft.scoreboard.Scoreboard
 net.minecraft.world.scores.Score net.minecraft.scoreboard.Score
 net.minecraft.network.chat.ClickEvent net.minecraft.event.ClickEvent
+net.minecraft.network.chat.HoverEvent net.minecraft.event.HoverEvent
 net.minecraft.resources.ResourceLocation net.minecraft.util.ResourceLocation
 net.minecraft.world.inventory.Slot net.minecraft.inventory.Slot
 net.minecraft.client.gui.screens.TitleScreen net.minecraft.client.gui.GuiMainMenu
