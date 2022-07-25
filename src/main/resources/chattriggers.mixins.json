@@ -46,6 +46,7 @@
         //#else
         //$$ "AbstractSoundInstanceAccessor",
         //$$ "GameProfileAccessor",
+        //$$ "KeyboardHandlerMixin",
         //$$ "KeyMappingAccessor",
         //$$ "MouseHandlerMixin",
         //$$ "ParticleAccessor",

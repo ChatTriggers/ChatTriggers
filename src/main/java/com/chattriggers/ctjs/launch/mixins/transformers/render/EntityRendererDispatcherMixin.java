@@ -41,7 +41,7 @@ package com.chattriggers.ctjs.launch.mixins.transformers.render;
 //$$
 //$$     @Inject(method = "render", at = @At("TAIL"))
 //$$     private void chattriggers_postRenderEntityTrigger(Entity arg, double x, double y, double z, float yaw, float tickDelta, PoseStack arg2, MultiBufferSource arg3, int j, CallbackInfo ci) {
-//$$         TriggerType.RenderEntity.triggerAll(
+//$$         TriggerType.PostRenderEntity.triggerAll(
 //$$                 new com.chattriggers.ctjs.minecraft.wrappers.entity.Entity(arg),
 //$$                 new Vector3f((float) x, (float) y, (float) z),
 //$$                 tickDelta

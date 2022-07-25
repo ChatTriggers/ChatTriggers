@@ -22,10 +22,13 @@ import java.util.List;
 
 //#if MC<=11202
 import org.lwjgl.input.Keyboard;
+//#elseif MC>=11701
+//$$ import com.mojang.blaze3d.vertex.PoseStack;
+//$$ import org.spongepowered.asm.mixin.Shadow;
 //#endif
 
 @Mixin(GuiScreen.class)
-public class GuiScreenMixin {
+public abstract class GuiScreenMixin {
     @Inject(
             //#if MC<=11202
             method = "sendChatMessage(Ljava/lang/String;)V",
@@ -118,7 +121,9 @@ public class GuiScreenMixin {
             textComponent = new UTextComponent(component);
         TriggerType.ChatComponentHovered.triggerAll(textComponent, x, y, ci);
     }
+    //#endif
 
+    //#if MC<=11202
     @Inject(
         method = "renderToolTip",
         at = @At(
@@ -149,5 +154,47 @@ public class GuiScreenMixin {
             listener.invoke(new Object[] {mouseX, mouseY, this});
         });
     }
+    //#elseif MC>=11701
+    //$$ @Shadow
+    //$$ public abstract List<Component> getTooltipFromItem(ItemStack arg);
+    //$$
+    //#if FORGE
+    //$$ @Shadow
+    //$$ private ItemStack tooltipStack;
+    //#endif
+    //$$
+    //$$ @Inject(
+    //$$     method = "renderTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemStack;II)V",
+    //$$     at = @At(
+    //$$         value = "INVOKE",
+    //$$         target = "Lnet/minecraft/client/gui/screens/Screen;renderTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;Ljava/util/Optional;II)V"
+    //$$     ),
+    //$$     cancellable = true
+    //$$ )
+    //$$ private void chattriggers_tooltipTrigger(PoseStack arg, ItemStack arg2, int i, int j, CallbackInfo ci) {
+    //$$     TriggerType.Tooltip.triggerAll(getTooltipFromItem(arg2), new Item(arg2), ci);
+             //#if FORGE
+             //$$ if (ci.isCancelled()) {
+             //$$     this.tooltipStack = ItemStack.EMPTY;
+             //$$ }
+             //#endif
+    //$$ }
+    //$$ @Inject(method = "renderBackground(Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At("HEAD"), cancellable = true)
+    //$$ private void chattriggers_guiDrawBackground(CallbackInfo ci) {
+    //$$     TriggerType.GuiDrawBackground.triggerAll(this, ci);
+    //$$ }
+    //$$
+    //$$ @Inject(method = "renderBackground(Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At("TAIL"))
+    //$$ private void chattriggers_postGuiDrawBackground(CallbackInfo ci) {
+    //$$     TriggerType.GuiRender.triggerAll(UMouse.Scaled.getX(), UMouse.Scaled.getY(), this);
+    //$$ }
+    //$$
+    //$$ @Inject(method = "render", at = @At("TAIL"))
+    //$$ private void chattriggers_postGuiRenderTrigger(PoseStack arg, int i, int j, float f, CallbackInfo ci) {
+    //$$     TriggerType.PostGuiRender.triggerAll(i, j, f, this);
+    //$$     CTJS.Companion.getEventListeners(EventType.PostGuiRender).forEach(listener -> {
+    //$$         listener.invoke(new Object[] {i, j, this});
+    //$$     });
+    //$$ }
     //#endif
 }

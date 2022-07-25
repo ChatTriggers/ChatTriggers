@@ -45,7 +45,7 @@ public class BlockNoteMixin {
         //$$ event.setInstrument$chattriggers(arg.getValue(NoteBlock.INSTRUMENT));
         //#endif
 
-        TriggerType.NoteBlockPlay.triggerAll(vec, event.getNote().name(), event.getOctave(), event);
+        TriggerType.NoteBlockChange.triggerAll(vec, event.getNote().name(), event.getOctave(), event);
 
         if (event.isCanceled()) {
             cir.setReturnValue(false);
