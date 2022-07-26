@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
 import com.chattriggers.ctjs.utils.kotlin.asMixin
-import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagListAccessor
+import com.chattriggers.ctjs.mixins.NBTTagListAccessor
 
 class NBTTagList(override val rawNBT: net.minecraft.nbt.NBTTagList) : NBTBase(rawNBT) {
     val tagCount: Int

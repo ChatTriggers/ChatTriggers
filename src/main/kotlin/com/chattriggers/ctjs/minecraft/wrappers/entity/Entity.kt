@@ -12,7 +12,7 @@ import net.minecraft.util.Vec3
 import java.util.*
 
 //#if MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityAccessor
+//$$ import com.chattriggers.ctjs.mixins.entity.EntityAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import gg.essential.universal.wrappers.message.UTextComponent
 //$$ import net.minecraft.core.Registry

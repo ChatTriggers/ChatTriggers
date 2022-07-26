@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects.keybind
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.launch.mixins.transformers.GameSettingsAccessor
+import com.chattriggers.ctjs.mixins.GameSettingsAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.RegularTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
@@ -11,7 +11,7 @@ import net.minecraft.client.settings.KeyBinding
 import org.apache.commons.lang3.ArrayUtils
 
 //#if MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.KeyMappingAccessor
+//$$ import com.chattriggers.ctjs.mixins.KeyMappingAccessor
 //#endif
 
 @Suppress("LeakingThis")

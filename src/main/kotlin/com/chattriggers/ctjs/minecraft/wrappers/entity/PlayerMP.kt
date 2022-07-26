@@ -8,9 +8,9 @@ import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.entity.player.EntityPlayer
 
 //#if MC<=11202
-import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityPlayerAccessor
+import com.chattriggers.ctjs.mixins.entity.EntityPlayerAccessor
 //#elseif MC>=11701
-//$$import com.chattriggers.ctjs.launch.mixins.transformers.GameProfileAccessor
+//$$import com.chattriggers.ctjs.mixins.GameProfileAccessor
 //#endif
 
 class PlayerMP(override val entity: EntityPlayer) : EntityLivingBase(entity) {

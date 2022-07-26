@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
-import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
+import com.chattriggers.ctjs.mixins.NBTTagCompoundAccessor
 import com.chattriggers.ctjs.utils.kotlin.asMixin
 import net.minecraft.nbt.NBTTagByteArray
 import net.minecraft.nbt.NBTTagIntArray

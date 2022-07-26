@@ -6,7 +6,7 @@ import org.mozilla.javascript.NativeArray
 import org.mozilla.javascript.NativeObject
 
 //#if MC<=11202
-import com.chattriggers.ctjs.launch.mixins.transformers.NBTTagCompoundAccessor
+import com.chattriggers.ctjs.mixins.NBTTagCompoundAccessor
 //#endif
 
 open class NBTBase(open val rawNBT: net.minecraft.nbt.NBTBase) {

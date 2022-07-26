@@ -13,11 +13,11 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.client.multiplayer.WorldClient
 
 //#if MC<=11202
-import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderGlobalAccessor
+import com.chattriggers.ctjs.mixins.render.RenderGlobalAccessor
 import net.minecraft.util.EnumParticleTypes
 //#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.render.LevelRendererAccessor
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.render.RenderChunkInfoAccessor
+//$$ import com.chattriggers.ctjs.mixins.render.LevelRendererAccessor
+//$$ import com.chattriggers.ctjs.mixins.render.RenderChunkInfoAccessor
 //$$ import net.minecraft.core.Registry
 //$$ import net.minecraft.core.particles.SimpleParticleType
 //$$ import net.minecraft.resources.ResourceLocation

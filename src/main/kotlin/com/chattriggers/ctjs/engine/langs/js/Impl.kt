@@ -13,7 +13,7 @@ import net.minecraft.client.settings.KeyBinding
 import org.mozilla.javascript.NativeObject
 
 //#if MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.KeyMappingAccessor
+//$$ import com.chattriggers.ctjs.mixins.KeyMappingAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //#endif
 

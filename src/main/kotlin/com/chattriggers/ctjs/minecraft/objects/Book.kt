@@ -1,13 +1,12 @@
 package com.chattriggers.ctjs.minecraft.objects
 
-import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiScreenBookAccessor
+import com.chattriggers.ctjs.mixins.gui.GuiScreenBookAccessor
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagList
 import com.chattriggers.ctjs.utils.kotlin.*
 import gg.essential.api.utils.GuiUtil
 import gg.essential.universal.wrappers.message.UMessage
-import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.gui.GuiScreenBook
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack

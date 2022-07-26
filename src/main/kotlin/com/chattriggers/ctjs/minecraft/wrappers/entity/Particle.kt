@@ -8,9 +8,9 @@ import net.minecraft.client.particle.EntityFX
 import java.awt.Color
 
 //#if MC<=11202
-import com.chattriggers.ctjs.launch.mixins.transformers.entity.EntityFXAccessor
+import com.chattriggers.ctjs.mixins.entity.EntityFXAccessor
 //#elseif MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.ParticleAccessor
+//$$ import com.chattriggers.ctjs.mixins.ParticleAccessor
 //$$ import kotlin.math.max
 //#endif
 

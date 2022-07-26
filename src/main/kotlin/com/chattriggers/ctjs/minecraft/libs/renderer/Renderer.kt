@@ -28,7 +28,7 @@ import kotlin.math.*
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.RenderHelper
 //#else
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.entity.AbstractClientPlayerAccessor
+//$$ import com.chattriggers.ctjs.mixins.entity.AbstractClientPlayerAccessor
 //$$ import com.chattriggers.ctjs.utils.kotlin.asMixin
 //$$ import com.mojang.blaze3d.platform.Lighting
 //$$ import com.mojang.blaze3d.vertex.PoseStack

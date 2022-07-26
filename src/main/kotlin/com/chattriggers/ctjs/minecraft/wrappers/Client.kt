@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.wrappers
 
-import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiChatAccessor
-import com.chattriggers.ctjs.launch.mixins.transformers.MinecraftAccessor
+import com.chattriggers.ctjs.mixins.gui.GuiChatAccessor
+import com.chattriggers.ctjs.mixins.MinecraftAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
@@ -40,7 +40,7 @@ import net.minecraft.client.multiplayer.WorldClient
 //#endif
 
 //#if FABRIC
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.gui.HandledScreenAccessor
+//$$ import com.chattriggers.ctjs.mixins.gui.HandledScreenAccessor
 //#endif
 
 abstract class Client {

@@ -1,6 +1,6 @@
 package com.chattriggers.ctjs.minecraft.libs
 
-import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiNewChatAccessor
+import com.chattriggers.ctjs.mixins.gui.GuiNewChatAccessor
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.ClientListener
 import com.chattriggers.ctjs.minecraft.listeners.events.ChatEvent

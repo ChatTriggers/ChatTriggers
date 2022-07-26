@@ -1,7 +1,7 @@
 package com.chattriggers.ctjs.minecraft.objects.gui
 
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.launch.mixins.transformers.gui.GuiButtonAccessor
+import com.chattriggers.ctjs.mixins.gui.GuiButtonAccessor
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener

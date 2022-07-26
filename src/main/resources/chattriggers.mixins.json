@@ -1,6 +1,6 @@
 {
     "required": true,
-    "package": "com.chattriggers.ctjs.launch.mixins.transformers",
+    "package": "com.chattriggers.ctjs.mixins",
     //#if MC<=11202
     "compatibilityLevel": "JAVA_8",
     //#else

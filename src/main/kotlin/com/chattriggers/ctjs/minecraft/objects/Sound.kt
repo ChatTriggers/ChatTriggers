@@ -12,13 +12,13 @@ import java.net.MalformedURLException
 
 //#if MC<=11202
 import net.minecraftforge.fml.relauncher.ReflectionHelper
-import com.chattriggers.ctjs.launch.mixins.transformers.SoundHandlerAccessor
+import com.chattriggers.ctjs.mixins.SoundHandlerAccessor
 import net.minecraft.client.audio.SoundCategory
 import paulscode.sound.SoundSystem
 //#elseif MC>=11701
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.AbstractSoundInstanceAccessor
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.SoundAccessor
-//$$ import com.chattriggers.ctjs.launch.mixins.transformers.SoundManagerAccessor
+//$$ import com.chattriggers.ctjs.mixins.AbstractSoundInstanceAccessor
+//$$ import com.chattriggers.ctjs.mixins.SoundAccessor
+//$$ import com.chattriggers.ctjs.mixins.SoundManagerAccessor
 //$$ import net.minecraft.client.sounds.WeighedSoundEvents
 //$$ import net.minecraft.client.resources.sounds.AbstractSoundInstance
 //$$ import net.minecraft.client.resources.sounds.SoundInstance
