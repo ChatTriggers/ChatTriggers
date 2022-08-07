@@ -8,10 +8,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.net.HttpURLConnection
-import java.net.URL
 import javax.imageio.ImageIO
 
-class Image constructor(var image: BufferedImage?) {
+class Image(var image: BufferedImage?) {
     private lateinit var texture: DynamicTexture
     private val textureWidth = image?.width ?: 0
     private val textureHeight = image?.height ?: 0
@@ -21,8 +20,17 @@ class Image constructor(var image: BufferedImage?) {
         CTJS.images.add(this)
     }
 
-    constructor(name: String, url: String) : this(getBufferedImage(name, url))
+    @Deprecated(
+        message = "API is ambiguous, especially when called from JavaScript, and is relative to the assets directory",
+        replaceWith = ReplaceWith("Image.fromFile() /* or Image.fromUrl() */"),
+    )
+    @JvmOverloads
+    constructor(name: String, url: String? = null) : this(getBufferedImage(name, url))
 
+    @Deprecated(
+        message = "Use static method for consistency",
+        replaceWith = ReplaceWith("Image.fromFile()")
+    )
     constructor(file: File) : this(ImageIO.read(file))
 
     fun getTextureWidth(): Int = textureWidth
@@ -79,22 +87,54 @@ class Image constructor(var image: BufferedImage?) {
         Renderer.drawImage(this, x, y, width, height)
     }
 
+    @Suppress("DEPRECATION")
     companion object {
-        private fun getBufferedImage(name: String, url: String): BufferedImage? {
+        /**
+         * Create an image object from a java.io.File object. Throws an exception
+         * if the file cannot be found.
+         */
+        @JvmStatic
+        fun fromFile(file: File) =  Image(file)
+
+        /**
+         * Create an image object from a file path. Throws an exception
+         * if the file cannot be found.
+         */
+        @JvmStatic
+        fun fromFile(file: String) = Image(File(file))
+
+        /**
+         * Create an image object from a file path, relative to the ChatTriggers
+         * assets directory. Throws an exception if the file cannot be found.
+         */
+        @JvmStatic
+        fun fromAsset(name: String) = Image(File(CTJS.assetsDir, name))
+
+        /**
+         * Creates an image object from a URL. Throws an exception if an image
+         * cannot be created from the URL.
+         */
+        @JvmStatic
+        fun fromUrl(url: String) = Image(getImageFromUrl(url))
+
+        private fun getBufferedImage(name: String, url: String? = null): BufferedImage? {
             val resourceFile = File(CTJS.assetsDir, name)
 
-            if (resourceFile.exists()) {
+            if (resourceFile.exists())
                 return ImageIO.read(resourceFile)
-            }
 
+            val image = getImageFromUrl(url!!)
+            ImageIO.write(image, "png", resourceFile)
+            return image
+        }
+
+        private fun getImageFromUrl(url: String): BufferedImage {
             val conn = (CTJS.makeWebRequest(url) as HttpURLConnection).apply {
                 requestMethod = "GET"
                 doOutput = true
             }
 
-            val image = ImageIO.read(conn.inputStream) ?: return null
-            ImageIO.write(image, "png", resourceFile)
-            return image
+            return ImageIO.read(conn.inputStream)
         }
     }
 }
