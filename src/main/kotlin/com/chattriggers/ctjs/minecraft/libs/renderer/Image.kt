@@ -104,18 +104,23 @@ class Image(var image: BufferedImage?) {
         fun fromFile(file: String) = Image(File(file))
 
         /**
-         * Create an image object from a file path, relative to the ChatTriggers
-         * assets directory. Throws an exception if the file cannot be found.
+         * Create an image object from a file path, relative to the assets directory.
+         * Throws an exception if the file cannot be found.
          */
         @JvmStatic
         fun fromAsset(name: String) = Image(File(CTJS.assetsDir, name))
 
         /**
          * Creates an image object from a URL. Throws an exception if an image
-         * cannot be created from the URL.
+         * cannot be created from the URL. Will cache the image in the assets
          */
         @JvmStatic
-        fun fromUrl(url: String) = Image(getImageFromUrl(url))
+        @JvmOverloads
+        fun fromUrl(url: String, cachedImageName: String? = null): Image {
+            if (cachedImageName == null)
+                return Image(getImageFromUrl(url))
+            return Image(cachedImageName, url)
+        }
 
         private fun getBufferedImage(name: String, url: String? = null): BufferedImage? {
             val resourceFile = File(CTJS.assetsDir, name)
