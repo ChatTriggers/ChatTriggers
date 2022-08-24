@@ -18,6 +18,7 @@ abstract class Gui : GuiScreen() {
     private var onMouseReleased: RegularTrigger? = null
     private var onMouseDragged: RegularTrigger? = null
     private var onActionPerformed: RegularTrigger? = null
+    private var onGuiOpened: RegularTrigger? = null
 
     private var mouseX = 0
     private var mouseY = 0
@@ -35,6 +36,7 @@ abstract class Gui : GuiScreen() {
 
     fun open() {
         GuiHandler.openGui(this)
+        onGuiOpened?.trigger(arrayOf(this))
     }
 
     fun close() {
@@ -154,6 +156,19 @@ abstract class Gui : GuiScreen() {
     fun registerActionPerformed(method: Any) = run {
         onActionPerformed = RegularTrigger(method, TriggerType.Other, getLoader())
         onActionPerformed
+    }
+
+    /**
+     * Registers a method to be run when the gui is opened.
+     * Arguments passed through to method:
+     * - the gui
+     *
+     * @param method the method to run
+     * @return the trigger
+     */
+    fun registerGuiOpened(method: Any) = run {
+        onGuiOpened = RegularTrigger(method, TriggerType.Other, getLoader())
+        onGuiOpened
     }
 
     /**
