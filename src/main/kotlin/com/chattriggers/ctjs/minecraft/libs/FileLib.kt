@@ -6,6 +6,7 @@ import java.io.*
 import java.net.URL
 import java.net.UnknownHostException
 import java.nio.charset.Charset
+import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -267,5 +268,27 @@ object FileLib {
 
     private fun absoluteLocation(importName: String, fileLocation: String): String {
         return Config.modulesFolder + File.separator + importName + File.separator + fileLocation
+    }
+
+    /**
+     * Encodes a string to a base64 string
+     *
+     * @param toEncode string to encode
+     * @return base64 encoded string
+     */
+    @JvmStatic
+    fun encodeBase64(toEncode: String): String {
+        return Base64.getEncoder().encodeToString(toEncode.toByteArray())
+    }
+
+    /**
+     * Decodes a base64 string to a string
+     *
+     * @param toDecode base64 encoded string to decode
+     * @return decoded string
+     */
+    @JvmStatic
+    fun decodeBase64(toDecode: String): String {
+        return String(Base64.getDecoder().decode(toDecode))
     }
 }
