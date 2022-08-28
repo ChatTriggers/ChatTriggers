@@ -16,6 +16,7 @@ import java.net.URL
  */
 interface ILoader {
     val console: Console
+    val classLoader: ClassLoader
 
     /**
      * Performs initial engine setup given a list of jars. Note that

@@ -2,9 +2,9 @@ package com.chattriggers.ctjs.minecraft.libs.renderer
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.objects.display.DisplayHandler
-import com.chattriggers.ctjs.utils.kotlin.getOption
+import com.chattriggers.ctjs.utils.kotlin.getMemberAs
 import net.minecraft.client.renderer.GlStateManager
-import org.mozilla.javascript.NativeObject
+import org.graalvm.polyglot.Value
 
 class Text {
     private lateinit var string: String
@@ -30,17 +30,17 @@ class Text {
         setY(y)
     }
 
-    constructor(string: String, config: NativeObject) {
+    constructor(string: String, config: Value) {
         setString(string)
-        setColor(config.getOption("color", 0xffffffff).toLong())
-        setFormatted(config.getOption("formatted", true).toBoolean())
-        setShadow(config.getOption("shadow", false).toBoolean())
-        setAlign(config.getOption("align", DisplayHandler.Align.LEFT))
-        setX(config.getOption("x", 0f).toFloat())
-        setY(config.getOption("y", 0f).toFloat())
-        setMaxLines((config.getOption("maxLines", Int.MAX_VALUE)).toDouble().toInt())
-        setScale(config.getOption("scale", 1f).toFloat())
-        setMaxWidth(config.getOption("maxWidth", 0).toInt())
+        setColor(config.getMemberAs<Long>("color") ?: 0xffffffffL)
+        setFormatted(config.getMemberAs<Boolean>("formatted") ?: true)
+        setShadow(config.getMemberAs<Boolean>("shadow") ?: false)
+        setAlign(config.getMember("align") ?: DisplayHandler.Align.LEFT)
+        setX(config.getMemberAs<Float>("x") ?: 0f)
+        setY(config.getMemberAs<Float>("y") ?: 0f)
+        setMaxLines(config.getMemberAs<Int>("maxLines") ?: Int.MAX_VALUE)
+        setScale(config.getMemberAs<Float>("scale") ?: 1f)
+        setMaxWidth(config.getMemberAs<Int>("maxWidth") ?: 0)
     }
 
     fun getString(): String = string

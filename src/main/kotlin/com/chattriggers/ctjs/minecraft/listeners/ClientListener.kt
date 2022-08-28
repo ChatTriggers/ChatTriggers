@@ -1,6 +1,5 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
-import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
@@ -28,7 +27,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
-import org.graalvm.polyglot.Context
 import org.lwjgl.util.vector.Vector3f
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -101,6 +99,7 @@ object ClientListener {
     fun onNetworkEvent(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
         TriggerType.ServerConnect.triggerAll(event)
 
+        // TODO: Get loader dynamically here
         event.manager.channel().pipeline()
             .addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
                 override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {

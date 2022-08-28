@@ -3,7 +3,6 @@ package com.chattriggers.ctjs.engine.module
 import com.chattriggers.ctjs.CTJS
 import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
-import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
 import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
@@ -14,10 +13,8 @@ import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.Console
 import org.apache.commons.io.FileUtils
-import org.mozilla.javascript.Context
 import java.io.File
 import java.lang.invoke.MethodHandle
-import java.net.URLClassLoader
 
 object ModuleManager {
     private val loaders = listOf(JSLoader)
@@ -171,20 +168,15 @@ object ModuleManager {
         val module = cachedModules.find { it.name.lowercase() == name.lowercase() } ?: return false
 
         val file = File(modulesFolder, module.name)
-        if (!file.exists()) throw IllegalStateException("Expected module to have an existing folder!")
+        if (!file.exists())
+            throw IllegalStateException("Expected module to have an existing folder!")
 
-        val context = JSContextFactory.enterContext()
-        try {
-            val classLoader = context.applicationClassLoader as URLClassLoader
+        // TODO: Get the loader dynamically
+        JSLoader.classLoader.close()
 
-            classLoader.close()
-
-            if (file.deleteRecursively()) {
-                Reference.loadCT()
-                return true
-            }
-        } finally {
-            Context.exit()
+        if (file.deleteRecursively()) {
+            Reference.loadCT()
+            return true
         }
 
         return false

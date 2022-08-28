@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.contracts.ExperimentalContracts
 
 object JSLoader : ILoader {
-    private val classLoader = ModifiedURLClassLoader()
+    override val classLoader = ModifiedURLClassLoader()
     private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<Trigger>>()
     override val console by lazy { Console(this) }
 
@@ -310,8 +310,8 @@ object JSLoader : ILoader {
         }
     }
 
-    private class ModifiedURLClassLoader : URLClassLoader(arrayOf(), javaClass.classLoader) {
-        val sources = mutableListOf<URL>()
+    class ModifiedURLClassLoader : URLClassLoader(arrayOf(), javaClass.classLoader) {
+        private val sources = mutableListOf<URL>()
 
         init {
             definePackage("com.oracle.truffle.regex", null, null, null, null, null, null, null)

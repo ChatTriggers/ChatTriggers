@@ -91,7 +91,7 @@ dependencies {
     provided("dev.falsehonesty.asmhelper:AsmHelper:1.5.3-$mcVersion") {
         exclude group: "org.jetbrains.kotlin"
     }
-    provided('org.graalvm.js:js:21.3.0') {
+    provided('org.graalvm.js:js:22.2.0') {
         exclude group: "org.graalvm.regex"
     }
     provided files("./libs/org-graalvm-regex-21.3.0.jar")

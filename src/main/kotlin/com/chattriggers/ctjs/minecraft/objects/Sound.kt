@@ -37,7 +37,7 @@ import java.net.MalformedURLException
  */
 class Sound(private val config: Value) {
     private var sndSystem: SoundSystem? = null
-    private val source = config.getMember("source")?.let(JSRuntime::toString)
+    private val source = config.getMember("source")?.let(JSRuntime::toString)?.toString()
         ?: throw IllegalArgumentException("Sound options bag must contain a \"source\" key")
     var isListening = false
 

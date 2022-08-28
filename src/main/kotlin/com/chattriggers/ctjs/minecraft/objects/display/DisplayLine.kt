@@ -41,9 +41,8 @@ abstract class DisplayLine {
     constructor(text: String, config: Value) {
         setText(text)
 
-        textColor = config.getMember("textColor")?.let(JSRuntime::toNumber)?.toLong()
-        backgroundColor = config.getMember("backgroundColor")?.let(JSRuntime::toNumber)?.toLong()
-
+        setTextColor(config.getMember("textColor")?.let(JSRuntime::toNumber)?.toLong())
+        setBackgroundColor(config.getMember("backgroundColor")?.let(JSRuntime::toNumber)?.toLong())
         setAlign(config.getMember("align"))
         setBackground(config.getMember("background"))
     }
