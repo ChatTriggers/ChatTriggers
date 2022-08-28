@@ -50,14 +50,11 @@ object Reference {
 
         if (asCommand) {
             ChatLib.chat("&7Unloaded all of ChatTriggers")
-            isLoaded = false
         }
     }
 
     @JvmStatic
     fun loadCT() {
-        if (!isLoaded) return
-
         Client.getMinecraft().gameSettings.saveOptions()
         unloadCT(false)
 
