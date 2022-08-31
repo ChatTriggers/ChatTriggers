@@ -39,7 +39,7 @@ fun injectRenderTitle() = inject {
         val displayedSubTitle = shadowField<String>()
 
         code {
-            if (displayedTitle.isNotEmpty() && displayedSubTitle.isNotEmpty()) {
+            if (displayedTitle.isNotEmpty() || displayedSubTitle.isNotEmpty()) {
                 val event = CancellableEvent()
 
                 TriggerType.RenderTitle.triggerAll(displayedTitle, displayedSubTitle, event)
