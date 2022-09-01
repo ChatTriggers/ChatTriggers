@@ -196,7 +196,7 @@ object Player {
     fun getLightLevel(): Int = World.getWorld()?.getLight(getPlayer()?.position) ?: 0
 
     @JvmStatic
-    fun isMoving(): Boolean = getPlayer()?.let { it.movementInput.moveForward != 0F || it.movementInput.moveStrafe != 0F } ?: false
+    fun isMoving(): Boolean = getPlayer()?.movementInput?.let { it.moveForward != 0F || it.moveStrafe != 0F } ?: false
 
     @JvmStatic
     fun isSneaking(): Boolean = getPlayer()?.isSneaking ?: false
