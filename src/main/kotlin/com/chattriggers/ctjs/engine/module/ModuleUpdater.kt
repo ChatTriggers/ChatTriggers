@@ -15,7 +15,6 @@ import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.apache.commons.io.FileUtils
 import java.io.File
-import java.net.URL
 import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -98,8 +97,19 @@ object ModuleUpdater {
         }
     }
 
-    fun importModule(moduleName: String): List<Module> {
-        if (cachedModules.any { it.name == moduleName }) return emptyList()
+    fun importModule(moduleName: String, requiredBy: String? = null): List<Module> {
+        val alreadyImported = cachedModules.any {
+            if (it.name == moduleName) {
+                if (requiredBy != null) {
+                    it.metadata.isRequired = true
+                    it.requiredBy.add(requiredBy)
+                }
+
+                true
+            } else false
+        }
+
+        if (alreadyImported) return emptyList()
 
         val (realName, modVersion) = downloadModule(moduleName) ?: return emptyList()
 
@@ -107,9 +117,18 @@ object ModuleUpdater {
         val module = ModuleManager.parseModule(moduleDir)
         module.targetModVersion = modVersion.toVersion()
 
-        cachedModules.add(module)
+        if (requiredBy != null) {
+            module.metadata.isRequired = true
+            module.requiredBy.add(requiredBy)
+        }
 
-        return listOf(module) + (module.metadata.requires?.map(::importModule)?.flatten() ?: emptyList())
+        cachedModules.add(module)
+        cachedModules.sortWith { a, b ->
+            a.name.compareTo(b.name)
+        }
+        return listOf(module) + (module.metadata.requires?.map {
+            importModule(it, module.name)
+        }?.flatten() ?: emptyList())
     }
 
     data class DownloadResult(val name: String, val modVersion: String)

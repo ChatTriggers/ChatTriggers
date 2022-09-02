@@ -8,6 +8,7 @@ import java.io.File
 
 class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
     var targetModVersion: Version? = null
+    var requiredBy = mutableSetOf<String>()
 
     private val gui = object {
         var collapsed = true
@@ -52,7 +53,11 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
             }
 
             Renderer.drawStringWithShadow(
-                ChatLib.addColor(if (metadata.isRequired) "&8required" else "&4[delete]"),
+                ChatLib.addColor(if (metadata.isRequired) {
+                    "&8required by $requiredBy"
+                } else {
+                    "&4[delete]"
+                }),
                 x + 3, y + gui.description.getHeight() + 15
             )
 
@@ -68,7 +73,7 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
             return
         }
 
-        if (gui.collapsed) return
+        if (gui.collapsed || metadata.isRequired) return
 
         if (x > gui.x && x < gui.x + 45
             && y > gui.y + gui.description.getHeight() + 15 && y < gui.y + gui.description.getHeight() + 25
