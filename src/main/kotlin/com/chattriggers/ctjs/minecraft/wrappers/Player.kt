@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.inventory.Inventory
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.minecraft.wrappers.world.PotionEffect
 import com.chattriggers.ctjs.minecraft.wrappers.entity.Team
+import com.chattriggers.ctjs.minecraft.wrappers.utils.RayTraceResult
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.*
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import com.chattriggers.ctjs.utils.kotlin.MCRayTraceType
@@ -273,6 +274,9 @@ object Player {
             else -> BlockType(0)
         }
     }
+    
+    @JvmStatic
+    fun rayTrace(distance: Double, partialTicks: Float) = getPlayer()?.rayTrace(distance, partialTicks)?.let(::RayTraceResult)
 
     @JvmStatic
     fun getHeldItem(): Item? = getPlayer()?.inventory?.getCurrentItem()?.let(::Item)

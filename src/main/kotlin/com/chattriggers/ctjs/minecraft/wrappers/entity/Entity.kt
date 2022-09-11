@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.Chunk
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
+import com.chattriggers.ctjs.minecraft.wrappers.utils.RayTraceResult
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
 import net.minecraft.util.Vec3
@@ -295,6 +296,8 @@ open class Entity(val entity: MCEntity) {
     fun getChunk(): Chunk = Chunk(
         getWorld().getChunkFromChunkCoords(entity.chunkCoordX, entity.chunkCoordZ)
     )
+
+    fun rayTrace(distance: Double, partialTicks: Float) = RayTraceResult(entity.rayTrace(distance, partialTicks))
 
     override fun toString(): String {
         return "Entity{name=${getName()}, x=${getX()}, y=${getY()}, z=${getZ()}}"

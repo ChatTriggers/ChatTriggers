@@ -21,6 +21,7 @@ internal typealias MCNBTTagList = net.minecraft.nbt.NBTTagList
 internal typealias MCNBTTagString = net.minecraft.nbt.NBTTagString
 
 internal typealias MCBlockPos = net.minecraft.util.BlockPos
+internal typealias MCRayTraceResult = net.minecraft.util.MovingObjectPosition
 internal typealias MCRayTraceType = net.minecraft.util.MovingObjectPosition.MovingObjectType
 internal typealias MCMathHelper = net.minecraft.util.MathHelper
 internal typealias MCChatPacket = net.minecraft.network.play.server.S02PacketChat
@@ -38,6 +39,7 @@ internal typealias MCSoundCategory = net.minecraft.client.audio.SoundCategory
 //#else
 //$$ internal typealias MCParticle = net.minecraft.client.particle.Particle
 //$$ internal typealias MCBlockPos = net.minecraft.util.math.BlockPos
+//$$ internal typealias MCRayTraceResult = net.minecraft.util.math.RayTraceResult
 //$$ internal typealias MCRayTraceType = net.minecraft.util.math.RayTraceResult.Type
 //$$ internal typealias MCMathHelper = net.minecraft.util.math.MathHelper
 //$$ internal typealias MCChatPacket = net.minecraft.network.play.server.SPacketChat
