@@ -11,6 +11,8 @@ abstract class Trigger protected constructor(
     private var priority: Priority = Priority.NORMAL
 
     init {
+        // See note for register method
+        @Suppress("LeakingThis")
         register()
     }
 
@@ -29,7 +31,10 @@ abstract class Trigger protected constructor(
      * This is done automatically with TriggerRegister.
      * @return the trigger for method chaining
      */
-    fun register() = apply {
+    // NOTE: Class initialization cannot be done in this method. It is called in
+    //       the init block above, and thus the child class version will not be
+    //       run initially
+    open fun register() = apply {
         loader.addTrigger(this)
     }
 
