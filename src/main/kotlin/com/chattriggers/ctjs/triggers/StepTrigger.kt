@@ -31,6 +31,11 @@ class StepTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType.St
         systemTime = Client.getSystemTime() - this.delay * 1000
     }
 
+    override fun register(): Trigger {
+        systemTime = Client.getSystemTime()
+        return super.register()
+    }
+
     override fun trigger(args: Array<out Any?>) {
         if (delay < 0) {
             // run trigger based on set fps value (60 per second by default)
