@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.objects.message
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.utils.kotlin.*
+import net.minecraftforge.common.ForgeHooks
 
 class TextComponent {
 
@@ -186,10 +187,9 @@ class TextComponent {
                 "}"
 
     private fun reInstance() {
-        chatComponentText = MCBaseTextComponent(
-            if (formatted) ChatLib.addColor(text)
-            else text
-        )
+        val string = if (formatted) ChatLib.addColor(text) else text
+
+        chatComponentText = ForgeHooks.newChatWithLinks(string)
 
         reInstanceClick()
         reInstanceHover()
