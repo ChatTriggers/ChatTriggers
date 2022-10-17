@@ -53,7 +53,7 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
             }
 
             Renderer.drawStringWithShadow(
-                ChatLib.addColor(if (metadata.isRequired) {
+                ChatLib.addColor(if (metadata.isRequired && requiredBy.isNotEmpty()) {
                     "&8required by $requiredBy"
                 } else {
                     "&4[delete]"
@@ -73,7 +73,7 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
             return
         }
 
-        if (gui.collapsed || metadata.isRequired) return
+        if (gui.collapsed || (metadata.isRequired && requiredBy.isNotEmpty())) return
 
         if (x > gui.x && x < gui.x + 45
             && y > gui.y + gui.description.getHeight() + 15 && y < gui.y + gui.description.getHeight() + 25

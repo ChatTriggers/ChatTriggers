@@ -99,7 +99,7 @@ object ModuleUpdater {
 
     fun importModule(moduleName: String, requiredBy: String? = null): List<Module> {
         val alreadyImported = cachedModules.any {
-            if (it.name == moduleName) {
+            if (it.name.equals(moduleName, ignoreCase = true)) {
                 if (requiredBy != null) {
                     it.metadata.isRequired = true
                     it.requiredBy.add(requiredBy)
