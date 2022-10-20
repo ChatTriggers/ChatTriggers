@@ -5,6 +5,7 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Renderer
 import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.utils.kotlin.MCTessellator
 import com.chattriggers.ctjs.utils.kotlin.getRenderer
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.util.vector.Vector3f
@@ -310,7 +311,7 @@ object Tessellator {
             lScale *= 0.45f * multiplier
         }
 
-        val xMultiplier = if (renderManager.options.thirdPersonView == 2) -1 else 1
+        val xMultiplier = if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 2) -1 else 1
 
         GlStateManager.color(1f, 1f, 1f, 0.5f)
         pushMatrix()
