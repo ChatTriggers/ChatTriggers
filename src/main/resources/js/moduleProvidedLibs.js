@@ -39,6 +39,7 @@
     loadClass("com.chattriggers.ctjs.minecraft.libs.renderer.Renderer");
     loadClass("com.chattriggers.ctjs.minecraft.libs.renderer.Shape");
     loadClass("com.chattriggers.ctjs.minecraft.libs.renderer.Text");
+    loadClass("com.chattriggers.ctjs.minecraft.libs.renderer.Font");
 
     // Objects
     loadClass("com.chattriggers.ctjs.minecraft.objects.Book");
