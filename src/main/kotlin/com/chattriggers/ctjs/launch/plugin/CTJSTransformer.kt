@@ -39,6 +39,7 @@ class CTJSTransformer : BaseClassTransformer() {
             injectGuiIngame()
             injectGuiIngameForge()
             injectRenderItem()
+            injectEntityPlayerSP()
             ModuleManager.setup()
             ModuleManager.asmPass()
         } catch (e: Throwable) {
