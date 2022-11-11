@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack
 import org.lwjgl.input.Keyboard
 
 fun injectGuiScreen() {
-    injectSendChatMessage()
     injectHandleKeyboardInput()
     injectMouseClick()
     injectMouseRelease()
@@ -25,27 +24,6 @@ fun injectGuiScreen() {
     injectTextComponentHover()
     injectRenderTooltip()
     injectPreBackground()
-}
-
-fun injectSendChatMessage() = inject {
-    className = "net/minecraft/client/gui/GuiScreen"
-    methodName = "sendChatMessage"
-    methodDesc = "(Ljava/lang/String;Z)V"
-    at = At(InjectionPoint.HEAD)
-
-    methodMaps = mapOf("func_175281_b" to "sendChatMessage")
-
-    codeBlock {
-        val local1 = shadowLocal<String>()
-
-        code {
-            val event = CancellableEvent()
-            TriggerType.MessageSent.triggerAll(local1, event)
-
-            if (event.isCancelled())
-                methodReturn()
-        }
-    }
 }
 
 fun injectHandleKeyboardInput() = inject {
