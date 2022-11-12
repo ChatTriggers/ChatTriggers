@@ -2,7 +2,10 @@ package com.chattriggers.ctjs.minecraft.objects.message
 
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.utils.kotlin.*
-import net.minecraftforge.common.ForgeHooks
+import net.minecraft.event.ClickEvent
+import net.minecraft.util.ChatStyle
+import net.minecraft.util.EnumChatFormatting
+import java.net.URI
 
 class TextComponent {
 
@@ -189,7 +192,7 @@ class TextComponent {
     private fun reInstance() {
         val string = if (formatted) ChatLib.addColor(text) else text
 
-        chatComponentText = ForgeHooks.newChatWithLinks(string)
+        chatComponentText = stringToComponent(string)
 
         reInstanceClick()
         reInstanceHover()
@@ -227,5 +230,76 @@ class TextComponent {
                     else hoverValue
                 )
             )
+    }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    private fun stringToComponent(string: String): MCBaseTextComponent {
+        val buffer = StringBuilder()
+        val comp = MCBaseTextComponent("")
+        var style = ChatStyle()
+        var i = 0
+        while (i < string.length) {
+            if (i < string.length - 1 && formatRegex.matches(string.substring(i..i + 1))) {
+                // add the previous component as a sibling of the base component
+                val prevText = MCBaseTextComponent(buffer.toString()).apply { chatStyle = style.createDeepCopy() }
+                buffer.clear()
+                comp.appendSibling(prevText)
+
+                // Update the style local var
+                i++
+                when {
+                    string[i] in '0'..'f' -> style.color = EnumChatFormatting.values()[string[i].digitToInt(16)]
+                    string[i] == 'k' -> style.obfuscated = true
+                    string[i] == 'l' -> style.bold = true
+                    string[i] == 'm' -> style.strikethrough = true
+                    string[i] == 'n' -> style.underlined = true
+                    string[i] == 'o' -> style.italic = true
+                    string[i] == 'r' -> style = ChatStyle()
+                }
+            } else if (URL_REGEX.matchesAt(string, i)) {
+                // add the previous component as a sibling of the base component
+                val prevText = MCBaseTextComponent(buffer.toString()).apply { chatStyle = style.createDeepCopy() }
+                buffer.clear()
+                comp.appendSibling(prevText)
+
+                val link = URL_REGEX.matchAt(string, i)!!.value
+                i += link.length - 1
+
+                // add the link with previous styles
+                val linkComponent = MCBaseTextComponent(link).apply {
+                    chatStyle = style.createDeepCopy()
+
+                    chatStyle.chatClickEvent = ClickEvent(
+                        ClickEvent.Action.OPEN_URL, if (URI(link).scheme == null) {
+                            "http://$link"
+                        } else {
+                            link
+                        }
+                    )
+                }
+
+                comp.appendSibling(linkComponent)
+            } else {
+                // store this char for later use
+                buffer.append(string[i])
+            }
+            i++
+        }
+
+        if (buffer.isNotEmpty()) {
+            // add the leftover parts of the string
+            comp.appendSibling(MCBaseTextComponent(buffer.toString()).apply { chatStyle = style.createDeepCopy() })
+        }
+        return comp
+    }
+
+    companion object {
+        private val URL_REGEX =
+        // a modified version of ForgeHooks.URL_PATTERN disallowing connecting to IPs
+        //           schema             namespace            port   path         ends
+            //   |-------------|  |------------------|    |-------| |--|   |---------------|
+            "((?:[a-z\\d]{2,}://)?[-\\w.]+\\.[a-z]{2,}?(?::\\d{1,5})?.*?(?=[!\"\u00A7 \n]|$))".toRegex()
+
+        private val formatRegex = "[\u00A7&][\\da-fk-or]".toRegex()
     }
 }
