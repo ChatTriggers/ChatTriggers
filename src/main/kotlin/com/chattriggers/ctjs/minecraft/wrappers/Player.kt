@@ -279,7 +279,7 @@ object Player {
 
     @JvmStatic
     fun setHeldItemIndex(index: Int) {
-        if (index < 0 || index > 9) throw IndexOutOfBoundsException()
+        if (index < 0 || index > 8) throw IndexOutOfBoundsException()
         getPlayer()?.inventory?.currentItem = index
     }
 
