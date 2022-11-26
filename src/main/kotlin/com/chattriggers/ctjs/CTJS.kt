@@ -63,8 +63,7 @@ object CTJS {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        Vigilance.initialize()
-        Config.preload()
+        Config.loadData()
 
         // Ensure that reportHashedUUID always runs on a separate thread
         if (Config.threadedLoading) {

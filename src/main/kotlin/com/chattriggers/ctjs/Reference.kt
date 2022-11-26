@@ -23,6 +23,8 @@ object Reference {
     const val MODNAME = "ChatTriggers"
     const val MODVERSION = "2.1.5"
 
+    const val DEFAULT_MODULES_FOLDER = "./config/ChatTriggers/modules"
+
     var isLoaded = true
 
     @Deprecated("Does not provide any additional functionality", ReplaceWith("loadCT"))

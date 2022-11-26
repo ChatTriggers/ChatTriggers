@@ -1,6 +1,7 @@
 package com.chattriggers.ctjs.utils
 
 import com.chattriggers.ctjs.CTJS
+import com.chattriggers.ctjs.Reference
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
@@ -8,13 +9,15 @@ import java.awt.Color
 import java.io.File
 
 object Config : Vigilant(File(CTJS.configLocation, "ChatTriggers.toml"), sortingBehavior = CategorySorting) {
+    // Do not change the name or category of this option without also updating the
+    // code in the ModuleManager#modulesFolder initializer.
     @Property(
         PropertyType.TEXT,
         name = "Modules Folders",
         category = "General",
         description = "Folder where CT modules are stored",
     )
-    var modulesFolder: String = "./config/ChatTriggers/modules"
+    var modulesFolder: String = Reference.DEFAULT_MODULES_FOLDER
 
     @Property(
         PropertyType.SWITCH,
