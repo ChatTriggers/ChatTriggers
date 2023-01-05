@@ -301,7 +301,7 @@ open class Entity(val entity: MCEntity) {
     )
 
     /**
-     * @return [RayTraceResult] of the entity that is being looking at
+     * @return [RayTraceResult] of the block that is being looking at
      * within the specified distance.
      */
     @JvmOverloads
