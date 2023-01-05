@@ -7,19 +7,23 @@ import com.chattriggers.ctjs.utils.kotlin.MCRayTraceResult
 import net.minecraft.util.Vec3
 
 class RayTraceResult(val rayTraceResult: MCRayTraceResult) {
-    fun getBlockPos() = BlockPos(rayTraceResult.blockPos)
+    /**
+     * @return [BlockPos] of the block that was hit. Or null
+     * if a block wasn't hit
+     */
+    fun getBlockPos() = rayTraceResult.blockPos?.let(::BlockPos)
 
     /**
      * @return A [String] representing the type of hit.
-     * "ENTITY", "BLOCK" or "MISS".
+     * "ENTITY", "BLOCK" or "MISS"
      */
     fun getTypeOfHit() = rayTraceResult.typeOfHit.toString()
 
     /**
      * @return A [BlockFace] representing the side of the block
-     * the ray trace hit.
+     * the ray trace hit. Or null if a block wasn't hit
      */
-    fun getSideHit() = BlockFace.fromMCEnumFacing(rayTraceResult.sideHit)
+    fun getSideHit() = rayTraceResult.sideHit?.let { BlockFace.fromMCEnumFacing(it) }
 
     /**
      * @return [Vec3] position of the hit
@@ -36,6 +40,6 @@ class RayTraceResult(val rayTraceResult: MCRayTraceResult) {
             "type=${getTypeOfHit()}, " +
             "sideHit=${getSideHit()}, " +
             "hitVec=${getHitVec()}, " +
-            "entity=${getEntityHit() ?: "none"}" +
+            "entity=${getEntityHit()}" +
             "}"
 }

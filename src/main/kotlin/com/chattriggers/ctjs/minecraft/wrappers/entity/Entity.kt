@@ -6,8 +6,11 @@ import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockPos
 import com.chattriggers.ctjs.minecraft.wrappers.utils.Vec3i
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.minecraft.wrappers.utils.RayTraceResult
+import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
 import com.chattriggers.ctjs.utils.kotlin.MCEntity
 import com.chattriggers.ctjs.utils.kotlin.MCMathHelper
+import net.minecraft.util.MovingObjectPosition
+import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.Vec3
 import net.minecraft.world.World
 import java.util.*
@@ -297,7 +300,55 @@ open class Entity(val entity: MCEntity) {
         getWorld().getChunkFromChunkCoords(entity.chunkCoordX, entity.chunkCoordZ)
     )
 
-    fun rayTrace(distance: Double, partialTicks: Float) = RayTraceResult(entity.rayTrace(distance, partialTicks))
+    /**
+     * @return [RayTraceResult] of the entity that is being looking at
+     * within the specified distance.
+     */
+    @JvmOverloads
+    fun rayTraceBlock(maxDistance: Double = 200.0, partialTicks: Float = 1f) = RayTraceResult(entity.rayTrace(maxDistance, partialTicks))
+
+    /**
+     * @return [RayTraceResult] of the entity that is being looking at
+     * within the specified distance.
+     */
+    @JvmOverloads
+    fun rayTraceEntity(maxDistance: Double = 200.0, partialTicks: Float = 1f): RayTraceResult {
+        val eyePosition = entity.getPositionEyes(partialTicks)
+        val lookDirection = entity.getLook(partialTicks)
+        val lookingAt = eyePosition.addVector(
+            lookDirection.xCoord * maxDistance,
+            lookDirection.yCoord * maxDistance,
+            lookDirection.zCoord * maxDistance
+        )
+
+        val blockHit = rayTraceBlock(maxDistance, partialTicks)
+        var entityHit: MCEntity? = null
+        var hitVec: Vec3 = eyePosition
+
+        getWorld().getEntitiesWithinAABBExcludingEntity(
+            entity,
+            entity.entityBoundingBox.addCoord(
+                lookDirection.xCoord * maxDistance,
+                lookDirection.yCoord * maxDistance,
+                lookDirection.zCoord * maxDistance
+            )
+        ).forEach { entityFound ->
+            entityFound.entityBoundingBox.calculateIntercept(eyePosition, lookingAt)?.also { result ->
+                entityHit = entityFound
+                hitVec = result.hitVec
+            }
+        }
+
+        return if (entityHit != null && eyePosition.distanceTo(hitVec) < eyePosition.distanceTo(blockHit.getHitVec()))
+            RayTraceResult(MovingObjectPosition(entityHit, hitVec))
+        else
+            RayTraceResult(MovingObjectPosition(
+                MovingObjectType.MISS,
+                hitVec,
+                null,
+                MCBlockPos(hitVec)
+            ))
+    }
 
     override fun toString(): String {
         return "Entity{name=${getName()}, x=${getX()}, y=${getY()}, z=${getZ()}}"

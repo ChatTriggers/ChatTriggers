@@ -274,9 +274,22 @@ object Player {
             else -> BlockType(0)
         }
     }
-    
+
+    /**
+     * @return [RayTraceResult] of the block that the player is looking at
+     * within the specified distance.
+     */
     @JvmStatic
-    fun rayTrace(distance: Double, partialTicks: Float) = getPlayer()?.rayTrace(distance, partialTicks)?.let(::RayTraceResult)
+    @JvmOverloads
+    fun rayTraceBlock(maxDistance: Double = 200.0, partialTicks: Float = 1f) = getPlayer()?.rayTrace(maxDistance, partialTicks)?.let(::RayTraceResult)
+
+    /**
+     * @return [RayTraceResult] of the entity that the player is looking at
+     * within the specified distance.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun rayTraceEntity(maxDistance: Double = 200.0, partialTicks: Float = 1f) = Client.getMinecraft().renderViewEntity.let(::Entity).rayTraceEntity(maxDistance, partialTicks)
 
     @JvmStatic
     fun getHeldItem(): Item? = getPlayer()?.inventory?.getCurrentItem()?.let(::Item)
