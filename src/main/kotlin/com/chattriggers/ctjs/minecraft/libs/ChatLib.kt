@@ -251,11 +251,10 @@ object ChatLib {
     }
 
     private fun editChat(toReplace: (Message) -> Boolean, vararg replacements: Message) {
-        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
         val chatLines = Client.getChatGUI()!!.chatLines
 
         editChatLineList(chatLines, toReplace, *replacements)
-        editChatLineList(drawnChatLines, toReplace, *replacements)
+        Client.getChatGUI()!!.refreshChat()
     }
 
     private fun editChatLineList(
@@ -343,11 +342,10 @@ object ChatLib {
     }
 
     private fun deleteChat(toDelete: (Message) -> Boolean) {
-        val drawnChatLines = Client.getChatGUI()!!.drawnChatLines
         val chatLines = Client.getChatGUI()!!.chatLines
 
         deleteChatLineList(chatLines, toDelete)
-        deleteChatLineList(drawnChatLines, toDelete)
+        Client.getChatGUI()!!.refreshChat()
     }
 
     private fun deleteChatLineList(
