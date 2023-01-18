@@ -1128,12 +1128,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
+     * - [EntityRenderTrigger.setEntityClasses] Sets the entity classes which this trigger
+     *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderEntity(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
+    fun registerRenderEntity(method: Any): EntityRenderTrigger {
+        return EntityRenderTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1146,12 +1148,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
+     * - [EntityRenderTrigger.setEntityClasses] Sets the entity classes which this trigger
+     *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostRenderEntity(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
+    fun registerPostRenderEntity(method: Any): EntityRenderTrigger {
+        return EntityRenderTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
     }
 
     /**
