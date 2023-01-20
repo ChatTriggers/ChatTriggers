@@ -1020,14 +1020,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [PacketTrigger.setPacketClasses] Sets the packet classes which this trigger
+     * - [ClassTrigger.setClasses] Sets the packet classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketSent(method: Any): PacketTrigger {
-        return PacketTrigger(method, TriggerType.PacketSent, getImplementationLoader())
+    fun registerPacketSent(method: Any): ClassTrigger {
+        return ClassTrigger(method, TriggerType.PacketSent, getImplementationLoader())
     }
 
     /**
@@ -1039,14 +1039,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [PacketTrigger.setPacketClasses] Sets the packet classes which this trigger
+     * - [ClassTrigger.setClasses] Sets the packet classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPacketReceived(method: Any): PacketTrigger {
-        return PacketTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
+    fun registerPacketReceived(method: Any): ClassTrigger {
+        return ClassTrigger(method, TriggerType.PacketReceived, getImplementationLoader())
     }
 
     /**
@@ -1128,14 +1128,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [EntityRenderTrigger.setEntityClasses] Sets the entity classes which this trigger
+     * - [ClassTrigger.setClasses] Sets the entity classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderEntity(method: Any): EntityRenderTrigger {
-        return EntityRenderTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
+    fun registerRenderEntity(method: Any): ClassTrigger {
+        return ClassTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1148,14 +1148,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [EntityRenderTrigger.setEntityClasses] Sets the entity classes which this trigger
+     * - [ClassTrigger.setClasses] Sets the entity classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostRenderEntity(method: Any): EntityRenderTrigger {
-        return EntityRenderTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
+    fun registerPostRenderEntity(method: Any): ClassTrigger {
+        return ClassTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1169,12 +1169,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
+     * - [ClassTrigger.setClasses] Sets the tile entity classes which this trigger
+     *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderTileEntity(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
+    fun registerRenderTileEntity(method: Any): ClassTrigger {
+        return ClassTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
     }
 
     /**
@@ -1187,12 +1189,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
+     * - [ClassTrigger.setClasses] Sets the tile entity classes which this trigger
+     *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostRenderTileEntity(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
+    fun registerPostRenderTileEntity(method: Any): ClassTrigger {
+        return ClassTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
     }
 
     /**
