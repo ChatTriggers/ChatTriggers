@@ -60,7 +60,7 @@ class Command(
     //#endif
 
     fun register() {
-        if (name in ClientCommandHandler.instance.commandMap.keys && !overrideExisting) {
+        if (name in ClientCommandHandler.instance.commands.keys && !overrideExisting) {
             ("Command with name $name already exists! " +
                     "This will not override the other command with the same name. " +
                     "To override conflicting commands, " +
@@ -75,7 +75,7 @@ class Command(
 
     fun unregister() {
         ClientCommandHandler.instance.commandSet.remove(this)
-        ClientCommandHandler.instance.commandMap.remove(name)
+        ClientCommandHandler.instance.commands.remove(name)
         activeCommands.remove(name)
     }
 
