@@ -9,10 +9,11 @@ import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.FileLib
 import com.chattriggers.ctjs.minecraft.wrappers.World
-import com.chattriggers.ctjs.printTraceToConsole
+import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.Console
+import com.chattriggers.ctjs.utils.console.LogType
 import gg.essential.vigilance.impl.nightconfig.core.file.FileConfig
 import org.apache.commons.io.FileUtils
 import org.mozilla.javascript.Context
@@ -68,16 +69,24 @@ object ModuleManager {
             module.metadata.requires?.forEach { ModuleUpdater.importModule(it, module.name) }
         }
 
+        loadAssetsAndJars(cachedModules)
+
+        // We're finished setting up all of our loaders,
+        //  which means they can now have their ASM invocation re-lookups happen
+        IndySupport.invalidateInvocations()
+    }
+
+    private fun loadAssetsAndJars(modules: List<Module>) {
         // Load their assets
-        loadAssets(cachedModules)
+        loadAssets(modules)
 
         // Normalize all metadata
-        cachedModules.forEach {
+        modules.forEach {
             it.metadata.entry = it.metadata.entry?.replace('/', File.separatorChar)?.replace('\\', File.separatorChar)
         }
 
         // Get all jars
-        val jars = cachedModules.map { module ->
+        val jars = modules.map { module ->
             module.folder.walk().filter {
                 it.isFile && it.extension == "jar"
             }.map {
@@ -89,10 +98,6 @@ object ModuleManager {
         loaders.forEach {
             it.setup(jars)
         }
-
-        // We're finished setting up all of our loaders,
-        //  which means they can now have their ASM invocation re-lookups happen
-        IndySupport.invalidateInvocations()
     }
 
     fun asmPass() {
@@ -159,7 +164,7 @@ object ModuleManager {
             try {
                 metadata = CTJS.gson.fromJson(FileLib.read(metadataFile), ModuleMetadata::class.java)
             } catch (exception: Exception) {
-                exception.printTraceToConsole()
+                "Module $directory has invalid metadata.json".printToConsole(logType = LogType.ERROR)
             }
         }
 
@@ -171,13 +176,7 @@ object ModuleManager {
     fun importModule(moduleName: String): ImportedModule {
         val newModules = ModuleUpdater.importModule(moduleName)
 
-        // Load their assets
-        loadAssets(newModules)
-
-        // Normalize all metadata
-        newModules.forEach {
-            it.metadata.entry = it.metadata.entry?.replace('/', File.separatorChar)?.replace('\\', File.separatorChar)
-        }
+        loadAssetsAndJars(newModules)
 
         // TODO: Print warning to console if metadatas contain an asm key
 
@@ -218,8 +217,10 @@ object ModuleManager {
     }
 
     fun reportOldVersion(module: Module) {
-        ChatLib.chat("&cWarning: the module \"${module.name}\" was made for an older version of CT, " +
-                "so it may not work correctly.")
+        ChatLib.chat(
+            "&cWarning: the module \"${module.name}\" was made for an older version of CT, " +
+                    "so it may not work correctly."
+        )
     }
 
     private fun loadAssets(modules: List<Module>) {
