@@ -26,6 +26,9 @@ object Renderer {
     private val tessellator = MCTessellator.getInstance()
     private val worldRenderer = tessellator.getRenderer()
 
+    private var xScale: Float = 1f
+    private var yScale: Float = 1f
+
     @JvmStatic
     val BLACK = color(0, 0, 0, 255)
 
@@ -111,7 +114,16 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getStringWidth(text: String) = getFontRenderer().getStringWidth(ChatLib.addColor(text))
+    fun getXScale() = xScale
+
+    @JvmStatic
+    fun getYScale() = yScale
+
+    @JvmStatic
+    fun getStringWidth(text: String) = (getFontRenderer().getStringWidth(ChatLib.addColor(text)) * xScale).toInt()
+
+    @JvmStatic
+    fun getStringHeight() = (getFontRenderer().FONT_HEIGHT * yScale).toInt()
 
     @JvmStatic
     @JvmOverloads
@@ -154,8 +166,44 @@ object Renderer {
 
     @JvmStatic
     @JvmOverloads
-    fun scale(scaleX: Float, scaleY: Float = scaleX) {
-        GlStateManager.scale(scaleX, scaleY, 1f)
+    fun scale(scaleX: Float, scaleY: Float = scaleX) = apply {
+        xScale = scaleX; yScale = scaleY
+        GlStateManager.scale(xScale, yScale, 1f)
+    }
+
+    @JvmStatic
+    fun scale(scaleX: Double, scaleY: Double) = apply {
+        xScale = scaleX.toFloat(); yScale = scaleY.toFloat()
+        GlStateManager.scale(xScale.toDouble(), yScale.toDouble(), 1.0)
+    }
+
+    @JvmStatic
+    fun scale(scaleX: Int, scaleY: Int) = apply {
+        xScale = scaleX.toFloat(); yScale = scaleY.toFloat()
+        GlStateManager.scale(xScale.toDouble(), yScale.toDouble(), 1.0)
+    }
+
+    @JvmStatic
+    fun scale(scale: Float) = apply {
+        sameScale(scale)
+        GlStateManager.scale(xScale, yScale, 1f)
+    }
+
+    @JvmStatic
+    fun scale(scale: Double) = apply {
+        sameScale(scale)
+        GlStateManager.scale(xScale, yScale, 1f)
+    }
+
+    @JvmStatic
+    fun scale(scale: Int) = apply {
+        sameScale(scale)
+        GlStateManager.scale(xScale.toDouble(), yScale.toDouble(), 1.0)
+    }
+
+    @JvmStatic
+    fun resetScale() = apply {
+        this.sameScale(1f)
     }
 
     @JvmStatic
@@ -453,6 +501,21 @@ object Renderer {
         }
 
         return area / 2
+    }
+
+    private fun sameScale(scale: Float) {
+        xScale = scale
+        yScale = scale
+    }
+
+    private fun sameScale(scale: Double) {
+        xScale = scale.toFloat()
+        yScale = scale.toFloat()
+    }
+
+    private fun sameScale(scale: Int) {
+        xScale = scale.toFloat()
+        yScale = scale.toFloat()
     }
 
     object screen {
