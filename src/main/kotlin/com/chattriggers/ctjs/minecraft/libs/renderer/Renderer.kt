@@ -26,8 +26,8 @@ object Renderer {
     private val tessellator = MCTessellator.getInstance()
     private val worldRenderer = tessellator.getRenderer()
 
-    private var xScale: Float = 1f
-    private var yScale: Float = 1f
+    private var xScale: Float? = null
+    private var yScale: Float? = null
 
     @JvmStatic
     val BLACK = color(0, 0, 0, 255)
@@ -114,16 +114,20 @@ object Renderer {
     }
 
     @JvmStatic
-    fun getXScale() = xScale
+    fun getXScale() = xScale ?: 1f
 
     @JvmStatic
-    fun getYScale() = yScale
+    fun getYScale() = yScale ?: 1f
 
     @JvmStatic
-    fun getStringWidth(text: String) = (getFontRenderer().getStringWidth(ChatLib.addColor(text)) * xScale).toInt()
+    @JvmOverloads
+    fun getStringWidth(text: String, includeScale: Boolean = false): Int {
+        if (!includeScale) return getFontRenderer().getStringWidth(ChatLib.addColor(text))
+        return (getFontRenderer().getStringWidth(ChatLib.addColor(text)) * (xScale ?: 1f)).toInt()
+    }
 
     @JvmStatic
-    fun getStringHeight() = (getFontRenderer().FONT_HEIGHT * yScale).toInt()
+    fun getStringHeight() = (getFontRenderer().FONT_HEIGHT * (yScale ?: 1f)).toInt()
 
     @JvmStatic
     @JvmOverloads
@@ -165,44 +169,32 @@ object Renderer {
     }
 
     @JvmStatic
-    fun scale(scaleX: Float, scaleY: Float) = apply {
-        xScale = scaleX; yScale = scaleY
-        GlStateManager.scale(xScale, yScale, 1f)
-    }
-
-    @JvmStatic
-    fun scale(scaleX: Double, scaleY: Double) = apply {
+    fun scale(scaleX: Number, scaleY: Number) = apply {
         xScale = scaleX.toFloat(); yScale = scaleY.toFloat()
-        GlStateManager.scale(xScale.toDouble(), yScale.toDouble(), 1.0)
+        GlStateManager.scale(xScale ?: 1f, yScale ?: 1f, 1f)
     }
 
     @JvmStatic
-    fun scale(scaleX: Int, scaleY: Int) = apply {
-        xScale = scaleX.toFloat(); yScale = scaleY.toFloat()
-        GlStateManager.scale(xScale.toDouble(), yScale.toDouble(), 1.0)
-    }
-
-    @JvmStatic
-    fun scale(scale: Float) = apply {
+    fun scale(scale: Number) = apply {
         sameScale(scale)
-        GlStateManager.scale(xScale, yScale, 1f)
-    }
-
-    @JvmStatic
-    fun scale(scale: Double) = apply {
-        sameScale(scale)
-        GlStateManager.scale(xScale, yScale, 1f)
-    }
-
-    @JvmStatic
-    fun scale(scale: Int) = apply {
-        sameScale(scale)
-        GlStateManager.scale(xScale.toDouble(), yScale.toDouble(), 1.0)
+        GlStateManager.scale(xScale ?: 1f, yScale ?: 1f, 1f)
     }
 
     @JvmStatic
     fun resetScale() = apply {
-        this.sameScale(1f)
+        xScale = null
+        yScale = null
+    }
+
+    @JvmStatic
+    fun pushMatrix() = apply {
+        GlStateManager.pushMatrix()
+    }
+
+    @JvmStatic
+    fun popMatrix() = apply {
+        GlStateManager.popMatrix()
+        resetScale()
     }
 
     @JvmStatic
@@ -484,6 +476,7 @@ object Renderer {
         if (!retainTransforms) {
             colorized = null
             drawMode = null
+            resetScale()
             GlStateManager.popMatrix()
             GlStateManager.pushMatrix()
         }
@@ -502,17 +495,7 @@ object Renderer {
         return area / 2
     }
 
-    private fun sameScale(scale: Float) {
-        xScale = scale
-        yScale = scale
-    }
-
-    private fun sameScale(scale: Double) {
-        xScale = scale.toFloat()
-        yScale = scale.toFloat()
-    }
-
-    private fun sameScale(scale: Int) {
+    private fun sameScale(scale: Number) {
         xScale = scale.toFloat()
         yScale = scale.toFloat()
     }
