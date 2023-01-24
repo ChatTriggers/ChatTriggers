@@ -165,8 +165,7 @@ object Renderer {
     }
 
     @JvmStatic
-    @JvmOverloads
-    fun scale(scaleX: Float, scaleY: Float = scaleX) = apply {
+    fun scale(scaleX: Float, scaleY: Float) = apply {
         xScale = scaleX; yScale = scaleY
         GlStateManager.scale(xScale, yScale, 1f)
     }
