@@ -184,6 +184,7 @@ object Renderer {
     fun resetScale() = apply {
         xScale = null
         yScale = null
+        GlStateManager.scale(1f, 1f, 1f)
     }
 
     @JvmStatic
