@@ -114,7 +114,7 @@ object Renderer {
     fun getStringWidth(text: String) = getFontRenderer().getStringWidth(ChatLib.addColor(text))
 
     @JvmStatic
-    fun getStringHeight(text: String) = getFontRenderer().FONT_HEIGHT
+    fun getFontHeight() = getFontRenderer().FONT_HEIGHT
 
     @JvmStatic
     @JvmOverloads
