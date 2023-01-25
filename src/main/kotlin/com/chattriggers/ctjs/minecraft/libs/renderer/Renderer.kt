@@ -114,6 +114,9 @@ object Renderer {
     fun getStringWidth(text: String) = getFontRenderer().getStringWidth(ChatLib.addColor(text))
 
     @JvmStatic
+    fun getStringHeight(text: String) = getFontRenderer().FONT_HEIGHT
+
+    @JvmStatic
     @JvmOverloads
     fun color(red: Long, green: Long, blue: Long, alpha: Long = 255): Long {
         return (MathLib.clamp(alpha.toInt(), 0, 255) * 0x1000000
