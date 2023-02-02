@@ -6,6 +6,7 @@ import net.minecraft.event.ClickEvent
 import net.minecraft.util.ChatStyle
 import net.minecraft.util.EnumChatFormatting
 import java.net.URI
+import java.net.URISyntaxException
 
 class TextComponent {
 
@@ -239,7 +240,7 @@ class TextComponent {
         var style = ChatStyle()
         var i = 0
         while (i < string.length) {
-            if (i < string.length - 1 && formatRegex.matches(string.substring(i..i + 1))) {
+            if (i < string.length - 1 && formatRegex.matches(string.substring(i, i + 1))) {
                 // add the previous component as a sibling of the base component
                 val prevText = MCBaseTextComponent(buffer.toString()).apply { chatStyle = style.createDeepCopy() }
                 buffer.clear()
@@ -269,13 +270,17 @@ class TextComponent {
                 val linkComponent = MCBaseTextComponent(link).apply {
                     chatStyle = style.createDeepCopy()
 
-                    chatStyle.chatClickEvent = ClickEvent(
-                        ClickEvent.Action.OPEN_URL, if (URI(link).scheme == null) {
-                            "http://$link"
-                        } else {
-                            link
-                        }
-                    )
+                    try {
+                        chatStyle.chatClickEvent = ClickEvent(
+                            ClickEvent.Action.OPEN_URL, if (URI(link).scheme == null) {
+                                "http://$link"
+                            } else {
+                                link
+                            }
+                        )
+                    } catch (ignored: URISyntaxException) {
+                        // this will throw if there is bad uri syntax (e.g. a : with no port)
+                    }
                 }
 
                 comp.appendSibling(linkComponent)
