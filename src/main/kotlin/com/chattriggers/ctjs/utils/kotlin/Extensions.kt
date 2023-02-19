@@ -51,7 +51,3 @@ fun String.toVersion(): Version {
 fun NativeObject?.getOption(key: String, default: Any): String {
     return (this?.get(key) ?: default).toString()
 }
-
-fun NativeObject?.getOptionNullable(key: String, default: Any?): String? {
-    return (this?.get(key) ?: default)?.toString()
-}

@@ -2,6 +2,7 @@ package com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt
 
 import com.chattriggers.ctjs.utils.kotlin.MCNBTBase
 import com.chattriggers.ctjs.utils.kotlin.MCNBTTagList
+import org.mozilla.javascript.NativeArray
 
 class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
     val tagCount: Int
@@ -47,4 +48,6 @@ class NBTTagList(override val rawNBT: MCNBTTagList) : NBTBase(rawNBT) {
         NBTTagCompound.NBTDataType.COMPOUND_TAG -> getCompoundTagAt(index)
         else -> get(index)
     }
+
+    fun toArray(): NativeArray = rawNBT.toObject()
 }

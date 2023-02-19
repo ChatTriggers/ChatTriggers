@@ -164,7 +164,5 @@ class NBTTagCompound(override val rawNBT: MCNBTTagCompound) : NBTBase(rawNBT) {
         rawNBT.removeTag(key)
     }
 
-    fun toObject(): NativeObject {
-        return rawNBT.toObject()
-    }
+    fun toObject(): NativeObject = rawNBT.toObject()
 }
