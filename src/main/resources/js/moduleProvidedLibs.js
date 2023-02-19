@@ -89,6 +89,7 @@
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.inventory.action.DropAction");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.inventory.action.KeyAction");
 
+    loadInstance("com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBT");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTBase");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagCompound");
     loadClass("com.chattriggers.ctjs.minecraft.wrappers.inventory.nbt.NBTTagList");
