@@ -21,7 +21,7 @@ import kotlin.math.roundToInt
 object Reference {
     const val MODID = "chattriggers"
     const val MODNAME = "ChatTriggers"
-    const val MODVERSION = "2.1.5"
+    const val MODVERSION = "2.2.0"
 
     const val DEFAULT_MODULES_FOLDER = "./config/ChatTriggers/modules"
 
