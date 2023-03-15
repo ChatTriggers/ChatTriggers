@@ -74,6 +74,21 @@ abstract class KeyBind {
         onKeyDown
     }
 
+    fun unregisterKeyPress() = apply {
+        onKeyPress?.unregister()
+        onKeyPress = null
+    }
+
+    fun unregisterKeyRelease() = apply {
+        onKeyRelease?.unregister()
+        onKeyRelease = null
+    }
+
+    fun unregisterKeyDown() = apply {
+        onKeyDown?.unregister()
+        onKeyDown = null
+    }
+
     internal fun onTick() {
         if (isPressed()) {
             onKeyPress?.trigger(arrayOf())
