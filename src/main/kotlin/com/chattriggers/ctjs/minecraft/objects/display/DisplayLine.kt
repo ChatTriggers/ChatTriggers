@@ -6,7 +6,6 @@ import com.chattriggers.ctjs.minecraft.libs.renderer.Text
 import com.chattriggers.ctjs.minecraft.listeners.MouseListener
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.triggers.RegularTrigger
-import com.chattriggers.ctjs.triggers.Trigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import org.mozilla.javascript.NativeObject
 
@@ -20,10 +19,10 @@ abstract class DisplayLine {
     private var background: DisplayHandler.Background? = null
     private var align: DisplayHandler.Align? = null
 
-    private var onClicked: Trigger? = null
-    private var onHovered: Trigger? = null
-    private var onDragged: Trigger? = null
-    private var onMouseLeave: Trigger? = null
+    private var onClicked: RegularTrigger? = null
+    private var onHovered: RegularTrigger? = null
+    private var onDragged: RegularTrigger? = null
+    private var onMouseLeave: RegularTrigger? = null
 
     internal var shouldRender: Boolean = true
 
@@ -134,6 +133,26 @@ abstract class DisplayLine {
     fun registerDragged(method: Any) = run {
         onDragged = RegularTrigger(method, TriggerType.Other, getLoader())
         onDragged
+    }
+
+    fun unregisterClicked() = apply {
+        onClicked?.unregister()
+        onClicked = null
+    }
+
+    fun unregisterHovered() = apply {
+        onHovered?.unregister()
+        onHovered = null
+    }
+
+    fun unregisterMouseLeave() = apply {
+        onMouseLeave?.unregister()
+        onMouseLeave = null
+    }
+
+    fun unregisterDragged() = apply {
+        onDragged?.unregister()
+        onDragged = null
     }
 
     fun draw(
