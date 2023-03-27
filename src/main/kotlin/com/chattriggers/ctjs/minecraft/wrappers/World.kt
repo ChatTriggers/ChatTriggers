@@ -112,21 +112,21 @@ object World {
     }
 
     /**
-     * Gets the [BlockType] at a location in the world.
+     * Gets the [Block] at a location in the world.
      *
      * @param x the x position
      * @param y the y position
      * @param z the z position
-     * @return the [BlockType] at the location
+     * @return the [Block] at the location
      */
     @JvmStatic
     fun getBlockAt(x: Number, y: Number, z: Number) = getBlockAt(BlockPos(x, y, z))
 
     /**
-     * Gets the [BlockType] at a location in the world.
+     * Gets the [Block] at a location in the world.
      *
      * @param pos The block position
-     * @return the [BlockType] at the location
+     * @return the [Block] at the location
      */
     @JvmStatic
     fun getBlockAt(pos: BlockPos): Block {
@@ -137,7 +137,7 @@ object World {
      * Gets the [IBlockState] at a location in the world.
      *
      * @param pos The block position
-     * @return the [BlockType] at the location
+     * @return the [IBlockState] at the location
      */
     @JvmStatic
     fun getBlockStateAt(pos: BlockPos): IBlockState {

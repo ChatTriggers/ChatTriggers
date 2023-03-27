@@ -249,10 +249,10 @@ object Player {
 
     /**
      * Gets the current object that the player is looking at,
-     * whether that be a block or an entity. Returns an air block when not looking
+     * whether that be a block or an entity. Returns an air [BlockType] when not looking
      * at anything.
      *
-     * @return the [BlockType], [Sign], or [Entity] being looked at
+     * @return the [Block], [Entity], [Sign], or [BlockType] being looked at
      */
     @JvmStatic
     fun lookingAt(): Any {

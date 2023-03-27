@@ -20,11 +20,11 @@ class BlockType(val mcBlock: MCBlock) {
     constructor(item: Item) : this(MCBlock.getBlockFromItem(item.item))
 
     /**
-     * Returns a PlacedBlock based on this block and the
+     * Returns a [Block] based on this block and the
      * provided BlockPos
      *
      * @param blockPos the block position
-     * @return a PlacedBlock object
+     * @return a [Block] object
      */
     fun withBlockPos(blockPos: BlockPos) = Block(this, blockPos)
 
