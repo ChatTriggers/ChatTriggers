@@ -89,8 +89,8 @@ interface ILoader {
      * @param replace whether to replace the file being saved to
      */
     fun saveResource(resourceName: String?, outputFile: File, replace: Boolean): String {
-        if (resourceName == null || resourceName == "") {
-            throw IllegalArgumentException("ResourcePath cannot be null or empty")
+        require(resourceName != null && resourceName != "") {
+            "ResourcePath cannot be null or empty"
         }
 
         val parsedResourceName = resourceName.replace('\\', '/')

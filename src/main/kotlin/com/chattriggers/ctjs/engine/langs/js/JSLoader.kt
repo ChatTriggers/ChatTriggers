@@ -293,8 +293,7 @@ object JSLoader : ILoader {
     override fun trigger(trigger: Trigger, method: Any, args: Array<out Any?>) {
         wrapInContext {
             try {
-                if (method !is Function)
-                    throw IllegalArgumentException("Need to pass actual function to the register function, not the name!")
+                require(method is Function) { "Need to pass actual function to the register function, not the name!" }
 
                 method.call(Context.getCurrentContext(), scope, scope, args)
             } catch (e: Throwable) {
