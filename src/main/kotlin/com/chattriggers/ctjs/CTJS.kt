@@ -12,6 +12,7 @@ import com.chattriggers.ctjs.minecraft.objects.Sound
 import com.chattriggers.ctjs.minecraft.objects.gui.GuiHandler
 import com.chattriggers.ctjs.minecraft.wrappers.CPS
 import com.chattriggers.ctjs.minecraft.wrappers.Player
+import com.chattriggers.ctjs.triggers.ForgeTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.UpdateChecker
@@ -54,7 +55,8 @@ object CTJS {
             ClientListener,
             UpdateChecker,
             MouseListener,
-            ModuleUpdater
+            ModuleUpdater,
+            ForgeTrigger
         ).forEach(MinecraftForge.EVENT_BUS::register)
 
         UriScheme.installUriScheme()

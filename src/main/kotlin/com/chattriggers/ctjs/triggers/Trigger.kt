@@ -22,7 +22,7 @@ abstract class Trigger protected constructor(
      * @param priority the priority of the trigger
      * @return the trigger for method chaining
      */
-    fun setPriority(priority: Priority) = apply {
+    open fun setPriority(priority: Priority) = apply {
         this.priority = priority
     }
 
@@ -42,7 +42,7 @@ abstract class Trigger protected constructor(
      * Unregisters a trigger.
      * @return the trigger for method chaining
      */
-    fun unregister() = apply {
+    open fun unregister() = apply {
         loader.removeTrigger(this)
     }
 

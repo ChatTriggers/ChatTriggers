@@ -10,6 +10,7 @@ import com.chattriggers.ctjs.minecraft.objects.keybind.KeyBind
 import com.chattriggers.ctjs.minecraft.objects.message.Message
 import com.chattriggers.ctjs.minecraft.wrappers.Client
 import com.chattriggers.ctjs.minecraft.wrappers.World
+import com.chattriggers.ctjs.triggers.ForgeTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.console.Console
@@ -42,6 +43,7 @@ object Reference {
         ModuleManager.teardown()
         MouseListener.clearListeners()
         KeyBind.clearKeyBinds()
+        ForgeTrigger.unregisterTriggers()
 
         Command.activeCommands.values.toList().forEach(Command::unregister)
 
