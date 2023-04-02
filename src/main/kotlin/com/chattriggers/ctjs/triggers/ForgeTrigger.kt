@@ -28,16 +28,6 @@ class ForgeTrigger(
         return super.unregister()
     }
 
-    override fun setPriority(priority: Priority): Trigger {
-        super.setPriority(priority)
-
-        // Re-register so the position in the SortedSet gets updated
-        unregister()
-        register()
-
-        return this
-    }
-
     override fun trigger(args: Array<out Any?>) {
         callMethod(args)
     }

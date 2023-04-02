@@ -22,8 +22,12 @@ abstract class Trigger protected constructor(
      * @param priority the priority of the trigger
      * @return the trigger for method chaining
      */
-    open fun setPriority(priority: Priority) = apply {
+    fun setPriority(priority: Priority) = apply {
         this.priority = priority
+
+        // Re-register so the position in the ConcurrentSkipListSet gets updated
+        unregister()
+        register()
     }
 
     /**
