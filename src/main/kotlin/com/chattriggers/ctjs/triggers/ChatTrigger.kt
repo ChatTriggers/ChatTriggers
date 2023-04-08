@@ -165,8 +165,9 @@ class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(met
      * @param args list of arguments as described
      */
     override fun trigger(args: Array<out Any?>) {
-        if (args[0] !is String || args[1] !is ClientChatReceivedEvent)
-            throw IllegalArgumentException("Argument 1 must be a String, Argument 2 must be a ClientChatReceivedEvent")
+        require(args[0] is String && args[1] is ClientChatReceivedEvent) {
+            "Argument 1 must be a String, Argument 2 must be a ClientChatReceivedEvent"
+        }
 
         val chatEvent = args[1] as ClientChatReceivedEvent
 

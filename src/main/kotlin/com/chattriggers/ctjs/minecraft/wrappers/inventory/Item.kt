@@ -66,17 +66,17 @@ class Item {
      * @param entity the Entity
      */
     constructor(entity: Entity) {
-        if (entity.entity is EntityItem) {
-            //#if MC<=10809
-            item = entity.entity.entityItem.item
-            itemStack = entity.entity.entityItem
-            //#else
-            //$$ item = entity.entity.item.item
-            //$$ itemStack = entity.entity.item
-            //#endif
-        } else {
-            throw IllegalArgumentException("Entity is not of type EntityItem")
+        require(entity.entity is EntityItem) {
+            "Entity is not of type EntityItem"
         }
+
+        //#if MC<=10809
+        item = entity.entity.entityItem.item
+        itemStack = entity.entity.entityItem
+        //#else
+        //$$ item = entity.entity.item.item
+        //$$ itemStack = entity.entity.item
+        //#endif
     }
 
     fun getTextComponent() = TextComponent(itemStack.chatComponent)

@@ -189,7 +189,7 @@ object ModuleManager {
         val module = cachedModules.find { it.name.lowercase() == name.lowercase() } ?: return false
 
         val file = File(modulesFolder, module.name)
-        if (!file.exists()) throw IllegalStateException("Expected module to have an existing folder!")
+        check(file.exists()) { "Expected module to have an existing folder!" }
 
         val context = JSContextFactory.enterContext()
         try {

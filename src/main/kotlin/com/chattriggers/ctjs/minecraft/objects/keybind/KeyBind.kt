@@ -38,12 +38,11 @@ abstract class KeyBind {
         }
 
         if (possibleDuplicate != null) {
-            if (possibleDuplicate in customKeyBindings) {
-                keyBinding = possibleDuplicate
-            } else throw IllegalArgumentException(
+            require(possibleDuplicate in customKeyBindings) {
                 "KeyBind already exists! To get a KeyBind from an existing Minecraft KeyBinding, " +
                         "use the other KeyBind constructor or Client.getKeyBindFromKey."
-            )
+            }
+            keyBinding = possibleDuplicate
         } else {
             if (category !in KeyBinding.getKeybinds()) {
                 uniqueCategories[category] = 0
@@ -72,6 +71,21 @@ abstract class KeyBind {
     fun registerKeyDown(method: Any) = run {
         onKeyDown = RegularTrigger(method, TriggerType.Other, getLoader())
         onKeyDown
+    }
+
+    fun unregisterKeyPress() = apply {
+        onKeyPress?.unregister()
+        onKeyPress = null
+    }
+
+    fun unregisterKeyRelease() = apply {
+        onKeyRelease?.unregister()
+        onKeyRelease = null
+    }
+
+    fun unregisterKeyDown() = apply {
+        onKeyDown?.unregister()
+        onKeyDown = null
     }
 
     internal fun onTick() {

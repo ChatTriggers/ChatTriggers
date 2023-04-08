@@ -20,20 +20,28 @@ interface IRegister {
      * removing the word register, and comparing it case-insensitively with
      * the methods below.
      *
+     * Can also be passed a class of type
+     * [net.minecraftforge.fml.common.eventhandler.Event] as the first parameter
+     * to register functions for arbitrary forge events.
+     *
      * @param triggerType the type of trigger
      * @param method The name of the method or the actual method to callback when the event is fired
      * @return The trigger for additional modification
      */
-    fun register(triggerType: String, method: Any): Trigger {
-        val name = triggerType.lowercase()
+    fun register(triggerType: Any, method: Any): Trigger {
+        if (triggerType is Class<*>)
+            return ForgeTrigger(method, triggerType, getImplementationLoader())
 
-        var func = methodMap[name]
+        require(triggerType is String) {
+            "register() expects a String or Class as its first argument"
+        }
 
-        if (func == null) {
-            func = this::class.memberFunctions.firstOrNull {
+        val func = methodMap.getOrPut(triggerType) {
+            val name = triggerType.lowercase()
+
+            this::class.memberFunctions.firstOrNull {
                 it.name.lowercase() == "register$name"
             } ?: throw NoSuchMethodException("No trigger type named '$triggerType'")
-            methodMap[name] = func
         }
 
         return func.call(this, method) as Trigger
@@ -1020,7 +1028,7 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [PacketTrigger.setPacketClasses] Sets the packet classes which this trigger
+     * - [ClassFilterTrigger.setFilteredClasses] Sets the packet classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
@@ -1039,7 +1047,7 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [PacketTrigger.setPacketClasses] Sets the packet classes which this trigger
+     * - [ClassFilterTrigger.setFilteredClasses] Sets the packet classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
@@ -1128,14 +1136,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [EntityRenderTrigger.setEntityClasses] Sets the entity classes which this trigger
+     * - [ClassFilterTrigger.setFilteredClasses] Sets the entity classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderEntity(method: Any): EntityRenderTrigger {
-        return EntityRenderTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
+    fun registerRenderEntity(method: Any): RenderEntityTrigger {
+        return RenderEntityTrigger(method, TriggerType.RenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1148,14 +1156,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
-     * - [EntityRenderTrigger.setEntityClasses] Sets the entity classes which this trigger
+     * - [ClassFilterTrigger.setFilteredClasses] Sets the entity classes which this trigger
      *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostRenderEntity(method: Any): EntityRenderTrigger {
-        return EntityRenderTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
+    fun registerPostRenderEntity(method: Any): RenderEntityTrigger {
+        return RenderEntityTrigger(method, TriggerType.PostRenderEntity, getImplementationLoader())
     }
 
     /**
@@ -1169,12 +1177,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
+     * - [ClassFilterTrigger.setFilteredClasses] Sets the tile entity classes which this trigger
+     *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerRenderTileEntity(method: Any): EventTrigger {
-        return EventTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
+    fun registerRenderTileEntity(method: Any): RenderTileEntityTrigger {
+        return RenderTileEntityTrigger(method, TriggerType.RenderTileEntity, getImplementationLoader())
     }
 
     /**
@@ -1187,12 +1197,14 @@ interface IRegister {
      *
      * Available modifications:
      * - [Trigger.setPriority] Sets the priority
+     * - [ClassFilterTrigger.setFilteredClasses] Sets the tile entity classes which this trigger
+     *   gets fired for
      *
      * @param method The method to call when the event is fired
      * @return The trigger for additional modification
      */
-    fun registerPostRenderTileEntity(method: Any): RegularTrigger {
-        return RegularTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
+    fun registerPostRenderTileEntity(method: Any): RenderTileEntityTrigger {
+        return RenderTileEntityTrigger(method, TriggerType.PostRenderTileEntity, getImplementationLoader())
     }
 
     /**

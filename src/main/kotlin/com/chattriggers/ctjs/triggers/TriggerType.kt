@@ -83,6 +83,7 @@ enum class TriggerType {
     EntityDamage,
 
     // misc
+    Forge,
     Command,
     Other;
 

@@ -24,6 +24,10 @@ abstract class Trigger protected constructor(
      */
     fun setPriority(priority: Priority) = apply {
         this.priority = priority
+
+        // Re-register so the position in the ConcurrentSkipListSet gets updated
+        unregister()
+        register()
     }
 
     /**
@@ -42,7 +46,7 @@ abstract class Trigger protected constructor(
      * Unregisters a trigger.
      * @return the trigger for method chaining
      */
-    fun unregister() = apply {
+    open fun unregister() = apply {
         loader.removeTrigger(this)
     }
 
