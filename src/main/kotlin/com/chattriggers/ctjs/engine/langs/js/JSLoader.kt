@@ -97,7 +97,7 @@ object JSLoader : ILoader {
         saveResource("/js/asmLib.js", asmLibFile, true)
 
         try {
-            val returned = require.loadCTModule("ASMLib", "ASMLib", asmLibFile.toURI())
+            val returned = require.loadCTModule("ASMLib", asmLibFile.toURI())
 
             // Get the default export, the ASM Helper
             ASMLib = ScriptableObject.getProperty(returned, "default")
@@ -109,7 +109,9 @@ object JSLoader : ILoader {
 
     override fun asmPass(module: Module, asmURI: URI) = wrapInContext {
         try {
-            val returned = require.loadCTModule(module.name, module.metadata.asmEntry!!, asmURI)
+            // Ensure the ASM portion of this module is separately-cached in the module tree, and
+            // make the name weird to avoid collisions
+            val returned = require.loadCTModule("${module.name}-asm$$", asmURI)
 
             val asmFunction = ScriptableObject.getProperty(returned, "default") as? Function
 
@@ -151,7 +153,7 @@ object JSLoader : ILoader {
 
     override fun entryPass(module: Module, entryURI: URI): Unit = wrapInContext {
         try {
-            require.loadCTModule(module.name, module.metadata.entry!!, entryURI)
+            require.loadCTModule(module.name, entryURI)
         } catch (e: Throwable) {
             println("Error loading module ${module.name}")
             e.printStackTrace()
@@ -164,7 +166,7 @@ object JSLoader : ILoader {
     override fun asmInvokeLookup(module: Module, functionURI: URI): MethodHandle {
         return wrapInContext {
             try {
-                val returned = require.loadCTModule(module.name, File(functionURI).name, functionURI)
+                val returned = require.loadCTModule(module.name, functionURI)
                 val func = ScriptableObject.getProperty(returned, "default") as Callable
 
                 // When a call to this function ID is made, we always want to point it
@@ -325,8 +327,8 @@ object JSLoader : ILoader {
     class CTRequire(
         moduleProvider: ModuleScriptProvider,
     ) : Require(moduleContext, scope, moduleProvider, null, null, false) {
-        fun loadCTModule(name: String, entry: String, uri: URI): Scriptable {
-            return getExportedModuleInterface(moduleContext, name + File.separator + entry, uri, null, false)
+        fun loadCTModule(cachedName: String, uri: URI): Scriptable {
+            return getExportedModuleInterface(moduleContext, cachedName, uri, null, false)
         }
     }
 }
