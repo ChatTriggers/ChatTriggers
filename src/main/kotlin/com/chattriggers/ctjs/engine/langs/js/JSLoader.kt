@@ -40,7 +40,7 @@ object JSLoader : ILoader {
 
     private lateinit var scope: Scriptable
     private lateinit var require: CTRequire
-    private lateinit var ASMLib: Any
+    private var ASMLib: Any? = null
 
     private val INVOKE_JS_CALL = MethodHandles.lookup().findStatic(
         JSLoader::class.java,
@@ -131,6 +131,9 @@ object JSLoader : ILoader {
     }
 
     override fun entrySetup(): Unit = wrapInContext {
+        // We don't need this object at this point, so allow it to be garbage collected
+        ASMLib = null
+
         val moduleProvidedLibs = saveResource(
             "/js/moduleProvidedLibs.js",
             File(modulesFolder.parentFile, "chattriggers-modules-provided-libs.js"),
