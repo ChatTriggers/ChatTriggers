@@ -4,6 +4,7 @@ import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
+import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.Trigger
@@ -190,11 +191,7 @@ object JSLoader : ILoader {
                 // If we can't resolve the target function correctly, we will return
                 //  a no-op method handle that will always return null.
                 //  It still needs to match the method type (Object[])Object, so we drop the arguments param.
-                MethodHandles.dropArguments(
-                    MethodHandles.constant(Any::class.java, null),
-                    0,
-                    Array<Any?>::class.java,
-                )
+                IndySupport.DUMMY_INVOKE_HANDLE
             }
         }
     }
