@@ -46,5 +46,20 @@ class BlockPos(x: Number, y: Number, z: Number) : Vec3i(x, y, z) {
         return BlockPos(x + facing.getOffsetX() * n, y + facing.getOffsetY() * n, z + facing.getOffsetZ() * n)
     }
 
+    companion object {
+        /**
+         * Gets a list of [BlockPos] within the Box.
+         *
+         * @param from The BlockPos to start at
+         * @param to The BlockPos at the other side of the Box
+         * @return The Blocks including the corners wrapped as ct [BlockPos]
+         */
+        @JvmStatic
+        fun getAllInBox(from: BlockPos, to: BlockPos): List<BlockPos> {
+            return MCBlockPos.getAllInBox(from.toMCBlock(), to.toMCBlock()).map(::BlockPos)
+        }
+    }
+
+
     fun toMCBlock() = MCBlockPos(x, y, z)
 }
