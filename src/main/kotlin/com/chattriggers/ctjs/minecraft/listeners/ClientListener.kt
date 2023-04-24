@@ -37,14 +37,11 @@ object ClientListener {
     val chatHistory = mutableListOf<String>()
     val actionBarHistory = mutableListOf<String>()
     private val tasks = CopyOnWriteArrayList<Task>()
-    private var packetContext: Context
 
     class Task(var delay: Int, val callback: () -> Unit)
 
     init {
         ticksPassed = 0
-        packetContext = JSContextFactory.enterContext()
-        Context.exit()
     }
 
     @SubscribeEvent
@@ -114,7 +111,7 @@ object ClientListener {
                     val packetReceivedEvent = CancellableEvent()
 
                     if (msg is Packet<*>) {
-                        JSLoader.wrapInContext(packetContext) {
+                        JSLoader.wrapInContext {
                             TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
                         }
                     }
@@ -127,7 +124,7 @@ object ClientListener {
                     val packetSentEvent = CancellableEvent()
 
                     if (msg is Packet<*>) {
-                        JSLoader.wrapInContext(packetContext) {
+                        JSLoader.wrapInContext {
                             TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
                         }
                     }
