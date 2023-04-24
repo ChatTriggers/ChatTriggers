@@ -209,7 +209,7 @@ object JSLoader : ILoader {
         }
     }
 
-    internal fun <T> wrapInContext(block: (cx: Context) -> T): T {
+    private fun <T> wrapInContext(block: (cx: Context) -> T): T {
         contract {
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
         }
