@@ -49,7 +49,7 @@ object JSLoader : ILoader {
         MethodType.methodType(Any::class.java, Callable::class.java, Array<Any?>::class.java)
     )
 
-    override fun exec(type: TriggerType, args: Array<out Any?>) {
+    override fun exec(type: TriggerType, args: Array<out Any?>): Unit = wrapInContext {
         triggers[type]?.forEach { it.trigger(args) }
     }
 
@@ -288,15 +288,16 @@ object JSLoader : ILoader {
     override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: Trigger, method: Any, args: Array<out Any?>) {
-        wrapInContext {
-            try {
-                require(method is Function) { "Need to pass actual function to the register function, not the name!" }
+        try {
+            require(method is Function) { "Need to pass actual function to the register function, not the name!" }
 
-                method.call(it, scope, scope, args)
-            } catch (e: Throwable) {
-                e.printTraceToConsole(console)
-                removeTrigger(trigger)
-            }
+            // We can use getCurrentContext here (which doesn't assert a Context exists) instead of getContext
+            // (which does assert) as we are guaranteed to have a context here, since the only caller of this
+            // is exec(), which calls wrapInContext().
+            method.call(Context.getCurrentContext(), scope, scope, args)
+        } catch (e: Throwable) {
+            e.printTraceToConsole(console)
+            removeTrigger(trigger)
         }
     }
 
