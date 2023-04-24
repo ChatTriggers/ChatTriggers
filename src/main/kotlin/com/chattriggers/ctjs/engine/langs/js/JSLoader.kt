@@ -1,5 +1,6 @@
 package com.chattriggers.ctjs.engine.langs.js
 
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
@@ -49,8 +50,13 @@ object JSLoader : ILoader {
         MethodType.methodType(Any::class.java, Callable::class.java, Array<Any?>::class.java)
     )
 
-    override fun exec(type: TriggerType, args: Array<out Any?>): Unit = wrapInContext {
-        triggers[type]?.forEach { it.trigger(args) }
+    override fun exec(type: TriggerType, args: Array<out Any?>) {
+        if (!Reference.isLoaded)
+            return
+
+        wrapInContext {
+            triggers[type]?.forEach { it.trigger(args) }
+        }
     }
 
     override fun addTrigger(trigger: Trigger) {
