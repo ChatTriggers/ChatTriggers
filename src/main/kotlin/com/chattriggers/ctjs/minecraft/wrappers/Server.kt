@@ -15,6 +15,9 @@ object Server {
         return Client.getMinecraft().currentServerData?.serverIP ?: ""
     }
 
+    @JvmStatic
+    fun isSingleplayer(): Boolean = Client.getMinecraft().isSingleplayer
+
     /**
      * Gets the current server's name, or "SinglePlayer" if the player
      * is in a single-player world.
