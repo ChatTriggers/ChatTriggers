@@ -10,10 +10,9 @@ import com.chattriggers.ctjs.minecraft.wrappers.World
 import com.chattriggers.ctjs.minecraft.wrappers.entity.PlayerMP
 import com.chattriggers.ctjs.minecraft.wrappers.inventory.Item
 import com.chattriggers.ctjs.minecraft.wrappers.world.block.BlockFace
-import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.triggers.TriggerType
-import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.kotlin.MCBlockPos
+import com.chattriggers.ctjs.utils.kotlin.MCChatPacket
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
@@ -49,28 +48,13 @@ object ClientListener {
 
     @SubscribeEvent
     fun onReceiveChat(event: ClientChatReceivedEvent) {
-        when (EventLib.getType(event)) {
-            in 0..1 -> {
-                // save to chatHistory
-                chatHistory += ChatLib.getChatMessage(event, true)
-                if (chatHistory.size > 1000) chatHistory.removeAt(0)
+        if (EventLib.getType(event) == 2) {
+            // save to actionbar history
+            actionBarHistory += ChatLib.getChatMessage(event, true)
+            if (actionBarHistory.size > 1000) actionBarHistory.removeAt(0)
 
-                // normal Chat Message
-                TriggerType.Chat.triggerAll(ChatLib.getChatMessage(event, false), event)
-
-                // print to console
-                if (Config.printChatToConsole) {
-                    "[CHAT] ${ChatLib.replaceFormatting(ChatLib.getChatMessage(event, true))}".printToConsole()
-                }
-            }
-            2 -> {
-                // save to actionbar history
-                actionBarHistory += ChatLib.getChatMessage(event, true)
-                if (actionBarHistory.size > 1000) actionBarHistory.removeAt(0)
-
-                // action bar
-                TriggerType.ActionBar.triggerAll(ChatLib.getChatMessage(event, false), event)
-            }
+            // action bar
+            TriggerType.ActionBar.triggerAll(ChatLib.getChatMessage(event, false), event, false)
         }
     }
 
@@ -112,14 +96,20 @@ object ClientListener {
             .addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
                 override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
                     val packetReceivedEvent = CancellableEvent()
+                    val chatEvent = ClientChatReceivedEvent(0, null)
 
                     if (msg is Packet<*>) {
                         JSLoader.wrapInContext(packetContext) {
                             TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
+
+                            if (msg is MCChatPacket && msg.type.toInt() != 2) {
+                                chatEvent.message = msg.chatComponent
+                                TriggerType.Chat.triggerAll(ChatLib.getChatMessage(chatEvent, false), chatEvent, false)
+                            }
                         }
                     }
 
-                    if (!packetReceivedEvent.isCancelled())
+                    if (!packetReceivedEvent.isCancelled() && !chatEvent.isCanceled)
                         ctx?.fireChannelRead(msg)
                 }
 

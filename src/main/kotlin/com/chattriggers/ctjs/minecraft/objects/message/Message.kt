@@ -224,16 +224,18 @@ class Message {
         parseMessage()
         if (!ChatLib.isPlayer("[ACTION BAR]: " + chatMessage.formattedText)) return
 
-        Client.getConnection()?.handleChat(
-            MCChatPacket(
-                chatMessage,
-                //#if MC<=10809
-                2
-                //#else
-                //$$ ChatType.GAME_INFO
-                //#endif
+        Client.scheduleTask {
+            Client.getConnection()?.handleChat(
+                MCChatPacket(
+                    chatMessage,
+                    //#if MC<=10809
+                    2
+                    //#else
+                    //$$ ChatType.GAME_INFO
+                    //#endif
+                )
             )
-        )
+        }
     }
 
     override fun toString() =

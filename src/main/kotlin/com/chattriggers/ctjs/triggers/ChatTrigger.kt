@@ -3,6 +3,7 @@ package com.chattriggers.ctjs.triggers
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
+import com.chattriggers.ctjs.utils.kotlin.MCITextComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
 
@@ -13,6 +14,7 @@ class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(met
     private lateinit var criteriaPattern: Regex
     private val parameters = mutableListOf<Parameter?>()
     private var triggerIfCanceled: Boolean = true
+    private var canReceiveClientMessages: Boolean = false
 
     /**
      * Sets if the chat trigger should run if the chat event has already been canceled.
@@ -160,18 +162,41 @@ class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(met
     }
 
     /**
+     * Allows this to trigger on client side messages, e.g. messages coming from other mods,
+     * ChatLib.chat(), etc
+     * @return the trigger object for method chaining
+     */
+    fun setCanReceiveClientMessages() = apply {
+        canReceiveClientMessages = true
+    }
+
+    /**
      * Argument 1 (String) The chat message received
      * Argument 2 (ClientChatReceivedEvent) the chat event fired
      * @param args list of arguments as described
      */
     override fun trigger(args: Array<out Any?>) {
-        require(args[0] is String && args[1] is ClientChatReceivedEvent) {
-            "Argument 1 must be a String, Argument 2 must be a ClientChatReceivedEvent"
+        require(args[0] is String && args[1] is ClientChatReceivedEvent && args[2] is Boolean) {
+            "Argument 1 must be a String, Argument 2 must be a ClientChatReceivedEvent," +
+                    "Argument 3 must be a Boolean"
         }
 
         val chatEvent = args[1] as ClientChatReceivedEvent
+        val isClientSideTriggered = args[2] as Boolean
 
-        if (!triggerIfCanceled && chatEvent.isCanceled) return
+        if ((!triggerIfCanceled && chatEvent.isCanceled) || (!canReceiveClientMessages && isClientSideTriggered)) {
+            return
+        }
+
+        // If the user has a chat trigger with canReceiveClientMessages, it will trigger at both the ASM point
+        // and in ClientListener for "normal" chats (not client-only). So, to fix it firing twice, we store
+        // the previous chat component to check if we have already seen it.
+        if (prevChatComponent === chatEvent.message) {
+            prevChatComponent = null
+            return
+        }
+
+        prevChatComponent = chatEvent.message
 
         val chatMessage = getChatMessage(chatEvent, args[0] as String)
 
@@ -245,5 +270,9 @@ class ChatTrigger(method: Any, type: TriggerType, loader: ILoader) : Trigger(met
                     param.names.any { it.lowercase() == name }
                 }
         }
+    }
+
+    companion object {
+        private var prevChatComponent: MCITextComponent? = null
     }
 }

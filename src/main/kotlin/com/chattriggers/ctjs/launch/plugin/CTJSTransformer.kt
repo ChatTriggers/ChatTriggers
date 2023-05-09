@@ -40,6 +40,7 @@ class CTJSTransformer : BaseClassTransformer() {
             injectGuiIngameForge()
             injectRenderItem()
             injectEntityPlayerSP()
+            injectGuiNewChat()
             ModuleManager.setup()
             ModuleManager.asmPass()
         } catch (e: Throwable) {
