@@ -25,8 +25,9 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
             0xaa000000,
             x, y, width, 13f
         )
+        
         Renderer.drawStringWithShadow(
-            metadata.name ?: name,
+            (metadata.isLibrary===true ? "§7" : "")+(metadata.name ?: name),
             x + 3, y + 3
         )
 
