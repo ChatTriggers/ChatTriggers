@@ -14,5 +14,6 @@ data class ModuleMetadata(
     val helpMessage: String? = null,
     val changelog: String? = null,
     val ignored: ArrayList<String>? = null,
-    var isRequired: Boolean = false
+    var isRequired: Boolean = false,
+    var isLibrary: Boolean = false
 )
