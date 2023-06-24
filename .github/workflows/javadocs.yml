@@ -36,10 +36,10 @@ jobs:
       - name: Publish Javadocs
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.ACTIONS_DEPLOYER_USERNAME }}
+          key: ${{ secrets.ACTIONS_DEPLOYER_SSH_KEY }}
+          passphrase: ${{ secrets.ACTIONS_DEPLOYER_PASSPHRASE }}
           source: build/javadoc/
           target: /srv/www/static/home/javadocs
           strip_components: 2
@@ -48,8 +48,8 @@ jobs:
       - name: Set File Permissions
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.ACTIONS_DEPLOYER_USERNAME }}
+          key: ${{ secrets.ACTIONS_DEPLOYER_SSH_KEY }}
+          passphrase: ${{ secrets.ACTIONS_DEPLOYER_PASSPHRASE }}
           script: chmod -R g+w /srv/www/static/home/javadocs
