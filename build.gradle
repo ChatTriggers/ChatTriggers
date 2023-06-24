@@ -25,6 +25,7 @@ buildscript {
         )
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
+        classpath "org.jetbrains.dokka:versioning-plugin:$dokka_version"
         classpath ':proguard:'
     }
 }
@@ -92,6 +93,7 @@ dependencies {
     provided 'com.fasterxml.jackson.core:jackson-core:2.13.0'
     provided 'com.chattriggers:rhino:1.8.6'
     provided 'com.fifesoft:rsyntaxtextarea:3.1.3'
+    dokkaHtmlPlugin 'org.jetbrains.dokka:versioning-plugin:1.6.10'
 }
 
 jar {
@@ -134,15 +136,23 @@ processResources {
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
-task userdocs(type: DokkaTask) {
-    description = "Generate the docs to be used by scripters, excludes internal classes"
-    group = "documentation"
+dokkaHtml {
+    def docVersionsDir = new File(projectDir, "docs/dokka/versions")
+    def currentVersion = project.version.toString()
+    def currentDocsDir = new File(docVersionsDir, currentVersion)
 
-    dependencies {
-        userdocsPlugin(project(":dokka-plugin"))
+    outputDirectory.set(currentDocsDir)
+
+    def versioningConfiguration = """
+    {
+        "version": "$currentVersion",
+        "olderVersionsDir": "$docVersionsDir",
+        "renderVersionsNavigationOnAllPages": true
     }
-
-    outputDirectory.set(file("$buildDir/javadoc"))
+    """
+    pluginsMapConfiguration.set(
+        ["org.jetbrains.dokka.versioning.VersioningPlugin": versioningConfiguration]
+    )
 
     suppressInheritedMembers.set(true)
 
