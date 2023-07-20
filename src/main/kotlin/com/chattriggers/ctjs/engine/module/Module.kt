@@ -25,8 +25,13 @@ class Module(val name: String, var metadata: ModuleMetadata, val folder: File) {
             0xaa000000,
             x, y, width, 13f
         )
+
         Renderer.drawStringWithShadow(
-            metadata.name ?: name,
+            ChatLib.addColor(if (metadata.isRequired && requiredBy.isNotEmpty()) {
+                "&7${metadata.name ?: name}"
+            } else {
+                metadata.name ?: name
+            }),
             x + 3, y + 3
         )
 
