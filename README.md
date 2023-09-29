@@ -9,7 +9,7 @@
       <img src="https://discordapp.com/api/guilds/119493402902528000/embed.png" alt="Discord" />
     </a>
     <a href="https://travis-ci.org/ChatTriggers/ChatTriggers">
-      <img src="https://api.travis-ci.org/ChatTriggers/ChatTriggers.svg?branch=master" alt="Build Status" />
+      <img src="https://api.travis-ci.com/ChatTriggers/ChatTriggers.svg?branch=master" alt="Build Status" />
     </a>
     <a href="https://github.com/ChatTriggers/ChatTriggers/releases">
       <img src="https://img.shields.io/github/v/release/ChatTriggers/ChatTriggers.svg?include_prereleases" alt="Releases" />
