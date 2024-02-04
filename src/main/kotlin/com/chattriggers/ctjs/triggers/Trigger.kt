@@ -51,8 +51,6 @@ abstract class Trigger protected constructor(
     }
 
     protected fun callMethod(args: Array<out Any?>) {
-        if (!Reference.isLoaded) return
-
         loader.trigger(this, method, args)
     }
 

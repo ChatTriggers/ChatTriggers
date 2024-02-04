@@ -1,7 +1,6 @@
 package com.chattriggers.ctjs.minecraft.listeners
 
 import com.chattriggers.ctjs.engine.langs.js.JSContextFactory
-import com.chattriggers.ctjs.engine.langs.js.JSLoader
 import com.chattriggers.ctjs.minecraft.libs.ChatLib
 import com.chattriggers.ctjs.minecraft.libs.EventLib
 import com.chattriggers.ctjs.minecraft.wrappers.Client
@@ -37,14 +36,11 @@ object ClientListener {
     val chatHistory = mutableListOf<String>()
     val actionBarHistory = mutableListOf<String>()
     private val tasks = CopyOnWriteArrayList<Task>()
-    private var packetContext: Context
 
     class Task(var delay: Int, val callback: () -> Unit)
 
     init {
         ticksPassed = 0
-        packetContext = JSContextFactory.enterContext()
-        Context.exit()
     }
 
     @SubscribeEvent
@@ -110,14 +106,21 @@ object ClientListener {
 
         event.manager.channel().pipeline()
             .addAfter("fml:packet_handler", "CT_packet_handler", object : ChannelDuplexHandler() {
+                override fun handlerAdded(ctx: ChannelHandlerContext?) {
+                    super.handlerAdded(ctx)
+                    JSContextFactory.enterContext()
+                }
+
+                override fun handlerRemoved(ctx: ChannelHandlerContext?) {
+                    super.handlerRemoved(ctx)
+                    Context.exit()
+                }
+
                 override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
                     val packetReceivedEvent = CancellableEvent()
 
-                    if (msg is Packet<*>) {
-                        JSLoader.wrapInContext(packetContext) {
-                            TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
-                        }
-                    }
+                    if (msg is Packet<*>)
+                        TriggerType.PacketReceived.triggerAll(msg, packetReceivedEvent)
 
                     if (!packetReceivedEvent.isCancelled())
                         ctx?.fireChannelRead(msg)
@@ -126,11 +129,8 @@ object ClientListener {
                 override fun write(ctx: ChannelHandlerContext?, msg: Any?, promise: ChannelPromise?) {
                     val packetSentEvent = CancellableEvent()
 
-                    if (msg is Packet<*>) {
-                        JSLoader.wrapInContext(packetContext) {
-                            TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
-                        }
-                    }
+                    if (msg is Packet<*>)
+                        TriggerType.PacketSent.triggerAll(msg, packetSentEvent)
 
                     if (!packetSentEvent.isCancelled())
                         ctx?.write(msg, promise)

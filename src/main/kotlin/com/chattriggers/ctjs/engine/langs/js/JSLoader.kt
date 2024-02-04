@@ -1,9 +1,11 @@
 package com.chattriggers.ctjs.engine.langs.js
 
+import com.chattriggers.ctjs.Reference
 import com.chattriggers.ctjs.engine.ILoader
 import com.chattriggers.ctjs.engine.langs.Lang
 import com.chattriggers.ctjs.engine.module.Module
 import com.chattriggers.ctjs.engine.module.ModuleManager.modulesFolder
+import com.chattriggers.ctjs.launch.IndySupport
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.printTraceToConsole
 import com.chattriggers.ctjs.triggers.Trigger
@@ -31,17 +33,16 @@ import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.io.path.toPath
 
 @OptIn(ExperimentalContracts::class)
 object JSLoader : ILoader {
     private val triggers = ConcurrentHashMap<TriggerType, ConcurrentSkipListSet<Trigger>>()
     override val console by lazy { Console(this) }
 
-    private lateinit var moduleContext: Context
-    private lateinit var evalContext: Context
     private lateinit var scope: Scriptable
     private lateinit var require: CTRequire
-    private lateinit var ASMLib: Any
+    private var ASMLib: Any? = null
 
     private val INVOKE_JS_CALL = MethodHandles.lookup().findStatic(
         JSLoader::class.java,
@@ -50,7 +51,12 @@ object JSLoader : ILoader {
     )
 
     override fun exec(type: TriggerType, args: Array<out Any?>) {
-        triggers[type]?.forEach { it.trigger(args) }
+        if (!Reference.isLoaded)
+            return
+
+        wrapInContext {
+            triggers[type]?.forEach { it.trigger(args) }
+        }
     }
 
     override fun addTrigger(trigger: Trigger) {
@@ -78,7 +84,7 @@ object JSLoader : ILoader {
             )
 
             try {
-                moduleContext.evaluateString(
+                it.evaluateString(
                     scope,
                     asmProvidedLibs,
                     "asmProvided",
@@ -122,7 +128,7 @@ object JSLoader : ILoader {
             }
 
             ScriptableObject.putProperty(ASMLib, "currentModule", module.name)
-            asmFunction.call(moduleContext, scope, scope, arrayOf(ASMLib))
+            asmFunction.call(it, scope, scope, arrayOf(ASMLib))
         } catch (e: Throwable) {
             println("Error loading asm entry for module ${module.name}")
             e.printStackTrace()
@@ -132,6 +138,9 @@ object JSLoader : ILoader {
     }
 
     override fun entrySetup(): Unit = wrapInContext {
+        // We don't need this object at this point, so allow it to be garbage collected
+        ASMLib = null
+
         val moduleProvidedLibs = saveResource(
             "/js/moduleProvidedLibs.js",
             File(modulesFolder.parentFile, "chattriggers-modules-provided-libs.js"),
@@ -139,7 +148,7 @@ object JSLoader : ILoader {
         )
 
         try {
-            moduleContext.evaluateString(
+            it.evaluateString(
                 scope,
                 moduleProvidedLibs,
                 "moduleProvided",
@@ -166,7 +175,10 @@ object JSLoader : ILoader {
     override fun asmInvokeLookup(module: Module, functionURI: URI): MethodHandle {
         return wrapInContext {
             try {
-                val returned = require.loadCTModule(module.name, functionURI)
+                // We need to include the URI in the cached module name since each exposed
+                // function should be its own module. It can't share the name of the owning
+                // module in the module tree.
+                val returned = require.loadCTModule(module.name + File.separator + File(functionURI).name, functionURI)
                 val func = ScriptableObject.getProperty(returned, "default") as Callable
 
                 // When a call to this function ID is made, we always want to point it
@@ -185,11 +197,7 @@ object JSLoader : ILoader {
                 // If we can't resolve the target function correctly, we will return
                 //  a no-op method handle that will always return null.
                 //  It still needs to match the method type (Object[])Object, so we drop the arguments param.
-                MethodHandles.dropArguments(
-                    MethodHandles.constant(Any::class.java, null),
-                    0,
-                    Array<Any?>::class.java,
-                )
+                IndySupport.DUMMY_INVOKE_HANDLE
             }
         }
     }
@@ -197,29 +205,16 @@ object JSLoader : ILoader {
     @JvmStatic
     fun asmInvoke(func: Callable, args: Array<Any?>): Any {
         return wrapInContext {
-            func.call(moduleContext, scope, scope, args)
+            func.call(it, scope, scope, args)
         }
     }
 
-    internal inline fun <T> wrapInContext(context: Context = moduleContext, crossinline block: () -> T): T {
+    private fun <T> wrapInContext(block: (cx: Context) -> T): T {
         contract {
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
         }
 
-        val missingContext = Context.getCurrentContext() == null
-        if (missingContext) {
-            try {
-                JSContextFactory.enterContext(context)
-            } catch (e: Throwable) {
-                JSContextFactory.enterContext()
-            }
-        }
-
-        try {
-            return block()
-        } finally {
-            if (missingContext) Context.exit()
-        }
+        return JSContextFactory.call(block)
     }
 
     @JvmStatic
@@ -285,50 +280,51 @@ object JSLoader : ILoader {
     }
 
     override fun eval(code: String): String {
-        return wrapInContext(evalContext) {
-            Context.toString(evalContext.evaluateString(scope, code, "<eval>", 1, null))
+        return wrapInContext {
+            val oldOpt = it.optimizationLevel
+            it.optimizationLevel = 0
+            try {
+                Context.toString(it.evaluateString(scope, code, "<eval>", 1, null))
+            } finally {
+                it.optimizationLevel = oldOpt
+            }
         }
     }
 
     override fun getLanguage() = Lang.JS
 
     override fun trigger(trigger: Trigger, method: Any, args: Array<out Any?>) {
-        wrapInContext {
-            try {
-                require(method is Function) { "Need to pass actual function to the register function, not the name!" }
+        try {
+            require(method is Function) { "Need to pass actual function to the register function, not the name!" }
 
-                method.call(Context.getCurrentContext(), scope, scope, args)
-            } catch (e: Throwable) {
-                e.printTraceToConsole(console)
-                removeTrigger(trigger)
-            }
+            // We can use getCurrentContext here (which doesn't assert a Context exists) instead of getContext
+            // (which does assert) as we are guaranteed to have a context here, since the only caller of this
+            // is exec(), which calls wrapInContext().
+            method.call(Context.getCurrentContext(), scope, scope, args)
+        } catch (e: Throwable) {
+            e.printTraceToConsole(console)
+            removeTrigger(trigger)
         }
     }
 
     private fun instanceContexts(files: List<URL>) {
         JSContextFactory.addAllURLs(files)
 
-        moduleContext = JSContextFactory.enterContext()
-        scope = ImporterTopLevel(moduleContext)
+        wrapInContext {
+            scope = ImporterTopLevel(it)
 
-        val sourceProvider = UrlModuleSourceProvider(listOf(modulesFolder.toURI()), listOf())
-        val moduleProvider = StrongCachingModuleScriptProvider(sourceProvider)
-        require = CTRequire(moduleProvider)
-        require.install(scope)
-
-        Context.exit()
-
-        JSContextFactory.optimize = false
-        evalContext = JSContextFactory.enterContext()
-        Context.exit()
-        JSContextFactory.optimize = true
+            val sourceProvider = UrlModuleSourceProvider(listOf(modulesFolder.toURI()), listOf())
+            val moduleProvider = StrongCachingModuleScriptProvider(sourceProvider)
+            require = CTRequire(it, moduleProvider)
+            require.install(scope)
+        }
     }
 
-    class CTRequire(
+    class CTRequire(cx: Context,
         moduleProvider: ModuleScriptProvider,
-    ) : Require(moduleContext, scope, moduleProvider, null, null, false) {
+    ) : Require(cx, scope, moduleProvider, null, null, false) {
         fun loadCTModule(cachedName: String, uri: URI): Scriptable {
-            return getExportedModuleInterface(moduleContext, cachedName, uri, null, false)
+            return getExportedModuleInterface(JSContextFactory.enterContext(), cachedName, uri, null, false)
         }
     }
 }
