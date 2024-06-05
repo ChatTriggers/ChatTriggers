@@ -16,6 +16,7 @@ import com.chattriggers.ctjs.triggers.ForgeTrigger
 import com.chattriggers.ctjs.triggers.TriggerType
 import com.chattriggers.ctjs.utils.Config
 import com.chattriggers.ctjs.utils.UpdateChecker
+import com.chattriggers.ctjs.utils.console.LogType
 import com.google.gson.Gson
 import gg.essential.vigilance.Vigilance
 import net.minecraftforge.client.ClientCommandHandler
@@ -26,9 +27,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.io.File
 import java.net.URL
 import java.net.URLConnection
+import java.security.KeyStore
+import javax.net.ssl.HttpsURLConnection
 import java.security.MessageDigest
 import java.util.*
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManagerFactory
 import kotlin.concurrent.thread
+import kotlin.math.log
 
 @Mod(
     modid = Reference.MODID,
@@ -46,6 +53,25 @@ object CTJS {
     val sounds = mutableListOf<Sound>()
     val images = mutableSetOf<Image>()
 
+    @JvmStatic
+    val sslContext by lazy {
+        try {
+            val myKeyStore = KeyStore.getInstance("JKS")
+            myKeyStore.load(CTJS::class.java.getResourceAsStream("/ctjskeystore.jks"), "changeit".toCharArray())
+            val kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+            val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+            kmf.init(myKeyStore, null)
+            tmf.init(myKeyStore)
+            var ctx = SSLContext.getInstance("TLS")
+            ctx?.init(kmf.keyManagers, tmf.trustManagers, null)
+            ctx
+        } catch (e: Exception) {
+            "Failed to load keystore. Web requests may fail on older Java versions".printToConsole(logType = LogType.WARN)
+            e.printTraceToConsole()
+            null
+        }
+    }
+    
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
         listOf(
@@ -88,10 +114,15 @@ object CTJS {
         registerHooks()
     }
 
-    fun makeWebRequest(url: String): URLConnection = URL(url).openConnection().apply {
-        setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
-        connectTimeout = 3000
-        readTimeout = 3000
+    fun makeWebRequest(url: String): URLConnection {
+        val connection = URL(url).openConnection()
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (ChatTriggers)")
+        if (connection is HttpsURLConnection && sslContext != null) {
+            connection.sslSocketFactory = sslContext!!.socketFactory
+        }
+        connection.connectTimeout = 3000
+        connection.readTimeout = 3000
+        return connection
     }
 
     private fun registerHooks() {
