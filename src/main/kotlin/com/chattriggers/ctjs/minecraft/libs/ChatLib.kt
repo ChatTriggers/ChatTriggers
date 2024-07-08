@@ -9,6 +9,7 @@ import com.chattriggers.ctjs.minecraft.wrappers.Player
 import com.chattriggers.ctjs.printToConsole
 import com.chattriggers.ctjs.utils.kotlin.times
 import net.minecraft.client.gui.ChatLine
+import net.minecraft.client.gui.GuiChat
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import org.mozilla.javascript.regexp.NativeRegExp
@@ -418,6 +419,33 @@ object ChatLib {
     @JvmStatic
     fun addColor(message: String?): String {
         return message.toString().replace("(?<!\\\\)&(?![^0-9a-fk-or]|$)".toRegex(), "\u00a7")
+    }
+
+    /**
+     * Gets the position of the caret in the chat's input box.
+     * @return the zero-index caret position, -1 if not in chat
+     */
+    @JvmStatic
+    fun getCaretPosition(): Int {
+        return (Client.getMinecraft().currentScreen as? GuiChat)?.inputField?.cursorPosition ?: -1
+    }
+
+    /**
+     * Sets the position of the caret in the chat's input box.
+     * @param position The position to set the caret to
+     */
+    @JvmStatic
+    fun setCaretPosition(position: Int) {
+        (Client.getMinecraft().currentScreen as? GuiChat)?.inputField?.cursorPosition = position
+    }
+
+    /**
+     * Gets the selected text in the chat's input box, or null if none is selected.
+     * @returns The selected text, or null if inaccessible
+     */
+    @JvmStatic
+    fun getSelectedText(): String? {
+        return (Client.getMinecraft().currentScreen as? GuiChat)?.inputField?.selectedText
     }
 
     // helper method to make sure player exists before putting something in chat
