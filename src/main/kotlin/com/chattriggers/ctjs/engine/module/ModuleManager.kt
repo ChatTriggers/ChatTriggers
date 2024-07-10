@@ -73,7 +73,7 @@ object ModuleManager {
 
         // We're finished setting up all of our loaders,
         //  which means they can now have their ASM invocation re-lookups happen
-        IndySupport.invalidateInvocations()
+        IndySupport.invalidateInvocations(areLoadersConfigured = true)
     }
 
     private fun loadAssetsAndJars(modules: List<Module>) {
@@ -236,6 +236,9 @@ object ModuleManager {
     }
 
     fun teardown() {
+        // Rebind invokedynamic instructions to a dummy function while CT is unloaded
+        IndySupport.invalidateInvocations(areLoadersConfigured = false)
+
         cachedModules.clear()
 
         loaders.forEach {

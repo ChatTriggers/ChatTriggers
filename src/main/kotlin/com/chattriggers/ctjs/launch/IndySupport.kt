@@ -1,10 +1,19 @@
 package com.chattriggers.ctjs.launch
 
 import com.chattriggers.ctjs.engine.module.ModuleManager
+import org.mozilla.javascript.Undefined
 import java.lang.invoke.*
 
 object IndySupport {
     private var invocationInvalidator = SwitchPoint()
+    private var areLoadersConfigured = false
+
+    // A dummy handle which matches the expected type of an exposed ASM function, but just returns Undefined
+    val DUMMY_INVOKE_HANDLE: MethodHandle = MethodHandles.dropArguments(
+        MethodHandles.constant(Any::class.java, Undefined.instance),
+        0,
+        Array<Any?>::class.java,
+    )
 
     @JvmStatic
     fun bootstrapInvokeJS(
@@ -43,19 +52,25 @@ object IndySupport {
 
     @JvmStatic
     fun initInvokeJS(callSite: MutableCallSite, moduleName: String, functionID: String, args: Array<Any?>): Any? {
-        // Make an initial lookup to the target function, this is where we want our bytecode invoke
-        // to actually point to.
-        val targetHandle = ModuleManager.asmInvokeLookup(moduleName, functionID)
+        val targetHandle = if (areLoadersConfigured) {
+            // If we are loaded, then make an initial lookup to the target function. This is where we want
+            // our bytecode invoke to actually point to.
+            ModuleManager.asmInvokeLookup(moduleName, functionID)
+        } else {
+            // Otherwise, we are in the middle of a load (or the user has called /ct unload for some reason).
+            // In this case, there's nothing we can really do, so we point to a dummy handle which will return
+            // the Undefined sentinel.
+            DUMMY_INVOKE_HANDLE
+        }
 
-        // Until we /ct load that is. When we reload, we need to re-resolve all js invocation targets
-        // because our old script engine has been thrown away and recreated, plus the user
-        // may have changed code in their targeted function
+        // When we reload, we need to re-resolve all js invocation targets because our old script engine has
+        // been thrown away and recreated, plus the user may have changed code in their targeted function
         val initTarget = callSite.target
 
-        // This switch point will be our indicator to know if the user has reloaded.
-        // As soon as the user reloads, this switch should get flipped, immediately making
-        // the call site link to the fallback MethodHandle, which in this case is this very
-        // method, which will let it re-run the lookup and such.
+        // This switch point will be our indicator to know if the user has reloaded. As soon as the user reloads,
+        // this switch should get flipped, immediately making the call site link to the fallback MethodHandle, which
+        // in this case is this very method, which will let it re-run the lookup and such. The "flip" happens during
+        // the invocation of invalidateInvocations below.
         val guardedTarget = invocationInvalidator.guardWithTest(targetHandle, initTarget)
 
         // We now have a target that is very fast to call back into the target method, and
@@ -67,7 +82,10 @@ object IndySupport {
         return targetHandle.invoke(args)
     }
 
-    fun invalidateInvocations() {
+    // Calling this causes the next invocation of any particular invokedynamic instruction to
+    // rebind (i.e. call into initInvokeJS above)
+    fun invalidateInvocations(areLoadersConfigured: Boolean) {
+        this.areLoadersConfigured = areLoadersConfigured
         SwitchPoint.invalidateAll(arrayOf(invocationInvalidator))
         invocationInvalidator = SwitchPoint()
     }
