@@ -279,6 +279,7 @@ object Player {
 
     @JvmStatic
     fun setHeldItemIndex(index: Int) {
+        if (index !in 0..8) throw IndexOutOfBoundsException("Item slot must be an integer from 0 to 8.")
         getPlayer()?.inventory?.currentItem = index
     }
 
