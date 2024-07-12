@@ -69,7 +69,7 @@ object FileLib {
 
     /**
      * Reads a file from folder in modules.
-     * Returns an empty string if file is not found.
+     * Returns null if file is not found.
      *
      * @param importName name of the import
      * @param fileName name of the file
@@ -83,7 +83,7 @@ object FileLib {
     /**
      * Reads a file from anywhere on the system.
      * Use "./" for the ".minecraft" folder.
-     * Returns an empty string if file is not found.
+     * Returns null if file is not found.
      *
      * @param fileLocation the location and file name
      * @return the string in the file
@@ -95,6 +95,7 @@ object FileLib {
 
     /**
      * Reads a file from anywhere on the system using java.io.File.
+     * Returns null if file is not found.
      *
      * @param file the java.io.File to read
      * @return the string in the file
