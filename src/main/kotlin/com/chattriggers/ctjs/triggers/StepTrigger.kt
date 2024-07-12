@@ -37,15 +37,17 @@ class StepTrigger(method: Any, loader: ILoader) : Trigger(method, TriggerType.St
     }
 
     override fun trigger(args: Array<out Any?>) {
+        val currentTime = args[0] as Long
+
         if (delay < 0) {
             // run trigger based on set fps value (60 per second by default)
-            while (systemTime < Client.getSystemTime() + 1000 / fps) {
+            while (systemTime < currentTime + 1000 / fps) {
                 callMethod(arrayOf(++elapsed))
                 systemTime += 1000 / fps
             }
         } else {
             // run trigger based on set delay in seconds
-            while (Client.getSystemTime() > systemTime + delay * 1000) {
+            while (currentTime > systemTime + delay * 1000) {
                 callMethod(arrayOf(++elapsed))
                 systemTime += delay * 1000
             }
