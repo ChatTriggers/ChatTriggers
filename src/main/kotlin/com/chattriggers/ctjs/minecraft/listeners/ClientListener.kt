@@ -145,7 +145,7 @@ object ClientListener {
 
     @SubscribeEvent
     fun onRenderTick(event: TickEvent.RenderTickEvent) {
-        TriggerType.Step.triggerAll()
+        TriggerType.Step.triggerAll(Client.getSystemTime())
         if (World.isLoaded()) {
             MouseListener.handleDragged()
         }
